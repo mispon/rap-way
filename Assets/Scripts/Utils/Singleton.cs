@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Polygon.Scripts
+namespace Utils
 {
     /// <summary>
     /// Паттерн "одиночка"
