@@ -4,6 +4,9 @@ using Utils;
 
 namespace Core
 {
+    /// <summary>
+    /// Управление сохранением и загрузкой игровых данных
+    /// </summary>
     public class DataManager: Singleton<DataManager>
     {
         public PlayerData PlayerData;

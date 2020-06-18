@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using Enums;
 
 using InputField = UnityEngine.UI.InputField;
@@ -39,9 +40,8 @@ namespace Models.Player
         
         /// <summary>
         /// Возраст персонажа
-        /// ToDo: Когда будет создан TimeManager с полем Now (игровое время) необходимо будет заменить DateTime.Now на TimeManger.Now
         /// </summary>
-        public int Age => (int) ((DateTime.Today - DateOfBirth).TotalDays / 365);
+        public int Age => (int) ((TimeManager.Instance.Now - DateOfBirth).TotalDays / 365);
 
         /// <summary>
         /// Пол персонажа
