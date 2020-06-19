@@ -82,8 +82,11 @@ namespace Core
 
         private static void DisposeTimer(Timer timer)
         {
-            timer.Stop();
-            timer.Dispose();
+            try
+            {
+                timer.Stop();
+                timer.Dispose();    
+            }catch{}
         }
     }
 }
