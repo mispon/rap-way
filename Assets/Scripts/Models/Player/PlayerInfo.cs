@@ -36,7 +36,7 @@ namespace Models.Player
         /// <summary>
         /// Дата создания персонажа, для презентации програсса игрока за определенный период
         /// </summary>
-        public readonly DateTime CreationDate = DateTime.Now;
+        public DateTime CreationDate;
         
         /// <summary>
         /// Возраст персонажа
@@ -58,6 +58,7 @@ namespace Models.Player
         /// </summary>
         public string HomeLand;
         
+        public static PlayerInfo New => new PlayerInfo();
         
         public override string ToString() => $"{FirstName} <{NickName}> {LastName}";
     }

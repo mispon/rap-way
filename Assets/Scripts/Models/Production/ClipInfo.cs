@@ -1,9 +1,11 @@
-﻿namespace Models.Production
+﻿using System;
+
+namespace Models.Production
 {
     /// <summary>
     /// Информация о выпущенном клипе
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class ClipInfo: Production
     {
         public int TrackId;

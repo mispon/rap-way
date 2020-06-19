@@ -9,7 +9,7 @@ namespace Models.Player
     [Serializable]
     public class Teammate
     {
-        public static Teammate Base => new Teammate();
+        public static Teammate New => new Teammate();
         
         /// <summary>
         /// Навык

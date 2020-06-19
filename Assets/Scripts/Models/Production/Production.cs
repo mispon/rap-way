@@ -1,10 +1,12 @@
-﻿using Core;
+﻿using System;
+using Core;
 
 namespace Models.Production
 {
     /// <summary>
     /// Абстрактный класс продуктивной деятельности, позволяющий получить общую для всех проудктов информацию
     /// </summary>
+    [Serializable]
     public abstract class Production
     {
         public int Id;
@@ -15,6 +17,6 @@ namespace Models.Production
         public int HypeIncome;
 
         public override string ToString()
-            => $"{DataManager.Instance.PlayerData.Info.NickName} - {Name}";
+            => $"{GameManager.Instance.PlayerData.Info.NickName} - {Name}";
     }
 }

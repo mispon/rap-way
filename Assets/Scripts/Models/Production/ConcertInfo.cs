@@ -1,11 +1,12 @@
-﻿using Core;
+﻿using System;
+using Core;
 
 namespace Models.Production
 {
     /// <summary>
     /// Информация о проведенном концерте
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class ConcertInfo: Production
     {
         public int AlbumId;
@@ -18,6 +19,6 @@ namespace Models.Production
         public int PrPoints;
 
         public override string ToString()
-            => $"{DataManager.Instance.PlayerData.Info.NickName} - {Name} (Live: {Location})";
+            => $"{GameManager.Instance.PlayerData.Info.NickName} - {Name} (Live: {Location})";
     }
 }

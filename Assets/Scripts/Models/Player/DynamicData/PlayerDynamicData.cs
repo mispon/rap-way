@@ -11,5 +11,7 @@ namespace Models.Player.DynamicData
         public Money Money;
         public Fans Fans;
         public Hype Hype;
+        
+        public static PlayerDynamicData New => new PlayerDynamicData();
     }
 }

@@ -4,22 +4,22 @@ namespace Models.Player
 {
     /// <summary>
     /// Команда персонажа
-    /// Не включаем сторонних чуваков, которые помогают при создании [клипа/концерта/чего еще душе угодно]
+    /// Не включаем сторонних чуваков, которые помогают при создании клипа
     /// </summary>
     [Serializable]
-    public class PlayerTeam//ToDo: Написать сериализатор для сохранения/загрузки
+    public class PlayerTeam
     {
         public Teammate BitMaker;
         public Teammate TextWriter;
         public Teammate Producer;
         public Teammate SMM;
 
-        public static PlayerTeam Base => new PlayerTeam
+        public static PlayerTeam New => new PlayerTeam
         {
-            BitMaker = Teammate.Base,
-            TextWriter = Teammate.Base,
-            Producer = Teammate.Base,
-            SMM = Teammate.Base
+            BitMaker = Teammate.New,
+            TextWriter = Teammate.New,
+            Producer = Teammate.New,
+            SMM = Teammate.New
         };
     }
 }
