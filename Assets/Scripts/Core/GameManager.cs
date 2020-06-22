@@ -1,4 +1,5 @@
-﻿using Models.Game;
+﻿using System;
+using Models.Game;
 using Models.Player;
 using UnityEngine;
 using Utils;
@@ -25,7 +26,8 @@ namespace Core
             // todo: включить загрузочный экран
 
             LoadApplicationData();
-
+            TimeManager.Instance.Setup(GameStats.Now);
+            
             // todo: выключить загрузочный экран
         }
 

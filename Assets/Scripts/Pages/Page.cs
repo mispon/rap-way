@@ -7,15 +7,19 @@ namespace Pages
     /// </summary>
     public class Page : MonoBehaviour
     {
-        public bool IsOpen { get; private set; }
+        private bool _isOpen;
 
         /// <summary>
         /// Открывает страницу
         /// </summary>
         public void Open()
         {
-            IsOpen = true;
+            if (_isOpen) return;
+            
+            BeforePageOpen();
+            _isOpen = true;
             gameObject.SetActive(true);
+            AfterPageOpen();
         }
         
         /// <summary>
@@ -23,17 +27,20 @@ namespace Pages
         /// </summary>
         public void Close()
         {
-            IsOpen = false;
+            if (!_isOpen) return;
+            
+            BeforePageClose();
+            _isOpen = false;
             gameObject.SetActive(false);
+            AfterPageClose();
         }
 
         /// <summary>
-        /// Переключает состояние страницы
+        /// Обработчики событий открытия/закрытия страницы
         /// </summary>
-        public void Toggle()
-        {
-            IsOpen = !IsOpen;
-            gameObject.SetActive(IsOpen);
-        }
+        protected virtual void BeforePageOpen() {}
+        protected virtual void AfterPageOpen() {}
+        protected virtual void BeforePageClose() {}
+        protected virtual void AfterPageClose() {}
     }
 }
