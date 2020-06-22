@@ -15,8 +15,8 @@ namespace Analyzers
         {
             // todo: analyze track
             
-            track.ListensCount = Random.Range(1, 100);
-            track.ChartPosition = 0;
+            track.ListenAmount = Random.Range(1, 100);
+            track.ChartPosition = Random.Range(1, 100);
             track.FansIncome = Random.Range(1, 100);
             track.MoneyIncome = Random.Range(1, 100);
         }

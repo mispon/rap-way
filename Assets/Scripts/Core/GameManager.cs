@@ -32,6 +32,39 @@ namespace Core
         }
 
         /// <summary>
+        /// Выдает награду за завершение основного действия
+        /// </summary>
+        public void GiveReward(int fans, int money)
+        {
+            AddFans(fans);
+            AddMoney(money);
+        }
+        
+        /// <summary>
+        /// Изменяет количество фанатов 
+        /// </summary>
+        public void AddFans(int fans)
+        {
+            PlayerData.Data.Fans += fans;
+        }
+
+        /// <summary>
+        /// Изменяет количество денег 
+        /// </summary>
+        public void AddMoney(int money)
+        {
+            PlayerData.Data.Money += money;
+        }
+
+        /// <summary>
+        /// Изменяет количество хайпа 
+        /// </summary>
+        public void AddHype(int hype)
+        {
+            PlayerData.Data.Hype += hype;
+        }
+
+        /// <summary>
         /// Загрузка данных приложения
         /// </summary>
         private void LoadApplicationData()

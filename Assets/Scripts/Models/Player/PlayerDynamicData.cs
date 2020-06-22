@@ -8,9 +8,9 @@ namespace Models.Player.DynamicData
     [Serializable]
     public class PlayerDynamicData
     {
-        public Money Money;
-        public Fans Fans;
-        public Hype Hype;
+        public int Money;
+        public int Fans;
+        public int Hype;
         
         public static PlayerDynamicData New => new PlayerDynamicData();
     }

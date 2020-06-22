@@ -1,4 +1,5 @@
 ﻿using Analyzers;
+using Core;
 using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,10 @@ namespace Pages.Track
     {
         [Header("Компоменты")]
         [SerializeField] private Text header;
+        [SerializeField] private Text listenAmount;
+        [SerializeField] private Text chartInfo;
+        [SerializeField] private Text fansIncome;
+        [SerializeField] private Text moneyIncome;
 
         [Header("Анализатор трека")]
         [SerializeField] private TrackAnalyzer trackAnalyzer;
@@ -33,14 +38,20 @@ namespace Pages.Track
         private void DisplayResult(TrackInfo track)
         {
             header.text = $"Работа над треком \"{track.Name}\" завершена!";
+            listenAmount.text = $"Количество прослушиваний: {track.ListenAmount}";
+            chartInfo.text = track.ChartPosition > 0
+                ? $"Трек занял {track.ChartPosition}-ую позицию в чарте!"
+                : "Трек не попал в топ чарта";
+            fansIncome.text = $"ФАНАТЫ: +{track.FansIncome}";
+            moneyIncome.text = $"ДЕНЬГИ: +{track.MoneyIncome}";
         }
 
         /// <summary>
         /// Выдает награду игроку 
         /// </summary>
-        private void GiveReward(TrackInfo track)
+        private static void GiveReward(TrackInfo track)
         {
-            
+            GameManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
         }
 
         /// <summary>
