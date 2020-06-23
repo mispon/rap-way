@@ -1,10 +1,14 @@
 ﻿using System.Linq;
+using Localization;
 using Models.Player;
 using Models.Production;
 using Utils;
 
 namespace Core
 {
+    /// <summary>
+    /// Логика взаимодействия с данными игрока
+    /// </summary>
     public class PlayerManager : Singleton<PlayerManager>
     {
         public static PlayerData PlayerData => GameManager.Instance.PlayerData;
@@ -45,7 +49,7 @@ namespace Core
         /// <summary>
         /// Возвращает идентификатор для новой сущности 
         /// </summary>
-        public static int GetNextId<T>() where T : Production
+        public static int GetNextProductionId<T>() where T : Production
         {
             var history = PlayerData.History;
             var id = 0;
@@ -64,5 +68,26 @@ namespace Core
 
             return id + 1;
         }
+
+        /// <summary>
+        /// Возвращает локализированный список тематик, известных игроку  
+        /// </summary>
+        public static string[] GetPlayersThemes()
+        {
+            return PlayerData.Themes
+                .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
+                .ToArray();
+        }
+        
+        /// <summary>
+        /// Возвращает локализированный список стилистик, известных игроку  
+        /// </summary>
+        public static string[] GetPlayersStyles()
+        {
+            return PlayerData.Styles
+                .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
+                .ToArray();
+        }
+        
     }
 }

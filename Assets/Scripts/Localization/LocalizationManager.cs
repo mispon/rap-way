@@ -41,7 +41,7 @@ namespace Localization
         public string GetKey(string value)
         {
             var item = _data.items.First(e => e.value == value);
-            return item.value;
+            return item.key;
         }
 
         /// <summary>

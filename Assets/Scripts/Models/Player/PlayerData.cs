@@ -19,8 +19,8 @@ namespace Models.Player
         
         public List<Good> Goods;
         public List<Achievement> Achievements;
-        public List<Styles> Styles;
         public List<Themes> Themes;
+        public List<Styles> Styles;
         public List<Skills> Skills;
         
         public static PlayerData New => new PlayerData
@@ -33,8 +33,8 @@ namespace Models.Player
             
             Goods = new List<Good>(),
             Achievements = new List<Achievement>(),
-            Styles = new List<Styles>(),
-            Themes = new List<Themes>(),
+            Themes = new List<Themes> { Enums.Themes.Self },
+            Styles = new List<Styles> { Enums.Styles.Common },
             Skills = new List<Skills>()
         };
     }

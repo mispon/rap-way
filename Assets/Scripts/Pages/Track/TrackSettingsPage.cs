@@ -30,14 +30,9 @@ namespace Pages.Track
         {
             trackNameInput.onValueChanged.AddListener(OnTrackNameInput);
             startButton.onClick.AddListener(CreateTrack);
-
-            var themes = EnumExtension.GetDiscriptions<Themes>()
-                .Select(e => LocalizationManager.Instance.Get(e));
-            themeSwitcher.InstantiateElements(themes);
-
-            var styles = EnumExtension.GetDiscriptions<Styles>()
-                .Select(e => LocalizationManager.Instance.Get(e));
-            styleSwitcher.InstantiateElements(styles);
+            
+            themeSwitcher.InstantiateElements(PlayerManager.GetPlayersThemes());
+            styleSwitcher.InstantiateElements(PlayerManager.GetPlayersStyles());
         }
         
         /// <summary>
@@ -53,17 +48,28 @@ namespace Pages.Track
         /// </summary>
         private void CreateTrack()
         {
-            _track.Id = PlayerManager.GetNextId<TrackInfo>();
+            _track.Id = PlayerManager.GetNextProductionId<TrackInfo>();
 
             if (string.IsNullOrEmpty(_track.Name))
                 _track.Name = $"Track {_track.Id}";
-
-            _track.Theme = (Themes) themeSwitcher.ActiveIndex;
-            _track.Style = (Styles) styleSwitcher.ActiveIndex;
+            
+            _track.Theme = GetToneValue<Themes>(themeSwitcher);
+            _track.Style = GetToneValue<Styles>(styleSwitcher);
             
             workingPage.CreateTrack(_track);
             Close();
         }
+
+        /// <summary>
+        /// Возвращает выбранное значение тематики или стиля 
+        /// </summary>
+        private static T GetToneValue<T>(Switcher switcher) where T: Enum
+        {
+            var desc = LocalizationManager.Instance.GetKey(switcher.ActiveTextValue);
+            return EnumExtension.GetFromDescription<T>(desc);
+        }
+
+        #region PAGE EVENTS
 
         protected override void BeforePageOpen()
         {
@@ -78,5 +84,7 @@ namespace Pages.Track
             themeSwitcher.ResetActive();
             styleSwitcher.ResetActive();
         }
+
+        #endregion
     }
 }

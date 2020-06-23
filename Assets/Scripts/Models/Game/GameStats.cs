@@ -16,7 +16,7 @@ namespace Models.Game
         public static GameStats New => new GameStats
         {
             Now = DateTime.Now,
-            Trands = new Trands { Style = Styles.Common, Theme = Themes.Theme0 },
+            Trands = new Trands { Style = Styles.Common, Theme = Themes.Self },
             Lang = 0
         };
     }
