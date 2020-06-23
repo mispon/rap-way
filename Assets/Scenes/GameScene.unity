@@ -596,6 +596,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5296354436972659694, guid: 9e3951eeb38121e4285ca00b2ae7cc3e,
+        type: 3}
+      propertyPath: duration
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6776669904289569403, guid: 9e3951eeb38121e4285ca00b2ae7cc3e,
         type: 3}
       propertyPath: m_AnchorMin.x
@@ -1089,9 +1094,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1030385853}
-  - component: {fileID: 1030385851}
   - component: {fileID: 1030385852}
   - component: {fileID: 1030385854}
+  - component: {fileID: 1030385851}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1108,9 +1113,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1030385850}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2384ae7182b48fd40ba5098359b6ca01, type: 3}
+  m_Script: {fileID: 11500000, guid: 8136d7b29de161047a6f0d19adf52576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dontDestroy: 0
+  _data:
+    items: []
 --- !u!114 &1030385852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1126,7 +1134,6 @@ MonoBehaviour:
   _dontDestroy: 0
   playersDataKey: RapWay_PlayerSave
   gameDataKey: RapWay_GameSave
-  dataManager: {fileID: 1030385851}
 --- !u!4 &1030385853
 Transform:
   m_ObjectHideFlags: 0
@@ -1184,7 +1191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dontDestroy: 0
-  actionInterval: 3
+  actionInterval: 2
   inactionInterval: 10
 --- !u!4 &1434850206
 Transform:
