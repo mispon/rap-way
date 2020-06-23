@@ -1,6 +1,8 @@
-﻿using Models.Production;
+﻿using Enums;
+using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace Pages.Track
 {
@@ -11,8 +13,8 @@ namespace Pages.Track
     {
         [Header("Контроллы")]
         [SerializeField] private InputField trackNameInput;
-        [SerializeField] private Dropdown themeDropdown;
-        [SerializeField] private Dropdown styleDropdown;
+        [SerializeField] private Switcher themeSwitcher;
+        [SerializeField] private Switcher styleSwitcher;
         [SerializeField] private Button startButton;
 
         [Header("Страница разработки")]
@@ -23,8 +25,6 @@ namespace Pages.Track
         private void Start()
         {
             trackNameInput.onValueChanged.AddListener(OnTrackNameInput);
-            themeDropdown.onValueChanged.AddListener(OnThemeChanged);
-            styleDropdown.onValueChanged.AddListener(OnStyleChanged);
             startButton.onClick.AddListener(CreateTrack);
         }
         
@@ -35,35 +35,16 @@ namespace Pages.Track
         {
             _track.Name = value;
         }
-        
-        /// <summary>
-        /// Обработчик смены тематики трека
-        /// </summary>
-        private void OnThemeChanged(int value)
-        {
-            print($"Selected {themeDropdown.options[value].text}");
-        }
-        
-        /// <summary>
-        /// Обработчик смены стилистики трека
-        /// </summary>
-        private void OnStyleChanged(int value)
-        {
-            print($"Selected {styleDropdown.options[value].text}");
-        }
 
         /// <summary>
         /// Обработчик запуска работы над треком
         /// </summary>
         private void CreateTrack()
         {
-            // todo: get next id
-            _track.Id = 0;
-            
+            _track.Id = 0; // todo: get next id from history
+
             if (string.IsNullOrEmpty(_track.Name))
-            {
                 _track.Name = $"Track {_track.Id}";
-            }
             
             workingPage.CreateTrack(_track);
             Close();
@@ -78,9 +59,9 @@ namespace Pages.Track
         {
             _track = null;
             
-            themeDropdown.SetValueWithoutNotify(0);
-            styleDropdown.SetValueWithoutNotify(0);
             trackNameInput.SetTextWithoutNotify(string.Empty);
+            themeSwitcher.ResetActive();
+            styleSwitcher.ResetActive();
         }
     }
 }

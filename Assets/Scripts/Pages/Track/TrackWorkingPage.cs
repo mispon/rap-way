@@ -1,5 +1,6 @@
 ﻿using Core;
 using Models.Production;
+using UI.MainMenu;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,11 +14,17 @@ namespace Pages.Track
         [Header("Настройки")]
         [SerializeField] private int duration;
 
+        [Header("Идентификаторы прогресса работы")]
+        [SerializeField] private ProgressBar progressBar;
+        [SerializeField] private Text bitPoints;
+        [SerializeField] private Text textPoints;
+        
+        [Header("Команда игрока")]
+        [SerializeField] private GameObject bitmaker;
+        [SerializeField] private GameObject textwritter;
+
         [Header("Страница результата")]
         [SerializeField] private TrackResultPage trackResult;
-        
-        [Header("DEBUG")]
-        [SerializeField] private Text daysLeft;
 
         private TrackInfo _track;
         private int _daysLeft;
@@ -37,21 +44,39 @@ namespace Pages.Track
         /// </summary>
         private void OnDayLeft()
         {
-            _daysLeft--;
-            
-            // todo: generate work points
-            // todo: update ui
-            daysLeft.text = $"До завершения работы осталось {_daysLeft} дней";
-            
             if (_daysLeft == 0)
-                FinishTrack();
+                return;
+            
+            _daysLeft--;
+
+            progressBar.AddProgress(1);
+            GenerateWorkPoints();
+            DisplayWorkPoints();
+        }
+    
+        /// <summary>
+        /// Генерирует очки работы над треком
+        /// </summary>
+        private void GenerateWorkPoints()
+        {
+            _track.BitPoints += Random.Range(1, 5);
+            _track.TextPoints += Random.Range(1, 5);
+        }
+
+        /// <summary>
+        /// Отображает очки работы над треком
+        /// </summary>
+        private void DisplayWorkPoints()
+        {
+            bitPoints.text = _track.BitPoints.ToString();
+            textPoints.text = _track.TextPoints.ToString();
         }
 
         /// <summary>
         /// Завершает работу над треком
         /// </summary>
         private void FinishTrack()
-        {
+        { 
             trackResult.Show(_track);
             Close();
         }
@@ -60,13 +85,19 @@ namespace Pages.Track
 
         protected override void AfterPageOpen()
         {
+            progressBar.Init(duration);
+            progressBar.onFinish += FinishTrack;
+            
             TimeManager.Instance.SetActionMode();
         }
 
         protected override void BeforePageClose()
         {
             TimeManager.Instance.ResetActionMode();
+            
             _track = null;
+            progressBar.ResetProgress();
+            progressBar.onFinish -= FinishTrack;
         }
 
         #endregion

@@ -3,7 +3,6 @@ using System.Linq;
 using Enums;
 using Models.Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
@@ -19,15 +18,9 @@ namespace UI.MainMenu
 
         private void Start()
         {
-            //Инициализация значений возраста
             dateOfBirthSwitcher.InstantiateElements(Enumerable.Range(12, 100));
-            
-            //Инициализация знаений Рас
-            raceSwitcher.InstantiateElements(
-                Enum.GetNames(typeof(Race)));
-            
-            genderSwitcher.InstantiateElements(
-                Enum.GetNames(typeof(Gender)));
+            raceSwitcher.InstantiateElements(Enum.GetNames(typeof(Race)));
+            genderSwitcher.InstantiateElements(Enum.GetNames(typeof(Gender)));
         }
         
         #region Validation
@@ -60,10 +53,10 @@ namespace UI.MainMenu
         }
         #endregion
 
-        public void Confirm()
+        private void Confirm()
         {
 
-            PlayerInfo newPlayer = new PlayerInfo
+            var newPlayer = new PlayerInfo
             {
                 FirstName = inputFields[0].text,
                 LastName = inputFields[1].text,
@@ -73,8 +66,7 @@ namespace UI.MainMenu
                 CreationDate = DateTime.Now,
                 DateOfBirth = DateTime.Today - TimeSpan.FromDays(365 * Convert.ToInt32(dateOfBirthSwitcher.ActiveTextValue)),
 
-                Race = (Race)raceSwitcher.ActiveIndex,
-
+                Race = (Race) raceSwitcher.ActiveIndex,
                 Gender = (Gender) genderSwitcher.ActiveIndex
             };
             

@@ -13,9 +13,9 @@ namespace Utils
         private System.Action<int> onClickAction = delegate { };
         
         [SerializeField, Tooltip("Сгенировать элементы при старте?")] 
-        private bool createOnAwake = false;
+        private bool createOnAwake;
         [SerializeField, Tooltip("Создать подписчик на старте?")] 
-        private bool subscribeOnAwake = false;
+        private bool subscribeOnAwake;
     
         [Header("Settings")]
         [SerializeField, Tooltip("Контейнер элементов")] 
@@ -39,10 +39,7 @@ namespace Utils
         /// </summary>
         private float containerPositionPercentage {
             get => _containerPositionPercentage;
-            set
-            {
-                _containerPositionPercentage = value < 0 ? 0: value > 1 ? 1 : value;
-            }
+            set => _containerPositionPercentage = value < 0 ? 0 : value > 1 ? 1 : value;
         }
         /// <summary>
         /// Правая граница доли позиции от ширины контейнера на каждый из элементов
@@ -93,11 +90,9 @@ namespace Utils
         /// </summary>
         private float _lastDragDelta;
         
-        
-        
-        private void Start()
+        private void Awake()
         {
-            var viewPortRect = (transform.Find("Viewport") as RectTransform).rect;
+            var viewPortRect = ((RectTransform) transform.Find("Viewport")).rect;
             _viewPortSize = new Vector2(viewPortRect.width, viewPortRect.height);
     
             if (createOnAwake)
@@ -105,39 +100,38 @@ namespace Utils
             if (subscribeOnAwake)
                 AddClickCallback(delegate (int index) { Debug.Log(index); });
         }
-    
-    
-        //++Generate items
-        
+
+        #region Instaintiate elements
         ///<summary>
         /// Создать элемент из перечисления
         /// </summary>
         public void InstantiateElements<T>(IEnumerable<T> values)
         {
-            this.listElements.options.Clear();
-            this.listElements.options.AddRange(values.Select(v=> new Dropdown.OptionData(v.ToString())));
+            listElements.options.Clear();
+            listElements.options.AddRange(values.Select(v=> new Dropdown.OptionData(v.ToString())));
             InstantiateElements();
         }
+        
         ///<summary>
         /// Создать элементы из перечисления опций
         /// </summary>
         public void InstantiateElements(IEnumerable<dd.OptionData> elements)
         {
-            this.listElements.options.Clear();
-            this.listElements.options.AddRange(elements);
+            listElements.options.Clear();
+            listElements.options.AddRange(elements);
             InstantiateElements();
         }
+        
         /// <summary>
         /// Создать элементы из DropDown-листа
         /// </summary>
-        /// <param name="listElements"></param>
-        public void InstantiateElements(dd.OptionDataList listElements)
+        public void InstantiateElements(dd.OptionDataList elements)
         {
-            this.listElements.options.Clear();
-            this.listElements.options.AddRange(listElements.options);
+            listElements.options.Clear();
+            listElements.options.AddRange(elements.options);
             InstantiateElements();
         }
-    
+        
         /// <summary>
         /// Создание элементов, позиционирование, расчет вспомогательных данных для опеределния сфокусированного элемента 
         /// </summary>
@@ -175,8 +169,6 @@ namespace Utils
         /// <summary>
         /// Заполнение текстовых полей и картинок элемента исходя из значения опций
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="position"></param>
         private void FillElement(int index, Vector2 position)
         {
             var item = InstantiateElement(position, index);
@@ -186,14 +178,11 @@ namespace Utils
                 item.GetComponentInChildren<Text>().text = data.text;
             if (data.image != null)
                 item.GetComponentInChildren<Image>().sprite = data.image;
-    
         }
+        
         /// <summary>
         /// Создание объекта-элемента и его позиционирование внутри контейнера
         /// </summary>
-        /// <param name="position"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
         private GameObject InstantiateElement(Vector2 position, int index)
         {
             var item = Instantiate(baseElement, container);
@@ -207,23 +196,9 @@ namespace Utils
     
             return item;
         }
-        ///--Generate items
-    
+        #endregion
         
-        
-        //++Events
-        //++Click item
-        /// <summary>
-        /// Подписаться на событие нажатия на элементы
-        /// </summary>
-        /// <param name="callbackAction">Действие при нажатии (на вход получает активный индекс элемента)</param>
-        public void AddClickCallback(System.Action<int> callbackAction)
-        {
-            onClickAction += callbackAction;
-        }
-        //--Click item
-    
-        //++Scroll with buttons
+        #region Btns click move
         /// <summary>
         /// Нажатие на кнопку "Сместить влево"
         /// </summary>
@@ -231,10 +206,10 @@ namespace Utils
         {
             if (ActiveIndex != 0)
                 --ActiveIndex;
-                
-    
+        
             StartCoroutine(SlideCor());
         }
+        
         /// <summary>
         /// Нажатие на кнопку "Сместить вправо"
         /// </summary>
@@ -245,10 +220,10 @@ namespace Utils
                 
             StartCoroutine(SlideCor());
         }
+        
         /// <summary>
         /// Корутина слайда контейнера
         /// </summary>
-        /// <returns></returns>
         private IEnumerator SlideCor()
         {
             if(_enableSlide)
@@ -257,7 +232,7 @@ namespace Utils
             _enableSlide = true;
             float t_start = Time.time, ct;
             Vector2 startPos = container.anchoredPosition,
-                endPos = -(ActiveObject.GetComponent<RectTransform>()).anchoredPosition;
+                endPos = -ActiveObject.GetComponent<RectTransform>().anchoredPosition;
     
             while ((ct = (Time.time - t_start) / t_Slide) < 1f)
             {
@@ -269,13 +244,12 @@ namespace Utils
             
             _enableSlide = false;
         }
-        //--Scroll with buttons
+        #endregion
         
-        //++Scroll with drag
+        #region Scroll move
         /// <summary>
         /// При регистрации "Начала скролла" выдаем разрешения на скролл, устанавливаем дефолтные значений необходимых параметров
         /// </summary>
-        /// <param name="eventData"></param>
         public void OnBeginDrag(PointerEventData eventData)
         {
             if(_enableSlide)
@@ -284,40 +258,39 @@ namespace Utils
             _enableDrag = true;
             _lastDragDelta = 0;
         }
+        
         public void OnDrag(PointerEventData eventData)
         {
-            if(_enableSlide)
+            if(!_enableDrag)
                 return;
     
-            float delta = eventData.delta.x*dragMultiplier;
-            
-            //Доля изменения позиции от всей ширины контейнера
-            float deltaPercentage = delta / _containerWidth;
-            //Изменение текущей доли, с перерасчетом на выходы за границы контейнера
+            var delta = eventData.delta.x * dragMultiplier;
+            // Доля изменения позиции от всей ширины контейнера
+            var deltaPercentage = delta / _containerWidth;
+            // Изменение текущей доли, с перерасчетом на выходы за границы контейнера
             containerPositionPercentage -= deltaPercentage;
-            //Изменение положения контейнера
+            // Изменение положения контейнера
             container.anchoredPosition = new Vector2(-_containerWidth * containerPositionPercentage, 0);
     
             _lastDragDelta += delta;    
         }
+        
         public void OnEndDrag(PointerEventData eventData)
         {
-            //Запуск корутины инерциального движения после скролла
             StartCoroutine(AfterDragCor());
         }
     
         /// <summary>
         /// Коррутина инерциального движения после скролла
         /// </summary>
-        /// <returns></returns>
         private IEnumerator AfterDragCor()
         {
             float t_start = Time.time, ct;
-            Vector2 startPos = container.anchoredPosition,
-                endPos = startPos + new Vector2(afterDragInertia*_lastDragDelta, 0);
+            var startPos = container.anchoredPosition;
+            var endPos = startPos + new Vector2(afterDragInertia*_lastDragDelta, 0);
     
             //Контроллируем, что инерциально движение не выдвигает элемент за границы
-            bool reduced = false;
+            var reduced = false;
             if (endPos.x > 0)
             {
                 endPos = Vector2.zero;
@@ -328,8 +301,7 @@ namespace Utils
                 endPos = new Vector2(-_containerWidth, 0);
                 reduced = true;
             }
-                
-            
+
             while ((ct = (Time.time - t_start) / t_Inertia) < 1f)
             {
                 container.anchoredPosition = Vector2.Lerp(startPos, endPos, ct);
@@ -345,34 +317,51 @@ namespace Utils
             //Запуск корутины фокусирования на элементе
             if(!reduced)
                 StartCoroutine(SlideCor());
+            
             _lastDragDelta = 0;
             _enableDrag = false;
         }
-        //--Scroll with drag
-        //--Events
+        #endregion
         
+        /// <summary>
+        /// Подписаться на событие нажатия на элементы
+        /// </summary>
+        /// <param name="callbackAction">Действие при нажатии (на вход получает активный индекс элемента)</param>
+        public void AddClickCallback(System.Action<int> callbackAction)
+        {
+            onClickAction += callbackAction;
+        }
+
+        /// <summary>
+        /// Сброс выбранного значения
+        /// </summary>
+        public void ResetActive()
+        {
+            _containerPositionPercentage = 0;
+            container.anchoredPosition = Vector2.zero;
+            ActiveIndex = 0;
+        }
     }
 
-    public static partial class Extensions
+    public static class Extensions
     {
         /// <summary>
         /// Определение граничных долей каждого из элементов
         /// </summary>
         /// <param name="count">Количество элементов</param>
         /// <param name="spacePercentage">Доля промежуточного расстояния между элементами от ширины элементов</param>
-        /// <returns></returns>
         public static float[] PercentageBoardsOnElement(int count, float spacePercentage)
         {
             var result = new float[count];
-            float sum = (1 + spacePercentage) * (count-1);
-            for (int i = 0; i < count; i++)
+            var sum = (1 + spacePercentage) * (count - 1);
+            for (var i = 0; i < count; i++)
             {
                 if (i == 0)
-                    result[i] = (1 + (spacePercentage / 2)) / 2 / sum;
-                else if(i==count-1)
+                    result[i] = (1 + spacePercentage / 2) / 2 / sum;
+                else if(i == count - 1)
                     result[i] = 1f;
                 else 
-                    result[i] = ((1 + (spacePercentage / 2)) / sum) + result[i-1];
+                    result[i] = (1 + (spacePercentage / 2)) / sum + result[i - 1];
             }
             return result;
         }
@@ -382,21 +371,16 @@ namespace Utils
         /// </summary>
         /// <param name="boards">Массив правых границ</param>
         /// <param name="percentage">Текущая доля</param>
-        /// <returns>Индекс ячейки</returns>
         public static int IndexAtBoards(this float[] boards, float percentage)
         {
             //Начальная левая гранциа = 0. Конечная правая = 1. 
             //Происходит проврека слева направо, меньше ли текущее значение правой границы ячейки.
             //Если да, то текущая доля попадает в ячейку.
-            for (int i = 0; i < boards.Length; i++)
+            for (var i = 0; i < boards.Length; i++)
                 if (boards[i] > percentage)
                     return i;
     
             return boards.Length - 1;
-    
         }
     }
-
 }
-
-
