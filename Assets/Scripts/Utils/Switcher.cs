@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using dd = UnityEngine.UI.Dropdown;
@@ -25,6 +26,23 @@ namespace Utils
         [SerializeField, Range(0.1f, 1f), Tooltip("Расстояние между элементами, как доля от их размера")] 
         private float elementSpaceWidthPercentage = 0.33f;
     
+        [Header("Elements info")]
+        [SerializeField, Tooltip("Список опций выбора")] private dd.OptionDataList listElements;
+        
+        [Header("Scroll info")] 
+        [SerializeField, Range(0.1f, 1.0f), Tooltip("Время слайда контейнера при фокусировании")] 
+        private float t_Slide = 0.2f;
+        [SerializeField, Range(0.02f, 1.0f), Tooltip("Время инерции при скролле")] 
+        private float t_Inertia = 0.075f;
+        [SerializeField, Tooltip("Флаг запрета скролла")]
+        private bool lockDrag = false;
+        [SerializeField, Tooltip("Коэффициент изменения позиции мыши")]
+        private float dragMultiplier = 3;
+        [SerializeField, Tooltip("Коэффициент инерции при скролле")]
+        private float afterDragInertia = 0.5f;
+        
+        //++Данные расчета позици контейнера
+        
         /// <summary>
         /// Размер окна отображения
         /// </summary>
@@ -41,7 +59,7 @@ namespace Utils
             get => _containerPositionPercentage;
             set
             {
-                _containerPositionPercentage = value < 0 ? 0 : value > 1 ? 1 : value;
+                _containerPositionPercentage = Mathf.Clamp01(value);
                 container.anchoredPosition = new Vector2(-_containerPositionPercentage * _containerWidth, 0);
             } 
         }
@@ -49,9 +67,30 @@ namespace Utils
         /// Правая граница доли позиции от ширины контейнера на каждый из элементов
         /// </summary>
         private float[] _percentageBoardsOnElement;
-    
-        [Header("Elements info")]
-        [SerializeField, Tooltip("Список опций выбора")] private dd.OptionDataList listElements;
+        
+        //--Данные расчета позици контейнера
+        
+        //++Данные состояний
+        
+        /// <summary>
+        /// Флаг активации процесса изменения позиции
+        /// </summary>
+        private bool _enableSlide;
+        /// <summary>
+        /// Флаг процесса считывания Drag мышью
+        /// </summary>
+        private bool _enableDrag;
+        /// <summary>
+        /// Изменение позиции при скролле
+        /// </summary>
+        private float _lastDragDelta;
+        
+        //--Данные состояний
+        
+        
+        /// <summary>
+        /// Компоненты RectTransform созданных кнопок
+        /// </summary>
         private RectTransform[] _instantiatedElements;
         public int ElementsCount => listElements.options.Count;
         /// <summary>
@@ -70,31 +109,6 @@ namespace Utils
         /// Текст элемента, на котором сфокусировано окно выбора
         /// </summary>
         public string ActiveTextValue => ActiveOption.text;
-    
-        [Header("Scroll info")] 
-        [SerializeField, Range(0.1f, 1.0f), Tooltip("Время слайда контейнера при фокусировании")] 
-        private float t_Slide = 0.2f;
-        [SerializeField, Range(0.02f, 1.0f), Tooltip("Время инерции при скролле")] 
-        private float t_Inertia = 0.075f;
-
-        [SerializeField, Tooltip("Флаг запрета скролла")]
-        private bool lockDrag = false;
-        [SerializeField, Tooltip("Коэффициент изменения позиции мыши")]
-        private float dragMultiplier = 3;
-        [SerializeField, Tooltip("Коэффициент инерции при скролле")]
-        private float afterDragInertia = 0.5f;
-        /// <summary>
-        /// Флаг активации процесса изменения позиции
-        /// </summary>
-        private bool _enableSlide;
-        /// <summary>
-        /// Флаг процесса считывания Drag мышью
-        /// </summary>
-        private bool _enableDrag;
-        /// <summary>
-        /// Изменение позиции при скролле
-        /// </summary>
-        private float _lastDragDelta;
         
         private void Awake()
         {
@@ -266,7 +280,7 @@ namespace Utils
         
         public void OnDrag(PointerEventData eventData)
         {
-            if(!_enableDrag || lockDrag)
+            if(!_enableDrag)
                 return;
     
             var delta = eventData.delta.x * dragMultiplier;
@@ -280,9 +294,6 @@ namespace Utils
         
         public void OnEndDrag(PointerEventData eventData)
         {
-            if(lockDrag)
-                return;
-            
             StartCoroutine(AfterDragCor());
         }
     
@@ -322,7 +333,29 @@ namespace Utils
         {
             onClickAction += callbackAction;
         }
+        
+        /// <summary>
+        /// Установка специальных коллбэков по нажатию
+        /// </summary>
+        /// <param name="btnClickCallbacks">Массив коллбэков: i-й коллбэк для i-го элемента</param>
+        /// <param name="resetPreviousCallbacks">Сбросить все предыдущие коллбэки. По умолчанию устанавливается коллбэк "onClickAction" с передачей текущего активного индекса</param>
+        public void AddClickCallbacks(UnityAction[] btnClickCallbacks, bool resetPreviousCallbacks = true)
+        {
+            if(btnClickCallbacks.Length < ElementsCount)
+                throw new RapWayException($"Передано [{btnClickCallbacks.Length}] callback-функций для [{ElementsCount}] элементов");
 
+            for (var i = 0; i < ElementsCount; i++)
+            {
+                if (btnClickCallbacks[i] == null)
+                    continue;
+                
+                var btn = _instantiatedElements[i].GetComponent<Button>();
+                if (resetPreviousCallbacks)
+                    btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(btnClickCallbacks[i]);
+            }
+        }
+        
         /// <summary>
         /// Сброс выбранного значения
         /// </summary>
@@ -351,7 +384,7 @@ namespace Utils
                 else if(i == count - 1)
                     result[i] = 1f;
                 else 
-                    result[i] = (1 + spacePercentage / 2) / sum + result[i - 1];
+                    result[i] = (1 + (spacePercentage / 2)) / sum + result[i - 1];
             }
             return result;
         }

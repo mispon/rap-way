@@ -15,7 +15,6 @@ namespace UI.MainScreen
         private void Start()
         {
             menuSwitcher.InstantiateElements(new[] {"New Game", "Continue", "About"});
-            menuSwitcher.AddClickCallback(OnItemSelect);
         }
 
         private void OnItemSelect(int index)

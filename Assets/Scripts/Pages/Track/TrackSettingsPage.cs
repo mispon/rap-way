@@ -1,4 +1,9 @@
-﻿using Models.Production;
+﻿using System;
+using System.Linq;
+using Core;
+using Enums;
+using Localization;
+using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -25,6 +30,14 @@ namespace Pages.Track
         {
             trackNameInput.onValueChanged.AddListener(OnTrackNameInput);
             startButton.onClick.AddListener(CreateTrack);
+
+            var themes = EnumExtension.GetDiscriptions<Themes>()
+                .Select(e => LocalizationManager.Instance.Get(e));
+            themeSwitcher.InstantiateElements(themes);
+
+            var styles = EnumExtension.GetDiscriptions<Styles>()
+                .Select(e => LocalizationManager.Instance.Get(e));
+            styleSwitcher.InstantiateElements(styles);
         }
         
         /// <summary>
@@ -40,10 +53,13 @@ namespace Pages.Track
         /// </summary>
         private void CreateTrack()
         {
-            _track.Id = 0; // todo: get next id from history
+            _track.Id = PlayerManager.GetNextId<TrackInfo>();
 
             if (string.IsNullOrEmpty(_track.Name))
                 _track.Name = $"Track {_track.Id}";
+
+            _track.Theme = (Themes) themeSwitcher.ActiveIndex;
+            _track.Style = (Styles) styleSwitcher.ActiveIndex;
             
             workingPage.CreateTrack(_track);
             Close();

@@ -6,12 +6,12 @@ namespace Core
     /// <summary>
     /// Управление сохранением и загрузкой игровых данных
     /// </summary>
-    public class DataManager: MonoBehaviour
+    public static class DataManager
     {
         /// <summary>
         /// Выполняет сохранение игровых данных 
         /// </summary>
-        public void Save<T>(T data, string saveKey) where T : class
+        public static void Save<T>(T data, string saveKey) where T : class
         {
             var jsonData = JsonUtility.ToJson(data);
             
@@ -24,7 +24,7 @@ namespace Core
         /// <summary>
         /// Выполняет загрузку игровых данных 
         /// </summary>
-        public T Load<T>(string saveKey) where T : class
+        public static T Load<T>(string saveKey) where T : class
         {
             T result = null;
             
@@ -39,7 +39,7 @@ namespace Core
         /// <summary>
         /// Удаляет игровые данные
         /// </summary>
-        public void Clear(string saveKey)
+        public static void Clear(string saveKey)
         {
             PlayerPrefs.DeleteKey(saveKey);
         }

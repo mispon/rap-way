@@ -1,4 +1,5 @@
 ﻿using Core;
+using Models.Player;
 using Models.Production;
 using UI.MainMenu;
 using UnityEngine;
@@ -15,11 +16,16 @@ namespace Pages.Track
         [SerializeField] private int duration;
 
         [Header("Идентификаторы прогресса работы")]
+        [SerializeField] private Text header;
         [SerializeField] private ProgressBar progressBar;
         [SerializeField] private Text bitPoints;
         [SerializeField] private Text textPoints;
-        
+
         [Header("Команда игрока")]
+        [SerializeField] private WorkPoints playerBitWorkPoints;
+        [SerializeField] private WorkPoints playerTextWorkPoints;
+        [SerializeField] private WorkPoints bitmakerWorkPoints;
+        [SerializeField] private WorkPoints textwritterWorkPoints;
         [SerializeField] private GameObject bitmaker;
         [SerializeField] private GameObject textwritter;
 
@@ -27,7 +33,6 @@ namespace Pages.Track
         [SerializeField] private TrackResultPage trackResult;
 
         private TrackInfo _track;
-        private int _daysLeft;
     
         /// <summary>
         /// Запускает создание нового трека
@@ -35,7 +40,6 @@ namespace Pages.Track
         public void CreateTrack(TrackInfo track)
         {
             _track = track;
-            _daysLeft = duration;
             Open();
         }
         
@@ -44,12 +48,9 @@ namespace Pages.Track
         /// </summary>
         private void OnDayLeft()
         {
-            if (_daysLeft == 0)
+            if (progressBar.IsFinish)
                 return;
             
-            _daysLeft--;
-
-            progressBar.AddProgress(1);
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
@@ -59,12 +60,51 @@ namespace Pages.Track
         /// </summary>
         private void GenerateWorkPoints()
         {
-            _track.BitPoints += Random.Range(1, 5);
-            _track.TextPoints += Random.Range(1, 5);
+            var bitWorkPoints = CreateBitPoints(PlayerManager.PlayerData);
+            var textWorkPoints = CreateTextPoints(PlayerManager.PlayerData);
+            
+            _track.BitPoints += bitWorkPoints;
+            _track.TextPoints += textWorkPoints;
         }
 
         /// <summary>
-        /// Отображает очки работы над треком
+        /// Создает очки работы по биту 
+        /// </summary>
+        private int CreateBitPoints(PlayerData data)
+        {
+            var playersBitPoints = Random.Range(1, data.Stats.Bitmaking);
+            playerBitWorkPoints.Show(playersBitPoints);
+
+            var bitmakerPoints = 0;
+            if (bitmaker.activeSelf)
+            {
+                bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill);
+                bitmakerWorkPoints.Show(bitmakerPoints);
+            }
+
+            return playersBitPoints + bitmakerPoints;
+        }
+        
+        /// <summary>
+        /// Создает очки работы по тексту 
+        /// </summary>
+        private int CreateTextPoints(PlayerData data)
+        {
+            var playersTextPoints = Random.Range(1, data.Stats.Vocobulary);
+            playerTextWorkPoints.Show(playersTextPoints);
+
+            var textwritterPoints = 0;
+            if (textwritter.activeSelf)
+            {
+                textwritterPoints = Random.Range(1, data.Team.TextWriter.Skill);
+                textwritterWorkPoints.Show(textwritterPoints);
+            }
+
+            return playersTextPoints + textwritterPoints;
+        }
+
+        /// <summary>
+        /// Обновляет значение рабочих очков в интерфейсе
         /// </summary>
         private void DisplayWorkPoints()
         {
@@ -83,35 +123,32 @@ namespace Pages.Track
 
         #region PAGE CALLBACKS
 
+        protected override void BeforePageOpen()
+        {
+            header.text = $"Работа над треком \"{_track.Name}\"";
+            bitmaker.SetActive(!PlayerManager.PlayerData.Team.BitMaker.IsEmpty);
+            textwritter.SetActive(!PlayerManager.PlayerData.Team.TextWriter.IsEmpty);
+        }
+
         protected override void AfterPageOpen()
         {
+            TimeManager.Instance.onDayLeft += OnDayLeft;
+            TimeManager.Instance.SetActionMode();
+            
             progressBar.Init(duration);
             progressBar.onFinish += FinishTrack;
-            
-            TimeManager.Instance.SetActionMode();
+            progressBar.Run();
         }
 
         protected override void BeforePageClose()
         {
-            TimeManager.Instance.ResetActionMode();
-            
-            _track = null;
-            progressBar.ResetProgress();
-            progressBar.onFinish -= FinishTrack;
-        }
-
-        #endregion
-
-        #region TIME LISTENER
-
-        private void OnEnable()
-        {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-        }
-        
-        private void OnDisable()
-        {
             TimeManager.Instance.onDayLeft -= OnDayLeft;
+            TimeManager.Instance.ResetActionMode();
+
+            bitPoints.text = textPoints.text = "0";
+            
+            progressBar.onFinish -= FinishTrack;
+            _track = null;
         }
 
         #endregion

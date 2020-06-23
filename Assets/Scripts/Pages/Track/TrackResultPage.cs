@@ -28,7 +28,7 @@ namespace Pages.Track
         {
             trackAnalyzer.Analyze(track);
             DisplayResult(track);
-            GiveReward(track);
+            SaveResult(track);
             Open();
         }
 
@@ -47,11 +47,12 @@ namespace Pages.Track
         }
 
         /// <summary>
-        /// Выдает награду игроку 
+        /// Сохраняет результаты трека
         /// </summary>
-        private static void GiveReward(TrackInfo track)
+        private static void SaveResult(TrackInfo track)
         {
-            GameManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
+            PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
+            PlayerManager.PlayerData.History.TrackList.Add(track);
         }
 
         /// <summary>

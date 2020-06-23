@@ -11,11 +11,13 @@ namespace Models.Game
     {
         public DateTime Now;
         public Trands Trands;
+        public int Lang;
         
         public static GameStats New => new GameStats
         {
             Now = DateTime.Now,
-            Trands = new Trands {Style = Styles.Style0, Theme = Themes.Theme0}
+            Trands = new Trands { Style = Styles.Common, Theme = Themes.Theme0 },
+            Lang = 0
         };
     }
 }
