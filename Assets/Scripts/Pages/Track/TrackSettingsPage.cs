@@ -1,5 +1,4 @@
-﻿using Enums;
-using Models.Production;
+﻿using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;

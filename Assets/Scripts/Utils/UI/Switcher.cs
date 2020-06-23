@@ -39,7 +39,11 @@ namespace Utils
         /// </summary>
         private float containerPositionPercentage {
             get => _containerPositionPercentage;
-            set => _containerPositionPercentage = value < 0 ? 0 : value > 1 ? 1 : value;
+            set
+            {
+                _containerPositionPercentage = value < 0 ? 0 : value > 1 ? 1 : value;
+                container.anchoredPosition = new Vector2(-_containerPositionPercentage * _containerWidth, 0);
+            } 
         }
         /// <summary>
         /// Правая граница доли позиции от ширины контейнера на каждый из элементов
@@ -48,7 +52,7 @@ namespace Utils
     
         [Header("Elements info")]
         [SerializeField, Tooltip("Список опций выбора")] private dd.OptionDataList listElements;
-        private GameObject[] _instantiatedElements;
+        private RectTransform[] _instantiatedElements;
         public int ElementsCount => listElements.options.Count;
         /// <summary>
         /// Индекс элемента, на котором сфокисоровано окно выбора
@@ -57,7 +61,7 @@ namespace Utils
         /// <summary>
         /// Объект-элемент, на котором сфокусировано окно выбора. Нахуй - не придумал
         /// </summary>
-        public GameObject ActiveObject => _instantiatedElements[ActiveIndex];
+        private RectTransform ActiveRectTransform => _instantiatedElements[ActiveIndex];
         /// <summary>
         /// Опция-элемент, на котором сфокусировано окно выбора
         /// </summary>
@@ -72,7 +76,9 @@ namespace Utils
         private float t_Slide = 0.2f;
         [SerializeField, Range(0.02f, 1.0f), Tooltip("Время инерции при скролле")] 
         private float t_Inertia = 0.075f;
-    
+
+        [SerializeField, Tooltip("Флаг запрета скролла")]
+        private bool lockDrag = false;
         [SerializeField, Tooltip("Коэффициент изменения позиции мыши")]
         private float dragMultiplier = 3;
         [SerializeField, Tooltip("Коэффициент инерции при скролле")]
@@ -139,9 +145,9 @@ namespace Utils
         {
             //Очищаем массив элементов
             if(_instantiatedElements != null && _instantiatedElements.Length > 0)
-                foreach (var element in _instantiatedElements.ToArray())
+                foreach (var element in _instantiatedElements.Select(rect=> rect.gameObject).ToArray())
                     Destroy(element);
-            _instantiatedElements = new GameObject[ElementsCount];
+            _instantiatedElements = new RectTransform[ElementsCount];
             //Указываем границы долей позиции контенера от его ширины на каждый из элементов
             //Необходимо для определния индекса элемента после скролла
             _percentageBoardsOnElement = Extensions.PercentageBoardsOnElement(ElementsCount, elementSpaceWidthPercentage);
@@ -183,7 +189,7 @@ namespace Utils
         /// <summary>
         /// Создание объекта-элемента и его позиционирование внутри контейнера
         /// </summary>
-        private GameObject InstantiateElement(Vector2 position, int index)
+        private RectTransform InstantiateElement(Vector2 position, int index)
         {
             var item = Instantiate(baseElement, container);
             var rect = item.GetComponent<RectTransform>();
@@ -192,9 +198,9 @@ namespace Utils
             rect.anchoredPosition = position;
     
             item.SetActive(true);
-            _instantiatedElements[index] = item;
+            _instantiatedElements[index] = item.GetComponent<RectTransform>();
     
-            return item;
+            return _instantiatedElements[index];
         }
         #endregion
         
@@ -231,16 +237,15 @@ namespace Utils
     
             _enableSlide = true;
             float t_start = Time.time, ct;
-            Vector2 startPos = container.anchoredPosition,
-                endPos = -ActiveObject.GetComponent<RectTransform>().anchoredPosition;
+            float startPercentage = -container.anchoredPosition.x / _containerWidth,
+                endPercentage = ActiveRectTransform.anchoredPosition.x / _containerWidth;
     
             while ((ct = (Time.time - t_start) / t_Slide) < 1f)
             {
-                container.anchoredPosition = Vector2.Lerp(startPos, endPos, ct);
+                containerPositionPercentage = Mathf.Lerp(startPercentage, endPercentage, ct);
                 yield return null;
             }
-            container.anchoredPosition = endPos;
-            _containerPositionPercentage = -endPos.x / _containerWidth;
+            containerPositionPercentage = endPercentage;
             
             _enableSlide = false;
         }
@@ -252,7 +257,7 @@ namespace Utils
         /// </summary>
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if(_enableSlide)
+            if(lockDrag || _enableSlide)
                 return;
     
             _enableDrag = true;
@@ -261,7 +266,7 @@ namespace Utils
         
         public void OnDrag(PointerEventData eventData)
         {
-            if(!_enableDrag)
+            if(!_enableDrag || lockDrag)
                 return;
     
             var delta = eventData.delta.x * dragMultiplier;
@@ -269,14 +274,15 @@ namespace Utils
             var deltaPercentage = delta / _containerWidth;
             // Изменение текущей доли, с перерасчетом на выходы за границы контейнера
             containerPositionPercentage -= deltaPercentage;
-            // Изменение положения контейнера
-            container.anchoredPosition = new Vector2(-_containerWidth * containerPositionPercentage, 0);
     
             _lastDragDelta += delta;    
         }
         
         public void OnEndDrag(PointerEventData eventData)
         {
+            if(lockDrag)
+                return;
+            
             StartCoroutine(AfterDragCor());
         }
     
@@ -286,36 +292,21 @@ namespace Utils
         private IEnumerator AfterDragCor()
         {
             float t_start = Time.time, ct;
-            var startPos = container.anchoredPosition;
-            var endPos = startPos + new Vector2(afterDragInertia*_lastDragDelta, 0);
-    
-            //Контроллируем, что инерциально движение не выдвигает элемент за границы
-            var reduced = false;
-            if (endPos.x > 0)
-            {
-                endPos = Vector2.zero;
-                reduced = true;
-            }
-            else if (endPos.x < -_containerWidth)
-            {
-                endPos = new Vector2(-_containerWidth, 0);
-                reduced = true;
-            }
-
+            var startPercentage = -container.anchoredPosition.x / _containerWidth;
+            var endPercentage = startPercentage + (-afterDragInertia * _lastDragDelta / _containerWidth);
+            
             while ((ct = (Time.time - t_start) / t_Inertia) < 1f)
             {
-                container.anchoredPosition = Vector2.Lerp(startPos, endPos, ct);
+                containerPositionPercentage = Mathf.Lerp(startPercentage, endPercentage, ct);
                 yield return null;
             }
-    
-            container.anchoredPosition = endPos;
-            //Доля текущей позиции от всей ширины
-            containerPositionPercentage = -endPos.x / _containerWidth;
-            //ИНдекс активного элемента, исходя из доли текущей позиции
-            ActiveIndex = _percentageBoardsOnElement.IndexAtBoards(_containerPositionPercentage);
+            containerPositionPercentage = endPercentage;
             
-            //Запуск корутины фокусирования на элементе
-            if(!reduced)
+            //Индекс активного элемента, исходя из доли текущей позиции
+            ActiveIndex = _percentageBoardsOnElement.IndexAtBoards(containerPositionPercentage);
+            
+            //Запуск корутины фокусирования на элементе, если окно не достигло граничных значений
+            if(endPercentage > 0 || endPercentage < 1)
                 StartCoroutine(SlideCor());
             
             _lastDragDelta = 0;
@@ -337,8 +328,7 @@ namespace Utils
         /// </summary>
         public void ResetActive()
         {
-            _containerPositionPercentage = 0;
-            container.anchoredPosition = Vector2.zero;
+            containerPositionPercentage = 0;
             ActiveIndex = 0;
         }
     }
@@ -361,7 +351,7 @@ namespace Utils
                 else if(i == count - 1)
                     result[i] = 1f;
                 else 
-                    result[i] = (1 + (spacePercentage / 2)) / sum + result[i - 1];
+                    result[i] = (1 + spacePercentage / 2) / sum + result[i - 1];
             }
             return result;
         }
