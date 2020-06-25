@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Timers;
+using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using Game;
 using UnityEngine;
 using Utils;
 
@@ -8,37 +10,43 @@ namespace Core
     /// <summary>
     /// Контроль игрового времени
     /// </summary>
+    [SuppressMessage("ReSharper", "IteratorNeverReturns")]
     public class TimeManager : Singleton<TimeManager>
     {
-        private DateTime _now;
+        public DateTime Now { get; private set; }
+        public string DisplayNow => Now.ToString("dd/MM/yyyy");
 
         [Header("Временные интервалы")]
         [SerializeField] private int actionInterval;
         [SerializeField] private int inactionInterval;
 
-        public DateTime Now => _now;
-
         public Action onDayLeft = () => {};
         public Action onWeekLeft = () => {};
         public Action onMonthLeft = () => {};
 
-        private Timer _actionTimer;
-        private Timer _inactionTimer;
+        private Coroutine _timer;
+        private bool _hasAction;
+        
+        private WaitForSeconds _waitForSecondsActive;
+        private WaitForSeconds _waitForSecondsInactive;
+
+        private void Start()
+        {
+            _waitForSecondsActive = new WaitForSeconds(actionInterval);
+            _waitForSecondsInactive = new WaitForSeconds(inactionInterval);
+            
+            Setup();
+        }
 
         /// <summary>
         /// Инициализирует менеджер при старте игры 
         /// </summary>
-        public void Setup(DateTime now)
+        private void Setup()
         {
-            _now = now;
-
-            _actionTimer = new Timer(actionInterval * 1000) {AutoReset = true};
-            _actionTimer.Elapsed += Tick;
+            Now = GameManager.Instance.GameStats.Now;
+            _timer = StartCoroutine(TickCoroutine());
             
-            _inactionTimer = new Timer(inactionInterval * 1000) {AutoReset = true};
-            _inactionTimer.Elapsed += Tick;
-            
-            SetActionMode();
+            EventManager.RaiseEvent(EventType.GameReady);
         }
 
         /// <summary>
@@ -46,8 +54,8 @@ namespace Core
         /// </summary>
         public void SetActionMode()
         {
-            _inactionTimer.Stop();
-            _actionTimer.Start();
+            _hasAction = true;
+            RestartTimer();
         }
 
         /// <summary>
@@ -55,38 +63,49 @@ namespace Core
         /// </summary>
         public void ResetActionMode()
         {
-            _actionTimer.Stop();
-            _inactionTimer.Start();
+            _hasAction = false;
+            RestartTimer();
+        }
+        
+        /// <summary>
+        /// Корутина игрового течения времени
+        /// </summary>
+        private IEnumerator TickCoroutine()
+        {
+            while (true)
+            {
+                yield return _hasAction ? _waitForSecondsActive : _waitForSecondsInactive;
+                Tick();
+            }
         }
 
         /// <summary>
         /// Обработчик завершения одного игрового дня 
         /// </summary>
-        private void Tick(object sender, ElapsedEventArgs args)
+        private void Tick()
         {
-            _now = _now.AddDays(1);
+            Now = Now.AddDays(1);
             
             onDayLeft.Invoke();
             if (IsWeekLeft()) onWeekLeft.Invoke();
             if (IsMonthLeft()) onMonthLeft.Invoke();
         }
 
-        private bool IsWeekLeft() => _now.DayOfWeek == DayOfWeek.Monday;
-        private bool IsMonthLeft() => _now.Day == 1;
+        private bool IsWeekLeft() => Now.DayOfWeek == DayOfWeek.Monday;
+        private bool IsMonthLeft() => Now.Day == 1;
 
+        /// <summary>
+        /// Перезапускает корутину таймера
+        /// </summary>
+        private void RestartTimer()
+        {
+            StopCoroutine(_timer);
+            _timer = StartCoroutine(TickCoroutine());
+        }
+        
         private void OnDisable()
         {
-            DisposeTimer(_actionTimer);
-            DisposeTimer(_inactionTimer);
-        }
-
-        private static void DisposeTimer(Timer timer)
-        {
-            try
-            {
-                timer.Stop();
-                timer.Dispose();    
-            }catch{}
+            StopCoroutine(_timer);
         }
     }
 }

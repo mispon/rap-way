@@ -1,5 +1,5 @@
 ﻿using System;
-using Core;
+using Game;
 
 namespace Models.Production
 {

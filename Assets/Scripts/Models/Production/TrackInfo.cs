@@ -14,7 +14,7 @@ namespace Models.Production
         public int TextPoints;
         public int BitPoints;
 
-        public int ListensCount;
+        public int ListenAmount;
         public int ChartPosition;
     }
 }
