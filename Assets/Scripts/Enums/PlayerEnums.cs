@@ -80,4 +80,12 @@ namespace Enums
         [Description("theme_motivation")]
         Motivation
     }
+
+    public enum Teammates
+    {
+        BitMaker,
+        TextWriter,
+        Producer, 
+        SMM
+    }
 }
