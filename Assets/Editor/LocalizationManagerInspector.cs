@@ -138,8 +138,7 @@ public class LocalizationManagerInspector: UnityEditor.Editor
                 EditorGUILayout.EndFoldoutHeaderGroup();
                 return;
             }
-                
-
+            
             EditorGUILayout.BeginHorizontal();
             if (!autoLoad)
             {
@@ -173,7 +172,7 @@ public class LocalizationManagerInspector: UnityEditor.Editor
             return;
         }
 
-        for(int i = 0 ; i < items.Count; i++)
+        for(var i = 0 ; i < items.Count; i++)
         {
             EditorGUILayout.BeginHorizontal();
 
@@ -217,19 +216,18 @@ public class LocalizationManagerInspector: UnityEditor.Editor
             EditorGUILayout.EndFoldoutHeaderGroup();
             return;
         }
-
-
-        int newCount = Mathf.Max(0, EditorGUILayout.IntField("Size", newItems.Count, GUILayout.Width(100)));
+        
+        var newCount = Mathf.Max(0, EditorGUILayout.IntField("Size", newItems.Count, GUILayout.Width(100)));
         while (newCount < newItems.Count)
             newItems.RemoveAt(newItems.Count - 1);
         while (newCount > newItems.Count)
             newItems.Add(new LocalizationItem { key = "", value = ""});
 
-        for(int i =0; i < newItems.Count; i++)
+        foreach (var newItem in newItems)
         {
             EditorGUILayout.BeginHorizontal();
-            newItems[i].key = EditorGUILayout.TextField("Key:", newItems[i].key);
-            newItems[i].value = EditorGUILayout.TextField("Value:", newItems[i].value);
+            newItem.key = EditorGUILayout.TextField("Key:", newItem.key);
+            newItem.value = EditorGUILayout.TextField("Value:", newItem.value);
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.Space();
@@ -244,7 +242,7 @@ public class LocalizationManagerInspector: UnityEditor.Editor
     /// <summary>
     /// Отображение настроек для добавления в другой словарь
     /// </summary>
-    private void DrawMergeData()
+    private static void DrawMergeData()
     {
         showMerge = EditorGUILayout.BeginFoldoutHeaderGroup(showMerge, showMerge ? $"[{mergeLanguage}]: Скрыть настройки добавления в другой словарь" : $"[{mergeLanguage}]: Отобразить настройки добавления в другой словарь");
         if (showMerge)
@@ -278,10 +276,8 @@ public class LocalizationManagerInspector: UnityEditor.Editor
     {
         if (LocalizationManager.AvailableLanguages.All(el => el != lang))
             throw new RapWayException($"Язык [{lang}] не поддерживается");
-
-        Debug.Log($"Load localization for [{language}] language");
-        string jsonData = File.ReadAllText(LocalizationManager.WindowsFileName(lang));
-
+        
+        var jsonData = File.ReadAllText(LocalizationManager.WindowsFileName(lang));
         ParseLocalizationData(jsonData, ref itemsList, updateEnableEditList);
     }
 
@@ -313,9 +309,7 @@ public class LocalizationManagerInspector: UnityEditor.Editor
         if (LocalizationManager.AvailableLanguages.All(el => el != lang))
             throw new RapWayException($"Язык [{lang}] не поддерживается");
 
-        Debug.Log($"Save localization for [{language}] language");
-
-        string jsonData = LocalizationManager.LocalizationDataToJson(new LocalizationData { items = itemsList.ToArray()});
+        var jsonData = LocalizationManager.LocalizationDataToJson(new LocalizationData { items = itemsList.ToArray()});
         File.WriteAllText(LocalizationManager.WindowsFileName(lang), jsonData);
     }
 
@@ -360,12 +354,13 @@ public class LocalizationManagerInspector: UnityEditor.Editor
         Repaint();
     }
 
-    private void AddToDictionary(in List<LocalizationItem> sourceItems, SystemLanguage destinationLanguage)
+    private static void AddToDictionary(in List<LocalizationItem> sourceItems, SystemLanguage destinationLanguage)
     {
-        List<LocalizationItem> destinationItems = new List<LocalizationItem>();
+        var destinationItems = new List<LocalizationItem>();
         LoadLocalization(destinationLanguage, ref destinationItems, false);
         destinationItems.AddRange(
-            sourceItems.Where(it => destinationItems.All(dit => dit.key != it.key))//Добавить из источника такие, ключей каких нет в целевом
+            //Добавить из источника такие, ключей каких нет в целевом
+            sourceItems.Where(it => destinationItems.All(dit => dit.key != it.key))
         );
         SaveLocalization(destinationLanguage, destinationItems);
     }
