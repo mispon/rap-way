@@ -58,13 +58,13 @@ namespace Game
                 id = history.TrackList.Any() ? history.TrackList.Max(e => e.Id) : 0;
 
             if (typeof(T) == typeof(ClipInfo))
-                id = history.TrackList.Any() ? history.ClipList.Max(e => e.Id) : 0;
+                id = history.ClipList.Any() ? history.ClipList.Max(e => e.Id) : 0;
 
             if (typeof(T) == typeof(AlbumInfo))
-                id = history.TrackList.Any() ? history.AlbumList.Max(e => e.Id) : 0;
+                id = history.AlbumList.Any() ? history.AlbumList.Max(e => e.Id) : 0;
 
             if (typeof(T) == typeof(ConcertInfo))
-                id = history.TrackList.Any() ? history.ConcertList.Max(e => e.Id) : 0;
+                id = history.ConcertList.Any() ? history.ConcertList.Max(e => e.Id) : 0;
 
             return id + 1;
         }

@@ -71,8 +71,10 @@ namespace Game.UI.MainMenu
             player.LastName = inputFields[1].text;
             player.NickName = inputFields[2].text;
             player.HomeLand = inputFields[3].text;
+            
             player.CreationDate = DateTime.Now;
             player.CreationDate = DateTime.Now;
+            
             player.Race = (Race) raceSwitcher.ActiveIndex;
             player.Gender = (Gender) genderSwitcher.ActiveIndex;
 
