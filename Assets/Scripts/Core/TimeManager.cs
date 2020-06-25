@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Game;
 using UnityEngine;
 using Utils;
@@ -14,7 +15,7 @@ namespace Core
     public class TimeManager : Singleton<TimeManager>
     {
         public DateTime Now { get; private set; }
-        public string DisplayNow => Now.ToString("dd/MM/yyyy");
+        public string DisplayNow => Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
 
         [Header("Временные интервалы")]
         [SerializeField] private int actionInterval;
