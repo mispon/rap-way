@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using Localization;
+using UnityEngine;
+using Utils;
 
 namespace Game.Pages
 {
@@ -33,6 +36,15 @@ namespace Game.Pages
             _isOpen = false;
             gameObject.SetActive(false);
             AfterPageClose();
+        }
+        
+        /// <summary>
+        /// Возвращает выбранное значение тематики или стиля 
+        /// </summary>
+        protected static T GetToneValue<T>(Switcher switcher) where T: Enum
+        {
+            var desc = LocalizationManager.Instance.GetKey(switcher.ActiveTextValue);
+            return EnumExtension.GetFromDescription<T>(desc);
         }
 
         /// <summary>

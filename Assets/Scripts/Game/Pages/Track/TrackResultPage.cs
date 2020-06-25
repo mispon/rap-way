@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Game.Pages.Track
 {
     /// <summary>
-    /// Страница резултатов трека
+    /// Страница результатов трека
     /// </summary>
     public class TrackResultPage : Page
     {

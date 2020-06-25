@@ -59,15 +59,6 @@ namespace Game.Pages.Track
             Close();
         }
 
-        /// <summary>
-        /// Возвращает выбранное значение тематики или стиля 
-        /// </summary>
-        private static T GetToneValue<T>(Switcher switcher) where T: Enum
-        {
-            var desc = LocalizationManager.Instance.GetKey(switcher.ActiveTextValue);
-            return EnumExtension.GetFromDescription<T>(desc);
-        }
-
         #region PAGE EVENTS
 
         protected override void BeforePageOpen()
