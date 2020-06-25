@@ -292,7 +292,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -50, y: 0}
   m_SizeDelta: {x: 300, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &7298731506945629728
@@ -848,7 +848,7 @@ GameObject:
   - component: {fileID: 1130531134745484551}
   - component: {fileID: 204916293668672539}
   m_Layer: 5
-  m_Name: ProductionContainer
+  m_Name: ProductionButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -985,7 +985,7 @@ GameObject:
   - component: {fileID: 1331157108346382764}
   - component: {fileID: 2102953204159059318}
   m_Layer: 5
-  m_Name: RealRapersButton
+  m_Name: ArtistsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1104,7 +1104,7 @@ GameObject:
   - component: {fileID: 7311425396910255001}
   - component: {fileID: 5176625606826663499}
   m_Layer: 5
-  m_Name: BackToMenuButton
+  m_Name: MainMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1400,7 +1400,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 50, y: 0}
   m_SizeDelta: {x: 300, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4687457341165077120
@@ -1752,10 +1752,10 @@ RectTransform:
   m_Father: {fileID: 2138816503067587347}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: -600}
+  m_SizeDelta: {x: 150, y: 400}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &3920513402600451460
 MonoBehaviour:
@@ -1988,7 +1988,7 @@ GameObject:
   - component: {fileID: 1746408114537329830}
   - component: {fileID: 3547262760090982383}
   m_Layer: 5
-  m_Name: SkillUpgradeButton
+  m_Name: TrainingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3025,7 +3025,7 @@ GameObject:
   m_Component:
   - component: {fileID: 812438410912097380}
   m_Layer: 5
-  m_Name: UpHorizontalGroup
+  m_Name: CharacterStats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3112,7 +3112,7 @@ GameObject:
   - component: {fileID: 4429327473976737006}
   - component: {fileID: 369324720}
   m_Layer: 5
-  m_Name: MainVIew
+  m_Name: GameScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3190,7 +3190,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8437612093458685e8fb55b763a232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationProductionFoldout: {fileID: 204916293668672539}
+  playerNickname: {fileID: 2033767528987131789}
+  playerFans: {fileID: 3913319865474342809}
+  playerMoney: {fileID: 5478291488474120655}
+  playerHype: {fileID: 1263399208520332887}
+  currentDate: {fileID: 62659863321725042}
+  productionFoldoutButton: {fileID: 1130531134745484551}
+  foldoutAnimation: {fileID: 204916293668672539}
+  foldoutShowAnim: ProductionShow
+  foldoutHideAnim: ProductionHide
+  mainMenuButton: {fileID: 5176625606826663499}
 --- !u!1 &8418247480748983944
 GameObject:
   m_ObjectHideFlags: 0
@@ -3340,7 +3349,7 @@ GameObject:
   - component: {fileID: 227013352439082942}
   - component: {fileID: 3971030978030827697}
   m_Layer: 5
-  m_Name: ActionGroup
+  m_Name: ActionsGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

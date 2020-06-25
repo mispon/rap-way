@@ -13,5 +13,9 @@ namespace Models.Player.DynamicData
         public int Hype;
         
         public static PlayerDynamicData New => new PlayerDynamicData();
+
+        // todo: Написать логику красивого представления фанатов и денег
+        public string GetMoney() => $"{Money} $";
+        public string GetFans() => $"{Fans}";
     }
 }

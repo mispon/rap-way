@@ -1,5 +1,6 @@
 ﻿using System;
 using Enums;
+using UnityEngine;
 
 namespace Models.Game
 {
@@ -11,13 +12,13 @@ namespace Models.Game
     {
         public DateTime Now;
         public Trands Trands;
-        public int Lang;
+        public SystemLanguage Lang;
         
         public static GameStats New => new GameStats
         {
             Now = DateTime.Now,
             Trands = new Trands { Style = Styles.Common, Theme = Themes.Self },
-            Lang = 0
+            Lang = SystemLanguage.Russian
         };
     }
 }

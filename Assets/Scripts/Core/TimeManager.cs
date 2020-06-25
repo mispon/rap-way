@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using Game;
 using UnityEngine;
 using Utils;
 
@@ -13,6 +14,7 @@ namespace Core
     public class TimeManager : Singleton<TimeManager>
     {
         public DateTime Now { get; private set; }
+        public string DisplayNow => Now.ToString("dd/MM/yyyy");
 
         [Header("Временные интервалы")]
         [SerializeField] private int actionInterval;
@@ -32,15 +34,19 @@ namespace Core
         {
             _waitForSecondsActive = new WaitForSeconds(actionInterval);
             _waitForSecondsInactive = new WaitForSeconds(inactionInterval);
+            
+            Setup();
         }
 
         /// <summary>
         /// Инициализирует менеджер при старте игры 
         /// </summary>
-        public void Setup(DateTime now)
+        private void Setup()
         {
-            Now = now;
+            Now = GameManager.Instance.GameStats.Now;
             _timer = StartCoroutine(TickCoroutine());
+            
+            EventManager.RaiseEvent(EventType.GameReady);
         }
 
         /// <summary>

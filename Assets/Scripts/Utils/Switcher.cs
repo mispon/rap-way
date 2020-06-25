@@ -35,7 +35,7 @@ namespace Utils
         [SerializeField, Range(0.02f, 1.0f), Tooltip("Время инерции при скролле")] 
         private float t_Inertia = 0.075f;
         [SerializeField, Tooltip("Флаг запрета скролла")]
-        private bool lockDrag = false;
+        private bool lockDrag;
         [SerializeField, Tooltip("Коэффициент изменения позиции мыши")]
         private float dragMultiplier = 3;
         [SerializeField, Tooltip("Коэффициент инерции при скролле")]
@@ -176,8 +176,9 @@ namespace Utils
                     startPosition += new Vector2(_viewPortSize.x * (1 + elementSpaceWidthPercentage), 0);
             }
     
-            //Фиксируем размер (до начала последнего элемента) контейнера для отслеживания текущей позиции
-            _containerWidth = startPosition.x;//берем текущую позицию, считаем долю от размера, получаем долю смещения, сверяемся с индексами элементов. Подробнее в работе
+            //Фиксируем размер (до начала последнего элемента) контейнера для отслеживания текущей позиции.
+            //Так как будет высчитываться доля текущей позции от _containerWidth, то необходимо зафиксировать минимальную ширину контейнера (0.01f) 
+            _containerWidth = Mathf.Max(startPosition.x, 0.01f);
             //Ресайзим контейнер на ширину, покрывающей все элементы
             container.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _containerWidth + _viewPortSize.x);
             
@@ -224,7 +225,7 @@ namespace Utils
         /// </summary>
         public void OnLeftClick()
         {
-            if (ActiveIndex != 0)
+            if (ActiveIndex > 0)
                 --ActiveIndex;
         
             StartCoroutine(SlideCor());
@@ -235,7 +236,7 @@ namespace Utils
         /// </summary>
         public void OnRightClick()
         {
-            if (ActiveIndex != ElementsCount - 1)
+            if (ActiveIndex < ElementsCount - 1)
                 ActiveIndex++;
                 
             StartCoroutine(SlideCor());
@@ -264,7 +265,7 @@ namespace Utils
             _enableSlide = false;
         }
         #endregion
-        
+         
         #region Scroll move
         /// <summary>
         /// При регистрации "Начала скролла" выдаем разрешения на скролл, устанавливаем дефолтные значений необходимых параметров

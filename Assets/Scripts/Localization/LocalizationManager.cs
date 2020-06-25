@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Core;
 using UnityEngine;
+using UnityEngine.Networking;
 using Utils;
 using EventType = Core.EventType;
 
@@ -16,9 +17,11 @@ namespace Localization
     /// </summary>
     public class LocalizationManager : Singleton<LocalizationManager> 
     {
-        /// <summary>
-        /// Хранилище данных локализации
-        /// </summary>
+        public static readonly SystemLanguage[] AvailableLanguages = {
+            SystemLanguage.English,
+            SystemLanguage.Russian
+        };
+
         [SerializeField] private LocalizationData _data;
 
         public bool IsReady { get; private set; }
@@ -43,23 +46,25 @@ namespace Localization
             var item = _data.items.First(e => e.value == value);
             return item.key;
         }
-
+        
         /// <summary>
         /// Загружает данные локализации
         /// </summary>
         [SuppressMessage("ReSharper", "JoinDeclarationAndInitializer")]
-        public void LoadLocalization(int value, bool sendEvent = false) 
+        public void LoadLocalization(SystemLanguage lang, bool sendEvent = false) 
         {
+            if (AvailableLanguages.All(el => el != lang))
+                throw new RapWayException($"Язык [{lang}] не поддерживается");
+
             IsReady = false;
             
             string jsonData;
 #if UNITY_ANDROID
-            StartCoroutine(ReadDataRoutine(value, raw => jsonData = raw));
+            StartCoroutine(ReadDataRoutine(lang, raw => jsonData = raw));
 #elif UNITY_IPHONE
             // todo: logic for iphone
 #else
-            var filePath = Path.Combine(Application.streamingAssetsPath, GetFileName(value));
-            jsonData = File.ReadAllText(filePath);
+            jsonData = File.ReadAllText(WindowsFileName(lang));
 #endif
             ParseLocalizationData(jsonData, sendEvent);
         }
@@ -67,12 +72,13 @@ namespace Localization
         /// <summary>
         /// Routine read localization data for android
         /// </summary>
-        private IEnumerator ReadDataRoutine(int value, Action<string> callback) 
+        private IEnumerator ReadDataRoutine(SystemLanguage lang, Action<string> callback) 
         {
-            var filePath = "jar:file://" + Application.dataPath + "!/assets/" + GetFileName(value);
-            var www = new WWW(filePath);
-            yield return www;
-            callback(www.text);
+            using (var request = UnityWebRequest.Get(AndroidFileName(lang)))
+            {
+                yield return request.SendWebRequest();
+                callback(request.downloadHandler.text);
+            }
         }
 
         /// <summary>
@@ -92,17 +98,35 @@ namespace Localization
         }
 
         /// <summary>
+        /// Выполняет парсинг данных локализации в json
+        /// </summary>
+        public static string LocalizationDataToJson(LocalizationData data)
+            => JsonUtility.ToJson(data);
+
+        /// <summary>
+        /// Полный путь к файлу в ОС Windows
+        /// </summary>
+        public static string WindowsFileName(SystemLanguage lang)
+            => Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
+
+        /// <summary>
+        /// Полный пусть к файлу в ОС Android
+        /// </summary>
+        private static string AndroidFileName(SystemLanguage lang)
+            => $"jar:file://{Application.dataPath}!/assets/{GetFileName(lang)}";
+
+        /// <summary>
         /// Возвращает имя файла локализации
         /// </summary>
-        private static string GetFileName(int value)
+        private static string GetFileName(SystemLanguage lang)
         {
-            switch (value) 
+            switch (lang) 
             {
-                case 1:
+                case SystemLanguage.English:
                     return "en.json";
-                
+
                 // todo: other langs
-                
+
                 default:
                     return "ru.json";
             }

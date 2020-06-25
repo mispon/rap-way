@@ -1,5 +1,4 @@
 ﻿using System;
-using Core;
 
 namespace Models.Production
 {
@@ -15,8 +14,5 @@ namespace Models.Production
         public int MoneyIncome;
         public int FansIncome;
         public int HypeIncome;
-
-        public override string ToString()
-            => $"{GameManager.Instance.PlayerData.Info.NickName} - {Name}";
     }
 }

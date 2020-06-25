@@ -4,11 +4,12 @@ using System.Collections.Generic;
 namespace Core 
 {
     /// <summary>
-    /// Events types
+    /// Типы событий
     /// </summary>
     public enum EventType 
     {
-        LangChanged
+        LangChanged,
+        GameReady
     }
 
     /// <summary>
