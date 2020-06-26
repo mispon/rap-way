@@ -36,7 +36,8 @@ namespace Game.Pages.Album
         /// </summary>
         private void DisplayResult(AlbumInfo album)
         {
-            header.text = $"Работа над альбомом \"{album.Name}\" завершена!";
+            var nickname = PlayerManager.PlayerData.Info.NickName;
+            header.text = $"Завершена работа над альбомом: \"{nickname} - {album.Name}\"";
             listenAmount.text = $"Количество прослушиваний: {album.ListenAmount}";
             chartInfo.text = album.ChartPosition > 0
                 ? $"Альбом занял {album.ChartPosition}-ую позицию в чарте!"

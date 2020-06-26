@@ -44,14 +44,13 @@ namespace Game.Pages.Album
         /// </summary>
         private void CreateAlbum()
         {
-            var nickName = PlayerManager.PlayerData.Info.NickName;
-            
             _album.Id = PlayerManager.GetNextProductionId<AlbumInfo>();
+            if (string.IsNullOrEmpty(_album.Name))
+            {
+                _album.Name = $"Album {_album.Id}";
+            }
             _album.Theme = GetToneValue<Themes>(themeSwitcher);
             _album.Style = GetToneValue<Styles>(styleSwitcher);
-            _album.Name = string.IsNullOrEmpty(_album.Name)
-                ? $"{nickName} - Track {_album.Id}"
-                : $"{nickName} - {_album.Name}";
             
             workingPage.CreateAlbum(_album);
             Close();

@@ -1,4 +1,5 @@
 ﻿using System;
+using Enums;
 
 namespace Models.Player
 {
@@ -9,7 +10,17 @@ namespace Models.Player
     [Serializable]
     public class Teammate
     {
-        public static Teammate New => new Teammate();
+        public static Teammate New(TeammateType type) => new Teammate {Type = type};
+        
+        /// <summary>
+        /// Тип тиммейта
+        /// </summary>
+        public TeammateType Type;
+
+        /// <summary>
+        /// Флаг оплаты услуг тиммейта
+        /// </summary>
+        public bool HasPayment;
         
         /// <summary>
         /// Навык
@@ -20,5 +31,13 @@ namespace Models.Player
         /// Тиммейт еще не открыт
         /// </summary>
         public bool IsEmpty => Skill == 0;
+    }
+    
+    [Serializable]
+    public struct TeammateInfo
+    {
+        public TeammateType Type;
+        public int FansToUnlock;
+        public int[] Salary;
     }
 }

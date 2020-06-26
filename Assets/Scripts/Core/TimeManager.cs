@@ -27,6 +27,7 @@ namespace Core
 
         private Coroutine _timer;
         private bool _hasAction;
+        private bool _freezed;
         
         private WaitForSeconds _waitForSecondsActive;
         private WaitForSeconds _waitForSecondsInactive;
@@ -67,6 +68,14 @@ namespace Core
             _hasAction = false;
             RestartTimer();
         }
+
+        /// <summary>
+        /// Устанавливает состояние заморозки времени 
+        /// </summary>
+        public void SetFreezed(bool state)
+        {
+            _freezed = state;
+        }
         
         /// <summary>
         /// Корутина игрового течения времени
@@ -75,6 +84,7 @@ namespace Core
         {
             while (true)
             {
+                yield return new WaitWhile(() => _freezed);
                 yield return _hasAction ? _waitForSecondsActive : _waitForSecondsInactive;
                 Tick();
             }

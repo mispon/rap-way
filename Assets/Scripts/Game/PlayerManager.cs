@@ -47,6 +47,18 @@ namespace Game
         }
 
         /// <summary>
+        /// Выполянет оплату 
+        /// </summary>
+        public bool Pay(int money)
+        {
+            if (PlayerData.Data.Money < money)
+                return false;
+
+            PlayerData.Data.Money -= money;
+            return true;
+        }
+
+        /// <summary>
         /// Возвращает идентификатор для новой сущности 
         /// </summary>
         public static int GetNextProductionId<T>() where T : Production

@@ -16,5 +16,7 @@ namespace Models.Production
 
         public int ListenAmount;
         public int ChartPosition;
+
+        public bool HasClip;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,8 @@ namespace Utils
 {
     public class Switcher : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
-        private System.Action<int> onClickAction = delegate { };
+        public Action<int> onClickAction = index => {};
+        public Action<int> onIndexChange = index => {};
         
         [SerializeField, Tooltip("Сгенировать элементы при старте?")] 
         private bool createOnAwake;
@@ -71,7 +73,10 @@ namespace Utils
         //--Данные расчета позици контейнера
         
         //++Данные состояний
-        
+        /// <summary>
+        /// Текущий индекс
+        /// </summary>
+        private int _activeIndex;
         /// <summary>
         /// Флаг активации процесса изменения позиции
         /// </summary>
@@ -84,9 +89,7 @@ namespace Utils
         /// Изменение позиции при скролле
         /// </summary>
         private float _lastDragDelta;
-        
         //--Данные состояний
-        
         
         /// <summary>
         /// Компоненты RectTransform созданных кнопок
@@ -96,7 +99,14 @@ namespace Utils
         /// <summary>
         /// Индекс элемента, на котором сфокисоровано окно выбора
         /// </summary>
-        public int ActiveIndex { get; private set; }
+        public int ActiveIndex { 
+            get => _activeIndex;
+            private set
+            {
+                _activeIndex = value;
+                onIndexChange.Invoke(value);
+            }
+        }
         /// <summary>
         /// Объект-элемент, на котором сфокусировано окно выбора. Нахуй - не придумал
         /// </summary>
@@ -227,7 +237,7 @@ namespace Utils
         {
             if (ActiveIndex > 0)
                 --ActiveIndex;
-        
+            
             StartCoroutine(SlideCor());
         }
         
@@ -238,7 +248,7 @@ namespace Utils
         {
             if (ActiveIndex < ElementsCount - 1)
                 ActiveIndex++;
-                
+            
             StartCoroutine(SlideCor());
         }
         
@@ -316,7 +326,7 @@ namespace Utils
             
             //Индекс активного элемента, исходя из доли текущей позиции
             ActiveIndex = _percentageBoardsOnElement.IndexAtBoards(containerPositionPercentage);
-            
+
             //Запуск корутины фокусирования на элементе, если окно не достигло граничных значений
             if(endPercentage > 0 || endPercentage < 1)
                 StartCoroutine(SlideCor());
@@ -330,7 +340,7 @@ namespace Utils
         /// Подписаться на событие нажатия на элементы
         /// </summary>
         /// <param name="callbackAction">Действие при нажатии (на вход получает активный индекс элемента)</param>
-        public void AddClickCallback(System.Action<int> callbackAction)
+        public void AddClickCallback(Action<int> callbackAction)
         {
             onClickAction += callbackAction;
         }
@@ -360,10 +370,14 @@ namespace Utils
         /// <summary>
         /// Сброс выбранного значения
         /// </summary>
-        public void ResetActive()
+        public void ResetActive(bool withoutNotify = false)
         {
             containerPositionPercentage = 0;
-            ActiveIndex = 0;
+            
+            if (withoutNotify)
+                _activeIndex = 0;
+            else
+                ActiveIndex = 0;
         }
     }
 

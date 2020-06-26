@@ -10,9 +10,11 @@ namespace Models.Production
     {
         public int TrackId;
 
+        public int DirectorSkill;
+        public int OperatorSkill;
+        
         public int DirectorPoints;
         public int OperatorPoints;
-        public int StylistPoints;
 
         public int Views;
         public int Likes;
