@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using Core.Interfaces;
 using Game;
 using UnityEngine;
 using Utils;
@@ -12,7 +13,7 @@ namespace Core
     /// Контроль игрового времени
     /// </summary>
     [SuppressMessage("ReSharper", "IteratorNeverReturns")]
-    public class TimeManager : Singleton<TimeManager>
+    public class TimeManager : Singleton<TimeManager>, IStarter
     {
         public DateTime Now { get; private set; }
         public string DisplayNow => Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -32,23 +33,13 @@ namespace Core
         private WaitForSeconds _waitForSecondsActive;
         private WaitForSeconds _waitForSecondsInactive;
 
-        private void Start()
+        public void OnStart()
         {
             _waitForSecondsActive = new WaitForSeconds(actionInterval);
             _waitForSecondsInactive = new WaitForSeconds(inactionInterval);
             
-            Setup();
-        }
-
-        /// <summary>
-        /// Инициализирует менеджер при старте игры 
-        /// </summary>
-        private void Setup()
-        {
             Now = GameManager.Instance.GameStats.Now;
             _timer = StartCoroutine(TickCoroutine());
-            
-            EventManager.RaiseEvent(EventType.GameReady);
         }
 
         /// <summary>

@@ -94,7 +94,7 @@ namespace Game.Pages.Clip
         /// </summary>
         private void CacheLastTracks()
         {
-            var tracks = PlayerManager.PlayerData.History.TrackList
+            var tracks = PlayerManager.Data.History.TrackList
                 .OrderByDescending(e => e.Id)
                 .Where(e => !e.HasClip)
                 .Take(TRACKS_CACHE);

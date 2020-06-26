@@ -43,7 +43,7 @@ namespace Game
             if (lockedTeammates.Length == 0)
                 return;
 
-            var fans = PlayerManager.PlayerData.Data.Fans;
+            var fans = PlayerManager.Data.Fans;
             var lockedTeammate = lockedTeammates
                 .FirstOrDefault(tm => teammateInfos.First(tmi => tmi.Type == tm.Type).FansToUnlock <= fans);
             
@@ -66,7 +66,7 @@ namespace Game
         /// </summary>
         private static Teammate[] GetTeammates(Func<Teammate, bool> predicate)
         {
-            return PlayerManager.PlayerData.Team.TeammatesArray
+            return PlayerManager.Data.Team.TeammatesArray
                 .Where(predicate)
                 .ToArray();
         }

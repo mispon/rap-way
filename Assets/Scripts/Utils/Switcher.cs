@@ -174,7 +174,7 @@ namespace Utils
             _instantiatedElements = new RectTransform[ElementsCount];
             //Указываем границы долей позиции контенера от его ширины на каждый из элементов
             //Необходимо для определния индекса элемента после скролла
-            _percentageBoardsOnElement = Extensions.PercentageBoardsOnElement(ElementsCount, elementSpaceWidthPercentage);
+            _percentageBoardsOnElement = SwitcherExtensions.PercentageBoardsOnElement(ElementsCount, elementSpaceWidthPercentage);
     
             //Генерируем элементы
             var startPosition = Vector2.zero;
@@ -381,7 +381,7 @@ namespace Utils
         }
     }
 
-    public static class Extensions
+    public static class SwitcherExtensions
     {
         /// <summary>
         /// Определение граничных долей каждого из элементов

@@ -36,7 +36,7 @@ namespace Game.Pages.Track
         /// </summary>
         private void DisplayResult(TrackInfo track)
         {
-            var nickname = PlayerManager.PlayerData.Info.NickName;
+            var nickname = PlayerManager.Data.Info.NickName;
             header.text = $"Завершена работа над треком: \"{nickname} - {track.Name}\"";
             listenAmount.text = $"Количество прослушиваний: {track.ListenAmount}";
             chartInfo.text = track.ChartPosition > 0
@@ -52,7 +52,7 @@ namespace Game.Pages.Track
         private static void SaveResult(TrackInfo track)
         {
             PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
-            PlayerManager.PlayerData.History.TrackList.Add(track);
+            PlayerManager.Data.History.TrackList.Add(track);
         }
 
         /// <summary>

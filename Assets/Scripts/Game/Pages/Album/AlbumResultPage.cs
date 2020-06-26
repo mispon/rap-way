@@ -36,7 +36,7 @@ namespace Game.Pages.Album
         /// </summary>
         private void DisplayResult(AlbumInfo album)
         {
-            var nickname = PlayerManager.PlayerData.Info.NickName;
+            var nickname = PlayerManager.Data.Info.NickName;
             header.text = $"Завершена работа над альбомом: \"{nickname} - {album.Name}\"";
             listenAmount.text = $"Количество прослушиваний: {album.ListenAmount}";
             chartInfo.text = album.ChartPosition > 0
@@ -52,7 +52,7 @@ namespace Game.Pages.Album
         private static void SaveResult(AlbumInfo album)
         {
             PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome);
-            PlayerManager.PlayerData.History.AlbumList.Add(album);
+            PlayerManager.Data.History.AlbumList.Add(album);
         }
 
         /// <summary>

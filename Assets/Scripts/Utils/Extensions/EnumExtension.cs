@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace Utils
+namespace Utils.Extensions
 {
     public static class EnumExtension {
         /// <summary>
@@ -36,11 +36,14 @@ namespace Utils
                     if (field.Name == desc) return (T) field.GetValue(null);
                 }
             }
-            
-            throw new ArgumentException("Not found");
+
+            throw new ArgumentException($"[EnumExtension] Not found item by description - {desc}");
         }
 
-        public static string[] GetDiscriptions<T>() where T: Enum
+        /// <summary>
+        /// Возвращает список описаний всех элементов перечисления  
+        /// </summary>
+        public static string[] GetDescriptions<T>() where T: Enum
         {
             var values = (T[]) Enum.GetValues(typeof(T));
             return values.Select(e => e.GetDescription()).ToArray();

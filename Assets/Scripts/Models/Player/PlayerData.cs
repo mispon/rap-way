@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Enums;
-using Models.Player.DynamicData;
 
 namespace Models.Player
 {
@@ -11,9 +10,12 @@ namespace Models.Player
     [Serializable]
     public class PlayerData
     {
+        public int Money;
+        public int Fans;
+        public int Hype;
+        
         public PlayerInfo Info;
         public PlayerStats Stats;
-        public PlayerDynamicData Data;
         public PlayerHistory History;
         public PlayerTeam Team;
         
@@ -25,9 +27,12 @@ namespace Models.Player
         
         public static PlayerData New => new PlayerData
         {
+            Money =  0,
+            Fans = 0,
+            Hype = 0,
+            
             Info = PlayerInfo.New,
             Stats = PlayerStats.New,
-            Data = PlayerDynamicData.New,
             History = PlayerHistory.New,
             Team = PlayerTeam.New,
             

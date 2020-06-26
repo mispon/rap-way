@@ -2,7 +2,7 @@ using Localization;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
+using Utils.Extensions;
 
 namespace Game.Pages.Team
 {
@@ -64,7 +64,7 @@ namespace Game.Pages.Team
             else
             {
                 // todo: use Price prefab
-                Debug.Log($"Недостаточно денег: {GameManager.Instance.PlayerData.Data.GetMoney()}");
+                Debug.Log($"Недостаточно денег: {PlayerManager.Data.Money}");
             }
         }
     }

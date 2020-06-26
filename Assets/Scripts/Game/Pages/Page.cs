@@ -2,6 +2,7 @@
 using Localization;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 
 namespace Game.Pages
 {

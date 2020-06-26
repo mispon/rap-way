@@ -1,15 +1,16 @@
 ﻿using Core;
+using Core.Interfaces;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
-using EventType = Core.EventType;
+using Utils.Extensions;
 
 namespace Game.UI.GameScreen
 {
     /// <summary>
     /// Контроллер главного окна игры
     /// </summary>
-    public class GameScreenController: MonoBehaviour
+    public class GameScreenController: MonoBehaviour, IStarter
     {
         [Header("HUD контроллы")]
         [SerializeField] private Text playerNickname;
@@ -28,20 +29,11 @@ namespace Game.UI.GameScreen
 
         private bool _productionShown;
         
-        private void Start()
+        public void OnStart()
         {
             productionFoldoutButton.onClick.AddListener(OnProductionClick);
             mainMenuButton.onClick.AddListener(OnMainMenuClick);
-            
-            EventManager.AddHandler(EventType.GameReady, OnGameReady);
-        }
-
-        /// <summary>
-        /// Инициализирует интерфейса игрока 
-        /// </summary>
-        private void InitHUD()
-        {
-            PlayerManager.Instance.SetHUD(this);
+            TimeManager.Instance.onDayLeft += OnDayLeft;
         }
 
         /// <summary>
@@ -50,9 +42,9 @@ namespace Game.UI.GameScreen
         public void UpdateHUD(PlayerData playerData)
         {
             playerNickname.text = playerData.Info.NickName;
-            playerMoney.text = playerData.Data.GetMoney();
-            playerFans.text = playerData.Data.GetFans();
-            playerHype.text = playerData.Data.Hype.ToString();
+            playerMoney.text = playerData.GetDisplayMoney();
+            playerFans.text = playerData.GetDisplayFans();
+            playerHype.text = playerData.Hype.ToString();
             currentDate.text = TimeManager.Instance.DisplayNow;
         }
 
@@ -81,21 +73,10 @@ namespace Game.UI.GameScreen
             GameManager.Instance.SaveApplicationData();
             SceneManager.Instance.LoadMainScene();
         }
-
-        #region GAME EVENTS
-
-        private void OnGameReady(object[] args)
-        {
-            InitHUD();
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-        }
-
-        private void OnDisable()
+        
+        private void OnDestroy()
         {
             TimeManager.Instance.onDayLeft -= OnDayLeft;
-            EventManager.RemoveHandler(EventType.GameReady, OnGameReady);
         }
-
-        #endregion
     }
 }

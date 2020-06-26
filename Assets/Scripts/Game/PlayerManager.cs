@@ -1,30 +1,37 @@
 ﻿using System.Linq;
+using Core.Interfaces;
 using Game.UI.GameScreen;
 using Localization;
 using Models.Player;
 using Models.Production;
+using UnityEngine;
 using Utils;
+using Utils.Extensions;
 
 namespace Game
 {
     /// <summary>
     /// Логика взаимодействия с данными игрока
     /// </summary>
-    public class PlayerManager : Singleton<PlayerManager>
+    public class PlayerManager : Singleton<PlayerManager>, IStarter
     {
-        public static PlayerData PlayerData => GameManager.Instance.PlayerData;
+        [Header("HUD")]
+        [SerializeField] private GameScreenController gameScreen;
         
-        private GameScreenController _gameScreen;
+        /// <summary>
+        /// Данные игрока
+        /// </summary>
+        public static PlayerData Data { get; private set; }
 
         /// <summary>
-        /// Устанавливает ссылку на интерфейс игрока
+        /// Инициализация объекта
         /// </summary>
-        public void SetHUD(GameScreenController gameScreen)
+        public void OnStart()
         {
-            _gameScreen = gameScreen;
-            _gameScreen.UpdateHUD(PlayerData);
+            Data = GameManager.Instance.PlayerData;
+            gameScreen.UpdateHUD(Data);
         }
-        
+
         /// <summary>
         /// Выдает награду за завершение основного действия
         /// </summary>
@@ -39,8 +46,8 @@ namespace Game
         /// </summary>
         public void AddFans(int fans)
         {
-            PlayerData.Data.Fans += fans;
-            _gameScreen.UpdateHUD(PlayerData);
+            Data.Fans += fans;
+            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -48,8 +55,8 @@ namespace Game
         /// </summary>
         public void AddMoney(int money)
         {
-            PlayerData.Data.Money += money;
-            _gameScreen.UpdateHUD(PlayerData);
+            Data.Money += money;
+            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -57,8 +64,8 @@ namespace Game
         /// </summary>
         public void AddHype(int hype)
         {
-            PlayerData.Data.Hype += hype;
-            _gameScreen.UpdateHUD(PlayerData);
+            Data.Hype += hype;
+            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -66,7 +73,7 @@ namespace Game
         /// </summary>
         public bool SpendMoney(int money)
         {
-            if (PlayerData.Data.Money < money)
+            if (Data.Money < money)
                 return false;
 
             AddMoney(-money);
@@ -78,7 +85,7 @@ namespace Game
         /// </summary>
         public static int GetNextProductionId<T>() where T : Production
         {
-            var history = PlayerData.History;
+            var history = Data.History;
             var id = 0;
             
             if (typeof(T) == typeof(TrackInfo))
@@ -101,7 +108,7 @@ namespace Game
         /// </summary>
         public static string[] GetPlayersThemes()
         {
-            return PlayerData.Themes
+            return Data.Themes
                 .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
                 .ToArray();
         }
@@ -111,10 +118,9 @@ namespace Game
         /// </summary>
         public static string[] GetPlayersStyles()
         {
-            return PlayerData.Styles
+            return Data.Styles
                 .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
                 .ToArray();
         }
-        
     }
 }

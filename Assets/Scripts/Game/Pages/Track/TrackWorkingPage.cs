@@ -60,8 +60,8 @@ namespace Game.Pages.Track
         /// </summary>
         private void GenerateWorkPoints()
         {
-            var bitWorkPoints = CreateBitPoints(PlayerManager.PlayerData);
-            var textWorkPoints = CreateTextPoints(PlayerManager.PlayerData);
+            var bitWorkPoints = CreateBitPoints(PlayerManager.Data);
+            var textWorkPoints = CreateTextPoints(PlayerManager.Data);
             
             _track.BitPoints += bitWorkPoints;
             _track.TextPoints += textWorkPoints;
@@ -126,8 +126,8 @@ namespace Game.Pages.Track
         protected override void BeforePageOpen()
         {
             header.text = $"Работа над треком \"{_track.Name}\"";
-            bitmaker.SetActive(!PlayerManager.PlayerData.Team.BitMaker.IsEmpty);
-            textwritter.SetActive(!PlayerManager.PlayerData.Team.TextWriter.IsEmpty);
+            bitmaker.SetActive(!PlayerManager.Data.Team.BitMaker.IsEmpty);
+            textwritter.SetActive(!PlayerManager.Data.Team.TextWriter.IsEmpty);
         }
 
         protected override void AfterPageOpen()

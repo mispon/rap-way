@@ -3,7 +3,7 @@ using Localization;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
+using Utils.Extensions;
 
 namespace Game.Pages.Team
 {
@@ -28,8 +28,8 @@ namespace Game.Pages.Team
         {
             TimeManager.Instance.SetFreezed(true);
             
-            teammateText.text = 
-                LocalizationManager.Instance.Get(_unlockedTeammate.Type.GetDescription());   
+            var desc = _unlockedTeammate.Type.GetDescription();
+            teammateText.text = LocalizationManager.Instance.Get(desc);   
         }
 
         protected override void BeforePageClose()

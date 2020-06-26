@@ -8,8 +8,7 @@ namespace Core
     /// </summary>
     public enum EventType 
     {
-        LangChanged,
-        GameReady
+        LangChanged
     }
 
     /// <summary>

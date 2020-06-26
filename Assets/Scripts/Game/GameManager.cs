@@ -18,6 +18,7 @@ namespace Game
 
         public PlayerData PlayerData { get; private set; }
         public GameStats GameStats { get; private set; }
+        public bool IsReady { get; private set; }
 
         private void Start()
         {
@@ -25,7 +26,8 @@ namespace Game
 
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
-            
+            IsReady = true;
+
             // todo: выключить загрузочный экран
         }
 
