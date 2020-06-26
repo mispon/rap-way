@@ -1,6 +1,7 @@
 using System.Linq;
 using Core;
 using Game.Pages;
+using Game.Pages.Team;
 using Models.Player;
 using UnityEngine;
 using Utils;
@@ -11,10 +12,10 @@ namespace Game
     {
 
         [Header("Teammate external info")] 
-        [SerializeField] private TeammateInfo[] teammateInfos;
+        [SerializeField, ArrayElementTitle("type")] private TeammateInfo[] teammateInfos;
 
         [Header("Teammate event pages")] 
-        [SerializeField] private Page unlockTeammatePage;
+        [SerializeField] private TeammateUnlockPage unlockTeammatePage;
         [SerializeField] private Page salaryPage;
 
 
@@ -37,11 +38,8 @@ namespace Game
                 teammates.FirstOrDefault(tm => teammateInfos.First(tmi => tmi.type == tm.type).fansToUnlock <= fans);
             
             
-           if(unlockTeammate == null)
-               return;
-           
-           
-           //todo: отобразить в [unlockTeammatePage] нового тиммейта
+           if(unlockTeammate != null)
+               unlockTeammatePage.Show(unlockTeammate);
         }
 
         private void OnSalary()

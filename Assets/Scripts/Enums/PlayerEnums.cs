@@ -83,9 +83,13 @@ namespace Enums
 
     public enum Teammates
     {
+        [Description("teammate_bitmaker")]
         BitMaker,
+        [Description("teammate_textwritter")]
         TextWriter,
+        [Description("teammate_producer")]
         Producer, 
+        [Description("teammate_smm")]
         SMM
     }
 }

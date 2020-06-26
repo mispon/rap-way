@@ -16,6 +16,11 @@ namespace Models.Player
         /// Тип тиммейта
         /// </summary>
         public Teammates type;
+
+        /// <summary>
+        /// Флаг оплаты услуг тиммейта.
+        /// </summary>
+        public bool hasPayment;
         
         /// <summary>
         /// Навык

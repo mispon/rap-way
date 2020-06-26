@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6495241212439587862}
   - component: {fileID: 6108130984381607496}
   - component: {fileID: 6495241212439587863}
-  - component: {fileID: 6495241212439587861}
   - component: {fileID: 6495241212439587856}
   m_Layer: 0
   m_Name: GameManager
@@ -30,7 +29,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 458543949629195996}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -64,19 +64,6 @@ MonoBehaviour:
   _dontDestroy: 0
   playersDataKey: RapWay_PlayerSave
   gameDataKey: RapWay_GameSave
---- !u!114 &6495241212439587861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6495241212439587857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be23ae18d3d94d779eea03efb82b6a42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dontDestroy: 0
 --- !u!114 &6495241212439587856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,3 +79,76 @@ MonoBehaviour:
   _dontDestroy: 0
   _data:
     items: []
+--- !u!1 &8753097403301050692
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 458543949629195996}
+  - component: {fileID: 8538140907899672725}
+  - component: {fileID: 2275128435086705033}
+  m_Layer: 0
+  m_Name: PlayerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &458543949629195996
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8753097403301050692}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6495241212439587862}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8538140907899672725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8753097403301050692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be23ae18d3d94d779eea03efb82b6a42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dontDestroy: 0
+--- !u!114 &2275128435086705033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8753097403301050692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb6a6450b4f41b999bff3ed97b2997e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dontDestroy: 0
+  teammateInfos:
+  - type: 0
+    fansToUnlock: 1000
+    salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
+  - type: 1
+    fansToUnlock: 2000
+    salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
+  - type: 2
+    fansToUnlock: 3000
+    salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
+  - type: 3
+    fansToUnlock: 4000
+    salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
+  unlockTeammatePage: {fileID: 0}
+  salaryPage: {fileID: 0}
