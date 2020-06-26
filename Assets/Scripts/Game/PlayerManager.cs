@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Game.UI.GameScreen;
 using Localization;
 using Models.Player;
 using Models.Production;
@@ -12,7 +13,18 @@ namespace Game
     public class PlayerManager : Singleton<PlayerManager>
     {
         public static PlayerData PlayerData => GameManager.Instance.PlayerData;
+        
+        private GameScreenController _gameScreen;
 
+        /// <summary>
+        /// Устанавливает ссылку на интерфейс игрока
+        /// </summary>
+        public void SetHUD(GameScreenController gameScreen)
+        {
+            _gameScreen = gameScreen;
+            _gameScreen.UpdateHUD(PlayerData);
+        }
+        
         /// <summary>
         /// Выдает награду за завершение основного действия
         /// </summary>
@@ -28,6 +40,7 @@ namespace Game
         public void AddFans(int fans)
         {
             PlayerData.Data.Fans += fans;
+            _gameScreen.UpdateHUD(PlayerData);
         }
 
         /// <summary>
@@ -36,6 +49,7 @@ namespace Game
         public void AddMoney(int money)
         {
             PlayerData.Data.Money += money;
+            _gameScreen.UpdateHUD(PlayerData);
         }
 
         /// <summary>
@@ -44,17 +58,18 @@ namespace Game
         public void AddHype(int hype)
         {
             PlayerData.Data.Hype += hype;
+            _gameScreen.UpdateHUD(PlayerData);
         }
 
         /// <summary>
-        /// Выполянет оплату 
+        /// Выполянет оплату
         /// </summary>
-        public bool Pay(int money)
+        public bool SpendMoney(int money)
         {
             if (PlayerData.Data.Money < money)
                 return false;
 
-            PlayerData.Data.Money -= money;
+            AddMoney(-money);
             return true;
         }
 

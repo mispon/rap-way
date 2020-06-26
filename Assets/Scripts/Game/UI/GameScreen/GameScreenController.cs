@@ -1,4 +1,5 @@
 ﻿using Core;
+using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Core.EventType;
@@ -36,12 +37,18 @@ namespace Game.UI.GameScreen
         }
 
         /// <summary>
-        /// Инициализирует данные интерфейса игрока 
+        /// Инициализирует интерфейса игрока 
         /// </summary>
         private void InitHUD()
         {
-            var playerData = PlayerManager.PlayerData;
+            PlayerManager.Instance.SetHUD(this);
+        }
 
+        /// <summary>
+        /// Обновляет интерфейс игрока
+        /// </summary>
+        public void UpdateHUD(PlayerData playerData)
+        {
             playerNickname.text = playerData.Info.NickName;
             playerMoney.text = playerData.Data.GetMoney();
             playerFans.text = playerData.Data.GetFans();

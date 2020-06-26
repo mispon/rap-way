@@ -39,9 +39,6 @@ namespace Game
         /// </summary>
         private void CheckNewTeammate()
         {
-            PlayerManager.Instance.GiveReward(500, 100);
-            print($"Player fans: {PlayerManager.PlayerData.Data.Fans}");
-            
             var lockedTeammates = GetTeammates(e => e.IsEmpty);
             if (lockedTeammates.Length == 0)
                 return;

@@ -56,7 +56,7 @@ namespace Game.Pages.Team
         /// </summary>
         private void Pay()
         {
-            if (PlayerManager.Instance.Pay(_salary))
+            if (PlayerManager.Instance.SpendMoney(_salary))
             {
                 _teammate.HasPayment = true;
                 Reset();
