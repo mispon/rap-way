@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Game.UI;
 using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ namespace Game.Pages.Clip
         [Space, SerializeField] private Switcher operatorSwitcher;
         [SerializeField] private Text operatorSkill;
         [SerializeField] private Text operatorPrice;
-        [Space, SerializeField] private Text fullPrice;
+        [Space, SerializeField] private Price price;
         [SerializeField] private Button startButton;
 
         [Header("Страница разработки")]
@@ -47,15 +48,21 @@ namespace Game.Pages.Clip
             operatorSwitcher.onIndexChange += OnOperatorChange;
         }
 
+        /// <summary>
+        /// Запускает создание клипа
+        /// </summary>
         private void CreateClip()
         {
-            // todo: check money and pay team
+            if (!PlayerManager.Instance.SpendMoney(_fullPrice))
+            {
+                price.ShowNoMoney();
+                return;
+            }
             
             var track = _lastTracks[trackSwitcher.ActiveIndex];
             track.HasClip = true;
             
             _clip.TrackId = track.Id;
-
             workingPage.CreateClip(_clip);
             Close();
         }
@@ -68,6 +75,7 @@ namespace Game.Pages.Clip
             var director = directorsList[index];
             directorSkill.text = $"Навык: {director.Skill}";
             directorPrice.text = $"Стоимость: {director.Price}";
+            _clip.DirectorSkill = director.Skill;
             _directorPrice = director.Price;
             DisplayFullPrice();
         }
@@ -80,6 +88,7 @@ namespace Game.Pages.Clip
             var clipOperator = operatorsList[index];
             operatorSkill.text = $"Навык: {clipOperator.Skill}";
             operatorPrice.text = $"Стоимость: {clipOperator.Price}";
+            _clip.OperatorSkill = clipOperator.Skill;
             _operatorPrice = clipOperator.Price;
             DisplayFullPrice();
         }
@@ -87,7 +96,7 @@ namespace Game.Pages.Clip
         /// <summary>
         /// Отображает полную стоимость клипа
         /// </summary>
-        private void DisplayFullPrice() => fullPrice.text = $"СТОИМОСТЬ: {_fullPrice}";
+        private void DisplayFullPrice() => price.SetValue($"СТОИМОСТЬ: {_fullPrice}");
 
         /// <summary>
         /// Кэшируем самые новые треки игрока на которые еще не снимался клип

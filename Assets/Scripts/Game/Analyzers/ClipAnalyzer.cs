@@ -16,6 +16,9 @@ namespace Game.Analyzers
             clip.Views = Random.Range(0, 1000);
             clip.Likes = Random.Range(0, 100);
             clip.Dislikes = Random.Range(0, 100);
+
+            clip.FansIncome = Random.Range(0, 100);
+            clip.MoneyIncome = Random.Range(0, 100);
         }
     }
 }

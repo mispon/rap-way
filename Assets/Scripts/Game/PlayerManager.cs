@@ -122,5 +122,13 @@ namespace Game
                 .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
                 .ToArray();
         }
+
+        /// <summary>
+        /// Возвращает название трека по идентификатору
+        /// </summary>
+        public static string GetTrackName(int trackId)
+        {
+            return Data.History.TrackList.First(e => e.Id == trackId).Name;
+        }
     }
 }

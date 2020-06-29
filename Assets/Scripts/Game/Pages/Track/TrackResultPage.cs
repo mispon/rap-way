@@ -21,7 +21,7 @@ namespace Game.Pages.Track
         [SerializeField] private TrackAnalyzer trackAnalyzer;
 
         /// <summary>
-        /// Показывает результат 
+        /// Показывает результат работы над треком
         /// </summary>
         public void Show(TrackInfo track)
         {
