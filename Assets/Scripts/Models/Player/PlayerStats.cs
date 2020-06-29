@@ -32,6 +32,16 @@ namespace Models.Player
         public int Charisma;
 
         /// <summary>
+        /// Менеджмент. Влияет на организацию концертов
+        /// </summary>
+        public int Management;
+
+        /// <summary>
+        /// Маркетинг. Влияет на организацию концертов
+        /// </summary>
+        public int Marketing;
+
+        /// <summary>
         /// Случайная генерация из предельных значений
         /// </summary>
         public PlayerStats(in DefaultPlayerStats defaultValues)

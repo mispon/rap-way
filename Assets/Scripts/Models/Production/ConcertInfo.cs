@@ -1,5 +1,4 @@
 ﻿using System;
-using Game;
 
 namespace Models.Production
 {
@@ -12,13 +11,12 @@ namespace Models.Production
         public int AlbumId;
         public string Location;
         
+        public int TicketCost;
         public int TicketsSold;
-        public int OrganisationPoints;
 
-        public int ManagerPoint;
-        public int PrPoints;
-
-        public override string ToString()
-            => $"{GameManager.Instance.PlayerData.Info.NickName} - {Name} (Live: {Location})";
+        public int ManagementPoints;
+        public int MarketingPoints;
+        
+        public int Income => TicketsSold * TicketCost;
     }
 }

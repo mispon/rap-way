@@ -12,17 +12,17 @@ namespace Models.Player
     {
         public Teammate BitMaker;
         public Teammate TextWriter;
-        public Teammate Producer;
-        public Teammate SMM;
+        public Teammate Manager;
+        public Teammate PrMan;
 
-        public Teammate[] TeammatesArray => new[] {BitMaker, TextWriter, Producer, SMM};
+        public Teammate[] TeammatesArray => new[] {BitMaker, TextWriter, Manager, PrMan};
 
         public static PlayerTeam New => new PlayerTeam
         {
             BitMaker = Teammate.New(TeammateType.BitMaker),
             TextWriter = Teammate.New(TeammateType.TextWriter),
-            Producer = Teammate.New(TeammateType.Producer),
-            SMM = Teammate.New(TeammateType.SMM)
+            Manager = Teammate.New(TeammateType.Manager),
+            PrMan = Teammate.New(TeammateType.PrMan)
         };
     }
 }

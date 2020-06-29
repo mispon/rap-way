@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Data;
 using Game.UI;
 using Models.Production;
 using UnityEngine;
@@ -31,8 +32,7 @@ namespace Game.Pages.Clip
         [SerializeField] private ClipWorkingPage workingPage;
 
         [Header("Данные")]
-        [SerializeField] private ClipStaff[] directorsList;
-        [SerializeField] private ClipStaff[] operatorsList;
+        [SerializeField] private ClipStaffData data;
 
         private ClipInfo _clip;
         private List<TrackInfo> _lastTracks = new List<TrackInfo>(TRACKS_CACHE);
@@ -44,6 +44,11 @@ namespace Game.Pages.Clip
         private void Start()
         {
             startButton.onClick.AddListener(CreateClip);
+            
+            // todo: Localize
+            directorSwitcher.InstantiateElements(data.Directors.Select(e => e.NameKey));
+            operatorSwitcher.InstantiateElements(data.Operators.Select(e => e.NameKey));
+            
             directorSwitcher.onIndexChange += OnDirectorChange;
             operatorSwitcher.onIndexChange += OnOperatorChange;
         }
@@ -72,11 +77,11 @@ namespace Game.Pages.Clip
         /// </summary>
         private void OnDirectorChange(int index)
         {
-            var director = directorsList[index];
+            var director = data.Directors[index];
             directorSkill.text = $"Навык: {director.Skill}";
-            directorPrice.text = $"Стоимость: {director.Price}";
+            directorPrice.text = $"Стоимость: {director.Salary}";
             _clip.DirectorSkill = director.Skill;
-            _directorPrice = director.Price;
+            _directorPrice = director.Salary;
             DisplayFullPrice();
         }
         
@@ -85,11 +90,11 @@ namespace Game.Pages.Clip
         /// </summary>
         private void OnOperatorChange(int index)
         {
-            var clipOperator = operatorsList[index];
+            var clipOperator = data.Operators[index];
             operatorSkill.text = $"Навык: {clipOperator.Skill}";
-            operatorPrice.text = $"Стоимость: {clipOperator.Price}";
+            operatorPrice.text = $"Стоимость: {clipOperator.Salary}";
             _clip.OperatorSkill = clipOperator.Skill;
-            _operatorPrice = clipOperator.Price;
+            _operatorPrice = clipOperator.Salary;
             DisplayFullPrice();
         }
 
@@ -99,7 +104,7 @@ namespace Game.Pages.Clip
         private void DisplayFullPrice() => price.SetValue($"СТОИМОСТЬ: {_fullPrice}");
 
         /// <summary>
-        /// Кэшируем самые новые треки игрока на которые еще не снимался клип
+        /// Кэширует самые новые треки игрока на которые еще не снимался клип
         /// </summary>
         private void CacheLastTracks()
         {
@@ -128,9 +133,6 @@ namespace Game.Pages.Clip
                 trackSwitcher.InstantiateElements(new[] {"Нет треков"});
                 startButton.interactable = false;
             }
-            
-            directorSwitcher.InstantiateElements(directorsList.Select(e => e.Name));
-            operatorSwitcher.InstantiateElements(operatorsList.Select(e => e.Name));
             
             OnDirectorChange(0);
             OnOperatorChange(0);

@@ -87,9 +87,9 @@ namespace Enums
         BitMaker,
         [Description("teammate_textwritter")]
         TextWriter,
-        [Description("teammate_producer")]
-        Producer, 
-        [Description("teammate_smm")]
-        SMM
+        [Description("teammate_manager")]
+        Manager, 
+        [Description("teammate_prman")]
+        PrMan
     }
 }
