@@ -79,7 +79,7 @@ namespace Game.Pages.Clip
         {
             var director = data.Directors[index];
             directorSkill.text = $"Навык: {director.Skill}";
-            directorPrice.text = $"Стоимость: {director.Salary}";
+            directorPrice.text = $"Стоимость: {director.Salary}$";
             _clip.DirectorSkill = director.Skill;
             _directorPrice = director.Salary;
             DisplayFullPrice();
@@ -92,7 +92,7 @@ namespace Game.Pages.Clip
         {
             var clipOperator = data.Operators[index];
             operatorSkill.text = $"Навык: {clipOperator.Skill}";
-            operatorPrice.text = $"Стоимость: {clipOperator.Salary}";
+            operatorPrice.text = $"Стоимость: {clipOperator.Salary}$";
             _clip.OperatorSkill = clipOperator.Skill;
             _operatorPrice = clipOperator.Salary;
             DisplayFullPrice();
@@ -101,7 +101,7 @@ namespace Game.Pages.Clip
         /// <summary>
         /// Отображает полную стоимость клипа
         /// </summary>
-        private void DisplayFullPrice() => price.SetValue($"СТОИМОСТЬ: {_fullPrice}");
+        private void DisplayFullPrice() => price.SetValue($"СТОИМОСТЬ: {_fullPrice}$");
 
         /// <summary>
         /// Кэширует самые новые треки игрока на которые еще не снимался клип

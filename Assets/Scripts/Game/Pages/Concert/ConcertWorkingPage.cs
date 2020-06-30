@@ -118,13 +118,14 @@ namespace Game.Pages.Concert
         private void FinishConcert()
         {
             concertResult.Show(_concert);
+            Close();
         }
         
         #region PAGE CALLBACKS
 
         protected override void BeforePageOpen()
         {
-            header.text = $"Организация концерта в \"{_concert.Location}\"";
+            header.text = $"Организация концерта в \"{_concert.LocationName}\"";
             manager.SetActive(!PlayerManager.Data.Team.Manager.IsEmpty);
             prman.SetActive(!PlayerManager.Data.Team.PrMan.IsEmpty);
         }

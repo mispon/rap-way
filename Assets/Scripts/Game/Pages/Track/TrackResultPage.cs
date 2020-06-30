@@ -43,7 +43,7 @@ namespace Game.Pages.Track
                 ? $"Трек занял {track.ChartPosition}-ую позицию в чарте!"
                 : "Трек не попал в топ чарта";
             fansIncome.text = $"ФАНАТЫ: +{track.FansIncome}";
-            moneyIncome.text = $"ДЕНЬГИ: +{track.MoneyIncome}";
+            moneyIncome.text = $"ДЕНЬГИ: +{track.MoneyIncome}$";
         }
 
         /// <summary>

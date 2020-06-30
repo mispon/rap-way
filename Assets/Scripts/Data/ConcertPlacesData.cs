@@ -14,7 +14,12 @@ namespace Data
     public class ConcertPlace
     {
         public string NameKey;
-        public int FansRequirement;
+        public int Capacity;
         public int Cost;
+
+        public int TicketMinCost;
+        public int TicketMaxCost;
+        
+        public int FansRequirement;
     }
 }

@@ -9,7 +9,9 @@ namespace Models.Production
     public class ConcertInfo: Production
     {
         public int AlbumId;
-        public string Location;
+        
+        public string LocationName;
+        public int LocationCapacity;
         
         public int TicketCost;
         public int TicketsSold;

@@ -40,7 +40,7 @@ namespace Game.Pages.Clip
             viewsAmount.text = $"ПРОСМОТРЫ: {clip.Views}";
             likesAndDislikes.text = $"{clip.Likes} лайков / {clip.Dislikes} дизлайков";
             fansIncome.text = $"ФАНАТЫ: +{clip.FansIncome}";
-            moneyIncome.text = $"ДЕНЬГИ: +{clip.MoneyIncome}";
+            moneyIncome.text = $"ДЕНЬГИ: +{clip.MoneyIncome}$";
         }
         
         /// <summary>

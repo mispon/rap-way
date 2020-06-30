@@ -18,8 +18,9 @@ namespace Game.Pages.Concert
         
         [Header("Компоненты")]
         [SerializeField] private Switcher placeSwitcher;
+        [SerializeField] private Text placeCapacityLabel;
+        [SerializeField] private Text fansRequirementLabel;
         [SerializeField] private Switcher albumsSwitcher;
-        [SerializeField] private Text fansRequirement;
         [Space, SerializeField] private Slider ticketCostSlider;
         [SerializeField] private Text ticketCost;
         [Space, SerializeField] private Price concertPrice;
@@ -72,11 +73,18 @@ namespace Game.Pages.Concert
         {
             var place = data.Places[index];
 
-            _concert.Location = place.NameKey;
+            _concert.LocationName = place.NameKey;
+            _concert.LocationCapacity = place.Capacity;
+            placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity}";
+            
             _placeCost = place.Cost;
             concertPrice.SetValue($"АРЕНДА: {_placeCost} $");
+
+            ticketCostSlider.minValue = place.TicketMinCost;
+            ticketCostSlider.maxValue = place.TicketMaxCost;
+            ResetTicketCost();
             
-            fansRequirement.text = $"НЕОБХОДИМО ФАНАТОВ: {place.FansRequirement}";
+            fansRequirementLabel.text = $"НЕОБХОДИМО ФАНАТОВ: {place.FansRequirement}";
             startButton.interactable = PlayerManager.Data.Fans >= place.FansRequirement;
         }
         

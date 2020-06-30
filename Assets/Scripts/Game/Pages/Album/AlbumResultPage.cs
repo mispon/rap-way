@@ -43,7 +43,7 @@ namespace Game.Pages.Album
                 ? $"Альбом занял {album.ChartPosition}-ую позицию в чарте!"
                 : "Альбом не попал в топ чарта";
             fansIncome.text = $"ФАНАТЫ: +{album.FansIncome}";
-            moneyIncome.text = $"ДЕНЬГИ: +{album.MoneyIncome}";
+            moneyIncome.text = $"ДЕНЬГИ: +{album.MoneyIncome}$";
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using Game.Analyzers;
 using Models.Production;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Pages.Concert
 {
@@ -9,6 +10,12 @@ namespace Game.Pages.Concert
     /// </summary>
     public class ConcertResultPage : Page
     {
+        [Header("Компоменты")]
+        [SerializeField] private Text header;
+        [SerializeField] private Text ticketsSold;
+        [SerializeField] private Text ticketCost;
+        [SerializeField] private Text moneyIncome;
+        
         [Header("Анализатор концерта")]
         [SerializeField] private ConcertAnalyzer concertAnalyzer;
 
@@ -20,6 +27,8 @@ namespace Game.Pages.Concert
         public void Show(ConcertInfo concert)
         {
             _concert = concert;
+            concertAnalyzer.Analyze(concert);
+            
             DisplayResult(concert);
             SaveResult(concert);
             Open();
@@ -30,7 +39,10 @@ namespace Game.Pages.Concert
         /// </summary>
         private void DisplayResult(ConcertInfo concert)
         {
-            // todo
+            header.text = $"Концерт в \"{concert.LocationName}\" завершен!";
+            ticketsSold.text = $"ПРОДАНО {concert.TicketsSold} билетов";
+            ticketCost.text = $"ЦЕНА БИЛЕТА: {concert.TicketCost}$";
+            moneyIncome.text = $"ДОХОД: +{concert.Income}$";
         }
 
         /// <summary>
@@ -46,7 +58,6 @@ namespace Game.Pages.Concert
 
         protected override void BeforePageOpen()
         {
-            concertAnalyzer.Analyze(_concert);
             // todo: Show concert cutscene
         }
 
