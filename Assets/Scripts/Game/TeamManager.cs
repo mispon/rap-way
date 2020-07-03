@@ -1,23 +1,23 @@
+using System;
 using System.Linq;
 using Core;
-using Game.Pages;
 using Game.Pages.Team;
 using Models.Player;
 using UnityEngine;
-using Utils;
 
 namespace Game
 {
-    public class TeamManager: Singleton<TeamManager>
+    /// <summary>
+    /// Логика взаимодействия с командой игрока
+    /// </summary>
+    public class TeamManager: MonoBehaviour
     {
+        [Header("Данные команды")] 
+        [ArrayElementTitle("Type")] public TeammateInfo[] teammateInfos;
 
-        [Header("Teammate external info")] 
-        [SerializeField, ArrayElementTitle("type")] private TeammateInfo[] teammateInfos;
-
-        [Header("Teammate event pages")] 
+        [Header("Страницы команды")] 
         [SerializeField] private TeammateUnlockPage unlockTeammatePage;
-        [SerializeField] private Page salaryPage;
-
+        [SerializeField] private TeammateSalaryPage salaryPage;
 
         private void Start()
         {
@@ -25,31 +25,50 @@ namespace Game
             TimeManager.Instance.onMonthLeft += OnSalary;
         }
 
+        /// <summary>
+        /// Возвращает зарплату тиммейта
+        /// </summary>
+        public int GetSalary(Teammate teammate)
+        {
+            var info = teammateInfos.First(tmi => tmi.Type == teammate.Type);
+            return info.Salary[teammate.Skill - 1];
+        }
+        
+        /// <summary>
+        /// Проверяет возможность получения нового тиммейта
+        /// </summary>
         private void CheckNewTeammate()
         {
-            //Массив еще недоступных тиммеейтов
-            var teammates = GameManager.Instance.PlayerData.Team.TeammatesArray.Where(tm => tm.Skill == 0).ToArray();
-            if(teammates.Length == 0)
+            var lockedTeammates = GetTeammates(e => e.IsEmpty);
+            if (lockedTeammates.Length == 0)
                 return;
 
-            var fans = GameManager.Instance.PlayerData.Data.Fans;
-            //Первый попавшийся тиммейт, которого можно открыть
-            var unlockTeammate =
-                teammates.FirstOrDefault(tm => teammateInfos.First(tmi => tmi.type == tm.type).fansToUnlock <= fans);
+            var fans = PlayerManager.Data.Fans;
+            var lockedTeammate = lockedTeammates
+                .FirstOrDefault(tm => teammateInfos.First(tmi => tmi.Type == tm.Type).FansToUnlock <= fans);
             
-            
-           if(unlockTeammate != null)
-               unlockTeammatePage.Show(unlockTeammate);
+           if (lockedTeammate != null)
+               unlockTeammatePage.Show(lockedTeammate);
         }
 
+        /// <summary>
+        /// Открывает страницу выплаты зарплат
+        /// </summary>
         private void OnSalary()
         {
-            //Массив доступных тиммейтов
-            var teammates = GameManager.Instance.PlayerData.Team.TeammatesArray.Where(tm => tm.Skill != 0).ToArray();
-            if(teammates.Length == 0)
-                return;
-            
-            //todo: работаем с панелью отображения зарплат
+            var teammates = GetTeammates(e => !e.IsEmpty);
+            if (teammates.Length > 0)
+                salaryPage.Show(teammates);
+        }
+
+        /// <summary>
+        /// Возвращает тиммейтов подходящих под условию
+        /// </summary>
+        private static Teammate[] GetTeammates(Func<Teammate, bool> predicate)
+        {
+            return PlayerManager.Data.Team.TeammatesArray
+                .Where(predicate)
+                .ToArray();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Models.Production;
+﻿using Models.Info.Production;
 using UnityEngine;
 
 namespace Game.Analyzers
@@ -7,7 +7,7 @@ namespace Game.Analyzers
     /// Базовый анализатор
     /// </summary>
     public abstract class Analyzer<T> : MonoBehaviour 
-        where T : Production 
+        //where T : Production //убрал, так как закинул сюда же SocialInfo, которое не наследуется от Production
     {
         /// <summary>
         /// Анализирует успешность деятельности игрока 

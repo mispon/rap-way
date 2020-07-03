@@ -4,13 +4,14 @@ using Models.Game;
 using Models.Player;
 using UnityEngine;
 using Utils;
+using Core.Interfaces;
 
 namespace Game
 {
     /// <summary>
     /// Логика управления состоянием игры
     /// </summary>
-    public class GameManager : Singleton<GameManager>
+    public class GameManager : Singleton<GameManager>, IStarter
     {
         [Header("Ключи сохранения данных")]
         [SerializeField] private string playersDataKey;
@@ -18,8 +19,8 @@ namespace Game
 
         public PlayerData PlayerData { get; private set; }
         public GameStats GameStats { get; private set; }
-
-        private void Start()
+        
+        public void OnStart()
         {
             // todo: включить загрузочный экран
 

@@ -1,11 +1,8 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ElementTitleAttribute: PropertyAttribute
 {
-    public string draw_name { get; private set; }
+    public string draw_name { get; }
 
     public ElementTitleAttribute(string _name)
     {

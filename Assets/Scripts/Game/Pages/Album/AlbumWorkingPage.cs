@@ -1,7 +1,7 @@
 ﻿using Core;
 using Game.UI;
 using Models.Player;
-using Models.Production;
+using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,8 +60,8 @@ namespace Game.Pages.Album
         /// </summary>
         private void GenerateWorkPoints()
         {
-            var bitWorkPoints = CreateBitPoints(PlayerManager.PlayerData);
-            var textWorkPoints = CreateTextPoints(PlayerManager.PlayerData);
+            var bitWorkPoints = CreateBitPoints(PlayerManager.Data);
+            var textWorkPoints = CreateTextPoints(PlayerManager.Data);
             
             _album.BitPoints += bitWorkPoints;
             _album.TextPoints += textWorkPoints;
@@ -126,8 +126,8 @@ namespace Game.Pages.Album
         protected override void BeforePageOpen()
         {
             header.text = $"Работа над альбомом \"{_album.Name}\"";
-            bitmaker.SetActive(!PlayerManager.PlayerData.Team.BitMaker.IsEmpty);
-            textwritter.SetActive(!PlayerManager.PlayerData.Team.TextWriter.IsEmpty);
+            bitmaker.SetActive(!PlayerManager.Data.Team.BitMaker.IsEmpty);
+            textwritter.SetActive(!PlayerManager.Data.Team.TextWriter.IsEmpty);
         }
 
         protected override void AfterPageOpen()

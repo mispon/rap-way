@@ -1,5 +1,5 @@
 ﻿using Game.Analyzers;
-using Models.Production;
+using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +21,7 @@ namespace Game.Pages.Track
         [SerializeField] private TrackAnalyzer trackAnalyzer;
 
         /// <summary>
-        /// Показывает результат 
+        /// Показывает результат работы над треком
         /// </summary>
         public void Show(TrackInfo track)
         {
@@ -36,13 +36,14 @@ namespace Game.Pages.Track
         /// </summary>
         private void DisplayResult(TrackInfo track)
         {
-            header.text = $"Работа над треком \"{track.Name}\" завершена!";
+            var nickname = PlayerManager.Data.Info.NickName;
+            header.text = $"Завершена работа над треком: \"{nickname} - {track.Name}\"";
             listenAmount.text = $"Количество прослушиваний: {track.ListenAmount}";
             chartInfo.text = track.ChartPosition > 0
                 ? $"Трек занял {track.ChartPosition}-ую позицию в чарте!"
                 : "Трек не попал в топ чарта";
             fansIncome.text = $"ФАНАТЫ: +{track.FansIncome}";
-            moneyIncome.text = $"ДЕНЬГИ: +{track.MoneyIncome}";
+            moneyIncome.text = $"ДЕНЬГИ: +{track.MoneyIncome}$";
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace Game.Pages.Track
         private static void SaveResult(TrackInfo track)
         {
             PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
-            PlayerManager.PlayerData.History.TrackList.Add(track);
+            PlayerManager.Data.History.TrackList.Add(track);
         }
 
         /// <summary>

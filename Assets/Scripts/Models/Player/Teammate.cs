@@ -5,22 +5,21 @@ namespace Models.Player
 {
     /// <summary>
     /// Тиммейт
-    /// Этим классом определяются как члены PlayerTeam, так и сторонние чуваки, которых мы нанимаем для создания [клипа/концерта/чего еще душе угодно]
     /// </summary>
     [Serializable]
     public class Teammate
     {
-        public static Teammate New(Teammates type) => new Teammate {type = type};
+        public static Teammate New(TeammateType type) => new Teammate {Type = type};
         
         /// <summary>
         /// Тип тиммейта
         /// </summary>
-        public Teammates type;
+        public TeammateType Type;
 
         /// <summary>
-        /// Флаг оплаты услуг тиммейта.
+        /// Флаг оплаты услуг тиммейта
         /// </summary>
-        public bool hasPayment;
+        public bool HasPayment;
         
         /// <summary>
         /// Навык
@@ -33,11 +32,11 @@ namespace Models.Player
         public bool IsEmpty => Skill == 0;
     }
     
-    [System.Serializable]
+    [Serializable]
     public struct TeammateInfo
     {
-        public Teammates type;
-        public int fansToUnlock;
-        public int[] salary;
+        public TeammateType Type;
+        public int FansToUnlock;
+        public int[] Salary;
     }
 }

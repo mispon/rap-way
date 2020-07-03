@@ -65,7 +65,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void CreatePlayer()
         {
-            var player = PlayerManager.PlayerData.Info;
+            var player = GameManager.Instance.PlayerData.Info;
 
             player.FirstName = inputFields[0].text;
             player.LastName = inputFields[1].text;

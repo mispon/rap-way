@@ -1,7 +1,4 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ArrayElementTitleAttribute : PropertyAttribute
 {
@@ -15,19 +12,19 @@ public class ArrayElementTitleAttribute : PropertyAttribute
     /// <summary>
     /// Режим выбора имени: true - выведется первое имя, не содержащее пустую строку. false - выведутся все имена, не сожержащие поустую строку
     /// </summary>
-    public bool switchmode = false;
-    public bool lockEnumNull = false;
+    public bool switchmode;
+    public bool lockEnumNull;
 
     public ArrayElementTitleAttribute()
-    {
-
-    }
+    {}
+    
     public ArrayElementTitleAttribute(string ElementTitleVar)
     {
-        Varnames = new string[] { ElementTitleVar };
+        Varnames = new[] { ElementTitleVar };
         switchmode = false;
         lockEnumNull = false;
     }
+    
     public ArrayElementTitleAttribute(string[] ElementTitleVars)
     {
         Varnames = ElementTitleVars;

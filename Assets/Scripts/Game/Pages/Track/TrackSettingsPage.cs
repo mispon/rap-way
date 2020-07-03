@@ -1,7 +1,5 @@
-﻿using System;
-using Enums;
-using Localization;
-using Models.Production;
+﻿using Enums;
+using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -28,9 +26,6 @@ namespace Game.Pages.Track
         {
             trackNameInput.onValueChanged.AddListener(OnTrackNameInput);
             startButton.onClick.AddListener(CreateTrack);
-            
-            themeSwitcher.InstantiateElements(PlayerManager.GetPlayersThemes());
-            styleSwitcher.InstantiateElements(PlayerManager.GetPlayersStyles());
         }
         
         /// <summary>
@@ -46,14 +41,13 @@ namespace Game.Pages.Track
         /// </summary>
         private void CreateTrack()
         {
-            var nickName = PlayerManager.PlayerData.Info.NickName;
-            
             _track.Id = PlayerManager.GetNextProductionId<TrackInfo>();
+            if (string.IsNullOrEmpty(_track.Name))
+            {
+                _track.Name = $"Track {_track.Id}";
+            }
             _track.Theme = GetToneValue<Themes>(themeSwitcher);
             _track.Style = GetToneValue<Styles>(styleSwitcher);
-            _track.Name = string.IsNullOrEmpty(_track.Name)
-                ? $"{nickName} - Track {_track.Id}"
-                : $"{nickName} - {_track.Name}";
             
             workingPage.CreateTrack(_track);
             Close();
@@ -64,6 +58,9 @@ namespace Game.Pages.Track
         protected override void BeforePageOpen()
         {
             _track = new TrackInfo();
+            
+            themeSwitcher.InstantiateElements(PlayerManager.GetPlayersThemes());
+            styleSwitcher.InstantiateElements(PlayerManager.GetPlayersStyles());
         }
 
         protected override void AfterPageClose()

@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Models.Player
@@ -32,28 +31,28 @@ namespace Models.Player
         public int Charisma;
 
         /// <summary>
-        /// Случайная генерация из предельных значений
+        /// Менеджмент. Влияет на организацию концертов
         /// </summary>
-        public PlayerStats(in DefaultPlayerStats defaultValues)
-        {
-            Vocobulary = Random.Range(1, defaultValues.maxVocobulary);
-            Bitmaking = Random.Range(1, defaultValues.maxBitmaking);
-            Flow = Random.Range(1, defaultValues.maxFlow);
-            Charisma = Random.Range(1, defaultValues.maxCharisma);
-        }
-        
-        public static PlayerStats New => new PlayerStats(new DefaultPlayerStats());
-    }
+        public int Management;
 
-    /// <summary>
-    /// Можно настроить напрямую в инспекторе
-    /// </summary>
-    [Serializable]
-    public struct DefaultPlayerStats
-    {
-        [Range(2, 10)] public int maxVocobulary;
-        [Range(2, 10)] public int maxBitmaking;
-        [Range(2, 10)] public int maxFlow;
-        [Range(2, 10)] public int maxCharisma;
+        /// <summary>
+        /// Маркетинг. Влияет на организацию концертов
+        /// </summary>
+        public int Marketing;
+
+        public static PlayerStats New => new PlayerStats
+        {
+            Vocobulary = RandomValue,
+            Bitmaking = RandomValue,
+            Flow = RandomValue,
+            Charisma = RandomValue,
+            Management = RandomValue,
+            Marketing = RandomValue
+        };
+
+        /// <summary>
+        /// Случайный разброс начальных характеристик от 1 до 2
+        /// </summary>
+        private static int RandomValue => Random.Range(1, 3);
     }
 }

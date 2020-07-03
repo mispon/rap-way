@@ -1,5 +1,5 @@
 ﻿using Game.Analyzers;
-using Models.Production;
+using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,13 +36,14 @@ namespace Game.Pages.Album
         /// </summary>
         private void DisplayResult(AlbumInfo album)
         {
-            header.text = $"Работа над альбомом \"{album.Name}\" завершена!";
+            var nickname = PlayerManager.Data.Info.NickName;
+            header.text = $"Завершена работа над альбомом: \"{nickname} - {album.Name}\"";
             listenAmount.text = $"Количество прослушиваний: {album.ListenAmount}";
             chartInfo.text = album.ChartPosition > 0
                 ? $"Альбом занял {album.ChartPosition}-ую позицию в чарте!"
                 : "Альбом не попал в топ чарта";
             fansIncome.text = $"ФАНАТЫ: +{album.FansIncome}";
-            moneyIncome.text = $"ДЕНЬГИ: +{album.MoneyIncome}";
+            moneyIncome.text = $"ДЕНЬГИ: +{album.MoneyIncome}$";
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace Game.Pages.Album
         private static void SaveResult(AlbumInfo album)
         {
             PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome);
-            PlayerManager.PlayerData.History.AlbumList.Add(album);
+            PlayerManager.Data.History.AlbumList.Add(album);
         }
 
         /// <summary>

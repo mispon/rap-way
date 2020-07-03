@@ -1,17 +1,36 @@
 ﻿using System.Linq;
+using Core.Interfaces;
+using Game.UI.GameScreen;
 using Localization;
 using Models.Player;
-using Models.Production;
+using Models.Info.Production;
+using UnityEngine;
 using Utils;
+using Utils.Extensions;
 
 namespace Game
 {
     /// <summary>
     /// Логика взаимодействия с данными игрока
     /// </summary>
-    public class PlayerManager : Singleton<PlayerManager>
+    public class PlayerManager : Singleton<PlayerManager>, IStarter
     {
-        public static PlayerData PlayerData => GameManager.Instance.PlayerData;
+        [Header("HUD")]
+        [SerializeField] private GameScreenController gameScreen;
+        
+        /// <summary>
+        /// Данные игрока
+        /// </summary>
+        public static PlayerData Data { get; private set; }
+
+        /// <summary>
+        /// Инициализация объекта
+        /// </summary>
+        public void OnStart()
+        {
+            Data = GameManager.Instance.PlayerData;
+            gameScreen.UpdateHUD(Data);
+        }
 
         /// <summary>
         /// Выдает награду за завершение основного действия
@@ -27,7 +46,8 @@ namespace Game
         /// </summary>
         public void AddFans(int fans)
         {
-            PlayerData.Data.Fans += fans;
+            Data.Fans += fans;
+            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -35,7 +55,8 @@ namespace Game
         /// </summary>
         public void AddMoney(int money)
         {
-            PlayerData.Data.Money += money;
+            Data.Money += money;
+            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -43,7 +64,20 @@ namespace Game
         /// </summary>
         public void AddHype(int hype)
         {
-            PlayerData.Data.Hype += hype;
+            Data.Hype += hype;
+            gameScreen.UpdateHUD(Data);
+        }
+
+        /// <summary>
+        /// Выполянет оплату
+        /// </summary>
+        public bool SpendMoney(int money)
+        {
+            if (Data.Money < money)
+                return false;
+
+            AddMoney(-money);
+            return true;
         }
 
         /// <summary>
@@ -51,7 +85,7 @@ namespace Game
         /// </summary>
         public static int GetNextProductionId<T>() where T : Production
         {
-            var history = PlayerData.History;
+            var history = Data.History;
             var id = 0;
             
             if (typeof(T) == typeof(TrackInfo))
@@ -74,7 +108,7 @@ namespace Game
         /// </summary>
         public static string[] GetPlayersThemes()
         {
-            return PlayerData.Themes
+            return Data.Themes
                 .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
                 .ToArray();
         }
@@ -84,10 +118,17 @@ namespace Game
         /// </summary>
         public static string[] GetPlayersStyles()
         {
-            return PlayerData.Styles
+            return Data.Styles
                 .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
                 .ToArray();
         }
-        
+
+        /// <summary>
+        /// Возвращает название трека по идентификатору
+        /// </summary>
+        public static string GetTrackName(int trackId)
+        {
+            return Data.History.TrackList.First(e => e.Id == trackId).Name;
+        }
     }
 }
