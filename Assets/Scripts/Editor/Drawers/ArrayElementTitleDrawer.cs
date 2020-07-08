@@ -62,7 +62,7 @@ public class ArrayElementTitleDrawer : PropertyDrawer
             newLabel = label.text;
 
         if (_attr.baseHeader != "")
-            newLabel = string.Format("{0} {1}", _attr.baseHeader, newLabel);
+            newLabel = $"{_attr.baseHeader} {newLabel}";
 
         EditorGUI.PropertyField(position, property, new GUIContent(newLabel, label.tooltip), true);
     }

@@ -7,7 +7,7 @@ namespace Models.Player
     /// Шмотка персонажа
     /// </summary>
     [Serializable]
-    public struct Good
+    public class Good
     {
         /// <summary>
         /// Тип шмотки
