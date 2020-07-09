@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Data;
 using Enums;
 using Models.Player;
@@ -22,13 +22,14 @@ namespace Game.Pages.Store
         /// Массив данных об UI товаров для каждого типа шмотки каждого уровня
         /// </summary>
         private GoodInfo[] _goodInfos;
+        
         /// <summary>
         /// Список контроллеров управления UI-элементами товара
         /// </summary>
         private readonly List<StoreItemController> _itemsList = new List<StoreItemController>();
 
-        private float _elementTemplateHeight = 0;
-        private float _containerBaseHeight = 0;
+        private float _elementTemplateHeight;
+        private float _containerBaseHeight;
 
         /// <summary>
         /// Высота одного элемента
@@ -37,7 +38,7 @@ namespace Game.Pages.Store
         {
             get
             {
-                if (_elementTemplateHeight == 0)
+                if (Math.Abs(_elementTemplateHeight) < 0.01f)
                     _elementTemplateHeight = elementTemplate.transform.GetComponent<RectTransform>().rect.height;
 
                 return _elementTemplateHeight;
@@ -50,7 +51,7 @@ namespace Game.Pages.Store
         {
             get
             {
-                if(_containerBaseHeight == 0)
+                if (Math.Abs(_containerBaseHeight) < 0.01f)
                     _containerBaseHeight = rectContent.parent.GetComponent<RectTransform>().rect.height;
 
                 return _containerBaseHeight;

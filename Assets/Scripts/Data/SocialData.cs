@@ -20,7 +20,7 @@ namespace Data
     {
         public SocialType Type;
         public string WorkingPageHeader;
-        [ElementTitle("Длительность (дн.)")]public int Duration;
-        [ElementTitle("Восстановление (дн.)")]public int Cooldown;
+        [ElementTitle("Длительность (дн.)")] public int Duration;
+        [ElementTitle("Восстановление (дн.)")] public int Cooldown;
     }
 }

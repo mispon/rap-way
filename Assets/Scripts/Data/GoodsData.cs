@@ -11,7 +11,7 @@ namespace Data
     [CreateAssetMenu(fileName = "Goods", menuName = "Data/Goods")]
     public class GoodsData: ScriptableObject
     {
-        [Header("Для работы"),ArrayElementTitle("Type")]
+        [Header("Для работы"), ArrayElementTitle("Type")]
         public GoodInfo[] WorkTools;
 
         [Header("Понты"), ArrayElementTitle("Type")]
@@ -28,6 +28,7 @@ namespace Data
         /// Тип предмета
         /// </summary>
         public GoodsType Type;
+        
         /// <summary>
         /// Элементы отображения в магазине
         /// </summary>
@@ -47,10 +48,12 @@ namespace Data
         /// Уровень предмета
         /// </summary>
         public short Level;
+        
         /// <summary>
         /// Иконка предмета
         /// </summary>
         public Sprite Image;
+        
         /// <summary>
         /// Цена предмета
         /// </summary>
