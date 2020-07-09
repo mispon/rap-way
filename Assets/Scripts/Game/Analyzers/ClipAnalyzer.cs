@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿using Models.Info.Production;
+=======
+﻿using Models.Production;
+>>>>>>> master
 using UnityEngine;
 
 namespace Game.Analyzers
