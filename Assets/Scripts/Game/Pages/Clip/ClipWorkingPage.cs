@@ -1,6 +1,6 @@
 ﻿using Core;
 using Game.UI;
-using Models.Production;
+using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 

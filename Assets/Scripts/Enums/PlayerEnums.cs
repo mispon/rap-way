@@ -62,7 +62,18 @@ namespace Enums
     /// <summary>
     /// Имущество игрока
     /// </summary>
-    public enum GoodsType { Micro }
+    public enum GoodsType
+    {
+        Micro, 
+        AudioCard, 
+        FxMixer, 
+        Acustiq, 
+        Car, 
+        Appartaments, 
+        Swatches, 
+        Chain, 
+        Grilz
+    }
     
     /// <summary>
     /// Достижения игрока
@@ -136,5 +147,24 @@ namespace Enums
         Manager, 
         [Description("teammate_prman")]
         PrMan
+    }
+
+    /// <summary>
+    /// Типы социальных действий
+    /// </summary>
+    public enum SocialType
+    {
+        [Description("social_twit")]
+        Twit,
+        [Description("social_photo")]
+        Photo,
+        [Description("social_story")]
+        Story,
+        [Description("social_translation")]
+        Translation,
+        [Description("social_streamevent")]
+        StreamEvent,
+        [Description("social_charity")]
+        Charity
     }
 }

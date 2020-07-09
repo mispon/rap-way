@@ -26,6 +26,12 @@ namespace Localization
 
         public bool IsReady { get; private set; }
 
+        protected override void Awake()
+        {
+            dontDestroy = true;
+            base.Awake();
+        }
+
         /// <summary>
         /// Возвращает локализацию переданного ключа
         /// </summary>

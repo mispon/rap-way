@@ -3,7 +3,7 @@ using Core.Interfaces;
 using Game.UI.GameScreen;
 using Localization;
 using Models.Player;
-using Models.Production;
+using Models.Info.Production;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;

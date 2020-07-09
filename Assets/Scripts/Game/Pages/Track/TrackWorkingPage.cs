@@ -1,7 +1,7 @@
 ﻿using Core;
 using Game.UI;
 using Models.Player;
-using Models.Production;
+using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 

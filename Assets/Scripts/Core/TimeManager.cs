@@ -33,6 +33,8 @@ namespace Core
         private WaitForSeconds _waitForSecondsActive;
         private WaitForSeconds _waitForSecondsInactive;
 
+        public int SecondsPerTick => _hasAction ? actionInterval : inactionInterval;
+
         public void OnStart()
         {
             _waitForSecondsActive = new WaitForSeconds(actionInterval);

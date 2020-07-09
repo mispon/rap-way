@@ -18,6 +18,7 @@ namespace Models.Player
         public PlayerStats Stats;
         public PlayerHistory History;
         public PlayerTeam Team;
+        public PlayerSocials Socials;
         
         public List<Good> Goods;
         public List<Achievement> Achievements;
@@ -27,7 +28,7 @@ namespace Models.Player
         
         public static PlayerData New => new PlayerData
         {
-            Money =  0,
+            Money =  3000000,
             Fans = 0,
             Hype = 0,
             
@@ -35,6 +36,7 @@ namespace Models.Player
             Stats = PlayerStats.New,
             History = PlayerHistory.New,
             Team = PlayerTeam.New,
+            Socials = PlayerSocials.New,
             
             Goods = new List<Good>(),
             Achievements = new List<Achievement>(),

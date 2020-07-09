@@ -1,4 +1,4 @@
-﻿using Models.Production;
+using Models.Info.Production;
 using UnityEngine;
 
 namespace Game.Analyzers

@@ -1,5 +1,5 @@
 ﻿using Game.Analyzers;
-using Models.Production;
+using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 

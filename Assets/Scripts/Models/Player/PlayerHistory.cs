@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Models.Production;
+using Models.Info.Production;
 
 namespace Models.Player
 {

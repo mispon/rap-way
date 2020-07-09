@@ -13,7 +13,7 @@ namespace Utils
         public static T Instance { get; private set; }
 
         [SerializeField, Header("Нужно ли сохранять объект при переключении сцен")]
-        private bool _dontDestroy;
+        protected bool dontDestroy;
 
         protected virtual void Awake() 
         {
@@ -33,7 +33,7 @@ namespace Utils
         private T GetInstance() 
         {
             var instance = FindObjectOfType<T>() ?? CreateInstance();
-            if (_dontDestroy) DontDestroyOnLoad(instance);
+            if (dontDestroy) DontDestroyOnLoad(instance);
             return instance;
         }
 
