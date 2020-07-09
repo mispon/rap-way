@@ -1,11 +1,7 @@
 ﻿using Core;
 using Game.UI;
 using Models.Player;
-<<<<<<< HEAD
 using Models.Info.Production;
-=======
-using Models.Production;
->>>>>>> master
 using UnityEngine;
 using UnityEngine.UI;
 
