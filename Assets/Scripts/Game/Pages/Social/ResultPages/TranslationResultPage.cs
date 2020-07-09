@@ -16,12 +16,12 @@ namespace Game.Pages.Social.ResultPages
         
         protected override void DisplayResult ()
         {
-            var typeLocalization = LocalizationManager.Instance.Get(_social.Data.Type.GetDescription());
+            var typeLocalization = LocalizationManager.Instance.Get(Social.Data.Type.GetDescription());
             var nickname = PlayerManager.Data.Info.NickName;
-            headerText.text = $"{typeLocalization} <{nickname}>:\n{_social.ExternalText}";
+            headerText.text = $"{typeLocalization} <{nickname}>:\n{Social.ExternalText}";
             
             //marksText
-            hypeIncomeText.text = $"Хайп: +{_social.HypeIncome}";
+            hypeIncomeText.text = $"Хайп: +{Social.HypeIncome}";
         }
         
         protected override void AfterPageClose()

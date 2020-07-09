@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using System;
+using Enums;
 using Data;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ namespace Game.Pages.Social
     /// </summary>
     public class SocialSettingsPage : Page
     {
-        private const int MAXACTIONS = 6;
+        private const int MAX_ACTIONS = 6;
         
         [Header("Контролы")] 
         [SerializeField, ArrayElementTitle("Type")] private SocialSettingsUi[] uiElements;
@@ -63,7 +64,7 @@ namespace Game.Pages.Social
         /// </summary>
         private void OnScrollButtonPressed(int value)
         {
-            horScrollScrollbar.value += (value / (float) MAXACTIONS);
+            horScrollScrollbar.value += (value / (float) MAX_ACTIONS);
         }
         
         /// <summary>
@@ -71,7 +72,7 @@ namespace Game.Pages.Social
         /// </summary>
         private void OnScrollSliderValueChange(float value)
         {
-            var newValue = value * MAXACTIONS;
+            var newValue = value * MAX_ACTIONS;
             scrollLeftBtn.SetActive(newValue >= 1f);
             scrollRightBtn.SetActive(newValue <= 5f);
         }
@@ -94,7 +95,7 @@ namespace Game.Pages.Social
         {
             charityMoneyText.text = $"{value} $";
             //Запрещаем жертвовать 0 бабла.
-            CharityUiElements.Btn.interactable &= value != 0;
+            CharityUiElements.Btn.interactable &= Math.Abs(value) > 0.01f;
         }
         
         /// <summary>
@@ -124,7 +125,7 @@ namespace Game.Pages.Social
         
         protected override void BeforePageOpen()
         {
-            var _money = PlayerManager.Data.Money;
+            var money = PlayerManager.Data.Money;
             
             var socialActivities = PlayerManager.Data.Socials.AsArray;
             for (int i = 0; i < Mathf.Min(uiElements.Length, socialActivities.Length); i++)
@@ -139,8 +140,8 @@ namespace Game.Pages.Social
             }
 
             var charitySlider = CharityUiElements.ExternalSlider;
-            charitySlider.minValue = (int)(data.minCharityPercentage * _money);
-            charitySlider.maxValue = _money;
+            charitySlider.minValue = (int)(data.minCharityPercentage * money);
+            charitySlider.maxValue = money;
             charitySlider.interactable = (int)charitySlider.maxValue != 0;
             charitySlider.value = charitySlider.minValue;
         }
