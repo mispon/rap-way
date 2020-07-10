@@ -34,8 +34,11 @@ namespace Game.Pages.Training.Tabs
             () => PlayerManager.Data.Stats.Management += 1,
             () => PlayerManager.Data.Stats.Marketing += 1,
         };
-        
-        private void Start()
+
+        /// <summary>
+        /// Инициализация вкладки
+        /// </summary>
+        public override void Init()
         {
             for (int i = 0; i < statsButtons.Length; i++)
             {

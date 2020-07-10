@@ -23,6 +23,8 @@ namespace Game.Pages.Training
             {
                 int index = i;
                 tabsButtons[index].onClick.AddListener(() => OpenTab(index));
+                
+                tabs[index].Init();
                 tabs[index].onStartTraining += StartTraining;
             }
         }

@@ -26,7 +26,10 @@ namespace Game.Pages.Training.Tabs
 
         private Skills _selectedSkill;
 
-        private void Start()
+        /// <summary>
+        /// Инициализация вкладки
+        /// </summary>
+        public override void Init()
         {
             skillsSwitcher.onIndexChange += OnSkillChanged;
             learnButton.onClick.AddListener(OnLearnSkill);

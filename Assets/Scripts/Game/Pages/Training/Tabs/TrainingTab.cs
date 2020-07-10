@@ -10,6 +10,11 @@ namespace Game.Pages.Training.Tabs
     {
         [Header("Длительность тренировки")]
         [SerializeField] protected int trainingDuration;
+
+        /// <summary>
+        /// Инициализация вкладки
+        /// </summary>
+        public abstract void Init();
         
         /// <summary>
         /// Активирует / деактивирует вкладку
