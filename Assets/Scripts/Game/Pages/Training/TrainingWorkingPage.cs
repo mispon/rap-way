@@ -1,3 +1,5 @@
+using System;
+
 namespace Game.Pages.Training
 {
     /// <summary>
@@ -5,6 +7,9 @@ namespace Game.Pages.Training
     /// </summary>
     public class TrainingWorkingPage : Page
     {
-        
+        public void StartTrainig(int duration, Action onFinish)
+        {
+            
+        }
     }
 }

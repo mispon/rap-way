@@ -51,6 +51,11 @@ namespace Models.Player
         };
 
         /// <summary>
+        /// Возвращает список актуальных значений навыков
+        /// </summary>
+        public int[] Values => new[] { Vocobulary, Bitmaking, Flow, Charisma, Management, Marketing };
+
+        /// <summary>
         /// Случайный разброс начальных характеристик от 1 до 2
         /// </summary>
         private static int RandomValue => Random.Range(1, 3);
