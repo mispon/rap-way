@@ -13,6 +13,7 @@ namespace Models.Player
         /// Дней до активации социального действия
         /// </summary>
         private int _daysToActivate;
+        
         /// <summary>
         /// При активации социального действия
         /// </summary>
@@ -22,7 +23,6 @@ namespace Models.Player
         /// Активно ли социальное действие
         /// </summary>
         public bool IsActive => _daysToActivate <= 0;
-
 
         /// <summary>
         /// Установка дизактивации социального действия

@@ -48,7 +48,7 @@ namespace Game.Pages.Social
             scrollLeftBtn.GetComponent<Button>().onClick.AddListener(() => { OnScrollButtonPressed(-1);});
             scrollRightBtn.GetComponent<Button>().onClick.AddListener(() => { OnScrollButtonPressed(+1);});
 
-            var socialActivities = PlayerManager.Data.Socials.AsArray;
+            var socialActivities = PlayerManager.Data.Socials.Values;
             for (int i = 0; i < uiElements.Length; i++)
             {
                 var activity = socialActivities[i];
@@ -127,7 +127,7 @@ namespace Game.Pages.Social
         {
             var money = PlayerManager.Data.Money;
             
-            var socialActivities = PlayerManager.Data.Socials.AsArray;
+            var socialActivities = PlayerManager.Data.Socials.Values;
             for (int i = 0; i < Mathf.Min(uiElements.Length, socialActivities.Length); i++)
             {
                 var activity = socialActivities[i];
@@ -135,8 +135,11 @@ namespace Game.Pages.Social
 
                 // В случае, если деактивация была запущена в предыдущую сессию,
                 // то необходимо пересоздать callback на активацию кнопки по истечении времени
-                if (!activity.IsActive && activity.ActivateAction == null) 
-                    activity.ActivateAction = () => { SetActiveAction(uiElements[i].Type, true); };
+                if (!activity.IsActive && activity.ActivateAction == null)
+                {
+                    var index = i;
+                    activity.ActivateAction = () => { SetActiveAction(uiElements[index].Type, true); };
+                }
             }
 
             var charitySlider = CharityUiElements.ExternalSlider;

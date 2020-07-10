@@ -8,6 +8,9 @@ namespace Game.Pages.Training.Tabs
     /// </summary>
     public abstract class TrainingTab : MonoBehaviour
     {
+        [Header("Длительность тренировки")]
+        [SerializeField] protected int trainingDuration;
+        
         /// <summary>
         /// Активирует / деактивирует вкладку
         /// </summary>

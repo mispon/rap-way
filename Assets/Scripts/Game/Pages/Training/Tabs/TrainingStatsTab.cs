@@ -13,7 +13,6 @@ namespace Game.Pages.Training.Tabs
         private const int MAX_STAT_LEVEL = 10;
 
         [Header("Основное")]
-        [SerializeField] private int trainingDuration;
         [SerializeField] private Button[] statsButtons;
         
         [Header("Информация о навыке")]
@@ -23,10 +22,10 @@ namespace Game.Pages.Training.Tabs
         [SerializeField] private Button upButton;
 
         [Header("Данные о навыках")]
-        [SerializeField] private PlayerStatsData data;
+        [SerializeField] private TrainingInfoData data;
 
         private int _statsIndex;
-        private Action[] _finishCallbacks =
+        private readonly Action[] _finishCallbacks =
         {
             () => PlayerManager.Data.Stats.Vocobulary += 1,
             () => PlayerManager.Data.Stats.Bitmaking += 1,
@@ -40,7 +39,7 @@ namespace Game.Pages.Training.Tabs
         {
             for (int i = 0; i < statsButtons.Length; i++)
             {
-                var index = i;
+                int index = i;
                 statsButtons[index].onClick.AddListener(() => OnStatsSelected(index));
             }
             
@@ -72,8 +71,8 @@ namespace Game.Pages.Training.Tabs
             
             var stat = PlayerManager.Data.Stats.Values[index];
 
-            header.text = data.Items[index].NameKey;
-            desc.text = data.Items[index].DescriptionKey;
+            header.text = data.StatsInfo[index].NameKey; // todo: Localize
+            desc.text = data.StatsInfo[index].DescriptionKey; // todo: Localize
             level.text = $"Уровень: {stat}";
 
             upButton.gameObject.SetActive(stat < MAX_STAT_LEVEL);
