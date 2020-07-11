@@ -31,8 +31,8 @@ namespace Game.Pages.Training.Tabs
         {
             themesSwitcher.onIndexChange += OnThemeChanged;
             stylesSwitcher.onIndexChange += OnStyleChanged;
-            learnThemeButton.onClick.AddListener(OnLearnTone<Themes>);
-            learnStyleButton.onClick.AddListener(OnLearnTone<Styles>);
+            learnThemeButton.onClick.AddListener(() => OnLearnTone(LearnThemeCallback));
+            learnStyleButton.onClick.AddListener(() => OnLearnTone(LearnStyleCallback));
         }
         
         /// <summary>
@@ -94,16 +94,27 @@ namespace Game.Pages.Training.Tabs
         /// <summary>
         /// Запускает изучение выбранной стилистики
         /// </summary>
-        private void OnLearnTone<T>() where T : Enum
+        private void OnLearnTone(Func<string> onFinish)
         {
-            Action callback;
-            if (typeof(T) == typeof(Themes))
-                callback = () => PlayerManager.Data.Themes.Add(_selectedTheme);
-            else
-                callback = () => PlayerManager.Data.Styles.Add(_selectedStyle);
-            
-            var onFinish = new Action(callback);
             onStartTraining.Invoke(trainingDuration, onFinish);
+        }
+
+        /// <summary>
+        /// Коллбэк завершения изучения новой тематики
+        /// </summary>
+        private string LearnThemeCallback()
+        {
+            PlayerManager.Data.Themes.Add(_selectedTheme);
+            return $"{Locale("training_newTheme")}: {Locale(_selectedTheme.GetDescription())}";
+        }
+        
+        /// <summary>
+        /// Коллбэк завершения изучения новой стилистики
+        /// </summary>
+        private string LearnStyleCallback()
+        {
+            PlayerManager.Data.Styles.Add(_selectedStyle);
+            return $"{Locale("training_newStyle")}: {Locale(_selectedStyle.GetDescription())}";
         }
 
         private void OnDestroy()

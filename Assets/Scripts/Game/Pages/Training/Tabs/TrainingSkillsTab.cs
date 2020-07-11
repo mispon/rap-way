@@ -76,7 +76,7 @@ namespace Game.Pages.Training.Tabs
             
             var item = data.SkillsInfo.First(e => e.Type == skill);
             header.text = skillsSwitcher.ActiveTextValue;
-            desc.text = item.DescriptionKey; // todo: Localize
+            desc.text = item.DescriptionKey; // TODO: Localize
 
             _selectedSkill = skill;
         }
@@ -86,8 +86,13 @@ namespace Game.Pages.Training.Tabs
         /// </summary>
         private void OnLearnSkill()
         {
-            var onFinish = new Action(() => PlayerManager.Data.Skills.Add(_selectedSkill));
-            onStartTraining.Invoke(trainingDuration, onFinish);
+            string OnFinish()
+            {
+                PlayerManager.Data.Skills.Add(_selectedSkill);
+                return $"{Locale("training_newSkill")}: {Locale(_selectedSkill.GetDescription())}";
+            }
+
+            onStartTraining.Invoke(trainingDuration, OnFinish);
         }
 
         private void OnDestroy()

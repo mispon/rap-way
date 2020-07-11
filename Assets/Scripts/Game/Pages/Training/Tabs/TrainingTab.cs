@@ -1,4 +1,5 @@
 using System;
+using Localization;
 using UnityEngine;
 
 namespace Game.Pages.Training.Tabs
@@ -24,6 +25,14 @@ namespace Game.Pages.Training.Tabs
         /// <summary>
         /// Запускает выполнение тренировки
         /// </summary>
-        public Action<int, Action> onStartTraining = (i, action) => {};
+        public Action<int, Func<string>> onStartTraining = (duration, callback) => {};
+
+        /// <summary>
+        /// Обертка менеджера локализации для краткости кода 
+        /// </summary>
+        protected static string Locale(string key)
+        {
+            return LocalizationManager.Instance.Get(key);
+        }
     }
 }

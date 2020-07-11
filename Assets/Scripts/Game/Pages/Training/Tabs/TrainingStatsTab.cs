@@ -25,14 +25,14 @@ namespace Game.Pages.Training.Tabs
         [SerializeField] private TrainingInfoData data;
 
         private int _statsIndex;
-        private readonly Action[] _finishCallbacks =
+        private readonly Func<string>[] _finishCallbacks =
         {
-            () => PlayerManager.Data.Stats.Vocobulary += 1,
-            () => PlayerManager.Data.Stats.Bitmaking += 1,
-            () => PlayerManager.Data.Stats.Flow += 1,
-            () => PlayerManager.Data.Stats.Charisma += 1,
-            () => PlayerManager.Data.Stats.Management += 1,
-            () => PlayerManager.Data.Stats.Marketing += 1,
+            () => FinishCallback(() => PlayerManager.Data.Stats.Vocobulary += 1),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Bitmaking += 1),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Flow += 1),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Charisma += 1),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Management += 1),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Marketing += 1)
         };
 
         /// <summary>
@@ -74,9 +74,10 @@ namespace Game.Pages.Training.Tabs
             
             var stat = PlayerManager.Data.Stats.Values[index];
 
-            header.text = data.StatsInfo[index].NameKey; // todo: Localize
-            desc.text = data.StatsInfo[index].DescriptionKey; // todo: Localize
-            level.text = $"Уровень: {stat}";
+            // TODO: Localize
+            header.text = data.StatsInfo[index].NameKey;
+            desc.text = data.StatsInfo[index].DescriptionKey;
+            level.text = $"{Locale("level")}: {stat}";
 
             upButton.gameObject.SetActive(stat < MAX_STAT_LEVEL);
         }
@@ -88,6 +89,15 @@ namespace Game.Pages.Training.Tabs
         {
             var onFinish = _finishCallbacks[_statsIndex];
             onStartTraining.Invoke(trainingDuration, onFinish);
+        }
+
+        /// <summary>
+        /// Обработчик завершения тренировки навыка 
+        /// </summary>
+        private static string FinishCallback(Action action)
+        {
+            action.Invoke();
+            return Locale("training_statUpgrade");
         }
     }
 }

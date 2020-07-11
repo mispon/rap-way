@@ -32,9 +32,10 @@ namespace Game.Pages.Training
         /// <summary>
         /// Запускает тренировку 
         /// </summary>
-        private void StartTraining(int duration, Action onFinish)
+        private void StartTraining(int duration, Func<string> onFinish)
         {
             workingPage.StartTrainig(duration, onFinish);
+            Close();
         }
 
         /// <summary>
