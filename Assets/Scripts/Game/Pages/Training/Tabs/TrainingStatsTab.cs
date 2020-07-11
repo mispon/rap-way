@@ -73,10 +73,9 @@ namespace Game.Pages.Training.Tabs
             _statsIndex = index;
             
             var stat = PlayerManager.Data.Stats.Values[index];
-
-            // TODO: Localize
-            header.text = data.StatsInfo[index].NameKey;
-            desc.text = data.StatsInfo[index].DescriptionKey;
+            
+            header.text = Locale(data.StatsInfo[index].NameKey);
+            desc.text = Locale(data.StatsInfo[index].DescriptionKey);
             level.text = $"{Locale("level")}: {stat}";
 
             upButton.gameObject.SetActive(stat < MAX_STAT_LEVEL);

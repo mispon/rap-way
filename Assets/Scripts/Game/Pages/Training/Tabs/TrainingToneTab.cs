@@ -18,8 +18,11 @@ namespace Game.Pages.Training.Tabs
         [Header("Контролы")]
         [SerializeField] private Switcher themesSwitcher;
         [SerializeField] private Switcher stylesSwitcher;
+        [SerializeField] private Text noThemeLabel;
+        [Space]
         [SerializeField] private Button learnThemeButton;
         [SerializeField] private Button learnStyleButton;
+        [SerializeField] private Text noStyleLabel;
 
         private Themes _selectedTheme;
         private Styles _selectedStyle;
@@ -56,7 +59,7 @@ namespace Game.Pages.Training.Tabs
         /// <summary>
         /// Обновляет значения свитчера
         /// </summary>
-        private static void RefreshSwitcher<T>(Switcher switcher, ICollection<T> playerData) where T : Enum
+        private void RefreshSwitcher<T>(Switcher switcher, ICollection<T> playerData) where T : Enum
         {
             var values = (T[]) Enum.GetValues(typeof(T));
             
@@ -65,8 +68,23 @@ namespace Game.Pages.Training.Tabs
                 .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
                 .ToArray();
             
+            if (displayData.Length == 0)
+                ShowEmptyLabel<T>();
+            
             switcher.InstantiateElements(displayData);
             switcher.ResetActive();
+        }
+
+        /// <summary>
+        /// Скрывает контролы и показывает сообщение о том, что все открыто и изучено
+        /// </summary>
+        private void ShowEmptyLabel<T>() where T : Enum
+        {
+            bool isTheme = typeof(T) == typeof(Themes);
+            
+            (isTheme ? themesSwitcher : stylesSwitcher).gameObject.SetActive(false);
+            (isTheme ? learnThemeButton : learnStyleButton).gameObject.SetActive(false);
+            (isTheme ? noThemeLabel : noStyleLabel).gameObject.SetActive(true);
         }
         
         /// <summary>

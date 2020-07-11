@@ -24,7 +24,6 @@ namespace Data
     [Serializable]
     public class PlayerSkillInfo
     {
-        public string NameKey;
         public string DescriptionKey;
         public Skills Type;
     }

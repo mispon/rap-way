@@ -76,7 +76,7 @@ namespace Game.Pages.Training.Tabs
             
             var item = data.SkillsInfo.First(e => e.Type == skill);
             header.text = skillsSwitcher.ActiveTextValue;
-            desc.text = item.DescriptionKey; // TODO: Localize
+            desc.text = Locale(item.DescriptionKey);
 
             _selectedSkill = skill;
         }
