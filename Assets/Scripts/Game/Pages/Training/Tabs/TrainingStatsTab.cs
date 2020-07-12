@@ -27,12 +27,12 @@ namespace Game.Pages.Training.Tabs
         private int _statsIndex;
         private readonly Func<string>[] _finishCallbacks =
         {
-            () => FinishCallback(() => PlayerManager.Data.Stats.Vocobulary += 1),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Bitmaking += 1),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Flow += 1),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Charisma += 1),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Management += 1),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Marketing += 1)
+            () => FinishCallback(() => PlayerManager.Data.Stats.Vocobulary += 1, "vocobulary"),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Bitmaking += 1, "bitmaking"),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Flow += 1, "flow"),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Charisma += 1, "charisma"),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Management += 1, "management"),
+            () => FinishCallback(() => PlayerManager.Data.Stats.Marketing += 1, "marketing")
         };
 
         /// <summary>
@@ -50,19 +50,11 @@ namespace Game.Pages.Training.Tabs
         }
 
         /// <summary>
-        /// Активирует / деактивирует вкладку
+        /// Вызывается при открытии
         /// </summary>
-        public override void Toggle(bool isOpen)
+        protected override void OnOpen()
         {
-            if (isOpen)
-            {
-                OnStatsSelected(0);
-                gameObject.SetActive(true);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            OnStatsSelected(0);
         }
 
         /// <summary>
@@ -93,10 +85,10 @@ namespace Game.Pages.Training.Tabs
         /// <summary>
         /// Обработчик завершения тренировки навыка 
         /// </summary>
-        private static string FinishCallback(Action action)
+        private static string FinishCallback(Action action, string statKey)
         {
             action.Invoke();
-            return Locale("training_statUpgrade");
+            return $"{Locale("training_statUpgrade")}: {Locale(statKey)}";
         }
     }
 }

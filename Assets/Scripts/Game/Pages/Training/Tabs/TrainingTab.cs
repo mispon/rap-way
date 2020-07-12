@@ -16,11 +16,25 @@ namespace Game.Pages.Training.Tabs
         /// Инициализация вкладки
         /// </summary>
         public abstract void Init();
-        
+
         /// <summary>
         /// Активирует / деактивирует вкладку
         /// </summary>
-        public abstract void Toggle(bool isOpen);
+        public void Toggle(bool isOpen)
+        {
+            if (isOpen)
+            {
+                OnOpen();
+                gameObject.SetActive(true);
+            }
+            else
+                gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Вызывается в дочерних классах при открытии
+        /// </summary>
+        protected abstract void OnOpen();
 
         /// <summary>
         /// Запускает выполнение тренировки

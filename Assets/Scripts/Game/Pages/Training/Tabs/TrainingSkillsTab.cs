@@ -36,19 +36,11 @@ namespace Game.Pages.Training.Tabs
         }
 
         /// <summary>
-        /// Активирует / деактивирует вкладку
+        /// Вызывается при открытии
         /// </summary>
-        public override void Toggle(bool isOpen)
+        protected override void OnOpen()
         {
-            if (isOpen)
-            {
-                RefreshSwitcher();
-                gameObject.SetActive(true);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            RefreshSwitcher();
         }
 
         /// <summary>

@@ -37,23 +37,14 @@ namespace Game.Pages.Training.Tabs
             learnThemeButton.onClick.AddListener(() => OnLearnTone(LearnThemeCallback));
             learnStyleButton.onClick.AddListener(() => OnLearnTone(LearnStyleCallback));
         }
-        
+
         /// <summary>
-        /// Активирует / деактивирует вкладку
+        /// Вызывается при открытии
         /// </summary>
-        public override void Toggle(bool isOpen)
+        protected override void OnOpen()
         {
-            if (isOpen)
-            {
-                RefreshSwitcher(themesSwitcher, PlayerManager.Data.Themes);
-                RefreshSwitcher(stylesSwitcher, PlayerManager.Data.Styles);
-                
-                gameObject.SetActive(true);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            RefreshSwitcher(themesSwitcher, PlayerManager.Data.Themes);
+            RefreshSwitcher(stylesSwitcher, PlayerManager.Data.Styles);
         }
 
         /// <summary>
