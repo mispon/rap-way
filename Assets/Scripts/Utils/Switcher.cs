@@ -128,7 +128,7 @@ namespace Utils
             if (createOnAwake)
                 InstantiateElements();
             if (subscribeOnAwake)
-                AddClickCallback(delegate (int index) { Debug.Log(index); });
+                AddClickCallback(index => {});
         }
 
         #region Instaintiate elements

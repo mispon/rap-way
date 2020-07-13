@@ -9,6 +9,8 @@ namespace Models.Player
     [Serializable]
     public class PlayerStats
     {
+        private const int MIN_VALUE = 1;
+        
         /// <summary>
         /// Вокобуляр. Влияет на качество текстов для треков, альбомов и баттлов
         /// </summary>
@@ -42,17 +44,25 @@ namespace Models.Player
 
         public static PlayerStats New => new PlayerStats
         {
-            Vocobulary = RandomValue,
-            Bitmaking = RandomValue,
-            Flow = RandomValue,
-            Charisma = RandomValue,
-            Management = RandomValue,
-            Marketing = RandomValue
+            Vocobulary = MIN_VALUE,
+            Bitmaking = MIN_VALUE,
+            Flow = MIN_VALUE,
+            Charisma = MIN_VALUE,
+            Management = MIN_VALUE,
+            Marketing = MIN_VALUE
         };
 
         /// <summary>
-        /// Случайный разброс начальных характеристик от 1 до 2
+        /// Возвращает список актуальных значений навыков
         /// </summary>
-        private static int RandomValue => Random.Range(1, 3);
+        public int[] Values => new[]
+        {
+            Vocobulary,
+            Bitmaking,
+            Flow,
+            Charisma,
+            Management,
+            Marketing
+        };
     }
 }

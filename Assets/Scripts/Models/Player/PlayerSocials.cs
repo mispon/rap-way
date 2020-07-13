@@ -17,7 +17,7 @@ namespace Models.Player
         public SocialActivity StreamEventActivity;
         public SocialActivity CharityActivity;
 
-        public SocialActivity[] AsArray => new[]
+        public SocialActivity[] Values => new[]
         {
             TweetActivity,
             PhotoActivity,

@@ -7,7 +7,6 @@ using Localization;
 using Models.Info;
 using UnityEngine;
 using UnityEngine.UI;
-using Models.Player;
 using Utils.Extensions;
 
 namespace Game.Pages.Social
@@ -38,7 +37,6 @@ namespace Game.Pages.Social
         public void ShowPage(SocialInfo social)
         {
             _social = social;
-            
             Open();
         }
 

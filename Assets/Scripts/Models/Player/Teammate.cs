@@ -9,6 +9,8 @@ namespace Models.Player
     [Serializable]
     public class Teammate
     {
+        public const int MAX_SKILL = 10;
+        
         public static Teammate New(TeammateType type) => new Teammate {Type = type};
         
         /// <summary>
@@ -25,7 +27,7 @@ namespace Models.Player
         /// Навык
         /// </summary>
         public int Skill;
-        
+
         /// <summary>
         /// Тиммейт еще не открыт
         /// </summary>

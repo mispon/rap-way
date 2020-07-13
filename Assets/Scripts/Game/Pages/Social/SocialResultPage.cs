@@ -1,7 +1,6 @@
 ﻿using Core;
 using Game.Analyzers;
 using UnityEngine;
-using UnityEngine.UI;
 using Models.Info;
 
 namespace Game.Pages.Social
@@ -17,11 +16,11 @@ namespace Game.Pages.Social
         [Header("Анализатор")] 
         [SerializeField] protected SocialAnalyzer analyzer;
         
-        protected SocialInfo _social;
+        protected SocialInfo Social;
         
         public void ShowPage(SocialInfo social)
         {
-            _social = social;
+            Social = social;
             Open();
         }
 
@@ -60,19 +59,19 @@ namespace Game.Pages.Social
         #region PAGE CALLBACKS
         protected override void BeforePageOpen()
         {
-            analyzer.Analyze(_social);
-            SaveResult(_social);
+            analyzer.Analyze(Social);
+            SaveResult(Social);
             DisplayResult();
         }
 
         protected override void BeforePageClose()
         {
-            OnSocialCooldownStart(_social);
+            OnSocialCooldownStart(Social);
         }
 
         protected override void AfterPageClose()
         {
-            _social = null;
+            Social = null;
         }
         #endregion
     }

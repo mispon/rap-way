@@ -28,7 +28,8 @@ namespace Core
         {
             T result = null;
             
-            if (PlayerPrefs.HasKey(saveKey)) {
+            if (PlayerPrefs.HasKey(saveKey))
+            {
                 var jsonData = PlayerPrefs.GetString(saveKey);
                 result = JsonUtility.FromJson<T>(jsonData);
             }

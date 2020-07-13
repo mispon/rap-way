@@ -18,14 +18,14 @@ namespace Game.Pages.Social.ResultPages
 
         protected override void DisplayResult ()
         {
-            var typeLocalization = LocalizationManager.Instance.Get(_social.Data.Type.GetDescription());
-            headerText.text = $"Фонд \"{_social.ExternalText}\"";
-            commentText.text = $"Сегодня, {TimeManager.Instance.DisplayNow}, фонд \"{_social.ExternalText}\" получил от {PlayerManager.Data.Info} " +
-                               $"средства в размере {_social.CharityMoney}$. Нуждающиеся в этих деньгах навсегда останутся ему благодарны.\n\n" +
+            var typeLocalization = LocalizationManager.Instance.Get(Social.Data.Type.GetDescription());
+            headerText.text = $"Фонд \"{Social.ExternalText}\"";
+            commentText.text = $"Сегодня, {TimeManager.Instance.DisplayNow}, фонд \"{Social.ExternalText}\" получил от {PlayerManager.Data.Info} " +
+                               $"средства в размере {Social.CharityMoney}$. Нуждающиеся в этих деньгах навсегда останутся ему благодарны.\n\n" +
                                $"P.S.: Не унывай! У тебя на счету осталось {PlayerManager.Data.Money}$>"; 
             
             //marksText
-            hypeIncomeText.text = $"Хайп: +{_social.HypeIncome}";
+            hypeIncomeText.text = $"Хайп: +{Social.HypeIncome}";
         }
         
         protected override void AfterPageClose()

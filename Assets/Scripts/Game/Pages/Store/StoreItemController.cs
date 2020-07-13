@@ -2,7 +2,6 @@ using System;
 using Data;
 using Enums;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Game.Pages.Store
@@ -10,7 +9,7 @@ namespace Game.Pages.Store
     /// <summary>
     /// Класс управkения UI-элементами конкретного товара
     /// </summary>
-    public class StoreItemController: MonoBehaviour
+    public class StoreItemController : MonoBehaviour
     {
         [SerializeField] private Image iconImg;
         [SerializeField] private Text priceTxt;
