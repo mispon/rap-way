@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Core;
+using Game.Notifications;
 using Game.Pages.Team;
 using Models.Player;
 using UnityEngine;
@@ -46,9 +47,21 @@ namespace Game
             var fans = PlayerManager.Data.Fans;
             var lockedTeammate = lockedTeammates
                 .FirstOrDefault(tm => teammateInfos.First(tmi => tmi.Type == tm.Type).FansToUnlock <= fans);
-            
-           if (lockedTeammate != null)
-               unlockTeammatePage.Show(lockedTeammate);
+
+            if (lockedTeammate != null)
+                UnlockTeammate(lockedTeammate);
+        }
+
+        /// <summary>
+        /// Разблокирует тиммейта
+        /// </summary>
+        private void UnlockTeammate(Teammate teammate)
+        {
+            teammate.Skill = 1;
+            teammate.HasPayment = true;
+
+            void Notification() => unlockTeammatePage.Show(teammate);
+            NotificationManager.Instance.AddNotification(Notification);
         }
 
         /// <summary>
@@ -57,8 +70,8 @@ namespace Game
         private void OnSalary()
         {
             var teammates = GetTeammates(e => !e.IsEmpty);
-            if (teammates.Length > 0)
-                salaryPage.Show(teammates);
+            if (teammates.Any())
+                NotificationManager.Instance.AddNotification(() => salaryPage.Show(teammates));
         }
 
         /// <summary>
