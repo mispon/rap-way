@@ -23,9 +23,7 @@ namespace Game.Pages.History
 
         private void Start()
         {
-            _baseHeight = container.parent
-                .GetComponent<RectTransform>()
-                .rect.height;
+            _baseHeight = container.parent.GetComponent<RectTransform>().rect.height;
             Resize();
         }
 
@@ -44,24 +42,24 @@ namespace Game.Pages.History
         /// </summary>
         public void RepositionElements(IEnumerable<HistoryInfoItemController> itemControllers)
         {
-            var count = itemControllers.Count();
-            if (count == 0)
+            var itemsCount = itemControllers.Count();
+            if (itemsCount == 0)
                 return;
             
             foreach (var itemController in itemControllers)
                 itemController.SetPosition(spacing);
 
-            Resize(count, itemControllers.First().Height);
+            Resize(itemsCount, itemControllers.First().Height);
         }
 
         /// <summary>
         /// Переопределение размера контейнера
         /// </summary>
-        private void Resize(int count = 0, float height = 0)
+        private void Resize(int itemsCount = 0, float height = 0)
         {
             container.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Vertical, 
-                Mathf.Max(_baseHeight, count * (spacing + height)));
+                Mathf.Max(_baseHeight, (spacing + height) * itemsCount));
         }
     }
 }

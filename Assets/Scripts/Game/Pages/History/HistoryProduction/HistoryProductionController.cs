@@ -17,7 +17,7 @@ namespace Game.Pages.History.HistoryProduction
         [Header("Вкладка переключения")] 
         [SerializeField] private Button foldoutBtn;
         
-        [Header("UI-элементы заголовка колонки")]
+        [Header("UI-элементы заголовков колонок")]
         [SerializeField] private GameObject headerColumnObject;
         
         [Header("UI-элементы шаблоны")]
@@ -26,12 +26,14 @@ namespace Game.Pages.History.HistoryProduction
         private bool _isInitialized;
         private HistoryPage _historyPage;
         private HistoryScrollViewController _scrollViewController;
+        
         /// <summary>
         /// Список всех уже созданных UI-элементов экземпляров Production
         /// </summary>
         public List<HistoryInfoItemController> generatedItemsList = new List<HistoryInfoItemController>();
+        
         /// <summary>
-        /// Функция получения массива всех созданных игроком Экземпляров Production
+        /// Функция получения массива всех созданных игроком экземпляров Production
         /// </summary>
         protected virtual Production[] PlayerProductionInfos() => new Production[0];
         
@@ -53,7 +55,7 @@ namespace Game.Pages.History.HistoryProduction
         }
 
         /// <summary>
-        /// Активация/Деактивация элементов UI в шапке (кнопок-вкладок + заголовков таблицы)
+        /// Активация/Деактивация UI-элементов в шапке (кнопок-вкладок + заголовков таблицы)
         /// </summary>
         private void SetActiveUi(HistoryProductionController activeController)
         {
@@ -73,7 +75,7 @@ namespace Game.Pages.History.HistoryProduction
             if (!CheckAnyProduction(in productionInfo))
                 return;
 
-            if(!ProductionIsUpdated(in productionInfo))
+            if (!ProductionIsUpdated(in productionInfo))
                 return;
 
             GenerateNewItems(in productionInfo);
@@ -89,7 +91,7 @@ namespace Game.Pages.History.HistoryProduction
         }
 
         /// <summary>
-        /// Проверка, есть ли какие-то экзепляры выбранного Production
+        /// Проверка, есть ли какие-то экземпляры выбранного Production
         /// </summary>
         private bool CheckAnyProduction(in Production[] productionInfo)
         {
@@ -99,7 +101,7 @@ namespace Game.Pages.History.HistoryProduction
         }
 
         /// <summary>
-        /// Проверка, есть ли новые экзепляры выбранного Production
+        /// Проверка, есть ли новые экземпляры выбранного Production
         /// </summary>
         private bool ProductionIsUpdated(in Production[] productionInfo)
             => productionInfo.Length > generatedItemsList.Count;

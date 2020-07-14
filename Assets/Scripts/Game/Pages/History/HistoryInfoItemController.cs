@@ -12,23 +12,33 @@ namespace Game.Pages.History
         [SerializeField] private Text numText;
         [SerializeField] private Text[] infoTexts;
 
+        private int _orderNumber;
+        private RectTransform _rectTransform;
+        
         /// <summary>
         /// Порядоквый номер элемента в таблице (начаниется с 1)
         /// </summary>
-        private int _num;
+        private int orderNumber
+        {
+            get => _orderNumber;
+            set
+            {
+                _orderNumber = value;
+                numText.text = $"{_orderNumber}.";
+            }
+        }
+        
         /// <summary>
         /// Высота элемента
         /// </summary>
         public float Height { get; private set; }
-        private RectTransform _rectTransform;
 
         /// <summary>
         /// Заполнение информации об экземпляре при создании
         /// </summary>
-        public void Initialize(int num, string[] infos)
+        public void Initialize(int index, string[] infos)
         {
-            _num = num;
-            numText.text = $"{_num}.";
+            orderNumber = index;
             for (int i = 0; i < Mathf.Min(infoTexts.Length, infos.Length); i++)
                 infoTexts[i].text = infos[i];
         }
@@ -38,8 +48,7 @@ namespace Game.Pages.History
         /// </summary>
         public void UpdateNum(int increment)
         {
-            _num += increment;
-            numText.text = $"{_num}.";
+            orderNumber += increment;
         }
 
         /// <summary>
@@ -53,7 +62,7 @@ namespace Game.Pages.History
             if (Height == 0)
                 Height = _rectTransform.rect.height;
             
-            _rectTransform.anchoredPosition = Vector2.down * ((spacing * _num) + (Height * (_num-1)));
+            _rectTransform.anchoredPosition = Vector2.down * ((spacing * _orderNumber) + (Height * (_orderNumber-1)));
         }
     }
 }

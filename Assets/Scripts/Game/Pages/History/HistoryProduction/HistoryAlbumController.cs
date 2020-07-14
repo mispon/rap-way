@@ -12,7 +12,7 @@ namespace Game.Pages.History.HistoryProduction
     {
         protected override Production[] PlayerProductionInfos()
             => PlayerManager.Data.History.AlbumList
-                .OrderByDescending(alb=> alb.Id)
+                .OrderByDescending(album => album.Id)
                 .ToArray();
     }
 }

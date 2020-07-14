@@ -12,7 +12,7 @@ namespace Game.Pages.History.HistoryProduction
     {
         protected override Production[] PlayerProductionInfos()
             => PlayerManager.Data.History.TrackList
-                .OrderByDescending(tr=> tr.Id)
+                .OrderByDescending(track => track.Id)
                 .ToArray();
     }
 }

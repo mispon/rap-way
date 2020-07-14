@@ -18,9 +18,9 @@ namespace Game.Pages.History
         
         [Header("Контролы управления Production")] 
         [SerializeField] private HistoryTrackController trackHistoryController;
-        [Space, SerializeField] private HistoryAlbumController albumHistoryController;
-        [Space, SerializeField] private HistoryClipController clipHistoryController;
-        [Space, SerializeField] private HistoryConcertController concertHistoryController;
+        [SerializeField] private HistoryAlbumController albumHistoryController;
+        [SerializeField] private HistoryClipController clipHistoryController;
+        [SerializeField] private HistoryConcertController concertHistoryController;
 
         [Header("Контроллер ScrollView")]
         [SerializeField] private HistoryScrollViewController scrollViewController;
