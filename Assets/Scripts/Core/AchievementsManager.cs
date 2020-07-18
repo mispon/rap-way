@@ -1,15 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Core.Interfaces;
 using Data;
 using Enums;
 using Game;
-using JetBrains.Annotations;
+using Game.Pages.Achievement;
+using Localization;
 using Models.Info.Production;
 using Models.Player;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 
 namespace Core
 {
@@ -18,6 +19,9 @@ namespace Core
     /// </summary>
     public class AchievementsManager: Singleton<AchievementsManager>, IStarter
     {
+        [Header("Страница новых достижений")]
+        [SerializeField] private NewAchievementsPage newAchievementsPage;
+
         [Header("Данные")]
         [SerializeField] private AchievementsData achievementsData;
         [SerializeField] private ConcertPlacesData concertPlacesData;
@@ -40,42 +44,63 @@ namespace Core
             ProductionManager.Instance.onClipAdd += CheckClipLoser;
             ProductionManager.Instance.onConcertAdd += CheckConcertPlace;
             
-            //CheckFeat
-            //CheckBattle
+            //todo: CheckFeat
+            //todo: CheckBattle
         }
         
+        /// <summary>
+        /// Листенер события изменения денег
+        /// </summary>
         private void CheckMoney(int money)
         {
             BaseCheckValue(AchievementsType.Money, money);
         }
-        
+
+        /// <summary>
+        /// Листенер события изменения фанатов
+        /// </summary>
         private void CheckFans(int fans)
         {
             BaseCheckValue(AchievementsType.Fans, fans);
         }
-        
+
+        /// <summary>
+        /// Листенер события изменения хайпа
+        /// </summary>
         private void CheckHype(int hype)
         {
             BaseCheckValue(AchievementsType.HypeBeast, hype);
         }
-        
+
+        /// <summary>
+        /// Листенер события выпуска нового трека
+        /// </summary>
         private void CheckTrackChartPosition(TrackInfo trackInfo)
         {
             MultipleCheckValue(AchievementsType.TrackChartPosition, trackInfo.ChartPosition,
                 info => info.Achievement.CompareValue);
         }
 
+        /// <summary>
+        /// Листенер события выпуска нового альбома
+        /// </summary>
         private void CheckAlbumChartPosition(AlbumInfo albumInfo)
         {
             MultipleCheckValue(AchievementsType.AlbumChartPosition, albumInfo.ChartPosition,
                 info => info.Achievement.CompareValue);
         }
-        
+
+        /// <summary>
+        /// Листенер события выпуска нового клипа
+        /// </summary>
         private void CheckClipLoser(ClipInfo clipInfo)
         {
             BaseCheckValue(AchievementsType.ClipLoser, clipInfo.Dislikes);
         }
 
+        /// <summary>
+        /// Листенер события организации нового концерта (по завершению)
+        /// </summary>
         private void CheckConcertPlace(ConcertInfo concertInfo)
         {
             var index = concertPlacesData.Places.ToList()
@@ -83,11 +108,17 @@ namespace Core
             EqualCheckValue(AchievementsType.ConcertPlace, index);
         }
 
+        /// <summary>
+        /// Листенер события фита с каким-то реальным репером
+        /// </summary>
         private void CheckFeat(int raperId)
         {
             EqualCheckValue(AchievementsType.Feat, raperId);
         }
 
+        /// <summary>
+        /// Листенер события баттла с реальным репером
+        /// </summary>
         private void CheckBattle(int raperId)
         {
             EqualCheckValue(AchievementsType.Battle, raperId);
@@ -110,7 +141,8 @@ namespace Core
 
         /// <summary>
         /// Ищет все новые заработанные достижения указанного типа, фиксирует все в PlayerHistory,
-        /// а выводит в UI лишь первое, согласно ключу сортировки
+        /// а выводит в UI лишь первое, согласно ключу сортировки 
+        /// (в текущей реализации, лучший результат, например, из ТопЧарта 1 и 50 выведет "Топ 1")
         /// </summary>
         private void MultipleCheckValue(AchievementsType type, int value, Func<AchievementInfo, int> orderSelector)
         {
@@ -146,18 +178,40 @@ namespace Core
         }
 
         /// <summary>
-        /// Функция добавления ачивки в список заработанных
+        /// Функция добавления ачивки в список заработанных и вывода в UI
         /// </summary>
-        private static void AddAchievement(Achievement achievement, bool showUi = true)
+        private void AddAchievement(Achievement achievement, bool showUi = true)
         {
             achievement.Unlocked = true;
             PlayerManager.Data.Achievements.Add(achievement);
 
-            if (showUi)
+            if (!showUi)
+                return;
+
+            string compareValueString = "";
+            switch (achievement.Type)
             {
-                //todo: show achievement UI
-                Debug.Log($"Show UI: {achievement.Type} | {achievement.CompareValue}");
+                case AchievementsType.ConcertPlace:
+                    {
+                        compareValueString = concertPlacesData.Places[achievement.CompareValue].NameKey;
+                        break;
+                    }
+                case AchievementsType.Feat:
+                case AchievementsType.Battle:
+                    {
+                        //todo: Добавить поиск репера из списка по аналогии с местом проведеняи концерта
+                        break;
+                    }
+                default:
+                    {
+                        compareValueString = achievement.CompareValue.GetDescription();
+                        break;
+                    }
             }
+            string localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
+            string achievementString = $"{localizedAchievementName}: {compareValueString}";
+            string description = "Some description";//todo: Добавить дескриптион для ачивки
+            newAchievementsPage.ShowNewAchievement(achievementString, description);
         }
     }
 }
