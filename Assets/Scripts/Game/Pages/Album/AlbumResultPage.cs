@@ -1,4 +1,5 @@
-﻿using Game.Analyzers;
+﻿using Core;
+using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,7 +53,7 @@ namespace Game.Pages.Album
         private static void SaveResult(AlbumInfo album)
         {
             PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome);
-            PlayerManager.Data.History.AlbumList.Add(album);
+            ProductionManager.AddProduction(album);
         }
 
         /// <summary>

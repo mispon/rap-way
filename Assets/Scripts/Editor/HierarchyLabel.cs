@@ -4,7 +4,7 @@ using UnityEditor;
 namespace Editor
 {
     /// <summary>
-    /// Check out http://diegogiacomelli.com.br/unitytips-hierarchy-window-group-header/
+    /// CheckCondition out http://diegogiacomelli.com.br/unitytips-hierarchy-window-group-header/
     /// </summary>
     [InitializeOnLoad]
     public class HierarchyLabel : MonoBehaviour

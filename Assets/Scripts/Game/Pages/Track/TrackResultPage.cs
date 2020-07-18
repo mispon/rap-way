@@ -1,4 +1,5 @@
-﻿using Game.Analyzers;
+﻿using Core;
+using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,7 +53,7 @@ namespace Game.Pages.Track
         private static void SaveResult(TrackInfo track)
         {
             PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
-            PlayerManager.Data.History.TrackList.Add(track);
+            ProductionManager.AddProduction(track);
         }
 
         /// <summary>

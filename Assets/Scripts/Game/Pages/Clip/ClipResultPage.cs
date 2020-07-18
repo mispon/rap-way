@@ -1,4 +1,5 @@
-﻿using Game.Analyzers;
+﻿using Core;
+using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,7 +50,7 @@ namespace Game.Pages.Clip
         private static void SaveResult(ClipInfo clip)
         {
             PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome);
-            PlayerManager.Data.History.ClipList.Add(clip);
+            ProductionManager.AddProduction(clip);
         }
 
         /// <summary>

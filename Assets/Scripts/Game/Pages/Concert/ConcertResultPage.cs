@@ -1,4 +1,5 @@
-﻿using Game.Analyzers;
+﻿using Core;
+using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +52,7 @@ namespace Game.Pages.Concert
         private static void SaveResult(ConcertInfo concert)
         {
             PlayerManager.Instance.AddMoney(concert.Income);
-            PlayerManager.Data.History.ConcertList.Add(concert);
+            ProductionManager.AddProduction(concert);
         }
 
         #region PAGE EVENTS
