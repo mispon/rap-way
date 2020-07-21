@@ -62,7 +62,7 @@ namespace Game.Pages.Concert
 
             _concert.Id = PlayerManager.GetNextProductionId<ConcertInfo>();
             
-            workingPage.CreateConcert(_concert);
+            workingPage.StartWork(_concert);
             Close();
         }
         

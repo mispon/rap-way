@@ -115,7 +115,7 @@ namespace Game.Pages.Social
                 CharityMoney = charityMoney
             };
 
-            workingPage.ShowPage(social);
+            workingPage.StartWork(social);
             
             SetActiveAction(settings.Type, false);
             Close();

@@ -1,6 +1,4 @@
-﻿using Core;
-using Game.UI;
-using Models.Info.Production;
+﻿using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,14 +7,10 @@ namespace Game.Pages.Clip
     /// <summary>
     /// Страница работы над клипом
     /// </summary>
-    public class ClipWorkingPage : Page
+    public class ClipWorkingPage : BaseWorkingPage
     {
-        [Header("Настройки")]
-        [SerializeField] private int duration;
-
         [Header("Идентификаторы прогресса работы")]
         [SerializeField] private Text header;
-        [SerializeField] private ProgressBar progressBar;
         [SerializeField] private Text playerPoints;
         [SerializeField] private Text directorPoints;
         [SerializeField] private Text operatorPoints;
@@ -30,27 +24,33 @@ namespace Game.Pages.Clip
         [SerializeField] private ClipResultPage clipResult;
 
         private ClipInfo _clip;
-        
+
         /// <summary>
-        /// Запускает создание нового клипа
+        /// Начинает выполнение работы 
         /// </summary>
-        public void CreateClip(ClipInfo clip)
+        public override void StartWork(params object[] args)
         {
-            _clip = clip;
+            _clip = (ClipInfo) args[0];
             header.text = $"Работа над клипом трека \"{PlayerManager.GetTrackName(_clip.TrackId)}\"";
             Open();
         }
 
         /// <summary>
-        /// Обработчик истечения дня
+        /// Работа, выполняемая за один день
         /// </summary>
-        private void OnDayLeft()
+        protected override void DoDayWork()
         {
-            if (progressBar.IsFinish)
-                return;
-            
             GenerateWorkPoints();
             DisplayWorkPoints();
+        }
+
+        /// <summary>
+        /// Обработчик завершения работы
+        /// </summary>
+        protected override void FinishWork()
+        {
+            clipResult.Show(_clip);
+            Close();
         }
 
         /// <summary>
@@ -81,40 +81,15 @@ namespace Game.Pages.Clip
             operatorPoints.text = _clip.OperatorPoints.ToString();
         }
 
-        /// <summary>
-        /// Обработчик завершения клипа
-        /// </summary>
-        private void FinishClip()
-        {
-            clipResult.Show(_clip);
-            Close();
-        }
-        
-        #region PAGE CALLBACKS
-
-        protected override void AfterPageOpen()
-        {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-            TimeManager.Instance.SetActionMode();
-            
-            progressBar.Init(duration);
-            progressBar.onFinish += FinishClip;
-            progressBar.Run();
-        }
-
         protected override void BeforePageClose()
         {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
-            TimeManager.Instance.ResetActionMode();
+            base.BeforePageClose();
 
             playerPoints.text = "0";
             directorPoints.text = "0";
             operatorPoints.text = "0";
             
-            progressBar.onFinish -= FinishClip;
             _clip = null;
         }
-
-        #endregion
     }
 }

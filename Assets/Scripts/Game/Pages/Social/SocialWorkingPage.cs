@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using Core;
 using Enums;
 using Game.Pages.Social.SocialStructs;
-using Game.UI;
 using Localization;
 using Models.Info;
 using UnityEngine;
@@ -14,11 +12,10 @@ namespace Game.Pages.Social
     /// <summary>
     /// Страница работы социального действия
     /// </summary>
-    public class SocialWorkingPage : Page
+    public class SocialWorkingPage : BaseWorkingPage
     {
         [Header("Идентификаторы прогресса работы")]
         [SerializeField] private Text header;
-        [SerializeField] private ProgressBar progressBar;
         [SerializeField] private Text playerPoints;
         [SerializeField] private Text prManPoints;
         [SerializeField] private GameObject prManBucket;
@@ -32,22 +29,21 @@ namespace Game.Pages.Social
         [SerializeField, ArrayElementTitle("Type")] private TypedResultPage[] socialResults; 
         
         private SocialInfo _social;
-        private SocialResultPage SocialResult(SocialType type) => socialResults.First(sr => sr.Type == type).Page;
 
-        public void ShowPage(SocialInfo social)
+        /// <summary>
+        /// Начинает выполнение работы 
+        /// </summary>
+        public override void StartWork(params object[] args)
         {
-            _social = social;
+            _social = (SocialInfo) args[0];
             Open();
         }
 
         /// <summary>
-        /// Обработчик истечения дня
+        /// Работа, выполняемая за один день
         /// </summary>
-        private void OnDayLeft()
+        protected override void DoDayWork()
         {
-            if (progressBar.IsFinish)
-                return;
-
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
@@ -79,17 +75,23 @@ namespace Game.Pages.Social
             if (prMan.activeSelf)
                 prManPoints.text = _social.PrManPoints.ToString();
         }
-
+        
         /// <summary>
-        /// Обработчик завершения социального действия
+        /// Обработчик завершения работы
         /// </summary>
-        private void FinishSocial()
+        protected override void FinishWork()
         {
-            SocialResult(_social.Data.Type).ShowPage(_social);
+            GetPage(_social.Data.Type).ShowPage(_social);
             Close();
         }
-
-        #region PAGE CALLBACKS
+        
+        /// <summary>
+        /// Возвращает страницу для указанного типа соц. события 
+        /// </summary>
+        private SocialResultPage GetPage(SocialType type)
+        {
+            return socialResults.First(sr => sr.Type == type).Page;
+        }
 
         protected override void BeforePageOpen()
         {
@@ -101,31 +103,16 @@ namespace Game.Pages.Social
             prManBucket.SetActive(active);
         }
 
-        protected override void AfterPageOpen()
-        {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-            TimeManager.Instance.SetActionMode();
-
-            progressBar.Init(TimeManager.Instance.SecondsPerTick * _social.Data.Duration);
-            progressBar.onFinish += FinishSocial;
-            progressBar.Run();
-        }
-
         protected override void BeforePageClose()
         {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
-            TimeManager.Instance.ResetActionMode();
+            base.BeforePageClose();
 
             playerPoints.text = "0";
             prManPoints.text = "0";
-            
-            progressBar.onFinish -= FinishSocial;
-            
             header.text = "";
+            
             _social = null;
         }
-
-        #endregion
     }
 }
 

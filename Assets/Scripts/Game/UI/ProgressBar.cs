@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace Game.UI
 {
@@ -24,6 +25,9 @@ namespace Game.UI
         /// </summary>
         public void Init(int duration)
         {
+            if (duration == 0)
+                throw new RapWayException("Передано нулевое значение длительности в ProgressBar!");
+            
             _duration = duration;
             progressBar.value = 0;
             IsFinish = false;

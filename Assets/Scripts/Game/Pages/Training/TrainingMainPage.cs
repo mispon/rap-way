@@ -34,7 +34,7 @@ namespace Game.Pages.Training
         /// </summary>
         private void StartTraining(int duration, Func<string> onFinish)
         {
-            workingPage.StartTrainig(duration, onFinish);
+            workingPage.StartWork(duration, onFinish);
             Close();
         }
 

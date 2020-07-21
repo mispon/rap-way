@@ -40,7 +40,7 @@ namespace Game.Pages.Rappers
         private void StartConversation(bool isFeat)
         {
             PlayerManager.SetTeammateCooldown(TeammateType.Manager, cooldown);
-            workingPage.StartConversation(_rapper, isFeat);
+            workingPage.StartWork(_rapper, isFeat);
             Close();
         }
         

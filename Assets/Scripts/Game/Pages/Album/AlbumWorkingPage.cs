@@ -1,6 +1,4 @@
-﻿using Core;
-using Game.UI;
-using Models.Player;
+﻿using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,14 +8,10 @@ namespace Game.Pages.Album
     /// <summary>
     /// Страница работы над альбомом
     /// </summary>
-    public class AlbumWorkingPage : Page
+    public class AlbumWorkingPage : BaseWorkingPage
     {
-        [Header("Настройки")]
-        [SerializeField] private int duration;
-
         [Header("Идентификаторы прогресса работы")]
         [SerializeField] private Text header;
-        [SerializeField] private ProgressBar progressBar;
         [SerializeField] private Text bitPoints;
         [SerializeField] private Text textPoints;
 
@@ -33,28 +27,34 @@ namespace Game.Pages.Album
         [SerializeField] private AlbumResultPage albumResult;
 
         private AlbumInfo _album;
-        
+
         /// <summary>
-        /// Запускает создание нового альбома
+        /// Начинает выполнение работы 
         /// </summary>
-        public void CreateAlbum(AlbumInfo album)
+        public override void StartWork(params object[] args)
         {
-            _album = album;
+            _album = (AlbumInfo) args[0];
             Open();
         }
-        
+
         /// <summary>
-        /// Обработчик истечения игрового дня
+        /// Работа, выполняемая за один день
         /// </summary>
-        private void OnDayLeft()
+        protected override void DoDayWork()
         {
-            if (progressBar.IsFinish)
-                return;
-            
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
-        
+
+        /// <summary>
+        /// Обработчик завершения работы
+        /// </summary>
+        protected override void FinishWork()
+        {
+            albumResult.Show(_album);
+            Close();
+        }
+
         /// <summary>
         /// Генерирует очки работы над альбомом
         /// </summary>
@@ -111,17 +111,6 @@ namespace Game.Pages.Album
             bitPoints.text = _album.BitPoints.ToString();
             textPoints.text = _album.TextPoints.ToString();
         }
-        
-        /// <summary>
-        /// Завершает работу над треком
-        /// </summary>
-        private void FinishTrack()
-        { 
-            albumResult.Show(_album);
-            Close();
-        }
-        
-        #region PAGE CALLBACKS
 
         protected override void BeforePageOpen()
         {
@@ -130,27 +119,12 @@ namespace Game.Pages.Album
             textwritter.SetActive(!PlayerManager.Data.Team.TextWriter.IsEmpty);
         }
 
-        protected override void AfterPageOpen()
-        {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-            TimeManager.Instance.SetActionMode();
-            
-            progressBar.Init(duration);
-            progressBar.onFinish += FinishTrack;
-            progressBar.Run();
-        }
-
         protected override void BeforePageClose()
         {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
-            TimeManager.Instance.ResetActionMode();
-
-            bitPoints.text = textPoints.text = "0";
+            base.BeforePageClose();
             
-            progressBar.onFinish -= FinishTrack;
+            bitPoints.text = textPoints.text = "0";
             _album = null;
         }
-
-        #endregion
     }
 }

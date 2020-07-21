@@ -1,6 +1,4 @@
-using Core;
 using Data;
-using Game.UI;
 using Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,14 +8,10 @@ namespace Game.Pages.Rappers
     /// <summary>
     /// Страница переговоров с реальным исполнителем по поводу фита или баттла
     /// </summary>
-    public class RapperWorkingPage : Page
+    public class RapperWorkingPage : BaseWorkingPage
     {
-        [Header("Настройки")]
-        [SerializeField] private int duration;
-
         [Header("Идентификаторы прогресса работы")]
         [SerializeField] private Text header;
-        [SerializeField] private ProgressBar progressBar;
         [SerializeField] private Text managementPoints;
 
         [Header("Персонажи")]
@@ -31,27 +25,33 @@ namespace Game.Pages.Rappers
         private RapperInfo _rapper;
         private bool _isFeat;
         private int _managementPoints;
-        
+
         /// <summary>
-        /// Начинает переговоры с репером
+        /// Начинает выполнение работы 
         /// </summary>
-        public void StartConversation(RapperInfo rapper, bool isFeat)
+        public override void StartWork(params object[] args)
         {
-            _rapper = rapper;
-            _isFeat = isFeat;
+            _rapper = (RapperInfo) args[0]; 
+            _isFeat = (bool) args[1];
             
             Open();
         }
 
         /// <summary>
-        /// Вызывается по истечении игрового дня
+        /// Работа, выполняемая за один день
         /// </summary>
-        private void OnDayLeft()
+        protected override void DoDayWork()
         {
-            if (progressBar.IsFinish)
-                return;
-
             GenerateWorkPoints();
+        }
+
+        /// <summary>
+        /// Вызывается при завершении переговоров
+        /// </summary>
+        protected override void FinishWork()
+        {
+            rapperResult.Show(_rapper, _managementPoints, _isFeat);
+            Close();
         }
 
         /// <summary>
@@ -69,15 +69,6 @@ namespace Game.Pages.Rappers
             managementPoints.text = $"{_managementPoints}";
         }
 
-        /// <summary>
-        /// Вызывается при завершении переговоров
-        /// </summary>
-        private void FinishWork()
-        {
-            rapperResult.Show(_rapper, _managementPoints, _isFeat);
-            Close();
-        }
-
         protected override void BeforePageOpen()
         {
             header.text = $"{LocalizationManager.Instance.Get("conversation_with")} {_rapper.Name}";
@@ -86,22 +77,9 @@ namespace Game.Pages.Rappers
             _managementPoints = 0;
         }
 
-        protected override void AfterPageOpen()
-        {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-            TimeManager.Instance.SetActionMode();
-            
-            progressBar.Init(duration);
-            progressBar.onFinish += FinishWork;
-            progressBar.Run();
-        }
-
         protected override void BeforePageClose()
         {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
-            TimeManager.Instance.ResetActionMode();
-            
-            progressBar.onFinish -= FinishWork;
+            base.BeforePageClose();
             _rapper = null;
         }
     }

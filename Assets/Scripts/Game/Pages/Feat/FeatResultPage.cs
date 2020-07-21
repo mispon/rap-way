@@ -5,8 +5,5 @@ namespace Game.Pages.Feat
     /// <summary>
     /// Страница результатов фита
     /// </summary>
-    public class FeatResultPage : TrackResultPage
-    {
-        
-    }
+    public class FeatResultPage : TrackResultPage { }
 }

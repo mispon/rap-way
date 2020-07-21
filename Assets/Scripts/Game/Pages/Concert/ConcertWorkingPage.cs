@@ -1,6 +1,4 @@
-﻿using Core;
-using Game.UI;
-using Models.Player;
+﻿using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,14 +8,10 @@ namespace Game.Pages.Concert
     /// <summary>
     /// Страница подготовки концерта
     /// </summary>
-    public class ConcertWorkingPage : Page
+    public class ConcertWorkingPage : BaseWorkingPage
     {
-        [Header("Настройки")]
-        [SerializeField] private int duration;
-
         [Header("Идентификаторы прогресса работы")]
         [SerializeField] private Text header;
-        [SerializeField] private ProgressBar progressBar;
         [SerializeField] private Text managementPointsLabel;
         [SerializeField] private Text marketingPointsLabel;
 
@@ -33,28 +27,34 @@ namespace Game.Pages.Concert
         [SerializeField] private ConcertResultPage concertResult;
 
         private ConcertInfo _concert;
-        
+
         /// <summary>
-        /// Запускает подготовку концерта
+        /// Начинает выполнение работы 
         /// </summary>
-        public void CreateConcert(ConcertInfo concert)
+        public override void StartWork(params object[] args)
         {
-            _concert = concert;
+            _concert = (ConcertInfo) args[0];
             Open();
         }
 
         /// <summary>
-        /// Обработчик истечения игрового дня
+        /// Работа, выполняемая за один день
         /// </summary>
-        private void OnDayLeft()
+        protected override void DoDayWork()
         {
-            if (progressBar.IsFinish)
-                return;
-            
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
-        
+
+        /// <summary>
+        /// Обработчик завершения работы
+        /// </summary>
+        protected override void FinishWork()
+        {
+            concertResult.Show(_concert);
+            Close();
+        }
+
         /// <summary>
         /// Генерирует очки работы по организации концерта
         /// </summary>
@@ -112,17 +112,6 @@ namespace Game.Pages.Concert
             marketingPointsLabel.text = _concert.MarketingPoints.ToString();
         }
 
-        /// <summary>
-        /// Завершает подготовку к концерту
-        /// </summary>
-        private void FinishConcert()
-        {
-            concertResult.Show(_concert);
-            Close();
-        }
-        
-        #region PAGE CALLBACKS
-
         protected override void BeforePageOpen()
         {
             header.text = $"Организация концерта в \"{_concert.LocationName}\"";
@@ -130,28 +119,13 @@ namespace Game.Pages.Concert
             prman.SetActive(!PlayerManager.Data.Team.PrMan.IsEmpty);
         }
 
-        protected override void AfterPageOpen()
-        {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-            TimeManager.Instance.SetActionMode();
-            
-            progressBar.Init(duration);
-            progressBar.onFinish += FinishConcert;
-            progressBar.Run();
-        }
-
         protected override void BeforePageClose()
         {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
-            TimeManager.Instance.ResetActionMode();
+            base.BeforePageClose();
 
             managementPointsLabel.text = "0";
             marketingPointsLabel.text = "0";
-            
-            progressBar.onFinish -= FinishConcert;
             _concert = null;
         }
-
-        #endregion
     }
 }

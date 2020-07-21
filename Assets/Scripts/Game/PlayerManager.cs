@@ -129,7 +129,10 @@ namespace Game
         /// </summary>
         public static string GetTrackName(int trackId)
         {
-            return Data.History.TrackList.First(e => e.Id == trackId).Name;
+            var track = Data.History.TrackList.First(e => e.Id == trackId);
+
+            string featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : "";
+            return $"{track.Name}{featInfo}";
         }
 
         /// <summary>
