@@ -82,6 +82,8 @@ namespace Game.Pages.Rappers
         {
             header.text = $"{LocalizationManager.Instance.Get("conversation_with")} {_rapper.Name}";
             rapperAvatar.sprite = _rapper.Avatar;
+            managementPoints.text = "0";
+            _managementPoints = 0;
         }
 
         protected override void AfterPageOpen()
@@ -98,9 +100,6 @@ namespace Game.Pages.Rappers
         {
             TimeManager.Instance.onDayLeft -= OnDayLeft;
             TimeManager.Instance.ResetActionMode();
-
-            managementPoints.text = "0";
-            _managementPoints = 0;
             
             progressBar.onFinish -= FinishWork;
             _rapper = null;

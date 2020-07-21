@@ -1,4 +1,5 @@
 using Data;
+using Game.Pages.Feat;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,12 +10,18 @@ namespace Game.Pages.Rappers
     /// </summary>
     public class RapperResultPage : Page
     {
+        [Header("Контролы")]
         [SerializeField] private Text header;
         [Space]
         [SerializeField] private Button okButton;
         [SerializeField] private Button cancelButton;
         [SerializeField] private Button nextButton;
 
+        [Header("Страницы")]
+        [SerializeField] private RappersListPage listPage;
+        [SerializeField] private FeatSettingsPage featPage;
+
+        private RapperInfo _rapper;
         private bool _isFeat;
 
         private void Start()
@@ -29,6 +36,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         public void Show(RapperInfo rapper, int workPoints, bool isFeat)
         {
+            _rapper = rapper;
             _isFeat = isFeat;
             
             bool result = AnalyzeConversations(rapper, workPoints);
@@ -43,7 +51,7 @@ namespace Game.Pages.Rappers
         private bool AnalyzeConversations(RapperInfo rapper, int workPoints)
         {
             // TODO: analyze result
-            
+
             return true;
         }
 
@@ -67,12 +75,16 @@ namespace Game.Pages.Rappers
         {
             if (_isFeat)
             {
-                // TODO: do feat
+                featPage.Show(_rapper);
             }
             else
             {
-                // TODO: do battle
+                // TODO: load battle scene
+                print($"Start battle with {_rapper.Name}");
             }
+            
+            listPage.Close();
+            Close();
         }
     }
 }

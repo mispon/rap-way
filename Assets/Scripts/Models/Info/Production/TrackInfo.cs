@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using Data;
+using Enums;
 
 namespace Models.Info.Production
 {
@@ -18,5 +19,7 @@ namespace Models.Info.Production
         public int ChartPosition;
 
         public bool HasClip;
+
+        public RapperInfo Feat;
     }
 }

@@ -41,6 +41,7 @@ namespace Game.Pages.Rappers
         {
             PlayerManager.SetTeammateCooldown(TeammateType.Manager, cooldown);
             workingPage.StartConversation(_rapper, isFeat);
+            Close();
         }
         
         /// <summary>
@@ -93,8 +94,7 @@ namespace Game.Pages.Rappers
             battleButton.interactable = canInteract;
             featButton.interactable = canInteract;
             
-            if (!canInteract)
-                managerStatusInfo.text = LocalizationManager.Instance.Get(message);
+            managerStatusInfo.text = canInteract ? "" : LocalizationManager.Instance.Get(message);
         }
 
         /// <summary>

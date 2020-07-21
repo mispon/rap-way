@@ -20,7 +20,7 @@ namespace Game.Pages.Track
         [Header("Страница разработки")]
         [SerializeField] private TrackWorkingPage workingPage;
 
-        private TrackInfo _track;
+        protected TrackInfo _track;
 
         private void Start()
         {

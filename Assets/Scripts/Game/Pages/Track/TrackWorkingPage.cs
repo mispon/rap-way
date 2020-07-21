@@ -121,7 +121,7 @@ namespace Game.Pages.Track
             Close();
         }
 
-        #region PAGE CALLBACKS
+        #region PAGE EVENTS
 
         protected override void BeforePageOpen()
         {
