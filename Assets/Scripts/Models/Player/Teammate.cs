@@ -19,14 +19,19 @@ namespace Models.Player
         public TeammateType Type;
 
         /// <summary>
-        /// Флаг оплаты услуг тиммейта
-        /// </summary>
-        public bool HasPayment;
-        
-        /// <summary>
         /// Навык
         /// </summary>
         public int Skill;
+        
+        /// <summary>
+        /// Флаг оплаты услуг тиммейта
+        /// </summary>
+        public bool HasPayment;
+
+        /// <summary>
+        /// Длительность восстановления тиммейта
+        /// </summary>
+        public int Cooldown;
 
         /// <summary>
         /// Тиммейт еще не открыт

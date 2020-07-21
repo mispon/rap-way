@@ -13,7 +13,7 @@ namespace Localization
 {
     /// <summary>
     /// Реализация менеджера локализации
-    /// NOTE: All localization files must be in "Assests/StreamingAssets" folder in .json format
+    /// Все файлы локализации должны лежать в "Assests/StreamingAssets" в формате json
     /// </summary>
     public class LocalizationManager : Singleton<LocalizationManager> 
     {
@@ -41,7 +41,7 @@ namespace Localization
             if (item != null) 
                 return item.value;
             
-            throw new RapWayException($"Не найдена локализация по ключу {key}!");
+            throw new RapWayException($"Не найдена локализация по ключу [{key}]!");
         }
 
         /// <summary>
@@ -76,8 +76,9 @@ namespace Localization
         }
 
         /// <summary>
-        /// Routine read localization data for android
+        /// Корутина считывания данных для андроидов
         /// </summary>
+        // ReSharper disable once UnusedMember.Local
         private IEnumerator ReadDataRoutine(SystemLanguage lang, Action<string> callback) 
         {
             using (var request = UnityWebRequest.Get(AndroidFileName(lang)))

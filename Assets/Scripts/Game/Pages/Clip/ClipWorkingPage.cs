@@ -58,15 +58,15 @@ namespace Game.Pages.Clip
         /// </summary>
         private void GenerateWorkPoints()
         {
-            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma);
+            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma + 1);
             _clip.PlayerPoints += playerPointsValue;
             playerWorkPoints.Show(playerPointsValue);
             
-            var directorPointsValue = Random.Range(1, _clip.DirectorSkill);
+            var directorPointsValue = Random.Range(1, _clip.DirectorSkill + 1);
             _clip.DirectorPoints += directorPointsValue;
             directorWorkPoints.Show(directorPointsValue);
             
-            var operatorPointsValue = Random.Range(1, _clip.OperatorSkill);
+            var operatorPointsValue = Random.Range(1, _clip.OperatorSkill + 1);
             _clip.OperatorPoints += operatorPointsValue;
             operatorWorkPoints.Show(operatorPointsValue);
         }

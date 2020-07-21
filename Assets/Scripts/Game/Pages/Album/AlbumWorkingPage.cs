@@ -72,13 +72,13 @@ namespace Game.Pages.Album
         /// </summary>
         private int CreateBitPoints(PlayerData data)
         {
-            var playersBitPoints = Random.Range(1, data.Stats.Bitmaking);
+            var playersBitPoints = Random.Range(1, data.Stats.Bitmaking + 1);
             playerBitWorkPoints.Show(playersBitPoints);
 
             var bitmakerPoints = 0;
             if (bitmaker.activeSelf)
             {
-                bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill);
+                bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill + 1);
                 bitmakerWorkPoints.Show(bitmakerPoints);
             }
 

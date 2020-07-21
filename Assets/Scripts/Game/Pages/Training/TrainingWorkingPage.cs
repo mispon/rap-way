@@ -41,7 +41,7 @@ namespace Game.Pages.Training
             if (progressBar.IsFinish)
                 return;
             
-            playerWorkPoints.Show(Random.Range(1, 4));
+            playerWorkPoints.Show(Random.Range(1, 11));
         }
 
         /// <summary>
