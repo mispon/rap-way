@@ -68,6 +68,7 @@ namespace Game.Pages.Clip
             track.HasClip = true;
             
             _clip.TrackId = track.Id;
+            _clip.Name = track.Name;
             workingPage.CreateClip(_clip);
             Close();
         }

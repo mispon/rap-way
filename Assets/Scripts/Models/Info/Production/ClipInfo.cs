@@ -20,5 +20,12 @@ namespace Models.Info.Production
         public int Views;
         public int Likes;
         public int Dislikes;
+
+        public override string[] HistoryInfo => new[]
+        {
+            Name,
+            Views.ToString(),
+            $"{Likes} / {Dislikes}"
+        };
     }
 }
