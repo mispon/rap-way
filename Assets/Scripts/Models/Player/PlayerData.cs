@@ -28,8 +28,8 @@ namespace Models.Player
         
         public static PlayerData New => new PlayerData
         {
-            Money =  3_000_000,
-            Fans = 0,
+            Money =  500_000,
+            Fans = 100_000,
             Hype = 0,
             
             Info = PlayerInfo.New,
