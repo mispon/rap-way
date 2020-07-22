@@ -3,7 +3,9 @@ using Core.Interfaces;
 using Data;
 using Enums;
 using Game;
+using Game.Analyzers;
 using Models.Game;
+using Models.Info;
 using UnityEngine;
 using Utils;
 
@@ -17,15 +19,15 @@ namespace Core
         private static readonly int STYLESCOUNT = Enum.GetValues(typeof(Styles)).Length;
         private static readonly int THEMESCOUNT = Enum.GetValues(typeof(Themes)).Length;
 
-        [Header("Данные сравнения")]
-        [SerializeField] private TrendsCompareData trendsCompareData;
+        [Header("Анализатор совпадения с трендом")] 
+        [SerializeField] private TrendAnalyzer trendAnalyzer;
         
-        private Trends Trends => GameManager.Instance.GameStats.trends;
+        private Trends Trends => GameManager.Instance.GameStats.Trends;
         private DateTime Now => TimeManager.Instance.Now;
         
         public void OnStart()
         {
-            TimeManager.Instance.onWeekLeft += OnCheckTimeToChangeTrands;
+            TimeManager.Instance.onWeekLeft += OnCheckTimeToChangeTrends;
         }
 
         /// <summary>
@@ -37,20 +39,20 @@ namespace Core
         /// <summary>
         /// Проверяем, наступило ли время для изменения Трендов
         /// </summary>
-        private void OnCheckTimeToChangeTrands()
+        private void OnCheckTimeToChangeTrends()
         {
             if (Now < Trends.NextTimeUpdate)
                 return;
             
-            ChangeTrands(Now);
+            ChangeTrends(Now);
         }
 
         /// <summary>
         /// Изменяем тренды
         /// </summary>
-        private void ChangeTrands(DateTime now)
+        private void ChangeTrends(DateTime now)
         {
-            GameManager.Instance.GameStats.trends = new Trends
+            GameManager.Instance.GameStats.Trends = new Trends
             {
                 Style = (Styles) UnityEngine.Random.Range(0, STYLESCOUNT),
                 Theme = (Themes) UnityEngine.Random.Range(0, THEMESCOUNT),
@@ -61,7 +63,7 @@ namespace Core
         /// <summary>
         /// Получение оценки, насколько точное совпадение по текущим трендам
         /// </summary>
-        public static float AnalyzeEquality(Trends selectedTrend)
-            => Instance.trendsCompareData.AnalyzeEquality(Instance.Trends, selectedTrend);
+        public static void AnalyzeEquality(TrendInfo info)
+            => Instance.trendAnalyzer.Analyze(info);
     }
 }

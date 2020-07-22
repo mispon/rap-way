@@ -9,8 +9,7 @@ namespace Models.Info.Production
     [System.Serializable]
     public class TrackInfo: Production
     {
-        public Styles Style;
-        public Themes Theme;
+        public TrendInfo TrendInfo;
 
         public int TextPoints;
         public int BitPoints;
@@ -23,8 +22,8 @@ namespace Models.Info.Production
         public override string[] HistoryInfo => new[]
         {
             Name,
-            Style.GetDescription(),
-            Theme.GetDescription(),
+            TrendInfo.Style.GetDescription(),
+            TrendInfo.Theme.GetDescription(),
             ListenAmount.ToString(),
             ChartPosition.ToString()
         };

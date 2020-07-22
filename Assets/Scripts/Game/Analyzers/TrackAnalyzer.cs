@@ -1,4 +1,5 @@
-﻿using Models.Info.Production;
+﻿using Core;
+using Models.Info.Production;
 using UnityEngine;
 
 namespace Game.Analyzers
@@ -13,6 +14,9 @@ namespace Game.Analyzers
         /// </summary>
         public override void Analyze(TrackInfo track)
         {
+            TrendsManager.AnalyzeEquality(track.TrendInfo);
+            
+            
             // todo: analyze track
             
             track.ListenAmount = Random.Range(1, 100);
