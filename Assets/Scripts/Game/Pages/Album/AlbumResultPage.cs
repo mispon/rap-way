@@ -1,4 +1,5 @@
-﻿using Game.Analyzers;
+﻿using Core;
+using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,15 +20,18 @@ namespace Game.Pages.Album
 
         [Header("Анализатор альбома")]
         [SerializeField] private AlbumAnalyzer albumAnalyzer;
+
+        private AlbumInfo _albumInfo;
         
         /// <summary>
         /// Показывает результат 
         /// </summary>
         public void Show(AlbumInfo album)
         {
+            _albumInfo = album;
+            
             albumAnalyzer.Analyze(album);
             DisplayResult(album);
-            SaveResult(album);
             Open();
         }
         
@@ -52,9 +56,10 @@ namespace Game.Pages.Album
         private static void SaveResult(AlbumInfo album)
         {
             PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome);
-            PlayerManager.Data.History.AlbumList.Add(album);
+            ProductionManager.AddAlbum(album);
         }
 
+        #region PAGE EVENTS
         /// <summary>
         /// Выполняется перед открытием страницы
         /// </summary>
@@ -62,5 +67,14 @@ namespace Game.Pages.Album
         {
             // todo: запустить или не запускать случайное событие
         }
+        /// <summary>
+        /// Выполняется перед закрытием страницы
+        /// </summary>
+        protected override void AfterPageClose()
+        {
+            SaveResult(_albumInfo);
+            _albumInfo = null;
+        }
+        #endregion
     }
 }

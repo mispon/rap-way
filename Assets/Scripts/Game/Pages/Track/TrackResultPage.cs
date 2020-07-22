@@ -1,4 +1,5 @@
-﻿using Game.Analyzers;
+﻿using Core;
+using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,14 +21,17 @@ namespace Game.Pages.Track
         [Header("Анализатор трека")]
         [SerializeField] private TrackAnalyzer trackAnalyzer;
 
+        private TrackInfo _trackInfo;
+        
         /// <summary>
         /// Показывает результат работы над треком
         /// </summary>
         public void Show(TrackInfo track)
         {
+            _trackInfo = track;
+            
             trackAnalyzer.Analyze(track);
             DisplayResult(track);
-            SaveResult(track);
             Open();
         }
 
@@ -52,9 +56,10 @@ namespace Game.Pages.Track
         private static void SaveResult(TrackInfo track)
         {
             PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
-            PlayerManager.Data.History.TrackList.Add(track);
+            ProductionManager.AddTrack(track);
         }
 
+        #region PAGE EVENTS
         /// <summary>
         /// Выполняется перед открытием страницы
         /// </summary>
@@ -62,5 +67,15 @@ namespace Game.Pages.Track
         {
             // todo: запустить или не запускать случайное событие
         }
+        
+        /// <summary>
+        /// Выполняется перед закрытием страницы
+        /// </summary>
+        protected override void AfterPageClose()
+        {
+            SaveResult(_trackInfo);
+            _trackInfo = null;
+        }
+        #endregion
     }
 }

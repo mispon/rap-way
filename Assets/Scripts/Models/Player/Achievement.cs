@@ -13,7 +13,12 @@ namespace Models.Player
         /// Тип
         /// </summary>
         public AchievementsType Type;
-        
+
+        /// <summary>
+        ///Необходимое значение для получение достижения
+        /// </summary>
+        public int CompareValue;
+
         /// <summary>
         /// Состояние: открыто/закрыто
         /// </summary>
