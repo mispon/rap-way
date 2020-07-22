@@ -11,6 +11,8 @@ namespace Game.Pages.Concert
     /// </summary>
     public class ConcertResultPage : Page
     {
+        [SerializeField] private int rewardExp;
+
         [Header("Компоменты")]
         [SerializeField] private Text header;
         [SerializeField] private Text ticketsSold;
@@ -48,9 +50,10 @@ namespace Game.Pages.Concert
         /// <summary>
         /// Сохраняет результаты концерта 
         /// </summary>
-        private static void SaveResult(ConcertInfo concert)
+        private void SaveResult(ConcertInfo concert)
         {
             PlayerManager.Instance.AddMoney(concert.Income);
+            PlayerManager.Instance.AddExp(rewardExp);
             ProductionManager.AddConcert(concert);
         }
 

@@ -11,6 +11,8 @@ namespace Game.Pages.Track
     /// </summary>
     public class TrackResultPage : Page
     {
+        [SerializeField] private int rewardExp;
+        
         [Header("Компоменты")]
         [SerializeField] private Text header;
         [SerializeField] private Text listenAmount;
@@ -54,9 +56,10 @@ namespace Game.Pages.Track
         /// <summary>
         /// Сохраняет результаты трека
         /// </summary>
-        private static void SaveResult(TrackInfo track)
+        private void SaveResult(TrackInfo track)
         {
             PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
+            PlayerManager.Instance.AddExp(rewardExp);
             ProductionManager.AddTrack(track);
         }
 

@@ -17,23 +17,24 @@ namespace Game
     /// </summary>
     public class PlayerManager : Singleton<PlayerManager>, IStarter
     {
+        [Header("HUD")]
+        [SerializeField] private GameScreenController gameScreen;
+        
         /// <summary>
         /// Событие добавления денег
         /// </summary>
         public event Action<int> onMoneyAdd = value => { };
+        
         /// <summary>
         /// Событие добавления фанатов
         /// </summary>
         public event Action<int> onFansAdd = value => { };
+        
         /// <summary>
         /// Событие добавления хайпа
         /// </summary>
         public event Action<int> onHypeAdd = value => { };
-        
-        
-        [Header("HUD")]
-        [SerializeField] private GameScreenController gameScreen;
-        
+
         /// <summary>
         /// Данные игрока
         /// </summary>
@@ -85,6 +86,14 @@ namespace Game
             Data.Hype = Mathf.Clamp(Data.Hype + hype, 0, 100);
             onHypeAdd(Data.Hype);
             gameScreen.UpdateHUD(Data);
+        }
+
+        /// <summary>
+        /// Изменяет количество опыта 
+        /// </summary>
+        public void AddExp(int exp)
+        {
+            Data.Exp += exp;
         }
 
         /// <summary>

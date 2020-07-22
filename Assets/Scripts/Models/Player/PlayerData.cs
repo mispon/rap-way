@@ -13,6 +13,7 @@ namespace Models.Player
         public int Money;
         public int Fans;
         public int Hype;
+        public int Exp;
         
         public PlayerInfo Info;
         public PlayerStats Stats;
@@ -30,7 +31,6 @@ namespace Models.Player
         {
             Money =  500_000,
             Fans = 100_000,
-            Hype = 0,
             
             Info = PlayerInfo.New,
             Stats = PlayerStats.New,
