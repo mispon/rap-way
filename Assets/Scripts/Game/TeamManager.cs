@@ -3,6 +3,7 @@ using System.Linq;
 using Core;
 using Game.Notifications;
 using Game.Pages.Team;
+using Game.Pages.Training;
 using Models.Player;
 using UnityEngine;
 
@@ -16,9 +17,11 @@ namespace Game
         [Header("Данные команды")] 
         [ArrayElementTitle("Type")] public TeammateInfo[] teammateInfos;
 
-        [Header("Страницы команды")] 
+        [Header("Страницы команды")]
         [SerializeField] private TeammateUnlockPage unlockTeammatePage;
-        [SerializeField] private TeammateSalaryPage salaryPage;
+
+        [Header("Страница тренировок")]
+        [SerializeField] private TrainingMainPage trainingPage;
 
         private void Start()
         {
@@ -69,9 +72,11 @@ namespace Game
         /// </summary>
         private void OnSalary()
         {
-            var teammates = GetTeammates(e => !e.IsEmpty);
-            if (teammates.Any())
-                NotificationManager.Instance.AddNotification(() => salaryPage.Show(teammates));
+            if (GetTeammates(e => !e.IsEmpty).Length == 0)
+                return;
+            
+            const int teamTab = 3;
+            NotificationManager.Instance.AddNotification(() => trainingPage.OpenPage(teamTab));
         }
 
         /// <summary>

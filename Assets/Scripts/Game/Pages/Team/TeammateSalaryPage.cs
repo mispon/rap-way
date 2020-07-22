@@ -7,6 +7,7 @@ namespace Game.Pages.Team
     /// <summary>
     /// Страница зарплат команды
     /// </summary>
+    /// TODO: DELETE PAGE
     public class TeammateSalaryPage: Page
     {
         [SerializeField] private TeamManager teamManager;

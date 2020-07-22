@@ -29,6 +29,15 @@ namespace Game.Pages.Training
         }
 
         /// <summary>
+        /// Открывает страницу и указанную вкладку
+        /// </summary>
+        public void OpenPage(int tabIndex)
+        {
+            Open();
+            OpenTab(tabIndex);
+        }
+
+        /// <summary>
         /// Обработчик изменения индекса вкладки 
         /// </summary>
         private void OnTabChanged(int index)

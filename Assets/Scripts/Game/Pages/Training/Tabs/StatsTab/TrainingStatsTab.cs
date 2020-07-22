@@ -1,30 +1,20 @@
 using System;
 using Data;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Game.Pages.Training.Tabs
+namespace Game.Pages.Training.Tabs.StatsTab
 {
     /// <summary>
     /// Вкладка тренировки навыков
     /// </summary>
     public class TrainingStatsTab : TrainingTab
     {
-        private const int MAX_STAT_LEVEL = 10;
-
-        [Header("Основное")]
-        [SerializeField] private Button[] statsButtons;
-        
-        [Header("Информация о навыке")]
-        [SerializeField] private Text header;
-        [SerializeField] private Text desc;
-        [SerializeField] private Text level;
-        [SerializeField] private Button upButton;
+        [Header("Карточки навыков")]
+        [SerializeField] private StatsButton[] statsButtons;
 
         [Header("Данные о навыках")]
         [SerializeField] private TrainingInfoData data;
-
-        private int _statsIndex;
+        
         private readonly Func<string>[] _finishCallbacks =
         {
             () => FinishCallback(() => PlayerManager.Data.Stats.Vocobulary += 1, "vocobulary"),
@@ -42,11 +32,11 @@ namespace Game.Pages.Training.Tabs
         {
             for (int i = 0; i < statsButtons.Length; i++)
             {
-                int index = i;
-                statsButtons[index].onClick.AddListener(() => OnStatsSelected(index));
+                var statButton = statsButtons[i];
+                statButton.SetIndex(i);
+                statButton.onClick += OnStatsSelected;
+                statButton.onLevelUpClick += OnUpgradeStats;
             }
-            
-            upButton.onClick.AddListener(OnUpgradeStats);
         }
 
         /// <summary>
@@ -62,23 +52,24 @@ namespace Game.Pages.Training.Tabs
         /// </summary>
         private void OnStatsSelected(int index)
         {
-            _statsIndex = index;
-            
-            var stat = PlayerManager.Data.Stats.Values[index];
-            
-            header.text = Locale(data.StatsInfo[index].NameKey);
-            desc.text = Locale(data.StatsInfo[index].DescriptionKey);
-            level.text = $"{Locale("level")}: {stat}";
-
-            upButton.gameObject.SetActive(stat < MAX_STAT_LEVEL);
+            for (int i = 0; i < statsButtons.Length; i++)
+            {
+                if (i == index)
+                {
+                    var info = data.StatsInfo[index];
+                    statsButtons[i].Show(info);
+                }
+                else
+                    statsButtons[i].Hide();
+            }
         }
         
         /// <summary>
         /// Обработчик запуска улучшения навыка
         /// </summary>
-        private void OnUpgradeStats()
+        private void OnUpgradeStats(int index)
         {
-            var onFinish = _finishCallbacks[_statsIndex];
+            var onFinish = _finishCallbacks[index];
             onStartTraining.Invoke(trainingDuration, onFinish);
         }
 
@@ -89,6 +80,15 @@ namespace Game.Pages.Training.Tabs
         {
             action.Invoke();
             return $"{Locale("training_statUpgrade")}: {Locale(statKey)}";
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var statsButton in statsButtons)
+            {
+                statsButton.onClick -= OnStatsSelected;
+                statsButton.onLevelUpClick -= OnUpgradeStats;
+            }
         }
     }
 }
