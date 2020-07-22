@@ -14,5 +14,10 @@ namespace Models.Info.Production
         public int MoneyIncome;
         public int FansIncome;
         public int HypeIncome;
+        
+        /// <summary>
+        /// Массив строк из полей класса для заполнения в таблице Истории
+        /// </summary>
+        public virtual string[] HistoryInfo => new string[0];
     }
 }

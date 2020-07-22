@@ -9,7 +9,8 @@ namespace Models.Info.Production
     public class ConcertInfo: Production
     {
         public int AlbumId;
-        
+
+        public int LocationId;
         public string LocationName;
         public int LocationCapacity;
         
@@ -20,5 +21,13 @@ namespace Models.Info.Production
         public int MarketingPoints;
         
         public int Income => TicketsSold * TicketCost;
+
+        public override string[] HistoryInfo => new[]
+        {
+            Name,
+            LocationName,
+            TicketCost.ToString(),
+            Income.ToString()
+        };
     }
 }

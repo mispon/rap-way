@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Core.Interfaces;
 using Enums;
 using Game.UI.GameScreen;
@@ -16,6 +17,20 @@ namespace Game
     /// </summary>
     public class PlayerManager : Singleton<PlayerManager>, IStarter
     {
+        /// <summary>
+        /// Событие добавления денег
+        /// </summary>
+        public event Action<int> onMoneyAdd = value => { };
+        /// <summary>
+        /// Событие добавления фанатов
+        /// </summary>
+        public event Action<int> onFansAdd = value => { };
+        /// <summary>
+        /// Событие добавления хайпа
+        /// </summary>
+        public event Action<int> onHypeAdd = value => { };
+        
+        
         [Header("HUD")]
         [SerializeField] private GameScreenController gameScreen;
         
@@ -48,6 +63,7 @@ namespace Game
         public void AddFans(int fans)
         {
             Data.Fans += fans;
+            onFansAdd(Data.Fans);
             gameScreen.UpdateHUD(Data);
         }
 
@@ -57,6 +73,7 @@ namespace Game
         public void AddMoney(int money)
         {
             Data.Money += money;
+            onMoneyAdd(Data.Money);
             gameScreen.UpdateHUD(Data);
         }
 
@@ -65,7 +82,8 @@ namespace Game
         /// </summary>
         public void AddHype(int hype)
         {
-            Data.Hype += hype;
+            Data.Hype = Mathf.Clamp(Data.Hype + hype, 0, 100);
+            onHypeAdd(Data.Hype);
             gameScreen.UpdateHUD(Data);
         }
 

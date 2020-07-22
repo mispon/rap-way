@@ -1,5 +1,6 @@
 ﻿using Data;
 using Enums;
+using Utils.Extensions;
 
 namespace Models.Info.Production
 {
@@ -21,5 +22,13 @@ namespace Models.Info.Production
         public bool HasClip;
 
         public RapperInfo Feat;
+        public override string[] HistoryInfo => new[]
+        {
+            Name,
+            Style.GetDescription(),
+            Theme.GetDescription(),
+            ListenAmount.ToString(),
+            ChartPosition.ToString()
+        };
     }
 }
