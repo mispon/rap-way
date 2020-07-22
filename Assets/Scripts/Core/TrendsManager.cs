@@ -1,8 +1,10 @@
 using System;
 using Core.Interfaces;
+using Data;
 using Enums;
 using Game;
 using Models.Game;
+using UnityEngine;
 using Utils;
 
 namespace Core
@@ -10,12 +12,15 @@ namespace Core
     /// <summary>
     /// Класс управления трендами
     /// </summary>
-    public class TrandsManager: Singleton<TrandsManager>, IStarter
+    public class TrendsManager: Singleton<TrendsManager>, IStarter
     {
         private static readonly int STYLESCOUNT = Enum.GetValues(typeof(Styles)).Length;
         private static readonly int THEMESCOUNT = Enum.GetValues(typeof(Themes)).Length;
+
+        [Header("Данные сравнения")]
+        [SerializeField] private TrendsCompareData trendsCompareData;
         
-        private Trands Trands => GameManager.Instance.GameStats.Trands;
+        private Trends Trends => GameManager.Instance.GameStats.trends;
         private DateTime Now => TimeManager.Instance.Now;
         
         public void OnStart()
@@ -34,7 +39,7 @@ namespace Core
         /// </summary>
         private void OnCheckTimeToChangeTrands()
         {
-            if (Now < Trands.NextTimeUpdate)
+            if (Now < Trends.NextTimeUpdate)
                 return;
             
             ChangeTrands(Now);
@@ -45,12 +50,18 @@ namespace Core
         /// </summary>
         private void ChangeTrands(DateTime now)
         {
-            GameManager.Instance.GameStats.Trands = new Trands
+            GameManager.Instance.GameStats.trends = new Trends
             {
                 Style = (Styles) UnityEngine.Random.Range(0, STYLESCOUNT),
                 Theme = (Themes) UnityEngine.Random.Range(0, THEMESCOUNT),
                 NextTimeUpdate = GetNextTimeUpdate(now)
             };
         }
+
+        /// <summary>
+        /// Получение оценки, насколько точное совпадение по текущим трендам
+        /// </summary>
+        public static float AnalyzeEquality(Trends selectedTrend)
+            => Instance.trendsCompareData.AnalyzeEquality(Instance.Trends, selectedTrend);
     }
 }

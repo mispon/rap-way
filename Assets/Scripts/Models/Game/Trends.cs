@@ -5,17 +5,17 @@ using Enums;
 namespace Models.Game
 {
     [Serializable]
-    public class Trands
+    public class Trends
     {
         public Themes Theme;
         public Styles Style;
         public DateTime NextTimeUpdate;
 
-        public static Trands New => new Trands
+        public static Trends New => new Trends
         {
             Style = Styles.Common,
             Theme = Themes.Self,
-            NextTimeUpdate = TrandsManager.GetNextTimeUpdate(DateTime.Now)
+            NextTimeUpdate = TrendsManager.GetNextTimeUpdate(DateTime.Now)
         };
     }
 }
