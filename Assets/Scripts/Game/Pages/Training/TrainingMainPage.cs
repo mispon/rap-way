@@ -1,7 +1,7 @@
 using System;
 using Game.Pages.Training.Tabs;
 using UnityEngine;
-using UnityEngine.UI;
+using Utils;
 
 namespace Game.Pages.Training
 {
@@ -11,7 +11,7 @@ namespace Game.Pages.Training
     public class TrainingMainPage : Page
     {
         [Header("Контролы")]
-        [SerializeField] private Button[] tabsButtons;
+        [SerializeField] private Switcher tabsSwitcher;
         [SerializeField] private TrainingTab[] tabs;
 
         [Header("Рабочая страница")]
@@ -19,14 +19,21 @@ namespace Game.Pages.Training
 
         private void Start()
         {
-            for (int i = 0; i < tabsButtons.Length; i++)
+            tabsSwitcher.onIndexChange += OnTabChanged;
+
+            foreach (var tab in tabs)
             {
-                int index = i;
-                tabsButtons[index].onClick.AddListener(() => OpenTab(index));
-                
-                tabs[index].Init();
-                tabs[index].onStartTraining += StartTraining;
+                tab.Init();
+                tab.onStartTraining += StartTraining;
             }
+        }
+
+        /// <summary>
+        /// Обработчик изменения индекса вкладки 
+        /// </summary>
+        private void OnTabChanged(int index)
+        {
+            OpenTab(index);
         }
 
         /// <summary>
@@ -52,15 +59,18 @@ namespace Game.Pages.Training
 
         protected override void BeforePageOpen()
         {
+            // TODO: Localization
+            tabsSwitcher.InstantiateElements(new [] {"Навыки", "Умения", "Стили", "Команда"});
             OpenTab(0);
         }
 
         private void OnDestroy()
         {
-            for (int i = 0; i < tabsButtons.Length; i++)
+            tabsSwitcher.onIndexChange -= OnTabChanged;
+            
+            foreach (var tab in tabs)
             {
-                tabsButtons[i].onClick.RemoveAllListeners();
-                tabs[i].onStartTraining -= StartTraining;
+                tab.onStartTraining -= StartTraining;
             }
         }
     }
