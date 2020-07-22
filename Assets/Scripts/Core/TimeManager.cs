@@ -40,6 +40,9 @@ namespace Core
             _waitForSecondsActive = new WaitForSeconds(actionInterval);
             _waitForSecondsInactive = new WaitForSeconds(inactionInterval);
             
+            //ToDo: мне кажется, что изменяется именно копия значения <...GameStats.Now>
+            //так как DateTime  - это структруа. Сохраняется именно GameStats.Now
+            //Отсюда именение в TimeManger может не сохраняться при закрытии игры
             Now = GameManager.Instance.GameStats.Now;
             _timer = StartCoroutine(TickCoroutine());
         }
