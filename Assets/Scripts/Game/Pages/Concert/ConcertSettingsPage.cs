@@ -73,6 +73,7 @@ namespace Game.Pages.Concert
         {
             var place = data.Places[index];
 
+            _concert.LocationId = index;
             _concert.LocationName = place.NameKey;
             _concert.LocationCapacity = place.Capacity;
             placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity}";

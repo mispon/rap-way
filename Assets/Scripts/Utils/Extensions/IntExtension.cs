@@ -9,26 +9,26 @@ namespace Utils.Extensions
         /// </summary>
         public static string GetDescription(this int value)
         {
-            if(value < 1000)
+            if (value < 1000)
                 return value.ToString();
 
             if (value < 1000000)
-                return value.GetDesctiptionHelp(3);
+                return value.GetDescriptionHelp(3);
 
             if (value < 1000000000)
-                return value.GetDesctiptionHelp(6);
+                return value.GetDescriptionHelp(6);
 
-            return value.GetDesctiptionHelp(9);
+            return value.GetDescriptionHelp(9);
         }
 
         /// <summary>
         /// Общая функция преобразования, оставляющая только 3 знака до запятой и нужное количестов "k"
         /// </summary>
-        private static string GetDesctiptionHelp(this int value, int dividerSize)
+        private static string GetDescriptionHelp(this int value, int dividerSize)
         {
             var divider = Mathf.Pow(10, dividerSize);
             var dividedValue = value / divider;
-            return $"{dividedValue.ToString("###.#")}{new string('k', dividerSize / 3)}";
+            return $"{dividedValue:###.#}{new string('k', dividerSize / 3)}";
         }
     }
 }

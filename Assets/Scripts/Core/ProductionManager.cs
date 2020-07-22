@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game;
 using Models.Info.Production;
 using Models.Player;
@@ -6,6 +7,9 @@ using Utils;
 
 namespace Core
 {
+    /// <summary>
+    /// Менеджер добавления новых Production в историю игрока.
+    /// </summary>
     public class ProductionManager: Singleton<ProductionManager>
     {
         public event Action<TrackInfo> onTrackAdd = info => { }; 
@@ -14,33 +18,37 @@ namespace Core
         public event Action<ConcertInfo> onConcertAdd = info => { };
         
         private static PlayerHistory playerHistory => PlayerManager.Data.History;
-        
-        public static void AddProduction<T>(T production) where T : Production
+
+        public static void AddTrack(TrackInfo info)
         {
-            if (typeof(T) == typeof(TrackInfo))
-            {
-                var info = production as TrackInfo;
-                playerHistory.TrackList.Add(info);
-                Instance.onTrackAdd(info);
-            }
-            else if (typeof(T) == typeof(ClipInfo))
-            {
-                var info = production as ClipInfo;
-                playerHistory.ClipList.Add(info);
-                Instance.onClipAdd(info);
-            }
-            else if (typeof(T) == typeof(AlbumInfo))
-            {
-                var info = production as AlbumInfo;
-                playerHistory.AlbumList.Add(info);
-                Instance.onAlbumAdd(info);
-            }
-            else if (typeof(T) == typeof(ConcertInfo))
-            {
-                var info = production as ConcertInfo;
-                playerHistory.ConcertList.Add(info);
-                Instance.onConcertAdd(info);
-            }
+            playerHistory.TrackList.AddProduction(info, Instance.onTrackAdd);
+        }
+        
+        public static void AddAlbum(AlbumInfo info)
+        {
+            playerHistory.AlbumList.AddProduction(info, Instance.onAlbumAdd);
+        }
+        
+        public static void AddClip(ClipInfo info)
+        {
+            playerHistory.ClipList.AddProduction(info, Instance.onClipAdd);
+        }
+        
+        public static void AddConcert(ConcertInfo info)
+        {
+            playerHistory.ConcertList.AddProduction(info, Instance.onConcertAdd);
+        }
+    }
+
+    public static class Extension
+    {
+        /// <summary>
+        /// Добавляет Production в список истории игрока и вызывает связанное событие
+        /// </summary>
+        public static void AddProduction<T>(this List<T> productionList, T info, Action<T> newProductionEvent) where T : Production
+        {
+            productionList.Add(info);
+            newProductionEvent.Invoke(info);
         }
     }
 }

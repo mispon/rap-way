@@ -28,10 +28,9 @@ namespace Game.Pages.Concert
         public void Show(ConcertInfo concert)
         {
             _concert = concert;
-            concertAnalyzer.Analyze(concert);
             
+            concertAnalyzer.Analyze(concert);
             DisplayResult(concert);
-            SaveResult(concert);
             Open();
         }
 
@@ -52,7 +51,7 @@ namespace Game.Pages.Concert
         private static void SaveResult(ConcertInfo concert)
         {
             PlayerManager.Instance.AddMoney(concert.Income);
-            ProductionManager.AddProduction(concert);
+            ProductionManager.AddConcert(concert);
         }
 
         #region PAGE EVENTS
@@ -64,6 +63,7 @@ namespace Game.Pages.Concert
 
         protected override void AfterPageClose()
         {
+            SaveResult(_concert);
             _concert = null;
         }
 

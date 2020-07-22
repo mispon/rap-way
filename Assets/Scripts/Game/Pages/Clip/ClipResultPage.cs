@@ -20,15 +20,18 @@ namespace Game.Pages.Clip
 
         [Header("Анализатор клипа")]
         [SerializeField] private ClipAnalyzer clipAnalyzer;
+
+        private ClipInfo _clipInfo;
         
         /// <summary>
         /// Показывает результат работы над клипом
         /// </summary>
         public void Show(ClipInfo clip)
         {
+            _clipInfo = clip;
+            
             clipAnalyzer.Analyze(clip);
             DisplayResult(clip);
-            SaveResult(clip);
             Open();
         }
 
@@ -50,9 +53,10 @@ namespace Game.Pages.Clip
         private static void SaveResult(ClipInfo clip)
         {
             PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome);
-            ProductionManager.AddProduction(clip);
+            ProductionManager.AddClip(clip);
         }
 
+        #region PAGE EVENTS
         /// <summary>
         /// Выполняется перед открытием страницы
         /// </summary>
@@ -60,5 +64,15 @@ namespace Game.Pages.Clip
         {
             // todo: запустить или не запускать случайное событие
         }
+
+        /// <summary>
+        /// Выполняется перед закрытием страницы
+        /// </summary>
+        protected override void AfterPageClose()
+        {
+            SaveResult(_clipInfo);
+            _clipInfo = null;
+        }
+        #endregion
     }
 }

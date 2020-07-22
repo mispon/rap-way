@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core.Interfaces;
 using Data;
 using Enums;
 using Game;
 using Game.Pages.Achievement;
+using JetBrains.Annotations;
 using Localization;
 using Models.Info.Production;
 using Models.Player;
@@ -24,7 +26,12 @@ namespace Core
 
         [Header("Данные")]
         [SerializeField] private AchievementsData achievementsData;
-        [SerializeField] private ConcertPlacesData concertPlacesData;
+
+        /// <summary>
+        /// Место проведения последнего концерта
+        /// </summary>
+        private string _lastConcertPlaceName;
+        
 
         /// <summary>
         /// На каждое событие изменения одной из сущностей вешается листенер, который выбирает все НЕРАЗБЛОКИРОВАННЫЕ AchievementInfo конкретного AchievementsType.
@@ -103,9 +110,8 @@ namespace Core
         /// </summary>
         private void CheckConcertPlace(ConcertInfo concertInfo)
         {
-            var index = concertPlacesData.Places.ToList()
-                .IndexOf(concertPlacesData.Places.First(pl => pl.NameKey == concertInfo.LocationName));
-            EqualCheckValue(AchievementsType.ConcertPlace, index);
+            _lastConcertPlaceName = concertInfo.LocationName;
+            EqualCheckValue(AchievementsType.ConcertPlace, concertInfo.LocationId, () => { _lastConcertPlaceName = "";});
         }
 
         /// <summary>
@@ -113,7 +119,7 @@ namespace Core
         /// </summary>
         private void CheckFeat(int raperId)
         {
-            EqualCheckValue(AchievementsType.Feat, raperId);
+            EqualCheckValue(AchievementsType.Feat, raperId, null);
         }
 
         /// <summary>
@@ -121,7 +127,7 @@ namespace Core
         /// </summary>
         private void CheckBattle(int raperId)
         {
-            EqualCheckValue(AchievementsType.Battle, raperId);
+            EqualCheckValue(AchievementsType.Battle, raperId, null);
         }
         
         /// <summary>
@@ -130,8 +136,7 @@ namespace Core
         /// </summary>
         private void BaseCheckValue(AchievementsType type, int value)
         {
-            var lockedInfos = achievementsData.LockedInfos.Where(info => info.Achievement.Type == type);
-            if (!lockedInfos.Any())
+            if(!TryGetInfo(type, out var lockedInfos))
                 return;
             
             var achievementInfo = lockedInfos.OrderBy(info => info.Achievement.CompareValue).First();
@@ -146,8 +151,7 @@ namespace Core
         /// </summary>
         private void MultipleCheckValue(AchievementsType type, int value, Func<AchievementInfo, int> orderSelector)
         {
-            var lockedInfos = achievementsData.LockedInfos.Where(info => info.Achievement.Type == type);
-            if (!lockedInfos.Any())
+            if(!TryGetInfo(type, out var lockedInfos))
                 return;
 
             var achievementInfos =
@@ -156,7 +160,7 @@ namespace Core
             if (achievementInfos.Any())
             {
                 var newUnlockedInfos = achievementInfos.OrderBy(orderSelector).ToArray();
-                for (int i = 0; i < newUnlockedInfos.Length; i++)
+                for (var i = 0; i < newUnlockedInfos.Length; i++)
                     AddAchievement(newUnlockedInfos[i].Achievement, i == 0);
             }
         }
@@ -164,10 +168,9 @@ namespace Core
         /// <summary>
         /// Базовая функция проверки выполнения условия достижения на точное совпадение
         /// </summary>
-        private void EqualCheckValue(AchievementsType type, int value)
+        private void EqualCheckValue(AchievementsType type, int value, [CanBeNull] Action clearBufferVariable)
         {
-            var lockedInfos = achievementsData.LockedInfos.Where(info => info.Achievement.Type == type);
-            if (!lockedInfos.Any())
+            if(!TryGetInfo(type, out var lockedInfos))
                 return;
 
             var achievementInfo =
@@ -175,8 +178,19 @@ namespace Core
             
             if(achievementInfo != default)
                 AddAchievement(achievementInfo.Achievement);
+
+            clearBufferVariable?.Invoke();
         }
 
+        /// <summary>
+        /// Поиск достижений определнного типа.
+        /// </summary>
+        private bool TryGetInfo(AchievementsType type, out IEnumerable<AchievementInfo> lockedInfos)
+        {
+            lockedInfos = achievementsData.LockedInfos.Where(info => info.Achievement.Type == type);
+            return lockedInfos.Any();
+        }
+        
         /// <summary>
         /// Функция добавления ачивки в список заработанных и вывода в UI
         /// </summary>
@@ -188,30 +202,37 @@ namespace Core
             if (!showUi)
                 return;
 
-            string compareValueString = "";
+            var compareValueString = GetCompareValueString(achievement);
+            var localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
+            var achievementString = $"{localizedAchievementName}: {compareValueString}";
+            //todo: Добавить дескриптион для ачивки
+            var description = "Some description";
+            
+            newAchievementsPage.ShowNewAchievement(achievementString, description);
+        }
+
+        /// <summary>
+        /// Получение представления значения для получения достижения
+        /// </summary>
+        private string GetCompareValueString(Achievement achievement)
+        {
             switch (achievement.Type)
             {
                 case AchievementsType.ConcertPlace:
-                    {
-                        compareValueString = concertPlacesData.Places[achievement.CompareValue].NameKey;
-                        break;
-                    }
+                {
+                    return _lastConcertPlaceName;
+                }
                 case AchievementsType.Feat:
                 case AchievementsType.Battle:
-                    {
-                        //todo: Добавить поиск репера из списка по аналогии с местом проведеняи концерта
-                        break;
-                    }
+                {
+                    //todo: Добавить поиск репера из списка по аналогии с местом проведеняи концерта
+                    return "";
+                }
                 default:
-                    {
-                        compareValueString = achievement.CompareValue.GetDescription();
-                        break;
-                    }
+                {
+                    return achievement.CompareValue.GetDescription();
+                }
             }
-            string localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
-            string achievementString = $"{localizedAchievementName}: {compareValueString}";
-            string description = "Some description";//todo: Добавить дескриптион для ачивки
-            newAchievementsPage.ShowNewAchievement(achievementString, description);
         }
     }
 }

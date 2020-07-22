@@ -15,9 +15,7 @@ namespace Models.Player
         public AchievementsType Type;
 
         /// <summary>
-        /// Хуй знает, как описать.
-        /// Вместо того, чтобы создавать кучу перечислений типа Fans_1k -> Fans_100kk,
-        /// Указываем в CompareValue 1000 -> 100000000, которое будет участвовать в функции проверки достижения
+        ///Необходимое значение для получение достижения
         /// </summary>
         public int CompareValue;
 

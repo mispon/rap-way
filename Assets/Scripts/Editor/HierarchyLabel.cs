@@ -3,9 +3,6 @@ using UnityEditor;
 
 namespace Editor
 {
-    /// <summary>
-    /// CheckCondition out http://diegogiacomelli.com.br/unitytips-hierarchy-window-group-header/
-    /// </summary>
     [InitializeOnLoad]
     public class HierarchyLabel : MonoBehaviour
     {
