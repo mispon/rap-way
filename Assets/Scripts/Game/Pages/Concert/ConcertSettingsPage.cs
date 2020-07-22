@@ -85,7 +85,7 @@ namespace Game.Pages.Concert
             ResetTicketCost();
             
             fansRequirementLabel.text = $"НЕОБХОДИМО ФАНАТОВ: {place.FansRequirement}";
-            startButton.interactable = PlayerManager.Data.Fans >= place.FansRequirement;
+            CheckConcertConditions(place.FansRequirement);
         }
         
         /// <summary>
@@ -127,26 +127,29 @@ namespace Game.Pages.Concert
             ticketCostSlider.SetValueWithoutNotify(minValue);
             ticketCost.text = $"{minValue} $";
         }
+
+        /// <summary>
+        /// Проверяет соответствие всех требований 
+        /// </summary>
+        private void CheckConcertConditions(int fansRequirement)
+        {
+            bool canStart = PlayerManager.Data.Fans >= fansRequirement;
+            canStart &= _lastAlbums.Any();
+            
+            startButton.interactable = canStart;
+        }
         
         #region PAGE EVENTS
 
         protected override void BeforePageOpen()
         {
             _concert = new ConcertInfo();
-            
             CacheLastAlbums();
-            
-            if (_lastAlbums.Any())
-            {
-                albumsSwitcher.InstantiateElements(_lastAlbums.Select(e => e.Name));
-                startButton.interactable = true;
-            }
-            else
-            {
-                albumsSwitcher.InstantiateElements(new[] {"Нет альбомов"});
-                startButton.interactable = false;
-            }
-            
+
+            albumsSwitcher.InstantiateElements(
+                _lastAlbums.Any() ? _lastAlbums.Select(e => e.Name) : new[] {"Нет альбомов"}
+            );
+
             OnPlaceChanged(0);
         }
 
