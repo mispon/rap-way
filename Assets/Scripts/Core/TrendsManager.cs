@@ -18,9 +18,6 @@ namespace Core
     {
         private static readonly int STYLESCOUNT = Enum.GetValues(typeof(Styles)).Length;
         private static readonly int THEMESCOUNT = Enum.GetValues(typeof(Themes)).Length;
-
-        [Header("Анализатор совпадения с трендом")] 
-        [SerializeField] private TrendAnalyzer trendAnalyzer;
         
         private Trends Trends => GameManager.Instance.GameStats.Trends;
         private DateTime Now => TimeManager.Instance.Now;
@@ -59,11 +56,5 @@ namespace Core
                 NextTimeUpdate = GetNextTimeUpdate(now)
             };
         }
-
-        /// <summary>
-        /// Получение оценки, насколько точное совпадение по текущим трендам
-        /// </summary>
-        public static void AnalyzeEquality(TrendInfo info)
-            => Instance.trendAnalyzer.Analyze(info);
     }
 }
