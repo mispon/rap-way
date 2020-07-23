@@ -15,7 +15,7 @@ namespace Game.Analyzers
         [SerializeField, Tooltip("Анализатор совпадения с трендом")] 
         private TrendAnalyzer trendAnalyzer;
         [SerializeField, Tooltip("Коэффициент совпадения с трендом")] 
-        private float trendsEquality;
+        private float trendsEqualityMultiplier;
 
         [Header("Настройки слушателей")] 
         [SerializeField, Tooltip("Зависимость числа слушателей от очков")] 
@@ -26,7 +26,8 @@ namespace Game.Analyzers
         [Header("Настройки прироста фанатов")] 
         [SerializeField, Tooltip("Зависимость коэффициента прироста фанатов от текущих фанатов")] 
         private AnimationCurve fansIncomeCurve;
-        [SerializeField, Tooltip("Коэффициент влияния хайпа на прирост фанатов")] private float hypeImpactMultiplier;
+        [SerializeField, Tooltip("Коэффициент влияния хайпа на прирост фанатов")] 
+        private float hypeImpactMultiplier;
 
         [Header("Коэффициент заработка от количества прослушиваний")] 
         [SerializeField] private int moneyIncomeMultiplier;
@@ -38,10 +39,10 @@ namespace Game.Analyzers
         {
             var totalFans = PlayerManager.Data.Fans;
             
-            var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (album.TextPoints + album.BitPoints);
+            trendAnalyzer.Analyze(album.TrendInfo);
             
-            trendAnalyzer.Analyze(album.TrendInfo);//записывает в album.TrendInfo.EqualityValue коэффициент совпадения от 0 до 1
-            resultPoints += resultPoints * Mathf.Lerp(0, trendsEquality, album.TrendInfo.EqualityValue);
+            var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (album.TextPoints + album.BitPoints);
+            resultPoints += resultPoints * Mathf.Lerp(0, trendsEqualityMultiplier, album.TrendInfo.EqualityValue);
 
             album.ListenAmount = (int) listenAmountCurve.Evaluate(resultPoints);
             album.ChartPosition = (int) chartPositionCurve.Evaluate(album.ListenAmount);

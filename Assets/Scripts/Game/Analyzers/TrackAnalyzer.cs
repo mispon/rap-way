@@ -17,7 +17,7 @@ namespace Game.Analyzers
         [SerializeField, Tooltip("Анализатор совпадения с трендом")] 
         private TrendAnalyzer trendAnalyzer;
         [SerializeField, Tooltip("Коэффициент совпадения с трендом")] 
-        private float trendsEquality;
+        private float trendsEqualityMultiplier;
 
         [Header("Настройки слушателей")] 
         [SerializeField, Tooltip("Зависимость числа слушателей от очков")] 
@@ -28,11 +28,12 @@ namespace Game.Analyzers
         [Header("Настройки прироста фанатов")] 
         [SerializeField, Tooltip("Зависимость коэффициента прироста фанатов от текущих фанатов")] 
         private AnimationCurve fansIncomeCurve;
-        [SerializeField, Tooltip("Коэффициент влияния хайпа на прирост фанатов")] private float hypeImpactMultiplier;
+        [SerializeField, Tooltip("Коэффициент влияния хайпа на прирост фанатов")] 
+        private float hypeImpactMultiplier;
 
         [Header("Коэффициент заработка от количества прослушиваний")] 
         [SerializeField] private int moneyIncomeMultiplier;
-        
+
         /// <summary>
         /// Анализирует успешность трека
         /// </summary>
@@ -40,10 +41,10 @@ namespace Game.Analyzers
         {
             var totalFans = PlayerManager.Data.Fans;
             
-            var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (track.TextPoints + track.BitPoints);
+            trendAnalyzer.Analyze(track.TrendInfo);
             
-            trendAnalyzer.Analyze(track.TrendInfo);//записывает в track.TrendInfo.EqualityValue коэффициент совпадения от 0 до 1
-            resultPoints += resultPoints * Mathf.Lerp(0, trendsEquality, track.TrendInfo.EqualityValue);
+            var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (track.TextPoints + track.BitPoints);
+            resultPoints += resultPoints * Mathf.Lerp(0, trendsEqualityMultiplier, track.TrendInfo.EqualityValue);
 
             track.ListenAmount = (int) listenAmountCurve.Evaluate(resultPoints);
             track.ChartPosition = (int) chartPositionCurve.Evaluate(track.ListenAmount);

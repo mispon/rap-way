@@ -21,8 +21,7 @@ namespace Game.Pages.Social.ResultPages
             var typeLocalization = LocalizationManager.Instance.Get(Social.Data.Type.GetDescription());
             headerText.text = $"Фонд \"{Social.ExternalText}\"";
             commentText.text = $"Сегодня, {TimeManager.Instance.DisplayNow}, фонд \"{Social.ExternalText}\" получил от {PlayerManager.Data.Info} " +
-                               $"средства в размере {Social.CharityMoney}$. Нуждающиеся в этих деньгах навсегда останутся ему благодарны.\n\n" +
-                               $"P.S.: Не унывай! У тебя на счету осталось {PlayerManager.Data.Money}$>"; 
+                               $"средства в размере {Social.CharityMoney}$. Нуждающиеся в этих деньгах навсегда останутся ему благодарны.\n\n"; 
             
             //marksText
             hypeIncomeText.text = $"Хайп: +{Social.HypeIncome}";
