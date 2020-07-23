@@ -1,5 +1,6 @@
 using System.Linq;
 using Data;
+using Enums;
 using UnityEngine;
 using Models.Info;
 
@@ -26,10 +27,15 @@ namespace Game.Analyzers
         {
             var hypeMultiplier = hypeImpactData.hypeMultipliers.First(el => el.Type == social.Data.Type);
             var resultPoints =  social.PlayerPoints + social.PrManPoints;
-            var charityMoneyRatio = social.CharityMoney / (float) PlayerManager.Data.Money;
-            var charityMoneyImpact = charityMoneyRatioCurve.Evaluate(charityMoneyRatio);
             
-            var hypeIncome = fansMultiplier * hypeMultiplier.Value * charityMoneyImpact * resultPoints;
+            var hypeIncome = fansMultiplier * hypeMultiplier.Value * resultPoints;
+            if (social.Data.Type == SocialType.Charity)
+            {
+                var charityMoneyRatio = social.CharityMoney / (float) PlayerManager.Data.Money;
+                var charityMoneyImpact = charityMoneyRatioCurve.Evaluate(charityMoneyRatio);
+                
+                hypeIncome *= charityMoneyImpact;
+            }
 
             social.HypeIncome = (int) Mathf.Clamp(hypeIncome, 0, 100 - PlayerManager.Data.Hype);
         }
