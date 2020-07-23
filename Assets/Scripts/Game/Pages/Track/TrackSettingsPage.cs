@@ -19,9 +19,9 @@ namespace Game.Pages.Track
         [SerializeField] private Button startButton;
 
         [Header("Страница разработки")]
-        [SerializeField] private TrackWorkingPage workingPage;
+        [SerializeField] private BaseWorkingPage workingPage;
 
-        private TrackInfo _track;
+        protected TrackInfo _track;
 
         private void Start()
         {
@@ -54,7 +54,7 @@ namespace Game.Pages.Track
                 Theme = GetToneValue<Themes>(themeSwitcher)
             };
             
-            workingPage.CreateTrack(_track);
+            workingPage.StartWork(_track);
             Close();
         }
 

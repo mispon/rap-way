@@ -1,6 +1,4 @@
-﻿using Core;
-using Game.UI;
-using Models.Player;
+﻿using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,14 +8,10 @@ namespace Game.Pages.Track
     /// <summary>
     /// Страница работы над треком
     /// </summary>
-    public class TrackWorkingPage : Page
+    public class TrackWorkingPage : BaseWorkingPage
     {
-        [Header("Настройки")]
-        [SerializeField] private int duration;
-
         [Header("Идентификаторы прогресса работы")]
         [SerializeField] private Text header;
-        [SerializeField] private ProgressBar progressBar;
         [SerializeField] private Text bitPoints;
         [SerializeField] private Text textPoints;
 
@@ -33,28 +27,34 @@ namespace Game.Pages.Track
         [SerializeField] private TrackResultPage trackResult;
 
         private TrackInfo _track;
-    
+
         /// <summary>
-        /// Запускает создание нового трека
+        /// Начинает выполнение работы 
         /// </summary>
-        public void CreateTrack(TrackInfo track)
+        public override void StartWork(params object[] args)
         {
-            _track = track;
+            _track = (TrackInfo) args[0];
             Open();
         }
-        
+
         /// <summary>
-        /// Обработчик истечения игрового дня
+        /// Работа, выполняемая за один день
         /// </summary>
-        private void OnDayLeft()
+        protected override void DoDayWork()
         {
-            if (progressBar.IsFinish)
-                return;
-            
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
-    
+
+        /// <summary>
+        /// Обработчик завершения работы
+        /// </summary>
+        protected override void FinishWork()
+        {
+            trackResult.Show(_track);
+            Close();
+        }
+
         /// <summary>
         /// Генерирует очки работы над треком
         /// </summary>
@@ -72,13 +72,13 @@ namespace Game.Pages.Track
         /// </summary>
         private int CreateBitPoints(PlayerData data)
         {
-            var playersBitPoints = Random.Range(1, data.Stats.Bitmaking);
+            var playersBitPoints = Random.Range(1, data.Stats.Bitmaking + 1);
             playerBitWorkPoints.Show(playersBitPoints);
 
             var bitmakerPoints = 0;
             if (bitmaker.activeSelf)
             {
-                bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill);
+                bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill + 1);
                 bitmakerWorkPoints.Show(bitmakerPoints);
             }
 
@@ -90,13 +90,13 @@ namespace Game.Pages.Track
         /// </summary>
         private int CreateTextPoints(PlayerData data)
         {
-            var playersTextPoints = Random.Range(1, data.Stats.Vocobulary);
+            var playersTextPoints = Random.Range(1, data.Stats.Vocobulary + 1);
             playerTextWorkPoints.Show(playersTextPoints);
 
             var textwritterPoints = 0;
             if (textwritter.activeSelf)
             {
-                textwritterPoints = Random.Range(1, data.Team.TextWriter.Skill);
+                textwritterPoints = Random.Range(1, data.Team.TextWriter.Skill + 1);
                 textwritterWorkPoints.Show(textwritterPoints);
             }
 
@@ -112,17 +112,6 @@ namespace Game.Pages.Track
             textPoints.text = _track.TextPoints.ToString();
         }
 
-        /// <summary>
-        /// Завершает работу над треком
-        /// </summary>
-        private void FinishTrack()
-        { 
-            trackResult.Show(_track);
-            Close();
-        }
-
-        #region PAGE CALLBACKS
-
         protected override void BeforePageOpen()
         {
             header.text = $"Работа над треком \"{_track.Name}\"";
@@ -130,27 +119,12 @@ namespace Game.Pages.Track
             textwritter.SetActive(!PlayerManager.Data.Team.TextWriter.IsEmpty);
         }
 
-        protected override void AfterPageOpen()
-        {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-            TimeManager.Instance.SetActionMode();
-            
-            progressBar.Init(duration);
-            progressBar.onFinish += FinishTrack;
-            progressBar.Run();
-        }
-
         protected override void BeforePageClose()
         {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
-            TimeManager.Instance.ResetActionMode();
-
-            bitPoints.text = textPoints.text = "0";
+            base.BeforePageClose();
             
-            progressBar.onFinish -= FinishTrack;
+            bitPoints.text = textPoints.text = "0";
             _track = null;
         }
-
-        #endregion
     }
 }

@@ -57,7 +57,7 @@ namespace Game.Pages.Album
                 Theme = GetToneValue<Themes>(themeSwitcher)
             };
             
-            workingPage.CreateAlbum(_album);
+            workingPage.StartWork(_album);
             Close();
         }
         

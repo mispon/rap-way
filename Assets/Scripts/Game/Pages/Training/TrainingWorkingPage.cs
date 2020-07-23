@@ -1,6 +1,4 @@
 using System;
-using Core;
-using Game.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,10 +7,9 @@ namespace Game.Pages.Training
     /// <summary>
     /// Страница процесса тренировки
     /// </summary>
-    public class TrainingWorkingPage : Page
+    public class TrainingWorkingPage : BaseWorkingPage
     {
         [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private ProgressBar progressBar;
         [SerializeField] private WorkPoints playerWorkPoints;
         
         [Header("Страница результата")]
@@ -20,60 +17,41 @@ namespace Game.Pages.Training
 
         private int _duration;
         private Func<string> _onFinish;
-        
+
         /// <summary>
         /// Запускает процесс тренировки
         /// </summary>
         /// <param name="duration">Длительность тренировки</param>
         /// <param name="onFinish">Коллбэк успешного завершения</param>
-        public void StartTrainig(int duration, Func<string> onFinish)
+        public override void StartWork(params object[] args)
         {
-            _duration = duration;
-            _onFinish = onFinish;
+            _duration = (int) args[0];
+            _onFinish = (Func<string>) args[1];
             Open();
         }
 
         /// <summary>
-        /// Обработчик истечения игрового дня
+        /// Работа, выполняемая за один день
         /// </summary>
-        private void OnDayLeft()
+        protected override void DoDayWork()
         {
-            if (progressBar.IsFinish)
-                return;
-            
-            playerWorkPoints.Show(Random.Range(1, 4));
+            playerWorkPoints.Show(Random.Range(1, 11));
         }
 
         /// <summary>
-        /// Обработчик завершения тренировки
+        /// Обработчик завершения работы
         /// </summary>
-        private void FinishTraining()
+        protected override void FinishWork()
         {
             string message = _onFinish.Invoke();
             trainingResult.Show(message);
             Close();
         }
 
-        #region PAGE CALLBACKS
-
         protected override void AfterPageOpen()
         {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-            TimeManager.Instance.SetActionMode();
-            
-            progressBar.Init(_duration);
-            progressBar.onFinish += FinishTraining;
-            progressBar.Run();
+            duration = _duration;
+            base.AfterPageOpen();
         }
-
-        protected override void BeforePageClose()
-        {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
-            TimeManager.Instance.ResetActionMode();
-
-            progressBar.onFinish -= FinishTraining;
-        }
-
-        #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Core.Interfaces;
+using Enums;
 using Game.UI.GameScreen;
 using Localization;
 using Models.Player;
@@ -146,7 +147,19 @@ namespace Game
         /// </summary>
         public static string GetTrackName(int trackId)
         {
-            return Data.History.TrackList.First(e => e.Id == trackId).Name;
+            var track = Data.History.TrackList.First(e => e.Id == trackId);
+
+            string featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : "";
+            return $"{track.Name}{featInfo}";
+        }
+
+        /// <summary>
+        /// Устанавливает время отдыха указанному тиммейте 
+        /// </summary>
+        public static void SetTeammateCooldown(TeammateType type, int cooldown)
+        {
+            var teammate = Data.Team.TeammatesArray.First(e => e.Type == type);
+            teammate.Cooldown = cooldown;
         }
     }
 }

@@ -18,7 +18,6 @@ namespace Models.Info
         public int PrManPoints;
 
         public int CharityMoney;
-
         public int HypeIncome;
     }
 }

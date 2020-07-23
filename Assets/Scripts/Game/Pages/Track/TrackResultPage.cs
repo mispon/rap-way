@@ -41,7 +41,8 @@ namespace Game.Pages.Track
         private void DisplayResult(TrackInfo track)
         {
             var nickname = PlayerManager.Data.Info.NickName;
-            header.text = $"Завершена работа над треком: \"{nickname} - {track.Name}\"";
+            string featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : "";
+            header.text = $"Завершена работа над треком: \"{nickname} - {track.Name}{featInfo}\"";
             listenAmount.text = $"Количество прослушиваний: {track.ListenAmount}";
             chartInfo.text = track.ChartPosition > 0
                 ? $"Трек занял {track.ChartPosition}-ую позицию в чарте!"
