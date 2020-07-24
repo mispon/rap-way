@@ -17,10 +17,12 @@ namespace Game.Analyzers
         private AnimationCurve viewsCurve;
         [SerializeField, Tooltip("Зависимость коэффициента кол-ва просмотров от успеха трека (номер в чарте)")]
         private AnimationCurve viewsFromTrackCurve;
-        [SerializeField, Range(0f, 1f), Tooltip("Минимальная доля лайков на количество просмотров")] 
-        private float minLikesRatio = 0.2f;
-        [SerializeField, Range(0f, 1f), Tooltip("Максимальная доля лайков на количество просмотров")] 
-        private float maxLikesRatio = 0.2f;
+        [SerializeField, Tooltip("Доля лайков в зависимости от импакта трека")] 
+        private AnimationCurve likesFromTrackCurve;
+        [SerializeField, Range(0f, 1f), Tooltip("Минимальная доля оценок на количество просмотров")] 
+        private float minMarksRatio = 0.5f;
+        [SerializeField, Range(0f, 1f), Tooltip("Максимальная доля оценок на количество просмотров")] 
+        private float maxMarksRatio = 0.7f;
 
         [Header("Настройки прироста фанатов")] 
         [SerializeField, Tooltip("Зависимость коэффициента прироста фанатов от текущих фанатов")] 
@@ -43,11 +45,9 @@ namespace Game.Analyzers
             var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (clip.PlayerPoints + clip.OperatorPoints + clip.DirectorPoints);
             
             clip.Views = (int) viewsCurve.Evaluate(resultPoints * trackImpact);
-            clip.Likes = (int) (clip.Views * Random.Range(minLikesRatio, maxLikesRatio));
-            var dislikes = (int) (clip.Views * Random.Range(1 - maxLikesRatio, 1 - minLikesRatio));
-            clip.Dislikes = clip.Likes + dislikes > clip.Views 
-                ? clip.Views - clip.Likes 
-                : dislikes;
+            var marks = clip.Views * Random.Range(minMarksRatio, maxMarksRatio);
+            clip.Likes = (int) (marks * likesFromTrackCurve.Evaluate(trackImpact));
+            clip.Dislikes = (int) (marks - clip.Likes);
 
             var hypeImpact = hypeImpactMultiplier * PlayerManager.Data.Hype;
             var fansIncomeFromViews = fansIncomeCurve.Evaluate(totalFans) * clip.Views; 
