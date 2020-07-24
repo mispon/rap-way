@@ -41,7 +41,7 @@ namespace Data
         [SerializeField] private T value1;
         [SerializeField] private T value2;
 
-        public bool IsEqualTo<T>(T inputValue)
+        public bool IsEqualTo (T inputValue)
             => value1.Equals(inputValue) || value2.Equals(inputValue);
     }
 }

@@ -22,6 +22,9 @@ namespace Core
 
         #region TRACK
         
+        /// <summary>
+        /// Добавляет информацию о треке в историю игрока
+        /// </summary>
         public static void AddTrack(TrackInfo info)
         {
             playerHistory.TrackList.AddProduction(info, Instance.onTrackAdd);
@@ -48,6 +51,9 @@ namespace Core
 
         #region ALBUM
 
+        /// <summary>
+        /// Добавляет информацию об альбоме в историю игрока
+        /// </summary>
         public static void AddAlbum(AlbumInfo info)
         {
             playerHistory.AlbumList.AddProduction(info, Instance.onAlbumAdd);
@@ -61,7 +67,9 @@ namespace Core
 
         #endregion
         
-        
+        /// <summary>
+        /// Добавляет информацию о клипе в историю игрока
+        /// </summary>
         public static void AddClip(ClipInfo info)
         {
             playerHistory.ClipList.AddProduction(info, Instance.onClipAdd);
@@ -69,6 +77,9 @@ namespace Core
 
         #region CONCERT
 
+        /// <summary>
+        /// Добавляет информацию о концерте в историю игрока
+        /// </summary>
         public static void AddConcert(ConcertInfo info)
         {
             playerHistory.ConcertList.AddProduction(info, Instance.onConcertAdd);
