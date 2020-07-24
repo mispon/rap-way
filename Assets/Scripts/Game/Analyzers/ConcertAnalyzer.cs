@@ -1,5 +1,6 @@
 using Models.Info.Production;
 using System.Linq;
+using Core;
 using UnityEngine;
 
 namespace Game.Analyzers
@@ -33,8 +34,8 @@ namespace Game.Analyzers
         public override void Analyze(ConcertInfo concert)
         {
             var totalFans = PlayerManager.Data.Fans;
-            var sameConcertsCount = PlayerManager.Data.History.ConcertList.Count(c => c.AlbumId == concert.AlbumId);
-            var albumInfo = PlayerManager.Data.History.AlbumList.First(alb => alb.Id == concert.AlbumId);
+            var albumInfo = ProductionManager.GetAlbum(concert.AlbumId);
+            var sameConcertsCount = ProductionManager.SameConcertsCount(concert.AlbumId);
             
             var sameConcertImpact = sameConcertCurve.Evaluate(sameConcertsCount);
             var albumImpact = ticketsFromAlbumCurve.Evaluate(albumInfo.ChartPosition);

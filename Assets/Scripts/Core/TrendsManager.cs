@@ -17,17 +17,11 @@ namespace Core
     /// </summary>
     public class TrendsManager: Singleton<TrendsManager>, IStarter
     {
-        private static readonly int STYLESCOUNT = Enum.GetValues(typeof(Styles)).Length;
-        private static readonly int THEMESCOUNT = Enum.GetValues(typeof(Themes)).Length;
+        private static readonly int STYLES_COUNT = Enum.GetValues(typeof(Styles)).Length;
+        private static readonly int THEMES_COUNT = Enum.GetValues(typeof(Themes)).Length;
         
         [Header("Данные сравнения")]
         [SerializeField] private TrendsCompareData trendsCompareData;
-       
-        private Trends Trends => GameManager.Instance.GameStats.Trends;
-        private DateTime Now => TimeManager.Instance.Now;
-
-        private static BaseCompareInfo<Styles>[] StyleCompareInfos => Instance.trendsCompareData.StylesCompareInfos;
-        private static BaseCompareInfo<Themes>[] ThemesCompareInfos => Instance.trendsCompareData.ThemesCompareInfos;
         
         public void OnStart()
         {
@@ -45,10 +39,12 @@ namespace Core
         /// </summary>
         private void OnCheckTimeToChangeTrends()
         {
-            if (Now < Trends.NextTimeUpdate)
+            var now = TimeManager.Instance.Now;
+            
+            if (now < GameManager.Instance.GameStats.Trends.NextTimeUpdate)
                 return;
             
-            ChangeTrends(Now);
+            ChangeTrends(now);
         }
 
         /// <summary>
@@ -58,8 +54,8 @@ namespace Core
         {
             GameManager.Instance.GameStats.Trends = new Trends
             {
-                Style = (Styles) UnityEngine.Random.Range(0, STYLESCOUNT),
-                Theme = (Themes) UnityEngine.Random.Range(0, THEMESCOUNT),
+                Style = (Styles) UnityEngine.Random.Range(0, STYLES_COUNT),
+                Theme = (Themes) UnityEngine.Random.Range(0, THEMES_COUNT),
                 NextTimeUpdate = GetNextTimeUpdate(now)
             };
         }
@@ -70,9 +66,10 @@ namespace Core
         public static void Analyze(TrendInfo info)
         {
             var currentTrend = GameManager.Instance.GameStats.Trends;
+            var compareData = Instance.trendsCompareData;
             
-            var styleEquality = StyleCompareInfos.AnalyzeEquality(currentTrend.Style, info.Style);
-            var themeEquality = ThemesCompareInfos.AnalyzeEquality(currentTrend.Theme, info.Theme);
+            var styleEquality = compareData.StylesCompareInfos.AnalyzeEquality(currentTrend.Style, info.Style);
+            var themeEquality = compareData.ThemesCompareInfos.AnalyzeEquality(currentTrend.Theme, info.Theme);
 
             info.EqualityValue = styleEquality + themeEquality;
         }

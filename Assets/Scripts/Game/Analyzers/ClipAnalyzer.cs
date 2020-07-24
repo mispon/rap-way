@@ -1,4 +1,5 @@
 using System.Linq;
+using Core;
 using Models.Info.Production;
 using UnityEngine;
 
@@ -39,7 +40,7 @@ namespace Game.Analyzers
         public override void Analyze(ClipInfo clip)
         {
             var totalFans = PlayerManager.Data.Fans;
-            var trackInfo = PlayerManager.Data.History.TrackList.First(tr => tr.Id == clip.TrackId);
+            var trackInfo = ProductionManager.GetTrack(clip.TrackId);
             
             var trackImpact = viewsFromTrackCurve.Evaluate(trackInfo.ChartPosition);
             var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (clip.PlayerPoints + clip.OperatorPoints + clip.DirectorPoints);

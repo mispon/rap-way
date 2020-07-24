@@ -28,6 +28,7 @@ namespace Data
     /// </summary>
     [Serializable]
     public class StylesCompareInfo: BaseCompareInfo<Styles> {}
+    
     /// <summary>
     /// Информация схожих тем
     /// </summary>

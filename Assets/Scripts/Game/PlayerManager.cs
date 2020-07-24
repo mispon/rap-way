@@ -143,17 +143,6 @@ namespace Game
         }
 
         /// <summary>
-        /// Возвращает название трека по идентификатору
-        /// </summary>
-        public static string GetTrackName(int trackId)
-        {
-            var track = Data.History.TrackList.First(e => e.Id == trackId);
-
-            string featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : "";
-            return $"{track.Name}{featInfo}";
-        }
-
-        /// <summary>
         /// Устанавливает время отдыха указанному тиммейте 
         /// </summary>
         public static void SetTeammateCooldown(TeammateType type, int cooldown)
