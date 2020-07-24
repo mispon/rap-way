@@ -52,8 +52,8 @@ namespace Game.Pages.Feat
         {
             var stats = PlayerManager.Data.Stats;
             
-            var bitWorkPoints = CreateWorkPoints(stats.Bitmaking, playerBitWorkPoints, rapperBitWorkPoints);
-            var textWorkPoints = CreateWorkPoints(stats.Vocobulary, playerTextWorkPoints, rapperTextWorkPoints);
+            var bitWorkPoints = CreateWorkPoints(stats.Bitmaking.Value, playerBitWorkPoints, rapperBitWorkPoints);
+            var textWorkPoints = CreateWorkPoints(stats.Vocobulary.Value, playerTextWorkPoints, rapperTextWorkPoints);
             
             _track.BitPoints += bitWorkPoints;
             _track.TextPoints += textWorkPoints;
@@ -67,7 +67,7 @@ namespace Game.Pages.Feat
             var playerValue = Random.Range(1, playerSkill + 1);
             playerPoints.Show(playerValue);
 
-            var rapperValue = Random.Range(1, Teammate.MAX_SKILL + 1);
+            var rapperValue = Random.Range(1, PlayerData.MAX_SKILL + 1);
             rapperPoints.Show(rapperValue);
 
             return playerValue + rapperValue;

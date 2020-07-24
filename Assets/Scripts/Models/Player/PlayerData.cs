@@ -10,6 +10,8 @@ namespace Models.Player
     [Serializable]
     public class PlayerData
     {
+        public const int MAX_SKILL = 10;
+        
         public int Money;
         public int Fans;
         public int Hype;

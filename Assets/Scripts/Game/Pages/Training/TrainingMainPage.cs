@@ -1,6 +1,7 @@
 using System;
 using Game.Pages.Training.Tabs;
 using UnityEngine;
+using UnityEngine.UI;
 using Utils;
 
 namespace Game.Pages.Training
@@ -13,9 +14,9 @@ namespace Game.Pages.Training
         [Header("Контролы")]
         [SerializeField] private Switcher tabsSwitcher;
         [SerializeField] private TrainingTab[] tabs;
+        [SerializeField] private Text expLabel;
 
-        [Header("Рабочая страница")]
-        [SerializeField] private TrainingWorkingPage workingPage;
+        private int _tabIndex;
 
         private void Start()
         {
@@ -24,7 +25,7 @@ namespace Game.Pages.Training
             foreach (var tab in tabs)
             {
                 tab.Init();
-                tab.onStartTraining += StartTraining;
+                tab.onStartTraining += ApplyTraining;
             }
         }
 
@@ -48,10 +49,13 @@ namespace Game.Pages.Training
         /// <summary>
         /// Запускает тренировку 
         /// </summary>
-        private void StartTraining(int duration, Func<string> onFinish)
+        private void ApplyTraining(Func<int> training)
         {
-            workingPage.StartWork(duration, onFinish);
-            Close();
+            int cost = training.Invoke();
+            PlayerManager.Data.Exp -= cost;
+            
+            DisplayExp();
+            RefreshTab();
         }
 
         /// <summary>
@@ -59,6 +63,8 @@ namespace Game.Pages.Training
         /// </summary>
         private void OpenTab(int index)
         {
+            _tabIndex = index;
+            
             for (var i = 0; i < tabs.Length; i++)
             {
                 var tab = tabs[i];
@@ -66,9 +72,26 @@ namespace Game.Pages.Training
             }
         }
 
+        /// <summary>
+        /// Обновляет текущую вкладку методом её переоткрытия
+        /// </summary>
+        private void RefreshTab()
+        {
+            OpenTab(_tabIndex);
+        }
+        
+        /// <summary>
+        /// Отображает текущее количество очков опыта
+        /// </summary>
+        private void DisplayExp() => expLabel.text = $"EXP: {PlayerManager.Data.Exp}P"; 
+
+        /// <summary>
+        /// Вызывается перед открытием страницы
+        /// </summary>
         protected override void BeforePageOpen()
         {
             // TODO: Localization
+            DisplayExp();
             tabsSwitcher.InstantiateElements(new [] {"Навыки", "Умения", "Стили", "Команда"});
             OpenTab(0);
         }
@@ -79,7 +102,7 @@ namespace Game.Pages.Training
             
             foreach (var tab in tabs)
             {
-                tab.onStartTraining -= StartTraining;
+                tab.onStartTraining -= ApplyTraining;
             }
         }
     }

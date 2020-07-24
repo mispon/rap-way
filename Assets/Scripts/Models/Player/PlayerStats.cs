@@ -1,5 +1,5 @@
 ﻿using System;
-using Random = UnityEngine.Random;
+using Models.Game;
 
 namespace Models.Player
 {
@@ -14,48 +14,48 @@ namespace Models.Player
         /// <summary>
         /// Вокобуляр. Влияет на качество текстов для треков, альбомов и баттлов
         /// </summary>
-        public int Vocobulary;
+        public ExpValue Vocobulary;
         
         /// <summary>
         /// В переводе не нуждается. Влияет на BitPoints в генераторе
         /// </summary>
-        public int Bitmaking;
+        public ExpValue Bitmaking;
         
         /// <summary>
         /// Ораторское искусство, мастерство подачи текста
         /// Влияет на треки, альбомы, баттлы
         /// </summary>
-        public int Flow;
+        public ExpValue Flow;
         
         /// <summary>
         /// Харизма. Влияет на социальные действия, концерты и баттлы
         /// </summary>
-        public int Charisma;
+        public ExpValue Charisma;
 
         /// <summary>
         /// Менеджмент. Влияет на организацию концертов
         /// </summary>
-        public int Management;
+        public ExpValue Management;
 
         /// <summary>
         /// Маркетинг. Влияет на организацию концертов
         /// </summary>
-        public int Marketing;
+        public ExpValue Marketing;
 
         public static PlayerStats New => new PlayerStats
         {
-            Vocobulary = MIN_VALUE,
-            Bitmaking = MIN_VALUE,
-            Flow = MIN_VALUE,
-            Charisma = MIN_VALUE,
-            Management = MIN_VALUE,
-            Marketing = MIN_VALUE
+            Vocobulary = {Value = MIN_VALUE},
+            Bitmaking = {Value = MIN_VALUE},
+            Flow = {Value = MIN_VALUE},
+            Charisma = {Value = MIN_VALUE},
+            Management = {Value = MIN_VALUE},
+            Marketing = {Value = MIN_VALUE}
         };
 
         /// <summary>
         /// Возвращает список актуальных значений навыков
         /// </summary>
-        public int[] Values => new[]
+        public ExpValue[] Values => new[]
         {
             Vocobulary,
             Bitmaking,

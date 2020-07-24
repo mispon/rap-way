@@ -6,13 +6,14 @@ using Game.Pages.Team;
 using Game.Pages.Training;
 using Models.Player;
 using UnityEngine;
+using Utils;
 
 namespace Game
 {
     /// <summary>
     /// Логика взаимодействия с командой игрока
     /// </summary>
-    public class TeamManager: MonoBehaviour
+    public class TeamManager: Singleton<TeamManager>
     {
         [Header("Данные команды")] 
         [ArrayElementTitle("Type")] public TeammateInfo[] teammateInfos;
@@ -35,7 +36,7 @@ namespace Game
         public int GetSalary(Teammate teammate)
         {
             var info = teammateInfos.First(tmi => tmi.Type == teammate.Type);
-            return info.Salary[teammate.Skill - 1];
+            return info.Salary[teammate.Skill.Value - 1];
         }
         
         /// <summary>
@@ -60,7 +61,7 @@ namespace Game
         /// </summary>
         private void UnlockTeammate(Teammate teammate)
         {
-            teammate.Skill = 1;
+            teammate.Skill.Value = 1;
             teammate.HasPayment = true;
 
             void Notification() => unlockTeammatePage.Show(teammate);

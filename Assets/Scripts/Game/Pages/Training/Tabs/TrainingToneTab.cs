@@ -15,6 +15,9 @@ namespace Game.Pages.Training.Tabs
     /// </summary>
     public class TrainingToneTab : TrainingTab
     {
+        [Header("Цена покупки новой стилистики")]
+        [SerializeField] private int toneCost = 200;
+        
         [Header("Контролы")]
         [SerializeField] private Switcher themesSwitcher;
         [SerializeField] private Switcher stylesSwitcher;
@@ -103,27 +106,27 @@ namespace Game.Pages.Training.Tabs
         /// <summary>
         /// Запускает изучение выбранной стилистики
         /// </summary>
-        private void OnLearnTone(Func<string> onFinish)
+        private void OnLearnTone(Func<int> trainingAction)
         {
-            onStartTraining.Invoke(trainingDuration, onFinish);
+            onStartTraining.Invoke(trainingAction);
         }
 
         /// <summary>
         /// Коллбэк завершения изучения новой тематики
         /// </summary>
-        private string LearnThemeCallback()
+        private int LearnThemeCallback()
         {
             PlayerManager.Data.Themes.Add(_selectedTheme);
-            return $"{Locale("training_newTheme")}: {Locale(_selectedTheme.GetDescription())}";
+            return toneCost;
         }
         
         /// <summary>
         /// Коллбэк завершения изучения новой стилистики
         /// </summary>
-        private string LearnStyleCallback()
+        private int LearnStyleCallback()
         {
             PlayerManager.Data.Styles.Add(_selectedStyle);
-            return $"{Locale("training_newStyle")}: {Locale(_selectedStyle.GetDescription())}";
+            return toneCost;
         }
 
         private void OnDestroy()

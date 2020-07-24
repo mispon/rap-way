@@ -1,9 +1,9 @@
 using System;
 using Data;
 using Localization;
+using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace Game.Pages.Training.Tabs.StatsTab
 {
@@ -13,8 +13,6 @@ namespace Game.Pages.Training.Tabs.StatsTab
     [RequireComponent(typeof(Button))]
     public class StatsButton : MonoBehaviour
     {
-        private const int MAX_STAT_LEVEL = 10;
-        
         [SerializeField] private Text header;
         [SerializeField] private Text desc;
         [Space, SerializeField] private GameObject levelIcon;
@@ -45,19 +43,22 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// <summary>
         /// Раскрывает карточку навыка 
         /// </summary>
-        public void Show(PlayerStatsInfo info)
+        public void Show(PlayerStatsInfo info, int expToUp)
         {
             var stat = PlayerManager.Data.Stats.Values[_index];
             
             header.text = LocalizationManager.Instance.Get(info.NameKey);
             desc.text = LocalizationManager.Instance.Get(info.DescriptionKey);
-            level.text = stat.ToString();
             
+            level.text = stat.Value.ToString();
             levelIcon.SetActive(true);
-            upButton.gameObject.SetActive(stat < MAX_STAT_LEVEL);
+
+            bool canUp = stat.Value < PlayerData.MAX_SKILL;
+            upButton.gameObject.SetActive(canUp);
+            exp.gameObject.SetActive(canUp);
             
-            exp.gameObject.SetActive(true);
-            exp.value = Random.Range(0f, 1f);
+            exp.maxValue = expToUp;
+            exp.value = stat.Exp;
         }
 
         /// <summary>

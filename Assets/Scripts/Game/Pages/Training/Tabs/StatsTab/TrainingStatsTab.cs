@@ -1,5 +1,6 @@
 using System;
 using Data;
+using Models.Game;
 using UnityEngine;
 
 namespace Game.Pages.Training.Tabs.StatsTab
@@ -15,16 +16,24 @@ namespace Game.Pages.Training.Tabs.StatsTab
         [Header("Данные о навыках")]
         [SerializeField] private TrainingInfoData data;
         
-        private readonly Func<string>[] _finishCallbacks =
-        {
-            () => FinishCallback(() => PlayerManager.Data.Stats.Vocobulary += 1, "vocobulary"),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Bitmaking += 1, "bitmaking"),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Flow += 1, "flow"),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Charisma += 1, "charisma"),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Management += 1, "management"),
-            () => FinishCallback(() => PlayerManager.Data.Stats.Marketing += 1, "marketing")
-        };
+        [Header("Настройки тренировок")]
+        [Tooltip("Количество опыта на одно нажатие")]
+        [SerializeField] private int trainingCost;
+        [Tooltip("Требуемый опыт для увеличения уровня")]
+        [SerializeField] private int[] expToLevelUp;
 
+        private int _statIndex;
+        
+        private Func<int>[] _trainingActions => new Func<int>[]
+        {
+            UpgradeVocobulary,
+            UpgradeBitmaking,
+            UpgradeFlow,
+            UpgradeCharisma,
+            UpgradeManagement,
+            UpgradeMarketing
+        };
+        
         /// <summary>
         /// Инициализация вкладки
         /// </summary>
@@ -44,7 +53,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         protected override void OnOpen()
         {
-            OnStatsSelected(0);
+            OnStatsSelected(_statIndex);
         }
 
         /// <summary>
@@ -52,12 +61,16 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void OnStatsSelected(int index)
         {
+            _statIndex = index;
+            
             for (int i = 0; i < statsButtons.Length; i++)
             {
                 if (i == index)
                 {
                     var info = data.StatsInfo[index];
-                    statsButtons[i].Show(info);
+                    var stat = PlayerManager.Data.Stats.Values[index];
+
+                    statsButtons[i].Show(info, expToLevelUp[stat.Value]);
                 }
                 else
                     statsButtons[i].Hide();
@@ -69,17 +82,36 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void OnUpgradeStats(int index)
         {
-            var onFinish = _finishCallbacks[index];
-            onStartTraining.Invoke(trainingDuration, onFinish);
+            int cost = _trainingActions[index].Invoke();
+            onStartTraining.Invoke(() => cost);
         }
 
         /// <summary>
-        /// Обработчик завершения тренировки навыка 
+        /// Группа методов прокачки каждого из статов персонажа 
         /// </summary>
-        private static string FinishCallback(Action action, string statKey)
+        private int UpgradeVocobulary()  =>  AddExp(ref PlayerManager.Data.Stats.Vocobulary);
+        private int UpgradeBitmaking()   =>  AddExp(ref PlayerManager.Data.Stats.Bitmaking);
+        private int UpgradeFlow()        =>  AddExp(ref PlayerManager.Data.Stats.Flow);
+        private int UpgradeCharisma()    =>  AddExp(ref PlayerManager.Data.Stats.Charisma);
+        private int UpgradeManagement()  =>  AddExp(ref PlayerManager.Data.Stats.Management);
+        private int UpgradeMarketing()   =>  AddExp(ref PlayerManager.Data.Stats.Marketing);
+
+        /// <summary>
+        /// Добавляет опыт к переданному стату 
+        /// </summary>
+        private int AddExp(ref ExpValue stat)
         {
-            action.Invoke();
-            return $"{Locale("training_statUpgrade")}: {Locale(statKey)}";
+            int expToUp = expToLevelUp[stat.Value];
+
+            stat.Exp += trainingCost;
+
+            if (stat.Exp >= expToUp)
+            {
+                stat.Value += 1;
+                stat.Exp -= expToUp;
+            }
+            
+            return trainingCost;
         }
 
         private void OnDestroy()

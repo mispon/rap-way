@@ -15,6 +15,9 @@ namespace Game.Pages.Training.Tabs
     /// </summary>
     public class TrainingSkillsTab : TrainingTab
     {
+        [Header("Цена покупки нового умения")]
+        [SerializeField] private int skillCost;
+        
         [Header("Контролы")]
         [SerializeField] private Switcher skillsSwitcher;
         [SerializeField] private Text header;
@@ -78,13 +81,13 @@ namespace Game.Pages.Training.Tabs
         /// </summary>
         private void OnLearnSkill()
         {
-            string OnFinish()
+            int AddSkill()
             {
                 PlayerManager.Data.Skills.Add(_selectedSkill);
-                return $"{Locale("training_newSkill")}: {Locale(_selectedSkill.GetDescription())}";
+                return skillCost;
             }
 
-            onStartTraining.Invoke(trainingDuration, OnFinish);
+            onStartTraining.Invoke(AddSkill);
         }
 
         private void OnDestroy()
