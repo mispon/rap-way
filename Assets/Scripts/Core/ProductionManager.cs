@@ -40,7 +40,7 @@ namespace Core
         }
     }
 
-    public static class Extension
+    public static partial class Extension
     {
         /// <summary>
         /// Добавляет Production в список истории игрока и вызывает связанное событие

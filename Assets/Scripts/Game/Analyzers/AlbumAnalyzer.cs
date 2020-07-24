@@ -1,4 +1,5 @@
-﻿using Models.Info.Production;
+﻿using Core;
+using Models.Info.Production;
 using UnityEngine;
 
 namespace Game.Analyzers
@@ -12,8 +13,6 @@ namespace Game.Analyzers
         [SerializeField] private AnimationCurve fansToPointsIncomeCurve;
         
         [Header("Настройки тренда")] 
-        [SerializeField, Tooltip("Анализатор совпадения с трендом")] 
-        private TrendAnalyzer trendAnalyzer;
         [SerializeField, Tooltip("Коэффициент совпадения с трендом")] 
         private float trendsEqualityMultiplier;
 
@@ -39,7 +38,7 @@ namespace Game.Analyzers
         {
             var totalFans = PlayerManager.Data.Fans;
             
-            trendAnalyzer.Analyze(album.TrendInfo);
+            TrendsManager.Analyze(album.TrendInfo);
             
             var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (album.TextPoints + album.BitPoints);
             resultPoints += resultPoints * Mathf.Lerp(0, trendsEqualityMultiplier, album.TrendInfo.EqualityValue);
