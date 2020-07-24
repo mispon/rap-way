@@ -36,6 +36,7 @@ namespace Game.Pages.Training
         {
             Open();
             OpenTab(tabIndex);
+            tabsSwitcher.SetActive(tabIndex);
         }
 
         /// <summary>
@@ -90,9 +91,9 @@ namespace Game.Pages.Training
         /// </summary>
         protected override void BeforePageOpen()
         {
-            // TODO: Localization
             DisplayExp();
             tabsSwitcher.InstantiateElements(new [] {"Навыки", "Умения", "Стили", "Команда"});
+            tabsSwitcher.ResetActive(true);
             OpenTab(0);
         }
 

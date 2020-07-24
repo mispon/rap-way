@@ -69,8 +69,9 @@ namespace Game.Pages.Training.Tabs.StatsTab
                 {
                     var info = data.StatsInfo[index];
                     var stat = PlayerManager.Data.Stats.Values[index];
+                    bool expEnough = PlayerManager.Data.Exp >= trainingCost;
 
-                    statsButtons[i].Show(info, expToLevelUp[stat.Value]);
+                    statsButtons[i].Show(info, expEnough, expToLevelUp[stat.Value]);
                 }
                 else
                     statsButtons[i].Hide();

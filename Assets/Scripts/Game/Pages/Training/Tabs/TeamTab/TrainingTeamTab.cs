@@ -40,7 +40,9 @@ namespace Game.Pages.Training.Tabs.TeamTab
             for (int i = 0; i < teammatesCards.Length; i++)
             {
                 var member = teammates[i];
-                teammatesCards[i].Setup(member, expToLevelUp[member.Skill.Value]);
+                bool expEnough = PlayerManager.Data.Exp >= trainingCost;
+                
+                teammatesCards[i].Setup(member, expEnough, expToLevelUp[member.Skill.Value]);
             }
         }
 

@@ -33,6 +33,7 @@ namespace Models.Player
         {
             Money =  500_000,
             Fans = 100_000,
+            Exp = 500,
             
             Info = PlayerInfo.New,
             Stats = PlayerStats.New,

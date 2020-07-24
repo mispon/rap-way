@@ -43,7 +43,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// <summary>
         /// Раскрывает карточку навыка 
         /// </summary>
-        public void Show(PlayerStatsInfo info, int expToUp)
+        public void Show(PlayerStatsInfo info, bool expEnough, int expToUp)
         {
             var stat = PlayerManager.Data.Stats.Values[_index];
             
@@ -53,9 +53,10 @@ namespace Game.Pages.Training.Tabs.StatsTab
             level.text = stat.Value.ToString();
             levelIcon.SetActive(true);
 
-            bool canUp = stat.Value < PlayerData.MAX_SKILL;
-            upButton.gameObject.SetActive(canUp);
-            exp.gameObject.SetActive(canUp);
+            bool noLimit = stat.Value < PlayerData.MAX_SKILL;
+            upButton.interactable = expEnough;
+            upButton.gameObject.SetActive(noLimit);
+            exp.gameObject.SetActive(noLimit);
             
             exp.maxValue = expToUp;
             exp.value = stat.Exp;

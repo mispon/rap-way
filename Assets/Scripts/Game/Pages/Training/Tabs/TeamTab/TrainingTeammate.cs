@@ -30,7 +30,7 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// <summary>
         /// Инициализирует поля
         /// </summary>
-        public void Setup(Teammate teammate, int expToUp)
+        public void Setup(Teammate teammate, bool expEnough, int expToUp)
         {
             _teammate = teammate;
             
@@ -43,12 +43,12 @@ namespace Game.Pages.Training.Tabs.TeamTab
             innactiveLabel.SetActive(false);
             level.text = teammate.Skill.Value.ToString();
             
-            bool canUp = teammate.Skill.Value < PlayerData.MAX_SKILL;
+            bool noLimit = teammate.Skill.Value < PlayerData.MAX_SKILL;
             
             exp.maxValue = expToUp;
-            exp.value = canUp ? teammate.Skill.Exp : expToUp;
+            exp.value = noLimit ? teammate.Skill.Exp : expToUp;
 
-            upButton.interactable = canUp;
+            upButton.interactable = noLimit && expEnough;
             payButton.interactable = !teammate.HasPayment;
         }
 

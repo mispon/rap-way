@@ -257,13 +257,13 @@ namespace Utils
         /// </summary>
         private IEnumerator SlideCor()
         {
-            if(_enableSlide)
+            if (_enableSlide)
                 yield break;
     
             _enableSlide = true;
             float t_start = Time.time, ct;
             float startPercentage = -container.anchoredPosition.x / _containerWidth,
-                endPercentage = ActiveRectTransform.anchoredPosition.x / _containerWidth;
+                  endPercentage = ActiveRectTransform.anchoredPosition.x / _containerWidth;
     
             while ((ct = (Time.time - t_start) / t_Slide) < 1f)
             {
@@ -315,7 +315,7 @@ namespace Utils
         {
             float t_start = Time.time, ct;
             var startPercentage = -container.anchoredPosition.x / _containerWidth;
-            var endPercentage = startPercentage + (-afterDragInertia * _lastDragDelta / _containerWidth);
+            var endPercentage = startPercentage + -afterDragInertia * _lastDragDelta / _containerWidth;
             
             while ((ct = (Time.time - t_start) / t_Inertia) < 1f)
             {
@@ -365,6 +365,18 @@ namespace Utils
                     btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(btnClickCallbacks[i]);
             }
+        }
+
+        /// <summary>
+        /// Устанавливает индекс в переданное значение 
+        /// </summary>
+        public void SetActive(int index)
+        {
+            if (index < 0 || index > ElementsCount)
+                throw new IndexOutOfRangeException($"[SWITCHER] Index {index} out of range!");
+            
+            _activeIndex = index;
+            StartCoroutine(SlideCor());
         }
         
         /// <summary>
