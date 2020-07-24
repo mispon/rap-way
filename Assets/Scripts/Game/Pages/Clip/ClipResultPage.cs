@@ -40,7 +40,7 @@ namespace Game.Pages.Clip
         /// </summary>
         private void DisplayResult(ClipInfo clip)
         {
-            header.text = $"Завершена работа над клипом трека \"{PlayerManager.GetTrackName(clip.TrackId)}\"";
+            header.text = $"Завершена работа над клипом трека \"{ProductionManager.GetTrackName(clip.TrackId)}\"";
             viewsAmount.text = $"ПРОСМОТРЫ: {clip.Views}";
             likesAndDislikes.text = $"{clip.Likes} лайков / {clip.Dislikes} дизлайков";
             fansIncome.text = $"ФАНАТЫ: +{clip.FansIncome}";

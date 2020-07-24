@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Models.Info;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,8 +47,12 @@ namespace Game.Pages.Track
             {
                 _track.Name = $"Track {_track.Id}";
             }
-            _track.Theme = GetToneValue<Themes>(themeSwitcher);
-            _track.Style = GetToneValue<Styles>(styleSwitcher);
+
+            _track.TrendInfo = new TrendInfo
+            {
+                Style = GetToneValue<Styles>(styleSwitcher),
+                Theme = GetToneValue<Themes>(themeSwitcher)
+            };
             
             workingPage.StartWork(_track);
             Close();

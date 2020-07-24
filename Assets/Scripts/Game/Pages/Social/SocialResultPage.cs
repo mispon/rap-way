@@ -60,7 +60,6 @@ namespace Game.Pages.Social
         protected override void BeforePageOpen()
         {
             analyzer.Analyze(Social);
-            SaveResult(Social);
             DisplayResult();
         }
 
@@ -71,6 +70,7 @@ namespace Game.Pages.Social
 
         protected override void AfterPageClose()
         {
+            SaveResult(Social);
             Social = null;
         }
         #endregion
