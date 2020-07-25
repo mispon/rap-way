@@ -18,8 +18,8 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         [SerializeField] private Text desc;
         [SerializeField] private Button unlockButton;
 
-        private Action<Skills> _onUnlock;
         private Skills _skill;
+        private Action<Skills> _onUnlock;
 
         private void Start()
         {
