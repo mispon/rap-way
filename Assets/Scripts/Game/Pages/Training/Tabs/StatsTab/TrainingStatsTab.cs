@@ -11,7 +11,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
     public class TrainingStatsTab : TrainingTab
     {
         [Header("Карточки навыков")]
-        [SerializeField] private StatsButton[] statsButtons;
+        [SerializeField] private TrainingStatsCard[] statsButtons;
 
         [Header("Данные о навыках")]
         [SerializeField] private TrainingInfoData data;

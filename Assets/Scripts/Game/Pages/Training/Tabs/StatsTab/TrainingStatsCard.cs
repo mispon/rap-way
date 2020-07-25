@@ -11,7 +11,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
     /// Кнопка отображения параметра
     /// </summary>
     [RequireComponent(typeof(Button))]
-    public class StatsButton : MonoBehaviour
+    public class TrainingStatsCard : MonoBehaviour
     {
         [SerializeField] private Text header;
         [SerializeField] private Text desc;
