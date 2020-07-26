@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Enums;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,18 +17,30 @@ namespace Game.Pages.Training.Tabs.ToneTab
         
         [Header("Элемнты вкладки")]
         [SerializeField] private GridLayoutGroup grid;
-        [SerializeField] private GameObject cardTemplate;
+        [SerializeField] private TrainingToneCard cardTemplate;
 
-        private List<TrainingToneCard<Themes>> _themesCards;
-        private List<TrainingToneCard<Styles>> _stylesCards;
+        private List<TrainingToneCard> _toneCards;
 
         /// <summary>
         /// Инициализация вкладки
         /// </summary>
         public override void Init()
         {
-            CreateCards(out _themesCards);
-            CreateCards(out _stylesCards);
+            var themes = (Enum[]) Enum.GetValues(typeof(Themes));
+            var styles = (Enum[]) Enum.GetValues(typeof(Styles));
+            var tones = themes.Concat(styles).ToArray();
+            
+            _toneCards = new List<TrainingToneCard>(tones.Length);
+
+            for (int i = 0; i < tones.Length; i++)
+            {
+                var card = Instantiate(cardTemplate, grid.transform);
+                
+                card.Setup(i, tones[i]);
+                card.onUnlock += OnLearnTone;
+                
+                _toneCards.Add(card);
+            }
         }
 
         /// <summary>
@@ -37,10 +50,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
         {
             bool expEnough = PlayerManager.Data.Exp >= toneCost;
                 
-            foreach (var card in _themesCards)
-                card.Refresh(expEnough);
-            
-            foreach (var card in _stylesCards)
+            foreach (var card in _toneCards)
                 card.Refresh(expEnough);
         }
 
@@ -58,43 +68,12 @@ namespace Game.Pages.Training.Tabs.ToneTab
             onStartTraining.Invoke(() => toneCost);
         }
 
-        /// <summary>
-        /// Заполняет грид карточками стилистик
-        /// </summary>
-        private void CreateCards<T>(out List<TrainingToneCard<T>> cards)
-            where T : Enum
-        {
-            var tones = (T[]) Enum.GetValues(typeof(T));
-            cards = new List<TrainingToneCard<T>>(tones.Length);
-
-            for (int i = 0; i < tones.Length; i++)
-            {
-                var cardObject = Instantiate(cardTemplate, grid.transform);
-                var card = cardObject.GetComponent<TrainingToneCard<T>>();
-                
-                card.Setup(i, tones[i]);
-                card.onUnlock += OnLearnTone;
-                
-                cards.Add(card);
-            }
-        }
-
         private void OnDestroy()
         {
-            DisposeCards(_themesCards);
-            DisposeCards(_stylesCards);
-        }
-
-        /// <summary>
-        /// Очищает кэш карточек 
-        /// </summary>
-        private void DisposeCards<T>(List<TrainingToneCard<T>> cards)
-            where T : Enum
-        {
-            foreach (var card in cards)
+            foreach (var card in _toneCards)
                 card.onUnlock -= OnLearnTone;
             
-            cards.Clear();
+            _toneCards.Clear();
         }
     }
 }

@@ -10,16 +10,15 @@ namespace Game.Pages.Training.Tabs.ToneTab
     /// <summary>
     /// Карточка стилистики в гриде стилистик
     /// </summary>
-    public class TrainingToneCard<T> : MonoBehaviour 
-        where T : Enum
+    public class TrainingToneCard : MonoBehaviour
     {
         [SerializeField] private Text toneName;
         [SerializeField] private Button button;
-        [SerializeField] private TrainingToneView<T> view;
+        [SerializeField] private TrainingToneView view;
         
-        public Action<T> onUnlock = tone => {};
+        public Action<Enum> onUnlock = tone => {};
         
-        private T _tone;
+        private Enum _tone;
         private bool _expEnough;
         private bool _locked;
 
@@ -31,7 +30,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// <summary>
         /// Устанавливает данные карточки
         /// </summary>
-        public void Setup(int index, T tone)
+        public void Setup(int index, Enum tone)
         {
             _tone = tone;
             
@@ -48,12 +47,11 @@ namespace Game.Pages.Training.Tabs.ToneTab
         public void Refresh(bool expEnough)
         {
             _expEnough = expEnough;
-
-            object tone = _tone;
-            if (typeof(T) == typeof(Themes))
-                _locked = !PlayerManager.Data.Themes.Contains((Themes) tone);
+            
+            if (_tone.GetType() == typeof(Themes))
+                _locked = !PlayerManager.Data.Themes.Contains((Themes) _tone);
             else
-                _locked = !PlayerManager.Data.Styles.Contains((Styles) tone);
+                _locked = !PlayerManager.Data.Styles.Contains((Styles) _tone);
             
             button.image.color = _locked ? Color.white : Color.gray;
         }

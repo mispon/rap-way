@@ -10,14 +10,13 @@ namespace Game.Pages.Training.Tabs.ToneTab
     /// Форма с детальной информацией о стилистике
     /// </summary>
     [RequireComponent(typeof(Button))]
-    public class TrainingToneView<T> : MonoBehaviour
-        where T : Enum
+    public class TrainingToneView : MonoBehaviour
     {
         [SerializeField] private Text toneName;
         [SerializeField] private Button unlockButton;
 
-        private T _tone;
-        private Action<T> _onUnlock;
+        private Enum _tone;
+        private Action<Enum> _onUnlock;
 
         private void Start()
         {
@@ -29,7 +28,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// <summary>
         /// Открывает форму 
         /// </summary>
-        public void Show(T tone, bool expEnough, bool isLocked, Action<T> onUnlock)
+        public void Show(Enum tone, bool expEnough, bool isLocked, Action<Enum> onUnlock)
         {
             string nameKey = tone.GetDescription();
             toneName.text = LocalizationManager.Instance.Get(nameKey);
