@@ -11,6 +11,8 @@ namespace Game.Pages.Clip
     /// </summary>
     public class ClipResultPage : Page
     {
+        [SerializeField] private int rewardExp;
+
         [Header("Компоменты")]
         [SerializeField] private Text header;
         [SerializeField] private Text viewsAmount;
@@ -50,9 +52,10 @@ namespace Game.Pages.Clip
         /// <summary>
         /// Сохраняет результаты клипа
         /// </summary>
-        private static void SaveResult(ClipInfo clip)
+        private void SaveResult(ClipInfo clip)
         {
             PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome);
+            PlayerManager.Instance.AddExp(rewardExp);
             ProductionManager.AddClip(clip);
         }
 

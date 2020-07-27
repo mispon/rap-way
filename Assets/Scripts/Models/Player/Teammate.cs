@@ -1,5 +1,6 @@
 ﻿using System;
 using Enums;
+using Models.Game;
 
 namespace Models.Player
 {
@@ -9,8 +10,6 @@ namespace Models.Player
     [Serializable]
     public class Teammate
     {
-        public const int MAX_SKILL = 10;
-        
         public static Teammate New(TeammateType type) => new Teammate {Type = type};
         
         /// <summary>
@@ -21,7 +20,7 @@ namespace Models.Player
         /// <summary>
         /// Навык
         /// </summary>
-        public int Skill;
+        public ExpValue Skill;
         
         /// <summary>
         /// Флаг оплаты услуг тиммейта
@@ -36,7 +35,7 @@ namespace Models.Player
         /// <summary>
         /// Тиммейт еще не открыт
         /// </summary>
-        public bool IsEmpty => Skill == 0;
+        public bool IsEmpty => Skill.Value == 0;
     }
     
     [Serializable]

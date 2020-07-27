@@ -59,10 +59,10 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void GenerateWorkPoints()
         {
-            int playerPoints = Random.Range(1, PlayerManager.Data.Stats.Management + 1);
+            int playerPoints = Random.Range(1, PlayerManager.Data.Stats.Management.Value + 1);
             playerWorkPoints.Show(playerPoints);
             
-            int managerPoints = Random.Range(1, PlayerManager.Data.Team.Manager.Skill + 1);
+            int managerPoints = Random.Range(1, PlayerManager.Data.Team.Manager.Skill.Value + 1);
             managerWorkPoints.Show(managerPoints);
 
             _managementPoints += playerPoints + managerPoints;

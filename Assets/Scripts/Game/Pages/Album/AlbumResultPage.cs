@@ -11,6 +11,8 @@ namespace Game.Pages.Album
     /// </summary>
     public class AlbumResultPage : Page
     {
+        [SerializeField] private int rewardExp;
+
         [Header("Компоменты")]
         [SerializeField] private Text header;
         [SerializeField] private Text listenAmount;
@@ -53,9 +55,10 @@ namespace Game.Pages.Album
         /// <summary>
         /// Сохраняет результаты альбома
         /// </summary>
-        private static void SaveResult(AlbumInfo album)
+        private void SaveResult(AlbumInfo album)
         {
             PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome);
+            PlayerManager.Instance.AddExp(rewardExp);
             ProductionManager.AddAlbum(album);
         }
 

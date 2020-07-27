@@ -9,9 +9,6 @@ namespace Game.Pages.Training.Tabs
     /// </summary>
     public abstract class TrainingTab : MonoBehaviour
     {
-        [Header("Длительность тренировки")]
-        [SerializeField] protected int trainingDuration;
-
         /// <summary>
         /// Инициализация вкладки
         /// </summary>
@@ -39,7 +36,7 @@ namespace Game.Pages.Training.Tabs
         /// <summary>
         /// Запускает выполнение тренировки
         /// </summary>
-        public Action<int, Func<string>> onStartTraining = (duration, callback) => {};
+        public Action<Func<int>> onStartTraining = action => {};
 
         /// <summary>
         /// Обертка менеджера локализации для краткости кода 

@@ -10,9 +10,12 @@ namespace Models.Player
     [Serializable]
     public class PlayerData
     {
+        public const int MAX_SKILL = 10;
+        
         public int Money;
         public int Fans;
         public int Hype;
+        public int Exp;
         
         public PlayerInfo Info;
         public PlayerStats Stats;
@@ -30,7 +33,7 @@ namespace Models.Player
         {
             Money =  500_000,
             Fans = 100_000,
-            Hype = 0,
+            Exp = 500,
             
             Info = PlayerInfo.New,
             Stats = PlayerStats.New,

@@ -53,14 +53,14 @@ namespace Game.Pages.Social
         /// </summary>
         private void GenerateWorkPoints()
         {
-            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma + 1);
+            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 1);
             _social.PlayerPoints += playerPointsValue;
             playerWorkPoints.Show(playerPointsValue);
 
             var prManPointsValue = 0;
             if (prMan.activeSelf)
             {
-                prManPointsValue = Random.Range(1, PlayerManager.Data.Team.PrMan.Skill + 1);
+                prManPointsValue = Random.Range(1, PlayerManager.Data.Team.PrMan.Skill.Value + 1);
                 prManWorkPoints.Show(prManPointsValue);
             }
             _social.PrManPoints += prManPointsValue;

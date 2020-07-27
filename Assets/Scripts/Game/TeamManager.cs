@@ -3,22 +3,26 @@ using System.Linq;
 using Core;
 using Game.Notifications;
 using Game.Pages.Team;
+using Game.Pages.Training;
 using Models.Player;
 using UnityEngine;
+using Utils;
 
 namespace Game
 {
     /// <summary>
     /// Логика взаимодействия с командой игрока
     /// </summary>
-    public class TeamManager: MonoBehaviour
+    public class TeamManager: Singleton<TeamManager>
     {
         [Header("Данные команды")] 
         [ArrayElementTitle("Type")] public TeammateInfo[] teammateInfos;
 
-        [Header("Страницы команды")] 
+        [Header("Страницы команды")]
         [SerializeField] private TeammateUnlockPage unlockTeammatePage;
-        [SerializeField] private TeammateSalaryPage salaryPage;
+
+        [Header("Страница тренировок")]
+        [SerializeField] private TrainingMainPage trainingPage;
 
         private void Start()
         {
@@ -32,7 +36,7 @@ namespace Game
         public int GetSalary(Teammate teammate)
         {
             var info = teammateInfos.First(tmi => tmi.Type == teammate.Type);
-            return info.Salary[teammate.Skill - 1];
+            return info.Salary[teammate.Skill.Value - 1];
         }
         
         /// <summary>
@@ -57,7 +61,7 @@ namespace Game
         /// </summary>
         private void UnlockTeammate(Teammate teammate)
         {
-            teammate.Skill = 1;
+            teammate.Skill.Value = 1;
             teammate.HasPayment = true;
 
             void Notification() => unlockTeammatePage.Show(teammate);
@@ -69,9 +73,11 @@ namespace Game
         /// </summary>
         private void OnSalary()
         {
-            var teammates = GetTeammates(e => !e.IsEmpty);
-            if (teammates.Any())
-                NotificationManager.Instance.AddNotification(() => salaryPage.Show(teammates));
+            if (GetTeammates(e => !e.IsEmpty).Length == 0)
+                return;
+            
+            const int teamTab = 3;
+            NotificationManager.Instance.AddNotification(() => trainingPage.OpenPage(teamTab));
         }
 
         /// <summary>
