@@ -15,8 +15,9 @@ namespace Game.Pages.Training.Tabs.ToneTab
         [Header("Цена покупки новой стилистики")]
         [SerializeField] private int toneCost = 200;
         
-        [Header("Элемнты вкладки")]
-        [SerializeField] private GridLayoutGroup grid;
+        [Header("Элементы вкладки")]
+        [SerializeField] private GridLayoutGroup themesGrid;
+        [SerializeField] private GridLayoutGroup stylesGrid;
         [SerializeField] private TrainingToneCard cardTemplate;
 
         private List<TrainingToneCard> _toneCards;
@@ -26,12 +27,20 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         public override void Init()
         {
-            var themes = (Enum[]) Enum.GetValues(typeof(Themes));
-            var styles = (Enum[]) Enum.GetValues(typeof(Styles));
-            var tones = themes.Concat(styles).ToArray();
+            var themes = Enum.GetValues(typeof(Themes)).Cast<Enum>().ToArray();
+            var styles = Enum.GetValues(typeof(Styles)).Cast<Enum>().ToArray();
             
-            _toneCards = new List<TrainingToneCard>(tones.Length);
+            _toneCards = new List<TrainingToneCard>(themes.Length + styles.Length);
 
+            CreateCards(themesGrid, in themes);
+            CreateCards(stylesGrid, in styles);
+        }
+
+        /// <summary>
+        /// Создает тренировочные карточки 
+        /// </summary>
+        private void CreateCards(GridLayoutGroup grid, in Enum[] tones)
+        {
             for (int i = 0; i < tones.Length; i++)
             {
                 var card = Instantiate(cardTemplate, grid.transform);

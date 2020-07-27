@@ -53,7 +53,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
             else
                 _locked = !PlayerManager.Data.Styles.Contains((Styles) _tone);
             
-            button.image.color = _locked ? Color.white : Color.gray;
+            button.image.color = _locked ? Color.blue : Color.green;
         }
 
         /// <summary>

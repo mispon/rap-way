@@ -50,7 +50,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
             _expEnough = expEnough;
             _locked = !PlayerManager.Data.Skills.Contains(_info.Type);
             
-            button.image.color = _locked ? Color.white : Color.gray;
+            button.image.color = _locked ? Color.blue : Color.green;
         }
 
         /// <summary>
