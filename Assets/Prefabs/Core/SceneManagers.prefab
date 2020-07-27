@@ -77,6 +77,7 @@ Transform:
   - {fileID: 185180895004311940}
   - {fileID: 7114062550839399690}
   - {fileID: 2072436423813230743}
+  - {fileID: 5293382500688123559}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -124,8 +125,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
+  newAchievementsPage: {fileID: 0}
   achievementsData: {fileID: 11400000, guid: ac93b9090d0b40548a2294d636cdedcc, type: 2}
-  concertPlacesData: {fileID: 11400000, guid: 827a4429ab1e37a4286a12bc5291b162, type: 2}
 --- !u!1 &3187588212368941331
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,6 +172,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroy: 0
   gameScreen: {fileID: 0}
+--- !u!1 &3578829313049285354
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5293382500688123559}
+  - component: {fileID: 6410302032840157130}
+  m_Layer: 0
+  m_Name: TrandsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5293382500688123559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3578829313049285354}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1929117383248465391}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6410302032840157130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3578829313049285354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03ad19dde8c4ccea4a424215ae3a5f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0
+  trendAnalyzer: {fileID: 0}
 --- !u!1 &4223472995139525727
 GameObject:
   m_ObjectHideFlags: 0

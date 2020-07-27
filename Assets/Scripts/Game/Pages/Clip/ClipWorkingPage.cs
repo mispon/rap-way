@@ -1,4 +1,5 @@
-﻿using Models.Info.Production;
+﻿using Core;
+using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,7 @@ namespace Game.Pages.Clip
         public override void StartWork(params object[] args)
         {
             _clip = (ClipInfo) args[0];
-            header.text = $"Работа над клипом трека \"{PlayerManager.GetTrackName(_clip.TrackId)}\"";
+            header.text = $"Работа над клипом трека \"{ProductionManager.GetTrackName(_clip.TrackId)}\"";
             Open();
         }
 

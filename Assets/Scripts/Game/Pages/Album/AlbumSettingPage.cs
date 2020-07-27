@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Models.Info;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,8 +50,12 @@ namespace Game.Pages.Album
             {
                 _album.Name = $"Album {_album.Id}";
             }
-            _album.Theme = GetToneValue<Themes>(themeSwitcher);
-            _album.Style = GetToneValue<Styles>(styleSwitcher);
+
+            _album.TrendInfo = new TrendInfo
+            {
+                Style = GetToneValue<Styles>(styleSwitcher),
+                Theme = GetToneValue<Themes>(themeSwitcher)
+            };
             
             workingPage.StartWork(_album);
             Close();
