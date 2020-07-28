@@ -77,7 +77,7 @@ namespace Data
         public Func<int, int, bool> CheckCondition;
     }
 
-    public static class Extensions
+    public static partial class Extensions
     {
         public static void SetCondition(this IEnumerable<AchievementInfo> infos, AchievementsType type,
             Func<int, int, bool> conditionFunc)

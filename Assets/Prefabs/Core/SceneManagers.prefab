@@ -78,9 +78,57 @@ Transform:
   - {fileID: 7114062550839399690}
   - {fileID: 2072436423813230743}
   - {fileID: 5293382500688123559}
+  - {fileID: 1071507804230557114}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2227853986022448634
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1071507804230557114}
+  - component: {fileID: 4065143081552390622}
+  m_Layer: 0
+  m_Name: GameEventsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1071507804230557114
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2227853986022448634}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1929117383248465391}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4065143081552390622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2227853986022448634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a60c965964734da8ac7917a66cb17b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0
+  chance: 0.1
+  eventMainPage: {fileID: 0}
+  data: {fileID: 11400000, guid: 974a9531e92eb33448c26e19d9138621, type: 2}
 --- !u!1 &3036844871196652973
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
-  trendAnalyzer: {fileID: 0}
+  trendsCompareData: {fileID: 0}
 --- !u!1 &4223472995139525727
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb6a6450b4f41b999bff3ed97b2997e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontDestroy: 0
   teammateInfos:
   - Type: 0
     FansToUnlock: 1000
@@ -274,7 +323,7 @@ MonoBehaviour:
     FansToUnlock: 4000
     Salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
   unlockTeammatePage: {fileID: 0}
-  salaryPage: {fileID: 0}
+  trainingPage: {fileID: 0}
 --- !u!1 &6158019178704770329
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,4 +414,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroy: 0
   actionInterval: 2
-  inactionInterval: 10
+  inactionInterval: 2
