@@ -1,10 +1,8 @@
 using System;
 using Data;
 using Enums;
-using Localization;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Extensions;
 
 namespace Game.Pages.Training.Tabs.SkillsTab
 {
@@ -13,7 +11,6 @@ namespace Game.Pages.Training.Tabs.SkillsTab
     /// </summary>
     public class TrainingSkillCard : MonoBehaviour
     {
-        [SerializeField] private Text skillName;
         [SerializeField] private Button button;
         [SerializeField] private TrainingSkillView view;
 
@@ -34,9 +31,6 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         public void Setup(int index, PlayerSkillInfo info)
         {
             _info = info;
-            
-            string nameKey = info.Type.GetDescription();
-            skillName.text = LocalizationManager.Instance.Get(nameKey);
 
             name = $"SkillCard-{index + 1}";
             gameObject.SetActive(true);
@@ -50,7 +44,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
             _expEnough = expEnough;
             _locked = !PlayerManager.Data.Skills.Contains(_info.Type);
             
-            button.image.color = _locked ? Color.blue : Color.green;
+            button.image.sprite = _locked ? _info.Locked : _info.Normal;
         }
 
         /// <summary>

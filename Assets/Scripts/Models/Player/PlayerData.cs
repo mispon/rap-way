@@ -43,8 +43,8 @@ namespace Models.Player
             
             Goods = new List<Good>(),
             Achievements = new List<Achievement>(),
-            Themes = new List<Themes> { Enums.Themes.Self },
-            Styles = new List<Styles> { Enums.Styles.Common },
+            Themes = new List<Themes> { Enums.Themes.Life },
+            Styles = new List<Styles> { Enums.Styles.Underground },
             Skills = new List<Skills>()
         };
     }

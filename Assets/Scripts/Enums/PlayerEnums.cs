@@ -43,8 +43,6 @@ namespace Enums
         Edlib,
         [Description("skill_doubletime")]
         DoubleTime,
-        [Description("skill_reference")]
-        Reference,
         [Description("skill_shoutout")]
         ShoutOut,
         [Description("skill_freestyle")]

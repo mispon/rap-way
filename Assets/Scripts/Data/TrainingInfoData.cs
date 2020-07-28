@@ -12,6 +12,8 @@ namespace Data
     {
         public PlayerStatsInfo[] StatsInfo;
         public PlayerSkillInfo[] SkillsInfo;
+        public StylesInfo[] StylesInfo;
+        public ThemesInfo[] ThemesInfo;
     }
 
     [Serializable]
@@ -26,5 +28,28 @@ namespace Data
     {
         public string DescriptionKey;
         public Skills Type;
+        public Sprite Normal;
+        public Sprite Locked;
     }
+
+    [Serializable]
+    public class TonesInfo
+    {
+        public int Price;
+        public Sprite Normal;
+        public Sprite Locked;
+    }
+
+    [Serializable]
+    public class StylesInfo : TonesInfo
+    {
+        public Styles Type;
+    }
+    
+    [Serializable]
+    public class ThemesInfo : TonesInfo
+    {
+        public Themes Type;
+    }
+    
 }

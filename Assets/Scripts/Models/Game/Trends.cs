@@ -13,8 +13,8 @@ namespace Models.Game
 
         public static Trends New => new Trends
         {
-            Style = Styles.Common,
-            Theme = Themes.Self,
+            Style = Styles.Underground,
+            Theme = Themes.Life,
             NextTimeUpdate = TrendsManager.GetNextTimeUpdate(DateTime.Now)
         };
     }
