@@ -11,7 +11,7 @@ namespace Game.UI
     /// </summary>
     public class ProgressBar : MonoBehaviour
     {
-        [SerializeField] private Slider progressBar;
+        [SerializeField] private Image progress;
 
         public bool IsFinish { get; private set; }
         public Action onFinish = () => {};
@@ -29,8 +29,17 @@ namespace Game.UI
                 throw new RapWayException("Передано нулевое значение длительности в ProgressBar!");
             
             _duration = duration;
-            progressBar.value = 0;
+            progress.fillAmount = 0;
             IsFinish = false;
+        }
+
+        /// <summary>
+        /// Устанавливает текущее значение 
+        /// </summary>
+        public void SetValue(int value, int maxValue)
+        {
+            float amount = 1f * value / maxValue;
+            progress.fillAmount = amount;
         }
 
         /// <summary>
@@ -49,7 +58,7 @@ namespace Game.UI
             var elapsedTime = 0f;
             while (elapsedTime < _duration)
             {
-                progressBar.value = Mathf.Lerp(0f, 1f, elapsedTime / _duration);
+                progress.fillAmount = Mathf.Lerp(0f, 1f, elapsedTime / _duration);
                 elapsedTime += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }

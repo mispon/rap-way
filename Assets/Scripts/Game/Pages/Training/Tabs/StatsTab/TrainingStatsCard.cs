@@ -1,5 +1,6 @@
 using System;
 using Data;
+using Game.UI;
 using Localization;
 using Models.Player;
 using UnityEngine;
@@ -15,10 +16,14 @@ namespace Game.Pages.Training.Tabs.StatsTab
     {
         [SerializeField] private Text header;
         [SerializeField] private Text desc;
-        [Space, SerializeField] private GameObject levelIcon;
         [SerializeField] private Text level;
-        [Space, SerializeField] private Button upButton;
-        [SerializeField] private Slider exp;
+        [SerializeField] private Button upButton;
+        [SerializeField] private ProgressBar expBar;
+
+        [Header("Фон карточки")]
+        [SerializeField] private Image cardImage;
+        [SerializeField] private Sprite normalSprite;
+        [SerializeField] private Sprite darkSprite;
         
         private int _index;
 
@@ -50,16 +55,16 @@ namespace Game.Pages.Training.Tabs.StatsTab
             header.text = LocalizationManager.Instance.Get(info.NameKey);
             desc.text = LocalizationManager.Instance.Get(info.DescriptionKey);
             
-            level.text = stat.Value.ToString();
-            levelIcon.SetActive(true);
+            DisplayLevel();
 
             bool noLimit = stat.Value < PlayerData.MAX_SKILL;
             upButton.interactable = expEnough;
             upButton.gameObject.SetActive(noLimit);
-            exp.gameObject.SetActive(noLimit);
             
-            exp.maxValue = expToUp;
-            exp.value = stat.Exp;
+            expBar.gameObject.SetActive(noLimit);
+            expBar.SetValue(stat.Exp, expToUp);
+
+            cardImage.sprite = darkSprite;
         }
 
         /// <summary>
@@ -69,12 +74,22 @@ namespace Game.Pages.Training.Tabs.StatsTab
         {
             header.text = "";
             desc.text = "";
-            level.text = "";
-            
-            levelIcon.SetActive(false);
+
+            DisplayLevel();
+
             upButton.gameObject.SetActive(false);
-            
-            exp.gameObject.SetActive(false);
+            expBar.gameObject.SetActive(false);
+
+            cardImage.sprite = normalSprite;
+        }
+
+        /// <summary>
+        /// Отображает текущий уровень навыка
+        /// </summary>
+        private void DisplayLevel()
+        {
+            int value = PlayerManager.Data.Stats.Values[_index].Value;
+            level.text = value.ToString();
         }
 
         /// <summary>

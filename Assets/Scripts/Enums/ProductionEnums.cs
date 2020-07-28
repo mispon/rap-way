@@ -7,22 +7,30 @@ namespace Enums
     /// </summary>
     public enum Styles
     {
-        [Description("styles_common")]
-        Common,
-        [Description("styles_fast")]
-        Fast,
-        [Description("styles_slow")]
-        Slow,
-        [Description("styles_agressive")]
-        Agressive,
-        [Description("styles_lyric")]
-        Lyric,
-        [Description("styles_jerking")]
-        Jerking,
-        [Description("styles_reggae")]
-        Reggae,
-        [Description("styles_mumble")]
-        Mumble
+        [Description("styles_CloudRap")]
+        CloudRap,
+        [Description("styles_AfroBeat")]
+        AfroBeat,
+        [Description("styles_DownTempo")]
+        DownTempo,
+        [Description("styles_Dubstep")]
+        Dubstep,
+        [Description("styles_TripHop")]
+        TripHop,
+        [Description("styles_GlitchHop")]
+        GlitchHop,
+        [Description("styles_Underground")]
+        Underground,
+        [Description("styles_LoFi")]
+        LoFi,
+        [Description("styles_RapMetal")]
+        RapMetal,
+        [Description("styles_Rapcore")]
+        Rapcore,
+        [Description("styles_GettoFunk")]
+        GettoFunk,
+        [Description("styles_CountryRap")]
+        CountryRap
     }
 
     /// <summary>
@@ -34,25 +42,19 @@ namespace Enums
         Life,
         [Description("theme_money")]
         Money,
-        [Description("theme_cars")]
-        Cars,
         [Description("theme_girls")]
         Girls,
         [Description("theme_love")]
         Love,
-        [Description("theme_success")]
-        Success,
         [Description("theme_friends")]
         Friends,
         [Description("theme_haters")]
         Haters,
         [Description("theme_politic")]
         Politic,
-        [Description("theme_self")]
-        Self,
-        [Description("theme_problems")]
-        Problems,
         [Description("theme_motivation")]
-        Motivation
+        Motivation,
+        [Description("theme_fame")]
+        Fame
     }
 }

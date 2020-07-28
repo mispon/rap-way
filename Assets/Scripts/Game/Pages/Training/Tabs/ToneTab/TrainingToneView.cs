@@ -9,36 +9,35 @@ namespace Game.Pages.Training.Tabs.ToneTab
     /// <summary>
     /// Форма с детальной информацией о стилистике
     /// </summary>
-    [RequireComponent(typeof(Button))]
     public class TrainingToneView : MonoBehaviour
     {
         [SerializeField] private Text toneName;
+        [SerializeField] private Image toneIcon;
         [SerializeField] private Button unlockButton;
+        [SerializeField] private Button closeButton;
 
-        private Enum _tone;
-        private Action<Enum> _onUnlock;
+        private ToneViewContext _context;
 
         private void Start()
         {
-            var button = GetComponent<Button>();
-            button.onClick.AddListener(Hide);
             unlockButton.onClick.AddListener(UnlockTone);
+            closeButton.onClick.AddListener(Hide);
         }
 
         /// <summary>
         /// Открывает форму 
         /// </summary>
-        public void Show(Enum tone, bool expEnough, bool isLocked, Action<Enum> onUnlock)
+        public void Show(ToneViewContext context)
         {
-            string nameKey = tone.GetDescription();
-            toneName.text = LocalizationManager.Instance.Get(nameKey);
+            _context = context;
             
-            unlockButton.interactable = expEnough;
-            unlockButton.gameObject.SetActive(isLocked);
+            string nameKey = context.Tone.GetDescription();
+            toneName.text = LocalizationManager.Instance.Get(nameKey).ToUpper();
+            toneIcon.sprite = _context.Icon;
             
-            _tone = tone;
-            _onUnlock = onUnlock;
-            
+            unlockButton.interactable = context.ExpEnough;
+            unlockButton.gameObject.SetActive(context.IsLocked);
+
             gameObject.SetActive(true);
         }
 
@@ -55,8 +54,18 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void UnlockTone()
         {
-            _onUnlock.Invoke(_tone);
+            _context.onClick.Invoke(_context.Tone, _context.Cost);
             Hide();
         }
+    }
+
+    public class ToneViewContext
+    {
+        public Enum Tone;
+        public int Cost;
+        public Sprite Icon;
+        public bool ExpEnough;
+        public bool IsLocked;
+        public Action<Enum, int> onClick;
     }
 }

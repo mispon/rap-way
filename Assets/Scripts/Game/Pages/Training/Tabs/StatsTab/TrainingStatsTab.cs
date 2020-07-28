@@ -11,7 +11,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
     public class TrainingStatsTab : TrainingTab
     {
         [Header("Карточки навыков")]
-        [SerializeField] private TrainingStatsCard[] statsButtons;
+        [SerializeField] private TrainingStatsCard[] statsCards;
 
         [Header("Данные о навыках")]
         [SerializeField] private TrainingInfoData data;
@@ -23,7 +23,6 @@ namespace Game.Pages.Training.Tabs.StatsTab
         [SerializeField] private int[] expToLevelUp;
 
         private int _statIndex;
-        
         private Func<int>[] _trainingActions => new Func<int>[]
         {
             UpgradeVocobulary,
@@ -39,9 +38,9 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         public override void Init()
         {
-            for (int i = 0; i < statsButtons.Length; i++)
+            for (int i = 0; i < statsCards.Length; i++)
             {
-                var statButton = statsButtons[i];
+                var statButton = statsCards[i];
                 statButton.SetIndex(i);
                 statButton.onClick += OnStatsSelected;
                 statButton.onLevelUpClick += OnUpgradeStats;
@@ -63,7 +62,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         {
             _statIndex = index;
             
-            for (int i = 0; i < statsButtons.Length; i++)
+            for (int i = 0; i < statsCards.Length; i++)
             {
                 if (i == index)
                 {
@@ -71,10 +70,10 @@ namespace Game.Pages.Training.Tabs.StatsTab
                     var stat = PlayerManager.Data.Stats.Values[index];
                     bool expEnough = PlayerManager.Data.Exp >= trainingCost;
 
-                    statsButtons[i].Show(info, expEnough, expToLevelUp[stat.Value]);
+                    statsCards[i].Show(info, expEnough, expToLevelUp[stat.Value]);
                 }
                 else
-                    statsButtons[i].Hide();
+                    statsCards[i].Hide();
             }
         }
         
@@ -117,7 +116,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
 
         private void OnDestroy()
         {
-            foreach (var statsButton in statsButtons)
+            foreach (var statsButton in statsCards)
             {
                 statsButton.onClick -= OnStatsSelected;
                 statsButton.onLevelUpClick -= OnUpgradeStats;
