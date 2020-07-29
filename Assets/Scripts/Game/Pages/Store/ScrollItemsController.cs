@@ -169,7 +169,7 @@ namespace Game.Pages.Store
         }
 
         /// <summary>
-        ///  Удаление всех элементов из ScrollView
+        /// Удаление всех элементов из ScrollView
         /// </summary>
         public void Dispose()
         {
