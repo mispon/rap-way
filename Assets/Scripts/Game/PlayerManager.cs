@@ -34,6 +34,11 @@ namespace Game
         /// Событие добавления хайпа
         /// </summary>
         public event Action<int> onHypeAdd = value => { };
+        
+        /// <summary>
+        /// Событие добавления опыта
+        /// </summary>
+        public event Action<int> onExpAdd = value => { };
 
         /// <summary>
         /// Данные игрока
@@ -94,6 +99,8 @@ namespace Game
         public void AddExp(int exp)
         {
             Data.Exp += exp;
+            onExpAdd(Data.Exp);
+            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>

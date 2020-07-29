@@ -37,7 +37,7 @@ namespace Game.Pages.Training
         {
             playerWorkPoints.Show(Random.Range(1, 11));
         }
-
+        
         /// <summary>
         /// Обработчик завершения работы
         /// </summary>

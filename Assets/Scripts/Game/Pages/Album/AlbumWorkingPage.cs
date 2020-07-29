@@ -1,4 +1,6 @@
-﻿using Models.Player;
+﻿using Core;
+using Enums;
+using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,12 +49,20 @@ namespace Game.Pages.Album
         }
 
         /// <summary>
+        /// Обработчик перехода к странице результата
+        /// </summary>
+        private void ShowResultPage()
+        {
+            albumResult.Show(_album);
+            Close();
+        }
+        
+        /// <summary>
         /// Обработчик завершения работы
         /// </summary>
         protected override void FinishWork()
         {
-            albumResult.Show(_album);
-            Close();
+            GameEventsManager.CallEvent(GameEventType.Album, ShowResultPage);
         }
 
         /// <summary>
