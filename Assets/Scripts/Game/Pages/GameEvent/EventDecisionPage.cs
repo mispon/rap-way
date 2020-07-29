@@ -37,8 +37,7 @@ namespace Game.Pages.GameEvent
         private void SaveResult()
         {
             var income = _eventDecision.MetricsIncome;
-            PlayerManager.Instance.AddMoney(income.Money);
-            PlayerManager.Instance.AddFans(income.Fans);
+            PlayerManager.Instance.GiveReward(income.Fans, income.Money);
             PlayerManager.Instance.AddHype(income.Hype);
             PlayerManager.Instance.AddExp(income.Experience);
         }

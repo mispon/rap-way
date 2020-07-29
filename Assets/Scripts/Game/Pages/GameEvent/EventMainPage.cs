@@ -27,10 +27,10 @@ namespace Game.Pages.GameEvent
 
         private void Start()
         {
-            peacefullyButton.onClick.AddListener(()=> Decide(GameEventDecisionType.Peacefully));
-            aggressivelyButton.onClick.AddListener(()=> Decide(GameEventDecisionType.Aggressively));
-            indifferentlyButton.onClick.AddListener(()=> Decide(GameEventDecisionType.Indifferently));
-            peerAssistButton.onClick.AddListener(()=> Decide(GameEventDecisionType.PeerAssist));
+            peacefullyButton.onClick.AddListener(() => Decide(GameEventDecisionType.Peacefully));
+            aggressivelyButton.onClick.AddListener(() => Decide(GameEventDecisionType.Aggressively));
+            indifferentlyButton.onClick.AddListener(() => Decide(GameEventDecisionType.Indifferently));
+            peerAssistButton.onClick.AddListener(() => Decide(GameEventDecisionType.PeerAssist));
         }
 
         /// <summary>

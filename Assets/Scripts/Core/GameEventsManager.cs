@@ -60,12 +60,9 @@ namespace Core
         /// </summary>
         private static void SetUpCallback(Action onEventShownAction)
         {
-            if(onEventShownAction == null)
-                return;
-            
             Instance.onEventShow = () =>
             {
-                onEventShownAction.Invoke();
+                onEventShownAction?.Invoke();
                 Instance.onEventShow = null;
             };
         }
