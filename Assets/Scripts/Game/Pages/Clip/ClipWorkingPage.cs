@@ -1,4 +1,5 @@
 ﻿using Core;
+using Enums;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,12 +47,20 @@ namespace Game.Pages.Clip
         }
 
         /// <summary>
+        /// Обработчик перехода к странице результата
+        /// </summary>
+        private void ShowResultPage()
+        {
+            clipResult.Show(_clip);
+            Close();
+        }
+        
+        /// <summary>
         /// Обработчик завершения работы
         /// </summary>
         protected override void FinishWork()
         {
-            clipResult.Show(_clip);
-            Close();
+            GameEventsManager.CallEvent(GameEventType.Clip, ShowResultPage);
         }
 
         /// <summary>

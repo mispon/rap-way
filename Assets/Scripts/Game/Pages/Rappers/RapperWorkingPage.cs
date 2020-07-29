@@ -44,7 +44,7 @@ namespace Game.Pages.Rappers
         {
             GenerateWorkPoints();
         }
-
+        
         /// <summary>
         /// Вызывается при завершении переговоров
         /// </summary>

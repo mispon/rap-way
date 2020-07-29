@@ -1,4 +1,6 @@
-﻿using Models.Player;
+﻿using Core;
+using Enums;
+using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,12 +49,20 @@ namespace Game.Pages.Concert
         }
 
         /// <summary>
+        /// Обработчик перехода к странице результата
+        /// </summary>
+        private void ShowResultPage()
+        {
+            concertResult.Show(_concert);
+            Close();
+        }
+        
+        /// <summary>
         /// Обработчик завершения работы
         /// </summary>
         protected override void FinishWork()
         {
-            concertResult.Show(_concert);
-            Close();
+            GameEventsManager.CallEvent(GameEventType.Concert, ShowResultPage);
         }
 
         /// <summary>
