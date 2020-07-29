@@ -50,7 +50,7 @@ namespace Core
                     return;
                 }
                 
-                Debug.LogAssertion($"Не добавлено ни одно игровое событие типа \"{type}\"!");
+                Debug.LogAssertion($"Не добавлено ни одного игрового события типа \"{type}\"!");
             }
             onEventShownAction.Invoke();
         }
