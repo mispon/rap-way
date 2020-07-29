@@ -74,6 +74,9 @@ namespace Data
         public GameEventUi DecisionUi;
     }
     
+    /// <summary>
+    /// Информация, выводимая на экран, для описания ситуации или решения
+    /// </summary>
     [Serializable]
     public struct GameEventUi
     {
@@ -81,6 +84,9 @@ namespace Data
         public Sprite Background;
     }
 
+    /// <summary>
+    /// Набор данных об изменнии метрик в связи с принятым решением
+    /// </summary>
     [Serializable]
     public struct MetricsIncome
     {
@@ -92,14 +98,15 @@ namespace Data
 
     public static partial class Extensions
     {
+        /// <summary>
+        /// Возвращает случайное событие из набора. Если набор пусто, то возвращает null
+        /// </summary>
         public static GameEventInfo GetRandom(this GameEventInfo[] array)
-        {
-            if (array.Length == 0)
-                return null;
+            => array.Length == 0 ? null : array[Random.Range(0, array.Length)];
 
-            return array[Random.Range(0, array.Length)];
-        }
-
+        /// <summary>
+        /// Возвращает случайное решение из типизированного набора решений, если таковые имеются.
+        /// </summary>
         public static GameEventDecision GetRandom(this GameEventDecision[] gameEventDecisions, GameEventDecisionType decisionType)
         {
             var typedDecisions = gameEventDecisions.Where(el => el.DecisionType == decisionType).ToArray();
