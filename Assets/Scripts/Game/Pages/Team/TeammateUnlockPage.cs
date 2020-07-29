@@ -12,15 +12,20 @@ namespace Game.Pages.Team
     /// </summary>
     public class TeammateUnlockPage: Page
     {
-        [Space, SerializeField] private Text teammateText;
+        [SerializeField] private Text teammateName;
+        [SerializeField] private Image avatar;
+        [Space]
+        [SerializeField] private Sprite[] avatars;
 
         /// <summary>
         /// Открытие страницы отображения нового члена команды
         /// </summary>
         public void Show(Teammate unlockedTeammate)
         {
-            var desc = unlockedTeammate.Type.GetDescription();
-            teammateText.text = LocalizationManager.Instance.Get(desc); 
+            var nameKey = unlockedTeammate.Type.GetDescription();
+            teammateName.text = LocalizationManager.Instance.Get(nameKey);
+            avatar.sprite = avatars[(int) unlockedTeammate.Type];
+            
             Open();
         }
         
