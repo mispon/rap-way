@@ -11,11 +11,12 @@ namespace Game.Pages.Training.Tabs.SkillsTab
     /// <summary>
     /// Форма с детальной информацией о навыке
     /// </summary>
-    [RequireComponent(typeof(Button))]
     public class TrainingSkillView : MonoBehaviour
     {
         [SerializeField] private Text header;
         [SerializeField] private Text desc;
+        [SerializeField] private Image skillImage;
+        [SerializeField] private Button viewButton;
         [SerializeField] private Button unlockButton;
 
         private Skills _skill;
@@ -23,8 +24,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
 
         private void Start()
         {
-            var button = GetComponent<Button>();
-            button.onClick.AddListener(Hide);
+            viewButton.onClick.AddListener(Hide);
             unlockButton.onClick.AddListener(UnlockSkill);
         }
 
@@ -35,7 +35,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         {
             var locale = LocalizationManager.Instance;
             
-            header.text = locale.Get(info.Type.GetDescription());
+            header.text = locale.Get(info.Type.GetDescription()).ToUpper();
             desc.text = locale.Get(info.DescriptionKey);
 
             unlockButton.interactable = expEnough;
@@ -43,7 +43,8 @@ namespace Game.Pages.Training.Tabs.SkillsTab
 
             _skill = info.Type;
             _onUnlock = onUnlock;
-            
+
+            skillImage.sprite = info.Normal;
             gameObject.SetActive(true);
         }
 

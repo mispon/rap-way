@@ -1,4 +1,5 @@
 using System;
+using Game.UI;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +14,8 @@ namespace Game.Pages.Training.Tabs.TeamTab
         [SerializeField] private Text level;
         [SerializeField] private Button upButton;
         [SerializeField] private Button payButton;
-        [SerializeField] private Slider exp;
-        [SerializeField] private GameObject innactiveLabel;
+        [SerializeField] private ProgressBar expBar;
+        [SerializeField] private GameObject inactiveLabel;
 
         public Action<Teammate> onUp = teammate => {};
         public Action<Teammate, int> onPay = (teammate, salary) => {};
@@ -40,13 +41,13 @@ namespace Game.Pages.Training.Tabs.TeamTab
                 return;
             }
             
-            innactiveLabel.SetActive(false);
+            inactiveLabel.SetActive(false);
             level.text = teammate.Skill.Value.ToString();
             
             bool noLimit = teammate.Skill.Value < PlayerData.MAX_SKILL;
             
-            exp.maxValue = expToUp;
-            exp.value = noLimit ? teammate.Skill.Exp : expToUp;
+            int exp = noLimit ? teammate.Skill.Exp : expToUp;
+            expBar.SetValue(exp, expToUp);
 
             upButton.interactable = noLimit && expEnough;
             payButton.interactable = !teammate.HasPayment;
@@ -57,11 +58,10 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void SetLocked()
         {
-            innactiveLabel.SetActive(true);
+            inactiveLabel.SetActive(true);
             level.text = "0";
             
-            exp.value = 0;
-            exp.maxValue = 1;
+            expBar.SetValue(0, 1);
                 
             upButton.interactable = false;
             payButton.interactable = false;
@@ -80,8 +80,8 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void OnPay()
         {
-            var salaty = TeamManager.Instance.GetSalary(_teammate);
-            onPay.Invoke(_teammate, salaty);
+            var salary = TeamManager.Instance.GetSalary(_teammate);
+            onPay.Invoke(_teammate, salary);
         }
     }
 }

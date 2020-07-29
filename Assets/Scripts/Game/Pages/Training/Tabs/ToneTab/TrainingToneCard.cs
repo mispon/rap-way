@@ -1,5 +1,5 @@
 using System;
-using Enums;
+using Data;
 using Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,15 +10,16 @@ namespace Game.Pages.Training.Tabs.ToneTab
     /// <summary>
     /// Карточка стилистики в гриде стилистик
     /// </summary>
-    public class TrainingToneCard : MonoBehaviour
+    public abstract class TrainingToneCard : MonoBehaviour
     {
-        [SerializeField] private Text toneName;
-        [SerializeField] private Button button;
-        [SerializeField] private TrainingToneView view;
+        [SerializeField] protected Text toneName;
+        [SerializeField] protected Text tonePrice;
+        [SerializeField] protected Button button;
+        [SerializeField] protected TrainingToneView view;
         
-        public Action<Enum> onUnlock = tone => {};
-        
-        private Enum _tone;
+        public Action<Enum, int> onUnlock = (tone, cost) => {};
+
+        protected TonesInfo _info;
         private bool _expEnough;
         private bool _locked;
 
@@ -30,30 +31,37 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// <summary>
         /// Устанавливает данные карточки
         /// </summary>
-        public void Setup(int index, Enum tone)
+        public void Setup(int index, TonesInfo info)
         {
-            _tone = tone;
-            
-            string nameKey = tone.GetDescription();
-            toneName.text = LocalizationManager.Instance.Get(nameKey);
+            _info = info;
+
+            string nameKey = GetValue().GetDescription();
+            toneName.text = LocalizationManager.Instance.Get(nameKey).ToUpper();
 
             name = $"ToneCard-{index + 1}";
             gameObject.SetActive(true);
         }
+        
+        /// <summary>
+        /// Возвращает значение 
+        /// </summary>
+        protected abstract Enum GetValue();
+        
+        /// <summary>
+        /// Возвращает признак закрытости 
+        /// </summary>
+        protected abstract bool IsLocked();
 
         /// <summary>
         /// Обновляет состояние карточки
         /// </summary>
-        public void Refresh(bool expEnough)
+        public void Refresh()
         {
-            _expEnough = expEnough;
-            
-            if (_tone.GetType() == typeof(Themes))
-                _locked = !PlayerManager.Data.Themes.Contains((Themes) _tone);
-            else
-                _locked = !PlayerManager.Data.Styles.Contains((Styles) _tone);
-            
-            button.image.color = _locked ? Color.blue : Color.green;
+            _expEnough = PlayerManager.Data.Exp >= _info.Price;
+            _locked = IsLocked();
+
+            tonePrice.text = _locked ? _info.Price.ToString() : "";
+            button.image.sprite = _locked ? _info.Locked : _info.Normal;
         }
 
         /// <summary>
@@ -61,7 +69,17 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void ShowInfo()
         {
-            view.Show(_tone, _expEnough, _locked, onUnlock);
+            var context = new ToneViewContext
+            {
+                Tone = GetValue(),
+                Cost = _info.Price,
+                Icon = _info.Normal,
+                ExpEnough = _expEnough,
+                IsLocked = _locked,
+                onClick = onUnlock
+            };
+            
+            view.Show(context);
         }
     }
 }
