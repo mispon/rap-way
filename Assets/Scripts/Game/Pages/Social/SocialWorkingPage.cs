@@ -25,7 +25,7 @@ namespace Game.Pages.Social
         [SerializeField] private WorkPoints prManWorkPoints;
         [SerializeField] private GameObject prMan;
 
-        [Header("Страница результата")]
+        [Header("Страницы результата")]
         [SerializeField, ArrayElementTitle("Type")] private TypedResultPage[] socialResults; 
         
         private SocialInfo _social;
