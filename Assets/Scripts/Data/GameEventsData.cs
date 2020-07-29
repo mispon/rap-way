@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Enums;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Data
 {
+    /// <summary>
+    /// Данные о событиях при создании Production
+    /// </summary>
     [CreateAssetMenu(fileName = "GameEventsData", menuName = "Data/Game Events")]
     public class GameEventsData: ScriptableObject
     {
@@ -27,16 +31,20 @@ namespace Data
 
         /// <summary>
         /// Возвращает случайное игровое событие
+        /// Возвращает null, если не найдено событий этого типа
         /// </summary>
         public GameEventInfo GetRandomInfo(GameEventType type)
         {
             if (!_gameEventInfosCollection.ContainsKey(type))
-                return default;
+                return null;
 
             return _gameEventInfosCollection[type].GetRandom();
         }
     }
 
+    /// <summary>
+    /// Данные конкретного события: выводимая пользователю информация и набор данных решений
+    /// </summary>
     [Serializable]
     public class GameEventInfo
     {
@@ -52,6 +60,9 @@ namespace Data
             => gameEventDecisions.GetRandom(decisionType);
     }
 
+    /// <summary>
+    /// Данные решения: 
+    /// </summary>
     [Serializable]
     public class GameEventDecision
     {
@@ -84,7 +95,7 @@ namespace Data
         public static GameEventInfo GetRandom(this GameEventInfo[] array)
         {
             if (array.Length == 0)
-                return default;
+                return null;
 
             return array[Random.Range(0, array.Length)];
         }
@@ -93,7 +104,7 @@ namespace Data
         {
             var typedDecisions = gameEventDecisions.Where(el => el.DecisionType == decisionType).ToArray();
             if (typedDecisions.Length == 0)
-                return default;
+                throw new RapWayException($"Нет ни одного решения типа \"{decisionType}\"");
 
             return typedDecisions[Random.Range(0, typedDecisions.Length)];
         }

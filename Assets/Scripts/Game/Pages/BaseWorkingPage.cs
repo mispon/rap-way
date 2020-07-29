@@ -21,7 +21,7 @@ namespace Game.Pages
         /// Работа, выполняемая за один день
         /// </summary>
         protected abstract void DoDayWork();
-        
+
         /// <summary>
         /// Обработчик завершения работы
         /// </summary>

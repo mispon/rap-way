@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace Game.Pages.GameEvent
 {
+    /// <summary>
+    /// Страница игрового события, описывающая ситуацию
+    /// </summary>
     public class EventMainPage: Page
     {
         [Header("Настройки UI")]
@@ -30,6 +33,9 @@ namespace Game.Pages.GameEvent
             peerAssistButton.onClick.AddListener(()=> Decide(GameEventDecisionType.PeerAssist));
         }
 
+        /// <summary>
+        /// Функция показа страницы игрового события
+        /// </summary>
         public void Show(GameEventInfo eventInfo)
         {
             _eventInfo = eventInfo;
@@ -45,6 +51,8 @@ namespace Game.Pages.GameEvent
             Close();
         }
 
+        #region PAGE CALLBACKS
+
         protected override void BeforePageOpen()
         {
             descriptionText.text = _eventInfo.SituationUi.Description;
@@ -58,5 +66,7 @@ namespace Game.Pages.GameEvent
 
             _eventInfo = null;
         }
+
+        #endregion
     }
 }
