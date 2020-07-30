@@ -1,6 +1,7 @@
 ﻿using System;
 using Enums;
 using Models.Game;
+using UnityEngine;
 
 namespace Models.Player
 {
@@ -42,6 +43,7 @@ namespace Models.Player
     public struct TeammateInfo
     {
         public TeammateType Type;
+        public Sprite Avatar;
         public int FansToUnlock;
         public int[] Salary;
     }

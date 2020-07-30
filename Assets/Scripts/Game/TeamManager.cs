@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Core;
+using Enums;
+using Game.Effects;
 using Game.Notifications;
 using Game.Pages.Team;
 using Game.Pages.Training;
@@ -18,11 +20,12 @@ namespace Game
         [Header("Данные команды")] 
         [ArrayElementTitle("Type")] public TeammateInfo[] teammateInfos;
 
-        [Header("Страницы команды")]
+        [Header("Страницы")]
         [SerializeField] private TeammateUnlockPage unlockTeammatePage;
-
-        [Header("Страница тренировок")]
         [SerializeField] private TrainingMainPage trainingPage;
+
+        [Header("Эффект открытия нового тиммейта")]
+        [SerializeField] private NewTeammateEffect newTeammateEffect;
 
         private void Start()
         {
@@ -35,7 +38,7 @@ namespace Game
         /// </summary>
         public int GetSalary(Teammate teammate)
         {
-            var info = teammateInfos.First(tmi => tmi.Type == teammate.Type);
+            var info = GetInfo(teammate.Type);
             return info.Salary[teammate.Skill.Value - 1];
         }
         
@@ -50,7 +53,7 @@ namespace Game
 
             var fans = PlayerManager.Data.Fans;
             var lockedTeammate = lockedTeammates
-                .FirstOrDefault(tm => teammateInfos.First(tmi => tmi.Type == tm.Type).FansToUnlock <= fans);
+                .FirstOrDefault(tm => GetInfo(tm.Type).FansToUnlock <= fans);
 
             if (lockedTeammate != null)
                 UnlockTeammate(lockedTeammate);
@@ -64,7 +67,15 @@ namespace Game
             teammate.Skill.Value = 1;
             teammate.HasPayment = true;
 
-            void Notification() => unlockTeammatePage.Show(teammate);
+            void Notification()
+            {
+                var info = GetInfo(teammate.Type);
+                newTeammateEffect.Show(
+                    info.Avatar,
+                    () => unlockTeammatePage.Show(teammate, info.Avatar)
+                );
+            }
+            
             NotificationManager.Instance.AddNotification(Notification);
         }
 
@@ -78,6 +89,14 @@ namespace Game
             
             const int teamTab = 3;
             NotificationManager.Instance.AddNotification(() => trainingPage.OpenPage(teamTab));
+        }
+
+        /// <summary>
+        /// Возвращает информацию о тиммейте 
+        /// </summary>
+        private TeammateInfo GetInfo(TeammateType type)
+        {
+            return teammateInfos.First(e => e.Type == type);
         }
 
         /// <summary>

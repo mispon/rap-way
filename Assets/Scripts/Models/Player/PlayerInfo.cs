@@ -58,8 +58,11 @@ namespace Models.Player
         /// </summary>
         public string HomeLand;
         
-        public static PlayerInfo New => new PlayerInfo();
-        
-        public override string ToString() => $"{FirstName} <{NickName}> {LastName}";
+        public static PlayerInfo New => new PlayerInfo
+        {
+            FirstName = "Jon",
+            LastName = "Snow",
+            NickName = "White Wolf"
+        };
     }
 }

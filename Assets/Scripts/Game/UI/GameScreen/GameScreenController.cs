@@ -3,6 +3,7 @@ using Core.Interfaces;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 using Utils.Extensions;
 
 namespace Game.UI.GameScreen
@@ -10,7 +11,7 @@ namespace Game.UI.GameScreen
     /// <summary>
     /// Контроллер главного окна игры
     /// </summary>
-    public class GameScreenController: MonoBehaviour, IStarter
+    public class GameScreenController: Singleton<GameScreenController>, IStarter
     {
         [Header("HUD контроллы")]
         [SerializeField] private Text playerNickname;
@@ -46,6 +47,14 @@ namespace Game.UI.GameScreen
             playerFans.text = playerData.Fans.GetDisplay();
             playerHype.text = playerData.Hype.ToString();
             currentDate.text = TimeManager.Instance.DisplayNow;
+        }
+
+        /// <summary>
+        /// Изменяет видимость главного экрана
+        /// </summary>
+        public void SetVisibility(bool state)
+        {
+            gameObject.SetActive(state);
         }
 
         /// <summary>

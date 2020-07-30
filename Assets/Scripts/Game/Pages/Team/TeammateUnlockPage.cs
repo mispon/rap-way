@@ -14,17 +14,15 @@ namespace Game.Pages.Team
     {
         [SerializeField] private Text teammateName;
         [SerializeField] private Image avatar;
-        [Space]
-        [SerializeField] private Sprite[] avatars;
 
         /// <summary>
         /// Открытие страницы отображения нового члена команды
         /// </summary>
-        public void Show(Teammate unlockedTeammate)
+        public void Show(Teammate unlockedTeammate, Sprite teammateAvatar)
         {
             var nameKey = unlockedTeammate.Type.GetDescription();
             teammateName.text = LocalizationManager.Instance.Get(nameKey);
-            avatar.sprite = avatars[(int) unlockedTeammate.Type];
+            avatar.sprite = teammateAvatar;
             
             Open();
         }
