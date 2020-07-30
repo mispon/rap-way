@@ -29,8 +29,8 @@ namespace Game
 
         private void Start()
         {
-            TimeManager.Instance.onDayLeft += CheckNewTeammate;
-            TimeManager.Instance.onMonthLeft += OnSalary;
+            TimeManager.Instance.onDayLeft += OnDayLeft;
+            TimeManager.Instance.onMonthLeft += OnMonthLeft;
         }
 
         /// <summary>
@@ -45,15 +45,40 @@ namespace Game
         /// <summary>
         /// Проверяет возможность получения нового тиммейта
         /// </summary>
-        private void CheckNewTeammate()
+        private void OnDayLeft()
+        {
+            CheckTeammatesUnlock();
+            DecreaseManagerCooldown();
+        }
+        
+        /// <summary>
+        /// Открывает страницу выплаты зарплат
+        /// </summary>
+        private void OnMonthLeft()
+        {
+            var teammates = GetTeammates(e => !e.IsEmpty);
+            if (teammates.Length == 0)
+                return;
+
+            foreach (var teammate in teammates)
+                teammate.HasPayment = false;
+            
+            const int teamTab = 3;
+            NotificationManager.Instance.AddNotification(() => trainingPage.OpenPage(teamTab));
+        }
+
+        /// <summary>
+        /// Проверяет возможность разблокировки новых тиммейтов
+        /// </summary>
+        private void CheckTeammatesUnlock()
         {
             var lockedTeammates = GetTeammates(e => e.IsEmpty);
             if (lockedTeammates.Length == 0)
                 return;
 
-            var fans = PlayerManager.Data.Fans;
+            int fans = PlayerManager.Data.Fans;
             var lockedTeammate = lockedTeammates
-                .FirstOrDefault(tm => GetInfo(tm.Type).FansToUnlock <= fans);
+                .FirstOrDefault(e => GetInfo(e.Type).FansToUnlock <= fans);
 
             if (lockedTeammate != null)
                 UnlockTeammate(lockedTeammate);
@@ -80,15 +105,13 @@ namespace Game
         }
 
         /// <summary>
-        /// Открывает страницу выплаты зарплат
+        /// Сокращает кулдаун менеджера
         /// </summary>
-        private void OnSalary()
+        private static void DecreaseManagerCooldown()
         {
-            if (GetTeammates(e => !e.IsEmpty).Length == 0)
-                return;
-            
-            const int teamTab = 3;
-            NotificationManager.Instance.AddNotification(() => trainingPage.OpenPage(teamTab));
+            var manager = PlayerManager.Data.Team.Manager;
+            if (manager.Cooldown > 0)
+                manager.Cooldown -= 1;
         }
 
         /// <summary>
@@ -107,6 +130,12 @@ namespace Game
             return PlayerManager.Data.Team.TeammatesArray
                 .Where(predicate)
                 .ToArray();
+        }
+
+        private void OnDestroy()
+        {
+            TimeManager.Instance.onDayLeft -= OnDayLeft;
+            TimeManager.Instance.onMonthLeft -= OnMonthLeft;
         }
     }
 }
