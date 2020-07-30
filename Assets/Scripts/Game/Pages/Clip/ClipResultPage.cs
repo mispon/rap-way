@@ -54,8 +54,7 @@ namespace Game.Pages.Clip
         /// </summary>
         private void SaveResult(ClipInfo clip)
         {
-            PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome);
-            PlayerManager.Instance.AddExp(rewardExp);
+            PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome, rewardExp);
             ProductionManager.AddClip(clip);
         }
 

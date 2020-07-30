@@ -42,8 +42,8 @@ namespace Game.UI.GameScreen
         public void UpdateHUD(PlayerData playerData)
         {
             playerNickname.text = playerData.Info.NickName;
-            playerMoney.text = playerData.Money.GetDescription();
-            playerFans.text = playerData.Fans.GetDescription();
+            playerMoney.text = playerData.Money.GetDisplay();
+            playerFans.text = playerData.Fans.GetDisplay();
             playerHype.text = playerData.Hype.ToString();
             currentDate.text = TimeManager.Instance.DisplayNow;
         }

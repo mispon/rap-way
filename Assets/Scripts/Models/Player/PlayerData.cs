@@ -28,6 +28,8 @@ namespace Models.Player
         public List<Themes> Themes;
         public List<Styles> Styles;
         public List<Skills> Skills;
+        public HashSet<int> Feats;
+        public HashSet<int> Battles;
         
         public static PlayerData New => new PlayerData
         {
@@ -45,7 +47,9 @@ namespace Models.Player
             Achievements = new List<Achievement>(),
             Themes = new List<Themes> { Enums.Themes.Life },
             Styles = new List<Styles> { Enums.Styles.Underground },
-            Skills = new List<Skills>()
+            Skills = new List<Skills>(),
+            Feats = new HashSet<int>(),
+            Battles = new HashSet<int>()
         };
     }
 }

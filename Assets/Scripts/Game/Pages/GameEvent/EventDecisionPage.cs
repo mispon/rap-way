@@ -37,9 +37,8 @@ namespace Game.Pages.GameEvent
         private void SaveResult()
         {
             var income = _eventDecision.MetricsIncome;
-            PlayerManager.Instance.GiveReward(income.Fans, income.Money);
+            PlayerManager.Instance.GiveReward(income.Fans, income.Money, income.Experience);
             PlayerManager.Instance.AddHype(income.Hype);
-            PlayerManager.Instance.AddExp(income.Experience);
         }
 
         #region PAGE CALLBACKS
@@ -87,7 +86,7 @@ namespace Game.Pages.GameEvent
             var isActive = (value == 0);
             component.gameObject.SetActive(isActive);
             if (isActive)
-                component.text = value.GetDescription();
+                component.text = value.GetDisplay();
         }
 
         /// <summary>

@@ -45,14 +45,13 @@ namespace Core
             PlayerManager.Instance.onMoneyAdd += CheckMoney;
             PlayerManager.Instance.onFansAdd += CheckFans;
             PlayerManager.Instance.onHypeAdd += CheckHype;
+            PlayerManager.Instance.onFeat += CheckFeat;
+            PlayerManager.Instance.onBattle += CheckBattle;
 
             ProductionManager.Instance.onTrackAdd += CheckTrackChartPosition;
             ProductionManager.Instance.onAlbumAdd += CheckAlbumChartPosition;
             ProductionManager.Instance.onClipAdd += CheckClipLoser;
             ProductionManager.Instance.onConcertAdd += CheckConcertPlace;
-            
-            //todo: CheckFeat
-            //todo: CheckBattle
         }
         
         /// <summary>
@@ -154,8 +153,9 @@ namespace Core
             if(!TryGetInfo(type, out var lockedInfos))
                 return;
 
-            var achievementInfos =
-                lockedInfos.Where(info => info.CheckCondition(value, info.Achievement.CompareValue));
+            var achievementInfos = lockedInfos
+                .Where(info => info.CheckCondition(value, info.Achievement.CompareValue))
+                .ToArray();
 
             if (achievementInfos.Any())
             {
@@ -230,7 +230,7 @@ namespace Core
                 }
                 default:
                 {
-                    return achievement.CompareValue.GetDescription();
+                    return achievement.CompareValue.GetDisplay();
                 }
             }
         }

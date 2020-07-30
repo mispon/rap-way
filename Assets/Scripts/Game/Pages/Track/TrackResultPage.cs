@@ -58,20 +58,15 @@ namespace Game.Pages.Track
         /// </summary>
         private void SaveResult(TrackInfo track)
         {
-            PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome);
-            PlayerManager.Instance.AddExp(rewardExp);
+            PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome, rewardExp);
             ProductionManager.AddTrack(track);
+            
+            if (track.Feat != null)
+                PlayerManager.Instance.SaveFeat(track.Feat.Id);
         }
 
         #region PAGE EVENTS
-        /// <summary>
-        /// Выполняется перед открытием страницы
-        /// </summary>
-        protected override void BeforePageOpen()
-        {
-            // todo: запустить или не запускать случайное событие
-        }
-        
+
         /// <summary>
         /// Выполняется перед закрытием страницы
         /// </summary>
@@ -80,6 +75,7 @@ namespace Game.Pages.Track
             SaveResult(_trackInfo);
             _trackInfo = null;
         }
+        
         #endregion
     }
 }

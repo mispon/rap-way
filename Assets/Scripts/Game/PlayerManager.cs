@@ -23,22 +23,27 @@ namespace Game
         /// <summary>
         /// Событие добавления денег
         /// </summary>
-        public event Action<int> onMoneyAdd = value => { };
+        public event Action<int> onMoneyAdd = value => {};
         
         /// <summary>
         /// Событие добавления фанатов
         /// </summary>
-        public event Action<int> onFansAdd = value => { };
+        public event Action<int> onFansAdd = value => {};
         
         /// <summary>
         /// Событие добавления хайпа
         /// </summary>
-        public event Action<int> onHypeAdd = value => { };
+        public event Action<int> onHypeAdd = value => {};
+
+        /// <summary>
+        /// Событие фита с реальным реппером 
+        /// </summary>
+        public event Action<int> onFeat = rapper => {};
         
         /// <summary>
-        /// Событие добавления опыта
+        /// Событие победы в батле над реальным репером
         /// </summary>
-        public event Action<int> onExpAdd = value => { };
+        public event Action<int> onBattle = rapper => {}; 
 
         /// <summary>
         /// Данные игрока
@@ -57,29 +62,31 @@ namespace Game
         /// <summary>
         /// Выдает награду за завершение основного действия
         /// </summary>
-        public void GiveReward(int fans, int money)
+        public void GiveReward(int fans, int money, int exp = 0)
         {
-            AddFans(fans);
+            AddFans(fans, exp);
             AddMoney(money);
         }
         
         /// <summary>
         /// Изменяет количество фанатов 
         /// </summary>
-        public void AddFans(int fans)
+        public void AddFans(int fans, int exp = 0)
         {
+            AddExp(exp);
             Data.Fans += fans;
-            onFansAdd(Data.Fans);
+            onFansAdd.Invoke(Data.Fans);
             gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
         /// Изменяет количество денег 
         /// </summary>
-        public void AddMoney(int money)
+        public void AddMoney(int money, int exp = 0)
         {
+            AddExp(exp);
             Data.Money += money;
-            onMoneyAdd(Data.Money);
+            onMoneyAdd.Invoke(Data.Money);
             gameScreen.UpdateHUD(Data);
         }
 
@@ -89,18 +96,16 @@ namespace Game
         public void AddHype(int hype)
         {
             Data.Hype = Mathf.Clamp(Data.Hype + hype, 0, 100);
-            onHypeAdd(Data.Hype);
+            onHypeAdd.Invoke(Data.Hype);
             gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
         /// Изменяет количество опыта 
         /// </summary>
-        public void AddExp(int exp)
+        private static void AddExp(int exp)
         {
             Data.Exp += exp;
-            onExpAdd(Data.Exp);
-            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -165,6 +170,30 @@ namespace Game
         {
             var teammate = Data.Team.TeammatesArray.First(e => e.Type == type);
             teammate.Cooldown = cooldown;
+        }
+
+        /// <summary>
+        /// Сохраняет информацию о фите
+        /// </summary>
+        public void SaveFeat(int rapperId)
+        {
+            if (Data.Feats.Contains(rapperId))
+                return;
+
+            Data.Feats.Add(rapperId);
+            onFeat.Invoke(rapperId);
+        }
+
+        /// <summary>
+        /// Сохраняет информацию о батле
+        /// </summary>
+        public void SaveBattle(int rapperId)
+        {
+            if (Data.Battles.Contains(rapperId))
+                return;
+
+            Data.Battles.Add(rapperId);
+            onBattle.Invoke(rapperId);
         }
     }
 }

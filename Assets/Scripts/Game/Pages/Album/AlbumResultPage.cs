@@ -57,8 +57,7 @@ namespace Game.Pages.Album
         /// </summary>
         private void SaveResult(AlbumInfo album)
         {
-            PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome);
-            PlayerManager.Instance.AddExp(rewardExp);
+            PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome, rewardExp);
             ProductionManager.AddAlbum(album);
         }
 

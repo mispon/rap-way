@@ -1,5 +1,7 @@
 using Data;
+using Game.Pages.Battle;
 using Game.Pages.Feat;
+using Localization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +22,7 @@ namespace Game.Pages.Rappers
         [Header("Страницы")]
         [SerializeField] private RappersListPage listPage;
         [SerializeField] private FeatSettingsPage featPage;
+        [SerializeField] private BattleWorkingPage battlePage;
 
         private RapperInfo _rapper;
         private bool _isFeat;
@@ -34,12 +37,12 @@ namespace Game.Pages.Rappers
         /// <summary>
         /// Открывает страницу с результатами переговоров
         /// </summary>
-        public void Show(RapperInfo rapper, int workPoints, bool isFeat)
+        public void Show(RapperInfo rapper, int playerPoints, int rapperPoints, bool isFeat)
         {
             _rapper = rapper;
             _isFeat = isFeat;
             
-            bool result = AnalyzeConversations(rapper, workPoints);
+            bool result = AnalyzeConversations(playerPoints, rapperPoints);
             DisplayResult(result, rapper.Name);
             
             Open();
@@ -48,11 +51,10 @@ namespace Game.Pages.Rappers
         /// <summary>
         /// Анализирует успешность переговоров 
         /// </summary>
-        private bool AnalyzeConversations(RapperInfo rapper, int workPoints)
+        private static bool AnalyzeConversations(int playerPoints, int rapperPoints)
         {
-            // TODO: analyze result
-
-            return true;
+            int hypeBonus = PlayerManager.Data.Hype / 5;
+            return playerPoints + hypeBonus > rapperPoints;
         }
 
         /// <summary>
@@ -60,8 +62,8 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void DisplayResult(bool result, string rapperName)
         {
-            string template = result ? "Успешные переговоры с" : "Неудачные переговоры с";
-            header.text = $"{template} {rapperName}!";
+            string key = result ? "conversations_success" : "conversations_fail";
+            header.text = $"{LocalizationManager.Instance.Get(key)} {rapperName}!";
             
             okButton.gameObject.SetActive(!result);
             cancelButton.gameObject.SetActive(result);
@@ -74,15 +76,10 @@ namespace Game.Pages.Rappers
         private void OnNext()
         {
             if (_isFeat)
-            {
                 featPage.Show(_rapper);
-            }
             else
-            {
-                // TODO: load battle scene
-                print($"Start battle with {_rapper.Name}");
-            }
-            
+                battlePage.StartWork(_rapper);
+
             listPage.Close();
             Close();
         }

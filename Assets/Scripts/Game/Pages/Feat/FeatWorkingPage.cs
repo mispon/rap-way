@@ -1,5 +1,4 @@
 using Models.Info.Production;
-using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,8 +51,14 @@ namespace Game.Pages.Feat
         {
             var stats = PlayerManager.Data.Stats;
             
-            var bitWorkPoints = CreateWorkPoints(stats.Bitmaking.Value, playerBitWorkPoints, rapperBitWorkPoints);
-            var textWorkPoints = CreateWorkPoints(stats.Vocobulary.Value, playerTextWorkPoints, rapperTextWorkPoints);
+            var bitWorkPoints = CreateWorkPoints(
+                stats.Bitmaking.Value, playerBitWorkPoints,
+                _track.Feat.Vocobulary, rapperBitWorkPoints
+            );
+            var textWorkPoints = CreateWorkPoints(
+                stats.Vocobulary.Value, playerTextWorkPoints,
+                _track.Feat.Bitmaking, rapperTextWorkPoints
+            );
             
             _track.BitPoints += bitWorkPoints;
             _track.TextPoints += textWorkPoints;
@@ -62,12 +67,14 @@ namespace Game.Pages.Feat
         /// <summary>
         /// Создает рандомное количество очков работы в зависимости от скилла персонажа и тиммейта
         /// </summary>
-        private static int CreateWorkPoints(int playerSkill, WorkPoints playerPoints, WorkPoints rapperPoints)
-        {
+        private static int CreateWorkPoints(
+            int playerSkill, WorkPoints playerPoints,
+            int rapperSkill, WorkPoints rapperPoints
+        ) {
             var playerValue = Random.Range(1, playerSkill + 1);
             playerPoints.Show(playerValue);
 
-            var rapperValue = Random.Range(1, PlayerData.MAX_SKILL + 1);
+            var rapperValue = Random.Range(1, rapperSkill + 1);
             rapperPoints.Show(rapperValue);
 
             return playerValue + rapperValue;

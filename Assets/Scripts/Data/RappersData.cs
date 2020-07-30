@@ -16,9 +16,13 @@ namespace Data
     public class RapperInfo
     {
         public string Name;
+        public int Id;
         public string DescKey;
         public Sprite Avatar;
         public Sprite CountryImage;
         public int Fans;
+        public int Vocobulary;
+        public int Bitmaking;
+        public int Management;
     }
 }

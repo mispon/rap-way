@@ -52,8 +52,7 @@ namespace Game.Pages.Concert
         /// </summary>
         private void SaveResult(ConcertInfo concert)
         {
-            PlayerManager.Instance.AddMoney(concert.Income);
-            PlayerManager.Instance.AddExp(rewardExp);
+            PlayerManager.Instance.AddMoney(concert.Income, rewardExp);
             ProductionManager.AddConcert(concert);
         }
 

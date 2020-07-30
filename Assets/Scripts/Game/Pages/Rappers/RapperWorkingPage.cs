@@ -24,7 +24,8 @@ namespace Game.Pages.Rappers
 
         private RapperInfo _rapper;
         private bool _isFeat;
-        private int _managementPoints;
+        private int _playerPoints;
+        private int _rapperPoints;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -50,7 +51,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         protected override void FinishWork()
         {
-            rapperResult.Show(_rapper, _managementPoints, _isFeat);
+            rapperResult.Show(_rapper, _playerPoints, _rapperPoints, _isFeat);
             Close();
         }
 
@@ -65,8 +66,10 @@ namespace Game.Pages.Rappers
             int managerPoints = Random.Range(1, PlayerManager.Data.Team.Manager.Skill.Value + 1);
             managerWorkPoints.Show(managerPoints);
 
-            _managementPoints += playerPoints + managerPoints;
-            managementPoints.text = $"{_managementPoints}";
+            _playerPoints += playerPoints + managerPoints;
+            managementPoints.text = $"{_playerPoints}";
+
+            _rapperPoints += Random.Range(1, _rapper.Management + 1);
         }
 
         protected override void BeforePageOpen()
@@ -74,7 +77,7 @@ namespace Game.Pages.Rappers
             header.text = $"{LocalizationManager.Instance.Get("conversation_with")} {_rapper.Name}";
             rapperAvatar.sprite = _rapper.Avatar;
             managementPoints.text = "0";
-            _managementPoints = 0;
+            _playerPoints = 0;
         }
 
         protected override void BeforePageClose()
