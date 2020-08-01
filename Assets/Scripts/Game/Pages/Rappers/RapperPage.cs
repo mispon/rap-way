@@ -14,8 +14,14 @@ namespace Game.Pages.Rappers
         [Header("Поля информации репера")]
         [SerializeField] private Image avatar;
         [SerializeField] private Text nickname;
+        [Space]
+        [SerializeField] private Text vocobulary;
+        [SerializeField] private Text bitmaking;
+        [SerializeField] private Text management;
+        [Space]
         [SerializeField] private Text description;
         [SerializeField] private Text fans;
+        [Space]
         [SerializeField] private Button battleButton;
         [SerializeField] private Button featButton;
 
@@ -62,8 +68,11 @@ namespace Game.Pages.Rappers
         {
             avatar.sprite = info.Avatar;
             nickname.text = info.Name;
+            vocobulary.text = info.Vocobulary.ToString();
+            bitmaking.text = info.Bitmaking.ToString();
+            management.text = info.Management.ToString();
             description.text = LocalizationManager.Instance.Get(info.DescKey);
-            fans.text = info.Fans.ToString();
+            fans.text = $"{info.Fans}kk";
         }
 
         /// <summary>
