@@ -70,6 +70,8 @@ namespace Game.Pages.Training.Tabs.TeamTab
         private void GivePayment(Teammate teammate, int salary)
         {
             PlayerManager.Instance.SpendMoney(salary);
+            teammate.HasPayment = true;
+            
             onStartTraining.Invoke(() => 0);
         }
 
