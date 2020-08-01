@@ -26,6 +26,7 @@ namespace Game
 
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
+            SoundManager.Instance.Setup(GameStats.SoundVolume, GameStats.NoSound);
             
             // todo: выключить загрузочный экран
         }

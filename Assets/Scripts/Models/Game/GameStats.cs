@@ -14,11 +14,15 @@ namespace Models.Game
         public Trends Trends;
         public SystemLanguage Lang;
         
+        public bool NoSound;
+        public float SoundVolume;
+        
         public static GameStats New => new GameStats
         {
             Now = DateTime.Now,
             Trends = Trends.New,
-            Lang = SystemLanguage.Russian
+            Lang = SystemLanguage.Russian,
+            SoundVolume = 1f
         };
     }
 }
