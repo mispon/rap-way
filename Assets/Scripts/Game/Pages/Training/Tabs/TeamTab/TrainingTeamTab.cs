@@ -1,3 +1,4 @@
+using Core;
 using Models.Player;
 using UnityEngine;
 
@@ -61,6 +62,7 @@ namespace Game.Pages.Training.Tabs.TeamTab
                 teammate.Skill.Exp -= expToUp;
             }
             
+            SoundManager.Instance.Click();
             onStartTraining.Invoke(() => trainingCost);
         }
         
@@ -71,7 +73,7 @@ namespace Game.Pages.Training.Tabs.TeamTab
         {
             PlayerManager.Instance.SpendMoney(salary);
             teammate.HasPayment = true;
-            
+  
             onStartTraining.Invoke(() => 0);
         }
 

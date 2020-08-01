@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Utils;
 
@@ -12,9 +13,12 @@ namespace Core
         [SerializeField] private AudioSource ambient;
         [SerializeField] private AudioSource sfx;
 
-        [Header("Звуковые клипы")] 
+        [Header("Звуковые клипы")]
+        [SerializeField] private AudioClip[] ambientClips;
         [SerializeField] private AudioClip buttonClick;
 
+        private int _ambientIndex;
+        private Coroutine _ambientSoundRoutine;
         private bool _noSound;
 
         /// <summary>
@@ -32,11 +36,11 @@ namespace Core
         public void SetSound(bool value)
         {
             _noSound = value;
-            
+
             if (_noSound)
-                ambient.Stop();
+                StopCoroutine(_ambientSoundRoutine);
             else
-                ambient.Play();
+                _ambientSoundRoutine = StartCoroutine(AmbientSoundRoutine());
         }
 
         /// <summary>
@@ -66,6 +70,24 @@ namespace Core
         public void Click()
         {
             sfx.PlayOneShot(buttonClick);
+        }
+
+        /// <summary>
+        /// Корутина цикличного воспроизведения фоновой музыки 
+        /// </summary>
+        // ReSharper disable once FunctionRecursiveOnAllPaths
+        private IEnumerator AmbientSoundRoutine()
+        {
+            ambient.clip = ambientClips[_ambientIndex];
+            ambient.Play();
+            
+            yield return new WaitForSeconds(ambient.clip.length);
+
+            _ambientIndex++;
+            if (_ambientIndex >= ambientClips.Length)
+                _ambientIndex = 0;
+
+            yield return AmbientSoundRoutine();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -13,6 +14,7 @@ namespace Game.Notifications
     public class NotificationManager : Singleton<NotificationManager>
     {
         [SerializeField] private Button notificationButton;
+        [SerializeField] private AudioClip notificationSound;
         
         /// <summary>
         /// Очередь действий по клику на иконку уведомлений
@@ -30,6 +32,7 @@ namespace Game.Notifications
         /// </summary>
         public void AddNotification(Action action)
         {
+            SoundManager.Instance.PlayOne(notificationSound);
             _notificationActions.Enqueue(action);
             CheckStatus();
         }

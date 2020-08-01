@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Core;
 using Core.Interfaces;
 using Enums;
 using Game.UI.GameScreen;
@@ -19,6 +20,9 @@ namespace Game
     {
         [Header("HUD")]
         [SerializeField] private GameScreenController gameScreen;
+        
+        [Header("Звуки")]
+        [SerializeField] private AudioClip paySound;
         
         /// <summary>
         /// Событие добавления денег
@@ -117,6 +121,7 @@ namespace Game
                 return false;
 
             AddMoney(-money);
+            SoundManager.Instance.PlayOne(paySound);
             return true;
         }
 

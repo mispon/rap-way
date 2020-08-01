@@ -1,4 +1,5 @@
-﻿using Game.Pages;
+﻿using Core;
+using Game.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,14 +29,12 @@ namespace Game.UI.Buttons
 
         private void OnClick()
         {
+            SoundManager.Instance.Click();
+            
             if (action == PageActionType.Open)
-            {
                 page.Open();
-            }
             else
-            {
                 page.Close();
-            }
         }
     }
 }

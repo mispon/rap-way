@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Data;
 using Localization;
 using UnityEngine;
@@ -69,6 +70,8 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void ShowInfo()
         {
+            SoundManager.Instance.Click();
+            
             var context = new ToneViewContext
             {
                 Tone = GetValue(),
