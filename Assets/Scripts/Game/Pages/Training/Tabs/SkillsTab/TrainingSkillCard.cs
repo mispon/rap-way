@@ -53,7 +53,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         /// </summary>
         private void ShowInfo()
         {
-            SoundManager.Instance.Click();
+            SoundManager.Instance.PlayClick();
             view.Show(_info, _expEnough, _locked, onUnlock);
         }
     }

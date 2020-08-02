@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Game.UI.GameScreen;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -34,6 +35,7 @@ namespace Game.Effects
         /// </summary>
         public void OnPointerClick(PointerEventData eventData)
         {
+            SoundManager.Instance.PlayClick();
             GameScreenController.Instance.SetVisibility(true);
             onClose.Invoke();
             gameObject.SetActive(false);

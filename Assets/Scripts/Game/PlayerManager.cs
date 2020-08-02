@@ -20,10 +20,7 @@ namespace Game
     {
         [Header("HUD")]
         [SerializeField] private GameScreenController gameScreen;
-        
-        [Header("Звуки")]
-        [SerializeField] private AudioClip paySound;
-        
+
         /// <summary>
         /// Событие добавления денег
         /// </summary>
@@ -120,8 +117,8 @@ namespace Game
             if (Data.Money < money)
                 return false;
 
+            SoundManager.Instance.PlayPayment();
             AddMoney(-money);
-            SoundManager.Instance.PlayOne(paySound);
             return true;
         }
 

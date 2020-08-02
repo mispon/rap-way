@@ -1,4 +1,6 @@
-﻿using Enums;
+﻿using Core;
+using Enums;
+using Game.UI.GameScreen;
 using Models.Info;
 using Models.Info.Production;
 using UnityEngine;
@@ -45,6 +47,8 @@ namespace Game.Pages.Album
         /// </summary>
         private void CreateAlbum()
         {
+            SoundManager.Instance.PlayClick();
+            
             _album.Id = PlayerManager.GetNextProductionId<AlbumInfo>();
             if (string.IsNullOrEmpty(_album.Name))
             {
@@ -66,6 +70,7 @@ namespace Game.Pages.Album
         protected override void BeforePageOpen()
         {
             _album = new AlbumInfo();
+            GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()

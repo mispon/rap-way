@@ -1,4 +1,6 @@
-﻿using Core.Interfaces;
+﻿using System.Collections;
+using Core.Interfaces;
+using Game;
 using UnityEngine;
 
 namespace Core
@@ -11,8 +13,10 @@ namespace Core
         [Header("Порядок инициализации")]
         [SerializeField] private MonoBehaviour[] starters;
         
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitUntil(() => GameManager.Instance.IsReady);
+            
             foreach (var starter in starters)
                 (starter as IStarter)?.OnStart();
         }

@@ -29,7 +29,7 @@ namespace Game.UI.Buttons
 
         private void OnClick()
         {
-            SoundManager.Instance.Click();
+            SoundManager.Instance.PlayClick();
             
             if (action == PageActionType.Open)
                 page.Open();

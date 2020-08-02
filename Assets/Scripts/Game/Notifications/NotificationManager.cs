@@ -14,7 +14,6 @@ namespace Game.Notifications
     public class NotificationManager : Singleton<NotificationManager>
     {
         [SerializeField] private Button notificationButton;
-        [SerializeField] private AudioClip notificationSound;
         
         /// <summary>
         /// Очередь действий по клику на иконку уведомлений
@@ -32,7 +31,7 @@ namespace Game.Notifications
         /// </summary>
         public void AddNotification(Action action)
         {
-            SoundManager.Instance.PlayOne(notificationSound);
+            SoundManager.Instance.PlayNotify();
             _notificationActions.Enqueue(action);
             CheckStatus();
         }
@@ -42,6 +41,7 @@ namespace Game.Notifications
         /// </summary>
         private void ProcessNotification()
         {
+            SoundManager.Instance.PlayClick();
             var action = _notificationActions.Dequeue();
             action.Invoke();
             CheckStatus();

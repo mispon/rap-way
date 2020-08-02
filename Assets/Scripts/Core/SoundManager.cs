@@ -15,7 +15,16 @@ namespace Core
 
         [Header("Звуковые клипы")]
         [SerializeField] private AudioClip[] ambientClips;
-        [SerializeField] private AudioClip buttonClick;
+        [Space]
+        [SerializeField] private AudioClip click;
+        [SerializeField] private AudioClip train;
+        [SerializeField] private AudioClip pay;
+        [SerializeField] private AudioClip levelUp;
+        [SerializeField] private AudioClip notify;
+        [SerializeField] private AudioClip switcher;
+        [SerializeField] private AudioClip workPoint;
+        [SerializeField] private AudioClip unlock;
+        [SerializeField] private AudioClip achive;
 
         private int _ambientIndex;
         private Coroutine _ambientSoundRoutine;
@@ -26,6 +35,7 @@ namespace Core
         /// </summary>
         public void Setup(float volume, bool noSound)
         {
+            _ambientIndex = Random.Range(0, ambientClips.Length);
             SetSound(noSound);
             SetVolume(volume);
         }
@@ -48,28 +58,20 @@ namespace Core
         /// </summary>
         public void SetVolume(float volume)
         {
-            ambient.volume = volume * 0.5f;
+            ambient.volume = volume * 0.3f;
             sfx.volume = volume;
         }
 
         /// <summary>
         /// Воспроизводит единичный звук 
         /// </summary>
-        public void PlayOne(AudioClip clip)
+        private void PlaySound(AudioClip clip)
         {
             if (_noSound)
                 return;
             
-            sfx.pitch = Random.Range(0.8f, 1.2f);
+            sfx.pitch = Random.Range(0.9f, 1.1f);
             sfx.PlayOneShot(clip);
-        }
-
-        /// <summary>
-        /// Воспроизводит звук клика кнопки
-        /// </summary>
-        public void Click()
-        {
-            sfx.PlayOneShot(buttonClick);
         }
 
         /// <summary>
@@ -89,5 +91,19 @@ namespace Core
 
             yield return AmbientSoundRoutine();
         }
+
+        #region SOUND EVENTS
+
+        public void PlayClick() => PlaySound(click);
+        public void PlayTrain() => PlaySound(train);
+        public void PlayPayment() => PlaySound(pay);
+        public void PlayLevelUp() => PlaySound(levelUp);
+        public void PlayNotify() => PlaySound(notify);
+        public void PlaySwitcher() => PlaySound(switcher);
+        public void PlayWorkPoint() => PlaySound(workPoint);
+        public void PlayUnlock() => PlaySound(unlock);
+        public void PlayAchieve() => PlaySound(achive);
+
+        #endregion
     }
 }

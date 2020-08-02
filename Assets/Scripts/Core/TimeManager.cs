@@ -33,16 +33,11 @@ namespace Core
         private WaitForSeconds _waitForSecondsActive;
         private WaitForSeconds _waitForSecondsInactive;
 
-        public int SecondsPerTick => _hasAction ? actionInterval : inactionInterval;
-
         public void OnStart()
         {
             _waitForSecondsActive = new WaitForSeconds(actionInterval);
             _waitForSecondsInactive = new WaitForSeconds(inactionInterval);
             
-            //ToDo: мне кажется, что изменяется именно копия значения <...GameStats.Now>
-            //так как DateTime  - это структруа. Сохраняется именно GameStats.Now
-            //Отсюда именение в TimeManger может не сохраняться при закрытии игры
             Now = GameManager.Instance.GameStats.Now;
             _timer = StartCoroutine(TickCoroutine());
         }
@@ -110,7 +105,7 @@ namespace Core
             _timer = StartCoroutine(TickCoroutine());
         }
         
-        private void OnDisable()
+        private void OnDestroy()
         {
             StopCoroutine(_timer);
         }

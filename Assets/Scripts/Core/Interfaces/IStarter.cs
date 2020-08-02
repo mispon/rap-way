@@ -5,8 +5,6 @@
     /// </summary>
     public interface IStarter
     {
-        
-        
         void OnStart();
     }
 }

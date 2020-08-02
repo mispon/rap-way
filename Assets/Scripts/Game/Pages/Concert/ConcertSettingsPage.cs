@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
 using Game.UI;
+using Game.UI.GameScreen;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,8 +35,8 @@ namespace Game.Pages.Concert
         [SerializeField] private ConcertPlacesData data;
 
         private ConcertInfo _concert;
-        private List<AlbumInfo> _lastAlbums = new List<AlbumInfo>(ALBUMS_CACHE);
         private int _placeCost;
+        private readonly List<AlbumInfo> _lastAlbums = new List<AlbumInfo>(ALBUMS_CACHE);
 
         private void Start()
         {
@@ -54,6 +56,8 @@ namespace Game.Pages.Concert
         /// </summary>
         private void CreateConcert()
         {
+            SoundManager.Instance.PlayClick();
+            
             if (!PlayerManager.Instance.SpendMoney(_placeCost))
             {
                 concertPrice.ShowNoMoney();
@@ -152,6 +156,8 @@ namespace Game.Pages.Concert
             );
 
             OnPlaceChanged(0);
+            
+            GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()

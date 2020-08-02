@@ -47,7 +47,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void Hide()
         {
-            SoundManager.Instance.Click();
+            SoundManager.Instance.PlayClick();
             gameObject.SetActive(false);
         }
 

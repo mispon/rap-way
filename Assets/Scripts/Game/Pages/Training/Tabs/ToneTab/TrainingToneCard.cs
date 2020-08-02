@@ -70,7 +70,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void ShowInfo()
         {
-            SoundManager.Instance.Click();
+            SoundManager.Instance.PlayClick();
             
             var context = new ToneViewContext
             {

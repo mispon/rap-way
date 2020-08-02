@@ -52,17 +52,23 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void AddExp(Teammate teammate)
         {
+            bool isLevelUp = false;
             int expToUp = expToLevelUp[teammate.Skill.Value];
-
+            
             teammate.Skill.Exp += trainingCost;
 
             if (teammate.Skill.Exp >= expToUp)
             {
                 teammate.Skill.Value += 1;
                 teammate.Skill.Exp -= expToUp;
+                isLevelUp = true;
             }
             
-            SoundManager.Instance.Click();
+            if (isLevelUp)
+                SoundManager.Instance.PlayLevelUp();
+            else
+                SoundManager.Instance.PlayTrain();
+            
             onStartTraining.Invoke(() => trainingCost);
         }
         

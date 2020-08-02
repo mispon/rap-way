@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
 using Enums;
 using UnityEngine;
@@ -93,11 +94,13 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void OnLearnTone(Enum tone, int cost)
         {
+            SoundManager.Instance.PlayUnlock();
+            
             if (tone is Themes theme)
                 PlayerManager.Data.Themes.Add(theme);
             else if (tone is Styles style)
                 PlayerManager.Data.Styles.Add(style);
-
+            
             onStartTraining.Invoke(() => cost);
         }
 

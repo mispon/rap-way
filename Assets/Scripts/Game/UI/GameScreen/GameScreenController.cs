@@ -58,6 +58,15 @@ namespace Game.UI.GameScreen
         }
 
         /// <summary>
+        /// Скрытие выпадающего списка основных действий
+        /// </summary>
+        public void HideProductionGroup()
+        {
+            _productionShown = false;
+            foldoutAnimation.Play(foldoutHideAnim);
+        }
+
+        /// <summary>
         /// Обработчик истечения дня
         /// </summary>
         private void OnDayLeft()
@@ -70,6 +79,7 @@ namespace Game.UI.GameScreen
         /// </summary>
         private void OnProductionClick()
         {
+            SoundManager.Instance.PlayClick();
             _productionShown = !_productionShown;
             foldoutAnimation.Play(_productionShown ? foldoutShowAnim : foldoutHideAnim);
         }
@@ -79,6 +89,7 @@ namespace Game.UI.GameScreen
         /// </summary>
         private static void OnMainMenuClick()
         {
+            SoundManager.Instance.PlayClick();
             GameManager.Instance.SaveApplicationData();
             SceneManager.Instance.LoadMainScene();
         }

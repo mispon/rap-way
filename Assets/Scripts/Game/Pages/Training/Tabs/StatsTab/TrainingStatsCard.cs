@@ -98,7 +98,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void HandleClick()
         {
-            SoundManager.Instance.Click();
+            SoundManager.Instance.PlayClick();
             onClick.Invoke(_index);
         }
 
@@ -107,7 +107,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void HandleLevelUpClick()
         {
-            SoundManager.Instance.Click();
+            SoundManager.Instance.PlayClick();
             onLevelUpClick.Invoke(_index);
         }
     }

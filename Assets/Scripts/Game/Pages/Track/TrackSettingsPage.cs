@@ -1,4 +1,6 @@
-﻿using Enums;
+﻿using Core;
+using Enums;
+using Game.UI.GameScreen;
 using Models.Info;
 using Models.Info.Production;
 using UnityEngine;
@@ -42,6 +44,8 @@ namespace Game.Pages.Track
         /// </summary>
         private void CreateTrack()
         {
+            SoundManager.Instance.PlayClick();
+            
             _track.Id = PlayerManager.GetNextProductionId<TrackInfo>();
             if (string.IsNullOrEmpty(_track.Name))
             {
@@ -66,6 +70,8 @@ namespace Game.Pages.Track
             
             themeSwitcher.InstantiateElements(PlayerManager.GetPlayersThemes());
             styleSwitcher.InstantiateElements(PlayerManager.GetPlayersStyles());
+            
+            GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -105,6 +106,7 @@ namespace Utils
             {
                 _activeIndex = value;
                 onIndexChange.Invoke(value);
+                SoundManager.Instance.PlaySwitcher();
             }
         }
         /// <summary>
@@ -259,7 +261,7 @@ namespace Utils
         {
             if (_enableSlide)
                 yield break;
-    
+
             _enableSlide = true;
             float t_start = Time.time, ct;
             float startPercentage = -container.anchoredPosition.x / _containerWidth,

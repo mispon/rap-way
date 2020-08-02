@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Achiev = Models.Player.Achievement;
@@ -7,9 +6,7 @@ using Achiev = Models.Player.Achievement;
 namespace Game.Pages.Achievement
 {
     /// <summary>
-    /// Страница отображения получения новой ачивки.
-    /// Если получено несколько ачивок одним действием, то они сохраняются в списке.
-    /// Закрытие странциы приводит к показу новой ачивки, если такова висит в списке, либо же к закрытию, если список пуст
+    /// Страница получения новой ачивки
     /// </summary>
     public class NewAchievementsPage: Page
     {
@@ -23,7 +20,8 @@ namespace Game.Pages.Achievement
         /// <summary>
         /// Список пар строк: наименование ачивки и ее описание
         /// </summary>
-        private List<KeyValuePair<string, string>> _achievementDescriptions = new List<KeyValuePair<string, string>>();
+        private readonly List<KeyValuePair<string, string>> _achievementDescriptions 
+            = new List<KeyValuePair<string, string>>();
 
         /// <summary>
         /// Добавляет новую ачивку в очередь и запускает ее отображение, если страница закрыта

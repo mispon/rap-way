@@ -1,5 +1,6 @@
 ﻿using Core;
 using Game.Analyzers;
+using Game.UI.GameScreen;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,23 +61,11 @@ namespace Game.Pages.Album
             PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome, rewardExp);
             ProductionManager.AddAlbum(album);
         }
-
-        #region PAGE EVENTS
-        /// <summary>
-        /// Выполняется перед открытием страницы
-        /// </summary>
-        protected override void BeforePageOpen()
-        {
-            // todo: запустить или не запускать случайное событие
-        }
-        /// <summary>
-        /// Выполняется перед закрытием страницы
-        /// </summary>
+        
         protected override void AfterPageClose()
         {
             SaveResult(_albumInfo);
             _albumInfo = null;
         }
-        #endregion
     }
 }
