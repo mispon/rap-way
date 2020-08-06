@@ -138,6 +138,7 @@ namespace Game.Pages.Store
                 Debug.LogWarning($"Показ шмотки {good.Type}_{good.Level}. Кликни в центр.");
                 _newGoodEffect.Show(uIData.Image, IndependentNotificationManager.Instance.Unlock);    
             }
+            
             IndependentNotificationManager.Instance.AddNotification(Notification);
             
             var info = _goodInfos.First(gi => gi.Type == type);

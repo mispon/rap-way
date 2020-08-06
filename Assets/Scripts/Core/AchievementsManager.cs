@@ -230,8 +230,10 @@ namespace Core
             
                     newAchievementsPage.ShowNewAchievement(achievementString, description);
                 }
+                
                 newAchievementEffect.Show(newAchievementSprite, NotificationClickAction);
             }
+            
             IndependentNotificationManager.Instance.AddNotification(Notification);
         }
 
