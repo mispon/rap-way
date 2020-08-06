@@ -39,6 +39,11 @@ namespace Core
         /// </summary>
         private string _lastConcertPlaceName;
         
+        /// <summary>
+        /// Имя последнего релаьного репера, с кем было действие
+        /// </summary>
+        private string _lastRapperName;
+        
 
         /// <summary>
         /// На каждое событие изменения одной из сущностей вешается листенер, который выбирает все НЕРАЗБЛОКИРОВАННЫЕ AchievementInfo конкретного AchievementsType.
@@ -52,13 +57,14 @@ namespace Core
             PlayerManager.Instance.onMoneyAdd += CheckMoney;
             PlayerManager.Instance.onFansAdd += CheckFans;
             PlayerManager.Instance.onHypeAdd += CheckHype;
-            PlayerManager.Instance.onFeat += CheckFeat;
-            PlayerManager.Instance.onBattle += CheckBattle;
-
+            
             ProductionManager.Instance.onTrackAdd += CheckTrackChartPosition;
             ProductionManager.Instance.onAlbumAdd += CheckAlbumChartPosition;
             ProductionManager.Instance.onClipAdd += CheckClipLoser;
             ProductionManager.Instance.onConcertAdd += CheckConcertPlace;
+            
+            ProductionManager.Instance.onFeat += CheckFeat;
+            ProductionManager.Instance.onBattle += CheckBattle;
         }
         
         /// <summary>
@@ -123,17 +129,19 @@ namespace Core
         /// <summary>
         /// Листенер события фита с каким-то реальным репером
         /// </summary>
-        private void CheckFeat(int raperId)
+        private void CheckFeat(RapperInfo rapperInfo)
         {
-            EqualCheckValue(AchievementsType.Feat, raperId, null);
+            _lastRapperName = rapperInfo.Name;
+            EqualCheckValue(AchievementsType.Feat, rapperInfo.Id, null);
         }
 
         /// <summary>
         /// Листенер события баттла с реальным репером
         /// </summary>
-        private void CheckBattle(int raperId)
+        private void CheckBattle(RapperInfo rapperInfo)
         {
-            EqualCheckValue(AchievementsType.Battle, raperId, null);
+            _lastRapperName = rapperInfo.Name;
+            EqualCheckValue(AchievementsType.Battle, rapperInfo.Id, null);
         }
         
         /// <summary>
@@ -241,8 +249,7 @@ namespace Core
                 case AchievementsType.Feat:
                 case AchievementsType.Battle:
                 {
-                    //todo: Добавить поиск репера из списка по аналогии с местом проведеняи концерта
-                    return "";
+                    return _lastRapperName;
                 }
                 default:
                 {
