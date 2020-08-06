@@ -5,6 +5,8 @@ using Core.Interfaces;
 using Data;
 using Enums;
 using Game;
+using Game.Effects;
+using Game.Notifications;
 using Game.Pages.Achievement;
 using JetBrains.Annotations;
 using Localization;
@@ -21,6 +23,11 @@ namespace Core
     /// </summary>
     public class AchievementsManager: Singleton<AchievementsManager>, IStarter
     {
+        [Header("Эффект открытия новой шмотки")] 
+        [SerializeField, Tooltip("Базовая картинка для отображения в уведомлении")] 
+        private Sprite newAchievementSprite;
+        [SerializeField] private NewItemEffect newAchievementEffect;
+        
         [Header("Страница новых достижений")]
         [SerializeField] private NewAchievementsPage newAchievementsPage;
 
@@ -202,13 +209,22 @@ namespace Core
             if (!showUi)
                 return;
 
-            var compareValueString = GetCompareValueString(achievement);
-            var localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
-            var achievementString = $"{localizedAchievementName}: {compareValueString}";
-            //todo: Добавить дескриптион для ачивки
-            var description = "Some description";
+            void Notification()
+            {
+                Debug.LogWarning("Показ ачивки");
+                void NotificationClickAction()
+                {
+                    var compareValueString = GetCompareValueString(achievement);
+                    var localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
+                    var achievementString = $"{localizedAchievementName}: {compareValueString}";
+                    //todo: Добавить дескриптион для ачивки
+                    var description = "Some description";
             
-            newAchievementsPage.ShowNewAchievement(achievementString, description);
+                    newAchievementsPage.ShowNewAchievement(achievementString, description);
+                }
+                newAchievementEffect.Show(newAchievementSprite, NotificationClickAction);
+            }
+            IndependentNotificationManager.Instance.AddNotification(Notification);
         }
 
         /// <summary>

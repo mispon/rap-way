@@ -8,9 +8,9 @@ using Utils;
 namespace Game.Notifications
 {
     /// <summary>
-    /// Менеджер уведомлений
+    /// Менеджер уведомлений, отображаемых по нажатию кнопки
     /// </summary>
-    public class NotificationManager : Singleton<NotificationManager>
+    public class ClickNotificationManager : Singleton<ClickNotificationManager>
     {
         [SerializeField] private Button notificationButton;
         
@@ -31,7 +31,7 @@ namespace Game.Notifications
         public void AddNotification(Action action)
         {
             _notificationActions.Enqueue(action);
-            CheckStatus();
+            CheckNotificationsStatus();
         }
 
         /// <summary>
@@ -41,13 +41,13 @@ namespace Game.Notifications
         {
             var action = _notificationActions.Dequeue();
             action.Invoke();
-            CheckStatus();
+            CheckNotificationsStatus();
         }
 
         /// <summary>
         /// Проверяет наличие уведомлений
         /// </summary>
-        private void CheckStatus()
+        private void CheckNotificationsStatus()
         {
             bool hasNotifications = _notificationActions.Any();
             notificationButton.gameObject.SetActive(hasNotifications);

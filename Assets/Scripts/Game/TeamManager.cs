@@ -25,7 +25,7 @@ namespace Game
         [SerializeField] private TrainingMainPage trainingPage;
 
         [Header("Эффект открытия нового тиммейта")]
-        [SerializeField] private NewTeammateEffect newTeammateEffect;
+        [SerializeField] private NewItemEffect newTeammateEffect;
 
         private void Start()
         {
@@ -64,7 +64,7 @@ namespace Game
                 teammate.HasPayment = false;
             
             const int teamTab = 3;
-            NotificationManager.Instance.AddNotification(() => trainingPage.OpenPage(teamTab));
+            ClickNotificationManager.Instance.AddNotification(() => trainingPage.OpenPage(teamTab));
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Game
                 );
             }
             
-            NotificationManager.Instance.AddNotification(Notification);
+            ClickNotificationManager.Instance.AddNotification(Notification);
         }
 
         /// <summary>
@@ -134,6 +134,13 @@ namespace Game
 
         private void OnDestroy()
         {
+            //ToDo: (Андрей). Не уверен, что это необходимо.
+            // 1. Нет никаких гарантий, что TeamManager.OnDestroy() вызовется раньше, чем TimeManamger.OnDestroy().
+            //    В противном случае вылетит NullReferenceException
+            // 2. TeamManager не существует нигде отдельно от TimeManager и наоброт.
+            //     Следовательно, разрушение любого из них сопровождается разрушением другого => вызов событий TimeManager'a не должен возникать
+            // 3. Если по-прежднему хочется отписываться, то лучше это делать OnDisable, так как тут гарантировано, что TimeManager.Instance все еще существует.
+        
             TimeManager.Instance.onDayLeft -= OnDayLeft;
             TimeManager.Instance.onMonthLeft -= OnMonthLeft;
         }
