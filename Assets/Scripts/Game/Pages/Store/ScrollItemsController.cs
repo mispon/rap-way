@@ -134,12 +134,13 @@ namespace Game.Pages.Store
 
             void Notification()
             {
-                var uIData = GetGoodUi(good.Type, good.Level);
                 Debug.LogWarning($"Показ шмотки {good.Type}_{good.Level}. Кликни в центр.");
-                _newGoodEffect.Show(uIData.Image, IndependentNotificationManager.Instance.Unlock);    
+
+                var uIData = GetGoodUi(good.Type, good.Level);
+                _newGoodEffect.Show(uIData.Image, NotificationManager.Instance.UnlockIndependentQueue);    
             }
             
-            IndependentNotificationManager.Instance.AddNotification(Notification);
+            NotificationManager.Instance.AddIndependentNotification(Notification);
             
             var info = _goodInfos.First(gi => gi.Type == type);
             if (level + 1 > info.MaxItemLevel)

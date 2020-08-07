@@ -64,7 +64,7 @@ namespace Game
                 teammate.HasPayment = false;
             
             const int teamTab = 3;
-            ClickNotificationManager.Instance.AddNotification(() => trainingPage.OpenPage(teamTab));
+            NotificationManager.Instance.AddClickNotification(() => trainingPage.OpenPage(teamTab));
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Game
                 );
             }
             
-            ClickNotificationManager.Instance.AddNotification(Notification);
+            NotificationManager.Instance.AddClickNotification(Notification);
         }
 
         /// <summary>

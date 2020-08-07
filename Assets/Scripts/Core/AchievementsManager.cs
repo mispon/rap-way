@@ -234,7 +234,7 @@ namespace Core
                 newAchievementEffect.Show(newAchievementSprite, NotificationClickAction);
             }
             
-            IndependentNotificationManager.Instance.AddNotification(Notification);
+            NotificationManager.Instance.AddIndependentNotification(Notification);
         }
 
         /// <summary>

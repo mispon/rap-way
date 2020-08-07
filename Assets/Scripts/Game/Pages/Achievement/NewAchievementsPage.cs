@@ -54,7 +54,7 @@ namespace Game.Pages.Achievement
 
         protected override void BeforePageClose()
         {
-            IndependentNotificationManager.Instance.Unlock();
+            NotificationManager.Instance.UnlockIndependentQueue();
         }
 
         protected override void AfterPageClose()
