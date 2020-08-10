@@ -1,4 +1,5 @@
 using Data;
+using Game.Effects;
 using UnityEngine;
 
 namespace Game.Pages.Store
@@ -13,13 +14,16 @@ namespace Game.Pages.Store
         [SerializeField] private ScrollItemsController workToolsScrollItemsController;
         [SerializeField] private ScrollItemsController swagScrollItemsController;
         
+        [Header("Эффект открытия новой шмотки")]
+        [SerializeField] private NewItemEffect newGoodEffect;
+        
         [Header("Данные")]
         [SerializeField] private GoodsData data;
 
         protected override void BeforePageOpen()
         {
-            workToolsScrollItemsController.Initialize(data.WorkTools);
-            swagScrollItemsController.Initialize(data.Swag);
+            workToolsScrollItemsController.Initialize(data.WorkTools, newGoodEffect);
+            swagScrollItemsController.Initialize(data.Swag, newGoodEffect);
         }
 
         protected override void AfterPageClose()

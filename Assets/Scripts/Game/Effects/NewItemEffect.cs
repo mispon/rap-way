@@ -1,6 +1,7 @@
 using System;
 using Core;
 using Game.UI.GameScreen;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,9 +10,9 @@ namespace Game.Effects
     /// <summary>
     /// Эффект открытия нового тиммейта
     /// </summary>
-    public class NewTeammateEffect : MonoBehaviour, IPointerClickHandler
+    public class NewItemEffect : MonoBehaviour, IPointerClickHandler
     {
-        [SerializeField] private SpriteRenderer teammateAvatar;
+        [SerializeField] private SpriteRenderer itemAvatar;
         [SerializeField] private Animation effect;
 
         private event Action onClose = () => {};
@@ -19,11 +20,11 @@ namespace Game.Effects
         /// <summary>
         /// Показывает эффект 
         /// </summary>
-        public void Show(Sprite avatar, Action callback)
+        public void Show(Sprite avatar, [CanBeNull] Action callback)
         {
-            GameScreenController.Instance.SetVisibility(false);
+            CanvasController.SetActive(false);
             
-            teammateAvatar.sprite = avatar;
+            itemAvatar.sprite = avatar;
             onClose = callback;
             
             gameObject.SetActive(true);
@@ -35,6 +36,7 @@ namespace Game.Effects
         /// </summary>
         public void OnPointerClick(PointerEventData eventData)
         {
+            CanvasController.SetActive(true);
             SoundManager.Instance.PlayClick();
             GameScreenController.Instance.SetVisibility(true);
             onClose.Invoke();

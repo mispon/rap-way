@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Enums;
+using Game.Effects;
+using Game.Notifications;
 using Models.Player;
 using UnityEngine;
 
@@ -30,6 +32,7 @@ namespace Game.Pages.Store
 
         private float _elementTemplateHeight;
         private float _containerBaseHeight;
+        private NewItemEffect _newGoodEffect;
 
         /// <summary>
         /// Высота одного элемента
@@ -61,9 +64,11 @@ namespace Game.Pages.Store
         /// <summary>
         /// Инцниализация всех UI-элементов из GoodsData конкретного назначения (рабочие/понты)
         /// </summary>
-        public void Initialize(GoodInfo[] goodInfos)
+        public void Initialize(GoodInfo[] goodInfos, NewItemEffect newGoodEffect)
         {
             _goodInfos = goodInfos;
+            _newGoodEffect = newGoodEffect;
+            
             foreach (var info in _goodInfos)
             {
                 var newItemLevel = 1;
@@ -93,9 +98,18 @@ namespace Game.Pages.Store
                 _itemsList.Add(itemController);
             }
 
-            var uiData = _goodInfos.First(gi => gi.Type == type)
-                .UI.First(el => el.Level == (nextLevel ? level+1 : level)); 
+
+            var uiData = GetGoodUi(type, nextLevel ? level + 1 : level); 
             itemController.Initialize(type, uiData, OnPurchaseItemClick);
+        }
+
+        /// <summary>
+        /// Возвращает данные отрисовки по типу и уровню шмотки
+        /// </summary>
+        private GoodUI GetGoodUi(GoodsType type, int level)
+        {
+            return _goodInfos.First(gi => gi.Type == type)
+                .UI.First(el => el.Level == level); 
         }
 
         /// <summary>
@@ -118,15 +132,21 @@ namespace Game.Pages.Store
             }
             good.Level = level;
 
+            void Notification()
+            {
+                Debug.LogWarning($"Показ шмотки {good.Type}_{good.Level}. Кликни в центр.");
+
+                var uIData = GetGoodUi(good.Type, good.Level);
+                _newGoodEffect.Show(uIData.Image, NotificationManager.Instance.UnlockIndependentQueue);    
+            }
+            
+            NotificationManager.Instance.AddIndependentNotification(Notification);
+            
             var info = _goodInfos.First(gi => gi.Type == type);
             if (level + 1 > info.MaxItemLevel)
-            {
                 DisposeItem(type, level);
-            }
             else
-            {
                 DrawItem(type, level, true);
-            }
         }
 
         /// <summary>
@@ -175,6 +195,8 @@ namespace Game.Pages.Store
         {
             foreach (var itemController in _itemsList.ToArray())
                 DisposeItem(itemController, false);
+
+            _newGoodEffect = null;
         }
     }
 }

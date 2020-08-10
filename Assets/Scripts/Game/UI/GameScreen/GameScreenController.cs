@@ -49,9 +49,6 @@ namespace Game.UI.GameScreen
             currentDate.text = TimeManager.Instance.DisplayNow;
         }
 
-        /// <summary>
-        /// Изменяет видимость главного экрана
-        /// </summary>
         public void SetVisibility(bool state)
         {
             gameObject.SetActive(state);

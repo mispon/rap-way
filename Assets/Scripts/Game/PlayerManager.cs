@@ -36,15 +36,7 @@ namespace Game
         /// </summary>
         public event Action<int> onHypeAdd = value => {};
 
-        /// <summary>
-        /// Событие фита с реальным реппером 
-        /// </summary>
-        public event Action<int> onFeat = rapper => {};
-        
-        /// <summary>
-        /// Событие победы в батле над реальным репером
-        /// </summary>
-        public event Action<int> onBattle = rapper => {}; 
+       
 
         /// <summary>
         /// Данные игрока
@@ -172,30 +164,6 @@ namespace Game
         {
             var teammate = Data.Team.TeammatesArray.First(e => e.Type == type);
             teammate.Cooldown = cooldown;
-        }
-
-        /// <summary>
-        /// Сохраняет информацию о фите
-        /// </summary>
-        public void SaveFeat(int rapperId)
-        {
-            if (Data.Feats.Contains(rapperId))
-                return;
-
-            Data.Feats.Add(rapperId);
-            onFeat.Invoke(rapperId);
-        }
-
-        /// <summary>
-        /// Сохраняет информацию о батле
-        /// </summary>
-        public void SaveBattle(int rapperId)
-        {
-            if (Data.Battles.Contains(rapperId))
-                return;
-
-            Data.Battles.Add(rapperId);
-            onBattle.Invoke(rapperId);
         }
     }
 }

@@ -62,7 +62,7 @@ namespace Game.Pages.Track
             ProductionManager.AddTrack(track);
             
             if (track.Feat != null)
-                PlayerManager.Instance.SaveFeat(track.Feat.Id);
+                ProductionManager.AddFeat(track.Feat);
         }
 
         #region PAGE EVENTS

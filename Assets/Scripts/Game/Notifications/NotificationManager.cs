@@ -18,42 +18,83 @@ namespace Game.Notifications
         /// <summary>
         /// Очередь действий по клику на иконку уведомлений
         /// </summary>
-        private readonly Queue<Action> _notificationActions = new Queue<Action>();
+        private readonly Queue<Action> _clickNotificationActions = new Queue<Action>();
+
+        /// <summary>
+        /// Очередь независимых событий, отображаемых в любой момент игры
+        /// </summary>
+        private readonly Queue<Action> _independentNotificationActions = new Queue<Action>();
+
+        /// <summary>
+        /// Текущее состояние очереди: показывается сейчас что-нибудь или нет
+        /// </summary>
+        private bool _isIndependentVisualized;
 
         private void Start()
         {
-            notificationButton.onClick.AddListener(ProcessNotification);
+            notificationButton.onClick.AddListener(() => ProcessNotification(_clickNotificationActions));
             notificationButton.gameObject.SetActive(false);
         }
 
         /// <summary>
-        /// Добавляет новое уведомление в очередь
+        /// Добавляет новое уведомление в очередь показа по клику
         /// </summary>
-        public void AddNotification(Action action)
+        public void AddClickNotification(Action action)
         {
             SoundManager.Instance.PlayNotify();
-            _notificationActions.Enqueue(action);
-            CheckStatus();
+            _clickNotificationActions.Enqueue(action);
+            CheckClickNotificationsStatus();
         }
 
         /// <summary>
-        /// Обрабатывает нажатие на иконку уведомлений
+        /// Добавляет новое уведомление в очередь независимых; отображет его, если показ разрешен
         /// </summary>
-        private void ProcessNotification()
+        public void AddIndependentNotification(Action action)
         {
-            SoundManager.Instance.PlayClick();
-            var action = _notificationActions.Dequeue();
-            action.Invoke();
-            CheckStatus();
+            SoundManager.Instance.PlayClick
+            _independentNotificationActions.Enqueue(action);
+            if (!_isIndependentVisualized)
+                CheckIndependentNotificationsStatus();
+        }
+        /// <summary>
+        /// Разрешает показ новых уведомлений; показывает, если есть.
+        /// Вызов функции полностью лежит на источнике вызова.
+        /// </summary>
+        public void UnlockIndependentQueue()
+        {
+            _isIndependentVisualized = false;
+            CheckIndependentNotificationsStatus();
         }
 
         /// <summary>
-        /// Проверяет наличие уведомлений
+        /// Проверяет наличие уведомлений по клику
         /// </summary>
-        private void CheckStatus()
+        private void CheckClickNotificationsStatus()
         {
-            bool hasNotifications = _notificationActions.Any();
+            bool hasNotifications = _clickNotificationActions.Any();
             notificationButton.gameObject.SetActive(hasNotifications);
+        }
+
+        /// <summary>
+        /// Проверяет наличие независимых уведомлений
+        /// </summary>
+        private void CheckIndependentNotificationsStatus()
+        {
+            _isIndependentVisualized = _independentNotificationActions.Any();
+            if (_isIndependentVisualized)
+                ProcessNotification(_independentNotificationActions, false);
+        }
+
+        /// <summary>
+        /// Обрабатывает нажатие на иконку уведомлений - (isClickNotification)
+        /// Обрабатывает следующее в очереди независимое уведомление - (!isClickNotification)
+        /// </summary>
+        private void ProcessNotification(Queue<Action> actionQueue, bool isClickNotification = true)
+        {
+            var action = actionQueue.Dequeue();
+            action.Invoke();
+            if(isClickNotification)
+                CheckClickNotificationsStatus();
         }
     }
 }

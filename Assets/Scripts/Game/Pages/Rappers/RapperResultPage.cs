@@ -87,6 +87,11 @@ namespace Game.Pages.Rappers
             Close();
         }
 
+        protected override void AfterPageClose()
+        {
+            _rapper = null;
+        }
+
         /// <summary>
         /// Обработчик кнопок отмены и возврата
         /// </summary>
