@@ -74,7 +74,7 @@ Transform:
   - {fileID: 5334199828202639378}
   - {fileID: 979845882146328084}
   - {fileID: 507055690504234088}
-  - {fileID: 185180895004311940}
+  - {fileID: 1476646601508027867}
   - {fileID: 7114062550839399690}
   - {fileID: 2072436423813230743}
   - {fileID: 5293382500688123559}
@@ -173,6 +173,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
+  newAchievementSprite: {fileID: 0}
+  newAchievementEffect: {fileID: 0}
   newAchievementsPage: {fileID: 0}
   achievementsData: {fileID: 11400000, guid: ac93b9090d0b40548a2294d636cdedcc, type: 2}
 --- !u!1 &3187588212368941331
@@ -329,51 +331,6 @@ MonoBehaviour:
   unlockTeammatePage: {fileID: 0}
   trainingPage: {fileID: 0}
   newTeammateEffect: {fileID: 0}
---- !u!1 &6158019178704770329
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 185180895004311940}
-  - component: {fileID: 74556019194439720}
-  m_Layer: 0
-  m_Name: NotificationsManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &185180895004311940
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6158019178704770329}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1929117383248465391}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &74556019194439720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6158019178704770329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4bc87a696e649a0ade8773ef1399224, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroy: 0
-  notificationButton: {fileID: 0}
 --- !u!1 &8301132532118962818
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,3 +377,48 @@ MonoBehaviour:
   dontDestroy: 0
   actionInterval: 2
   inactionInterval: 2
+--- !u!1 &8616449362574666434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1476646601508027867}
+  - component: {fileID: 6995100066008485330}
+  m_Layer: 0
+  m_Name: NotificationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1476646601508027867
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616449362574666434}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1929117383248465391}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6995100066008485330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616449362574666434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 751af79d9d66f3b458139a14e529313c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0
+  notificationButton: {fileID: 0}

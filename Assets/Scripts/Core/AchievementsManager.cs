@@ -5,6 +5,8 @@ using Core.Interfaces;
 using Data;
 using Enums;
 using Game;
+using Game.Effects;
+using Game.Notifications;
 using Game.Pages.Achievement;
 using JetBrains.Annotations;
 using Localization;
@@ -21,6 +23,11 @@ namespace Core
     /// </summary>
     public class AchievementsManager: Singleton<AchievementsManager>, IStarter
     {
+        [Header("Эффект открытия новой шмотки")] 
+        [SerializeField, Tooltip("Базовая картинка для отображения в уведомлении")] 
+        private Sprite newAchievementSprite;
+        [SerializeField] private NewItemEffect newAchievementEffect;
+        
         [Header("Страница новых достижений")]
         [SerializeField] private NewAchievementsPage newAchievementsPage;
 
@@ -31,6 +38,11 @@ namespace Core
         /// Место проведения последнего концерта
         /// </summary>
         private string _lastConcertPlaceName;
+        
+        /// <summary>
+        /// Имя последнего релаьного репера, с кем было действие
+        /// </summary>
+        private string _lastRapperName;
         
 
         /// <summary>
@@ -45,13 +57,14 @@ namespace Core
             PlayerManager.Instance.onMoneyAdd += CheckMoney;
             PlayerManager.Instance.onFansAdd += CheckFans;
             PlayerManager.Instance.onHypeAdd += CheckHype;
-            PlayerManager.Instance.onFeat += CheckFeat;
-            PlayerManager.Instance.onBattle += CheckBattle;
-
+            
             ProductionManager.Instance.onTrackAdd += CheckTrackChartPosition;
             ProductionManager.Instance.onAlbumAdd += CheckAlbumChartPosition;
             ProductionManager.Instance.onClipAdd += CheckClipLoser;
             ProductionManager.Instance.onConcertAdd += CheckConcertPlace;
+            
+            ProductionManager.Instance.onFeat += CheckFeat;
+            ProductionManager.Instance.onBattle += CheckBattle;
         }
         
         /// <summary>
@@ -116,17 +129,19 @@ namespace Core
         /// <summary>
         /// Листенер события фита с каким-то реальным репером
         /// </summary>
-        private void CheckFeat(int raperId)
+        private void CheckFeat(RapperInfo rapperInfo)
         {
-            EqualCheckValue(AchievementsType.Feat, raperId, null);
+            _lastRapperName = rapperInfo.Name;
+            EqualCheckValue(AchievementsType.Feat, rapperInfo.Id, null);
         }
 
         /// <summary>
         /// Листенер события баттла с реальным репером
         /// </summary>
-        private void CheckBattle(int raperId)
+        private void CheckBattle(RapperInfo rapperInfo)
         {
-            EqualCheckValue(AchievementsType.Battle, raperId, null);
+            _lastRapperName = rapperInfo.Name;
+            EqualCheckValue(AchievementsType.Battle, rapperInfo.Id, null);
         }
         
         /// <summary>
@@ -202,13 +217,24 @@ namespace Core
             if (!showUi)
                 return;
 
-            var compareValueString = GetCompareValueString(achievement);
-            var localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
-            var achievementString = $"{localizedAchievementName}: {compareValueString}";
-            //todo: Добавить дескриптион для ачивки
-            var description = "Some description";
+            void Notification()
+            {
+                Debug.LogWarning("Показ ачивки");
+                void NotificationClickAction()
+                {
+                    var compareValueString = GetCompareValueString(achievement);
+                    var localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
+                    var achievementString = $"{localizedAchievementName}: {compareValueString}";
+                    //todo: Добавить дескриптион для ачивки
+                    var description = "Some description";
             
-            newAchievementsPage.ShowNewAchievement(achievementString, description);
+                    newAchievementsPage.ShowNewAchievement(achievementString, description);
+                }
+                
+                newAchievementEffect.Show(newAchievementSprite, NotificationClickAction);
+            }
+            
+            NotificationManager.Instance.AddIndependentNotification(Notification);
         }
 
         /// <summary>
@@ -225,8 +251,7 @@ namespace Core
                 case AchievementsType.Feat:
                 case AchievementsType.Battle:
                 {
-                    //todo: Добавить поиск репера из списка по аналогии с местом проведеняи концерта
-                    return "";
+                    return _lastRapperName;
                 }
                 default:
                 {

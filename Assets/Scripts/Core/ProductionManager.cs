@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Data;
 using Game;
 using Models.Info.Production;
 using Models.Player;
@@ -18,8 +19,12 @@ namespace Core
         public event Action<ClipInfo> onClipAdd = info => { }; 
         public event Action<ConcertInfo> onConcertAdd = info => { };
         
-        private static PlayerHistory playerHistory => PlayerManager.Data.History;
-
+        public event Action<RapperInfo> onFeat = rapper => {};
+        public event Action<RapperInfo> onBattle = rapper => {}; 
+        
+        private static PlayerData data => PlayerManager.Data;
+        private static PlayerHistory playerHistory => data.History;
+        
         #region TRACK
         
         /// <summary>
@@ -34,7 +39,7 @@ namespace Core
         /// Возвращает экземпляр Трека по идентификатору
         /// </summary>
         public static TrackInfo GetTrack(int trackId)
-            => PlayerManager.Data.History.TrackList.First(e => e.Id == trackId);
+            => playerHistory.TrackList.First(e => e.Id == trackId);
         
         /// <summary>
         /// Возвращает название трека по идентификатору
@@ -63,7 +68,7 @@ namespace Core
         /// Возвращает экземпляр Альбома по идентификатору
         /// </summary>
         public static AlbumInfo GetAlbum(int albumId)
-            => PlayerManager.Data.History.AlbumList.First(e => e.Id == albumId);
+            => playerHistory.AlbumList.First(e => e.Id == albumId);
 
         #endregion
         
@@ -89,9 +94,33 @@ namespace Core
         /// Возвращает кол-во проведенных концертов по идентификатору альбома
         /// </summary>
         public static int SameConcertsCount(int albumId)
-            => PlayerManager.Data.History.ConcertList.Count(c => c.AlbumId ==  albumId);
+            => playerHistory.ConcertList.Count(c => c.AlbumId ==  albumId);
 
         #endregion
+        
+        /// <summary>
+        /// Сохраняет информацию о фите
+        /// </summary>
+        public static void AddFeat(RapperInfo rapperInfo)
+        {
+            if (data.Feats.Contains(rapperInfo.Id))
+                return;
+
+            data.Feats.Add(rapperInfo.Id);
+            Instance.onFeat.Invoke(rapperInfo);
+        }
+
+        /// <summary>
+        /// Сохраняет информацию о батле
+        /// </summary>
+        public static void AddBattle(RapperInfo rapperInfo)
+        {
+            if (data.Battles.Contains(rapperInfo.Id))
+                return;
+
+            data.Battles.Add(rapperInfo.Id);
+            Instance.onBattle.Invoke(rapperInfo);
+        }
     }
 
     public static partial class Extension

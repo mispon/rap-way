@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Game.Notifications;
 using UnityEngine;
 using UnityEngine.UI;
 using Achiev = Models.Player.Achievement;
@@ -49,6 +50,11 @@ namespace Game.Pages.Achievement
         protected override void AfterPageOpen()
         {
             windowAnimation.Play();
+        }
+
+        protected override void BeforePageClose()
+        {
+            NotificationManager.Instance.UnlockIndependentQueue();
         }
 
         protected override void AfterPageClose()

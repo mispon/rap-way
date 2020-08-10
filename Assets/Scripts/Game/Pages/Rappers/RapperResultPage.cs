@@ -83,5 +83,10 @@ namespace Game.Pages.Rappers
             listPage.Close();
             Close();
         }
+
+        protected override void AfterPageClose()
+        {
+            _rapper = null;
+        }
     }
 }

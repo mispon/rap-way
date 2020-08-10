@@ -1,3 +1,4 @@
+using Core;
 using Data;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,15 +20,15 @@ namespace Game.Pages.Battle
         [SerializeField] private int winnerHype;
         [SerializeField] private int loserHype;
 
+        private BattleResult _result;
+        
         /// <summary>
         /// Открывает страницу результатов
         /// </summary>
         public void Show(RapperInfo rapper, int playerPoints, int rapperPoints)
         {
-            var result = AnalyzeResult(rapper.Id, playerPoints, rapperPoints);
-            
-            DisplayResult(rapper.Name, in result);
-            SaveResult(in result);
+            _result = AnalyzeResult(rapper, playerPoints, rapperPoints);
+            DisplayResult();
             
             Open();
         }
@@ -35,7 +36,7 @@ namespace Game.Pages.Battle
         /// <summary>
         /// Анализирует результаты батла 
         /// </summary>
-        private BattleResult AnalyzeResult(int rapperId, int playerPoints, int rapperPoints)
+        private BattleResult AnalyzeResult(RapperInfo rapper, int playerPoints, int rapperPoints)
         {
             bool isWin = playerPoints != rapperPoints
                 ? playerPoints > rapperPoints
@@ -46,7 +47,7 @@ namespace Game.Pages.Battle
             
             return new BattleResult
             {
-                RapperId = rapperId,
+                RapperInfo = rapper,
                 FansIncome = fans,
                 HypeIncome = hype,
                 IsWin = isWin
@@ -56,34 +57,49 @@ namespace Game.Pages.Battle
         /// <summary>
         /// Отображает результаты батла
         /// </summary>
-        private void DisplayResult(string rapperName, in BattleResult result)
+        private void DisplayResult()
         {
-            resultMessage.text = result.IsWin
+            var rapperName = _result.RapperInfo.Name;
+            resultMessage.text = _result.IsWin
                 ? $"{PlayerManager.Data.Info.NickName} победил в батле с {rapperName}!"
                 : $"{rapperName} победил в батле с {PlayerManager.Data.Info.NickName}!";
             
-            fansIncome.text = $"ФАНАТЫ: {result.FansIncome.GetDisplay()}";
-            hypeIncome.text = $"ХАЙП: {result.HypeIncome}";
+            fansIncome.text = $"ФАНАТЫ: {_result.FansIncome.GetDisplay()}";
+            hypeIncome.text = $"ХАЙП: {_result.HypeIncome}";
         }
 
         /// <summary>
         /// Сохраняет результаты батла
         /// </summary>
-        private void SaveResult(in BattleResult result)
+        private void SaveResult()
         {
-            PlayerManager.Instance.AddFans(result.FansIncome, rewardExp);
-            PlayerManager.Instance.AddHype(result.HypeIncome);
+            PlayerManager.Instance.AddFans(_result.FansIncome, rewardExp);
+            PlayerManager.Instance.AddHype(_result.HypeIncome);
             
-            if (result.IsWin)
-                PlayerManager.Instance.SaveBattle(result.RapperId);
+            if (_result.IsWin)
+                ProductionManager.AddBattle(_result.RapperInfo);
+        }
+
+        protected override void AfterPageClose()
+        {
+            SaveResult();
+            _result = BattleResult.Empty;
         }
     }
 
     public struct BattleResult
     {
-        public int RapperId;
+        public RapperInfo RapperInfo;
         public int FansIncome;
         public int HypeIncome;
         public bool IsWin;
+
+        public static BattleResult Empty => new BattleResult
+        {
+            RapperInfo = null,
+            FansIncome = 0,
+            HypeIncome = 0,
+            IsWin = false
+        };
     }
 }
