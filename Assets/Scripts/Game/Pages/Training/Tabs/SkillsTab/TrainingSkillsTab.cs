@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
 using Enums;
 using UnityEngine;
@@ -63,6 +64,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         /// </summary>
         private void OnLearnSkill(Skills skill)
         {
+            SoundManager.Instance.PlayUnlock();
             PlayerManager.Data.Skills.Add(skill);
             onStartTraining.Invoke(() => skillCost);
         }

@@ -1,3 +1,4 @@
+using Core;
 using Data;
 using Enums;
 using Localization;
@@ -45,6 +46,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void StartConversation(bool isFeat)
         {
+            SoundManager.Instance.PlayClick();
             PlayerManager.SetTeammateCooldown(TeammateType.Manager, cooldown);
             workingPage.StartWork(_rapper, isFeat);
             Close();

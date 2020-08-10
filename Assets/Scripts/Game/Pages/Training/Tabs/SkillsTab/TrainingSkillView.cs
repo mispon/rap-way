@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Data;
 using Enums;
 using Localization;
@@ -53,6 +54,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         /// </summary>
         private void Hide()
         {
+            SoundManager.Instance.PlayClick();
             gameObject.SetActive(false);
         }
         

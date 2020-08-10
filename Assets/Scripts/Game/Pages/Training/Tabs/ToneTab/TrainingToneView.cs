@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,6 +47,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void Hide()
         {
+            SoundManager.Instance.PlayClick();
             gameObject.SetActive(false);
         }
 

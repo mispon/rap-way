@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Data;
 using Game.UI;
 using Localization;
@@ -97,6 +98,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void HandleClick()
         {
+            SoundManager.Instance.PlayClick();
             onClick.Invoke(_index);
         }
 
@@ -105,6 +107,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void HandleLevelUpClick()
         {
+            SoundManager.Instance.PlayClick();
             onLevelUpClick.Invoke(_index);
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -40,6 +41,7 @@ namespace Game.Notifications
         /// </summary>
         public void AddClickNotification(Action action)
         {
+            SoundManager.Instance.PlayNotify();
             _clickNotificationActions.Enqueue(action);
             CheckClickNotificationsStatus();
         }
@@ -49,6 +51,7 @@ namespace Game.Notifications
         /// </summary>
         public void AddIndependentNotification(Action action)
         {
+            SoundManager.Instance.PlayClick
             _independentNotificationActions.Enqueue(action);
             if (!_isIndependentVisualized)
                 CheckIndependentNotificationsStatus();

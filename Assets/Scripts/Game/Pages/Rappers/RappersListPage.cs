@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core;
 using Data;
 using UnityEngine;
 
@@ -21,14 +22,6 @@ namespace Game.Pages.Rappers
         [SerializeField] private RappersData data;
 
         private readonly List<RapperItem> _rappersList = new List<RapperItem>();
-        
-        /// <summary>
-        /// Обработчик нажатия на элемент списка
-        /// </summary>
-        private void HandleItemClick(RapperItem item)
-        {
-            rapperPage.OpenPage(item.Info);
-        }
 
         /// <summary>
         /// Создает элемент списка реперов
@@ -42,6 +35,15 @@ namespace Game.Pages.Rappers
             rapperItem.gameObject.SetActive(true);
                 
             _rappersList.Add(rapperItem);
+        }
+        
+        /// <summary>
+        /// Обработчик нажатия на элемент списка
+        /// </summary>
+        private void HandleItemClick(RapperItem item)
+        {
+            SoundManager.Instance.PlayClick();
+            rapperPage.OpenPage(item.Info);
         }
         
         /// <summary>

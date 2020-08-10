@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Data;
 using Models.Game;
 using UnityEngine;
@@ -82,6 +83,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void OnUpgradeStats(int index)
         {
+            SoundManager.Instance.PlayTrain();
             int cost = _trainingActions[index].Invoke();
             onStartTraining.Invoke(() => cost);
         }
@@ -109,6 +111,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
             {
                 stat.Value += 1;
                 stat.Exp -= expToUp;
+                SoundManager.Instance.PlayLevelUp();
             }
             
             return trainingCost;

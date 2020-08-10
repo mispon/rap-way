@@ -1,3 +1,4 @@
+using Core;
 using Data;
 using Game.Pages.Battle;
 using Game.Pages.Feat;
@@ -29,8 +30,8 @@ namespace Game.Pages.Rappers
 
         private void Start()
         {
-            okButton.onClick.AddListener(Close);
-            cancelButton.onClick.AddListener(Close);
+            okButton.onClick.AddListener(OnClose);
+            cancelButton.onClick.AddListener(OnClose);
             nextButton.onClick.AddListener(OnNext);
         }
 
@@ -75,6 +76,8 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void OnNext()
         {
+            SoundManager.Instance.PlayClick();
+            
             if (_isFeat)
                 featPage.Show(_rapper);
             else
@@ -87,6 +90,15 @@ namespace Game.Pages.Rappers
         protected override void AfterPageClose()
         {
             _rapper = null;
+        }
+
+        /// <summary>
+        /// Обработчик кнопок отмены и возврата
+        /// </summary>
+        private void OnClose()
+        {
+            SoundManager.Instance.PlayClick();
+            Close();
         }
     }
 }

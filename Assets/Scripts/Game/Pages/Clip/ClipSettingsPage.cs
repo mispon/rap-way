@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
 using Game.UI;
+using Game.UI.GameScreen;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,9 +36,9 @@ namespace Game.Pages.Clip
         [SerializeField] private ClipStaffData data;
 
         private ClipInfo _clip;
-        private List<TrackInfo> _lastTracks = new List<TrackInfo>(TRACKS_CACHE);
         private int _directorPrice;
         private int _operatorPrice;
+        private readonly List<TrackInfo> _lastTracks = new List<TrackInfo>(TRACKS_CACHE);
 
         private int _fullPrice => _directorPrice + _operatorPrice;
         
@@ -58,6 +59,8 @@ namespace Game.Pages.Clip
         /// </summary>
         private void CreateClip()
         {
+            SoundManager.Instance.PlayClick();
+            
             if (!PlayerManager.Instance.SpendMoney(_fullPrice))
             {
                 price.ShowNoMoney();
@@ -137,6 +140,8 @@ namespace Game.Pages.Clip
             
             OnDirectorChange(0);
             OnOperatorChange(0);
+            
+            GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()
@@ -155,13 +160,5 @@ namespace Game.Pages.Clip
             directorSwitcher.onIndexChange -= OnDirectorChange;
             operatorSwitcher.onIndexChange -= OnOperatorChange;
         }
-    }
-    
-    [Serializable]
-    public class ClipStaff
-    {
-        public string Name;
-        public int Price;
-        public int Skill;
     }
 }

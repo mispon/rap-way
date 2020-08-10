@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Game.UI.GameScreen;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -36,7 +37,9 @@ namespace Game.Effects
         public void OnPointerClick(PointerEventData eventData)
         {
             CanvasController.SetActive(true);
-            onClose?.Invoke();
+            SoundManager.Instance.PlayClick();
+            GameScreenController.Instance.SetVisibility(true);
+            onClose.Invoke();
             gameObject.SetActive(false);
         }
     }

@@ -11,7 +11,7 @@ namespace Game
     /// <summary>
     /// Логика управления состоянием игры
     /// </summary>
-    public class GameManager : Singleton<GameManager>, IStarter
+    public class GameManager : Singleton<GameManager>
     {
         [Header("Ключи сохранения данных")]
         [SerializeField] private string playersDataKey;
@@ -19,16 +19,16 @@ namespace Game
 
         public PlayerData PlayerData { get; private set; }
         public GameStats GameStats { get; private set; }
-        
-        public void OnStart()
-        {
-            // todo: включить загрузочный экран
 
+        public bool IsReady;
+        
+        private void Start()
+        {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
             SoundManager.Instance.Setup(GameStats.SoundVolume, GameStats.NoSound);
-            
-            // todo: выключить загрузочный экран
+
+            IsReady = true;
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using Core;
 using Models.Player;
 using UnityEngine;
 
@@ -51,15 +52,22 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void AddExp(Teammate teammate)
         {
+            bool isLevelUp = false;
             int expToUp = expToLevelUp[teammate.Skill.Value];
-
+            
             teammate.Skill.Exp += trainingCost;
 
             if (teammate.Skill.Exp >= expToUp)
             {
                 teammate.Skill.Value += 1;
                 teammate.Skill.Exp -= expToUp;
+                isLevelUp = true;
             }
+            
+            if (isLevelUp)
+                SoundManager.Instance.PlayLevelUp();
+            else
+                SoundManager.Instance.PlayTrain();
             
             onStartTraining.Invoke(() => trainingCost);
         }
@@ -71,7 +79,7 @@ namespace Game.Pages.Training.Tabs.TeamTab
         {
             PlayerManager.Instance.SpendMoney(salary);
             teammate.HasPayment = true;
-            
+  
             onStartTraining.Invoke(() => 0);
         }
 
