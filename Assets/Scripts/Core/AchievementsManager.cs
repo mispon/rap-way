@@ -40,11 +40,10 @@ namespace Core
         private string _lastConcertPlaceName;
         
         /// <summary>
-        /// Имя последнего релаьного репера, с кем было действие
+        /// Имя последнего реального репера, с кем было действие
         /// </summary>
         private string _lastRapperName;
         
-
         /// <summary>
         /// На каждое событие изменения одной из сущностей вешается листенер, который выбирает все НЕРАЗБЛОКИРОВАННЫЕ AchievementInfo конкретного AchievementsType.
         /// В зависимсоти от логики ищется первое отсортированное по CompareValue или же все , прошедшие условия.
@@ -219,19 +218,15 @@ namespace Core
 
             void Notification()
             {
-                Debug.LogWarning("Показ ачивки");
-                void NotificationClickAction()
+                newAchievementEffect.Show(newAchievementSprite, () =>
                 {
                     var compareValueString = GetCompareValueString(achievement);
                     var localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
                     var achievementString = $"{localizedAchievementName}: {compareValueString}";
-                    //todo: Добавить дескриптион для ачивки
-                    var description = "Some description";
+                    var description = "Some description"; // todo: Добавить дескриптион для ачивки
             
                     newAchievementsPage.ShowNewAchievement(achievementString, description);
-                }
-                
-                newAchievementEffect.Show(newAchievementSprite, NotificationClickAction);
+                });
             }
             
             NotificationManager.Instance.AddIndependentNotification(Notification);

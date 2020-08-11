@@ -51,7 +51,7 @@ namespace Game.Notifications
         /// </summary>
         public void AddIndependentNotification(Action action)
         {
-            SoundManager.Instance.PlayClick
+            SoundManager.Instance.PlayClick();
             _independentNotificationActions.Enqueue(action);
             if (!_isIndependentVisualized)
                 CheckIndependentNotificationsStatus();
