@@ -15,7 +15,7 @@ namespace Models.Game
         {
             Style = Styles.Underground,
             Theme = Themes.Life,
-            NextTimeUpdate = TrendsManager.GetNextTimeUpdate(DateTime.Now)
+            NextTimeUpdate = GameStatsManager.GetNextTimeUpdate(DateTime.Now)
         };
     }
 }

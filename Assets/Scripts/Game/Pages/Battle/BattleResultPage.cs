@@ -64,7 +64,7 @@ namespace Game.Pages.Battle
                 ? $"{PlayerManager.Data.Info.NickName} победил в батле с {rapperName}!"
                 : $"{rapperName} победил в батле с {PlayerManager.Data.Info.NickName}!";
             
-            fansIncome.text = $"ФАНАТЫ: {_result.FansIncome.GetDisplay()}";
+            fansIncome.text = $"ФАНАТЫ: {_result.FansIncome.DisplayMoneyShort()}";
             hypeIncome.text = $"ХАЙП: {_result.HypeIncome}";
         }
 

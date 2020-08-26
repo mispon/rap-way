@@ -11,11 +11,15 @@ namespace Game.Pages.Training.Tabs.TeamTab
     /// </summary>
     public class TrainingTeammate : MonoBehaviour
     {
+        [SerializeField] private Image avatar;
         [SerializeField] private Text level;
         [SerializeField] private Button upButton;
         [SerializeField] private Button payButton;
         [SerializeField] private ProgressBar expBar;
         [SerializeField] private GameObject inactiveLabel;
+        [Space] 
+        [SerializeField] private Sprite activeSprite;
+        [SerializeField] private Sprite inactiveSprite;
 
         public Action<Teammate> onUp = teammate => {};
         public Action<Teammate, int> onPay = (teammate, salary) => {};
@@ -40,7 +44,8 @@ namespace Game.Pages.Training.Tabs.TeamTab
                 SetLocked();
                 return;
             }
-            
+
+            avatar.sprite = teammate.HasPayment ? activeSprite : inactiveSprite;
             inactiveLabel.SetActive(false);
             level.text = teammate.Skill.Value.ToString();
             
@@ -58,6 +63,7 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void SetLocked()
         {
+            avatar.sprite = inactiveSprite;
             inactiveLabel.SetActive(true);
             level.text = "0";
             

@@ -2,6 +2,7 @@ using System;
 using Data;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Rappers
 {
@@ -13,7 +14,6 @@ namespace Game.Pages.Rappers
     {
         [SerializeField] private Image avatar;
         [SerializeField] private Text nickname;
-        [SerializeField] private Image country;
         [SerializeField] private Text fans;
         
         public RapperInfo Info { get; private set; }
@@ -37,8 +37,7 @@ namespace Game.Pages.Rappers
             Info = info;
             avatar.sprite = info.Avatar;
             nickname.text = info.Name;
-            country.sprite = info.CountryImage;
-            fans.text = info.Fans.ToString(); // TODO: convert to display string
+            fans.text = info.Fans.DisplayMoneyShort();
         }
     }
 }

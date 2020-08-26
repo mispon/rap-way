@@ -42,6 +42,7 @@ namespace Game.Notifications
         public void AddClickNotification(Action action)
         {
             SoundManager.Instance.PlayNotify();
+            
             _clickNotificationActions.Enqueue(action);
             CheckClickNotificationsStatus();
         }
@@ -52,6 +53,7 @@ namespace Game.Notifications
         public void AddIndependentNotification(Action action)
         {
             SoundManager.Instance.PlayClick();
+            
             _independentNotificationActions.Enqueue(action);
             if (!_isIndependentVisualized)
                 CheckIndependentNotificationsStatus();
@@ -91,9 +93,12 @@ namespace Game.Notifications
         /// </summary>
         private void ProcessNotification(Queue<Action> actionQueue, bool isClickNotification = true)
         {
+            SoundManager.Instance.PlayClick();
+            
             var action = actionQueue.Dequeue();
             action.Invoke();
-            if(isClickNotification)
+            
+            if (isClickNotification)
                 CheckClickNotificationsStatus();
         }
     }

@@ -98,7 +98,6 @@ namespace Game.Pages.Store
                 _itemsList.Add(itemController);
             }
 
-
             var uiData = GetGoodUi(type, nextLevel ? level + 1 : level); 
             itemController.Initialize(type, uiData, OnPurchaseItemClick);
         }

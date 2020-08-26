@@ -4,7 +4,6 @@ using Models.Game;
 using Models.Player;
 using UnityEngine;
 using Utils;
-using Core.Interfaces;
 
 namespace Game
 {

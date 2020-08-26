@@ -19,7 +19,6 @@ namespace Data
         public int Id;
         public string DescKey;
         public Sprite Avatar;
-        public Sprite CountryImage;
         public int Fans;
         public int Vocobulary;
         public int Bitmaking;
