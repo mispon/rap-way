@@ -1,5 +1,3 @@
-using System.Linq;
-using Data;
 using Enums;
 using UnityEngine;
 using Models.Info;
@@ -18,20 +16,19 @@ namespace Game.Analyzers
         
         [Header("Данные")] 
         [SerializeField, Tooltip("Базовый коэффициента импакта хайпа по каждому из соц.действий")] 
-        private SocialHypeImpactData hypeImpactData;
+        private int[] hypeImpactData;
         
         /// <summary>
         /// Анализирует успешность социального действия
         /// </summary>
         public override void Analyze(SocialInfo social)
         {
-            var hypeMultiplier = hypeImpactData.hypeMultipliers.First(el => el.Type == social.Data.Type);
-            var resultPoints =  social.PlayerPoints + social.PrManPoints;
+            var hypeMultiplier = hypeImpactData[(int) social.Type];
             
-            var hypeIncome = fansMultiplier * hypeMultiplier.Value * resultPoints;
-            if (social.Data.Type == SocialType.Charity)
+            var hypeIncome = fansMultiplier * hypeMultiplier * social.WorkPoints;
+            if (social.Type == SocialType.Charity)
             {
-                var charityMoneyRatio = social.CharityMoney / (float) PlayerManager.Data.Money;
+                var charityMoneyRatio = social.CharityAmount / (float) PlayerManager.Data.Money;
                 var charityMoneyImpact = charityMoneyRatioCurve.Evaluate(charityMoneyRatio);
                 
                 hypeIncome *= charityMoneyImpact;

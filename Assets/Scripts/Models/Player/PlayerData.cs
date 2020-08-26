@@ -21,8 +21,7 @@ namespace Models.Player
         public PlayerStats Stats;
         public PlayerHistory History;
         public PlayerTeam Team;
-        public PlayerSocials Socials;
-        
+
         public List<Good> Goods;
         public List<Achievement> Achievements;
         public List<Themes> Themes;
@@ -41,7 +40,6 @@ namespace Models.Player
             Stats = PlayerStats.New,
             History = PlayerHistory.New,
             Team = PlayerTeam.New,
-            Socials = PlayerSocials.New,
             
             Goods = new List<Good>(),
             Achievements = new List<Achievement>(),

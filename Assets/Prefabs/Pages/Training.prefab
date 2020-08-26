@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5422559147629280936
 RectTransform:
   m_ObjectHideFlags: 0
@@ -79,7 +79,6 @@ MonoBehaviour:
   skillCost: 300
   grid: {fileID: 166176181419191078}
   cardTemplate: {fileID: 6952767732809225605}
-  unlockClip: {fileID: 8300000, guid: b7e5981d6f983e94bbc2cbf5a9c09da4, type: 3}
   data: {fileID: 11400000, guid: f531ed6fded683d4ea0117d2ee91a875, type: 2}
 --- !u!1 &60431858800409963
 GameObject:
@@ -536,11 +535,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04e4048204b4b17ac06b25a4e9b8747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avatar: {fileID: 2939414032244324641}
   level: {fileID: 3822675602501483865}
   upButton: {fileID: 4847138547110639998}
   payButton: {fileID: 6718527516805004392}
   expBar: {fileID: 6327525856323849485}
   inactiveLabel: {fileID: 6244217751846485684}
+  activeSprite: {fileID: 21300000, guid: 9b163cec97a11814484166b334619a8f, type: 3}
+  inactiveSprite: {fileID: 21300000, guid: f46bb1f3fee539b4b865f28ff91c348e, type: 3}
 --- !u!1 &368366632976318715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1810,11 +1812,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04e4048204b4b17ac06b25a4e9b8747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avatar: {fileID: 6440609928495796919}
   level: {fileID: 5945668907157469242}
   upButton: {fileID: 8277052196866145539}
   payButton: {fileID: 7775186770670862812}
   expBar: {fileID: 7525911150892519704}
   inactiveLabel: {fileID: 7831896561747427703}
+  activeSprite: {fileID: 21300000, guid: 794fd7e549aa3fb41bfbd5abf36497bf, type: 3}
+  inactiveSprite: {fileID: 21300000, guid: 695e288d9af13e94cba50adf8fe6f56b, type: 3}
 --- !u!1 &1359246702548156550
 GameObject:
   m_ObjectHideFlags: 0
@@ -4827,7 +4832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7690597913632519778
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4867,7 +4872,6 @@ MonoBehaviour:
   - {fileID: 6101955892649674226}
   trainingCost: 50
   expToLevelUp: 000000006400000096000000c8000000fa0000002c0100005e01000090010000c2010000f401000001000000
-  trainClip: {fileID: 8300000, guid: 7c369e915390afb4d9612452566d2fa6, type: 3}
 --- !u!1 &3295377272063715801
 GameObject:
   m_ObjectHideFlags: 0
@@ -8316,11 +8320,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04e4048204b4b17ac06b25a4e9b8747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avatar: {fileID: 7985127361810768856}
   level: {fileID: 5044016692852253786}
   upButton: {fileID: 7464894721270823575}
   payButton: {fileID: 7453804968446947535}
   expBar: {fileID: 2722974455576797359}
   inactiveLabel: {fileID: 6665155902823815104}
+  activeSprite: {fileID: 21300000, guid: a7037060194b9524bbc3baffad14c681, type: 3}
+  inactiveSprite: {fileID: 21300000, guid: 2086967379cc3784488f6a323963a87a, type: 3}
 --- !u!1 &6187418291783763657
 GameObject:
   m_ObjectHideFlags: 0
@@ -8830,7 +8837,6 @@ MonoBehaviour:
   styleCardTemplate: {fileID: 3277119484202873041}
   themesGrid: {fileID: 3423967168009998535}
   themeCardTemplate: {fileID: 5863097086936106995}
-  unlockClip: {fileID: 8300000, guid: b7e5981d6f983e94bbc2cbf5a9c09da4, type: 3}
   data: {fileID: 11400000, guid: f531ed6fded683d4ea0117d2ee91a875, type: 2}
 --- !u!1 &6633747302764407930
 GameObject:
@@ -9275,7 +9281,6 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: f531ed6fded683d4ea0117d2ee91a875, type: 2}
   trainingCost: 50
   expToLevelUp: 000000006400000096000000c8000000fa0000002c0100005e01000090010000c2010000f401000001000000
-  trainClip: {fileID: 8300000, guid: 7c369e915390afb4d9612452566d2fa6, type: 3}
 --- !u!1 &6743686109274404967
 GameObject:
   m_ObjectHideFlags: 0
@@ -9352,11 +9357,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04e4048204b4b17ac06b25a4e9b8747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avatar: {fileID: 4883455391031165433}
   level: {fileID: 3998361190480762730}
   upButton: {fileID: 143986884353024648}
   payButton: {fileID: 6329900984637058921}
   expBar: {fileID: 754932748731750840}
   inactiveLabel: {fileID: 1793929730554813605}
+  activeSprite: {fileID: 21300000, guid: 3c9c20d3dab33fd46ac514fd859aaead, type: 3}
+  inactiveSprite: {fileID: 21300000, guid: cb549c33623deda4d828ed741a3ae15e, type: 3}
 --- !u!1 &6753000863177891191
 GameObject:
   m_ObjectHideFlags: 0

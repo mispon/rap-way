@@ -1,11 +1,8 @@
-﻿using System.Linq;
+﻿using Data;
 using Enums;
-using Game.Pages.Social.SocialStructs;
-using Localization;
 using Models.Info;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Extensions;
 
 namespace Game.Pages.Social
 {
@@ -15,20 +12,19 @@ namespace Game.Pages.Social
     public class SocialWorkingPage : BaseWorkingPage
     {
         [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text header;
-        [SerializeField] private Text playerPoints;
-        [SerializeField] private Text prManPoints;
-        [SerializeField] private GameObject prManBucket;
-        
-        [Header("Команда игрока")]
+        [SerializeField] private Text workPoints;
         [SerializeField] private WorkPoints playerWorkPoints;
         [SerializeField] private WorkPoints prManWorkPoints;
-        [SerializeField] private GameObject prMan;
+        [SerializeField] private Image prManAvatar;
 
         [Header("Страницы результата")]
-        [SerializeField, ArrayElementTitle("Type")] private TypedResultPage[] socialResults; 
+        [SerializeField] private SocialResultPage[] socialResults;
+
+        [Header("Данные")]
+        [SerializeField] private ImagesBank imagesBank;
         
         private SocialInfo _social;
+        private bool _hasPrMan;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -54,16 +50,16 @@ namespace Game.Pages.Social
         private void GenerateWorkPoints()
         {
             var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 1);
-            _social.PlayerPoints += playerPointsValue;
             playerWorkPoints.Show(playerPointsValue);
 
             var prManPointsValue = 0;
-            if (prMan.activeSelf)
+            if (_hasPrMan)
             {
                 prManPointsValue = Random.Range(1, PlayerManager.Data.Team.PrMan.Skill.Value + 1);
                 prManWorkPoints.Show(prManPointsValue);
             }
-            _social.PrManPoints += prManPointsValue;
+            
+            _social.WorkPoints += playerPointsValue + prManPointsValue;
         }
 
         /// <summary>
@@ -71,9 +67,7 @@ namespace Game.Pages.Social
         /// </summary>
         private void DisplayWorkPoints()
         {
-            playerPoints.text = _social.PlayerPoints.ToString();
-            if (prMan.activeSelf)
-                prManPoints.text = _social.PrManPoints.ToString();
+            workPoints.text = _social.WorkPoints.ToString();
         }
         
         /// <summary>
@@ -81,36 +75,26 @@ namespace Game.Pages.Social
         /// </summary>
         protected override void FinishWork()
         {
-            GetPage(_social.Data.Type).ShowPage(_social);
+            GetPage(_social.Type).ShowPage(_social);
             Close();
         }
         
         /// <summary>
         /// Возвращает страницу для указанного типа соц. события 
         /// </summary>
-        private SocialResultPage GetPage(SocialType type)
-        {
-            return socialResults.First(sr => sr.Type == type).Page;
-        }
+        private SocialResultPage GetPage(SocialType type) => socialResults[(int) type];
 
         protected override void BeforePageOpen()
         {
-            var typeDescription = LocalizationManager.Instance.Get(_social.Data.Type.GetDescription()); 
-            header.text = $"{_social.Data.WorkingPageHeader} {typeDescription}";
-            
-            var active = !PlayerManager.Data.Team.PrMan.IsEmpty;
-            prMan.SetActive(active);
-            prManBucket.SetActive(active);
+            _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
+            prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
         }
 
         protected override void BeforePageClose()
         {
             base.BeforePageClose();
 
-            playerPoints.text = "0";
-            prManPoints.text = "0";
-            header.text = "";
-            
+            workPoints.text = "0";
             _social = null;
         }
     }

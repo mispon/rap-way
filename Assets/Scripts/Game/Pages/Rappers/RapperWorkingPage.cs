@@ -1,5 +1,5 @@
 using Data;
-using Localization;
+using Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,21 +11,27 @@ namespace Game.Pages.Rappers
     public class RapperWorkingPage : BaseWorkingPage
     {
         [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text header;
-        [SerializeField] private Text managementPoints;
+        [SerializeField] private Text managementPointsLabel;
+        [SerializeField] private Text rapperPointsLabel;
 
         [Header("Персонажи")]
+        [SerializeField] private Image managerAvatar;
         [SerializeField] private Image rapperAvatar;
         [SerializeField] private WorkPoints playerWorkPoints;
         [SerializeField] private WorkPoints managerWorkPoints;
+        [SerializeField] private WorkPoints rapperWorkPoints;
 
         [Header("Страница результата")]
         [SerializeField] private RapperResultPage rapperResult;
+
+        [Header("Даннык")]
+        [SerializeField] private ImagesBank imagesBank;
 
         private RapperInfo _rapper;
         private bool _isFeat;
         private int _playerPoints;
         private int _rapperPoints;
+        private bool _hasManager;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -43,7 +49,8 @@ namespace Game.Pages.Rappers
         /// </summary>
         protected override void DoDayWork()
         {
-            GenerateWorkPoints();
+            GeneratePlayerWorkPoints();
+            GenerateRapperWorkPoints();
         }
         
         /// <summary>
@@ -56,28 +63,45 @@ namespace Game.Pages.Rappers
         }
 
         /// <summary>
-        /// Генерирует очки работы
+        /// Генерирует очки работы игрока
         /// </summary>
-        private void GenerateWorkPoints()
+        private void GeneratePlayerWorkPoints()
         {
             int playerPoints = Random.Range(1, PlayerManager.Data.Stats.Management.Value + 1);
             playerWorkPoints.Show(playerPoints);
-            
-            int managerPoints = Random.Range(1, PlayerManager.Data.Team.Manager.Skill.Value + 1);
-            managerWorkPoints.Show(managerPoints);
+
+            int managerPoints = 0;
+            if (_hasManager)
+            {
+                managerPoints = Random.Range(1, PlayerManager.Data.Team.Manager.Skill.Value + 1);
+                managerWorkPoints.Show(managerPoints);
+            }
 
             _playerPoints += playerPoints + managerPoints;
-            managementPoints.text = $"{_playerPoints}";
+            managementPointsLabel.text = $"{_playerPoints}";
+        }
 
-            _rapperPoints += Random.Range(1, _rapper.Management + 1);
+        /// <summary>
+        /// Генерирует очки работы игрока
+        /// </summary>
+        private void GenerateRapperWorkPoints()
+        {
+            int rapperPoints =  Random.Range(1, _rapper.Management + 1);
+            rapperWorkPoints.Show(rapperPoints);
+            _rapperPoints += rapperPoints;
+            rapperPointsLabel.text = $"{_rapperPoints}";
         }
 
         protected override void BeforePageOpen()
         {
-            header.text = $"{LocalizationManager.Instance.Get("conversation_with")} {_rapper.Name}";
+            _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
+            managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
+            
             rapperAvatar.sprite = _rapper.Avatar;
-            managementPoints.text = "0";
+            managementPointsLabel.text = "0";
+            rapperPointsLabel.text = "0";
             _playerPoints = 0;
+            _rapperPoints = 0;
         }
 
         protected override void BeforePageClose()

@@ -34,6 +34,17 @@ namespace Game
         }
 
         /// <summary>
+        /// Проверяет доступность тиммейта
+        /// </summary>
+        public static bool IsAvailable(TeammateType type)
+        {
+            var teammate = PlayerManager.Data.Team.TeammatesArray
+                .First(e => e.Type == type);
+            
+            return teammate.IsEmpty == false && teammate.HasPayment;
+        }
+
+        /// <summary>
         /// Возвращает зарплату тиммейта
         /// </summary>
         public int GetSalary(Teammate teammate)

@@ -1,5 +1,4 @@
-﻿using Core;
-using Game.Analyzers;
+﻿using Game.Analyzers;
 using UnityEngine;
 using Models.Info;
 
@@ -8,72 +7,44 @@ namespace Game.Pages.Social
     /// <summary>
     /// Страница результата социального действия
     /// </summary>
-    public class SocialResultPage : Page
+    public abstract class SocialResultPage : Page
     {
-        [Header("Страница настроек")]
-        [SerializeField] protected SocialSettingsPage settingsPage;
+        private const int SOCIAL_COOLDOWN = 5;
 
         [Header("Анализатор")] 
         [SerializeField] protected SocialAnalyzer analyzer;
-        
-        protected SocialInfo Social;
+
+        private SocialInfo _social;
         
         public void ShowPage(SocialInfo social)
         {
-            Social = social;
+            _social = social;
+            analyzer.Analyze(_social);
+            
             Open();
+            DisplayResult(social);
         }
 
         /// <summary>
-        /// Заполняет данные страницы результата социального действия
+        /// Отображает результаты соц. действия
         /// </summary>
-        protected virtual void DisplayResult() {}
+        protected abstract void DisplayResult(SocialInfo socialInfo);
         
         /// <summary>
         /// Сохраняет результат социального действия
         /// </summary>
         private static void SaveResult(SocialInfo social)
         {
-            PlayerManager.Instance.SpendMoney(social.CharityMoney);
+            GameManager.Instance.GameStats.SocialsCooldown = SOCIAL_COOLDOWN;
+            PlayerManager.Instance.SpendMoney(social.CharityAmount);
             PlayerManager.Instance.AddHype(social.HypeIncome);
-        }
-        
-        /// <summary>
-        /// Установка параметров деактивации
-        /// </summary>
-        private void OnSocialCooldownStart(SocialInfo social)
-        {
-            TimeManager.Instance.onDayLeft += social.Activity.OnDayLeft;
-            social.Activity.SetDisable(social.Data.Cooldown, ()=> { OnSocialCooldownEnd(social); });
-        }
-
-        /// <summary>
-        /// Активация по окончанию кулдауна
-        /// </summary>
-        private void OnSocialCooldownEnd(SocialInfo social)
-        {
-            TimeManager.Instance.onDayLeft -= social.Activity.OnDayLeft;
-            settingsPage.SetActiveAction(social.Data.Type, true);
-        }
-
-        #region PAGE CALLBACKS
-        protected override void BeforePageOpen()
-        {
-            analyzer.Analyze(Social);
-            DisplayResult();
-        }
-
-        protected override void BeforePageClose()
-        {
-            OnSocialCooldownStart(Social);
         }
 
         protected override void AfterPageClose()
         {
-            SaveResult(Social);
-            Social = null;
+            SaveResult(_social);
+            _social = null;
         }
-        #endregion
     }
 }
 

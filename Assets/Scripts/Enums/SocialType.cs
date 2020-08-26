@@ -8,15 +8,15 @@ namespace Enums
     public enum SocialType
     {
         [Description("social_twit")]
-        Twit,
+        Eagler,
         [Description("social_photo")]
-        Photo,
+        Ieyegram,
         [Description("social_story")]
-        Story,
+        TackTack,
         [Description("social_translation")]
-        Translation,
+        Telescope,
         [Description("social_streamevent")]
-        StreamEvent,
+        Switch,
         [Description("social_charity")]
         Charity
     }

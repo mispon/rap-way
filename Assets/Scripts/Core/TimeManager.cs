@@ -22,9 +22,9 @@ namespace Core
         [SerializeField] private int actionInterval;
         [SerializeField] private int inactionInterval;
 
-        public Action onDayLeft = () => {};
-        public Action onWeekLeft = () => {};
-        public Action onMonthLeft = () => {};
+        public event Action onDayLeft = () => {};
+        public event Action onWeekLeft = () => {};
+        public event Action onMonthLeft = () => {};
 
         private Coroutine _timer;
         private bool _hasAction;

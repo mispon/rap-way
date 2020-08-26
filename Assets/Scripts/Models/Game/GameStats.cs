@@ -13,6 +13,7 @@ namespace Models.Game
         public DateTime Now;
         public Trends Trends;
         public SystemLanguage Lang;
+        public int SocialsCooldown;
         
         public bool NoSound;
         public float SoundVolume;

@@ -10,7 +10,6 @@ namespace Game.Pages.Feat
     public class FeatWorkingPage : BaseWorkingPage
     {
         [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text header;
         [SerializeField] private Text bitPoints;
         [SerializeField] private Text textPoints;
 
@@ -100,9 +99,7 @@ namespace Game.Pages.Feat
         
         protected override void BeforePageOpen()
         {
-            header.text = $"Работа над треком \"{_track.Name} feat. {_track.Feat.Name}\"";
             bitPoints.text = textPoints.text = "0";
-            
             rapperAvatar.sprite = _track.Feat.Avatar;
         }
 

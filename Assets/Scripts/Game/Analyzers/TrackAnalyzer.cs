@@ -38,7 +38,7 @@ namespace Game.Analyzers
         {
             var totalFans = PlayerManager.Data.Fans;
             
-            TrendsManager.Analyze(track.TrendInfo);
+            GameStatsManager.Analyze(track.TrendInfo);
             
             var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (track.TextPoints + track.BitPoints);
             resultPoints += resultPoints * Mathf.Lerp(0, trendsEqualityMultiplier, track.TrendInfo.EqualityValue);

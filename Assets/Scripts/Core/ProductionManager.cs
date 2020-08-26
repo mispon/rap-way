@@ -25,8 +25,6 @@ namespace Core
         private static PlayerData data => PlayerManager.Data;
         private static PlayerHistory playerHistory => data.History;
         
-        #region TRACK
-        
         /// <summary>
         /// Добавляет информацию о треке в историю игрока
         /// </summary>
@@ -51,10 +49,6 @@ namespace Core
             var featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : "";
             return $"{track.Name}{featInfo}";
         }
-        
-        #endregion
-
-        #region ALBUM
 
         /// <summary>
         /// Добавляет информацию об альбоме в историю игрока
@@ -70,8 +64,6 @@ namespace Core
         public static AlbumInfo GetAlbum(int albumId)
             => playerHistory.AlbumList.First(e => e.Id == albumId);
 
-        #endregion
-        
         /// <summary>
         /// Добавляет информацию о клипе в историю игрока
         /// </summary>
@@ -79,9 +71,7 @@ namespace Core
         {
             playerHistory.ClipList.AddProduction(info, Instance.onClipAdd);
         }
-
-        #region CONCERT
-
+        
         /// <summary>
         /// Добавляет информацию о концерте в историю игрока
         /// </summary>
@@ -96,8 +86,6 @@ namespace Core
         public static int SameConcertsCount(int albumId)
             => playerHistory.ConcertList.Count(c => c.AlbumId ==  albumId);
 
-        #endregion
-        
         /// <summary>
         /// Сохраняет информацию о фите
         /// </summary>

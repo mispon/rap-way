@@ -67,7 +67,7 @@ namespace Core
         /// </summary>
         private void PlaySound(AudioClip clip)
         {
-            if (_noSound)
+            if (_noSound || clip == null)
                 return;
             
             sfx.pitch = Random.Range(0.9f, 1.1f);
@@ -80,14 +80,16 @@ namespace Core
         // ReSharper disable once FunctionRecursiveOnAllPaths
         private IEnumerator AmbientSoundRoutine()
         {
+            if (ambientClips.Length == 0)
+                yield break;
+            
             ambient.clip = ambientClips[_ambientIndex];
             ambient.Play();
             
             yield return new WaitForSeconds(ambient.clip.length);
 
             _ambientIndex++;
-            if (_ambientIndex >= ambientClips.Length)
-                _ambientIndex = 0;
+            _ambientIndex %= ambientClips.Length;
 
             yield return AmbientSoundRoutine();
         }

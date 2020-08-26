@@ -1,6 +1,4 @@
-using Data;
-using Models.Player;
-using UnityEngine.UI;
+using Enums;
 
 namespace Models.Info
 {
@@ -9,15 +7,48 @@ namespace Models.Info
     /// </summary>
     public class SocialInfo
     {
-        public SocialActivity Activity;
-        public Social Data;
-
-        public string ExternalText;
+        /// <summary>
+        /// Тип социального действия
+        /// </summary>
+        public SocialType Type;
         
-        public int PlayerPoints;
-        public int PrManPoints;
+        /// <summary>
+        /// Основной текст соц. действия
+        /// (твит, коммент, пост)
+        /// </summary>
+        public string MainText;
+        
+        /// <summary>
+        /// Дополнительный текст
+        /// (название фонда)
+        /// </summary>
+        public string AdditionalText;
 
-        public int CharityMoney;
+        /// <summary>
+        /// Стиль в контексте соц. действия
+        /// (тип фотографии в инсте)
+        /// (тип поста в тик-токе)
+        /// </summary>
+        public int ModeIndex;
+        
+        /// <summary>
+        /// Очки работы
+        /// </summary>
+        public int WorkPoints;
+
+        /// <summary>
+        /// Сумма пожертвования
+        /// </summary>
+        public int CharityAmount;
+        
+        /// <summary>
+        /// Награда за выполнение соц. действия
+        /// </summary>
         public int HypeIncome;
+
+        /// <summary>
+        /// Количество лайков
+        /// </summary>
+        public int Likes;
     }
 }

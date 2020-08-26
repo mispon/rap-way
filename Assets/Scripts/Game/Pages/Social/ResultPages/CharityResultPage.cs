@@ -1,40 +1,28 @@
-using Core;
-using Localization;
+using Models.Info;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Extensions;
 
 namespace Game.Pages.Social.ResultPages
 {
+    /// <summary>
+    /// Страница результатов пожертвования
+    /// </summary>
     public class CharityResultPage: SocialResultPage
     {
-        [Header("Контролы")] 
-        [SerializeField] private Text headerText;
-        [SerializeField] private Text commentText;
+        [Header("Контролы")]
+        [SerializeField] private Text message;
+        [SerializeField] protected Text hype;
 
-        [Header("Контролы анализатора")] 
-        [SerializeField] private Text marksText;
-        [SerializeField] private Text hypeIncomeText;
-
-        protected override void DisplayResult ()
+        /// <summary>
+        /// Отображает результаты пожествования
+        /// </summary>
+        protected override void DisplayResult(SocialInfo info)
         {
-            var typeLocalization = LocalizationManager.Instance.Get(Social.Data.Type.GetDescription());
-            headerText.text = $"Фонд \"{Social.ExternalText}\"";
-            commentText.text = $"Сегодня, {TimeManager.Instance.DisplayNow}, фонд \"{Social.ExternalText}\" получил от {PlayerManager.Data.Info} " +
-                               $"средства в размере {Social.CharityMoney}$. Нуждающиеся в этих деньгах навсегда останутся ему благодарны.\n\n"; 
-            
-            //marksText
-            hypeIncomeText.text = $"Хайп: +{Social.HypeIncome}";
-        }
-        
-        protected override void AfterPageClose()
-        {
-            base.AfterPageClose();
-
-            headerText.text = "";
-            commentText.text = "";
-            //marksText.text = "";
-            hypeIncomeText.text = "";
+            message.text = $"СЕГОДНЯ ФОНД <color=#00fff4>«{info.AdditionalText}»</color> " +
+                           $"ПОЛУЧИЛ {info.CharityAmount.DisplayMoney()} " +
+                           $"С СООБЩЕНИЕМ: <color=#00fff4>«{info.MainText}»</color>";
+            hype.text = $"+{info.HypeIncome}";
         }
     }
 }
