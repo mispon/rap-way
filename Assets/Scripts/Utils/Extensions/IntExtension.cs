@@ -18,13 +18,13 @@ namespace Utils.Extensions
         /// </summary>
         public static string DisplayMoneyShort(this int value)
         {
-            if (value < 1000)
+            if (value < 10e3)
                 return value.ToString();
 
-            if (value < 1000000)
+            if (value < 10e6)
                 return DisplayShort(value, 3);
 
-            if (value < 1000000000)
+            if (value < 10e9)
                 return DisplayShort(value, 6);
 
             return DisplayShort(value, 9);
