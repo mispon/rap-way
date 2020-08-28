@@ -64,7 +64,7 @@ namespace Game.Pages.Concert
 
         protected override void BeforePageOpen()
         {
-            if (Random.Range(0, 1) <= cutsceneShowChance)
+            if (Random.Range(0f, 1f) <= cutsceneShowChance)
                 cutscenePage.Show(_concert);
         }
 

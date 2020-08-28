@@ -1,3 +1,4 @@
+using System;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,31 +7,19 @@ namespace Game.Pages.Concert
 {
     public class ConcertCutscenePage : Page
     {
-        [Header("Кол-во мер заполненности зала")] 
-        [SerializeField, Range(3, 5)] private int locationOccupancies;
+        private const float LocationOccupancyRatio = 1 / 3f;
 
-        [Header("Сцена")] 
-        [SerializeField] private GameObject artist;
-        //ToDo: Освещение?
+        [Header("Анимации флекса")] 
+        [SerializeField] private GameObject[] flexingObjects;
         
-        [Header("Настройки танцпола")] 
-        [SerializeField, Tooltip("Один единственный чувак на весь зал")] 
-        private GameObject flexSingleTemplate;
-        [SerializeField, Tooltip("Группа из чуваков на сцене")] 
-        private GameObject flexGroupTemplate;
-        [SerializeField, 
-         Tooltip("Контейнер, куда мы будем грузить наших чуваков. В теории обладает комопнентом HorizontalLayoutGroup, " +
-                 "и нам не нужно запараитьвася над координатами расстановки")]
-        private Transform container;
-
         [Header("Пропуск катсцены")] 
         [SerializeField] private Button skipButton;
-        
-        private GameObject[] flexingUnits;
+
+        private int _flexingIndex = -1;
         private ConcertInfo _concert;
         
         /// <summary>
-        /// Открытие страницы с передаче информации о проведенном концерте
+        /// Открытие страницы с передачей информации о проведенном концерте
         /// </summary>
         public void Show(ConcertInfo concert)
         {
@@ -38,51 +27,24 @@ namespace Game.Pages.Concert
             Open();
         }
 
-        /// <summary>
-        /// Устанавливаем настройки сцены
-        /// </summary>
-        private void SetUpScene()
+        private void Start()
         {
-            //ToDo: пока оставим просто вклбчение обхекта персонажа, но тут мы должны укзаать, что он начинает флексить
-            //ToDo: тоже самое со светом, если будем над ним запариваться: бошки начниают кружиться
-            
-            artist.SetActive(true);
+            skipButton.onClick.AddListener(Close);
         }
-        
+
         /// <summary>
-        /// Располагаем фанатов на танцполе в завивсмости от заполненности зала
+        /// Влючаем нужную анимацию в зависимости от заполненности зала 
         /// </summary>
         private void FillDanceFloor()
         {
             var occupancyRatio = _concert.TicketsSold / (float) _concert.LocationCapacity;
-            var locationOccupanciesRatio = 1 / (float) locationOccupancies;
-            //Мера заполненности зала. От нее мы рисуем нужжное кол-во флексящих чуваков на сцене
-            var occupancyMeasure = Mathf.RoundToInt(occupancyRatio / locationOccupanciesRatio);
-            
-            if(occupancyMeasure == 0)
-                InstantiateFlexing(flexSingleTemplate, 1);
-            else
-                InstantiateFlexing(flexGroupTemplate, occupancyMeasure);
-        }
+            _flexingIndex = Mathf.FloorToInt(occupancyRatio / LocationOccupancyRatio);
 
-        /// <summary>
-        /// Создаем группы фанатов, располагая их в контейнере
-        /// </summary>
-        private void InstantiateFlexing(GameObject unit, int count)
-        {
-            flexingUnits = new GameObject[count];
-            
-            for (var i = 0; i < count; i++)
-            {
-                flexingUnits[i] = Instantiate(unit, container);
-                flexingUnits[i].SetActive(true);
-            }
+            flexingObjects[_flexingIndex].SetActive(true);
         }
-        
-        
 
         #region PAGE CALLBACKS
-
+        
         protected override void BeforePageOpen()
         {
             FillDanceFloor();
@@ -90,17 +52,11 @@ namespace Game.Pages.Concert
 
         protected override void AfterPageClose()
         {
-            //ToDo: диспозим артиста и освещениеЮ если оно будет
-            artist.SetActive(false);
-            
-            //ToDo: диспозим группы флексящих
-            for (var i = 0; i < flexingUnits.Length; i++)
-                Destroy(flexingUnits[i]);
-
-            flexingUnits = null;
+            flexingObjects[_flexingIndex].SetActive(false);
+            _flexingIndex = -1;
             _concert = null;
         }
-
+        
         #endregion
     }
 }

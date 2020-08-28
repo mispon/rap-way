@@ -32,8 +32,8 @@ namespace Models.Player
         
         public static PlayerData New => new PlayerData
         {
-            Money =  500_000,
-            Fans = 100_000,
+            Money =  10_000,
+            Fans = 10_000,
             Exp = 500,
             
             Info = PlayerInfo.New,
