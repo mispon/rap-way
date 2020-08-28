@@ -7,8 +7,6 @@ namespace Game.Pages.Concert
 {
     public class ConcertCutscenePage : Page
     {
-        private const float LocationOccupancyRatio = 1 / 3f;
-
         [Header("Анимации флекса")] 
         [SerializeField] private GameObject[] flexingObjects;
         
@@ -38,7 +36,8 @@ namespace Game.Pages.Concert
         private void FillDanceFloor()
         {
             var occupancyRatio = _concert.TicketsSold / (float) _concert.LocationCapacity;
-            _flexingIndex = Mathf.FloorToInt(occupancyRatio / LocationOccupancyRatio);
+            float locationOccupancyRatio = 1 / (float) flexingObjects.Length;
+            _flexingIndex = Mathf.FloorToInt(occupancyRatio / locationOccupancyRatio);
 
             flexingObjects[_flexingIndex].SetActive(true);
         }
