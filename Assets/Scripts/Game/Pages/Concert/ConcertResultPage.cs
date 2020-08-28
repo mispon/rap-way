@@ -22,8 +22,7 @@ namespace Game.Pages.Concert
         [Header("Анализатор концерта")]
         [SerializeField] private ConcertAnalyzer concertAnalyzer;
 
-        [Header("Настройки катсцены")] 
-        [SerializeField, Range(0.01f, 1f)] private float cutsceneShowChance;
+        [Header("Катсцена")] 
         [SerializeField] private ConcertCutscenePage cutscenePage;
         
         private ConcertInfo _concert;
@@ -64,8 +63,7 @@ namespace Game.Pages.Concert
 
         protected override void BeforePageOpen()
         {
-            if (Random.Range(0f, 1f) <= cutsceneShowChance)
-                cutscenePage.Show(_concert);
+            cutscenePage.Show(_concert);
         }
 
         protected override void AfterPageClose()

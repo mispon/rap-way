@@ -39,7 +39,7 @@ namespace Game.Pages.Concert
         private void FillDanceFloor()
         {
             var occupancyRatio = _concert.TicketsSold / (float) _concert.LocationCapacity;
-            var locationOccupancyRatio = 1 / (float) flexingObjects.Length;
+            var locationOccupancyRatio = 1f / flexingObjects.Length;
             _flexingObjectIndex = Mathf.FloorToInt(occupancyRatio / locationOccupancyRatio);
 
             flexingObjects[_flexingObjectIndex].SetActive(true);
