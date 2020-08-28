@@ -156,7 +156,8 @@ namespace Game.Pages.Concert
             );
 
             OnPlaceChanged(0);
-            OnAlbumsChanged(0);
+            if(_lastAlbums.Any())
+                OnAlbumsChanged(0);
             
             GameScreenController.Instance.HideProductionGroup();
         }
