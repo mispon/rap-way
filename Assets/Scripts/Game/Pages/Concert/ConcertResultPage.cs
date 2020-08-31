@@ -22,6 +22,9 @@ namespace Game.Pages.Concert
         [Header("Анализатор концерта")]
         [SerializeField] private ConcertAnalyzer concertAnalyzer;
 
+        [Header("Катсцена")] 
+        [SerializeField] private ConcertCutscenePage cutscenePage;
+        
         private ConcertInfo _concert;
         
         /// <summary>
@@ -60,7 +63,7 @@ namespace Game.Pages.Concert
 
         protected override void BeforePageOpen()
         {
-            // todo: Show concert cutscene
+            cutscenePage.Show(_concert);
         }
 
         protected override void AfterPageClose()

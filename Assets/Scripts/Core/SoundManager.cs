@@ -67,7 +67,7 @@ namespace Core
         /// </summary>
         private void PlaySound(AudioClip clip)
         {
-            if (_noSound || clip == null)
+            if (_noSound || clip is null)
                 return;
             
             sfx.pitch = Random.Range(0.9f, 1.1f);

@@ -29,7 +29,7 @@ namespace Game.Pages.Social
         /// </summary>
         private void OnTabChanged(int index)
         {
-            for (int i = 0; i < tabs.Length; i++)
+            for (var i = 0; i < tabs.Length; i++)
             {
                 tabs[i].SetVisible(i == index);
             }

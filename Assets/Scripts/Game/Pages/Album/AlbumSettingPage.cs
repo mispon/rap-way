@@ -29,9 +29,6 @@ namespace Game.Pages.Album
         {
             albumNameInput.onValueChanged.AddListener(OnTrackNameInput);
             startButton.onClick.AddListener(CreateAlbum);
-            
-            themeSwitcher.InstantiateElements(PlayerManager.GetPlayersThemes());
-            styleSwitcher.InstantiateElements(PlayerManager.GetPlayersStyles());
         }
         
         /// <summary>
@@ -71,6 +68,9 @@ namespace Game.Pages.Album
         {
             _album = new AlbumInfo();
             GameScreenController.Instance.HideProductionGroup();
+            
+            themeSwitcher.InstantiateElements(PlayerManager.GetPlayersThemes());
+            styleSwitcher.InstantiateElements(PlayerManager.GetPlayersStyles());
         }
 
         protected override void AfterPageClose()

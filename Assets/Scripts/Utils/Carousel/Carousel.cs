@@ -113,7 +113,7 @@ namespace Utils.Carousel
         /// </summary>
         private void UpdateItems()
         {
-            for (int i = 0; i < _items.Length; i++)
+            for (var i = 0; i < _items.Length; i++)
             {
                 _items[i].gameObject.SetActive(i == _index);
             }
