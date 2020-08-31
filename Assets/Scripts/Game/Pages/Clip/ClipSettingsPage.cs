@@ -17,9 +17,8 @@ namespace Game.Pages.Clip
     public class ClipSettingsPage : Page
     {
         private const int TRACKS_CACHE = 10;
-        
-        [Header("Контролы")]
-        [SerializeField] private Switcher trackSwitcher;
+
+        [Header("Контролы")] [SerializeField] private Switcher trackSwitcher;
         [Space, SerializeField] private Switcher directorSwitcher;
         [SerializeField] private Text directorSkill;
         [SerializeField] private Text directorPrice;
@@ -29,11 +28,10 @@ namespace Game.Pages.Clip
         [Space, SerializeField] private Price price;
         [SerializeField] private Button startButton;
 
-        [Header("Страница разработки")]
-        [SerializeField] private ClipWorkingPage workingPage;
+        [Header("Страница разработки")] [SerializeField]
+        private ClipWorkingPage workingPage;
 
-        [Header("Данные")]
-        [SerializeField] private ClipStaffData data;
+        [Header("Данные")] [SerializeField] private ClipStaffData data;
 
         private ClipInfo _clip;
         private int _directorPrice;
@@ -41,15 +39,15 @@ namespace Game.Pages.Clip
         private readonly List<TrackInfo> _lastTracks = new List<TrackInfo>(TRACKS_CACHE);
 
         private int _fullPrice => _directorPrice + _operatorPrice;
-        
+
         private void Start()
         {
             startButton.onClick.AddListener(CreateClip);
-            
+
             // todo: Localize
             directorSwitcher.InstantiateElements(data.Directors.Select(e => e.NameKey));
             operatorSwitcher.InstantiateElements(data.Operators.Select(e => e.NameKey));
-            
+
             directorSwitcher.onIndexChange += OnDirectorChange;
             operatorSwitcher.onIndexChange += OnOperatorChange;
         }
@@ -60,16 +58,16 @@ namespace Game.Pages.Clip
         private void CreateClip()
         {
             SoundManager.Instance.PlayClick();
-            
+
             if (!PlayerManager.Instance.SpendMoney(_fullPrice))
             {
                 price.ShowNoMoney();
                 return;
             }
-            
+
             var track = _lastTracks[trackSwitcher.ActiveIndex];
             track.HasClip = true;
-            
+
             _clip.TrackId = track.Id;
             _clip.Name = track.Name;
             workingPage.StartWork(_clip);
@@ -88,7 +86,7 @@ namespace Game.Pages.Clip
             _directorPrice = director.Salary;
             DisplayFullPrice();
         }
-        
+
         /// <summary>
         /// Обработчик смены оператора 
         /// </summary>
@@ -127,20 +125,15 @@ namespace Game.Pages.Clip
 
             CacheLastTracks();
 
-            if (_lastTracks.Any())
-            {
-                trackSwitcher.InstantiateElements(_lastTracks.Select(e => e.Name));
-                startButton.interactable = true;
-            }
-            else
-            {
-                trackSwitcher.InstantiateElements(new[] {"Нет треков"});
-                startButton.interactable = false;
-            }
-            
+            var anyTracks = _lastTracks.Any();
+            trackSwitcher.InstantiateElements(
+                anyTracks ? _lastTracks.Select(e => e.Name) : new[] {"Нет треков"}
+            );
+            startButton.interactable = anyTracks;
+
             OnDirectorChange(0);
             OnOperatorChange(0);
-            
+
             GameScreenController.Instance.HideProductionGroup();
         }
 
@@ -148,7 +141,7 @@ namespace Game.Pages.Clip
         {
             _clip = null;
             _lastTracks.Clear();
-            
+
             directorSwitcher.ResetActive(true);
             operatorSwitcher.ResetActive(true);
         }
