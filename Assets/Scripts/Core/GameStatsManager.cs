@@ -98,7 +98,7 @@ namespace Core
             if (currentValue.Equals(selectedValue))
                 return 0.5f;
 
-            var equalInfos = array.Where(el => el.IsEqualTo(currentValue));
+            var equalInfos = array.Where(el => el.IsEqualTo(currentValue)).ToArray();
             var equalInfosCount = equalInfos.Count();
 
             if (equalInfosCount == 0 || !equalInfos.Any(el => el.IsEqualTo(selectedValue)))
