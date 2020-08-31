@@ -21,7 +21,6 @@ namespace Game.Pages.Rappers
         [SerializeField] private Button nextButton;
 
         [Header("Страницы")]
-        [SerializeField] private RappersListPage listPage;
         [SerializeField] private FeatSettingsPage featPage;
         [SerializeField] private BattleWorkingPage battlePage;
 
@@ -82,8 +81,7 @@ namespace Game.Pages.Rappers
                 featPage.Show(_rapper);
             else
                 battlePage.StartWork(_rapper);
-
-            listPage.Close();
+            
             Close();
         }
 

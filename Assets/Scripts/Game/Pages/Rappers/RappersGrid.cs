@@ -8,21 +8,32 @@ namespace Game.Pages.Rappers
     /// <summary>
     /// Страница со списком всех существующих исполнителей
     /// </summary>
-    public class RappersListPage : Page
+    public class RappersGrid : MonoBehaviour
     {
         [Header("Контролы и настройки")]
         [SerializeField] private RectTransform listContainer;
-        [SerializeField] private RapperItem rapperItemTemplate;
-        [SerializeField] private int rapperItemSize = 250;
+        [SerializeField] private RapperGridItem rapperItemTemplate;
 
-        [Header("Персональная страница")]
-        [SerializeField] private RapperPage rapperPage;
+        [Header("Персональная карточка")]
+        [SerializeField] private RapperCard rapperCard;
         
         [Header("Данные об исполнителях")]
         [SerializeField] private RappersData data;
 
-        private readonly List<RapperItem> _rappersList = new List<RapperItem>();
+        private readonly List<RapperGridItem> _rappersList = new List<RapperGridItem>();
 
+        /// <summary>
+        /// Инициализирует грид при первом вызове
+        /// </summary>
+        public void Init()
+        {
+            if (_rappersList.Count > 0)
+                return;
+            
+            foreach (var rapperInfo in data.Rappers)
+                CreateItem(rapperInfo);
+        }
+        
         /// <summary>
         /// Создает элемент списка реперов
         /// </summary>
@@ -40,46 +51,18 @@ namespace Game.Pages.Rappers
         /// <summary>
         /// Обработчик нажатия на элемент списка
         /// </summary>
-        private void HandleItemClick(RapperItem item)
+        private void HandleItemClick(RapperGridItem item)
         {
             SoundManager.Instance.PlayClick();
-            rapperPage.OpenPage(item.Info);
-        }
-        
-        /// <summary>
-        /// Переопределение размера контейнера
-        /// </summary>
-        private void Resize()
-        {
-            listContainer.SetSizeWithCurrentAnchors(
-                RectTransform.Axis.Vertical,
-                rapperItemSize * _rappersList.Count
-            );
-        }
-
-        #region PAGE CALLBACKS
-
-        protected override void BeforePageOpen()
-        {
-            if (_rappersList.Count > 0)
-                return;
-            
-            foreach (var rapperInfo in data.Rappers)
-                CreateItem(rapperInfo);
-
-            Resize();
+            rapperCard.Show(item.Info);
         }
 
         private void OnDestroy()
         {
             foreach (var rapperItem in _rappersList)
-            {
                 rapperItem.onClick -= HandleItemClick;
-            }
             
             _rappersList.Clear();
         }
-
-        #endregion
     }
 }

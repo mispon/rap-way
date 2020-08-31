@@ -2,7 +2,6 @@ using System;
 using Data;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Extensions;
 
 namespace Game.Pages.Rappers
 {
@@ -10,18 +9,16 @@ namespace Game.Pages.Rappers
     /// Элемент списка реальных исполнителей
     /// </summary>
     [RequireComponent(typeof(Button))]
-    public class RapperItem : MonoBehaviour
+    public class RapperGridItem : MonoBehaviour
     {
         [SerializeField] private Image avatar;
-        [SerializeField] private Text nickname;
-        [SerializeField] private Text fans;
         
         public RapperInfo Info { get; private set; }
 
         /// <summary>
         /// Обработчик клика по элементу
         /// </summary>
-        public Action<RapperItem> onClick = item => {};
+        public Action<RapperGridItem> onClick = item => {};
 
         private void Start()
         {
@@ -36,8 +33,6 @@ namespace Game.Pages.Rappers
         {
             Info = info;
             avatar.sprite = info.Avatar;
-            nickname.text = info.Name;
-            fans.text = info.Fans.DisplayMoneyShort();
         }
     }
 }

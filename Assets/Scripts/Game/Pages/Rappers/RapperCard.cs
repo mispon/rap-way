@@ -1,17 +1,18 @@
 using Core;
 using Data;
 using Enums;
-using Localization;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Game.Pages.Rappers
 {
     /// <summary>
-    /// Персональная страница существующего исполнителя
+    /// Персональная карточка существующего исполнителя
     /// </summary>
-    public class RapperPage : Page
+    public class RapperCard : MonoBehaviour
     {
+        private const int MANAGER_COOLDOWN = 30;
+        
         [Header("Поля информации репера")]
         [SerializeField] private Image avatar;
         [SerializeField] private Text nickname;
@@ -20,18 +21,18 @@ namespace Game.Pages.Rappers
         [SerializeField] private Text bitmaking;
         [SerializeField] private Text management;
         [Space]
-        [SerializeField] private Text description;
-        [SerializeField] private Text fans;
-        [Space]
+        [SerializeField] private Image managerAvatar;
         [SerializeField] private Button battleButton;
         [SerializeField] private Button featButton;
+        [Space]
+        [SerializeField] private Text fans;
 
-        [Header("Менеджер игрока")]
-        [SerializeField] private int cooldown;
-        [SerializeField] private Text managerStatusInfo;
-
-        [Header("Страница переговоров")]
+        [Header("Страницы")]
+        [SerializeField] private RappersPage rappersPage;
         [SerializeField] private RapperWorkingPage workingPage;
+
+        [Header("Банк картинок")]
+        [SerializeField] private ImagesBank imagesBank;
 
         private RapperInfo _rapper;
 
@@ -47,20 +48,22 @@ namespace Game.Pages.Rappers
         private void StartConversation(bool isFeat)
         {
             SoundManager.Instance.PlayClick();
-            PlayerManager.SetTeammateCooldown(TeammateType.Manager, cooldown);
+            PlayerManager.SetTeammateCooldown(TeammateType.Manager, MANAGER_COOLDOWN);
             workingPage.StartWork(_rapper, isFeat);
-            Close();
+            rappersPage.Close();
         }
         
         /// <summary>
-        /// Открывает персональную страницу репера
+        /// Открывает персональную карточку репера
         /// </summary>
-        public void OpenPage(RapperInfo rapperInfo)
+        public void Show(RapperInfo rapperInfo)
         {
             _rapper = rapperInfo;
             
             DisplayInfo(rapperInfo);
-            Open();
+            CheckPlayerManager();
+            
+            gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -73,47 +76,23 @@ namespace Game.Pages.Rappers
             vocobulary.text = info.Vocobulary.ToString();
             bitmaking.text = info.Bitmaking.ToString();
             management.text = info.Management.ToString();
-            description.text = LocalizationManager.Instance.Get(info.DescKey);
-            fans.text = $"{info.Fans}kk";
+            fans.text = $"{info.Fans}M";
         }
 
         /// <summary>
         /// Вызывается перед открытием страницы
         /// </summary>
-        protected override void BeforePageOpen()
+        private void CheckPlayerManager()
         {
             var manager = PlayerManager.Data.Team.Manager;
 
-            string message = "";
-            
-            if (manager.IsEmpty)
-                message = "no_manager";
-
-            if (manager.Cooldown > 0)
-                message =  "manager_cooldown";
-
-            SetInteractions(message);
-        }
-
-        /// <summary>
-        /// Устанавливает состояние возможности взаимодействия с репером
-        /// </summary>
-        private void SetInteractions(string message)
-        {
-            var canInteract = string.IsNullOrEmpty(message);
-            
+            bool canInteract = !manager.IsEmpty && manager.Cooldown == 0;
             battleButton.interactable = canInteract;
             featButton.interactable = canInteract;
-            
-            managerStatusInfo.text = canInteract ? "" : LocalizationManager.Instance.Get(message);
-        }
 
-        /// <summary>
-        /// Вызывается после закрытия страницы
-        /// </summary>
-        protected override void AfterPageClose()
-        {
-            _rapper = null;
+            managerAvatar.sprite = TeamManager.IsAvailable(TeammateType.Manager)
+                ? imagesBank.ProducerActive
+                : imagesBank.ProducerInactive;
         }
     }
 }
