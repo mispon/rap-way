@@ -21,7 +21,9 @@ namespace Game.Pages.Clip
         [SerializeField] private WorkPoints playerWorkPoints;
         [SerializeField] private WorkPoints directorWorkPoints;
         [SerializeField] private WorkPoints operatorWorkPoints;
-
+        [SerializeField] private Image directorAvatar;
+        [SerializeField] private Image operatorAvatar;
+        
         [Header("Страница результата")]
         [SerializeField] private ClipResultPage clipResult;
 
@@ -33,6 +35,8 @@ namespace Game.Pages.Clip
         public override void StartWork(params object[] args)
         {
             _clip = (ClipInfo) args[0];
+            directorAvatar.sprite = (Sprite) args[1];
+            operatorAvatar.sprite = (Sprite) args[2];
             header.text = $"Работа над клипом трека \"{ProductionManager.GetTrackName(_clip.TrackId)}\"";
             Open();
         }

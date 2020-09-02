@@ -28,5 +28,9 @@ namespace Data
         [Space]
         public Sprite PrManActive;
         public Sprite PrManInactive;
+
+        [Header("Персонал клипа")] 
+        public Sprite[] Directors;
+        public Sprite[] Operators;
     }
 }

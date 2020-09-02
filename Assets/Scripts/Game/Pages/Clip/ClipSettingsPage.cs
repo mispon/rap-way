@@ -8,6 +8,7 @@ using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
+using Utils.Carousel;
 
 namespace Game.Pages.Clip
 {
@@ -18,11 +19,12 @@ namespace Game.Pages.Clip
     {
         private const int TRACKS_CACHE = 10;
 
-        [Header("Контролы")] [SerializeField] private Switcher trackSwitcher;
-        [Space, SerializeField] private Switcher directorSwitcher;
+        [Header("Контролы")] 
+        [SerializeField] private Carousel trackCarousel;
+        [Space, SerializeField] private Carousel directorCarousel;
         [SerializeField] private Text directorSkill;
         [SerializeField] private Text directorPrice;
-        [Space, SerializeField] private Switcher operatorSwitcher;
+        [Space, SerializeField] private Carousel operatorCarousel;
         [SerializeField] private Text operatorSkill;
         [SerializeField] private Text operatorPrice;
         [Space, SerializeField] private Price price;
@@ -31,27 +33,63 @@ namespace Game.Pages.Clip
         [Header("Страница разработки")] [SerializeField]
         private ClipWorkingPage workingPage;
 
-        [Header("Данные")] [SerializeField] private ClipStaffData data;
+        [Header("Данные")] 
+        [SerializeField] private ClipStaffData staffData;
+        [SerializeField] private ImagesBank imagesBank;
 
         private ClipInfo _clip;
         private int _directorPrice;
         private int _operatorPrice;
         private readonly List<TrackInfo> _lastTracks = new List<TrackInfo>(TRACKS_CACHE);
 
-        private int _fullPrice => _directorPrice + _operatorPrice;
+        private int FullPrice => _directorPrice + _operatorPrice;
 
         private void Start()
         {
             startButton.onClick.AddListener(CreateClip);
 
-            // todo: Localize
-            directorSwitcher.InstantiateElements(data.Directors.Select(e => e.NameKey));
-            operatorSwitcher.InstantiateElements(data.Operators.Select(e => e.NameKey));
-
-            directorSwitcher.onIndexChange += OnDirectorChange;
-            operatorSwitcher.onIndexChange += OnOperatorChange;
+            SetupStaffCarousels();
         }
 
+        /// <summary>
+        /// Инициализирует карусели 
+        /// </summary>
+        private void SetupStaffCarousels()
+        {
+            var directorProps = ConvertStaffToCarouselProps(staffData.Directors, imagesBank.Directors);
+            directorCarousel.Init(directorProps);
+            directorCarousel.onChange += OnDirectorChange;
+            
+            var operatorProps = ConvertStaffToCarouselProps(staffData.Operators, imagesBank.Operators);
+            operatorCarousel.Init(operatorProps);
+            operatorCarousel.onChange += OnOperatorChange;
+        }
+        
+        /// <summary>
+        /// Конвертирует данные персонала в свойства карусели 
+        /// </summary>
+        private CarouselProps[] ConvertStaffToCarouselProps(IEnumerable<ClipStaff> staffArray, IReadOnlyList<Sprite> spriteArray)
+        {
+            return staffArray.Select((clipStaffInfo, index) => new CarouselProps
+            {
+                Text = clipStaffInfo.NameKey,
+                Sprite = spriteArray[index],
+                Value = index
+            }).ToArray();
+        }
+
+        /// <summary>
+        /// Конвертирует трек в свойство карусели
+        /// </summary>
+        private CarouselProps ConvertTrackToCarouselProps(TrackInfo trackInfo)
+        {
+            return new CarouselProps
+            {
+                Text = trackInfo.Name,
+                Value = trackInfo
+            };
+        }
+        
         /// <summary>
         /// Запускает создание клипа
         /// </summary>
@@ -59,18 +97,21 @@ namespace Game.Pages.Clip
         {
             SoundManager.Instance.PlayClick();
 
-            if (!PlayerManager.Instance.SpendMoney(_fullPrice))
+            if (!PlayerManager.Instance.SpendMoney(FullPrice))
             {
                 price.ShowNoMoney();
                 return;
             }
 
-            var track = _lastTracks[trackSwitcher.ActiveIndex];
+            var track = trackCarousel.GetValue<TrackInfo>();
             track.HasClip = true;
 
             _clip.TrackId = track.Id;
             _clip.Name = track.Name;
-            workingPage.StartWork(_clip);
+
+            var directorImage = imagesBank.Directors[directorCarousel.GetValue<int>()];
+            var operatorImage = imagesBank.Operators[operatorCarousel.GetValue<int>()];
+            workingPage.StartWork(_clip, directorImage, operatorImage);
             Close();
         }
 
@@ -79,7 +120,7 @@ namespace Game.Pages.Clip
         /// </summary>
         private void OnDirectorChange(int index)
         {
-            var director = data.Directors[index];
+            var director = staffData.Directors[index];
             directorSkill.text = $"Навык: {director.Skill}";
             directorPrice.text = $"Стоимость: {director.Salary}$";
             _clip.DirectorSkill = director.Skill;
@@ -92,7 +133,7 @@ namespace Game.Pages.Clip
         /// </summary>
         private void OnOperatorChange(int index)
         {
-            var clipOperator = data.Operators[index];
+            var clipOperator = staffData.Operators[index];
             operatorSkill.text = $"Навык: {clipOperator.Skill}";
             operatorPrice.text = $"Стоимость: {clipOperator.Salary}$";
             _clip.OperatorSkill = clipOperator.Skill;
@@ -103,7 +144,7 @@ namespace Game.Pages.Clip
         /// <summary>
         /// Отображает полную стоимость клипа
         /// </summary>
-        private void DisplayFullPrice() => price.SetValue($"СТОИМОСТЬ: {_fullPrice}$");
+        private void DisplayFullPrice() => price.SetValue($"СТОИМОСТЬ: {FullPrice}$");
 
         /// <summary>
         /// Кэширует самые новые треки игрока на которые еще не снимался клип
@@ -126,9 +167,10 @@ namespace Game.Pages.Clip
             CacheLastTracks();
 
             var anyTracks = _lastTracks.Any();
-            trackSwitcher.InstantiateElements(
-                anyTracks ? _lastTracks.Select(e => e.Name) : new[] {"Нет треков"}
-            );
+            var trackProps = anyTracks 
+                ? _lastTracks.Select(ConvertTrackToCarouselProps).ToArray() 
+                : new[] { new CarouselProps { Text = "Нет треков", Value = new TrackInfo() } };
+            trackCarousel.Init(trackProps);
             startButton.interactable = anyTracks;
 
             OnDirectorChange(0);
@@ -141,17 +183,8 @@ namespace Game.Pages.Clip
         {
             _clip = null;
             _lastTracks.Clear();
-
-            directorSwitcher.ResetActive(true);
-            operatorSwitcher.ResetActive(true);
         }
 
         #endregion
-
-        private void OnDestroy()
-        {
-            directorSwitcher.onIndexChange -= OnDirectorChange;
-            operatorSwitcher.onIndexChange -= OnOperatorChange;
-        }
     }
 }
