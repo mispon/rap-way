@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using Utils;
 using Utils.Carousel;
 using Utils.Extensions;
+using EventType = Core.EventType;
 
 namespace Game.Pages.Album
 {
@@ -133,6 +134,19 @@ namespace Game.Pages.Album
             textSkill.text = $"{playerTextSkill + textwritterSkill}";
         }
         
+        /// <summary>
+        /// Сбрасывает состояние членов команды и суммарный скилл команды
+        /// </summary>
+        private void DropTeam(object[] args)
+        {
+            bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
+            textwritterAvatar.sprite = imagesBank.TextwritterInactive;
+
+            var playerStats = PlayerManager.Data.Stats;
+            bitSkill.text = $"{playerStats.Bitmaking.Value}";
+            textSkill.text = $"{playerStats.Vocobulary.Value}";
+        }
+        
         #region PAGE EVENTS
 
         protected override void BeforePageOpen()
@@ -144,13 +158,15 @@ namespace Game.Pages.Album
             SetupTeam();
             DisplaySkills(data);
 
+            EventManager.AddHandler(EventType.UncleSamsParty, DropTeam);
             GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()
         {
-            _album = null;
+            EventManager.RemoveHandler(EventType.UncleSamsParty, DropTeam);
             
+            _album = null;
             albumNameInput.SetTextWithoutNotify(string.Empty);
         }
 

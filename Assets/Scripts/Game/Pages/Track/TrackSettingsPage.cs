@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
 using Utils.Extensions;
+using EventType = Core.EventType;
 
 namespace Game.Pages.Track
 {
@@ -119,6 +120,19 @@ namespace Game.Pages.Track
         }
 
         /// <summary>
+        /// Сбрасывает состояние членов команды и суммарный скилл команды
+        /// </summary>
+        private void DropTeam(object[] args)
+        {
+            bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
+            textwritterAvatar.sprite = imagesBank.TextwritterInactive;
+
+            var playerStats = PlayerManager.Data.Stats;
+            bitSkill.text = $"{playerStats.Bitmaking.Value}";
+            textSkill.text = $"{playerStats.Vocobulary.Value}";
+        }
+
+        /// <summary>
         /// Конвертирует элемент перечисление в свойство карусели 
         /// </summary>
         private CarouselProps ConvertToCarouselProps<T>(T value) where T : Enum
@@ -140,11 +154,14 @@ namespace Game.Pages.Track
             SetupTeam();
             DisplaySkills(data);
 
+            EventManager.AddHandler(EventType.UncleSamsParty, DropTeam);
             GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()
         {
+            EventManager.RemoveHandler(EventType.UncleSamsParty, DropTeam);
+            
             _track = null;
             trackNameInput.SetTextWithoutNotify(string.Empty);
         }

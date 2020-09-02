@@ -8,7 +8,8 @@ namespace Core
     /// </summary>
     public enum EventType 
     {
-        LangChanged
+        LangChanged,
+        UncleSamsParty
     }
 
     /// <summary>
