@@ -1,11 +1,18 @@
-﻿using Core;
+﻿using System;
+using System.Linq;
+using Core;
+using Data;
 using Enums;
 using Game.UI.GameScreen;
+using Localization;
 using Models.Info;
 using Models.Info.Production;
+using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
+using Utils.Carousel;
+using Utils.Extensions;
 
 namespace Game.Pages.Album
 {
@@ -16,25 +23,34 @@ namespace Game.Pages.Album
     {
         [Header("Контроллы")]
         [SerializeField] private InputField albumNameInput;
-        [SerializeField] private Switcher themeSwitcher;
-        [SerializeField] private Switcher styleSwitcher;
+        [SerializeField] private Carousel styleCarousel;
+        [SerializeField] private Carousel themeCarousel;
         [SerializeField] private Button startButton;
+        [Space]
+        [SerializeField] protected Text bitSkill;
+        [SerializeField] protected Text textSkill;
+        [SerializeField] private Image bitmakerAvatar;
+        [SerializeField] private Image textwritterAvatar;
 
+        
         [Header("Страница разработки")]
-        [SerializeField] private AlbumWorkingPage workingPage;
+        [SerializeField] private BaseWorkingPage workingPage;
 
+        [Header("Данные")]
+        [SerializeField] private ImagesBank imagesBank;
+        
         private AlbumInfo _album;
         
         private void Start()
         {
-            albumNameInput.onValueChanged.AddListener(OnTrackNameInput);
+            albumNameInput.onValueChanged.AddListener(OnAlbumNameInput);
             startButton.onClick.AddListener(CreateAlbum);
         }
         
         /// <summary>
         /// Обработчик ввода названия альбома 
         /// </summary>
-        private void OnTrackNameInput(string value)
+        private void OnAlbumNameInput(string value)
         {
             _album.Name = value;
         }
@@ -54,12 +70,67 @@ namespace Game.Pages.Album
 
             _album.TrendInfo = new TrendInfo
             {
-                Style = GetToneValue<Styles>(styleSwitcher),
-                Theme = GetToneValue<Themes>(themeSwitcher)
+                Style = styleCarousel.GetValue<Styles>(),
+                Theme = themeCarousel.GetValue<Themes>()
             };
             
             workingPage.StartWork(_album);
             Close();
+        }
+        
+        /// <summary>
+        /// Инициализирует карусели актуальными значениями 
+        /// </summary>
+        protected void SetupCarousel(PlayerData data)
+        {
+            var styleProps = data.Styles.Select(ConvertToCarouselProps).ToArray();
+            styleCarousel.Init(styleProps);
+            var themeProps = data.Themes.Select(ConvertToCarouselProps).ToArray();
+            themeCarousel.Init(themeProps);
+        }
+        
+        /// <summary>
+        /// Конвертирует элемент перечисление в свойство карусели 
+        /// </summary>
+        private CarouselProps ConvertToCarouselProps<T>(T value) where T : Enum
+        {
+            string text = LocalizationManager.Instance.Get(value.GetDescription());
+            Sprite icon = value.GetType() == typeof(Themes)
+                ? imagesBank.ThemesActive[Convert.ToInt32(value)]
+                : imagesBank.StyleActive;
+            
+            return new CarouselProps {Text = text, Sprite = icon, Value = value};
+        }
+        
+        /// <summary>
+        /// Отображает состояние членов команды
+        /// </summary>
+        private void SetupTeam()
+        {
+            bitmakerAvatar.sprite = TeamManager.IsAvailable(TeammateType.BitMaker)
+                ? imagesBank.BitmakerActive
+                : imagesBank.BitmakerInactive;
+            textwritterAvatar.sprite = TeamManager.IsAvailable(TeammateType.TextWriter)
+                ? imagesBank.TextwritterActive
+                : imagesBank.TextwritterInactive;
+        }
+        
+        /// <summary>
+        /// Показывает текущий суммарный скилл команды 
+        /// </summary>
+        private void DisplaySkills(PlayerData data)
+        {
+            int playerBitSkill = data.Stats.Bitmaking.Value;
+            int bitmakerSkill = TeamManager.IsAvailable(TeammateType.BitMaker) 
+                ? data.Team.BitMaker.Skill.Value 
+                : 0;
+            bitSkill.text = $"{playerBitSkill + bitmakerSkill}";
+            
+            int playerTextSkill = data.Stats.Vocobulary.Value;
+            int textwritterSkill = TeamManager.IsAvailable(TeammateType.TextWriter) 
+                ? data.Team.TextWriter.Skill.Value 
+                : 0;
+            textSkill.text = $"{playerTextSkill + textwritterSkill}";
         }
         
         #region PAGE EVENTS
@@ -67,10 +138,13 @@ namespace Game.Pages.Album
         protected override void BeforePageOpen()
         {
             _album = new AlbumInfo();
-            GameScreenController.Instance.HideProductionGroup();
             
-            themeSwitcher.InstantiateElements(PlayerManager.GetPlayersThemes());
-            styleSwitcher.InstantiateElements(PlayerManager.GetPlayersStyles());
+            var data = PlayerManager.Data;
+            SetupCarousel(data);
+            SetupTeam();
+            DisplaySkills(data);
+
+            GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()
@@ -78,8 +152,6 @@ namespace Game.Pages.Album
             _album = null;
             
             albumNameInput.SetTextWithoutNotify(string.Empty);
-            themeSwitcher.ResetActive();
-            styleSwitcher.ResetActive();
         }
 
         #endregion

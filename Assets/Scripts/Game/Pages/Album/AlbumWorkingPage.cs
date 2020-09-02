@@ -1,4 +1,5 @@
 ﻿using Core;
+using Data;
 using Enums;
 using Models.Player;
 using Models.Info.Production;
@@ -13,7 +14,6 @@ namespace Game.Pages.Album
     public class AlbumWorkingPage : BaseWorkingPage
     {
         [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text header;
         [SerializeField] private Text bitPoints;
         [SerializeField] private Text textPoints;
 
@@ -22,13 +22,18 @@ namespace Game.Pages.Album
         [SerializeField] private WorkPoints playerTextWorkPoints;
         [SerializeField] private WorkPoints bitmakerWorkPoints;
         [SerializeField] private WorkPoints textwritterWorkPoints;
-        [SerializeField] private GameObject bitmaker;
-        [SerializeField] private GameObject textwritter;
+        [SerializeField] private Image bitmakerAvatar;
+        [SerializeField] private Image textwritterAvatar;
 
+        [Header("Данные")]
+        [SerializeField] private ImagesBank imagesBank;
+        
         [Header("Страница результата")]
         [SerializeField] private AlbumResultPage albumResult;
 
         private AlbumInfo _album;
+        private bool _hasBitmaker;
+        private bool _hasTextwritter;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -86,7 +91,7 @@ namespace Game.Pages.Album
             playerBitWorkPoints.Show(playersBitPoints);
 
             var bitmakerPoints = 0;
-            if (bitmaker.activeSelf)
+            if (_hasBitmaker)
             {
                 bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill.Value + 1);
                 bitmakerWorkPoints.Show(bitmakerPoints);
@@ -104,7 +109,7 @@ namespace Game.Pages.Album
             playerTextWorkPoints.Show(playersTextPoints);
 
             var textwritterPoints = 0;
-            if (textwritter.activeSelf)
+            if (_hasTextwritter)
             {
                 textwritterPoints = Random.Range(1, data.Team.TextWriter.Skill.Value + 1);
                 textwritterWorkPoints.Show(textwritterPoints);
@@ -124,9 +129,11 @@ namespace Game.Pages.Album
 
         protected override void BeforePageOpen()
         {
-            header.text = $"Работа над альбомом \"{_album.Name}\"";
-            bitmaker.SetActive(!PlayerManager.Data.Team.BitMaker.IsEmpty);
-            textwritter.SetActive(!PlayerManager.Data.Team.TextWriter.IsEmpty);
+            _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
+            _hasTextwritter = TeamManager.IsAvailable(TeammateType.TextWriter);
+            
+            bitmakerAvatar.sprite = _hasBitmaker ? imagesBank.BitmakerActive : imagesBank.BitmakerInactive;
+            textwritterAvatar.sprite = _hasTextwritter ? imagesBank.TextwritterActive : imagesBank.TextwritterInactive;
         }
 
         protected override void BeforePageClose()
