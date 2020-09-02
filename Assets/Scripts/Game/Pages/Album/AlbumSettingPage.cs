@@ -10,7 +10,6 @@ using Models.Info.Production;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
 using Utils.Carousel;
 using Utils.Extensions;
 using EventType = Core.EventType;
@@ -22,32 +21,31 @@ namespace Game.Pages.Album
     /// </summary>
     public class AlbumSettingPage : Page
     {
-        [Header("Контроллы")]
+        [Header("Контроллы")] 
         [SerializeField] private InputField albumNameInput;
         [SerializeField] private Carousel styleCarousel;
         [SerializeField] private Carousel themeCarousel;
         [SerializeField] private Button startButton;
-        [Space]
+        [Space] 
         [SerializeField] protected Text bitSkill;
         [SerializeField] protected Text textSkill;
         [SerializeField] private Image bitmakerAvatar;
         [SerializeField] private Image textwritterAvatar;
-
         
-        [Header("Страница разработки")]
+        [Header("Страница разработки")] 
         [SerializeField] private BaseWorkingPage workingPage;
 
-        [Header("Данные")]
+        [Header("Данные")] 
         [SerializeField] private ImagesBank imagesBank;
-        
+
         private AlbumInfo _album;
-        
+
         private void Start()
         {
             albumNameInput.onValueChanged.AddListener(OnAlbumNameInput);
             startButton.onClick.AddListener(CreateAlbum);
         }
-        
+
         /// <summary>
         /// Обработчик ввода названия альбома 
         /// </summary>
@@ -55,14 +53,14 @@ namespace Game.Pages.Album
         {
             _album.Name = value;
         }
-        
+
         /// <summary>
         /// Обработчик запуска работы над треком
         /// </summary>
         private void CreateAlbum()
         {
             SoundManager.Instance.PlayClick();
-            
+
             _album.Id = PlayerManager.GetNextProductionId<AlbumInfo>();
             if (string.IsNullOrEmpty(_album.Name))
             {
@@ -74,11 +72,11 @@ namespace Game.Pages.Album
                 Style = styleCarousel.GetValue<Styles>(),
                 Theme = themeCarousel.GetValue<Themes>()
             };
-            
+
             workingPage.StartWork(_album);
             Close();
         }
-        
+
         /// <summary>
         /// Инициализирует карусели актуальными значениями 
         /// </summary>
@@ -89,7 +87,7 @@ namespace Game.Pages.Album
             var themeProps = data.Themes.Select(ConvertToCarouselProps).ToArray();
             themeCarousel.Init(themeProps);
         }
-        
+
         /// <summary>
         /// Конвертирует элемент перечисление в свойство карусели 
         /// </summary>
@@ -99,10 +97,10 @@ namespace Game.Pages.Album
             Sprite icon = value.GetType() == typeof(Themes)
                 ? imagesBank.ThemesActive[Convert.ToInt32(value)]
                 : imagesBank.StyleActive;
-            
+
             return new CarouselProps {Text = text, Sprite = icon, Value = value};
         }
-        
+
         /// <summary>
         /// Отображает состояние членов команды
         /// </summary>
@@ -115,25 +113,25 @@ namespace Game.Pages.Album
                 ? imagesBank.TextwritterActive
                 : imagesBank.TextwritterInactive;
         }
-        
+
         /// <summary>
         /// Показывает текущий суммарный скилл команды 
         /// </summary>
         private void DisplaySkills(PlayerData data)
         {
             int playerBitSkill = data.Stats.Bitmaking.Value;
-            int bitmakerSkill = TeamManager.IsAvailable(TeammateType.BitMaker) 
-                ? data.Team.BitMaker.Skill.Value 
+            int bitmakerSkill = TeamManager.IsAvailable(TeammateType.BitMaker)
+                ? data.Team.BitMaker.Skill.Value
                 : 0;
             bitSkill.text = $"{playerBitSkill + bitmakerSkill}";
-            
+
             int playerTextSkill = data.Stats.Vocobulary.Value;
-            int textwritterSkill = TeamManager.IsAvailable(TeammateType.TextWriter) 
-                ? data.Team.TextWriter.Skill.Value 
+            int textwritterSkill = TeamManager.IsAvailable(TeammateType.TextWriter)
+                ? data.Team.TextWriter.Skill.Value
                 : 0;
             textSkill.text = $"{playerTextSkill + textwritterSkill}";
         }
-        
+
         /// <summary>
         /// Сбрасывает состояние членов команды и суммарный скилл команды
         /// </summary>
@@ -146,13 +144,13 @@ namespace Game.Pages.Album
             bitSkill.text = $"{playerStats.Bitmaking.Value}";
             textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
-        
+
         #region PAGE EVENTS
 
         protected override void BeforePageOpen()
         {
             _album = new AlbumInfo();
-            
+
             var data = PlayerManager.Data;
             SetupCarousel(data);
             SetupTeam();
@@ -165,7 +163,7 @@ namespace Game.Pages.Album
         protected override void AfterPageClose()
         {
             EventManager.RemoveHandler(EventType.UncleSamsParty, DropTeam);
-            
+
             _album = null;
             albumNameInput.SetTextWithoutNotify(string.Empty);
         }

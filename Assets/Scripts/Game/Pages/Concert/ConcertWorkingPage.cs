@@ -1,7 +1,8 @@
 ﻿using Core;
+using Data;
 using Enums;
-using Models.Player;
 using Models.Info.Production;
+using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,22 +14,26 @@ namespace Game.Pages.Concert
     public class ConcertWorkingPage : BaseWorkingPage
     {
         [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text header;
         [SerializeField] private Text managementPointsLabel;
         [SerializeField] private Text marketingPointsLabel;
 
-        [Header("Команда игрока")]
+        [Header("Команда игрока")] 
         [SerializeField] private WorkPoints playerManagementWorkPoints;
         [SerializeField] private WorkPoints playerPrWorkPoints;
         [SerializeField] private WorkPoints managerWorkPoints;
         [SerializeField] private WorkPoints prmanWorkPoints;
-        [SerializeField] private GameObject manager;
-        [SerializeField] private GameObject prman;
+        [SerializeField] private Image managerAvatar;
+        [SerializeField] private Image prManAvatar;
 
-        [Header("Страница результата")]
+        [Header("Данные")]
+        [SerializeField] private ImagesBank imagesBank;        
+        
+        [Header("Страница результата")] 
         [SerializeField] private ConcertResultPage concertResult;
 
         private ConcertInfo _concert;
+        private bool _hasManager;
+        private bool _hasPrMan;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -56,7 +61,7 @@ namespace Game.Pages.Concert
             concertResult.Show(_concert);
             Close();
         }
-        
+
         /// <summary>
         /// Обработчик завершения работы
         /// </summary>
@@ -70,11 +75,8 @@ namespace Game.Pages.Concert
         /// </summary>
         private void GenerateWorkPoints()
         {
-            var bitWorkPoints = CreateManagementPoints(PlayerManager.Data);
-            var textWorkPoints = CreatePrPoints(PlayerManager.Data);
-            
-            _concert.ManagementPoints += bitWorkPoints;
-            _concert.MarketingPoints += textWorkPoints;
+            _concert.ManagementPoints += CreateManagementPoints(PlayerManager.Data);
+            _concert.MarketingPoints += CreatePrPoints(PlayerManager.Data);
         }
 
         /// <summary>
@@ -86,7 +88,7 @@ namespace Game.Pages.Concert
             playerManagementWorkPoints.Show(playersManagementPoints);
 
             var managerPoints = 0;
-            if (manager.activeSelf)
+            if (_hasPrMan)
             {
                 managerPoints = Random.Range(1, data.Team.Manager.Skill.Value + 1);
                 managerWorkPoints.Show(managerPoints);
@@ -94,7 +96,7 @@ namespace Game.Pages.Concert
 
             return playersManagementPoints + managerPoints;
         }
-        
+
         /// <summary>
         /// Создает очки работы маркетинга
         /// </summary>
@@ -103,14 +105,14 @@ namespace Game.Pages.Concert
             var playersMarketingPoints = Random.Range(1, data.Stats.Marketing.Value + 1);
             playerPrWorkPoints.Show(playersMarketingPoints);
 
-            var prmanPoints = 0;
-            if (manager.activeSelf)
+            var prManPoints = 0;
+            if (_hasPrMan)
             {
-                prmanPoints = Random.Range(1, data.Team.PrMan.Skill.Value + 1);
-                prmanWorkPoints.Show(prmanPoints);
+                prManPoints = Random.Range(1, data.Team.PrMan.Skill.Value + 1);
+                prmanWorkPoints.Show(prManPoints);
             }
 
-            return playersMarketingPoints + prmanPoints;
+            return playersMarketingPoints + prManPoints;
         }
 
         /// <summary>
@@ -124,9 +126,11 @@ namespace Game.Pages.Concert
 
         protected override void BeforePageOpen()
         {
-            header.text = $"Организация концерта в \"{_concert.LocationName}\"";
-            manager.SetActive(!PlayerManager.Data.Team.Manager.IsEmpty);
-            prman.SetActive(!PlayerManager.Data.Team.PrMan.IsEmpty);
+            _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
+            _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
+
+            managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
+            prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
         }
 
         protected override void BeforePageClose()

@@ -7,7 +7,6 @@ using Game.UI.GameScreen;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
 using Utils.Carousel;
 
 namespace Game.Pages.Clip
@@ -21,17 +20,20 @@ namespace Game.Pages.Clip
 
         [Header("Контролы")] 
         [SerializeField] private Carousel trackCarousel;
+        
         [Space, SerializeField] private Carousel directorCarousel;
         [SerializeField] private Text directorSkill;
         [SerializeField] private Text directorPrice;
+        
         [Space, SerializeField] private Carousel operatorCarousel;
         [SerializeField] private Text operatorSkill;
         [SerializeField] private Text operatorPrice;
+        
         [Space, SerializeField] private Price price;
         [SerializeField] private Button startButton;
 
-        [Header("Страница разработки")] [SerializeField]
-        private ClipWorkingPage workingPage;
+        [Header("Страница разработки")] 
+        [SerializeField] private ClipWorkingPage workingPage;
 
         [Header("Данные")] 
         [SerializeField] private ClipStaffData staffData;
@@ -59,16 +61,17 @@ namespace Game.Pages.Clip
             var directorProps = ConvertStaffToCarouselProps(staffData.Directors, imagesBank.Directors);
             directorCarousel.Init(directorProps);
             directorCarousel.onChange += OnDirectorChange;
-            
+
             var operatorProps = ConvertStaffToCarouselProps(staffData.Operators, imagesBank.Operators);
             operatorCarousel.Init(operatorProps);
             operatorCarousel.onChange += OnOperatorChange;
         }
-        
+
         /// <summary>
         /// Конвертирует данные персонала в свойства карусели 
         /// </summary>
-        private CarouselProps[] ConvertStaffToCarouselProps(IEnumerable<ClipStaff> staffArray, IReadOnlyList<Sprite> spriteArray)
+        private CarouselProps[] ConvertStaffToCarouselProps(IEnumerable<ClipStaff> staffArray,
+            IReadOnlyList<Sprite> spriteArray)
         {
             return staffArray.Select((clipStaffInfo, index) => new CarouselProps
             {
@@ -89,7 +92,7 @@ namespace Game.Pages.Clip
                 Value = trackInfo
             };
         }
-        
+
         /// <summary>
         /// Запускает создание клипа
         /// </summary>
@@ -167,9 +170,9 @@ namespace Game.Pages.Clip
             CacheLastTracks();
 
             var anyTracks = _lastTracks.Any();
-            var trackProps = anyTracks 
-                ? _lastTracks.Select(ConvertTrackToCarouselProps).ToArray() 
-                : new[] { new CarouselProps { Text = "Нет треков", Value = new TrackInfo() } };
+            var trackProps = anyTracks
+                ? _lastTracks.Select(ConvertTrackToCarouselProps).ToArray()
+                : new[] {new CarouselProps {Text = "Нет треков", Value = new TrackInfo()}};
             trackCarousel.Init(trackProps);
             startButton.interactable = anyTracks;
 

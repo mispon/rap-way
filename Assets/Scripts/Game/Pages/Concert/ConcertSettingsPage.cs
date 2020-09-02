@@ -7,7 +7,7 @@ using Game.UI.GameScreen;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
+using Utils.Carousel;
 
 namespace Game.Pages.Concert
 {
@@ -17,22 +17,24 @@ namespace Game.Pages.Concert
     public class ConcertSettingsPage : Page
     {
         private const int ALBUMS_CACHE = 5;
-        
-        [Header("Компоненты")]
-        [SerializeField] private Switcher placeSwitcher;
+
+        [Header("Компоненты")] 
+        [SerializeField] private Carousel placeCarousel;
         [SerializeField] private Text placeCapacityLabel;
         [SerializeField] private Text fansRequirementLabel;
-        [SerializeField] private Switcher albumsSwitcher;
+        [SerializeField] private Carousel albumsCarousel;
+        
         [Space, SerializeField] private Slider ticketCostSlider;
         [SerializeField] private Text ticketCost;
+        
         [Space, SerializeField] private Price concertPrice;
         [SerializeField] private Button startButton;
-        
-        [Header("Страница разработки")]
+
+        [Header("Страница разработки")] 
         [SerializeField] private ConcertWorkingPage workingPage;
 
-        [Header("Данные")]
-        [SerializeField] private ConcertPlacesData data;
+        [Header("Данные")] 
+        [SerializeField] private ConcertPlacesData placeData;
 
         private ConcertInfo _concert;
         private int _placeCost;
@@ -41,14 +43,43 @@ namespace Game.Pages.Concert
         private void Start()
         {
             startButton.onClick.AddListener(CreateConcert);
-            
-            placeSwitcher.InstantiateElements(data.Places.Select(e => e.NameKey));
-            
-            placeSwitcher.onIndexChange += OnPlaceChanged;
-            albumsSwitcher.onIndexChange += OnAlbumsChanged;
             ticketCostSlider.onValueChanged.AddListener(OnTicketPriceChanged);
 
-            ResetTicketCost();
+            SetupPlaceCarousel();
+        }
+
+        /// <summary>
+        /// Инициализирует карусель концертов 
+        /// </summary>
+        private void SetupPlaceCarousel()
+        {
+            var placeProps = placeData.Places.Select(ConvertPlaceToCarouselProps).ToArray();
+            placeCarousel.Init(placeProps);
+            placeCarousel.onChange += OnPlaceChanged;
+        }
+
+        /// <summary>
+        /// Конвертирует площадку в свойство карусели
+        /// </summary>
+        private CarouselProps ConvertPlaceToCarouselProps(ConcertPlace placeInfo)
+        {
+            return new CarouselProps
+            {
+                Text = placeInfo.NameKey,
+                Value = placeInfo
+            };
+        }
+
+        /// <summary>
+        /// Конвертирует альбом в свойство карусели
+        /// </summary>
+        private CarouselProps ConvertAlbumToCarouselProps(AlbumInfo albumInfo)
+        {
+            return new CarouselProps
+            {
+                Text = albumInfo.Name,
+                Value = albumInfo
+            };
         }
 
         /// <summary>
@@ -57,51 +88,44 @@ namespace Game.Pages.Concert
         private void CreateConcert()
         {
             SoundManager.Instance.PlayClick();
-            
+
             if (!PlayerManager.Instance.SpendMoney(_placeCost))
             {
                 concertPrice.ShowNoMoney();
                 return;
             }
 
+            var album = albumsCarousel.GetValue<AlbumInfo>();
+            _concert.AlbumId = album.Id;
             _concert.Id = PlayerManager.GetNextProductionId<ConcertInfo>();
-            
+
             workingPage.StartWork(_concert);
             Close();
         }
-        
+
         /// <summary>
         /// Обработчик изменения площадки 
         /// </summary>
         private void OnPlaceChanged(int index)
         {
-            var place = data.Places[index];
+            var place = placeData.Places[index];
 
             _concert.LocationId = index;
             _concert.LocationName = place.NameKey;
             _concert.LocationCapacity = place.Capacity;
             placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity}";
-            
+
             _placeCost = place.Cost;
             concertPrice.SetValue($"АРЕНДА: {_placeCost} $");
 
             ticketCostSlider.minValue = place.TicketMinCost;
             ticketCostSlider.maxValue = place.TicketMaxCost;
             ResetTicketCost();
-            
+
             fansRequirementLabel.text = $"НЕОБХОДИМО ФАНАТОВ: {place.FansRequirement}";
             CheckConcertConditions(place.FansRequirement);
         }
-        
-        /// <summary>
-        /// Обработчик изменения альбома 
-        /// </summary>
-        private void OnAlbumsChanged(int index)
-        {
-            var album = _lastAlbums[index];
-            _concert.AlbumId = album.Id;
-        }
-        
+
         /// <summary>
         /// Обработчик изменения цены билета 
         /// </summary>
@@ -111,7 +135,7 @@ namespace Game.Pages.Concert
             _concert.TicketCost = cost;
             ticketCost.text = $"{cost} $";
         }
-        
+
         /// <summary>
         /// Кэширует самые новые альбомы игрока
         /// </summary>
@@ -140,10 +164,10 @@ namespace Game.Pages.Concert
         {
             bool canStart = PlayerManager.Data.Fans >= fansRequirement;
             canStart &= _lastAlbums.Any();
-            
+
             startButton.interactable = canStart;
         }
-        
+
         #region PAGE EVENTS
 
         protected override void BeforePageOpen()
@@ -151,14 +175,14 @@ namespace Game.Pages.Concert
             _concert = new ConcertInfo();
             CacheLastAlbums();
 
-            albumsSwitcher.InstantiateElements(
-                _lastAlbums.Any() ? _lastAlbums.Select(e => e.Name) : new[] {"Нет альбомов"}
-            );
+            var anyAlbums = _lastAlbums.Any();
+            var albumProps = anyAlbums
+                ? _lastAlbums.Select(ConvertAlbumToCarouselProps).ToArray()
+                : new[] {new CarouselProps {Text = "Нет альбомов", Value = new AlbumInfo()}};
+            albumsCarousel.Init(albumProps);
 
             OnPlaceChanged(0);
-            if(_lastAlbums.Any())
-                OnAlbumsChanged(0);
-            
+
             GameScreenController.Instance.HideProductionGroup();
         }
 
@@ -166,19 +190,9 @@ namespace Game.Pages.Concert
         {
             _concert = null;
             _lastAlbums.Clear();
-            
-            placeSwitcher.ResetActive(true);
-            albumsSwitcher.ResetActive(true);
             ResetTicketCost();
         }
 
         #endregion
-
-        private void OnDestroy()
-        {
-            placeSwitcher.onIndexChange -= OnPlaceChanged;
-            albumsSwitcher.onIndexChange -= OnAlbumsChanged;
-            ticketCostSlider.onValueChanged.RemoveAllListeners();
-        }
     }
 }
