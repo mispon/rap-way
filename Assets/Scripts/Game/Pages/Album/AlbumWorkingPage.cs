@@ -1,7 +1,8 @@
 ﻿using Core;
+using Data;
 using Enums;
-using Models.Player;
 using Models.Info.Production;
+using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,23 +13,28 @@ namespace Game.Pages.Album
     /// </summary>
     public class AlbumWorkingPage : BaseWorkingPage
     {
-        [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text header;
+        [Header("Идентификаторы прогресса работы")] 
         [SerializeField] private Text bitPoints;
+
         [SerializeField] private Text textPoints;
 
-        [Header("Команда игрока")]
+        [Header("Команда игрока")] 
         [SerializeField] private WorkPoints playerBitWorkPoints;
         [SerializeField] private WorkPoints playerTextWorkPoints;
         [SerializeField] private WorkPoints bitmakerWorkPoints;
         [SerializeField] private WorkPoints textwritterWorkPoints;
-        [SerializeField] private GameObject bitmaker;
-        [SerializeField] private GameObject textwritter;
+        [SerializeField] private Image bitmakerAvatar;
+        [SerializeField] private Image textwritterAvatar;
 
-        [Header("Страница результата")]
+        [Header("Данные")] 
+        [SerializeField] private ImagesBank imagesBank;
+
+        [Header("Страница результата")] 
         [SerializeField] private AlbumResultPage albumResult;
 
         private AlbumInfo _album;
+        private bool _hasBitmaker;
+        private bool _hasTextwritter;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -56,7 +62,7 @@ namespace Game.Pages.Album
             albumResult.Show(_album);
             Close();
         }
-        
+
         /// <summary>
         /// Обработчик завершения работы
         /// </summary>
@@ -72,7 +78,7 @@ namespace Game.Pages.Album
         {
             var bitWorkPoints = CreateBitPoints(PlayerManager.Data);
             var textWorkPoints = CreateTextPoints(PlayerManager.Data);
-            
+
             _album.BitPoints += bitWorkPoints;
             _album.TextPoints += textWorkPoints;
         }
@@ -86,7 +92,7 @@ namespace Game.Pages.Album
             playerBitWorkPoints.Show(playersBitPoints);
 
             var bitmakerPoints = 0;
-            if (bitmaker.activeSelf)
+            if (_hasBitmaker)
             {
                 bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill.Value + 1);
                 bitmakerWorkPoints.Show(bitmakerPoints);
@@ -94,7 +100,7 @@ namespace Game.Pages.Album
 
             return playersBitPoints + bitmakerPoints;
         }
-        
+
         /// <summary>
         /// Создает очки работы по тексту 
         /// </summary>
@@ -104,7 +110,7 @@ namespace Game.Pages.Album
             playerTextWorkPoints.Show(playersTextPoints);
 
             var textwritterPoints = 0;
-            if (textwritter.activeSelf)
+            if (_hasTextwritter)
             {
                 textwritterPoints = Random.Range(1, data.Team.TextWriter.Skill.Value + 1);
                 textwritterWorkPoints.Show(textwritterPoints);
@@ -124,15 +130,17 @@ namespace Game.Pages.Album
 
         protected override void BeforePageOpen()
         {
-            header.text = $"Работа над альбомом \"{_album.Name}\"";
-            bitmaker.SetActive(!PlayerManager.Data.Team.BitMaker.IsEmpty);
-            textwritter.SetActive(!PlayerManager.Data.Team.TextWriter.IsEmpty);
+            _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
+            _hasTextwritter = TeamManager.IsAvailable(TeammateType.TextWriter);
+
+            bitmakerAvatar.sprite = _hasBitmaker ? imagesBank.BitmakerActive : imagesBank.BitmakerInactive;
+            textwritterAvatar.sprite = _hasTextwritter ? imagesBank.TextwritterActive : imagesBank.TextwritterInactive;
         }
 
         protected override void BeforePageClose()
         {
             base.BeforePageClose();
-            
+
             bitPoints.text = textPoints.text = "0";
             _album = null;
         }

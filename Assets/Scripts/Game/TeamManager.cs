@@ -9,6 +9,7 @@ using Game.Pages.Training;
 using Models.Player;
 using UnityEngine;
 using Utils;
+using EventType = Core.EventType;
 
 namespace Game
 {
@@ -73,9 +74,10 @@ namespace Game
 
             foreach (var teammate in teammates)
                 teammate.HasPayment = false;
-            
+
             const int teamTab = 3;
             NotificationManager.Instance.AddClickNotification(() => trainingPage.OpenPage(teamTab));
+            EventManager.RaiseEvent(EventType.UncleSamsParty);
         }
 
         /// <summary>

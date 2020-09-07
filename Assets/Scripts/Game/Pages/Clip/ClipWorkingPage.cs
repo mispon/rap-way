@@ -11,18 +11,22 @@ namespace Game.Pages.Clip
     /// </summary>
     public class ClipWorkingPage : BaseWorkingPage
     {
-        [Header("Идентификаторы прогресса работы")]
+        [Header("Идентификаторы прогресса работы")] 
         [SerializeField] private Text header;
+
         [SerializeField] private Text playerPoints;
         [SerializeField] private Text directorPoints;
         [SerializeField] private Text operatorPoints;
 
-        [Header("Команда игрока")]
+        [Header("Команда игрока")] 
         [SerializeField] private WorkPoints playerWorkPoints;
+
         [SerializeField] private WorkPoints directorWorkPoints;
         [SerializeField] private WorkPoints operatorWorkPoints;
+        [SerializeField] private Image directorAvatar;
+        [SerializeField] private Image operatorAvatar;
 
-        [Header("Страница результата")]
+        [Header("Страница результата")] 
         [SerializeField] private ClipResultPage clipResult;
 
         private ClipInfo _clip;
@@ -33,6 +37,8 @@ namespace Game.Pages.Clip
         public override void StartWork(params object[] args)
         {
             _clip = (ClipInfo) args[0];
+            directorAvatar.sprite = (Sprite) args[1];
+            operatorAvatar.sprite = (Sprite) args[2];
             header.text = $"Работа над клипом трека \"{ProductionManager.GetTrackName(_clip.TrackId)}\"";
             Open();
         }
@@ -54,7 +60,7 @@ namespace Game.Pages.Clip
             clipResult.Show(_clip);
             Close();
         }
-        
+
         /// <summary>
         /// Обработчик завершения работы
         /// </summary>
@@ -71,11 +77,11 @@ namespace Game.Pages.Clip
             var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 1);
             _clip.PlayerPoints += playerPointsValue;
             playerWorkPoints.Show(playerPointsValue);
-            
+
             var directorPointsValue = Random.Range(1, _clip.DirectorSkill + 1);
             _clip.DirectorPoints += directorPointsValue;
             directorWorkPoints.Show(directorPointsValue);
-            
+
             var operatorPointsValue = Random.Range(1, _clip.OperatorSkill + 1);
             _clip.OperatorPoints += operatorPointsValue;
             operatorWorkPoints.Show(operatorPointsValue);
@@ -98,7 +104,7 @@ namespace Game.Pages.Clip
             playerPoints.text = "0";
             directorPoints.text = "0";
             operatorPoints.text = "0";
-            
+
             _clip = null;
         }
     }

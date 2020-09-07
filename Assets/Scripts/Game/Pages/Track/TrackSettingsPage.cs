@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
 using Utils.Extensions;
+using EventType = Core.EventType;
 
 namespace Game.Pages.Track
 {
@@ -20,22 +21,23 @@ namespace Game.Pages.Track
     /// </summary>
     public class TrackSettingsPage : Page
     {
-        [Header("Контроллы")]
+        [Header("Контроллы")] 
         [SerializeField] private InputField trackNameInput;
         [SerializeField] private Carousel styleCarousel;
         [SerializeField] private Carousel themeCarousel;
         [SerializeField] private Button startButton;
-        [Space]
+        [Space] 
         [SerializeField] protected Text bitSkill;
         [SerializeField] protected Text textSkill;
         [SerializeField] private Image bitmakerAvatar;
         [SerializeField] private Image textwritterAvatar;
 
-        [Header("Данные")]
+        [Header("Данные")] 
         [SerializeField] private ImagesBank imagesBank;
 
-        [Header("Страница разработки")]
-        [SerializeField] private BaseWorkingPage workingPage;
+        [Header("Страница разработки")] 
+        [SerializeField]
+        private BaseWorkingPage workingPage;
 
         protected TrackInfo _track;
 
@@ -44,7 +46,7 @@ namespace Game.Pages.Track
             trackNameInput.onValueChanged.AddListener(OnTrackNameInput);
             startButton.onClick.AddListener(CreateTrack);
         }
-        
+
         /// <summary>
         /// Обработчик ввода названия трека 
         /// </summary>
@@ -59,7 +61,7 @@ namespace Game.Pages.Track
         private void CreateTrack()
         {
             SoundManager.Instance.PlayClick();
-            
+
             _track.Id = PlayerManager.GetNextProductionId<TrackInfo>();
             if (string.IsNullOrEmpty(_track.Name))
             {
@@ -71,7 +73,7 @@ namespace Game.Pages.Track
                 Style = styleCarousel.GetValue<Styles>(),
                 Theme = themeCarousel.GetValue<Themes>()
             };
-            
+
             workingPage.StartWork(_track);
             Close();
         }
@@ -106,16 +108,29 @@ namespace Game.Pages.Track
         private void DisplaySkills(PlayerData data)
         {
             int playerBitSkill = data.Stats.Bitmaking.Value;
-            int bitmakerSkill = TeamManager.IsAvailable(TeammateType.BitMaker) 
-                ? data.Team.BitMaker.Skill.Value 
+            int bitmakerSkill = TeamManager.IsAvailable(TeammateType.BitMaker)
+                ? data.Team.BitMaker.Skill.Value
                 : 0;
             bitSkill.text = $"{playerBitSkill + bitmakerSkill}";
-            
+
             int playerTextSkill = data.Stats.Vocobulary.Value;
-            int textwritterSkill = TeamManager.IsAvailable(TeammateType.TextWriter) 
-                ? data.Team.TextWriter.Skill.Value 
+            int textwritterSkill = TeamManager.IsAvailable(TeammateType.TextWriter)
+                ? data.Team.TextWriter.Skill.Value
                 : 0;
             textSkill.text = $"{playerTextSkill + textwritterSkill}";
+        }
+
+        /// <summary>
+        /// Сбрасывает состояние членов команды и суммарный скилл команды
+        /// </summary>
+        private void DropTeam(object[] args)
+        {
+            bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
+            textwritterAvatar.sprite = imagesBank.TextwritterInactive;
+
+            var playerStats = PlayerManager.Data.Stats;
+            bitSkill.text = $"{playerStats.Bitmaking.Value}";
+            textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
 
         /// <summary>
@@ -127,10 +142,10 @@ namespace Game.Pages.Track
             Sprite icon = value.GetType() == typeof(Themes)
                 ? imagesBank.ThemesActive[Convert.ToInt32(value)]
                 : imagesBank.StyleActive;
-            
+
             return new CarouselProps {Text = text, Sprite = icon, Value = value};
         }
-        
+
         protected override void BeforePageOpen()
         {
             _track = new TrackInfo();
@@ -140,11 +155,14 @@ namespace Game.Pages.Track
             SetupTeam();
             DisplaySkills(data);
 
+            EventManager.AddHandler(EventType.UncleSamsParty, DropTeam);
             GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()
         {
+            EventManager.RemoveHandler(EventType.UncleSamsParty, DropTeam);
+
             _track = null;
             trackNameInput.SetTextWithoutNotify(string.Empty);
         }
