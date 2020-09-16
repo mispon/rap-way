@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace Enums
 {
     /// <summary>
@@ -5,14 +7,23 @@ namespace Enums
     /// </summary>
     public enum GoodsType
     {
+        [Description("GoodsType_Micro")]
         Micro, 
+        [Description("GoodsType_AudioCard")]
         AudioCard, 
+        [Description("GoodsType_FxMixer")]
         FxMixer, 
-        Acustiq, 
+        [Description("GoodsType_Acoustic")]
+        Acoustic,
+        [Description("GoodsType_Car")]
         Car, 
-        Appartaments, 
+        [Description("GoodsType_Apartments")]
+        Apartments, 
+        [Description("GoodsType_Swatches")]
         Swatches, 
+        [Description("GoodsType_Chain")]
         Chain, 
-        Grilz
+        [Description("GoodsType_Grillz")]
+        Grillz
     }
 }

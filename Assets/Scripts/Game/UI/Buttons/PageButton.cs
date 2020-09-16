@@ -16,8 +16,9 @@ namespace Game.UI.Buttons
     [RequireComponent(typeof(Button))]
     public class PageButton : MonoBehaviour
     {
-        [SerializeField] private Page page;
-        [SerializeField] private PageActionType action;
+        [Header("НАстройки страницы")]
+        [SerializeField] protected Page page;
+        [SerializeField] protected PageActionType action;
 
         private Button _button;
         
@@ -30,7 +31,11 @@ namespace Game.UI.Buttons
         private void OnClick()
         {
             SoundManager.Instance.PlayClick();
-            
+            PageAction();
+        }
+
+        protected virtual void PageAction()
+        {
             if (action == PageActionType.Open)
                 page.Open();
             else

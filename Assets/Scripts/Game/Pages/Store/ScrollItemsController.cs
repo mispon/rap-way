@@ -37,7 +37,7 @@ namespace Game.Pages.Store
         /// <summary>
         /// Высота одного элемента
         /// </summary>
-        private float elementTemplateHeight
+        private float ElementTemplateHeight
         {
             get
             {
@@ -50,7 +50,7 @@ namespace Game.Pages.Store
         /// <summary>
         /// Высота ViewPort'a
         /// </summary>
-        private float containerBaseHeight
+        private float ContainerBaseHeight
         {
             get
             {
@@ -182,8 +182,8 @@ namespace Game.Pages.Store
             rectContent.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Vertical,
                 anyElements
-                    ? (elementTemplateHeight + 10) * _itemsList.Count
-                    : containerBaseHeight
+                    ? (ElementTemplateHeight + 10) * _itemsList.Count
+                    : ContainerBaseHeight
             );
         }
 
