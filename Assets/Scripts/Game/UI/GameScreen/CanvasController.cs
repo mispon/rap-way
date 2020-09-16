@@ -1,6 +1,7 @@
 using Models.UI;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 
 namespace Game.UI.GameScreen
 {
@@ -31,18 +32,7 @@ namespace Game.UI.GameScreen
         /// </summary>
         public static void SetActive(bool value)
         {
-            Instance.Set(value ? Instance.shownSettings : Instance.hiddenSettings);
-        }
-
-        /// <summary>
-        /// Устанавливает параметры для CanvasGroup 
-        /// </summary>
-        private void Set(CanvasGroupSettings settings)
-        {
-            _canvasGroup.alpha = settings.alpha;
-            _canvasGroup.interactable = settings.interactable;
-            _canvasGroup.blocksRaycasts = settings.blocksRaycasts;
-            _canvasGroup.ignoreParentGroups = settings.ignoreParentGroups;
+            Instance._canvasGroup.Set(value ? Instance.shownSettings : Instance.hiddenSettings);
         }
     }
     
