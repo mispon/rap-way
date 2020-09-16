@@ -1,8 +1,10 @@
 using System;
 using Data;
 using Enums;
+using Localization;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Store
 {
@@ -12,6 +14,7 @@ namespace Game.Pages.Store
     public class StoreItemController : MonoBehaviour
     {
         [SerializeField] private Image iconImg;
+        [SerializeField] private Text typeTxt;
         [SerializeField] private Text priceTxt;
         [SerializeField] private Button buyBtn;
         
@@ -27,7 +30,8 @@ namespace Game.Pages.Store
             Level = uiData.Level;
             
             iconImg.sprite = uiData.Image;
-            priceTxt.text = $"{type} {uiData.Price}$";
+            typeTxt.text = LocalizationManager.Instance.Get(type.GetDescription()).ToUpper();;
+            priceTxt.text = uiData.Price.DisplayMoney();
             
             buyBtn.onClick.RemoveAllListeners();
             buyBtn.onClick.AddListener(() => onClickAction(Type, Level, uiData.Price));

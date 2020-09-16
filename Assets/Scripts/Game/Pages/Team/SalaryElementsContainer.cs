@@ -32,7 +32,7 @@ namespace Game.Pages.Team
             _salary = salary;
          
             typeText.text = LocalizationManager.Instance.Get(_teammate.Type.GetDescription());
-            salaryText.text = $"{_salary} $";
+            salaryText.text = _salary.DisplayMoney();
             
             gameObject.SetActive(true);
         }

@@ -11,11 +11,18 @@ namespace Data
     [CreateAssetMenu(fileName = "Goods", menuName = "Data/Goods")]
     public class GoodsData: ScriptableObject
     {
+        [Obsolete]
         [Header("Для работы"), ArrayElementTitle("Type")]
         public GoodInfo[] WorkTools;
 
+        [Obsolete]
         [Header("Понты"), ArrayElementTitle("Type")]
         public GoodInfo[] Swag;
+
+        /// <summary>
+        /// Возвращает наборы всех товаров 
+        /// </summary>
+        public GoodInfo[] AllItems => WorkTools.Concat(Swag).ToArray();
     }
 
     /// <summary>
