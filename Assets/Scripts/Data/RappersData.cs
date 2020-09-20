@@ -17,7 +17,6 @@ namespace Data
     {
         public string Name;
         public int Id;
-        public string DescKey;
         public Sprite Avatar;
         public int Fans;
         public int Vocobulary;
