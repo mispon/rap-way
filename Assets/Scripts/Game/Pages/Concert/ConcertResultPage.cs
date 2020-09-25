@@ -55,11 +55,10 @@ namespace Game.Pages.Concert
         /// </summary>
         private void SaveResult(ConcertInfo concert)
         {
+            concert.Timestamp = TimeManager.Instance.Now;
             PlayerManager.Instance.AddMoney(concert.Income, rewardExp);
             ProductionManager.AddConcert(concert);
         }
-
-        #region PAGE EVENTS
 
         protected override void BeforePageOpen()
         {
@@ -71,7 +70,5 @@ namespace Game.Pages.Concert
             SaveResult(_concert);
             _concert = null;
         }
-
-        #endregion
     }
 }

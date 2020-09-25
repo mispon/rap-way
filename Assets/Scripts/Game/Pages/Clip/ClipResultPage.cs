@@ -54,17 +54,9 @@ namespace Game.Pages.Clip
         /// </summary>
         private void SaveResult(ClipInfo clip)
         {
+            clip.Timestamp = TimeManager.Instance.Now;
             PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome, rewardExp);
             ProductionManager.AddClip(clip);
-        }
-
-        #region PAGE EVENTS
-        /// <summary>
-        /// Выполняется перед открытием страницы
-        /// </summary>
-        protected override void BeforePageOpen()
-        {
-            // todo: запустить или не запускать случайное событие
         }
 
         /// <summary>
@@ -75,6 +67,5 @@ namespace Game.Pages.Clip
             SaveResult(_clipInfo);
             _clipInfo = null;
         }
-        #endregion
     }
 }

@@ -29,5 +29,9 @@ namespace Models.Info.Production
             TicketCost.ToString(),
             Income.ToString()
         };
+        
+        public override string GetLog() {
+            return $"{Timestamp}: Провёл концерт на площадке \"{LocationName}\"";
+        }
     }
 }

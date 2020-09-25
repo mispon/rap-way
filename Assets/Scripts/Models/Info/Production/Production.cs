@@ -10,14 +10,18 @@ namespace Models.Info.Production
     {
         public int Id;
         public string Name;
-
         public int MoneyIncome;
         public int FansIncome;
-        public int HypeIncome;
-        
+        public DateTime Timestamp;
+
         /// <summary>
         /// Массив строк из полей класса для заполнения в таблице Истории
         /// </summary>
         public virtual string[] HistoryInfo => new string[0];
+
+        /// <summary>
+        /// Возвращает информацию о событии 
+        /// </summary>
+        public abstract string GetLog();
     }
 }

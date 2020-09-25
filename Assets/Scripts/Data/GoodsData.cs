@@ -11,17 +11,12 @@ namespace Data
     [CreateAssetMenu(fileName = "Goods", menuName = "Data/Goods")]
     public class GoodsData: ScriptableObject
     {
-        [Obsolete]
-        [Header("Для работы"), ArrayElementTitle("Type")]
+        [Header("Рабочее"), ArrayElementTitle("Type")]
         public GoodInfo[] WorkTools;
-
-        [Obsolete]
-        [Header("Понты"), ArrayElementTitle("Type")]
+        
+        [Header("Личное"), ArrayElementTitle("Type")]
         public GoodInfo[] Swag;
-
-        /// <summary>
-        /// Возвращает наборы всех товаров 
-        /// </summary>
+        
         public GoodInfo[] AllItems => WorkTools.Concat(Swag).ToArray();
     }
 
@@ -31,9 +26,6 @@ namespace Data
     [Serializable]
     public class GoodInfo
     {
-        /// <summary>
-        /// Тип предмета
-        /// </summary>
         public GoodsType Type;
         
         /// <summary>

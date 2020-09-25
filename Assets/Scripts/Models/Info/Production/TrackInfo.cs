@@ -11,16 +11,13 @@ namespace Models.Info.Production
     public class TrackInfo: Production
     {
         public TrendInfo TrendInfo;
-
         public int TextPoints;
         public int BitPoints;
-
         public int ListenAmount;
         public int ChartPosition;
-
         public bool HasClip;
-
         public RapperInfo Feat;
+        
         public override string[] HistoryInfo => new[]
         {
             Name,
@@ -29,5 +26,9 @@ namespace Models.Info.Production
             ListenAmount.ToString(),
             ChartPosition.ToString()
         };
+        
+        public override string GetLog() {
+            return $"{Timestamp}: Завершил работу над треком {Name}";
+        }
     }
 }

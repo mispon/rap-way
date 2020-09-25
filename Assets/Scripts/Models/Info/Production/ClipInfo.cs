@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 
 namespace Models.Info.Production
 {
@@ -27,5 +28,10 @@ namespace Models.Info.Production
             Views.ToString(),
             $"{Likes} / {Dislikes}"
         };
+
+        public override string GetLog() {
+            string trackName = ProductionManager.GetTrackName(TrackId);
+            return $"{Timestamp}: Завершил съемку клипа на трек {trackName}";
+        }
     }
 }

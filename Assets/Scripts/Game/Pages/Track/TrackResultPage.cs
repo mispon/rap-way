@@ -56,17 +56,16 @@ namespace Game.Pages.Track
         /// <summary>
         /// Сохраняет результаты трека
         /// </summary>
-        private void SaveResult(TrackInfo track)
+        private void SaveResult(TrackInfo track) 
         {
+            track.Timestamp = TimeManager.Instance.Now;
             PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome, rewardExp);
             ProductionManager.AddTrack(track);
             
             if (track.Feat != null)
                 ProductionManager.AddFeat(track.Feat);
         }
-
-        #region PAGE EVENTS
-
+        
         /// <summary>
         /// Выполняется перед закрытием страницы
         /// </summary>
@@ -75,7 +74,5 @@ namespace Game.Pages.Track
             SaveResult(_trackInfo);
             _trackInfo = null;
         }
-        
-        #endregion
     }
 }

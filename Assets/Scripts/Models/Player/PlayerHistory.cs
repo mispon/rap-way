@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Models.Info.Production;
 
 namespace Models.Player
@@ -22,5 +23,18 @@ namespace Models.Player
             ClipList = new List<ClipInfo>(),
             ConcertList = new List<ConcertInfo>()
         };
+
+        public List<Production> GetLastActions(int amount)
+        {
+            int size = TrackList.Count + AlbumList.Count + ClipList.Count + ConcertList.Count;
+            var result = new List<Production>(size);
+            
+            result.AddRange(TrackList);
+            result.AddRange(AlbumList);
+            result.AddRange(ClipList);
+            result.AddRange(ConcertList);
+
+            return result.OrderByDescending(e => e.Timestamp).Take(amount).ToList();
+        }
     }
 }
