@@ -16,7 +16,7 @@ namespace Game.UI.Buttons
     [RequireComponent(typeof(Button))]
     public class PageButton : MonoBehaviour
     {
-        [Header("НАстройки страницы")]
+        [Header("Настройки страницы")]
         [SerializeField] protected Page page;
         [SerializeField] protected PageActionType action;
 
