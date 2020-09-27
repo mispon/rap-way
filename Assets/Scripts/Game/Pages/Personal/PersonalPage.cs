@@ -65,7 +65,7 @@ namespace Game.Pages.Personal
         private void SetupGoods(List<Good> playerGoods) {
             Sprite GetGoodsSprite(GoodsType type) {
                 int level = playerGoods.FirstOrDefault(e => e.Type == type)?.Level ?? 0;
-                return goods.AllItems.First(e => e.Type == type).UI[level].Image;
+                return goods.AllItems.First(e => e.Type == type).UI[level].PersonalPageImage;
             }
 
             microIcon.sprite = GetGoodsSprite(GoodsType.Micro);
