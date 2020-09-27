@@ -36,7 +36,7 @@ namespace Utils.Carousel
         /// <summary>
         /// Инициализация карусели
         /// </summary>
-        public void Init() => Init(props);
+        private void Init() => Init(props);
 
         /// <summary>
         /// Инициализация карусели
@@ -66,9 +66,14 @@ namespace Utils.Carousel
         public T GetValue<T>() => _items[_index].GetValue<T>();
 
         /// <summary>
+        /// Возвращает текстовое значение элемента 
+        /// </summary>
+        public string GetLabel() => _items[_index].GetLabel();
+
+        /// <summary>
         /// Очищает карусель
         /// </summary>
-        public void Clear()
+        private void Clear()
         {
             if (_items == null)
                 return;

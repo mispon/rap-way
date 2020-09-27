@@ -13,6 +13,10 @@ namespace Game.Pages.Personal
     /// Персональная страница
     /// </summary>
     public class PersonalPage : Page {
+        [Header("Персонажи")]
+        [SerializeField] private GameObject maleAvatar; 
+        [SerializeField] private GameObject femaleAvatar; 
+        
         [Header("Имущество игрока")]
         [SerializeField] private Image microIcon;
         [SerializeField] private Image acousticIcon;
@@ -51,12 +55,22 @@ namespace Game.Pages.Personal
         /// </summary>
         protected override void BeforePageOpen() {
             PlayerData data = PlayerManager.Data;
-            
+
+            SetupCharacter(data.Info.Gender);
             SetupGoods(data.Goods);
             SetupStats(data.Stats);
             SetupSkills(data.Skills);
             SetupBestTrack(data.History.TrackList);
             SetupLastActions(data.History.GetLastActions(3));
+        }
+
+        /// <summary>
+        /// Устанавливает аватар 
+        /// </summary>
+        private void SetupCharacter(Gender gender)
+        {
+            maleAvatar.SetActive(gender == Gender.Male);
+            femaleAvatar.SetActive(gender == Gender.Female);
         }
 
         /// <summary>

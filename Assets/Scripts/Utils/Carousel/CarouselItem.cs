@@ -31,6 +31,11 @@ namespace Utils.Carousel
         public T GetValue<T>() => (T) _value;
 
         /// <summary>
+        /// Возвращает текстовое обозначение элемента 
+        /// </summary>
+        public string GetLabel() => label.text;
+
+        /// <summary>
         /// Инициализация элемента карусели
         /// </summary>
         public void Setup(CarouselProps props, Action clickCallback)
