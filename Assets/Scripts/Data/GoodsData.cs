@@ -52,10 +52,23 @@ namespace Data
         /// Иконка предмета
         /// </summary>
         public Sprite Image;
+
+        /// <summary>
+        /// Иконка предмета на персональной странице
+        /// </summary>
+        [SerializeField] 
+        private Sprite personalPageImage;
         
         /// <summary>
         /// Цена предмета
         /// </summary>
         public int Price;
+
+        /// <summary>
+        /// Возвращает иконку предмета на персональной странице, если она определена.
+        /// Если неопределена - то иконку магазина
+        /// </summary>
+        public Sprite PersonalPageImage
+            => personalPageImage == null ? Image : personalPageImage;
     }
 }
