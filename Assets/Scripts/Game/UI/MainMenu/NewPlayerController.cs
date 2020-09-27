@@ -4,37 +4,51 @@ using Core;
 using Enums;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
+using Utils.Carousel;
 
 namespace Game.UI.MainMenu
 {
     /// <summary>
     /// Окно создания нового персонажа
     /// </summary>
-    public class NewPlayerController: MonoBehaviour
-    {
-        [Header("Поля данных")] 
+    public class NewPlayerController: MonoBehaviour {
+        [Header("Картинки")]
+        [SerializeField] private Sprite maleAvatar;
+        [SerializeField] private Sprite femaleAvatar;
+        [SerializeField] private Sprite maleAvatarInactive;
+        [SerializeField] private Sprite femaleAvatarInactive;
+        
+        [Header("Поля данных")]
+        [SerializeField] private Button maleButton;
+        [SerializeField] private Button femaleButton;
         [SerializeField] private InputField[] inputFields;
-        [SerializeField] private Switcher dateOfBirthSwitcher;
-        [SerializeField] private Switcher raceSwitcher;
-        [SerializeField] private Switcher genderSwitcher;
+        [SerializeField] private Carousel ageCarousel;
         [Space]
-        [SerializeField] private Button continueButton;
+        [SerializeField] private Button startButton;
 
+        private bool _maleSelected = true;
+        
         private void Start()
         {
-            // todo: обрабатывать локализацию значений
-            dateOfBirthSwitcher.InstantiateElements(Enumerable.Range(16, 15));
-            raceSwitcher.InstantiateElements(Enum.GetNames(typeof(Race)));
-            genderSwitcher.InstantiateElements(Enum.GetNames(typeof(Gender)));
-            
-            continueButton.onClick.AddListener(OnCreateClick);
+            maleButton.onClick.AddListener(() => OnGenderChange(true));
+            femaleButton.onClick.AddListener(() => OnGenderChange(false));
+            startButton.onClick.AddListener(OnStartClick);
+        }
+
+        /// <summary>
+        /// Обработчик изменения пола персонажа 
+        /// </summary>
+        private void OnGenderChange(bool isMale)
+        {
+            _maleSelected = isMale;
+            maleButton.image.sprite = isMale ? maleAvatar : maleAvatarInactive;
+            femaleButton.image.sprite = !isMale ? femaleAvatar : femaleAvatarInactive;
         }
 
         /// <summary>
         /// Обработчик кнопки создания персонажа
         /// </summary>
-        private void OnCreateClick()
+        private void OnStartClick()
         {
             if (inputFields.Any(field => !CheckNotNullOrEmpty(field)))
                 return;
@@ -67,19 +81,13 @@ namespace Game.UI.MainMenu
         {
             var player = GameManager.Instance.PlayerData.Info;
 
+            player.Gender = _maleSelected ? Gender.Male : Gender.Female;
             player.FirstName = inputFields[0].text;
-            player.LastName = inputFields[1].text;
-            player.NickName = inputFields[2].text;
-            player.HomeLand = inputFields[3].text;
-            
-            player.CreationDate = DateTime.Now;
-            player.CreationDate = DateTime.Now;
-            
-            player.Race = (Race) raceSwitcher.ActiveIndex;
-            player.Gender = (Gender) genderSwitcher.ActiveIndex;
+            player.LastName  = inputFields[1].text;
+            player.NickName  = inputFields[2].text;
+            player.Age = Convert.ToInt32(ageCarousel.GetLabel());
 
-            var days = TimeSpan.FromDays(365 * Convert.ToInt32(dateOfBirthSwitcher.ActiveTextValue));
-            player.DateOfBirth = DateTime.Today - days;
+            player.CreationDate = DateTime.Now;
 
             SceneManager.Instance.LoadGameScene();
         }

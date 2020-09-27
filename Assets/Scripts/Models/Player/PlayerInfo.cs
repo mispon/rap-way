@@ -27,21 +27,11 @@ namespace Models.Player
         /// Ник персонажа
         /// </summary>
         public string NickName;
-        
-        /// <summary>
-        /// Дата рождения персонажа. Проще вычислять возрат от известной даты 
-        /// </summary>
-        public DateTime DateOfBirth;
-        
-        /// <summary>
-        /// Дата создания персонажа, для презентации програсса игрока за определенный период
-        /// </summary>
-        public DateTime CreationDate;
-        
+
         /// <summary>
         /// Возраст персонажа
         /// </summary>
-        public int Age => (int) ((TimeManager.Instance.Now - DateOfBirth).TotalDays / 365);
+        public int Age;
 
         /// <summary>
         /// Пол персонажа
@@ -49,15 +39,10 @@ namespace Models.Player
         public Gender Gender;
         
         /// <summary>
-        /// Раса персонажа
+        /// Дата создания персонажа, для презентации програсса игрока за определенный период
         /// </summary>
-        public Race Race;
-        
-        /// <summary>
-        /// Родина персонажа
-        /// </summary>
-        public string HomeLand;
-        
+        public DateTime CreationDate;
+
         public static PlayerInfo New => new PlayerInfo
         {
             FirstName = "Jon",
