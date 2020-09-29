@@ -8,7 +8,7 @@ namespace Utils.Extensions
         /// <summary>
         /// Устанавливает параметры для CanvasGroup 
         /// </summary>
-        public static void Set(this CanvasGroup canvasGroup, CanvasGroupSettings settings)
+        public static void Set(this CanvasGroup canvasGroup, in CanvasGroupSettings settings)
         {
             canvasGroup.alpha = settings.alpha;
             canvasGroup.interactable = settings.interactable;

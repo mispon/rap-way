@@ -86,7 +86,7 @@ namespace Game.Pages.GameEvent
             var isActive = (value == 0);
             component.gameObject.SetActive(isActive);
             if (isActive)
-                component.text = value.DisplayMoneyShort();
+                component.text = value.DisplayShort();
         }
 
         /// <summary>

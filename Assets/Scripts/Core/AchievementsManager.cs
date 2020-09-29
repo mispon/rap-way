@@ -250,7 +250,7 @@ namespace Core
                 }
                 default:
                 {
-                    return achievement.CompareValue.DisplayMoneyShort();
+                    return achievement.CompareValue.DisplayShort();
                 }
             }
         }
