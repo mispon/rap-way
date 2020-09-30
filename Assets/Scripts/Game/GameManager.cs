@@ -42,7 +42,7 @@ namespace Game
         /// <summary>
         /// Загрузка данных приложения
         /// </summary>
-        private void LoadApplicationData()
+        public void LoadApplicationData()
         {
             PlayerData = DataManager.Load<PlayerData>(playersDataKey) ?? PlayerData.New;
             GameStats = DataManager.Load<GameStats>(gameDataKey) ?? GameStats.New;

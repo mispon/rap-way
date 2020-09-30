@@ -81,6 +81,9 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void CreatePlayer()
         {
+            GameManager.Instance.RemoveSaves();
+            GameManager.Instance.LoadApplicationData();
+            
             var player = GameManager.Instance.PlayerData.Info;
 
             player.Gender = _maleSelected ? Gender.Male : Gender.Female;
