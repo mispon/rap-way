@@ -31,52 +31,35 @@ namespace Game.UI.MainMenu
         
         [Header("CanvasGroup")] 
         [SerializeField] private CanvasGroupController menuCanvasGroupController;
-        
-        [Header("Управление меню")]
-        [SerializeField] private Button menuButton;
-        [SerializeField] private Animator menuAnimator;
-        [SerializeField] private string showMenuTriggerName;
-        [SerializeField] private string hideMenuTriggerName;
 
-        private bool _menuState;
+        /// <summary>
+        /// Набор кноппок открытия панелей
+        /// </summary>
+        private Button[] MenuButtons => new[]
+        {
+            newGameButton,
+            continueGameButton,
+            settingsButton,
+            aboutButton
+        };
         
         public void OnStart()
         {
-            SetUpPlayerData();
             SetUpButtons();
         }
-
-        /// <summary>
-        /// Устанавливает метрики текущего сохранения
-        /// </summary>
-        private void SetUpPlayerData()
-        {
-            var playerInfo = GameManager.Instance.PlayerData;
-            moneyText.text = playerInfo.Money.DisplayShort();
-            fansText.text = playerInfo.Fans.DisplayShort();
-            hypeText.text = playerInfo.Hype.ToString();
-        }
-
+        
         /// <summary>
         /// Создает обработчики нажатия на кнопки
         /// </summary>
         private void SetUpButtons()
         {
+            foreach (var button in MenuButtons)
+                button.onClick.AddListener(SoundManager.Instance.PlayClick);
+            
             newGameButton.onClick.AddListener(()=> ShowPanel(newPlayerPanel));
-            continueGameButton.onClick.AddListener(()=> SceneManager.Instance.LoadGameScene());
+            continueGameButton.onClick.AddListener(SceneManager.Instance.LoadGameScene);
             settingsButton.onClick.AddListener(()=> ShowPanel(settingsPanel));
             aboutButton.onClick.AddListener(()=> ShowPanel(aboutPanel));
-            
-            menuButton.onClick.AddListener(ChangeMenuState);
-        }
-
-        /// <summary>
-        /// Открытие/закрытие меню
-        /// </summary>
-        private void ChangeMenuState()
-        {
-            menuAnimator.SetTrigger(_menuState ? hideMenuTriggerName : showMenuTriggerName);
-            _menuState = !_menuState;
         }
 
         /// <summary>
@@ -85,8 +68,6 @@ namespace Game.UI.MainMenu
         private void ShowPanel(GameObject panel)
         {
             SetWindowActive(panel, true);
-            _menuState = true;
-            ChangeMenuState();
         }
         
         /// <summary>
