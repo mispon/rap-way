@@ -11,7 +11,7 @@ namespace Data
     [CreateAssetMenu(fileName = "AchievementData", menuName = "Data/Achievement")]
     public class AchievementsData: ScriptableObject
     {
-        [ArrayElementTitle(new string[]{"Achievement.Type", "Achievement.CompareValue" })]
+        [ArrayElementTitle(new []{"Achievement.Type", "Achievement.CompareValue" })]
         public AchievementInfo[] Infos;
 
         public IEnumerable<AchievementInfo> LockedInfos => Infos.Where(info => !info.Achievement.Unlocked);
@@ -27,10 +27,10 @@ namespace Data
 
             var lockedInfos = LockedInfos;
 
-            lockedInfos.SetCondition(AchievementsType.Fans, OverwiseConditionFunction);
-            lockedInfos.SetCondition(AchievementsType.Money, OverwiseConditionFunction);
-            lockedInfos.SetCondition(AchievementsType.HypeBeast, OverwiseConditionFunction);
-            lockedInfos.SetCondition(AchievementsType.ClipLoser, OverwiseConditionFunction);
+            lockedInfos.SetCondition(AchievementsType.Fans, OverflowConditionFunction);
+            lockedInfos.SetCondition(AchievementsType.Money, OverflowConditionFunction);
+            lockedInfos.SetCondition(AchievementsType.HypeBeast, OverflowConditionFunction);
+            lockedInfos.SetCondition(AchievementsType.ClipLoser, OverflowConditionFunction);
 
             lockedInfos.SetCondition(AchievementsType.TrackChartPosition, ChartPositionConditionFunction);
             lockedInfos.SetCondition(AchievementsType.AlbumChartPosition, ChartPositionConditionFunction);
@@ -43,20 +43,20 @@ namespace Data
         /// <summary>
         /// Проверка достижения порога
         /// </summary>
-        private bool OverwiseConditionFunction(int inputValue, int achievementValue)
+        private static bool OverflowConditionFunction(int inputValue, int achievementValue)
             => inputValue >= achievementValue;
    
         /// <summary>
         /// Проверка попадания ниже границы
         /// </summary>
-        private bool ChartPositionConditionFunction(int inputValue, int achievementValue)
+        private static bool ChartPositionConditionFunction(int inputValue, int achievementValue)
             => inputValue <= achievementValue;
         
         /// <summary>
         /// Проверка на соответсвие.
         /// В случае Концерта, Фита и Баттла передаем индекс Площадки/Репера в каком-либо перечислении
         /// </summary>
-        private bool EqualConditionFunction(int inputValue, int achievementValue)
+        private static bool EqualConditionFunction(int inputValue, int achievementValue)
             => achievementValue == inputValue;
     }
 

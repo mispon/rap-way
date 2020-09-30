@@ -53,7 +53,9 @@ namespace Game.Pages.Rappers
         /// </summary>
         private static bool AnalyzeConversations(int playerPoints, int rapperPoints)
         {
-            int hypeBonus = PlayerManager.Data.Hype / 5;
+            return true;
+            
+            var hypeBonus = PlayerManager.Data.Hype / 5;
             return playerPoints + hypeBonus > rapperPoints;
         }
 

@@ -86,7 +86,7 @@ namespace Game.Pages.Rappers
         {
             var manager = PlayerManager.Data.Team.Manager;
 
-            bool canInteract = !manager.IsEmpty && manager.Cooldown == 0;
+            bool canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
             battleButton.interactable = canInteract;
             featButton.interactable = canInteract;
 

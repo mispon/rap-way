@@ -95,6 +95,9 @@ namespace Core
         /// </summary>
         private void CheckTrackChartPosition(TrackInfo trackInfo)
         {
+            if(trackInfo.ChartPosition == 0)
+                return;
+            
             MultipleCheckValue(AchievementsType.TrackChartPosition, trackInfo.ChartPosition,
                 info => info.Achievement.CompareValue);
         }
@@ -104,6 +107,9 @@ namespace Core
         /// </summary>
         private void CheckAlbumChartPosition(AlbumInfo albumInfo)
         {
+            if(albumInfo.ChartPosition == 0)
+                return;
+            
             MultipleCheckValue(AchievementsType.AlbumChartPosition, albumInfo.ChartPosition,
                 info => info.Achievement.CompareValue);
         }
