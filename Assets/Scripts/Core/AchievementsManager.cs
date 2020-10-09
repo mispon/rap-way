@@ -232,7 +232,7 @@ namespace Core
                     var description = "Some description"; // todo: Добавить дескриптион для ачивки
             
                     newAchievementsPage.ShowNewAchievement(achievementString, description);
-                });
+                }, true);
             }
             
             NotificationManager.Instance.AddIndependentNotification(Notification);

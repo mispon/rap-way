@@ -14,13 +14,14 @@ namespace Game.Effects
     {
         [SerializeField] private SpriteRenderer itemAvatar;
         [SerializeField] private Animation effect;
-
+        [SerializeField] private GameObject fireWorkObject;
+        
         private event Action onClose = () => {};
         
         /// <summary>
         /// Показывает эффект 
         /// </summary>
-        public void Show(Sprite avatar, [CanBeNull] Action callback)
+        public void Show(Sprite avatar, [CanBeNull] Action callback, bool fireWorks = false)
         {
             CanvasController.SetActive(false);
             
@@ -28,6 +29,8 @@ namespace Game.Effects
             onClose = callback;
             
             gameObject.SetActive(true);
+            fireWorkObject.SetActive(fireWorks);
+            
             effect.Play();
         }
 
@@ -40,6 +43,7 @@ namespace Game.Effects
             SoundManager.Instance.PlayClick();
             GameScreenController.Instance.SetVisibility(true);
             onClose.Invoke();
+            fireWorkObject.SetActive(false);
             gameObject.SetActive(false);
         }
     }
