@@ -14,6 +14,9 @@ namespace Game.Effects
     {
         [SerializeField] private SpriteRenderer itemAvatar;
         [SerializeField] private Animation effect;
+
+        [Header("Дополнительные эффекты")]
+        [SerializeField] private GameObject haloLight;
         [SerializeField] private GameObject fireWorkObject;
         
         private event Action onClose = () => {};
@@ -21,7 +24,7 @@ namespace Game.Effects
         /// <summary>
         /// Показывает эффект 
         /// </summary>
-        public void Show(Sprite avatar, [CanBeNull] Action callback, bool fireWorks = false)
+        public void Show(Sprite avatar, [CanBeNull] Action callback, bool useFirework = false)
         {
             CanvasController.SetActive(false);
             
@@ -29,7 +32,11 @@ namespace Game.Effects
             onClose = callback;
             
             gameObject.SetActive(true);
-            fireWorkObject.SetActive(fireWorks);
+
+            if (useFirework)
+                fireWorkObject.SetActive(true);
+            else
+                haloLight.SetActive(true);
             
             effect.Play();
         }
@@ -43,6 +50,8 @@ namespace Game.Effects
             SoundManager.Instance.PlayClick();
             GameScreenController.Instance.SetVisibility(true);
             onClose.Invoke();
+            
+            haloLight.SetActive(false);
             fireWorkObject.SetActive(false);
             gameObject.SetActive(false);
         }
