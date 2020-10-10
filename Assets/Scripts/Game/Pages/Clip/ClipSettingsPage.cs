@@ -37,7 +37,6 @@ namespace Game.Pages.Clip
 
         [Header("Данные")] 
         [SerializeField] private ClipStaffData staffData;
-        [SerializeField] private ImagesBank imagesBank;
 
         private ClipInfo _clip;
         private int _directorPrice;
@@ -49,7 +48,6 @@ namespace Game.Pages.Clip
         private void Start()
         {
             startButton.onClick.AddListener(CreateClip);
-
             SetupStaffCarousels();
         }
 
@@ -58,33 +56,19 @@ namespace Game.Pages.Clip
         /// </summary>
         private void SetupStaffCarousels()
         {
-            var directorProps = ConvertStaffToCarouselProps(staffData.Directors, imagesBank.Directors);
-            directorCarousel.Init(directorProps);
+            var directorProps = Enumerable.Range(0, staffData.Directors.Length);
+            directorCarousel.Init(directorProps.Select(e => new CarouselProps()).ToArray());
             directorCarousel.onChange += OnDirectorChange;
 
-            var operatorProps = ConvertStaffToCarouselProps(staffData.Operators, imagesBank.Operators);
-            operatorCarousel.Init(operatorProps);
+            var operatorProps = Enumerable.Range(0, staffData.Operators.Length);
+            operatorCarousel.Init(operatorProps.Select(e => new CarouselProps()).ToArray());
             operatorCarousel.onChange += OnOperatorChange;
-        }
-
-        /// <summary>
-        /// Конвертирует данные персонала в свойства карусели 
-        /// </summary>
-        private CarouselProps[] ConvertStaffToCarouselProps(IEnumerable<ClipStaff> staffArray,
-            IReadOnlyList<Sprite> spriteArray)
-        {
-            return staffArray.Select((clipStaffInfo, index) => new CarouselProps
-            {
-                Text = clipStaffInfo.NameKey,
-                Sprite = spriteArray[index],
-                Value = index
-            }).ToArray();
         }
 
         /// <summary>
         /// Конвертирует трек в свойство карусели
         /// </summary>
-        private CarouselProps ConvertTrackToCarouselProps(TrackInfo trackInfo)
+        private static CarouselProps ConvertTrackToCarouselProps(TrackInfo trackInfo)
         {
             return new CarouselProps
             {
@@ -111,10 +95,8 @@ namespace Game.Pages.Clip
 
             _clip.TrackId = track.Id;
             _clip.Name = track.Name;
-
-            var directorImage = imagesBank.Directors[directorCarousel.GetValue<int>()];
-            var operatorImage = imagesBank.Operators[operatorCarousel.GetValue<int>()];
-            workingPage.StartWork(_clip, directorImage, operatorImage);
+            
+            workingPage.StartWork(_clip);
             Close();
         }
 
@@ -124,8 +106,8 @@ namespace Game.Pages.Clip
         private void OnDirectorChange(int index)
         {
             var director = staffData.Directors[index];
-            directorSkill.text = $"Навык: {director.Skill}";
-            directorPrice.text = $"Стоимость: {director.Salary}$";
+            directorSkill.text = $"SKILL: {director.Skill}";
+            directorPrice.text = $"COST: {director.Salary}$";
             _clip.DirectorSkill = director.Skill;
             _directorPrice = director.Salary;
             DisplayFullPrice();
@@ -137,8 +119,8 @@ namespace Game.Pages.Clip
         private void OnOperatorChange(int index)
         {
             var clipOperator = staffData.Operators[index];
-            operatorSkill.text = $"Навык: {clipOperator.Skill}";
-            operatorPrice.text = $"Стоимость: {clipOperator.Salary}$";
+            operatorSkill.text = $"SKILL: {clipOperator.Skill}";
+            operatorPrice.text = $"COST: {clipOperator.Salary}$";
             _clip.OperatorSkill = clipOperator.Skill;
             _operatorPrice = clipOperator.Salary;
             DisplayFullPrice();
@@ -147,7 +129,11 @@ namespace Game.Pages.Clip
         /// <summary>
         /// Отображает полную стоимость клипа
         /// </summary>
-        private void DisplayFullPrice() => price.SetValue($"СТОИМОСТЬ: {FullPrice}$");
+        private void DisplayFullPrice()
+        {
+            // todo: Localize
+            price.SetValue($"PRICE: {FullPrice}$");
+        }
 
         /// <summary>
         /// Кэширует самые новые треки игрока на которые еще не снимался клип
@@ -160,9 +146,7 @@ namespace Game.Pages.Clip
                 .Take(TRACKS_CACHE);
             _lastTracks.AddRange(tracks);
         }
-
-        #region PAGE EVENTS
-
+        
         protected override void BeforePageOpen()
         {
             _clip = new ClipInfo();
@@ -172,7 +156,7 @@ namespace Game.Pages.Clip
             var anyTracks = _lastTracks.Any();
             var trackProps = anyTracks
                 ? _lastTracks.Select(ConvertTrackToCarouselProps).ToArray()
-                : new[] {new CarouselProps {Text = "Нет треков", Value = new TrackInfo()}};
+                : new[] {new CarouselProps {Text = "NO TRACKS", Value = new TrackInfo()}};
             trackCarousel.Init(trackProps);
             startButton.interactable = anyTracks;
 
@@ -187,7 +171,5 @@ namespace Game.Pages.Clip
             _clip = null;
             _lastTracks.Clear();
         }
-
-        #endregion
     }
 }
