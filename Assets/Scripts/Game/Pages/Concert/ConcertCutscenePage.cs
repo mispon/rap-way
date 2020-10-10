@@ -1,4 +1,3 @@
-using System;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
