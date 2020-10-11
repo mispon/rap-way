@@ -176,7 +176,7 @@ namespace Game.Pages.Store
         /// </summary>
         private void ResizeContainer()
         {
-            bool anyElements = _itemsList.Count > 0;
+            var anyElements = _itemsList.Count > 0;
             noElementsText.SetActive(!anyElements);
 
             rectContent.SetSizeWithCurrentAnchors(

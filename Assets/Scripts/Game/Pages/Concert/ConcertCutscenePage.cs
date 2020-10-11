@@ -1,7 +1,9 @@
-using System;
+using System.Linq;
 using Models.Info.Production;
+using Spine.Unity;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Concert
 {
@@ -10,13 +12,18 @@ namespace Game.Pages.Concert
     /// </summary>
     public class ConcertCutscenePage : Page
     {
-        [Header("Анимации флекса")] [SerializeField]
-        private GameObject[] flexingObjects;
-
-        [Header("Пропуск катсцены")] [SerializeField]
+        private static readonly Color FlexingGraphicStartColor = new Color(1, 1, 1, 0); 
+        
+        [Header("Анимации флекса")] 
+        [SerializeField] 
+        private SkeletonGraphic flexingGraphic;
+        [SerializeField, SpineAnimation(dataField = "flexingGraphic")] 
+        private string[] flexingStates; 
+        
+        [Header("Пропуск катсцены")] 
+        [SerializeField]
         private Button skipButton;
 
-        private int _flexingObjectIndex = -1;
         private ConcertInfo _concert;
 
         private void Start()
@@ -39,23 +46,24 @@ namespace Game.Pages.Concert
         private void FillDanceFloor()
         {
             var occupancyRatio = _concert.TicketsSold / (float) _concert.LocationCapacity;
-            var locationOccupancyRatio = 1f / flexingObjects.Length;
-            _flexingObjectIndex = Mathf.FloorToInt(occupancyRatio / locationOccupancyRatio);
-
-            flexingObjects[_flexingObjectIndex].SetActive(true);
+            var locationOccupancyRatio = 1f / flexingStates.Length;
+            var maxFlexingAnimationIndex = Mathf.FloorToInt(occupancyRatio / locationOccupancyRatio);
+            maxFlexingAnimationIndex = Mathf.Clamp(maxFlexingAnimationIndex, 0, flexingStates.Length - 1);
+            
+            flexingGraphic.SetUpStatesOrder(flexingStates.Take(maxFlexingAnimationIndex + 1).ToArray());
         }
-
+        
         #region PAGE CALLBACKS
 
         protected override void BeforePageOpen()
         {
+            flexingGraphic.color = FlexingGraphicStartColor;
             FillDanceFloor();
         }
 
-        protected override void AfterPageClose()
+        protected override void BeforePageClose()
         {
-            flexingObjects[_flexingObjectIndex].SetActive(false);
-            _flexingObjectIndex = -1;
+            flexingGraphic.AnimationState.SetEmptyAnimation(0, 0);
             _concert = null;
         }
 
