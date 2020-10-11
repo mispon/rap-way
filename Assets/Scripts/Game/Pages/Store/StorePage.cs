@@ -13,7 +13,8 @@ namespace Game.Pages.Store
     public class StorePage: Page
     {
         [Header("Контроллеры управления UI-элементов")]
-        [SerializeField] private ScrollItemsController scrollItemsController;
+        [SerializeField] private ScrollItemsController swagScrollItemsController;
+        [SerializeField] private ScrollItemsController workScrollItemsController;
         
         [Header("Эффект открытия новой шмотки")]
         [SerializeField] private NewItemEffect newGoodEffect;
@@ -28,14 +29,16 @@ namespace Game.Pages.Store
 
         protected override void BeforePageOpen()
         {
-            scrollItemsController.Initialize(data.AllItems, newGoodEffect);
+            workScrollItemsController.Initialize(data.WorkTools, newGoodEffect);
+            swagScrollItemsController.Initialize(data.Swag, newGoodEffect);
             gameScreenCanvasGroup.Set(hideCanvasGroupSettings);
         }
 
         protected override void AfterPageClose()
         {
             gameScreenCanvasGroup.Set(showCanvasGroupSettings);
-            scrollItemsController.Dispose();
+            workScrollItemsController.Dispose();
+            swagScrollItemsController.Dispose();
         }
     }
 }
