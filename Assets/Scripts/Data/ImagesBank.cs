@@ -29,10 +29,6 @@ namespace Data
         public Sprite PrManActive;
         public Sprite PrManInactive;
 
-        [Header("Персонал клипа")] 
-        public Sprite[] Directors;
-        public Sprite[] Operators;
-
         [Header("Иконки скиллов")]
         [Tooltip("Индекс элемента соответствует значению enum Skills")]
         public Sprite[] Skills;

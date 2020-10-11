@@ -13,8 +13,7 @@ namespace Models.Info.Production
 
         public int DirectorSkill;
         public int OperatorSkill;
-
-        public int PlayerPoints;
+        
         public int DirectorPoints;
         public int OperatorPoints;
 

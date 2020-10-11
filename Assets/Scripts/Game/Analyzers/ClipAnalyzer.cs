@@ -43,7 +43,7 @@ namespace Game.Analyzers
             var trackInfo = ProductionManager.GetTrack(clip.TrackId);
             
             var trackImpact = viewsFromTrackCurve.Evaluate(trackInfo.ChartPosition);
-            var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (clip.PlayerPoints + clip.OperatorPoints + clip.DirectorPoints);
+            var resultPoints = fansToPointsIncomeCurve.Evaluate(totalFans) * (clip.OperatorPoints + clip.DirectorPoints);
             
             clip.Views = (int) viewsCurve.Evaluate(resultPoints * trackImpact);
             var marks = clip.Views * Random.Range(minMarksRatio, maxMarksRatio);
