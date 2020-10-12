@@ -1,4 +1,5 @@
 using System.Linq;
+using Enums;
 using Models.Info.Production;
 using Spine.Unity;
 using UnityEngine;
@@ -12,17 +13,19 @@ namespace Game.Pages.Concert
     /// </summary>
     public class ConcertCutscenePage : Page
     {
-        private static readonly Color FlexingGraphicStartColor = new Color(1, 1, 1, 0); 
+        private static readonly Color FlexingGraphicStartColor = new Color(1, 1, 1, 0);
+
+        [Header("Персонаж")]
+        [SerializeField] private SkeletonGraphic maleCharacter;
+        [SerializeField] private SkeletonGraphic femaleCharacter;
         
         [Header("Анимации флекса")] 
-        [SerializeField] 
-        private SkeletonGraphic flexingGraphic;
+        [SerializeField] private SkeletonGraphic flexingGraphic;
         [SerializeField, SpineAnimation(dataField = "flexingGraphic")] 
         private string[] flexingStates; 
         
         [Header("Пропуск катсцены")] 
-        [SerializeField]
-        private Button skipButton;
+        [SerializeField] private Button skipButton;
 
         private ConcertInfo _concert;
 
@@ -52,11 +55,10 @@ namespace Game.Pages.Concert
             
             flexingGraphic.SetUpStatesOrder(flexingStates.Take(maxFlexingAnimationIndex + 1).ToArray());
         }
-        
-        #region PAGE CALLBACKS
 
         protected override void BeforePageOpen()
         {
+            femaleCharacter.color = FlexingGraphicStartColor;
             flexingGraphic.color = FlexingGraphicStartColor;
             FillDanceFloor();
         }
@@ -66,7 +68,5 @@ namespace Game.Pages.Concert
             flexingGraphic.AnimationState.SetEmptyAnimation(0, 0);
             _concert = null;
         }
-
-        #endregion
     }
 }

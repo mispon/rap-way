@@ -35,9 +35,7 @@ namespace Game
         /// Событие добавления хайпа
         /// </summary>
         public event Action<int> onHypeAdd = value => {};
-
-       
-
+        
         /// <summary>
         /// Данные игрока
         /// </summary>
@@ -135,26 +133,6 @@ namespace Game
                 id = history.ConcertList.Any() ? history.ConcertList.Max(e => e.Id) : 0;
 
             return id + 1;
-        }
-
-        /// <summary>
-        /// Возвращает локализированный список тематик, известных игроку  
-        /// </summary>
-        public static string[] GetPlayersThemes()
-        {
-            return Data.Themes
-                .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
-                .ToArray();
-        }
-        
-        /// <summary>
-        /// Возвращает локализированный список стилистик, известных игроку  
-        /// </summary>
-        public static string[] GetPlayersStyles()
-        {
-            return Data.Styles
-                .Select(e => LocalizationManager.Instance.Get(e.GetDescription()))
-                .ToArray();
         }
 
         /// <summary>

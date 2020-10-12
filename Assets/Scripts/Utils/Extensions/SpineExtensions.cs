@@ -7,8 +7,7 @@ namespace Utils.Extensions
         /// <summary>
         /// Устанавливает очередь анимаций из массива имен анимаций 
         /// </summary>
-        public static void SetUpStatesOrder(this SkeletonGraphic graphic, string[] states,
-            bool lastLoop = true, int trackIndex = 0, float delay = 0)
+        public static void SetUpStatesOrder(this SkeletonGraphic graphic, string[] states, bool lastLoop = true, int trackIndex = 0, float delay = 0)
         {
             var index = 0;
             var maxIndex = states.Length - 1;
