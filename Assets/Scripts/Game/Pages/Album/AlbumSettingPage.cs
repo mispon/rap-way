@@ -80,7 +80,7 @@ namespace Game.Pages.Album
         /// <summary>
         /// Инициализирует карусели актуальными значениями 
         /// </summary>
-        protected void SetupCarousel(PlayerData data)
+        private void SetupCarousel(PlayerData data)
         {
             var styleProps = data.Styles.Select(ConvertToCarouselProps).ToArray();
             styleCarousel.Init(styleProps);
@@ -144,9 +144,7 @@ namespace Game.Pages.Album
             bitSkill.text = $"{playerStats.Bitmaking.Value}";
             textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
-
-        #region PAGE EVENTS
-
+        
         protected override void BeforePageOpen()
         {
             _album = new AlbumInfo();
@@ -167,7 +165,5 @@ namespace Game.Pages.Album
             _album = null;
             albumNameInput.SetTextWithoutNotify(string.Empty);
         }
-
-        #endregion
     }
 }

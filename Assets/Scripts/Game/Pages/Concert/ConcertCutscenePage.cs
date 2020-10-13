@@ -56,7 +56,7 @@ namespace Game.Pages.Concert
             flexingGraphic.SetUpStatesOrder(flexingStates.Take(maxFlexingAnimationIndex + 1).ToArray());
         }
 
-        protected override void BeforePageOpen()
+        protected override void AfterPageOpen()
         {
             femaleCharacter.color = FlexingGraphicStartColor;
             flexingGraphic.color = FlexingGraphicStartColor;
