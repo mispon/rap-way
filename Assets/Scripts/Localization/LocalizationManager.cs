@@ -92,7 +92,8 @@ namespace Localization
         {
             var request = UnityWebRequest.Get(path);
             yield return request.SendWebRequest();
-            if (request.isNetworkError || request.isHttpError)
+            UnityWebRequest.Result[] badRequests = { UnityWebRequest.Result.ConnectionError, UnityWebRequest.Result.ProtocolError };
+            if (badRequests.Contains(request.result))
                 Debug.LogError(request.error);
             else
                 callback.Invoke(request.downloadHandler.text);
@@ -131,16 +132,12 @@ namespace Localization
         /// </summary>
         private static string GetFileName(SystemLanguage lang)
         {
-            switch (lang) 
+            return lang switch
             {
-                case SystemLanguage.English:
-                    return "en.json";
-
-                // todo: other langs
-
-                default:
-                    return "ru.json";
-            }
+                SystemLanguage.Russian => "ru.json",
+                SystemLanguage.English => "en.json",
+                _ => "ru.json"
+            };
         }
     }
 }

@@ -128,8 +128,8 @@ namespace Editor
             showSettings = EditorGUILayout.BeginFoldoutHeaderGroup(showSettings, showSettings ? $"[{language}]: Скрыть настройки" : $"[{language}]: Отобразить настройки");
             if (showSettings)
             {
-                language = (SystemLanguage)EditorGUILayout.EnumPopup("Язык локализации", language);
-            
+                language = (SystemLanguage) EditorGUILayout.EnumPopup("Язык локализации", language);
+
                 EditorGUILayout.BeginHorizontal();
                 autoLoad = EditorGUILayout.ToggleLeft("Автозагрузка", autoLoad);
                 autoSave = EditorGUILayout.ToggleLeft("Автосохранение", autoSave);

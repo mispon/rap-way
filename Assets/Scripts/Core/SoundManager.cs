@@ -27,39 +27,24 @@ namespace Core
         [SerializeField] private AudioClip achive;
 
         private int _ambientIndex;
-        private Coroutine _ambientSoundRoutine;
-        private bool _noSound;
 
         /// <summary>
         /// Устанавливает значения из настроек 
         /// </summary>
-        public void Setup(float volume, bool noSound)
+        public void Setup(float soundVolume, float musicVolume)
         {
             _ambientIndex = Random.Range(0, ambientClips.Length);
-            SetSound(noSound);
-            SetVolume(volume);
-        }
-
-        /// <summary>
-        /// Устанавливает настройку звука 
-        /// </summary>
-        public void SetSound(bool value)
-        {
-            _noSound = value;
-
-            if (_noSound)
-                StopCoroutine(_ambientSoundRoutine);
-            else
-                _ambientSoundRoutine = StartCoroutine(AmbientSoundRoutine());
+            SetVolume(soundVolume, musicVolume);
+            StartCoroutine(AmbientSoundRoutine());
         }
 
         /// <summary>
         /// Устанавливает настройку громкости 
         /// </summary>
-        public void SetVolume(float volume)
+        public void SetVolume(float soundVolume, float musicVolume)
         {
-            ambient.volume = volume * 0.3f;
-            sfx.volume = volume;
+            ambient.volume = musicVolume;
+            sfx.volume = soundVolume;
         }
 
         /// <summary>
@@ -67,7 +52,7 @@ namespace Core
         /// </summary>
         private void PlaySound(AudioClip clip)
         {
-            if (_noSound || clip == null)
+            if (clip == null)
                 return;
             
             sfx.pitch = Random.Range(0.9f, 1.1f);

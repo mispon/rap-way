@@ -4,7 +4,6 @@ using Models.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
-using Utils.Extensions;
 
 namespace Game.UI.MainMenu
 {
@@ -13,11 +12,6 @@ namespace Game.UI.MainMenu
     /// </summary>
     public class MainMenuController : Singleton<MainMenuController>, IStarter
     {
-        [Header("Metrics UI")] 
-        [SerializeField] private Text moneyText;
-        [SerializeField] private Text fansText;
-        [SerializeField] private Text hypeText;
-
         [Header("Кнопки меню")] 
         [SerializeField] private Button newGameButton;
         [SerializeField] private Button continueGameButton;
@@ -32,17 +26,6 @@ namespace Game.UI.MainMenu
         [Header("CanvasGroup")] 
         [SerializeField] private CanvasGroupController menuCanvasGroupController;
 
-        /// <summary>
-        /// Набор кноппок открытия панелей
-        /// </summary>
-        private Button[] MenuButtons => new[]
-        {
-            newGameButton,
-            continueGameButton,
-            settingsButton,
-            aboutButton
-        };
-        
         public void OnStart()
         {
             SetUpButtons();
@@ -53,27 +36,34 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void SetUpButtons()
         {
-            foreach (var button in MenuButtons)
-                button.onClick.AddListener(SoundManager.Instance.PlayClick);
-            
             newGameButton.onClick.AddListener(()=> ShowPanel(newPlayerPanel));
-            continueGameButton.onClick.AddListener(SceneManager.Instance.LoadGameScene);
+            continueGameButton.onClick.AddListener(ContinueGame);
             settingsButton.onClick.AddListener(()=> ShowPanel(settingsPanel));
             aboutButton.onClick.AddListener(()=> ShowPanel(aboutPanel));
         }
 
         /// <summary>
+        /// Загружает игровую сцену
+        /// </summary>
+        private static void ContinueGame()
+        {
+            SoundManager.Instance.PlayClick();
+            SceneManager.Instance.LoadGameScene();
+        }
+
+        /// <summary>
         /// Переход к панели 
         /// </summary>
-        private void ShowPanel(GameObject panel)
+        private static void ShowPanel(GameObject panel)
         {
-            SetWindowActive(panel, true);
+            SoundManager.Instance.PlayClick();
+            SetPanelActivity(panel, true);
         }
         
         /// <summary>
         /// Открытие/закрытие окон главного меню
         /// </summary>
-        public static void SetWindowActive(GameObject panel, bool value)
+        public static void SetPanelActivity(GameObject panel, bool value)
         {
             panel.SetActive(value);
             Instance.menuCanvasGroupController.SetActive(!value);

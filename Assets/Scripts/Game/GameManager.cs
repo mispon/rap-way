@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Localization;
 using Models.Game;
 using Models.Player;
@@ -19,13 +20,13 @@ namespace Game
         public PlayerData PlayerData { get; private set; }
         public GameStats GameStats { get; private set; }
 
-        public bool IsReady;
+        [NonSerialized] public bool IsReady;
         
         private void Start()
         {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
-            SoundManager.Instance.Setup(GameStats.SoundVolume, GameStats.NoSound);
+            SoundManager.Instance.Setup(GameStats.SoundVolume, GameStats.MusicVolume);
 
             IsReady = true;
         }

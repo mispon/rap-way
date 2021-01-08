@@ -10,20 +10,23 @@ namespace Models.Game
     [Serializable]
     public class GameStats
     {
+        // Глобальное состояние
         public DateTime Now;
         public Trends Trends;
-        public SystemLanguage Lang;
         public int SocialsCooldown;
         
-        public bool NoSound;
+        // Настройки
+        public SystemLanguage Lang;
         public float SoundVolume;
+        public float MusicVolume;
         
         public static GameStats New => new GameStats
         {
             Now = DateTime.Now,
             Trends = Trends.New,
             Lang = SystemLanguage.Russian,
-            SoundVolume = 1f
+            SoundVolume = 1f,
+            MusicVolume = 0.5f
         };
     }
 }

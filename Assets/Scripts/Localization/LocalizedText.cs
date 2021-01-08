@@ -6,12 +6,20 @@ using EventType = Core.EventType;
 
 namespace Localization
 {
+    public enum TextCase
+    {
+        Normal,
+        Lower,
+        Upper
+    }
+    
     /// <summary>
     /// Локализируемый текстовый элемент сцены
     /// </summary>
     [RequireComponent(typeof(Text))]
     public class LocalizedText : MonoBehaviour
     {
+        [SerializeField] private TextCase textCase = TextCase.Normal;
         [SerializeField] private string key;
         
         private Text value;
@@ -27,7 +35,7 @@ namespace Localization
             while (!LocalizationManager.Instance.IsReady)
                 yield return null;
             
-            value.text = LocalizationManager.Instance.Get(key);
+            ApplyText();
         }
 
         /// <summary>
@@ -35,7 +43,22 @@ namespace Localization
         /// </summary>
         private void OnLangChanged(object[] args)
         {
-            value.text = LocalizationManager.Instance.Get(key);
+            ApplyText();
+        }
+
+        /// <summary>
+        /// Устанавливает текст 
+        /// </summary>
+        private void ApplyText()
+        {
+            string text = LocalizationManager.Instance.Get(key);
+            
+            if (textCase == TextCase.Lower)
+                text = text.ToLowerInvariant();
+            else if (textCase == TextCase.Upper)
+                text = text.ToUpperInvariant();
+
+            value.text = text;
         }
 
         private void OnDestroy()

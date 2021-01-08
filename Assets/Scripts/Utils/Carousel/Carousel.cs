@@ -71,6 +71,33 @@ namespace Utils.Carousel
         public string GetLabel() => _items[_index].GetLabel();
 
         /// <summary>
+        /// Напрямую устанавливает новый индекс
+        /// </summary>
+        public void SetIndex(int index)
+        {
+            _index = index;
+            OnArrowClicked(0);
+        }
+        
+        /// <summary>
+        /// Напрямую устанавливает новый индекс по текстовому значению
+        /// </summary>
+        public void SetIndex(string label)
+        {
+            int index = 0;
+            foreach (var item in _items)
+            {
+                if (string.Equals(label, item.GetLabel(), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SetIndex(index);
+                    break;
+                }
+
+                index++;
+            }
+        }
+
+        /// <summary>
         /// Очищает карусель
         /// </summary>
         private void Clear()

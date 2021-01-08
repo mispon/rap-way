@@ -25,7 +25,7 @@ namespace Game.UI.MainMenu
         [SerializeField] private Carousel ageCarousel;
         [Space]
         [SerializeField] private Button startButton;
-        [SerializeField] private Button exitButton;
+        [SerializeField] private Button backButton;
 
         private bool _maleSelected = true;
         
@@ -34,7 +34,7 @@ namespace Game.UI.MainMenu
             maleButton.onClick.AddListener(() => OnGenderChange(true));
             femaleButton.onClick.AddListener(() => OnGenderChange(false));
             startButton.onClick.AddListener(OnStartClick);
-            exitButton.onClick.AddListener(()=> MainMenuController.SetWindowActive(gameObject, false));
+            backButton.onClick.AddListener(() => MainMenuController.SetPanelActivity(gameObject, false));
         }
 
         /// <summary>
