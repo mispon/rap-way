@@ -2,7 +2,6 @@ using System;
 using Core.Interfaces;
 using Data;
 using Enums;
-using Game.Pages;
 using Game.Pages.GameEvent;
 using UnityEngine;
 using Utils;

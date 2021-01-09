@@ -11,6 +11,7 @@ using dd = UnityEngine.UI.Dropdown;
 
 namespace Utils
 {
+    [Obsolete("USE CAROUSEL")]
     public class Switcher : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
         public Action<int> onClickAction = index => {};
@@ -106,7 +107,7 @@ namespace Utils
             {
                 _activeIndex = value;
                 onIndexChange.Invoke(value);
-                SoundManager.Instance.PlaySwitcher();
+                SoundManager.Instance.PlaySwitch();
             }
         }
         /// <summary>

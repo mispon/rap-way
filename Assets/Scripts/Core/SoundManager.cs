@@ -25,6 +25,7 @@ namespace Core
         [SerializeField] private AudioClip workPoint;
         [SerializeField] private AudioClip unlock;
         [SerializeField] private AudioClip achive;
+        [SerializeField] private AudioClip concert;
 
         private int _ambientIndex;
 
@@ -43,7 +44,7 @@ namespace Core
         /// </summary>
         public void SetVolume(float soundVolume, float musicVolume)
         {
-            ambient.volume = musicVolume;
+            ambient.volume = musicVolume * 0.1f;
             sfx.volume = soundVolume;
         }
 
@@ -86,10 +87,11 @@ namespace Core
         public void PlayPayment() => PlaySound(pay);
         public void PlayLevelUp() => PlaySound(levelUp);
         public void PlayNotify() => PlaySound(notify);
-        public void PlaySwitcher() => PlaySound(switcher);
+        public void PlaySwitch() => PlaySound(switcher);
         public void PlayWorkPoint() => PlaySound(workPoint);
         public void PlayUnlock() => PlaySound(unlock);
         public void PlayAchieve() => PlaySound(achive);
+        public void PlayConcert() => PlaySound(concert);
 
         #endregion
     }

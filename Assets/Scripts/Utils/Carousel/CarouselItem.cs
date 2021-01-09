@@ -1,7 +1,9 @@
 using System;
+using Core;
+using Localization;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using EventType = Core.EventType;
 
 namespace Utils.Carousel
 {
@@ -24,6 +26,13 @@ namespace Utils.Carousel
         [SerializeField] private Image image;
 
         private object _value;
+        private string _text;
+        private bool _localized;
+
+        private void Start()
+        {
+            EventManager.AddHandler(EventType.LangChanged, OnLandChanged);
+        }
 
         /// <summary>
         /// Возвращает значение элемента 
@@ -43,30 +52,55 @@ namespace Utils.Carousel
             if (mode == CarouselMode.All)
                 SetAll(props);
             if (mode == CarouselMode.TextOnly)
-                SetText(props.Text);
+                SetText(props.Text, props.Localized);
             if (mode == CarouselMode.ImageOnly)
                 SetImage(props.Sprite);
             
             _value = props.Value;
             button.onClick.AddListener(clickCallback.Invoke);
-            
+
+            DisplayLabel();
             gameObject.SetActive(true);
         }
 
         private void SetAll(CarouselProps props)
         {
-            SetText(props.Text);
+            SetText(props.Text, props.Localized);
             SetImage(props.Sprite);
         }
 
-        private void SetText(string text) => label.text = text;
+        private void SetText(string text, bool localized)
+        {
+            _text = text;
+            _localized = localized;
+        }
         
         private void SetImage(Sprite sprite) => image.sprite = sprite;
+
+        /// <summary>
+        /// Отображает локализованное значение
+        /// </summary>
+        private void DisplayLabel() =>
+            label.text = _localized ? LocalizationManager.Instance.Get(_text) : _text;
+        
+        /// <summary>
+        /// Обрабатывает смену языка 
+        /// </summary>
+        private void OnLandChanged(object[] args)
+        {
+            DisplayLabel();
+        }
+
+        private void OnDestroy()
+        {
+            EventManager.RemoveHandler(EventType.LangChanged, OnLandChanged);
+        }
     }
 
     [Serializable]
     public class CarouselProps
     {
+        public bool Localized;
         public string Text;
         public Sprite Sprite;
      

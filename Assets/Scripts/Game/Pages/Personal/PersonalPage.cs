@@ -6,6 +6,7 @@ using Models.Info.Production;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Personal
 {
@@ -129,7 +130,7 @@ namespace Game.Pages.Personal
         {
             var bestTrack = trackList.OrderByDescending(e => e.ListenAmount).FirstOrDefault();
             bestTrackName.text = bestTrack != null ? bestTrack.Name : "NO TRACK YET";
-            listenAmount.text = bestTrack != null ? bestTrack.ListenAmount.ToString() : "0";
+            listenAmount.text = bestTrack != null ? bestTrack.ListenAmount.GetDisplay() : "0";
         }
 
         /// <summary>

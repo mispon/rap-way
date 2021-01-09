@@ -41,8 +41,6 @@ namespace Game.Pages.GameEvent
             PlayerManager.Instance.AddHype(income.Hype);
         }
 
-        #region PAGE CALLBACKS
-        
         protected override void BeforePageOpen()
         {
             descriptionText.text = _eventDecision.DecisionUi.Description;
@@ -72,8 +70,6 @@ namespace Game.Pages.GameEvent
             SaveResult();
             _eventDecision = null;
         }
-        
-        #endregion
     }
 
     public static class Extensions
@@ -83,10 +79,11 @@ namespace Game.Pages.GameEvent
         /// </summary>
         public static void SetMetricsInfo(this Text component, int value)
         {
-            var isActive = (value == 0);
-            component.gameObject.SetActive(isActive);
-            if (isActive)
-                component.text = value.DisplayShort();
+            if (value == 0)
+            {
+                component.text = $"{value.GetDisplay()}";
+                component.gameObject.SetActive(true);
+            }
         }
 
         /// <summary>
@@ -94,7 +91,7 @@ namespace Game.Pages.GameEvent
         /// </summary>
         public static void ClearMetricsInfo(this Text component)
         {
-            component.text = "";
+            component.text = string.Empty;
             component.gameObject.SetActive(false);
         }
     }

@@ -26,7 +26,7 @@ namespace Models.Game
             Trends = Trends.New,
             Lang = SystemLanguage.Russian,
             SoundVolume = 1f,
-            MusicVolume = 0.5f
+            MusicVolume = 1f
         };
     }
 }

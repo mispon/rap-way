@@ -2,7 +2,6 @@
 using Game.Notifications;
 using UnityEngine;
 using UnityEngine.UI;
-using Achiev = Models.Player.Achievement;
 
 namespace Game.Pages.Achievement
 {
@@ -35,7 +34,6 @@ namespace Game.Pages.Achievement
                 Open();
         }
 
-        #region PAGE EVENTS
         protected override void BeforePageOpen()
         {
             transform.localScale = Vector3.zero;
@@ -57,8 +55,8 @@ namespace Game.Pages.Achievement
 
         protected override void AfterPageClose()
         {
-            achievementText.text = "";
-            descriptionText.text = "";
+            achievementText.text = string.Empty;
+            descriptionText.text = string.Empty;
             _achievementDescriptions.RemoveAt(0);
 
             transform.localScale = Vector3.zero;
@@ -66,6 +64,5 @@ namespace Game.Pages.Achievement
             if (_achievementDescriptions.Count > 0)
                 Open();
         }
-        #endregion
     }
 }

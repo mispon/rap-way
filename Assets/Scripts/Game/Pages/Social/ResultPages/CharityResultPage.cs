@@ -19,9 +19,9 @@ namespace Game.Pages.Social.ResultPages
         /// </summary>
         protected override void DisplayResult(SocialInfo info)
         {
-            message.text = $"СЕГОДНЯ ФОНД <color=#00fff4>«{info.AdditionalText}»</color> " +
-                           $"ПОЛУЧИЛ {info.CharityAmount.DisplayMoney()} " +
-                           $"С СООБЩЕНИЕМ: <color=#00fff4>«{info.MainText}»</color>";
+            message.text = @$"СЕГОДНЯ ФОНД <color=#00fff4>«{info.AdditionalText}»</color>
+                             ПОЛУЧИЛ {info.CharityAmount.GetDisplay()}$
+                             С СООБЩЕНИЕМ: <color=#00fff4>«{info.MainText}»</color>";
             hype.text = $"+{info.HypeIncome}";
         }
     }

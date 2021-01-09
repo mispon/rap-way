@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Core;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,6 +68,8 @@ namespace Game.Pages.History.HistoryProduction
         /// </summary>
         public void Show()
         {
+            SoundManager.Instance.PlaySwitch();
+            
             _historyPage.ShowInfo(this);
 
             var productionInfo = PlayerProductionInfos();
@@ -111,14 +114,17 @@ namespace Game.Pages.History.HistoryProduction
         {
             var newElementsCount = productionInfo.Length - generatedItemsList.Count;
             foreach (var generatedItems in generatedItemsList)
+            {
                 generatedItems.UpdateNum(newElementsCount);
-            
+            }
+
             for (int i = 0; i < newElementsCount; i++)
             {
                 var itemController = _scrollViewController.InstantiatedElement(templateObject);
-                itemController.Initialize(i+1, productionInfo[i].HistoryInfo);
+                itemController.Initialize(i + 1, productionInfo[i].HistoryInfo);
                 generatedItemsList.Add(itemController);
             }
+            
             _scrollViewController.RepositionElements(generatedItemsList);
         }
     }

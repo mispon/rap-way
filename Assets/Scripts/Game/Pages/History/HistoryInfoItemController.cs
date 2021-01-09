@@ -8,9 +8,17 @@ namespace Game.Pages.History
     /// </summary>
     public class HistoryInfoItemController: MonoBehaviour
     {
+        [SerializeField] private Image panel;
+        
         [Header("Поля данных")]
         [SerializeField] private Text numText;
         [SerializeField] private Text[] infoTexts;
+
+        [Header("Цвета")]
+        [SerializeField] private Color oddRowColor;
+        [SerializeField] private Color evenRowColor;
+        [SerializeField] private Color oddTextColor;
+        [SerializeField] private Color evenTextColor;
 
         private int _orderNumber;
         private RectTransform _rectTransform;
@@ -24,9 +32,14 @@ namespace Game.Pages.History
             set
             {
                 _orderNumber = value;
-                numText.text = $"{_orderNumber}.";
+                numText.text = $"{_orderNumber}";
             }
         }
+
+        /// <summary>
+        /// Четность элемента в списке
+        /// </summary>
+        private bool isEven => _orderNumber % 2 == 0;
         
         /// <summary>
         /// Высота элемента
@@ -39,8 +52,17 @@ namespace Game.Pages.History
         public void Initialize(int index, string[] infos)
         {
             orderNumber = index;
-            for (int i = 0; i < Mathf.Min(infoTexts.Length, infos.Length); i++)
-                infoTexts[i].text = infos[i];
+
+            panel.color = isEven ? evenRowColor : oddRowColor;
+            numText.color = isEven ? evenTextColor : oddTextColor;
+            
+            int amount = Mathf.Min(infoTexts.Length, infos.Length);
+            for (int i = 0; i < amount; i++)
+            {
+                var item = infoTexts[i];
+                item.text = infos[i];
+                item.color = isEven ? evenTextColor : oddTextColor;
+            }
         }
 
         /// <summary>

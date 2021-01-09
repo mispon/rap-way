@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Utils.Extensions;
 
 namespace Models.Info.Production
 {
@@ -24,7 +25,7 @@ namespace Models.Info.Production
         public override string[] HistoryInfo => new[]
         {
             Name,
-            Views.ToString(),
+            Views.GetDisplay(),
             $"{Likes} / {Dislikes}"
         };
 

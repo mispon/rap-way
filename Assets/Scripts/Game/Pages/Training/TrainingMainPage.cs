@@ -2,7 +2,7 @@ using System;
 using Game.Pages.Training.Tabs;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
+using Utils.Carousel;
 
 namespace Game.Pages.Training
 {
@@ -12,7 +12,7 @@ namespace Game.Pages.Training
     public class TrainingMainPage : Page
     {
         [Header("Контролы")]
-        [SerializeField] private Switcher tabsSwitcher;
+        [SerializeField] private Carousel tabsCarousel;
         [SerializeField] private TrainingTab[] tabs;
         [SerializeField] private Text expLabel;
 
@@ -20,7 +20,7 @@ namespace Game.Pages.Training
 
         private void Start()
         {
-            tabsSwitcher.onIndexChange += OnTabChanged;
+            tabsCarousel.onChange += OnTabChanged;
 
             foreach (var tab in tabs)
             {
@@ -36,7 +36,6 @@ namespace Game.Pages.Training
         {
             Open();
             OpenTab(tabIndex);
-            tabsSwitcher.SetActive(tabIndex);
         }
 
         /// <summary>
@@ -92,19 +91,19 @@ namespace Game.Pages.Training
         protected override void BeforePageOpen()
         {
             DisplayExp();
-            tabsSwitcher.InstantiateElements(new [] {"Навыки", "Умения", "Стили", "Команда"});
-            tabsSwitcher.ResetActive(true);
             OpenTab(0);
+        }
+
+        protected override void AfterPageClose()
+        {
+            tabsCarousel.SetIndex(0);
         }
 
         private void OnDestroy()
         {
-            tabsSwitcher.onIndexChange -= OnTabChanged;
-            
+            tabsCarousel.onChange -= OnTabChanged;
             foreach (var tab in tabs)
-            {
                 tab.onStartTraining -= ApplyTraining;
-            }
         }
     }
 }

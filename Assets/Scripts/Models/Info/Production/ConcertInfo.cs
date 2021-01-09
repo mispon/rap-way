@@ -1,4 +1,5 @@
 ﻿using System;
+using Utils.Extensions;
 
 namespace Models.Info.Production
 {
@@ -26,8 +27,8 @@ namespace Models.Info.Production
         {
             Name,
             LocationName,
-            TicketCost.ToString(),
-            Income.ToString()
+            TicketCost.GetDisplay(),
+            Income.GetDisplay()
         };
         
         public override string GetLog() {

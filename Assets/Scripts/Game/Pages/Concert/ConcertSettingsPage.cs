@@ -8,6 +8,7 @@ using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
+using Utils.Extensions;
 
 namespace Game.Pages.Concert
 {
@@ -113,16 +114,16 @@ namespace Game.Pages.Concert
             _concert.LocationId = index;
             _concert.LocationName = place.NameKey;
             _concert.LocationCapacity = place.Capacity;
-            placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity:N0}";
+            placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity.GetDisplay()}";
 
             _placeCost = place.Cost;
-            concertPrice.SetValue($"АРЕНДА: {_placeCost:N0}$");
+            concertPrice.SetValue($"АРЕНДА: {_placeCost.GetDisplay()}$");
 
             ticketCostSlider.minValue = place.TicketMinCost;
             ticketCostSlider.maxValue = place.TicketMaxCost;
             ResetTicketCost();
 
-            fansRequirementLabel.text = $"*НЕОБХОДИМО {place.FansRequirement:N0} ФАНАТОВ";
+            fansRequirementLabel.text = $"*НЕОБХОДИМО <color=#F6C326>{place.FansRequirement.GetDisplay()}</color> ФАНАТОВ";
             CheckConcertConditions(place.FansRequirement);
         }
 
@@ -131,9 +132,9 @@ namespace Game.Pages.Concert
         /// </summary>
         private void OnTicketPriceChanged(float value)
         {
-            var cost = (int) value;
+            int cost = Mathf.RoundToInt(value);
             _concert.TicketCost = cost;
-            ticketCost.text = $"{cost:N0}$";
+            ticketCost.text = $"{cost.GetDisplay()}$";
         }
 
         /// <summary>
@@ -152,9 +153,9 @@ namespace Game.Pages.Concert
         /// </summary>
         private void ResetTicketCost()
         {
-            var minValue = ticketCostSlider.minValue;
+            int minValue = Mathf.RoundToInt(ticketCostSlider.minValue);
             ticketCostSlider.SetValueWithoutNotify(minValue);
-            ticketCost.text = $"{minValue:N0}$";
+            ticketCost.text = $"{minValue.GetDisplay()}$";
         }
 
         /// <summary>

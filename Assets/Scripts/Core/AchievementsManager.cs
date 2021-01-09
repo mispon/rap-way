@@ -155,7 +155,7 @@ namespace Core
         /// </summary>
         private void BaseCheckValue(AchievementsType type, int value)
         {
-            if(!TryGetInfo(type, out var lockedInfos))
+            if (!TryGetInfo(type, out var lockedInfos))
                 return;
             
             var achievementInfo = lockedInfos.OrderBy(info => info.Achievement.CompareValue).First();
@@ -170,7 +170,7 @@ namespace Core
         /// </summary>
         private void MultipleCheckValue(AchievementsType type, int value, Func<AchievementInfo, int> orderSelector)
         {
-            if(!TryGetInfo(type, out var lockedInfos))
+            if (!TryGetInfo(type, out var lockedInfos))
                 return;
 
             var achievementInfos = lockedInfos
@@ -226,12 +226,13 @@ namespace Core
             {
                 newAchievementEffect.Show(newAchievementSprite, () =>
                 {
-                    var compareValueString = GetCompareValueString(achievement);
-                    var localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
-                    var achievementString = $"{localizedAchievementName}: {compareValueString}";
-                    var description = "Some description"; // todo: Добавить дескриптион для ачивки
+                    string compareValueString = GetCompareValueString(achievement);
+                    string localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
+                    string achievementString = $"{localizedAchievementName}: {compareValueString}";
+                    string description = "Some description"; // todo: Добавить описание ачивки
             
                     newAchievementsPage.ShowNewAchievement(achievementString, description);
+                    SoundManager.Instance.PlayAchieve();
                 }, true);
             }
             
@@ -246,18 +247,12 @@ namespace Core
             switch (achievement.Type)
             {
                 case AchievementsType.ConcertPlace:
-                {
                     return _lastConcertPlaceName;
-                }
                 case AchievementsType.Feat:
                 case AchievementsType.Battle:
-                {
                     return _lastRapperName;
-                }
                 default:
-                {
-                    return achievement.CompareValue.DisplayShort();
-                }
+                    return $"{achievement.CompareValue.GetDisplay()}";
             }
         }
     }

@@ -34,7 +34,7 @@ namespace Game.UI.MainMenu
             maleButton.onClick.AddListener(() => OnGenderChange(true));
             femaleButton.onClick.AddListener(() => OnGenderChange(false));
             startButton.onClick.AddListener(OnStartClick);
-            backButton.onClick.AddListener(() => MainMenuController.SetPanelActivity(gameObject, false));
+            backButton.onClick.AddListener(OnClose);
         }
 
         /// <summary>
@@ -42,6 +42,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void OnGenderChange(bool isMale)
         {
+            SoundManager.Instance.PlayClick();
             _maleSelected = isMale;
             maleButton.image.sprite = isMale ? maleAvatar : maleAvatarInactive;
             femaleButton.image.sprite = !isMale ? femaleAvatar : femaleAvatarInactive;
@@ -52,9 +53,11 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void OnStartClick()
         {
+            SoundManager.Instance.PlayClick();
+
             if (inputFields.Any(field => !CheckNotNullOrEmpty(field)))
                 return;
-
+            
             CreatePlayer();
         }
         
@@ -95,6 +98,12 @@ namespace Game.UI.MainMenu
             player.CreationDate = DateTime.Now;
 
             SceneManager.Instance.LoadGameScene();
+        }
+
+        private void OnClose()
+        {
+            SoundManager.Instance.PlayClick();
+            MainMenuController.SetPanelActivity(gameObject, false);
         }
     }
 }

@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,13 @@ namespace Game.UI.MainMenu
 
         private void Start()
         {
-            okButton.onClick.AddListener(() => MainMenuController.SetPanelActivity(gameObject, false));
+            okButton.onClick.AddListener(OnClose);
+        }
+
+        private void OnClose()
+        {
+            SoundManager.Instance.PlayClick();            
+            MainMenuController.SetPanelActivity(gameObject, false);
         }
     }
 }

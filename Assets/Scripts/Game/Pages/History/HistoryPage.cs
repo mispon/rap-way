@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Game.Pages.History.HistoryProduction;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.Pages.History
 {
@@ -51,13 +50,17 @@ namespace Game.Pages.History
         private void RequestDisableElements(HistoryProductionController requestController)
         {
             foreach (var productionController in historyControllers.Where(hc => hc != requestController))
+            {
                 productionController.SetActiveElements(false);
+            }
         }
 
         protected override void BeforePageOpen()
         {
             foreach (var historyController in historyControllers)
-                historyController.Initialize(this, scrollViewController);
+            {
+                historyController.Initialize(this, scrollViewController);   
+            }
             
             trackHistoryController.Show();
         }

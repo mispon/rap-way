@@ -16,7 +16,7 @@ namespace Game.Pages.Concert
         private static readonly Color FlexingGraphicStartColor = new Color(1, 1, 1, 0);
 
         [Header("Персонаж")]
-        [SerializeField] private SkeletonGraphic maleCharacter;
+        [SerializeField] private Image maleCharacter;
         [SerializeField] private SkeletonGraphic femaleCharacter;
         
         [Header("Анимации флекса")] 
@@ -58,7 +58,10 @@ namespace Game.Pages.Concert
 
         protected override void AfterPageOpen()
         {
-            femaleCharacter.color = FlexingGraphicStartColor;
+            var gender = PlayerManager.Data.Info.Gender;
+            maleCharacter.gameObject.SetActive(gender == Gender.Male);
+            femaleCharacter.gameObject.SetActive(gender == Gender.Female);
+            
             flexingGraphic.color = FlexingGraphicStartColor;
             FillDanceFloor();
         }

@@ -10,8 +10,8 @@ namespace Game.Pages.History.HistoryProduction
     [Serializable]
     public class HistoryTrackController: HistoryProductionController
     {
-        protected override Production[] PlayerProductionInfos()
-            => PlayerManager.Data.History.TrackList
+        protected override Production[] PlayerProductionInfos() => 
+            PlayerManager.Data.History.TrackList
                 .OrderByDescending(track => track.Id)
                 .ToArray();
     }

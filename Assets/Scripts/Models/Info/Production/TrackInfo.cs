@@ -1,5 +1,4 @@
 ﻿using Data;
-using Enums;
 using Utils.Extensions;
 
 namespace Models.Info.Production
@@ -23,7 +22,7 @@ namespace Models.Info.Production
             Name,
             TrendInfo.Style.GetDescription(),
             TrendInfo.Theme.GetDescription(),
-            ListenAmount.ToString(),
+            ListenAmount.GetDisplay(),
             ChartPosition.ToString()
         };
         
