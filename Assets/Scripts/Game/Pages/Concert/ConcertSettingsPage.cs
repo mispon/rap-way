@@ -61,7 +61,7 @@ namespace Game.Pages.Concert
         /// <summary>
         /// Конвертирует площадку в свойство карусели
         /// </summary>
-        private CarouselProps ConvertPlaceToCarouselProps(ConcertPlace placeInfo)
+        private static CarouselProps ConvertPlaceToCarouselProps(ConcertPlace placeInfo)
         {
             return new CarouselProps
             {
@@ -73,7 +73,7 @@ namespace Game.Pages.Concert
         /// <summary>
         /// Конвертирует альбом в свойство карусели
         /// </summary>
-        private CarouselProps ConvertAlbumToCarouselProps(AlbumInfo albumInfo)
+        private static CarouselProps ConvertAlbumToCarouselProps(AlbumInfo albumInfo)
         {
             return new CarouselProps
             {
@@ -113,16 +113,16 @@ namespace Game.Pages.Concert
             _concert.LocationId = index;
             _concert.LocationName = place.NameKey;
             _concert.LocationCapacity = place.Capacity;
-            placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity}";
+            placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity:N0}";
 
             _placeCost = place.Cost;
-            concertPrice.SetValue($"АРЕНДА: {_placeCost} $");
+            concertPrice.SetValue($"АРЕНДА: {_placeCost:N0}$");
 
             ticketCostSlider.minValue = place.TicketMinCost;
             ticketCostSlider.maxValue = place.TicketMaxCost;
             ResetTicketCost();
 
-            fansRequirementLabel.text = $"НЕОБХОДИМО ФАНАТОВ: {place.FansRequirement}";
+            fansRequirementLabel.text = $"*НЕОБХОДИМО {place.FansRequirement:N0} ФАНАТОВ";
             CheckConcertConditions(place.FansRequirement);
         }
 
@@ -133,7 +133,7 @@ namespace Game.Pages.Concert
         {
             var cost = (int) value;
             _concert.TicketCost = cost;
-            ticketCost.text = $"{cost} $";
+            ticketCost.text = $"{cost:N0}$";
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Game.Pages.Concert
         {
             var minValue = ticketCostSlider.minValue;
             ticketCostSlider.SetValueWithoutNotify(minValue);
-            ticketCost.text = $"{minValue} $";
+            ticketCost.text = $"{minValue:N0}$";
         }
 
         /// <summary>
@@ -167,8 +167,6 @@ namespace Game.Pages.Concert
 
             startButton.interactable = canStart;
         }
-
-        #region PAGE EVENTS
 
         protected override void BeforePageOpen()
         {
@@ -192,7 +190,5 @@ namespace Game.Pages.Concert
             _lastAlbums.Clear();
             ResetTicketCost();
         }
-
-        #endregion
     }
 }
