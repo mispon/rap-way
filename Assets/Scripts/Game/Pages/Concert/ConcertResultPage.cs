@@ -3,6 +3,7 @@ using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Concert
 {
@@ -44,10 +45,10 @@ namespace Game.Pages.Concert
         /// </summary>
         private void DisplayResult(ConcertInfo concert)
         {
-            header.text = $"Концерт в \"{concert.LocationName}\" завершен!";
-            ticketsSold.text = $"ПРОДАНО {concert.TicketsSold} билетов";
-            ticketCost.text = $"ЦЕНА БИЛЕТА: {concert.TicketCost}$";
-            moneyIncome.text = $"ДОХОД: +{concert.Income}$";
+            header.text = $"Концерт в <color=#01C6B8>\"{concert.LocationName}\"</color> завершен!";
+            ticketsSold.text = $"ПРОДАНО <color=#F6C326>{concert.TicketsSold.GetDisplay()}</color> билетов";
+            ticketCost.text = $"ЦЕНА БИЛЕТА: <color=#00F475>{concert.TicketCost.GetDisplay()}$</color>";
+            moneyIncome.text = $"+{concert.Income.GetDisplay()}$";
         }
 
         /// <summary>

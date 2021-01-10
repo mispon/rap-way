@@ -2,6 +2,7 @@
 using System.Linq;
 using Core;
 using Data;
+using Enums;
 using Game.UI;
 using Game.UI.GameScreen;
 using Models.Info.Production;
@@ -9,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
 using Utils.Extensions;
+using EventType = Core.EventType;
 
 namespace Game.Pages.Concert
 {
@@ -19,23 +21,27 @@ namespace Game.Pages.Concert
     {
         private const int ALBUMS_CACHE = 5;
 
-        [Header("Компоненты")] 
+        [Header("Контролы")]
         [SerializeField] private Carousel placeCarousel;
+        [SerializeField] private Carousel albumsCarousel;
+        [SerializeField] private Slider ticketCostSlider;
+        [SerializeField] private Button startButton;
+        
+        [Header("Компоненты")]
         [SerializeField] private Text placeCapacityLabel;
         [SerializeField] private Text fansRequirementLabel;
-        [SerializeField] private Carousel albumsCarousel;
-        
-        [Space, SerializeField] private Slider ticketCostSlider;
         [SerializeField] private Text ticketCost;
-        
-        [Space, SerializeField] private Price concertPrice;
-        [SerializeField] private Button startButton;
+        [SerializeField] private Price concertPrice;
+        [Space]
+        [SerializeField] private Image managerAvatar;
+        [SerializeField] private Image prAvatar;
 
         [Header("Страница разработки")] 
         [SerializeField] private ConcertWorkingPage workingPage;
 
         [Header("Данные")] 
         [SerializeField] private ConcertPlacesData placeData;
+        [SerializeField] private ImagesBank imagesBank;
 
         private ConcertInfo _concert;
         private int _placeCost;
@@ -57,6 +63,19 @@ namespace Game.Pages.Concert
             var placeProps = placeData.Places.Select(ConvertPlaceToCarouselProps).ToArray();
             placeCarousel.Init(placeProps);
             placeCarousel.onChange += OnPlaceChanged;
+        }
+        
+        /// <summary>
+        /// Отображает состояние членов команды
+        /// </summary>
+        private void SetupTeam()
+        {
+            managerAvatar.sprite = TeamManager.IsAvailable(TeammateType.Manager)
+                ? imagesBank.ProducerActive
+                : imagesBank.ProducerInactive;
+            prAvatar.sprite = TeamManager.IsAvailable(TeammateType.PrMan)
+                ? imagesBank.PrManActive
+                : imagesBank.PrManInactive;
         }
 
         /// <summary>
@@ -159,6 +178,15 @@ namespace Game.Pages.Concert
         }
 
         /// <summary>
+        /// Сбрасывает состояние команды
+        /// </summary>
+        private void ResetTeam(object[] args)
+        {
+            managerAvatar.sprite = imagesBank.ProducerInactive;
+            prAvatar.sprite = imagesBank.PrManInactive;
+        }
+
+        /// <summary>
         /// Проверяет соответствие всех требований 
         /// </summary>
         private void CheckConcertConditions(int fansRequirement)
@@ -180,13 +208,17 @@ namespace Game.Pages.Concert
                 : new[] {new CarouselProps {Text = "Нет альбомов", Value = new AlbumInfo()}};
             albumsCarousel.Init(albumProps);
 
+            SetupTeam();
             OnPlaceChanged(0);
 
+            EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
             GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()
         {
+            EventManager.RemoveHandler(EventType.UncleSamsParty, ResetTeam);
+            
             _concert = null;
             _lastAlbums.Clear();
             ResetTicketCost();

@@ -1,3 +1,4 @@
+using Core;
 using Data;
 using Enums;
 using UnityEngine;
@@ -42,6 +43,7 @@ namespace Game.Pages.Rappers
             _isFeat = (bool) args[1];
             
             Open();
+            RefreshWorkAnims();
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         protected override void DoDayWork()
         {
+            SoundManager.Instance.PlayWorkPoint();
             GeneratePlayerWorkPoints();
             GenerateRapperWorkPoints();
         }

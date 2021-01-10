@@ -37,6 +37,18 @@ namespace Game.Pages
 
             DoDayWork();
         }
+
+        /// <summary>
+        /// Обновляет состояние аницаций работы
+        /// </summary>
+        protected void RefreshWorkAnims()
+        {
+            var anims = GetComponentsInChildren<ProductionAnim>();
+            foreach (var anim in anims)
+            {
+                anim.Refresh();
+            }
+        }
         
         protected override void AfterPageOpen()
         {

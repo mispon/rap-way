@@ -14,7 +14,8 @@ namespace Game.Pages.Rappers
     public class RapperResultPage : Page
     {
         [Header("Контролы")]
-        [SerializeField] private Text header;
+        [SerializeField] private Text message;
+        [SerializeField] private Image rapperAvatar;
         [Space]
         [SerializeField] private Button okButton;
         [SerializeField] private Button cancelButton;
@@ -63,7 +64,8 @@ namespace Game.Pages.Rappers
         private void DisplayResult(bool result, string rapperName)
         {
             string key = result ? "conversations_success" : "conversations_fail";
-            header.text = $"{LocalizationManager.Instance.Get(key)} {rapperName}!";
+            message.text = $"{LocalizationManager.Instance.Get(key)} <color=#01C6B8>{rapperName}</color>!";
+            rapperAvatar.sprite = _rapper.Avatar;
             
             okButton.gameObject.SetActive(!result);
             cancelButton.gameObject.SetActive(result);

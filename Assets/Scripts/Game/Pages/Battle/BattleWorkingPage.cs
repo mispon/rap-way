@@ -1,3 +1,4 @@
+using Core;
 using Data;
 using Enums;
 using UnityEngine;
@@ -11,8 +12,10 @@ namespace Game.Pages.Battle
     public class BattleWorkingPage : BaseWorkingPage
     {
         [Header("Контролы")] 
-        [SerializeField] private Text header;
+        [SerializeField] private Text playerName;
+        [SerializeField] private Text rapperName;
         [Space]
+        [SerializeField] private Image playerAvatar;
         [SerializeField] private Text playerPointsLabel;
         [SerializeField] private WorkPoints playerWorkPoints;
         [Space]
@@ -28,7 +31,10 @@ namespace Game.Pages.Battle
         [SerializeField] private WorkPoints punchPoint;
         [SerializeField] private WorkPoints flipPoint;
 
-        [Header("Страница результата")] 
+        [Header("Данные")]
+        [SerializeField] private ImagesBank imagesBank;
+        
+        [Header("Страница результата")]
         [SerializeField] private BattleResultPage battleResult;
 
         private RapperInfo _rapper;
@@ -42,6 +48,7 @@ namespace Game.Pages.Battle
         {
             _rapper = (RapperInfo) args[0];
             Open();
+            RefreshWorkAnims();
         }
 
         /// <summary>
@@ -49,6 +56,7 @@ namespace Game.Pages.Battle
         /// </summary>
         protected override void DoDayWork()
         {
+            SoundManager.Instance.PlayWorkPoint();
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
@@ -114,7 +122,7 @@ namespace Game.Pages.Battle
         /// </summary>
         private void DisplayAvailableSkills()
         {
-            void DisplayIfAvailable(Skills skill, WorkPoints workPoint)
+            static void DisplayIfAvailable(Skills skill, WorkPoints workPoint)
             {
                 var icon = workPoint.transform.parent.GetComponent<Image>();
                 icon.enabled = PlayerManager.Data.Skills.Contains(skill);
@@ -129,11 +137,16 @@ namespace Game.Pages.Battle
         
         protected override void BeforePageOpen()
         {
-            header.text = $"{PlayerManager.Data.Info.NickName} VS {_rapper.Name}";
-            playerPointsLabel.text = rapperPointsLabel.text = "0";
+            playerName.text = PlayerManager.Data.Info.NickName;
+            rapperName.text = _rapper.Name;
+            playerPointsLabel.text = "0";
+            rapperPointsLabel.text = "0";
 
             DisplayAvailableSkills();
-            
+
+            playerAvatar.sprite = PlayerManager.Data.Info.Gender == Gender.Male
+                ? imagesBank.MaleAvatar
+                : imagesBank.FemaleAvatar;
             rapperAvatar.sprite = _rapper.Avatar;
         }
 

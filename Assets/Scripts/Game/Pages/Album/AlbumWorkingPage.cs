@@ -43,6 +43,7 @@ namespace Game.Pages.Album
         {
             _album = (AlbumInfo) args[0];
             Open();
+            RefreshWorkAnims();
         }
 
         /// <summary>
@@ -76,6 +77,8 @@ namespace Game.Pages.Album
         /// </summary>
         private void GenerateWorkPoints()
         {
+            SoundManager.Instance.PlayWorkPoint();
+            
             var bitWorkPoints = CreateBitPoints(PlayerManager.Data);
             var textWorkPoints = CreateTextPoints(PlayerManager.Data);
 

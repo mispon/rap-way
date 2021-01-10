@@ -3,6 +3,7 @@ using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Track
 {
@@ -43,14 +44,14 @@ namespace Game.Pages.Track
         private void DisplayResult(TrackInfo track)
         {
             var nickname = PlayerManager.Data.Info.NickName;
-            string featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : "";
-            header.text = $"Завершена работа над треком: \"{nickname} - {track.Name}{featInfo}\"";
-            listenAmount.text = $"Количество прослушиваний: {track.ListenAmount}";
+            string featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : string.Empty;
+            header.text = $"Работа над треком <color=#01C6B8>\"{nickname} - {track.Name}{featInfo}\"</color> завершена";
+            listenAmount.text = $"Композицию прослушали <color=#F6C326>{track.ListenAmount.GetDisplay()}</color> раз!";
             chartInfo.text = track.ChartPosition > 0
-                ? $"Трек занял {track.ChartPosition}-ую позицию в чарте!"
-                : "Трек не попал в топ чарта";
-            fansIncome.text = $"ФАНАТЫ: +{track.FansIncome}";
-            moneyIncome.text = $"ДЕНЬГИ: +{track.MoneyIncome}$";
+                ? $"Трек занял <color=#00F475>{track.ChartPosition}</color> позицию в чарте!"
+                : "Трек не попал в топ чартов";
+            fansIncome.text = $"+{track.FansIncome.GetDisplay()}";
+            moneyIncome.text = $"+{track.MoneyIncome.GetDisplay()}$";
         }
 
         /// <summary>

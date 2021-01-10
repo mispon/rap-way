@@ -1,9 +1,9 @@
 ﻿using Core;
 using Game.Analyzers;
-using Game.UI.GameScreen;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Album
 {
@@ -44,13 +44,13 @@ namespace Game.Pages.Album
         private void DisplayResult(AlbumInfo album)
         {
             var nickname = PlayerManager.Data.Info.NickName;
-            header.text = $"Завершена работа над альбомом: \"{nickname} - {album.Name}\"";
-            listenAmount.text = $"Количество прослушиваний: {album.ListenAmount}";
+            header.text = $"Работа над альбомом <color=#01C6B8>\"{nickname} - {album.Name}\"</color> завершена";
+            listenAmount.text = $"Альбом послушали <color=#F6C326>{album.ListenAmount}</color> раз!";
             chartInfo.text = album.ChartPosition > 0
-                ? $"Альбом занял {album.ChartPosition}-ую позицию в чарте!"
-                : "Альбом не попал в топ чарта";
-            fansIncome.text = $"ФАНАТЫ: +{album.FansIncome}";
-            moneyIncome.text = $"ДЕНЬГИ: +{album.MoneyIncome}$";
+                ? $"Альбом занял <color=#00F475>{album.ChartPosition}</color> позицию в чарте!"
+                : "Альбом не попал в топ чартов";
+            fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
+            moneyIncome.text = $"+{album.MoneyIncome.GetDisplay()}$";
         }
 
         /// <summary>

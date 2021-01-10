@@ -10,42 +10,29 @@ namespace Game.Pages.Achievement
     /// </summary>
     public class NewAchievementsPage: Page
     {
-        [Header("Анимация окна")]
-        [SerializeField] private Animation windowAnimation;
-
-        [Header("Контроллы текста")]
         [SerializeField] private Text achievementText;
-        [SerializeField] private Text descriptionText;
 
         /// <summary>
         /// Список пар строк: наименование ачивки и ее описание
         /// </summary>
-        private readonly List<KeyValuePair<string, string>> _achievementDescriptions 
-            = new List<KeyValuePair<string, string>>();
+        private readonly Queue<string> _achievements = new Queue<string>();
 
         /// <summary>
         /// Добавляет новую ачивку в очередь и запускает ее отображение, если страница закрыта
         /// </summary>
-        public void ShowNewAchievement(string achievement, string description)
+        public void ShowNewAchievement(string achievement)
         {
-            _achievementDescriptions.Add(new KeyValuePair<string, string>(achievement, description));
+            _achievements.Enqueue(achievement);
 
             if (!gameObject.activeSelf)
+            {
                 Open();
+            }
         }
 
         protected override void BeforePageOpen()
         {
-            transform.localScale = Vector3.zero;
-
-            var achievementDescription = _achievementDescriptions[0];
-            achievementText.text = achievementDescription.Key;
-            descriptionText.text = achievementDescription.Value;
-        }
-
-        protected override void AfterPageOpen()
-        {
-            windowAnimation.Play();
+            achievementText.text = _achievements.Dequeue();
         }
 
         protected override void BeforePageClose()
@@ -56,13 +43,11 @@ namespace Game.Pages.Achievement
         protected override void AfterPageClose()
         {
             achievementText.text = string.Empty;
-            descriptionText.text = string.Empty;
-            _achievementDescriptions.RemoveAt(0);
 
-            transform.localScale = Vector3.zero;
-
-            if (_achievementDescriptions.Count > 0)
+            if (_achievements.Count > 0)
+            {
                 Open();
+            }
         }
     }
 }

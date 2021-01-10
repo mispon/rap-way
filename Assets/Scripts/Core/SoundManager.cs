@@ -25,7 +25,6 @@ namespace Core
         [SerializeField] private AudioClip workPoint;
         [SerializeField] private AudioClip unlock;
         [SerializeField] private AudioClip achive;
-        [SerializeField] private AudioClip concert;
 
         private int _ambientIndex;
 
@@ -91,7 +90,6 @@ namespace Core
         public void PlayWorkPoint() => PlaySound(workPoint);
         public void PlayUnlock() => PlaySound(unlock);
         public void PlayAchieve() => PlaySound(achive);
-        public void PlayConcert() => PlaySound(concert);
 
         #endregion
     }

@@ -19,9 +19,14 @@ namespace Game.Pages.Social.ResultPages
         /// </summary>
         protected override void DisplayResult(SocialInfo info)
         {
-            message.text = @$"СЕГОДНЯ ФОНД <color=#00fff4>«{info.AdditionalText}»</color>
-                             ПОЛУЧИЛ {info.CharityAmount.GetDisplay()}$
-                             С СООБЩЕНИЕМ: <color=#00fff4>«{info.MainText}»</color>";
+            bool noFondName = string.IsNullOrEmpty(info.AdditionalText);
+            bool noMessage = string.IsNullOrEmpty(info.MainText);
+
+            string fondPart = noFondName ? "НЕКИЙ ФОНД" : $"ФОНД <color=#00fff4>«{info.AdditionalText}»</color>";
+            string messagePart = noMessage ? "БЕЗ СООБЩЕНИЯ" : $"С СООБЩЕНИЕМ: <color=#00fff4>«{info.MainText}»</color>";
+            string moneyPart = $"<color=#00F475>{info.CharityAmount.GetDisplay()}$</color>";
+
+            message.text = $"СЕГОДНЯ {fondPart} ПОЛУЧИЛ {moneyPart} {messagePart}";
             hype.text = $"+{info.HypeIncome}";
         }
     }

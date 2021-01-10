@@ -3,6 +3,7 @@ using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Clip
 {
@@ -42,11 +43,11 @@ namespace Game.Pages.Clip
         /// </summary>
         private void DisplayResult(ClipInfo clip)
         {
-            header.text = $"Завершена работа над клипом трека \"{ProductionManager.GetTrackName(clip.TrackId)}\"";
-            viewsAmount.text = $"ПРОСМОТРЫ: {clip.Views}";
-            likesAndDislikes.text = $"{clip.Likes} лайков / {clip.Dislikes} дизлайков";
-            fansIncome.text = $"ФАНАТЫ: +{clip.FansIncome}";
-            moneyIncome.text = $"ДЕНЬГИ: +{clip.MoneyIncome}$";
+            header.text = $"Работа над клипом для трека <color=#01C6B8>\"{ProductionManager.GetTrackName(clip.TrackId)}\"</color> завершена";
+            viewsAmount.text = $"Просмотры: <color=#F6C326>{clip.Views.GetDisplay()}</color>";
+            likesAndDislikes.text = $"<color=#00F475>+{clip.Likes.GetDisplay()}</color> / <color=#FF4E4E>-{clip.Dislikes.GetDisplay()}</color>";
+            fansIncome.text = $"+{clip.FansIncome.GetDisplay()}";
+            moneyIncome.text = $"+{clip.MoneyIncome.GetDisplay()}$";
         }
         
         /// <summary>

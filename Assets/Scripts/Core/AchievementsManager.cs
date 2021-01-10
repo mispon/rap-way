@@ -190,15 +190,16 @@ namespace Core
         /// </summary>
         private void EqualCheckValue(AchievementsType type, int value, [CanBeNull] Action clearBufferVariable)
         {
-            if(!TryGetInfo(type, out var lockedInfos))
+            if (!TryGetInfo(type, out var lockedInfos))
                 return;
 
-            var achievementInfo =
-                lockedInfos.FirstOrDefault(info => info.CheckCondition(value, info.Achievement.CompareValue));
-            
-            if(achievementInfo != default)
-                AddAchievement(achievementInfo.Achievement);
+            var achievementInfo = lockedInfos.FirstOrDefault(info => info.CheckCondition(value, info.Achievement.CompareValue));
 
+            if (achievementInfo != default)
+            {
+                AddAchievement(achievementInfo.Achievement);
+            }
+            
             clearBufferVariable?.Invoke();
         }
 
@@ -224,16 +225,12 @@ namespace Core
 
             void Notification()
             {
-                newAchievementEffect.Show(newAchievementSprite, () =>
-                {
-                    string compareValueString = GetCompareValueString(achievement);
-                    string localizedAchievementName = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
-                    string achievementString = $"{localizedAchievementName}: {compareValueString}";
-                    string description = "Some description"; // todo: Добавить описание ачивки
+                string achivementTemplate = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
+                string achivementValue = $"<color=#01C6B8>{GetCompareValueString(achievement)}</color>";
+                string achievementInfo = string.Format(achivementTemplate, achivementValue);
             
-                    newAchievementsPage.ShowNewAchievement(achievementString, description);
-                    SoundManager.Instance.PlayAchieve();
-                }, true);
+                newAchievementsPage.ShowNewAchievement(achievementInfo);
+                SoundManager.Instance.PlayAchieve();
             }
             
             NotificationManager.Instance.AddIndependentNotification(Notification);

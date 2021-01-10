@@ -90,8 +90,7 @@ namespace Game
                 return;
 
             int fans = PlayerManager.Data.Fans;
-            var lockedTeammate = lockedTeammates
-                .FirstOrDefault(e => GetInfo(e.Type).FansToUnlock <= fans);
+            var lockedTeammate = lockedTeammates.FirstOrDefault(e => GetInfo(e.Type).FansToUnlock <= fans);
 
             if (lockedTeammate != null)
                 UnlockTeammate(lockedTeammate);
@@ -107,11 +106,10 @@ namespace Game
 
             void Notification()
             {
+                SoundManager.Instance.PlayAchieve();
+                
                 var info = GetInfo(teammate.Type);
-                newTeammateEffect.Show(
-                    info.Avatar,
-                    () => unlockTeammatePage.Show(teammate, info.Avatar)
-                );
+                newTeammateEffect.Show(info.Avatar, () => unlockTeammatePage.Show(teammate, info.Avatar));
             }
             
             NotificationManager.Instance.AddClickNotification(Notification);

@@ -56,7 +56,9 @@ namespace Game.Notifications
             
             _independentNotificationActions.Enqueue(action);
             if (!_isIndependentVisualized)
+            {
                 CheckIndependentNotificationsStatus();
+            }
         }
         /// <summary>
         /// Разрешает показ новых уведомлений; показывает, если есть.
@@ -84,7 +86,9 @@ namespace Game.Notifications
         {
             _isIndependentVisualized = _independentNotificationActions.Any();
             if (_isIndependentVisualized)
+            {
                 ProcessNotification(_independentNotificationActions, false);
+            }
         }
 
         /// <summary>
@@ -97,9 +101,11 @@ namespace Game.Notifications
             
             var action = actionQueue.Dequeue();
             action.Invoke();
-            
+
             if (isClickNotification)
+            {
                 CheckClickNotificationsStatus();
+            }
         }
     }
 }

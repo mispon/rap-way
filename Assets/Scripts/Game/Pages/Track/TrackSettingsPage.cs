@@ -123,7 +123,7 @@ namespace Game.Pages.Track
         /// <summary>
         /// Сбрасывает состояние членов команды и суммарный скилл команды
         /// </summary>
-        private void DropTeam(object[] args)
+        private void ResetTeam(object[] args)
         {
             bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = imagesBank.TextwritterInactive;
@@ -155,13 +155,13 @@ namespace Game.Pages.Track
             SetupTeam();
             DisplaySkills(data);
 
-            EventManager.AddHandler(EventType.UncleSamsParty, DropTeam);
+            EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
             GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterPageClose()
         {
-            EventManager.RemoveHandler(EventType.UncleSamsParty, DropTeam);
+            EventManager.RemoveHandler(EventType.UncleSamsParty, ResetTeam);
 
             _track = null;
             trackNameInput.SetTextWithoutNotify(string.Empty);

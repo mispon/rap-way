@@ -32,6 +32,7 @@ namespace Game.Pages.Clip
         {
             _clip = (ClipInfo) args[0];
             Open();
+            RefreshWorkAnims();
         }
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace Game.Pages.Clip
         /// </summary>
         protected override void DoDayWork()
         {
+            SoundManager.Instance.PlayWorkPoint();
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
@@ -75,7 +77,7 @@ namespace Game.Pages.Clip
 
             var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 1);
             playerWorkPoints.Show(playerPointsValue);
-            
+
             if (Random.Range(0, 2) > 0)
                 _clip.DirectorPoints += playerPointsValue;
             else

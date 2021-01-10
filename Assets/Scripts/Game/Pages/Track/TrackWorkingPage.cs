@@ -42,6 +42,7 @@ namespace Game.Pages.Track
         {
             _track = (TrackInfo) args[0];
             Open();
+            RefreshWorkAnims();
         }
 
         /// <summary>
@@ -75,6 +76,8 @@ namespace Game.Pages.Track
         /// </summary>
         private void GenerateWorkPoints()
         {
+            SoundManager.Instance.PlayWorkPoint();
+            
             var bitWorkPoints = CreateBitPoints(PlayerManager.Data);
             var textWorkPoints = CreateTextPoints(PlayerManager.Data);
             

@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Core;
+using Data;
 using Enums;
 using Models.Info;
 using UnityEngine;
@@ -33,6 +34,7 @@ namespace Game.Pages.Social
         {
             _social = (SocialInfo) args[0];
             Open();
+            RefreshWorkAnims();
         }
 
         /// <summary>
@@ -40,6 +42,7 @@ namespace Game.Pages.Social
         /// </summary>
         protected override void DoDayWork()
         {
+            SoundManager.Instance.PlayWorkPoint();
             GenerateWorkPoints();
             DisplayWorkPoints();
         }

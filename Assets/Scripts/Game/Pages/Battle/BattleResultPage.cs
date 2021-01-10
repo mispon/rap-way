@@ -61,11 +61,11 @@ namespace Game.Pages.Battle
         {
             var rapperName = _result.RapperInfo.Name;
             resultMessage.text = _result.IsWin
-                ? $"{PlayerManager.Data.Info.NickName} победил в батле с {rapperName}!"
-                : $"{rapperName} победил в батле с {PlayerManager.Data.Info.NickName}!";
-            
-            fansIncome.text = $"ФАНАТЫ: {_result.FansIncome.GetDisplay()}";
-            hypeIncome.text = $"ХАЙП: {_result.HypeIncome}";
+                ? $"<color=#CE93F1>{PlayerManager.Data.Info.NickName}</color> победил в батле с <color=#F6C326>{rapperName}</color>!"
+                : $"<color=#F6C326>{rapperName}</color> победил в батле с <color=#CE93F1>{PlayerManager.Data.Info.NickName}</color>!";
+
+            hypeIncome.text = $"{_result.HypeIncome}";
+            fansIncome.text = $"{_result.FansIncome.GetDisplay()}";
         }
 
         /// <summary>
@@ -75,9 +75,11 @@ namespace Game.Pages.Battle
         {
             PlayerManager.Instance.AddFans(_result.FansIncome, rewardExp);
             PlayerManager.Instance.AddHype(_result.HypeIncome);
-            
+
             if (_result.IsWin)
+            {
                 ProductionManager.AddBattle(_result.RapperInfo);
+            }
         }
 
         protected override void AfterPageClose()

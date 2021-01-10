@@ -1,5 +1,4 @@
-﻿using Core;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Game.Pages
@@ -17,7 +16,6 @@ namespace Game.Pages
         /// </summary>
         public void Show(int value)
         {
-            SoundManager.Instance.PlayWorkPoint();
             label.text = $"+{value}";
             clip.Play();
         }

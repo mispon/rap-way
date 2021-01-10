@@ -19,7 +19,7 @@ namespace Game.UI
         [SerializeField] private ProductionAnimType Type = ProductionAnimType.Touchpad;
         [SerializeField] private bool randomAnim;
 
-        private void Start()
+        public void Refresh()
         {
             var animator = GetComponent<Animator>();
 

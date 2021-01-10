@@ -36,7 +36,12 @@ namespace Game.Analyzers
         /// </summary>
         public override void Analyze(TrackInfo track)
         {
-            var totalFans = PlayerManager.Data.Fans;
+            track.FansIncome = Random.Range(100, 1_000);
+            track.MoneyIncome = Random.Range(track.FansIncome * 10, track.FansIncome * 100);
+            track.ListenAmount = Random.Range(100_000, 10_000_000);
+            track.ChartPosition = Random.Range(1, 101);
+
+            /*var totalFans = PlayerManager.Data.Fans;
             
             GameStatsManager.Analyze(track.TrendInfo);
             
@@ -49,7 +54,7 @@ namespace Game.Analyzers
             var hypeImpact = hypeImpactMultiplier * PlayerManager.Data.Hype;
             var fansIncomeFromListeners = fansIncomeCurve.Evaluate(totalFans) * track.ListenAmount; 
             track.FansIncome = (int) (hypeImpact * fansIncomeFromListeners);
-            track.MoneyIncome = moneyIncomeMultiplier * track.ListenAmount;
+            track.MoneyIncome = moneyIncomeMultiplier * track.ListenAmount;*/
         }
     }
 }

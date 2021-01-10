@@ -1,3 +1,4 @@
+using Core;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +33,7 @@ namespace Game.Pages.Feat
         {
             _track = (TrackInfo) args[0];
             Open();
+            RefreshWorkAnims();
         }
 
         /// <summary>
@@ -39,6 +41,7 @@ namespace Game.Pages.Feat
         /// </summary>
         protected override void DoDayWork()
         {
+            SoundManager.Instance.PlayWorkPoint();
             GenerateWorkPoints();
             DisplayWorkPoints();
         }

@@ -42,6 +42,7 @@ namespace Game.Pages.Concert
         {
             _concert = (ConcertInfo) args[0];
             Open();
+            RefreshWorkAnims();
         }
 
         /// <summary>
@@ -75,6 +76,7 @@ namespace Game.Pages.Concert
         /// </summary>
         private void GenerateWorkPoints()
         {
+            SoundManager.Instance.PlayWorkPoint();
             _concert.ManagementPoints += CreateManagementPoints(PlayerManager.Data);
             _concert.MarketingPoints += CreatePrPoints(PlayerManager.Data);
         }

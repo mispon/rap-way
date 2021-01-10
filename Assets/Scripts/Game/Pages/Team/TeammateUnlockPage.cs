@@ -21,7 +21,7 @@ namespace Game.Pages.Team
         public void Show(Teammate unlockedTeammate, Sprite teammateAvatar)
         {
             var nameKey = unlockedTeammate.Type.GetDescription();
-            teammateName.text = LocalizationManager.Instance.Get(nameKey);
+            teammateName.text = LocalizationManager.Instance.Get(nameKey).ToUpper();
             avatar.sprite = teammateAvatar;
             
             Open();
