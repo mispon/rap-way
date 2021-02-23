@@ -40,16 +40,16 @@ namespace Game.UI.MainMenu
         }
 
         /// <summary>
-        /// Обрабатчик смены языка 
+        /// Обрабатчик смены языка
         /// </summary>
         private void OnLangChanged(int index)
         {
             var lang = StringToLang(langCarousel.GetLabel());
             LocalizationManager.Instance.LoadLocalization(lang, true);
         }
-        
+
         /// <summary>
-        /// Обработчик изменения громкости звука 
+        /// Обработчик изменения громкости звука
         /// </summary>
         private void OnVolumeChanged(float volume)
         {
@@ -57,7 +57,7 @@ namespace Game.UI.MainMenu
         }
 
         /// <summary>
-        /// Сохраняет выбранные настройки 
+        /// Сохраняет выбранные настройки
         /// </summary>
         private void SaveSettings()
         {
@@ -69,29 +69,35 @@ namespace Game.UI.MainMenu
         }
 
         /// <summary>
-        /// Маппит перечисление языков на строковое представление 
+        /// Маппит перечисление языков на строковое представление
         /// </summary>
         private static string LangToString(SystemLanguage value)
         {
-            return value switch
+            switch (value)
             {
-                SystemLanguage.Russian => "RU",
-                SystemLanguage.English => "EN",
-                _ => throw new RapWayException($"LangToString: Не найден матчинг для {value}!")
-            };
+                case SystemLanguage.Russian:
+                    return "RU";
+                case SystemLanguage.English:
+                    return "EN";
+                default:
+                    throw new RapWayException($"LangToString: Не найден матчинг для {value}!");
+            }
         }
-        
+
         /// <summary>
-        /// Маппит строковое представление на перечисление языков 
+        /// Маппит строковое представление на перечисление языков
         /// </summary>
         private static SystemLanguage StringToLang(string value)
         {
-            return value switch
+            switch (value)
             {
-                "RU" => SystemLanguage.Russian,
-                "EN" => SystemLanguage.English,
-                _ => throw new RapWayException($"StringToLang: Не найден матчинг для {value}!")
-            };
+                case "RU":
+                    return SystemLanguage.Russian;
+                case "EN":
+                    return SystemLanguage.English;
+                default:
+                    throw new RapWayException($"StringToLang: Не найден матчинг для {value}!");
+            }
         }
     }
 }

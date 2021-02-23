@@ -11,7 +11,7 @@ namespace Game.Pages.Battle
     /// </summary>
     public class BattleWorkingPage : BaseWorkingPage
     {
-        [Header("Контролы")] 
+        [Header("Контролы")]
         [SerializeField] private Text playerName;
         [SerializeField] private Text rapperName;
         [Space]
@@ -33,16 +33,16 @@ namespace Game.Pages.Battle
 
         [Header("Данные")]
         [SerializeField] private ImagesBank imagesBank;
-        
+
         [Header("Страница результата")]
         [SerializeField] private BattleResultPage battleResult;
 
         private RapperInfo _rapper;
         private int _playerPoints;
         private int _rapperPoints;
-        
+
         /// <summary>
-        /// Начинает выполнение работы 
+        /// Начинает выполнение работы
         /// </summary>
         public override void StartWork(params object[] args)
         {
@@ -86,7 +86,7 @@ namespace Game.Pages.Battle
         }
 
         /// <summary>
-        /// Генерирует рабочие очки с умений 
+        /// Генерирует рабочие очки с умений
         /// </summary>
         private int GenerateSkillsPoints()
         {
@@ -94,7 +94,7 @@ namespace Game.Pages.Battle
             {
                 if (!PlayerManager.Data.Skills.Contains(skill) || Random.Range(0, 100) > skillChance)
                     return 0;
-                
+
                 workPoints.Show(1);
                 return 1;
             }
@@ -122,19 +122,19 @@ namespace Game.Pages.Battle
         /// </summary>
         private void DisplayAvailableSkills()
         {
-            static void DisplayIfAvailable(Skills skill, WorkPoints workPoint)
+            void DisplayIfAvailable(Skills skill, WorkPoints workPoint)
             {
                 var icon = workPoint.transform.parent.GetComponent<Image>();
                 icon.enabled = PlayerManager.Data.Skills.Contains(skill);
             }
-            
+
             DisplayIfAvailable(Skills.DoubleTime, doubleTimePoint);
             DisplayIfAvailable(Skills.ShoutOut, shoutOutPoint);
             DisplayIfAvailable(Skills.Freestyle, freestylePoint);
             DisplayIfAvailable(Skills.Punch, punchPoint);
             DisplayIfAvailable(Skills.Flip, flipPoint);
         }
-        
+
         protected override void BeforePageOpen()
         {
             playerName.text = PlayerManager.Data.Info.NickName;

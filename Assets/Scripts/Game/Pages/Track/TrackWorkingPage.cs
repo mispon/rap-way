@@ -68,7 +68,7 @@ namespace Game.Pages.Track
         /// </summary>
         protected override void FinishWork()
         {
-            GameEventsManager.CallEvent(GameEventType.Track, ShowResultPage);
+            GameEventsManager.Instance.CallEvent(GameEventType.Track, ShowResultPage);
         }
 
         /// <summary>

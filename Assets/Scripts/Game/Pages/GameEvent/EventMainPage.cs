@@ -1,7 +1,9 @@
+using System;
 using Data;
 using Enums;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Game.Pages.GameEvent
 {
@@ -10,15 +12,14 @@ namespace Game.Pages.GameEvent
     /// </summary>
     public class EventMainPage: Page
     {
-        [Header("Настройки UI")]
+        [Header("Поля")]
         [SerializeField] private Text descriptionText;
-        [SerializeField] private Image backgroundImage;
 
         [Header("Кнопки выбора решения")] 
         [SerializeField] private Button peacefullyButton;
         [SerializeField] private Button aggressivelyButton;
-        [SerializeField] private Button indifferentlyButton;
-        [SerializeField] private Button peerAssistButton;
+        [SerializeField] private Button neutralButton;
+        [SerializeField] private Button randomButton;
 
         [Header("Страница результат выбора")] 
         [SerializeField] private EventDecisionPage eventDecisionPage;
@@ -29,8 +30,8 @@ namespace Game.Pages.GameEvent
         {
             peacefullyButton.onClick.AddListener(() => Decide(GameEventDecisionType.Peacefully));
             aggressivelyButton.onClick.AddListener(() => Decide(GameEventDecisionType.Aggressively));
-            indifferentlyButton.onClick.AddListener(() => Decide(GameEventDecisionType.Indifferently));
-            peerAssistButton.onClick.AddListener(() => Decide(GameEventDecisionType.PeerAssist));
+            neutralButton.onClick.AddListener(() => Decide(GameEventDecisionType.Neutral));
+            randomButton.onClick.AddListener(DecideRandom);
         }
 
         /// <summary>
@@ -51,22 +52,24 @@ namespace Game.Pages.GameEvent
             Close();
         }
 
-        #region PAGE CALLBACKS
-
+        /// <summary>
+        /// Выбирает случайное решение
+        /// </summary>
+        private void DecideRandom()
+        {
+            var decisionTypes = (GameEventDecisionType[]) Enum.GetValues(typeof(GameEventDecisionType));
+            Decide(decisionTypes[Random.Range(0, decisionTypes.Length)]);
+        }
+        
         protected override void BeforePageOpen()
         {
-            descriptionText.text = _eventInfo.SituationUi.Description;
-            backgroundImage.sprite = _eventInfo.SituationUi.Background;    
+            descriptionText.text = _eventInfo.Description;
         }
 
         protected override void AfterPageClose()
         {
-            descriptionText.text = "";
-            backgroundImage.sprite = null;
-
+            descriptionText.text = string.Empty;
             _eventInfo = null;
         }
-
-        #endregion
     }
 }

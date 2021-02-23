@@ -14,19 +14,22 @@ namespace Data
     [CreateAssetMenu(fileName = "GameEventsData", menuName = "Data/Game Events")]
     public class GameEventsData: ScriptableObject
     {
-        private readonly Dictionary<GameEventType, GameEventInfo[]> _gameEventInfosCollection = new Dictionary<GameEventType, GameEventInfo[]>();
+        private Dictionary<GameEventType, GameEventInfo[]> _gameEventInfosCollection;
 
-        [SerializeField] private GameEventInfo[] trackGameEventInfos;
-        [SerializeField] private GameEventInfo[] albumGameEventInfos;
-        [SerializeField] private GameEventInfo[] clipGameEventInfos;
-        [SerializeField] private GameEventInfo[] concertGameEventInfos;
+        [SerializeField] private GameEventInfo[] trackEvents;
+        [SerializeField] private GameEventInfo[] albumEvents;
+        [SerializeField] private GameEventInfo[] clipEvents;
+        [SerializeField] private GameEventInfo[] concertEvents;
 
         public void Initialize()
         {
-            _gameEventInfosCollection.Add(GameEventType.Track, trackGameEventInfos);
-            _gameEventInfosCollection.Add(GameEventType.Album, albumGameEventInfos);
-            _gameEventInfosCollection.Add(GameEventType.Clip, clipGameEventInfos);
-            _gameEventInfosCollection.Add(GameEventType.Concert, concertGameEventInfos);
+            _gameEventInfosCollection = new Dictionary<GameEventType, GameEventInfo[]>
+            {
+                { GameEventType.Track, trackEvents },
+                { GameEventType.Album, albumEvents },
+                { GameEventType.Clip, clipEvents },
+                { GameEventType.Concert, concertEvents }
+            };
         }
 
         /// <summary>
@@ -35,10 +38,9 @@ namespace Data
         /// </summary>
         public GameEventInfo GetRandomInfo(GameEventType type)
         {
-            if (!_gameEventInfosCollection.ContainsKey(type))
-                return null;
-
-            return _gameEventInfosCollection[type].GetRandom();
+            return _gameEventInfosCollection.TryGetValue(type, out var value) 
+                ? value.GetRandom()
+                : null;
         }
     }
 
@@ -48,16 +50,23 @@ namespace Data
     [Serializable]
     public class GameEventInfo
     {
-        [Tooltip("UI события")]
-        public GameEventUi SituationUi;
-        [ArrayElementTitle("DecisionType"), Tooltip("Набор данных, описывающих решение")]
-        public GameEventDecision[] gameEventDecisions;
+        [Tooltip("Название события")]
+        public string Name;
+        
+        [Tooltip("Описание события")]
+        public string Description;
+        
+        [ArrayElementTitle("DecisionType")]
+        [Tooltip("Набор данных, описывающих решение")]
+        public GameEventDecision[] DecisionResults;
 
         /// <summary>
         /// Возвращает случайные данные решения по типу
         /// </summary>
-        public GameEventDecision GetRandomDecision(GameEventDecisionType decisionType) 
-            => gameEventDecisions.GetRandom(decisionType);
+        public GameEventDecision GetRandomDecision(GameEventDecisionType decisionType)
+        {
+            return DecisionResults.GetRandom(decisionType);
+        }
     }
 
     /// <summary>
@@ -68,32 +77,23 @@ namespace Data
     {
         [Tooltip("Тип решения")]
         public GameEventDecisionType DecisionType;
-        [Tooltip("Изменение метрик игрока в связи с выбором этого решения")]
-        public MetricsIncome MetricsIncome;
-        [Tooltip("UI решения")]
-        public GameEventUi DecisionUi;
-    }
-    
-    /// <summary>
-    /// Информация, выводимая на экран, для описания ситуации или решения
-    /// </summary>
-    [Serializable]
-    public struct GameEventUi
-    {
-        public string Description;
-        public Sprite Background;
-    }
 
-    /// <summary>
-    /// Набор данных об изменнии метрик в связи с принятым решением
-    /// </summary>
-    [Serializable]
-    public struct MetricsIncome
-    {
-        public int Money;
-        public int Fans;
-        public int Hype;
-        public int Experience;
+        [Tooltip("Описание события")]
+        public string Description;
+        
+        [Tooltip("Величина изменения количества денег как % от текущего (от 1% до 10%)")]
+        [Range(-0.25f, 0.25f)]
+        public float MoneyChange;
+        
+        [Tooltip("Величина изменения количества фанов как % от текущего (от 1% до 25%)")]
+        [Range(-0.1f, 0.1f)]
+        public float FansChange;
+        
+        [Tooltip("Количество очков хайпа")]
+        public int HypeChange;
+        
+        [Tooltip("Количество очков опыта")]
+        public int ExpChange;
     }
 
     public static partial class Extensions
@@ -101,8 +101,8 @@ namespace Data
         /// <summary>
         /// Возвращает случайное событие из набора. Если набор пусто, то возвращает null
         /// </summary>
-        public static GameEventInfo GetRandom(this GameEventInfo[] array)
-            => array.Length == 0 ? null : array[Random.Range(0, array.Length)];
+        public static GameEventInfo GetRandom(this GameEventInfo[] array) =>
+            array.Length == 0 ? null : array[Random.Range(0, array.Length)];
 
         /// <summary>
         /// Возвращает случайное решение из типизированного набора решений, если таковые имеются.

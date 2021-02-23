@@ -37,32 +37,34 @@ namespace Core
         /// <summary>
         /// Вызывает с вероятностью случаное событие определенного типа
         /// </summary>
-        public static void CallEvent(GameEventType type, Action onEventShownAction)
+        public void CallEvent(GameEventType type, Action onEventShownAction)
         {
-            if (Random.Range(0f, 1f) <= Instance.chance)
+            if (chance >= Random.Range(0f, 1f) || type == GameEventType.Track)
             {
-                var eventInfo = Instance.data.GetRandomInfo(type);
+                var eventInfo = data.GetRandomInfo(type);
                 if (eventInfo != null)
                 {
                     SetUpCallback(onEventShownAction);
-                    Instance.eventMainPage.Show(eventInfo);
-                    return;
+                    eventMainPage.Show(eventInfo);
+                } 
+                else
+                {
+                    Debug.LogAssertion($"Не добавлено ни одного игрового события типа \"{type}\"!");
                 }
-                
-                Debug.LogAssertion($"Не добавлено ни одного игрового события типа \"{type}\"!");
             }
+            
             onEventShownAction.Invoke();
         }
 
         /// <summary>
         /// Функция создания обработчика окончания показа игрвого события
         /// </summary>
-        private static void SetUpCallback(Action onEventShownAction)
+        private void SetUpCallback(Action onEventShownAction)
         {
-            Instance.onEventShow = () =>
+            onEventShow = () =>
             {
                 onEventShownAction?.Invoke();
-                Instance.onEventShow = null;
+                onEventShow = null;
             };
         }
     }

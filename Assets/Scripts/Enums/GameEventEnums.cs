@@ -22,9 +22,7 @@ namespace Enums
         Peacefully,
         [Description("gameevent_decision_aggressively")]
         Aggressively,
-        [Description("gameevent_decision_indifferently")]
-        Indifferently,
-        [Description("gameevent_decision_peerassist")]
-        PeerAssist
+        [Description("gameevent_decision_neutral")]
+        Neutral
     }
 }

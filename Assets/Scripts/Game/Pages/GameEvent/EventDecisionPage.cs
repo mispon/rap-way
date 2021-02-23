@@ -1,5 +1,6 @@
 using Core;
 using Data;
+using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Extensions;
@@ -11,16 +12,15 @@ namespace Game.Pages.GameEvent
     /// </summary>
     public class EventDecisionPage: Page
     {
-        [Header("Настройки UI")]
+        [Header("Описание")]
         [SerializeField] private Text descriptionText;
-        [SerializeField] private Image backgroundImage;
 
-        [Header("UI изменения метрик")] 
+        [Header("Индикаторы изменения параметров")] 
         [SerializeField] private Text moneyText;
         [SerializeField] private Text fansText;
         [SerializeField] private Text hypeText;
         [SerializeField] private Text expText;
-        
+
         private GameEventDecision _eventDecision;
         
         /// <summary>
@@ -36,22 +36,39 @@ namespace Game.Pages.GameEvent
         /// </summary>
         private void SaveResult()
         {
-            var income = _eventDecision.MetricsIncome;
-            PlayerManager.Instance.GiveReward(income.Fans, income.Money, income.Experience);
+            var income = CalculateIncome(PlayerManager.Data, _eventDecision);
+            
+            PlayerManager.Instance.GiveReward(income.Fans, income.Money, income.Exp);
             PlayerManager.Instance.AddHype(income.Hype);
+        }
+
+        /// <summary>
+        /// Считает доход игрока
+        /// </summary>
+        private static MetricsIncome CalculateIncome(PlayerData playerData, GameEventDecision decision)
+        {
+            return new MetricsIncome
+            {
+                // NOTE: Изменение денег тоже зависит от фанатов
+                Money = Mathf.RoundToInt(playerData.Fans * decision.MoneyChange),
+                Fans = Mathf.RoundToInt(playerData.Fans * decision.FansChange),
+                Hype = decision.HypeChange,
+                Exp = decision.ExpChange
+            };
         }
 
         protected override void BeforePageOpen()
         {
-            descriptionText.text = _eventDecision.DecisionUi.Description;
-            backgroundImage.sprite = _eventDecision.DecisionUi.Background;
-
-            moneyText.SetMetricsInfo(_eventDecision.MetricsIncome.Money);
-            fansText.SetMetricsInfo(_eventDecision.MetricsIncome.Fans);
-            hypeText.SetMetricsInfo(_eventDecision.MetricsIncome.Hype);
-            expText.SetMetricsInfo(_eventDecision.MetricsIncome.Experience);
+            descriptionText.text = _eventDecision.Description;
+            
+            var income = CalculateIncome(PlayerManager.Data, _eventDecision);
+            
+            moneyText.text = income.Money.GetDisplay();
+            fansText.text = income.Fans.GetDisplay();
+            hypeText.text = income.Hype.ToString();
+            expText.text = income.Exp.ToString();
         }
-
+        
         protected override void BeforePageClose()
         {
             GameEventsManager.Instance.onEventShow?.Invoke();
@@ -59,40 +76,23 @@ namespace Game.Pages.GameEvent
 
         protected override void AfterPageClose()
         {
-            moneyText.ClearMetricsInfo();
-            fansText.ClearMetricsInfo();
-            hypeText.ClearMetricsInfo();
-            expText.ClearMetricsInfo();
-
-            descriptionText.text = "";
-            backgroundImage.sprite = null;
-
+            moneyText.text = string.Empty;
+            fansText.text = string.Empty;
+            hypeText.text = string.Empty;
+            expText.text = string.Empty;
+            
             SaveResult();
+            
+            descriptionText.text = string.Empty;
             _eventDecision = null;
         }
     }
 
-    public static class Extensions
+    public class MetricsIncome
     {
-        /// <summary>
-        /// Отображение объекта, содержащего инфомацию об изменении метрики, и наполнение его этой информацией
-        /// </summary>
-        public static void SetMetricsInfo(this Text component, int value)
-        {
-            if (value == 0)
-            {
-                component.text = $"{value.GetDisplay()}";
-                component.gameObject.SetActive(true);
-            }
-        }
-
-        /// <summary>
-        /// Сброс данных изменения метрики
-        /// </summary>
-        public static void ClearMetricsInfo(this Text component)
-        {
-            component.text = string.Empty;
-            component.gameObject.SetActive(false);
-        }
+        public int Money;
+        public int Fans;
+        public int Hype;
+        public int Exp;
     }
 }

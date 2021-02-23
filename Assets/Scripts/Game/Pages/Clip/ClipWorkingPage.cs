@@ -59,7 +59,7 @@ namespace Game.Pages.Clip
         /// </summary>
         protected override void FinishWork()
         {
-            GameEventsManager.CallEvent(GameEventType.Clip, ShowResultPage);
+            GameEventsManager.Instance.CallEvent(GameEventType.Clip, ShowResultPage);
         }
 
         /// <summary>

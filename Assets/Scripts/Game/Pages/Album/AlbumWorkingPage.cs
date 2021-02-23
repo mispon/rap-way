@@ -69,7 +69,7 @@ namespace Game.Pages.Album
         /// </summary>
         protected override void FinishWork()
         {
-            GameEventsManager.CallEvent(GameEventType.Album, ShowResultPage);
+            GameEventsManager.Instance.CallEvent(GameEventType.Album, ShowResultPage);
         }
 
         /// <summary>

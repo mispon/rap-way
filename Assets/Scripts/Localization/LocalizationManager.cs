@@ -14,7 +14,7 @@ namespace Localization
     /// Реализация менеджера локализации
     /// Все файлы локализации должны лежать в "Assests/StreamingAssets" в формате json
     /// </summary>
-    public class LocalizationManager : Singleton<LocalizationManager> 
+    public class LocalizationManager : Singleton<LocalizationManager>
     {
         public static readonly SystemLanguage[] AvailableLanguages = {
             SystemLanguage.English,
@@ -37,9 +37,9 @@ namespace Localization
         public string Get(string key)
         {
             var item = _data.items.FirstOrDefault(e => e.key == key);
-            if (item != null) 
+            if (item != null)
                 return item.value;
-            
+
             throw new RapWayException($"Не найдена локализация по ключу [{key}]!");
         }
 
@@ -51,11 +51,11 @@ namespace Localization
             var item = _data.items.First(e => e.value == value);
             return item.key;
         }
-        
+
         /// <summary>
         /// Загружает данные локализации
         /// </summary>
-        public void LoadLocalization(SystemLanguage lang, bool sendEvent = false) 
+        public void LoadLocalization(SystemLanguage lang, bool sendEvent = false)
         {
             if (AvailableLanguages.All(el => el != lang))
                 throw new RapWayException($"Язык [{lang}] не поддерживается");
@@ -64,7 +64,7 @@ namespace Localization
         }
 
         /// <summary>
-        /// Корутина загрузки данных локализации 
+        /// Корутина загрузки данных локализации
         /// </summary>
         private IEnumerator LoadLocalizationAsync(SystemLanguage lang, bool sendEvent = false)
         {
@@ -80,20 +80,19 @@ namespace Localization
             jsonData = File.ReadAllText(path);
 #endif
             ParseLocalizationData(jsonData, sendEvent);
-            
+
             IsReady = true;
             yield return null;
         }
 
         /// <summary>
-        /// Загружает файл локализации на андроиде 
+        /// Загружает файл локализации на андроиде
         /// </summary>
         private static IEnumerator LoadAndroidLocalization(string path, Action<string> callback)
         {
             var request = UnityWebRequest.Get(path);
             yield return request.SendWebRequest();
-            UnityWebRequest.Result[] badRequests = { UnityWebRequest.Result.ConnectionError, UnityWebRequest.Result.ProtocolError };
-            if (badRequests.Contains(request.result))
+            if (request.isHttpError || request.isNetworkError)
                 Debug.LogError(request.error);
             else
                 callback.Invoke(request.downloadHandler.text);
@@ -104,12 +103,12 @@ namespace Localization
         /// </summary>
         private void ParseLocalizationData(string jsonData, bool sendEvent)
         {
-            if (string.IsNullOrEmpty(jsonData)) 
+            if (string.IsNullOrEmpty(jsonData))
                 throw new RapWayException("Не найден файл локализации!");
-                
+
             _data = JsonUtility.FromJson<LocalizationData>(jsonData);
-            
-            if (sendEvent) 
+
+            if (sendEvent)
                 EventManager.RaiseEvent(EventType.LangChanged);
 
             IsReady = true;
@@ -122,22 +121,25 @@ namespace Localization
             => JsonUtility.ToJson(data);
 
         /// <summary>
-        /// Возвращает путь к файлу локализации 
+        /// Возвращает путь к файлу локализации
         /// </summary>
         public static string GetLocalizationPath(SystemLanguage lang)
-            => Path.Combine(Application.streamingAssetsPath, GetFileName(lang));        
+            => Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
 
         /// <summary>
         /// Возвращает имя файла локализации
         /// </summary>
         private static string GetFileName(SystemLanguage lang)
         {
-            return lang switch
+            switch (lang)
             {
-                SystemLanguage.Russian => "ru.json",
-                SystemLanguage.English => "en.json",
-                _ => "ru.json"
-            };
+                case SystemLanguage.Russian:
+                    return "ru.json";
+                case SystemLanguage.English:
+                    return "en.json";
+                default:
+                    return "ru.json";
+            }
         }
     }
 }

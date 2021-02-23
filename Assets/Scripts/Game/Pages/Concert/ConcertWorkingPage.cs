@@ -68,7 +68,7 @@ namespace Game.Pages.Concert
         /// </summary>
         protected override void FinishWork()
         {
-            GameEventsManager.CallEvent(GameEventType.Concert, ShowResultPage);
+            GameEventsManager.Instance.CallEvent(GameEventType.Concert, ShowResultPage);
         }
 
         /// <summary>
