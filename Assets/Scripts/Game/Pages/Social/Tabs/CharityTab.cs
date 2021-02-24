@@ -31,7 +31,7 @@ namespace Game.Pages.Social.Tabs
         private void SetAmount(float value)
         {
             _amount = (int) value;
-            amountLabel.text = $"{_amount.GetDisplay()}$";
+            amountLabel.text = _amount.GetMoney();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Game.Pages.Social.Tabs
             SetSliderBorders();
 
             SetAmount(amountSlider.minValue);
-            balance.text = $"{PlayerManager.Data.Money.GetDisplay()}$";
+            balance.text = $"{PlayerManager.Data.Money.GetMoney()}";
             fondInput.text = string.Empty;
             messageInput.text = string.Empty;
             

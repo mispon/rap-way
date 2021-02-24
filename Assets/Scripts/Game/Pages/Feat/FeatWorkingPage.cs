@@ -99,6 +99,14 @@ namespace Game.Pages.Feat
             featResult.Show(_track);
             Close();
         }
+
+        /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.FeatWorkDuration;
+        }
         
         protected override void BeforePageOpen()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Core.Settings;
 using Localization;
 using Models.Game;
 using Models.Player;
@@ -16,6 +17,8 @@ namespace Game
         [Header("Ключи сохранения данных")]
         [SerializeField] private string playersDataKey;
         [SerializeField] private string gameDataKey;
+        [Header("Игровые настройки")]
+        public GameSettings Settings;
 
         public PlayerData PlayerData { get; private set; }
         public GameStats GameStats { get; private set; }

@@ -81,6 +81,14 @@ namespace Game.Pages.Social
             GetPage(_social.Type).ShowPage(_social);
             Close();
         }
+
+        /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.SocialsWorkDuration;
+        }
         
         /// <summary>
         /// Возвращает страницу для указанного типа соц. события 

@@ -55,7 +55,7 @@ namespace Game.Pages.Store
             }
             
             typeTxt.text = LocalizationManager.Instance.Get(type.GetDescription()).ToUpper();;
-            priceTxt.text = $"{uiData.Price.GetDisplay()}$";
+            priceTxt.text = uiData.Price.GetMoney();
             
             buyBtn.onClick.RemoveAllListeners();
             buyBtn.onClick.AddListener(() => onClickAction(Type, Level, uiData.Price));

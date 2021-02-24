@@ -66,6 +66,14 @@ namespace Game.Pages.Rappers
         }
 
         /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.RappersWorkDuration;
+        }
+
+        /// <summary>
         /// Генерирует очки работы игрока
         /// </summary>
         private void GeneratePlayerWorkPoints()

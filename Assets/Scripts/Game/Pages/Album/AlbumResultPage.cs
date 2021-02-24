@@ -50,7 +50,7 @@ namespace Game.Pages.Album
                 ? $"Альбом занял <color=#00F475>{album.ChartPosition}</color> позицию в чарте!"
                 : "Альбом не попал в топ чартов";
             fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
-            moneyIncome.text = $"+{album.MoneyIncome.GetDisplay()}$";
+            moneyIncome.text = $"+{album.MoneyIncome.GetMoney()}";
         }
 
         /// <summary>

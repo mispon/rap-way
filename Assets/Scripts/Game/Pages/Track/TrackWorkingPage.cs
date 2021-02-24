@@ -72,6 +72,14 @@ namespace Game.Pages.Track
         }
 
         /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.TrackWorkDuration;
+        }
+
+        /// <summary>
         /// Генерирует очки работы над треком
         /// </summary>
         private void GenerateWorkPoints()

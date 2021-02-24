@@ -1,4 +1,6 @@
+using System;
 using Core;
+using Core.Settings;
 using Game.UI;
 using UnityEngine;
 
@@ -9,7 +11,7 @@ namespace Game.Pages
     /// </summary>
     public abstract class BaseWorkingPage : Page
     {
-        [SerializeField] protected int duration;
+        [NonSerialized] protected GameSettings settings;
         [SerializeField] protected ProgressBar progressBar;
 
         /// <summary>
@@ -26,6 +28,11 @@ namespace Game.Pages
         /// Обработчик завершения работы
         /// </summary>
         protected abstract void FinishWork();
+
+        /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected abstract int GetDuration();
 
         /// <summary>
         /// Вызывается по истечении игрового дня
@@ -49,13 +56,18 @@ namespace Game.Pages
                 anim.Refresh();
             }
         }
-        
+
         protected override void AfterPageOpen()
         {
             TimeManager.Instance.onDayLeft += OnDayLeft;
             TimeManager.Instance.SetActionMode();
-            
-            progressBar.Init(duration);
+
+            if (settings == null)
+            {
+                settings = GameManager.Instance.Settings;
+            }
+
+            progressBar.Init(GetDuration());
             progressBar.onFinish += FinishWork;
             progressBar.Run();
         }

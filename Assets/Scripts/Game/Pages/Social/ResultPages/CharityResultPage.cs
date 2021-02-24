@@ -24,7 +24,7 @@ namespace Game.Pages.Social.ResultPages
 
             string fondPart = noFondName ? "НЕКИЙ ФОНД" : $"ФОНД <color=#00fff4>«{info.AdditionalText}»</color>";
             string messagePart = noMessage ? "БЕЗ СООБЩЕНИЯ" : $"С СООБЩЕНИЕМ: <color=#00fff4>«{info.MainText}»</color>";
-            string moneyPart = $"<color=#00F475>{info.CharityAmount.GetDisplay()}$</color>";
+            string moneyPart = $"<color=#00F475>{info.CharityAmount.GetMoney()}</color>";
 
             message.text = $"СЕГОДНЯ {fondPart} ПОЛУЧИЛ {moneyPart} {messagePart}";
             hype.text = $"+{info.HypeIncome}";

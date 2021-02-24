@@ -47,7 +47,7 @@ namespace Game.Pages.Clip
             viewsAmount.text = $"Просмотры: <color=#F6C326>{clip.Views.GetDisplay()}</color>";
             likesAndDislikes.text = $"<color=#00F475>+{clip.Likes.GetDisplay()}</color> / <color=#FF4E4E>-{clip.Dislikes.GetDisplay()}</color>";
             fansIncome.text = $"+{clip.FansIncome.GetDisplay()}";
-            moneyIncome.text = $"+{clip.MoneyIncome.GetDisplay()}$";
+            moneyIncome.text = $"+{clip.MoneyIncome.GetMoney()}";
         }
         
         /// <summary>

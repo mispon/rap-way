@@ -51,7 +51,7 @@ namespace Game.Pages.Track
                 ? $"Трек занял <color=#00F475>{track.ChartPosition}</color> позицию в чарте!"
                 : "Трек не попал в топ чартов";
             fansIncome.text = $"+{track.FansIncome.GetDisplay()}";
-            moneyIncome.text = $"+{track.MoneyIncome.GetDisplay()}$";
+            moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
         }
 
         /// <summary>

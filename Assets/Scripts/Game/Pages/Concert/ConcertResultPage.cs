@@ -47,8 +47,8 @@ namespace Game.Pages.Concert
         {
             header.text = $"Концерт в <color=#01C6B8>\"{concert.LocationName}\"</color> завершен!";
             ticketsSold.text = $"ПРОДАНО <color=#F6C326>{concert.TicketsSold.GetDisplay()}</color> билетов";
-            ticketCost.text = $"ЦЕНА БИЛЕТА: <color=#00F475>{concert.TicketCost.GetDisplay()}$</color>";
-            moneyIncome.text = $"+{concert.Income.GetDisplay()}$";
+            ticketCost.text = $"ЦЕНА БИЛЕТА: <color=#00F475>{concert.TicketCost.GetMoney()}</color>";
+            moneyIncome.text = $"+{concert.Income.GetMoney()}";
         }
 
         /// <summary>

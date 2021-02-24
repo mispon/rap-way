@@ -28,7 +28,7 @@ namespace Models.Info.Production
             Name,
             LocationName,
             TicketCost.GetDisplay(),
-            Income.GetDisplay()
+            Income.GetMoney()
         };
         
         public override string GetLog() {

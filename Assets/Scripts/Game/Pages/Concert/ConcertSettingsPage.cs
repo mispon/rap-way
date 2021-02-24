@@ -136,7 +136,7 @@ namespace Game.Pages.Concert
             placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity.GetDisplay()}";
 
             _placeCost = place.Cost;
-            concertPrice.SetValue($"АРЕНДА: {_placeCost.GetDisplay()}$");
+            concertPrice.SetValue($"АРЕНДА: {_placeCost.GetMoney()}");
 
             ticketCostSlider.minValue = place.TicketMinCost;
             ticketCostSlider.maxValue = place.TicketMaxCost;
@@ -153,7 +153,7 @@ namespace Game.Pages.Concert
         {
             int cost = Mathf.RoundToInt(value);
             _concert.TicketCost = cost;
-            ticketCost.text = $"{cost.GetDisplay()}$";
+            ticketCost.text = $"{cost.GetMoney()}";
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Game.Pages.Concert
         {
             int minValue = Mathf.RoundToInt(ticketCostSlider.minValue);
             ticketCostSlider.SetValueWithoutNotify(minValue);
-            ticketCost.text = $"{minValue.GetDisplay()}$";
+            ticketCost.text = $"{minValue.GetMoney()}";
         }
 
         /// <summary>

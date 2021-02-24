@@ -9,5 +9,13 @@
         {
             return $"{value:N0}";
         }
+
+        /// <summary>
+        /// Функция представления денег в удобочитаемом формате
+        /// </summary>
+        public static string GetMoney(this int value)
+        {
+            return $"{value:N0}$";
+        }
     }
 }

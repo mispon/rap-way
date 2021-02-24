@@ -63,6 +63,14 @@ namespace Game.Pages.Clip
         }
 
         /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.ClipWorkDuration;
+        }
+
+        /// <summary>
         /// Генерирует очки работы
         /// </summary>
         private void GenerateWorkPoints()

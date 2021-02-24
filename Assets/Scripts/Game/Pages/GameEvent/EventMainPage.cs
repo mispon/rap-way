@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Data;
 using Enums;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Game.Pages.GameEvent
     public class EventMainPage: Page
     {
         [Header("Поля")]
+        [SerializeField] private Text nameText;
         [SerializeField] private Text descriptionText;
 
         [Header("Кнопки выбора решения")] 
@@ -48,7 +50,12 @@ namespace Game.Pages.GameEvent
         /// </summary>
         private void Decide(GameEventDecisionType type)
         {
-            eventDecisionPage.Show(_eventInfo.GetRandomDecision(type));
+            var decisionResult = _eventInfo.DecisionResults.FirstOrDefault(e => e.DecisionType == type);
+            if (decisionResult != null)
+                eventDecisionPage.Show(_eventInfo.Name, decisionResult);
+            else
+                Debug.LogError($"Не найден результат случайного события для решения типа {type}!");
+
             Close();
         }
 
@@ -63,11 +70,13 @@ namespace Game.Pages.GameEvent
         
         protected override void BeforePageOpen()
         {
+            nameText.text = _eventInfo.Name;
             descriptionText.text = _eventInfo.Description;
         }
 
         protected override void AfterPageClose()
         {
+            nameText.text = string.Empty;
             descriptionText.text = string.Empty;
             _eventInfo = null;
         }

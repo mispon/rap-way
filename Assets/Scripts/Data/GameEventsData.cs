@@ -59,14 +59,6 @@ namespace Data
         [ArrayElementTitle("DecisionType")]
         [Tooltip("Набор данных, описывающих решение")]
         public GameEventDecision[] DecisionResults;
-
-        /// <summary>
-        /// Возвращает случайные данные решения по типу
-        /// </summary>
-        public GameEventDecision GetRandomDecision(GameEventDecisionType decisionType)
-        {
-            return DecisionResults.GetRandom(decisionType);
-        }
     }
 
     /// <summary>
@@ -101,19 +93,9 @@ namespace Data
         /// <summary>
         /// Возвращает случайное событие из набора. Если набор пусто, то возвращает null
         /// </summary>
-        public static GameEventInfo GetRandom(this GameEventInfo[] array) =>
-            array.Length == 0 ? null : array[Random.Range(0, array.Length)];
-
-        /// <summary>
-        /// Возвращает случайное решение из типизированного набора решений, если таковые имеются.
-        /// </summary>
-        public static GameEventDecision GetRandom(this GameEventDecision[] gameEventDecisions, GameEventDecisionType decisionType)
+        public static GameEventInfo GetRandom(this GameEventInfo[] array)
         {
-            var typedDecisions = gameEventDecisions.Where(el => el.DecisionType == decisionType).ToArray();
-            if (typedDecisions.Length == 0)
-                throw new RapWayException($"Нет ни одного решения типа \"{decisionType}\"");
-
-            return typedDecisions[Random.Range(0, typedDecisions.Length)];
+            return array.Length > 0 ? array[Random.Range(0, array.Length)] : null;
         }
     }
 }

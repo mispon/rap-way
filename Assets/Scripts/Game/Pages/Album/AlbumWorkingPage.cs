@@ -15,7 +15,6 @@ namespace Game.Pages.Album
     {
         [Header("Идентификаторы прогресса работы")] 
         [SerializeField] private Text bitPoints;
-
         [SerializeField] private Text textPoints;
 
         [Header("Команда игрока")] 
@@ -70,6 +69,14 @@ namespace Game.Pages.Album
         protected override void FinishWork()
         {
             GameEventsManager.Instance.CallEvent(GameEventType.Album, ShowResultPage);
+        }
+
+        /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.AlbumWorkDuration;
         }
 
         /// <summary>

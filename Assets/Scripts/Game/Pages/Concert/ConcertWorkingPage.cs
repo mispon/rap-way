@@ -72,6 +72,14 @@ namespace Game.Pages.Concert
         }
 
         /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.ConcertWorkDuration;
+        }
+
+        /// <summary>
         /// Генерирует очки работы по организации концерта
         /// </summary>
         private void GenerateWorkPoints()

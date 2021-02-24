@@ -8,6 +8,7 @@ using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
+using Utils.Extensions;
 
 namespace Game.Pages.Clip
 {
@@ -107,7 +108,7 @@ namespace Game.Pages.Clip
         {
             var director = staffData.Directors[index];
             directorSkill.text = $"SKILL: {director.Skill}";
-            directorPrice.text = $"COST: {director.Salary}$";
+            directorPrice.text = $"COST: {director.Salary.GetMoney()}";
             _clip.DirectorSkill = director.Skill;
             _directorPrice = director.Salary;
             DisplayFullPrice();
@@ -120,7 +121,7 @@ namespace Game.Pages.Clip
         {
             var clipOperator = staffData.Operators[index];
             operatorSkill.text = $"SKILL: {clipOperator.Skill}";
-            operatorPrice.text = $"COST: {clipOperator.Salary}$";
+            operatorPrice.text = $"COST: {clipOperator.Salary.GetMoney()}";
             _clip.OperatorSkill = clipOperator.Skill;
             _operatorPrice = clipOperator.Salary;
             DisplayFullPrice();
@@ -132,7 +133,7 @@ namespace Game.Pages.Clip
         private void DisplayFullPrice()
         {
             // todo: Localize
-            price.SetValue($"PRICE: {FullPrice}$");
+            price.SetValue($"PRICE: {FullPrice.GetMoney()}");
         }
 
         /// <summary>

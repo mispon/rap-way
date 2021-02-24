@@ -71,6 +71,14 @@ namespace Game.Pages.Battle
         }
 
         /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.BattleWorkDuration;
+        }
+
+        /// <summary>
         /// Генерирует очки работы игрока и рэпера
         /// </summary>
         private void GenerateWorkPoints()

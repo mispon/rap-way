@@ -12,7 +12,8 @@ namespace Game.Pages.GameEvent
     /// </summary>
     public class EventDecisionPage: Page
     {
-        [Header("Описание")]
+        [Header("Поля")]
+        [SerializeField] private Text nameText;
         [SerializeField] private Text descriptionText;
 
         [Header("Индикаторы изменения параметров")] 
@@ -26,9 +27,11 @@ namespace Game.Pages.GameEvent
         /// <summary>
         /// Функция показа страницы решения по игровому событию
         /// </summary>
-        public void Show(GameEventDecision eventDecision)
+        public void Show(string eventName, GameEventDecision eventDecision)
         {
+            nameText.text = eventName;
             _eventDecision = eventDecision;
+            Open();
         }
 
         /// <summary>
@@ -60,10 +63,10 @@ namespace Game.Pages.GameEvent
         protected override void BeforePageOpen()
         {
             descriptionText.text = _eventDecision.Description;
-            
+
             var income = CalculateIncome(PlayerManager.Data, _eventDecision);
             
-            moneyText.text = income.Money.GetDisplay();
+            moneyText.text = income.Money.GetMoney();
             fansText.text = income.Fans.GetDisplay();
             hypeText.text = income.Hype.ToString();
             expText.text = income.Exp.ToString();
@@ -83,6 +86,7 @@ namespace Game.Pages.GameEvent
             
             SaveResult();
             
+            nameText.text = string.Empty;
             descriptionText.text = string.Empty;
             _eventDecision = null;
         }
