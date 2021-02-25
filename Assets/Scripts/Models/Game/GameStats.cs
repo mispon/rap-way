@@ -19,6 +19,7 @@ namespace Models.Game
         public SystemLanguage Lang;
         public float SoundVolume;
         public float MusicVolume;
+        public bool ShowAds;
         
         public static GameStats New => new GameStats
         {
@@ -26,7 +27,8 @@ namespace Models.Game
             Trends = Trends.New,
             Lang = SystemLanguage.Russian,
             SoundVolume = 1f,
-            MusicVolume = 1f
+            MusicVolume = 1f,
+            ShowAds = true
         };
     }
 }

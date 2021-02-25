@@ -62,6 +62,11 @@ namespace Utils.Carousel
         }
 
         /// <summary>
+        /// Возвращает текущий индекс
+        /// </summary>
+        public int Index => _index;
+
+        /// <summary>
         /// Возвращает значение активного элемента 
         /// </summary>
         public T GetValue<T>() => _items[_index].GetValue<T>();

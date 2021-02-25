@@ -62,9 +62,11 @@ namespace Game.Pages.Track
             track.Timestamp = TimeManager.Instance.Now;
             PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome, rewardExp);
             ProductionManager.AddTrack(track);
-            
+
             if (track.Feat != null)
+            {
                 ProductionManager.AddFeat(track.Feat);
+            }
         }
         
         /// <summary>

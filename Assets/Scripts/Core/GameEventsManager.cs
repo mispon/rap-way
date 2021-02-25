@@ -14,11 +14,6 @@ namespace Core
     /// </summary>
     public class GameEventsManager: Singleton<GameEventsManager>, IStarter
     {
-        /// <summary>
-        /// Функция обработки по завершении показа события
-        /// </summary>
-        public Action onEventShow = () => { }; 
-        
         [Header("Настройки")] 
         [SerializeField, Tooltip("Шанс выпадания события"), Range(0.001f, 1f)] 
         private float chance;
@@ -39,12 +34,11 @@ namespace Core
         /// </summary>
         public void CallEvent(GameEventType type, Action onEventShownAction)
         {
-            if (chance >= Random.Range(0f, 1f) || type == GameEventType.Track)
+            if (chance >= Random.Range(0f, 1f))
             {
                 var eventInfo = data.GetRandomInfo(type);
                 if (eventInfo != null)
                 {
-                    SetUpCallback(onEventShownAction);
                     eventMainPage.Show(eventInfo);
                 } 
                 else
@@ -52,20 +46,8 @@ namespace Core
                     Debug.LogAssertion($"Не добавлено ни одного игрового события типа \"{type}\"!");
                 }
             }
-            
-            onEventShownAction.Invoke();
-        }
 
-        /// <summary>
-        /// Функция создания обработчика окончания показа игрвого события
-        /// </summary>
-        private void SetUpCallback(Action onEventShownAction)
-        {
-            onEventShow = () =>
-            {
-                onEventShownAction?.Invoke();
-                onEventShow = null;
-            };
+            onEventShownAction.Invoke();
         }
     }
 }

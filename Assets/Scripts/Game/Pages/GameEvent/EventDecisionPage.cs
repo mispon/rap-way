@@ -1,4 +1,3 @@
-using Core;
 using Data;
 using Models.Player;
 using UnityEngine;
@@ -70,11 +69,6 @@ namespace Game.Pages.GameEvent
             fansText.text = income.Fans.GetDisplay();
             hypeText.text = income.Hype.ToString();
             expText.text = income.Exp.ToString();
-        }
-        
-        protected override void BeforePageClose()
-        {
-            GameEventsManager.Instance.onEventShow?.Invoke();
         }
 
         protected override void AfterPageClose()

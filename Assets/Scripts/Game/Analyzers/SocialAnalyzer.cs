@@ -6,30 +6,18 @@ namespace Game.Analyzers
 {
     public class SocialAnalyzer: Analyzer<SocialInfo>
     {
-        [Header("Коэффициент от кол-ва фанатов")]
-        [SerializeField, Tooltip("Чем больше фанатов, тем больше за тобой следят, тем больше прирост хайпа")] 
-        private float fansMultiplier;
-
-        [Header("Зависимости благотворительности")] 
-        [SerializeField, Tooltip("Зависимость коэффициента от доли потраченных денег")]
-        private AnimationCurve charityMoneyRatioCurve;
-        
-        [Header("Данные")] 
-        [SerializeField, Tooltip("Базовый коэффициента импакта хайпа по каждому из соц.действий")] 
-        private int[] hypeImpactData;
-        
         /// <summary>
         /// Анализирует успешность социального действия
         /// </summary>
         public override void Analyze(SocialInfo social)
         {
-            var hypeMultiplier = hypeImpactData[(int) social.Type];
+            var hypeMultiplier = settings.SocialsHypeImpactData[(int) social.Type];
             
-            var hypeIncome = fansMultiplier * hypeMultiplier * social.WorkPoints;
+            var hypeIncome = settings.SocialsFansMultiplier * hypeMultiplier * social.WorkPoints;
             if (social.Type == SocialType.Charity)
             {
                 var charityMoneyRatio = social.CharityAmount / (float) PlayerManager.Data.Money;
-                var charityMoneyImpact = charityMoneyRatioCurve.Evaluate(charityMoneyRatio);
+                var charityMoneyImpact = settings.SocialsCharityMoneyRatioCurve.Evaluate(charityMoneyRatio);
                 
                 hypeIncome *= charityMoneyImpact;
             }
