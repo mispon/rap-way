@@ -21,8 +21,7 @@ namespace Game.Pages.Social.ResultPages
         protected override void DisplayResult(SocialInfo info)
         {
             comment.text = info.MainText;
-            // todo: check info.ModeIndex
-            
+
             likes.text = info.Likes.ToString();
             hype.text = $"+{info.HypeIncome}";
         }

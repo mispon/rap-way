@@ -83,7 +83,7 @@ namespace Game.Pages.Training
         /// <summary>
         /// Отображает текущее количество очков опыта
         /// </summary>
-        private void DisplayExp() => expLabel.text = $"EXP: {PlayerManager.Data.Exp}P"; 
+        private void DisplayExp() => expLabel.text = GetLocale("exp_value", PlayerManager.Data.Exp);
 
         /// <summary>
         /// Вызывается перед открытием страницы
@@ -103,7 +103,9 @@ namespace Game.Pages.Training
         {
             tabsCarousel.onChange -= OnTabChanged;
             foreach (var tab in tabs)
+            {
                 tab.onStartTraining -= ApplyTraining;
+            }
         }
     }
 }

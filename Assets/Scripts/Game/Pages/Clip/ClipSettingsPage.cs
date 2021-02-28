@@ -107,8 +107,8 @@ namespace Game.Pages.Clip
         private void OnDirectorChange(int index)
         {
             var director = staffData.Directors[index];
-            directorSkill.text = $"SKILL: {director.Skill}";
-            directorPrice.text = $"COST: {director.Salary.GetMoney()}";
+            directorSkill.text = GetLocale("skill_value", director.Skill).ToUpper();
+            directorPrice.text = GetLocale("cost_value", director.Salary.GetMoney()).ToUpper();
             _clip.DirectorSkill = director.Skill;
             _directorPrice = director.Salary;
             DisplayFullPrice();
@@ -120,8 +120,8 @@ namespace Game.Pages.Clip
         private void OnOperatorChange(int index)
         {
             var clipOperator = staffData.Operators[index];
-            operatorSkill.text = $"SKILL: {clipOperator.Skill}";
-            operatorPrice.text = $"COST: {clipOperator.Salary.GetMoney()}";
+            operatorSkill.text = GetLocale("skill_value", clipOperator.Skill).ToUpper();
+            operatorPrice.text = GetLocale("cost_value", clipOperator.Salary.GetMoney()).ToUpper();
             _clip.OperatorSkill = clipOperator.Skill;
             _operatorPrice = clipOperator.Salary;
             DisplayFullPrice();
@@ -132,8 +132,8 @@ namespace Game.Pages.Clip
         /// </summary>
         private void DisplayFullPrice()
         {
-            // todo: Localize
-            price.SetValue($"PRICE: {FullPrice.GetMoney()}");
+            string fullPrice = GetLocale("cost_value", FullPrice.GetMoney());
+            price.SetValue(fullPrice.ToUpper());
         }
 
         /// <summary>
@@ -157,7 +157,13 @@ namespace Game.Pages.Clip
             var anyTracks = _lastTracks.Any();
             var trackProps = anyTracks
                 ? _lastTracks.Select(ConvertTrackToCarouselProps).ToArray()
-                : new[] {new CarouselProps {Text = "NO TRACKS", Value = new TrackInfo()}};
+                : new[] {
+                    new CarouselProps
+                    {
+                        Text = GetLocale("no_tracks_yet").ToUpper(),
+                        Value = new TrackInfo()
+                    }
+                };
             trackCarousel.Init(trackProps);
             startButton.interactable = anyTracks;
 

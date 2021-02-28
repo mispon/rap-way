@@ -44,11 +44,11 @@ namespace Game.Pages.Album
         private void DisplayResult(AlbumInfo album)
         {
             var nickname = PlayerManager.Data.Info.NickName;
-            header.text = $"Работа над альбомом <color=#01C6B8>\"{nickname} - {album.Name}\"</color> завершена";
-            listenAmount.text = $"Альбом послушали <color=#F6C326>{album.ListenAmount}</color> раз!";
+            header.text = GetLocale("album_result_header", nickname, album.Name);
+            listenAmount.text = GetLocale("album_result_listens", nickname, album.Name);
             chartInfo.text = album.ChartPosition > 0
-                ? $"Альбом занял <color=#00F475>{album.ChartPosition}</color> позицию в чарте!"
-                : "Альбом не попал в топ чартов";
+                ? GetLocale("album_result_chart_pos", album.ChartPosition)
+                : GetLocale("album_result_chart_miss");
             fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{album.MoneyIncome.GetMoney()}";
         }

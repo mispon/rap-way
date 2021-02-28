@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Localization;
+using UnityEngine;
 
 namespace Game.Pages
 {
@@ -33,6 +34,16 @@ namespace Game.Pages
             _isOpen = false;
             gameObject.SetActive(false);
             AfterPageClose();
+        }
+
+        /// <summary>
+        /// Возвращает локализованную строку
+        /// </summary>
+        protected string GetLocale(string key, params object[] args)
+        {
+            return args.Length > 0
+                ? LocalizationManager.Instance.GetFormat(key, args)
+                : LocalizationManager.Instance.Get(key);
         }
 
         /// <summary>

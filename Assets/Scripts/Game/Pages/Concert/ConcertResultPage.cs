@@ -45,9 +45,9 @@ namespace Game.Pages.Concert
         /// </summary>
         private void DisplayResult(ConcertInfo concert)
         {
-            header.text = $"Концерт в <color=#01C6B8>\"{concert.LocationName}\"</color> завершен!";
-            ticketsSold.text = $"ПРОДАНО <color=#F6C326>{concert.TicketsSold.GetDisplay()}</color> билетов";
-            ticketCost.text = $"ЦЕНА БИЛЕТА: <color=#00F475>{concert.TicketCost.GetMoney()}</color>";
+            header.text = GetLocale("concert_result_header", concert.LocationName);
+            ticketsSold.text = GetLocale("concert_result_sold", concert.TicketsSold.GetDisplay()).ToUpper();
+            ticketCost.text = GetLocale("concert_result_cost", concert.TicketCost.GetMoney()).ToUpper();
             moneyIncome.text = $"+{concert.Income.GetMoney()}";
         }
 

@@ -35,7 +35,9 @@ namespace Game.Pages.Store
         public void Initialize(GoodsType type, GoodUI uiData, Action<GoodsType, short, int> onClickAction)
         {
             if (_itemIconMaxSize == 0)
+            {
                 _itemIconMaxSize = itemIconBackgroundRect.rect.width - marginPadding;
+            }
             
             Type = type;
             Level = uiData.Level;
@@ -54,7 +56,7 @@ namespace Game.Pages.Store
                 itemIconRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, texture.height * scale); 
             }
             
-            typeTxt.text = LocalizationManager.Instance.Get(type.GetDescription()).ToUpper();;
+            typeTxt.text = LocalizationManager.Instance.Get(type.GetDescription()).ToUpper();
             priceTxt.text = uiData.Price.GetMoney();
             
             buyBtn.onClick.RemoveAllListeners();

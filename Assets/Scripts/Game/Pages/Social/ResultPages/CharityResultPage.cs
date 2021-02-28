@@ -22,11 +22,16 @@ namespace Game.Pages.Social.ResultPages
             bool noFondName = string.IsNullOrEmpty(info.AdditionalText);
             bool noMessage = string.IsNullOrEmpty(info.MainText);
 
-            string fondPart = noFondName ? "НЕКИЙ ФОНД" : $"ФОНД <color=#00fff4>«{info.AdditionalText}»</color>";
-            string messagePart = noMessage ? "БЕЗ СООБЩЕНИЯ" : $"С СООБЩЕНИЕМ: <color=#00fff4>«{info.MainText}»</color>";
+            string fondPart = noFondName
+                ? GetLocale("socials_some_fond")
+                : GetLocale("socials_fond_name", info.AdditionalText);
+            string messagePart = noMessage
+                ? GetLocale("socials_fond_no_message")
+                : GetLocale("socials_fond_with_message", info.MainText);
+
             string moneyPart = $"<color=#00F475>{info.CharityAmount.GetMoney()}</color>";
 
-            message.text = $"СЕГОДНЯ {fondPart} ПОЛУЧИЛ {moneyPart} {messagePart}";
+            message.text = GetLocale("socials_fond_result", fondPart, moneyPart, messagePart).ToUpper();
             hype.text = $"+{info.HypeIncome}";
         }
     }

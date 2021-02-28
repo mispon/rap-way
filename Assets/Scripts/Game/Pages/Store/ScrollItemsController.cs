@@ -42,7 +42,9 @@ namespace Game.Pages.Store
             get
             {
                 if (Math.Abs(_elementTemplateHeight) < 0.01f)
+                {
                     _elementTemplateHeight = elementTemplate.transform.GetComponent<RectTransform>().rect.height;
+                }
 
                 return _elementTemplateHeight;
             }
@@ -55,7 +57,9 @@ namespace Game.Pages.Store
             get
             {
                 if (Math.Abs(_containerBaseHeight) < 0.01f)
+                {
                     _containerBaseHeight = rectContent.parent.GetComponent<RectTransform>().rect.height;
+                }
 
                 return _containerBaseHeight;
             }
@@ -73,11 +77,15 @@ namespace Game.Pages.Store
             {
                 var newItemLevel = 1;
                 var newItem = PlayerManager.Data.Goods.FirstOrDefault(g => g.Type == info.Type);
-                if(newItem != default)
+                if (newItem != default)
+                {
                     newItemLevel = newItem.Level + 1;
-                
-                if(info.UI.Any(el => el.Level == newItemLevel))
-                    DrawItem(info.Type, (short)newItemLevel);
+                }
+
+                if (info.UI.Any(el => el.Level == newItemLevel))
+                {
+                    DrawItem(info.Type, (short) newItemLevel);
+                }
             }
             ResizeContainer();
         }
@@ -85,7 +93,6 @@ namespace Game.Pages.Store
         /// <summary>
         /// Отрисовка элемента (предварительное создание контроллера при необходимости)
         /// </summary>
-        /// <param name="nextLevel">Отрисовываем элемент следующего уровня?</param>
         private void DrawItem(GoodsType type, short level, bool nextLevel = false)
         {
             var itemController = _itemsList.FirstOrDefault(it => it.Type == type && it.Level == level);
@@ -107,8 +114,7 @@ namespace Game.Pages.Store
         /// </summary>
         private GoodUI GetGoodUi(GoodsType type, int level)
         {
-            return _goodInfos.First(gi => gi.Type == type)
-                .UI.First(el => el.Level == level); 
+            return _goodInfos.First(gi => gi.Type == type).UI.First(el => el.Level == level);
         }
 
         /// <summary>
@@ -117,11 +123,7 @@ namespace Game.Pages.Store
         private void OnPurchaseItemClick(GoodsType type, short level, int price)
         {
             if (!PlayerManager.Instance.SpendMoney(price))
-            {
-                //todo: какая-то оповещалка, что "недостаточно средств"
-                print("Не хватает золота!");
                 return;
-            }
 
             var good = PlayerManager.Data.Goods.FirstOrDefault(g => g.Type == type);
             if (good == null)
@@ -133,8 +135,6 @@ namespace Game.Pages.Store
 
             void Notification()
             {
-                Debug.LogWarning($"Показ шмотки {good.Type}_{good.Level}. Кликни в центр.");
-
                 var uIData = GetGoodUi(good.Type, good.Level);
                 _newGoodEffect.Show(uIData.Image, NotificationManager.Instance.UnlockIndependentQueue);    
             }
@@ -143,9 +143,13 @@ namespace Game.Pages.Store
             
             var info = _goodInfos.First(gi => gi.Type == type);
             if (level + 1 > info.MaxItemLevel)
+            {
                 DisposeItem(type, level);
+            }
             else
+            {
                 DrawItem(type, level, true);
+            }
         }
 
         /// <summary>
@@ -167,8 +171,10 @@ namespace Game.Pages.Store
         {
             _itemsList.Remove(itemController);
             Destroy(itemController.gameObject);
-            if(resizeContainer)
+            if (resizeContainer)
+            {
                 ResizeContainer();
+            }
         }
         
         /// <summary>
@@ -193,7 +199,9 @@ namespace Game.Pages.Store
         public void Dispose()
         {
             foreach (var itemController in _itemsList.ToArray())
+            {
                 DisposeItem(itemController, false);
+            }
 
             _newGoodEffect = null;
         }

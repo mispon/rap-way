@@ -45,11 +45,11 @@ namespace Game.Pages.Track
         {
             var nickname = PlayerManager.Data.Info.NickName;
             string featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : string.Empty;
-            header.text = $"Работа над треком <color=#01C6B8>\"{nickname} - {track.Name}{featInfo}\"</color> завершена";
-            listenAmount.text = $"Композицию прослушали <color=#F6C326>{track.ListenAmount.GetDisplay()}</color> раз!";
+            header.text = GetLocale("track_result_header", nickname, track.Name, featInfo);
+            listenAmount.text = GetLocale("track_result_listens", track.ListenAmount.GetDisplay());
             chartInfo.text = track.ChartPosition > 0
-                ? $"Трек занял <color=#00F475>{track.ChartPosition}</color> позицию в чарте!"
-                : "Трек не попал в топ чартов";
+                ? GetLocale("track_result_chart_pos", track.ChartPosition)
+                : GetLocale("track_result_no_chart");
             fansIncome.text = $"+{track.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
         }

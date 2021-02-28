@@ -29,9 +29,11 @@ namespace Game.Pages.Rappers
         {
             if (_rappersList.Count > 0)
                 return;
-            
+
             foreach (var rapperInfo in data.Rappers)
+            {
                 CreateItem(rapperInfo);
+            }
         }
         
         /// <summary>
@@ -60,7 +62,9 @@ namespace Game.Pages.Rappers
         private void OnDestroy()
         {
             foreach (var rapperItem in _rappersList)
+            {
                 rapperItem.onClick -= HandleItemClick;
+            }
             
             _rappersList.Clear();
         }

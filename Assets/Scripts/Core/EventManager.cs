@@ -17,8 +17,7 @@ namespace Core
     /// </summary>
     public static class EventManager 
     {
-        private static readonly Dictionary<EventType, List<Action<object[]>>> _handlers = 
-            new Dictionary<EventType, List<Action<object[]>>>();
+        private static readonly Dictionary<EventType, List<Action<object[]>>> _handlers = new Dictionary<EventType, List<Action<object[]>>>();
 
         /// <summary>
         /// Добавляет слушателя событий переданного типа

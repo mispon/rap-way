@@ -5,7 +5,6 @@ using Core.Interfaces;
 using Data;
 using Enums;
 using Game;
-using Game.Effects;
 using Game.Notifications;
 using Game.Pages.Achievement;
 using JetBrains.Annotations;
@@ -23,11 +22,6 @@ namespace Core
     /// </summary>
     public class AchievementsManager: Singleton<AchievementsManager>, IStarter
     {
-        [Header("Эффект открытия новой шмотки")] 
-        [SerializeField, Tooltip("Базовая картинка для отображения в уведомлении")] 
-        private Sprite newAchievementSprite;
-        [SerializeField] private NewItemEffect newAchievementEffect;
-        
         [Header("Страница новых достижений")]
         [SerializeField] private NewAchievementsPage newAchievementsPage;
 
@@ -95,11 +89,10 @@ namespace Core
         /// </summary>
         private void CheckTrackChartPosition(TrackInfo trackInfo)
         {
-            if(trackInfo.ChartPosition == 0)
+            if (trackInfo.ChartPosition == 0)
                 return;
             
-            MultipleCheckValue(AchievementsType.TrackChartPosition, trackInfo.ChartPosition,
-                info => info.Achievement.CompareValue);
+            MultipleCheckValue(AchievementsType.TrackChartPosition, trackInfo.ChartPosition, info => info.Achievement.CompareValue);
         }
 
         /// <summary>
@@ -107,11 +100,10 @@ namespace Core
         /// </summary>
         private void CheckAlbumChartPosition(AlbumInfo albumInfo)
         {
-            if(albumInfo.ChartPosition == 0)
+            if (albumInfo.ChartPosition == 0)
                 return;
             
-            MultipleCheckValue(AchievementsType.AlbumChartPosition, albumInfo.ChartPosition,
-                info => info.Achievement.CompareValue);
+            MultipleCheckValue(AchievementsType.AlbumChartPosition, albumInfo.ChartPosition, info => info.Achievement.CompareValue);
         }
 
         /// <summary>
@@ -128,7 +120,7 @@ namespace Core
         private void CheckConcertPlace(ConcertInfo concertInfo)
         {
             _lastConcertPlaceName = concertInfo.LocationName;
-            EqualCheckValue(AchievementsType.ConcertPlace, concertInfo.LocationId, () => { _lastConcertPlaceName = "";});
+            EqualCheckValue(AchievementsType.ConcertPlace, concertInfo.LocationId, () => _lastConcertPlaceName = "");
         }
 
         /// <summary>

@@ -133,16 +133,16 @@ namespace Game.Pages.Concert
             _concert.LocationId = index;
             _concert.LocationName = place.NameKey;
             _concert.LocationCapacity = place.Capacity;
-            placeCapacityLabel.text = $"ВМЕСТИТЕЛЬНОСТЬ: {place.Capacity.GetDisplay()}";
+            placeCapacityLabel.text = GetLocale("concert_capacity", place.Capacity.GetDisplay()).ToUpper();
 
             _placeCost = place.Cost;
-            concertPrice.SetValue($"АРЕНДА: {_placeCost.GetMoney()}");
+            concertPrice.SetValue(GetLocale("concert_rent", _placeCost.GetMoney()).ToUpper());
 
             ticketCostSlider.minValue = place.TicketMinCost;
             ticketCostSlider.maxValue = place.TicketMaxCost;
             ResetTicketCost();
 
-            fansRequirementLabel.text = $"*НЕОБХОДИМО <color=#F6C326>{place.FansRequirement.GetDisplay()}</color> ФАНАТОВ";
+            fansRequirementLabel.text = GetLocale("concert_fans_requirement", place.FansRequirement.GetDisplay());
             CheckConcertConditions(place.FansRequirement);
         }
 
@@ -205,7 +205,14 @@ namespace Game.Pages.Concert
             var anyAlbums = _lastAlbums.Any();
             var albumProps = anyAlbums
                 ? _lastAlbums.Select(ConvertAlbumToCarouselProps).ToArray()
-                : new[] {new CarouselProps {Text = "Нет альбомов", Value = new AlbumInfo()}};
+                : new[]
+                {
+                    new CarouselProps
+                    {
+                        Text = GetLocale("no_albums_yet"),
+                        Value = new AlbumInfo()
+                    }
+                };
             albumsCarousel.Init(albumProps);
 
             SetupTeam();

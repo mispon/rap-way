@@ -53,6 +53,14 @@ namespace Localization
         }
 
         /// <summary>
+        /// Возвращает локализованную строку с подставленными параметрами
+        /// </summary>
+        public string GetFormat(string key, params object[] args)
+        {
+            return string.Format(Get(key), args);
+        }
+
+        /// <summary>
         /// Загружает данные локализации
         /// </summary>
         public void LoadLocalization(SystemLanguage lang, bool sendEvent = false)

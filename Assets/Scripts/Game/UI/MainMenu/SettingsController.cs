@@ -15,7 +15,6 @@ namespace Game.UI.MainMenu
         [SerializeField] private Carousel langCarousel;
         [SerializeField] private Slider soundVolume;
         [SerializeField] private Slider musicVolume;
-        [SerializeField] private Carousel adsCarousel;
         [Space]
         [SerializeField] private Button saveButton;
 
@@ -25,7 +24,6 @@ namespace Game.UI.MainMenu
             soundVolume.onValueChanged.AddListener(OnVolumeChanged);
             musicVolume.onValueChanged.AddListener(OnVolumeChanged);
             saveButton.onClick.AddListener(SaveSettings);
-            adsCarousel.onChange += OnAdsChanged;
 
             SetupControls();
         }
@@ -59,14 +57,6 @@ namespace Game.UI.MainMenu
         }
 
         /// <summary>
-        /// Обрабатчик смены настройки показа рекламы
-        /// </summary>
-        private void OnAdsChanged(int index)
-        {
-            langCarousel.SetIndex(index == 0 ? "ON" : "OFF");
-        }
-
-        /// <summary>
         /// Сохраняет выбранные настройки
         /// </summary>
         private void SaveSettings()
@@ -75,7 +65,6 @@ namespace Game.UI.MainMenu
             settings.Lang = StringToLang(langCarousel.GetLabel());
             settings.SoundVolume = soundVolume.value;
             settings.MusicVolume = musicVolume.value;
-            settings.ShowAds = adsCarousel.Index == 0;
             MainMenuController.SetPanelActivity(gameObject, false);
         }
 

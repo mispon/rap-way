@@ -21,7 +21,9 @@ namespace Game.Pages.Social
         {
             tabsCarousel.onChange += OnTabChanged;
             foreach (var tab in tabs)
+            {
                 tab.onStartSocial += StartSocial;
+            }
         }
 
         /// <summary>
@@ -56,7 +58,9 @@ namespace Game.Pages.Social
         {
             tabsCarousel.onChange -= OnTabChanged;
             foreach (var tab in tabs)
+            {
                 tab.onStartSocial -= StartSocial;
+            }
         }
     }
 }

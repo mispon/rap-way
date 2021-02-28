@@ -2,7 +2,6 @@ using Core;
 using Data;
 using Game.Pages.Battle;
 using Game.Pages.Feat;
-using Localization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -64,7 +63,7 @@ namespace Game.Pages.Rappers
         private void DisplayResult(bool result, string rapperName)
         {
             string key = result ? "conversations_success" : "conversations_fail";
-            message.text = $"{LocalizationManager.Instance.Get(key)} <color=#01C6B8>{rapperName}</color>!";
+            message.text = $"{GetLocale(key)} <color=#01C6B8>{rapperName}</color>!";
             rapperAvatar.sprite = _rapper.Avatar;
             
             okButton.gameObject.SetActive(!result);

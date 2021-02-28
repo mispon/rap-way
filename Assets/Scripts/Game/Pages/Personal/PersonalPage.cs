@@ -129,7 +129,7 @@ namespace Game.Pages.Personal
         private void SetupBestTrack(List<TrackInfo> trackList)
         {
             var bestTrack = trackList.OrderByDescending(e => e.ListenAmount).FirstOrDefault();
-            bestTrackName.text = bestTrack != null ? bestTrack.Name : "NO TRACK YET";
+            bestTrackName.text = bestTrack != null ? bestTrack.Name : GetLocale("no_tracks_yet").ToUpper();
             listenAmount.text = bestTrack != null ? bestTrack.ListenAmount.GetDisplay() : "0";
         }
 

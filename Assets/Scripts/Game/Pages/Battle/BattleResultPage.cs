@@ -59,10 +59,12 @@ namespace Game.Pages.Battle
         /// </summary>
         private void DisplayResult()
         {
-            var rapperName = _result.RapperInfo.Name;
+            string playerName = PlayerManager.Data.Info.NickName;
+            string rapperName = _result.RapperInfo.Name;
+
             resultMessage.text = _result.IsWin
-                ? $"<color=#CE93F1>{PlayerManager.Data.Info.NickName}</color> победил в батле с <color=#F6C326>{rapperName}</color>!"
-                : $"<color=#F6C326>{rapperName}</color> победил в батле с <color=#CE93F1>{PlayerManager.Data.Info.NickName}</color>!";
+                ? GetLocale("battle_result", playerName, rapperName)
+                : GetLocale("battle_result", rapperName, playerName);
 
             hypeIncome.text = $"{_result.HypeIncome}";
             fansIncome.text = $"{_result.FansIncome.GetDisplay()}";

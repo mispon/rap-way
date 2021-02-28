@@ -43,9 +43,9 @@ namespace Game.Pages.Clip
         /// </summary>
         private void DisplayResult(ClipInfo clip)
         {
-            header.text = $"Работа над клипом для трека <color=#01C6B8>\"{ProductionManager.GetTrackName(clip.TrackId)}\"</color> завершена";
-            viewsAmount.text = $"Просмотры: <color=#F6C326>{clip.Views.GetDisplay()}</color>";
-            likesAndDislikes.text = $"<color=#00F475>+{clip.Likes.GetDisplay()}</color> / <color=#FF4E4E>-{clip.Dislikes.GetDisplay()}</color>";
+            header.text = GetLocale("clip_result_header", ProductionManager.GetTrackName(clip.TrackId));
+            viewsAmount.text = GetLocale("clip_result_views", clip.Views.GetDisplay());
+            likesAndDislikes.text = GetLocale("clip_result_reaction", clip.Likes.GetDisplay(), clip.Dislikes.GetDisplay());
             fansIncome.text = $"+{clip.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{clip.MoneyIncome.GetMoney()}";
         }

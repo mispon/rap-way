@@ -40,9 +40,9 @@ namespace Game.Pages.History
         /// <summary>
         /// Переопределение положения UI-элементов экземпляров Production
         /// </summary>
-        public void RepositionElements(IEnumerable<HistoryInfoItemController> itemControllers)
+        public void RepositionElements(List<HistoryInfoItemController> itemControllers)
         {
-            var itemsCount = itemControllers.Count();
+            var itemsCount = itemControllers.Count;
             if (itemsCount == 0)
                 return;
             
