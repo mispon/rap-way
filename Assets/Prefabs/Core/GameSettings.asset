@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   TrackWorkDuration: 5
-  TrackFansToPointsIncomeCurve:
+  TrackBaseHype: 0.3
+  TrackBaseQuality: 0.15
+  TrackWorkPointsMax: 100
+  TrackGradeCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -37,8 +40,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  TrackTrendsEqualityMultiplier: 1
-  TrackListenAmountCurve:
+  TrackChartCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -46,72 +48,93 @@ MonoBehaviour:
       value: 0
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  TrackChartPositionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
+      time: 0.49
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.0000022430513
+      outSlope: -0.0000022430513
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.13097215
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: -2.1375155
+      outSlope: -2.1375155
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1346116
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 0.1
+      inSlope: -1.4981631
+      outSlope: -1.4981631
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.12134993
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  TrackHitChance: 0.2
   TrackFansIncomeCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      value: -0.05
+      inSlope: 0.19967677
+      outSlope: 0.19967677
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.098626375
+      value: -0.030306606
+      inSlope: 0.20616406
+      outSlope: 0.20616406
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.19411886
+      value: -0.01
+      inSlope: 0.30383867
+      outSlope: 0.30383867
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.38959104
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.2
+      value: 0.05
+      inSlope: 0.057978693
+      outSlope: 0.057978693
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.14491758
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 0.2
+      inSlope: 0.021900075
+      outSlope: 0.021900075
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.087568685
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  TrackHypeImpactMultiplier: 1
-  TrackMoneyIncomeMultiplier: 1
+  TrackListenCost: 0.4
   AlbumWorkDuration: 5
   AlbumFansToPointsIncomeCurve:
     serializedVersion: 2

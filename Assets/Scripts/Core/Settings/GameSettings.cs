@@ -6,23 +6,27 @@ namespace Core.Settings
     public class GameSettings : ScriptableObject
     {
         [Header("TRACK")]
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int TrackWorkDuration;
-        [Space, Tooltip("Кривая ценности одного очка работы от количества фанатов")]
-        public AnimationCurve TrackFansToPointsIncomeCurve;
-        [Tooltip("Коэффициент совпадения с трендом")]
-        public float TrackTrendsEqualityMultiplier;
-        [Space, Tooltip("Зависимость числа слушателей от очков")]
-        public AnimationCurve TrackListenAmountCurve;
-        [Tooltip("Зависимость места в чарте от количества слушателей")]
-        public AnimationCurve TrackChartPositionCurve;
-        [Space, Tooltip("Зависимость коэффициента прироста фанатов от текущих фанатов")]
+        [Range(0.1f, 0.8f), Tooltip("Базовая величина хайпа, %")]
+        public float TrackBaseHype;
+        [Range(0.1f, 0.7f), Tooltip("Базовое качество трека, %")]
+        public float TrackBaseQuality;
+        [Range(10, 250), Tooltip("Максимальное количество очков работы, шт")]
+        public int TrackWorkPointsMax;
+        [Tooltip("Зависимость оценки от качества трека")]
+        public AnimationCurve TrackGradeCurve;
+        [Tooltip("Зависимость позиции в чарте от прослушиваний")]
+        public AnimationCurve TrackChartCurve;
+        [Range(0f, 1f), Tooltip("Вероятность хита, %")]
+        public float TrackHitChance;
+        [Tooltip("Зависимость изменения фанатов от качества трека, %")]
         public AnimationCurve TrackFansIncomeCurve;
-        [Tooltip("Коэффициент влияния хайпа на прирост фанатов")]
-        public float TrackHypeImpactMultiplier;
-        [Tooltip("Коэффициент заработка от количества прослушиваний")]
-        public int TrackMoneyIncomeMultiplier;
+        [Range(0.1f, 1f), Tooltip("Цена одного прослушивания")]
+        public float TrackListenCost;
 
         [Header("ALBUM")]
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int AlbumWorkDuration;
         [Space, Tooltip("Кривая ценности одного очка работы от количества фанатов")]
         public AnimationCurve AlbumFansToPointsIncomeCurve;
@@ -40,6 +44,7 @@ namespace Core.Settings
         public int AlbumMoneyIncomeMultiplier;
 
         [Header("CLIP")]
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int ClipWorkDuration;
         [Space, Tooltip("Кривая ценности одного очка работы от количества фанатов")]
         public AnimationCurve ClipFansToPointsIncomeCurve;
@@ -61,6 +66,7 @@ namespace Core.Settings
         public int ClipMoneyIncomeMultiplier;
 
         [Header("CONCERT")]
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int ConcertWorkDuration;
         [Space, Tooltip("Кривая ценности одного очка работы от количества фанатов")]
         public AnimationCurve ConcertFansToPointsIncomeCurve;
@@ -76,6 +82,7 @@ namespace Core.Settings
         public AnimationCurve ConcertFansIncomeCurve;
 
         [Header("SOCIALS")]
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int SocialsWorkDuration;
         [Space, Tooltip("Чем больше фанатов, тем больше за тобой следят, тем больше прирост хайпа")]
         public float SocialsFansMultiplier;

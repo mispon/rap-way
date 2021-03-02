@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using Enums;
-using Models.Game;
 using UnityEngine;
 
 namespace Data
@@ -12,8 +10,6 @@ namespace Data
     [CreateAssetMenu(fileName = "TrendsCompare", menuName = "Data/Trends Compare")]
     public class TrendsCompareData: ScriptableObject
     {
-        //TODO: Необходимо настроить классы совпадений!
-        
         [Header("Соответсвия схожих стилей")]
         [ArrayElementTitle(new [] { "value1", "value2" })] 
         public StylesCompareInfo[] StylesCompareInfos;
@@ -41,7 +37,6 @@ namespace Data
         [SerializeField] private T value1;
         [SerializeField] private T value2;
 
-        public bool IsEqualTo (T inputValue)
-            => value1.Equals(inputValue) || value2.Equals(inputValue);
+        public bool IsEqualTo (T inputValue) => value1.Equals(inputValue) || value2.Equals(inputValue);
     }
 }

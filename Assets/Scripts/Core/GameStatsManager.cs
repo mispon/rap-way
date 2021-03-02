@@ -96,15 +96,15 @@ namespace Core
         public static float AnalyzeEquality<T>(this BaseCompareInfo<T>[] array, T currentValue, T selectedValue)
         {
             if (currentValue.Equals(selectedValue))
-                return 0.5f;
+                return 0.1f;
 
             var equalInfos = array.Where(el => el.IsEqualTo(currentValue)).ToArray();
-            var equalInfosCount = equalInfos.Count();
+            var equalInfosCount = equalInfos.Length;
 
             if (equalInfosCount == 0 || !equalInfos.Any(el => el.IsEqualTo(selectedValue)))
                 return 0;
 
-            return 0.5f / (equalInfosCount + 1);
+            return 0.1f / (equalInfosCount + 1);
         }
     }
 }
