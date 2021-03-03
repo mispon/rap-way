@@ -1,6 +1,5 @@
 ﻿using System;
-using Enums;
-using UnityEngine;
+using Localization;
 
 namespace Models.Game
 {
@@ -16,7 +15,7 @@ namespace Models.Game
         public int SocialsCooldown;
         
         // Настройки
-        public SystemLanguage Lang;
+        public GameLang Lang;
         public float SoundVolume;
         public float MusicVolume;
         public bool ShowAds;
@@ -25,7 +24,7 @@ namespace Models.Game
         {
             Now = DateTime.Now,
             Trends = Trends.New,
-            Lang = SystemLanguage.Russian,
+            Lang = GameLang.RU,
             SoundVolume = 1f,
             MusicVolume = 1f,
             ShowAds = true

@@ -34,7 +34,7 @@ namespace Game.UI.MainMenu
         private void SetupControls()
         {
             var settings = GameManager.Instance.GameStats;
-            langCarousel.SetIndex(LangToString(settings.Lang));
+            langCarousel.SetIndex(settings.Lang.ToString());
             soundVolume.value = settings.SoundVolume;
             musicVolume.value = settings.MusicVolume;
         }
@@ -69,32 +69,16 @@ namespace Game.UI.MainMenu
         }
 
         /// <summary>
-        /// Маппит перечисление языков на строковое представление
-        /// </summary>
-        private static string LangToString(SystemLanguage value)
-        {
-            switch (value)
-            {
-                case SystemLanguage.Russian:
-                    return "RU";
-                case SystemLanguage.English:
-                    return "EN";
-                default:
-                    throw new RapWayException($"LangToString: Не найден матчинг для {value}!");
-            }
-        }
-
-        /// <summary>
         /// Маппит строковое представление на перечисление языков
         /// </summary>
-        private static SystemLanguage StringToLang(string value)
+        private static GameLang StringToLang(string value)
         {
             switch (value)
             {
                 case "RU":
-                    return SystemLanguage.Russian;
+                    return GameLang.RU;
                 case "EN":
-                    return SystemLanguage.English;
+                    return GameLang.EN;
                 default:
                     throw new RapWayException($"StringToLang: Не найден матчинг для {value}!");
             }

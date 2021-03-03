@@ -50,7 +50,8 @@ namespace Game.Pages.Track
             chartInfo.text = track.ChartPosition > 0
                 ? GetLocale("track_result_chart_pos", track.ChartPosition)
                 : GetLocale("track_result_no_chart");
-            fansIncome.text = $"+{track.FansIncome.GetDisplay()}";
+            string fansIncomePrefix = track.FansIncome > 0 ? "+" : string.Empty;
+            fansIncome.text = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
         }
 

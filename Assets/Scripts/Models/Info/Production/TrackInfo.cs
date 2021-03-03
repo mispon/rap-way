@@ -1,4 +1,5 @@
 ﻿using Data;
+using Localization;
 using Utils.Extensions;
 
 namespace Models.Info.Production
@@ -20,8 +21,8 @@ namespace Models.Info.Production
         public override string[] HistoryInfo => new[]
         {
             Name,
-            TrendInfo.Style.GetDescription(),
-            TrendInfo.Theme.GetDescription(),
+            LocalizationManager.Instance.Get(TrendInfo.Style.GetDescription()),
+            LocalizationManager.Instance.Get(TrendInfo.Theme.GetDescription()),
             ListenAmount.GetDisplay(),
             ChartPosition.ToString()
         };

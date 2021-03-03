@@ -10,17 +10,18 @@ using EventType = Core.EventType;
 
 namespace Localization
 {
+    public enum GameLang
+    {
+        RU,
+        EN
+    }
+
     /// <summary>
     /// Реализация менеджера локализации
     /// Все файлы локализации должны лежать в "Assests/StreamingAssets" в формате json
     /// </summary>
     public class LocalizationManager : Singleton<LocalizationManager>
     {
-        public static readonly SystemLanguage[] AvailableLanguages = {
-            SystemLanguage.English,
-            SystemLanguage.Russian
-        };
-
         [SerializeField] private LocalizationData _data;
 
         public bool IsReady { get; private set; }
@@ -63,18 +64,15 @@ namespace Localization
         /// <summary>
         /// Загружает данные локализации
         /// </summary>
-        public void LoadLocalization(SystemLanguage lang, bool sendEvent = false)
+        public void LoadLocalization(GameLang lang, bool sendEvent = false)
         {
-            if (AvailableLanguages.All(el => el != lang))
-                throw new RapWayException($"Язык [{lang}] не поддерживается");
-
             StartCoroutine(LoadLocalizationAsync(lang, sendEvent));
         }
 
         /// <summary>
         /// Корутина загрузки данных локализации
         /// </summary>
-        private IEnumerator LoadLocalizationAsync(SystemLanguage lang, bool sendEvent = false)
+        private IEnumerator LoadLocalizationAsync(GameLang lang, bool sendEvent = false)
         {
             IsReady = false;
 
@@ -131,22 +129,22 @@ namespace Localization
         /// <summary>
         /// Возвращает путь к файлу локализации
         /// </summary>
-        public static string GetLocalizationPath(SystemLanguage lang)
+        public static string GetLocalizationPath(GameLang lang)
             => Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
 
         /// <summary>
         /// Возвращает имя файла локализации
         /// </summary>
-        private static string GetFileName(SystemLanguage lang)
+        private static string GetFileName(GameLang lang)
         {
             switch (lang)
             {
-                case SystemLanguage.Russian:
+                case GameLang.RU:
                     return "ru.json";
-                case SystemLanguage.English:
+                case GameLang.EN:
                     return "en.json";
                 default:
-                    return "ru.json";
+                    throw new RapWayException($"Неизвестное значение языка: {lang}!");
             }
         }
     }
