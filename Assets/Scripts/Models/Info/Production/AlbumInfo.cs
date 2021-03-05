@@ -11,6 +11,8 @@ namespace Models.Info.Production
     [Serializable]
     public class AlbumInfo : TrackInfo
     {
+        public int ConcertAmounts;
+
         public override string[] HistoryInfo => new[]
         {
             Name,

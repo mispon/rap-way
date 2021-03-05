@@ -124,13 +124,5 @@ namespace Game.Analyzers
 
             return (Convert.ToInt32(fans), Convert.ToInt32(money));
         }
-
-        /// <summary>
-        /// Возвращает отношение прослушиваний к общему числу фанатов
-        /// </summary>
-        private static float GetListenRatio(int listensAmount)
-        {
-            return 1f * listensAmount / PlayerManager.Data.Fans;
-        }
     }
 }

@@ -1,6 +1,8 @@
+using System;
 using Core;
 using Models.Info.Production;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game.Analyzers
 {
@@ -14,21 +16,76 @@ namespace Game.Analyzers
         /// </summary>
         public override void Analyze(ClipInfo clip)
         {
-            var totalFans = PlayerManager.Data.Fans;
-            var trackInfo = ProductionManager.GetTrack(clip.TrackId);
-            
-            var trackImpact = settings.ClipViewsFromTrackCurve.Evaluate(trackInfo.ChartPosition);
-            var resultPoints = settings.ClipFansToPointsIncomeCurve.Evaluate(totalFans) * (clip.OperatorPoints + clip.DirectorPoints);
-            
-            clip.Views = (int) settings.ClipViewsCurve.Evaluate(resultPoints * trackImpact);
-            var marks = clip.Views * Random.Range(settings.ClipMinMarksRatio, settings.ClipMaxMarksRatio);
-            clip.Likes = (int) (marks * settings.ClipLikesFromTrackCurve.Evaluate(trackImpact));
-            clip.Dislikes = (int) (marks - clip.Likes);
+            var track = ProductionManager.GetTrack(clip.TrackId);
 
-            var hypeImpact = settings.ClipHypeImpactMultiplier * PlayerManager.Data.Hype;
-            var fansIncomeFromViews = settings.ClipFansIncomeCurve.Evaluate(totalFans) * clip.Views;
-            clip.FansIncome = (int) (hypeImpact * fansIncomeFromViews);
-            clip.MoneyIncome = settings.ClipMoneyIncomeMultiplier * clip.Views;
+            float listenImpact = settings.ClipTrackListensImpact;
+            float trackListenFactor = Mathf.Min(listenImpact * GetListenRatio(track.ListenAmount), listenImpact);
+            float clipQuality = trackListenFactor + CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints);
+
+            clip.Views = CalculateViewsAmount(clipQuality, PlayerManager.Data.Fans);
+
+            var (likes, dislikes) = CalculateReaction(clipQuality, clip.Views);
+            clip.Likes = likes;
+            clip.Dislikes = dislikes;
+
+            var (fans, money) = CalculateIncomes(clipQuality, clip.Views);
+            clip.FansIncome = fans;
+            clip.MoneyIncome = money;
+        }
+
+        /// <summary>
+        /// Вычисляет вклад рабочих очков в качество трека
+        /// </summary>
+        private float CalculateWorkPointsFactor(int dirPoints, int opPoints)
+        {
+            float workPointsPercent = (1f - settings.ClipTrackListensImpact) * (1f / settings.ClipWorkPointsMax);
+            float workPointsFactor = Mathf.Min(dirPoints + opPoints, settings.ClipWorkPointsMax) * workPointsPercent;
+            return workPointsFactor;
+        }
+
+        /// <summary>
+        /// Вычисляет количество просмотров на основе качества клипа, кол-ва фанатов и уровня хайпа
+        /// </summary>
+        private int CalculateViewsAmount(float clipQuality, int fansAmount)
+        {
+            bool isHit = Random.Range(0f, 1f) <= settings.ClipHitChance;
+
+            float clipGrade = settings.ClipGradeCurve.Evaluate(clipQuality);
+            float hypeFactor = Mathf.Max(0.1f, PlayerManager.Data.Hype / 100f);
+
+            int views = Convert.ToInt32(clipGrade * fansAmount * hypeFactor);
+            if (isHit)
+            {
+                views *= 2;
+            }
+
+            return views;
+        }
+
+        /// <summary>
+        /// Вычисляет количество лайков / дизлайков
+        /// </summary>
+        private (int likes, int dislikes) CalculateReaction(float clipQuality, int views)
+        {
+            int activeViewers = Convert.ToInt32(views * settings.ClipActiveViewers);
+
+            int likes = Convert.ToInt32(clipQuality * activeViewers);
+            int dislikes = Convert.ToInt32((1f - clipQuality) * activeViewers);
+
+            return (likes, dislikes);
+        }
+
+        /// <summary>
+        /// Вычисляет прибыльность клипа
+        /// </summary>
+        private (int fans, int money) CalculateIncomes(float clipQuality, int views)
+        {
+            // Прирост фанатов - количество прослушиваний * коэф. прироста
+            int fans = Convert.ToInt32(views * settings.ClipFansIncomeCurve.Evaluate(clipQuality));
+            // Доход - количество прослушиваний * стоимость одного прослушивания
+            int money = Convert.ToInt32(views * settings.ClipViewCost);
+
+            return (fans, money);
         }
     }
 }

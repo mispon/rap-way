@@ -34,6 +34,7 @@ namespace Game.Pages.Training
         /// </summary>
         public void OpenPage(int tabIndex)
         {
+            _tabIndex = tabIndex;
             Open();
             OpenTab(tabIndex);
         }
@@ -64,7 +65,7 @@ namespace Game.Pages.Training
         private void OpenTab(int index)
         {
             _tabIndex = index;
-            
+
             for (var i = 0; i < tabs.Length; i++)
             {
                 var tab = tabs[i];
@@ -91,7 +92,11 @@ namespace Game.Pages.Training
         protected override void BeforePageOpen()
         {
             DisplayExp();
-            OpenTab(0);
+        }
+
+        protected override void AfterPageOpen()
+        {
+            tabsCarousel.SetIndex(_tabIndex);
         }
 
         protected override void AfterPageClose()

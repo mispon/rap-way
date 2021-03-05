@@ -1,5 +1,7 @@
-using Models.Info.Production;
+using System;
 using Core;
+using Models.Info.Production;
+using UnityEngine;
 
 namespace Game.Analyzers
 {
@@ -13,20 +15,40 @@ namespace Game.Analyzers
         /// </summary>
         public override void Analyze(ConcertInfo concert)
         {
-            var totalFans = PlayerManager.Data.Fans;
-            var albumInfo = ProductionManager.GetAlbum(concert.AlbumId);
-            var sameConcertsCount = ProductionManager.SameConcertsCount(concert.AlbumId);
-            
-            var sameConcertImpact = settings.ConcertSamePlaceAgainCurve.Evaluate(sameConcertsCount);
-            var albumImpact = settings.ConcertTicketsFromAlbumCurve.Evaluate(albumInfo.ChartPosition);
-            var hypeImpact = settings.ConcertHypeImpactMultiplier * PlayerManager.Data.Hype;
-            var resultPoints = settings.ConcertFansToPointsIncomeCurve.Evaluate(totalFans) * (concert.ManagementPoints + concert.MarketingPoints);
-            
-            concert.TicketsSold = (int) settings.ConcertTicketsSoldCurve.Evaluate(sameConcertImpact * albumImpact * hypeImpact * resultPoints);
-            
-            var fansIncomeFromVisitors = settings.ConcertFansIncomeCurve.Evaluate(totalFans) * concert.TicketsSold;
-            concert.FansIncome = (int) fansIncomeFromVisitors;
-            concert.MoneyIncome = concert.Income;
+            var album = ProductionManager.GetAlbum(concert.AlbumId);
+
+            float listenImpact = settings.ConcertAlbumListensImpact;
+            float albumListenFactor = Mathf.Min(listenImpact * GetListenRatio(album.ListenAmount), listenImpact);
+            float concertQuality = albumListenFactor + CalculateWorkPointsFactor(concert.ManagementPoints, concert.MarketingPoints);
+
+            float repeatsDebuff = album.ConcertAmounts / 10f;
+            concertQuality -= repeatsDebuff;
+
+            int fansAmount = PlayerManager.Data.Fans;
+            concert.TicketsSold = CalculateTicketSales(concertQuality, fansAmount);
+        }
+
+        /// <summary>
+        /// Вычисляет вклад рабочих очков в качество концерта
+        /// </summary>
+        private float CalculateWorkPointsFactor(int manPoints, int marPoints)
+        {
+            float workPointsPercent = (1f - settings.ConcertAlbumListensImpact) * (1f / settings.ConcertWorkPointsMax);
+            float workPointsFactor = Mathf.Min(manPoints + marPoints, settings.ConcertWorkPointsMax) * workPointsPercent;
+            return workPointsFactor;
+        }
+
+        /// <summary>
+        /// Вычисляет количество продаж на основе качества концерта, кол-ва фанатов и уровня хайпа
+        /// </summary>
+        private int CalculateTicketSales(float concertQuality, int fansAmount)
+        {
+            float concertGrade = settings.ConcertGradeCurve.Evaluate(concertQuality);
+            float hypeFactor = Mathf.Max(0.1f, PlayerManager.Data.Hype / 100f);
+
+            int ticketSales = Convert.ToInt32(concertGrade * fansAmount * hypeFactor);
+
+            return ticketSales;
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Core
         /// </summary>
         public static TrackInfo GetTrack(int trackId)
             => playerHistory.TrackList.First(e => e.Id == trackId);
-        
+
         /// <summary>
         /// Возвращает название трека по идентификатору
         /// </summary>

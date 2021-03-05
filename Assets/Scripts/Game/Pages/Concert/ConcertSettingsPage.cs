@@ -19,7 +19,7 @@ namespace Game.Pages.Concert
     /// </summary>
     public class ConcertSettingsPage : Page
     {
-        private const int ALBUMS_CACHE = 5;
+        private const int MAX_ALBUMS_COUNT = 5;
 
         [Header("Контролы")]
         [SerializeField] private Carousel placeCarousel;
@@ -45,7 +45,7 @@ namespace Game.Pages.Concert
 
         private ConcertInfo _concert;
         private int _placeCost;
-        private readonly List<AlbumInfo> _lastAlbums = new List<AlbumInfo>(ALBUMS_CACHE);
+        private readonly List<AlbumInfo> _lastAlbums = new List<AlbumInfo>(MAX_ALBUMS_COUNT);
 
         private void Start()
         {
@@ -116,6 +116,8 @@ namespace Game.Pages.Concert
             }
 
             var album = albumsCarousel.GetValue<AlbumInfo>();
+            album.ConcertAmounts += 1;
+
             _concert.AlbumId = album.Id;
             _concert.Id = PlayerManager.GetNextProductionId<ConcertInfo>();
 
@@ -162,8 +164,9 @@ namespace Game.Pages.Concert
         private void CacheLastAlbums()
         {
             var albums = PlayerManager.Data.History.AlbumList
+                .Where(e => e.ConcertAmounts < 3)
                 .OrderByDescending(e => e.Id)
-                .Take(ALBUMS_CACHE);
+                .Take(MAX_ALBUMS_COUNT);
             _lastAlbums.AddRange(albums);
         }
 

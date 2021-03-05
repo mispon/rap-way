@@ -20,6 +20,14 @@ namespace Game.Analyzers
         /// <summary>
         /// Анализирует успешность деятельности игрока 
         /// </summary>
-        public abstract void Analyze(T entity);
+        public abstract void Analyze(T social);
+
+        /// <summary>
+        /// Возвращает отношение прослушиваний к общему числу фанатов
+        /// </summary>
+        protected static float GetListenRatio(int listensAmount)
+        {
+            return 1f * listensAmount / PlayerManager.Data.Fans;
+        }
     }
 }

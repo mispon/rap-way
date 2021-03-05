@@ -46,7 +46,8 @@ namespace Game.Pages.Clip
             header.text = GetLocale("clip_result_header", ProductionManager.GetTrackName(clip.TrackId));
             viewsAmount.text = GetLocale("clip_result_views", clip.Views.GetDisplay());
             likesAndDislikes.text = GetLocale("clip_result_reaction", clip.Likes.GetDisplay(), clip.Dislikes.GetDisplay());
-            fansIncome.text = $"+{clip.FansIncome.GetDisplay()}";
+            string fansPrefix = clip.FansIncome > 0 ? "+" : string.Empty;
+            fansIncome.text = $"{fansPrefix}{clip.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{clip.MoneyIncome.GetMoney()}";
         }
         
