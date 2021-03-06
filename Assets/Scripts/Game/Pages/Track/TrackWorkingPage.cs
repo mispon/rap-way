@@ -1,10 +1,12 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Data;
 using Enums;
 using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Game.Pages.Track
 {
@@ -85,16 +87,19 @@ namespace Game.Pages.Track
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlayWorkPoint();
-            
-            var bitWorkPoints = CreateBitPoints(PlayerManager.Data);
-            var textWorkPoints = CreateTextPoints(PlayerManager.Data);
-            
-            _track.BitPoints += bitWorkPoints;
-            _track.TextPoints += textWorkPoints;
+
+            int bitWorkPoints = CreateBitPoints(PlayerManager.Data);
+            int textWorkPoints = CreateTextPoints(PlayerManager.Data);
+
+            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
+            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
+
+            _track.BitPoints += bitWorkPoints + equipBonus;
+            _track.TextPoints += textWorkPoints + equipBonus;
         }
 
         /// <summary>
-        /// Создает очки работы по биту 
+        /// Создает очки работы по биту
         /// </summary>
         private int CreateBitPoints(PlayerData data)
         {

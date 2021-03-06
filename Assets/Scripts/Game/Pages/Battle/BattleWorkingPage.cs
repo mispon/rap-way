@@ -3,6 +3,7 @@ using Data;
 using Enums;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Game.Pages.Battle
 {

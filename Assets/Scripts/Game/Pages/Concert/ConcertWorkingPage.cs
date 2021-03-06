@@ -1,10 +1,12 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Data;
 using Enums;
 using Models.Info.Production;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Game.Pages.Concert
 {
@@ -85,8 +87,15 @@ namespace Game.Pages.Concert
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlayWorkPoint();
-            _concert.ManagementPoints += CreateManagementPoints(PlayerManager.Data);
-            _concert.MarketingPoints += CreatePrPoints(PlayerManager.Data);
+
+            int managerPoints = CreateManagementPoints(PlayerManager.Data);
+            int prPoints = CreatePrPoints(PlayerManager.Data);
+
+            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
+            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
+
+            _concert.ManagementPoints += managerPoints + equipBonus;
+            _concert.MarketingPoints += prPoints + equipBonus;
         }
 
         /// <summary>

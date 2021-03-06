@@ -22,7 +22,7 @@ namespace Game.Analyzers
             float concertQuality = albumListenFactor + CalculateWorkPointsFactor(concert.ManagementPoints, concert.MarketingPoints);
 
             float repeatsDebuff = album.ConcertAmounts / 10f;
-            concertQuality -= repeatsDebuff;
+            concertQuality = Mathf.Max(concertQuality - repeatsDebuff, 0f);
 
             int fansAmount = PlayerManager.Data.Fans;
             concert.TicketsSold = CalculateTicketSales(concertQuality, fansAmount);
@@ -33,8 +33,11 @@ namespace Game.Analyzers
         /// </summary>
         private float CalculateWorkPointsFactor(int manPoints, int marPoints)
         {
-            float workPointsPercent = (1f - settings.ConcertAlbumListensImpact) * (1f / settings.ConcertWorkPointsMax);
-            float workPointsFactor = Mathf.Min(manPoints + marPoints, settings.ConcertWorkPointsMax) * workPointsPercent;
+            float workPointsImpact = 1f - settings.ConcertAlbumListensImpact;
+            float workPointsRatio = 1f * (manPoints + marPoints) / settings.ConcertWorkPointsMax;
+
+            float workPointsFactor = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
+
             return workPointsFactor;
         }
 

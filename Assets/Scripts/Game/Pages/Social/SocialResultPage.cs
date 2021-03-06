@@ -1,4 +1,5 @@
-﻿using Game.Analyzers;
+﻿using Enums;
+using Game.Analyzers;
 using UnityEngine;
 using Models.Info;
 
@@ -9,8 +10,6 @@ namespace Game.Pages.Social
     /// </summary>
     public abstract class SocialResultPage : Page
     {
-        private const int SOCIAL_COOLDOWN = 5;
-
         [Header("Анализатор")] 
         [SerializeField] protected SocialAnalyzer analyzer;
 
@@ -19,8 +18,12 @@ namespace Game.Pages.Social
         public void ShowPage(SocialInfo social)
         {
             _social = social;
-            analyzer.Analyze(_social);
-            
+
+            if (social.Type != SocialType.Trends)
+            {
+                analyzer.Analyze(_social);
+            }
+
             Open();
             DisplayResult(social);
         }
@@ -35,7 +38,7 @@ namespace Game.Pages.Social
         /// </summary>
         private static void SaveResult(SocialInfo social)
         {
-            GameManager.Instance.GameStats.SocialsCooldown = SOCIAL_COOLDOWN;
+            GameManager.Instance.GameStats.SocialsCooldown = GameManager.Instance.Settings.SocialsCooldown;
             PlayerManager.Instance.SpendMoney(social.CharityAmount);
             PlayerManager.Instance.AddHype(social.HypeIncome);
         }

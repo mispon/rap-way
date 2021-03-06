@@ -1,10 +1,12 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Data;
 using Enums;
 using Models.Info.Production;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Game.Pages.Album
 {
@@ -85,12 +87,15 @@ namespace Game.Pages.Album
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlayWorkPoint();
-            
+
             var bitWorkPoints = CreateBitPoints(PlayerManager.Data);
             var textWorkPoints = CreateTextPoints(PlayerManager.Data);
 
-            _album.BitPoints += bitWorkPoints;
-            _album.TextPoints += textWorkPoints;
+            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
+            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
+
+            _album.BitPoints += bitWorkPoints + equipBonus;
+            _album.TextPoints += textWorkPoints + equipBonus;
         }
 
         /// <summary>

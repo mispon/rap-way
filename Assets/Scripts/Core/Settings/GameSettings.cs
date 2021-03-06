@@ -76,11 +76,21 @@ namespace Core.Settings
         [Header("SOCIALS")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int SocialsWorkDuration;
-        // todo
+        [Range(1, 30), Tooltip("Длительность отдыха PR-менеджера, дни")]
+        public int SocialsCooldown;
+        [Range(10, 100), Tooltip("Максимальное количество очков работы, шт")]
+        public int SocialsWorkPointsMax;
+        [Range(0f, 1f), Tooltip("Сила влияния количества денег при пожертвовании")]
+        public float SocialsCharitySizeImpact;
+        [Range(0f, 1f), Tooltip("Доля активных фанатов от общего кол-ва, %")]
+        public float SocialsActiveFansGroup;
 
         [Header("OTHER")]
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int RappersWorkDuration;
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int BattleWorkDuration;
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int FeatWorkDuration;
     }
 }

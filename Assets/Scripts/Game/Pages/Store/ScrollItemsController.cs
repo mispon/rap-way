@@ -19,6 +19,8 @@ namespace Game.Pages.Store
         [SerializeField] private RectTransform rectContent; 
         [Space, SerializeField] private GameObject elementTemplate;
         [SerializeField] private GameObject noElementsText;
+        [Space]
+        [SerializeField] private StoreItemInfoPage infoPage;
 
         /// <summary>
         /// Массив данных об UI товаров для каждого типа шмотки каждого уровня
@@ -106,7 +108,7 @@ namespace Game.Pages.Store
             }
 
             var uiData = GetGoodUi(type, nextLevel ? level + 1 : level); 
-            itemController.Initialize(type, uiData, OnPurchaseItemClick);
+            itemController.Initialize(type, uiData, OnPurchaseItemClick, OnItemClick);
         }
 
         /// <summary>
@@ -150,6 +152,15 @@ namespace Game.Pages.Store
             {
                 DrawItem(type, level, true);
             }
+        }
+
+        /// <summary>
+        /// Показывает детальную информацию о товаре
+        /// </summary>
+        private void OnItemClick(GoodsType type, short level, int price)
+        {
+            var uIData = GetGoodUi(type, level);
+            infoPage.Show(uIData.Image, type, level, price);
         }
 
         /// <summary>

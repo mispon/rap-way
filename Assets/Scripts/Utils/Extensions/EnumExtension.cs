@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -47,6 +48,14 @@ namespace Utils.Extensions
         {
             var values = (T[]) Enum.GetValues(typeof(T));
             return values.Select(e => e.GetDescription()).ToArray();
+        }
+
+        /// <summary>
+        /// Преобразует коллекцию в хэш-список
+        /// </summary>
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> values)
+        {
+            return new HashSet<T>(values);
         }
     }
 }

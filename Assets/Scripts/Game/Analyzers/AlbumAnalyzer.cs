@@ -53,8 +53,11 @@ namespace Game.Analyzers
         /// </summary>
         private float CalculateWorkPointsFactor(int textPoints, int bitPoints)
         {
-            float workPointsPercent = (1f - settings.AlbumBaseQuality) * (1f / settings.AlbumWorkPointsMax);
-            float workPointsFactor = Mathf.Min(textPoints + bitPoints, settings.AlbumWorkPointsMax) * workPointsPercent;
+            float workPointsImpact = 1f - settings.AlbumBaseQuality;
+            float workPointsRatio = 1f * (textPoints + bitPoints) / settings.AlbumWorkPointsMax;
+
+            float workPointsFactor = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
+
             return workPointsFactor;
         }
 

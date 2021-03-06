@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Core.Interfaces;
 using Models.Player;
 using UnityEngine;
@@ -19,6 +20,13 @@ namespace Game.UI.GameScreen
         [SerializeField] private Text playerMoney;
         [SerializeField] private Text playerHype;
         [SerializeField] private Text currentDate;
+        [Space]
+        [SerializeField] private Button moneyButton;
+        [SerializeField] private Button fansButton;
+        [SerializeField] private Button hypeButton;
+        [Space]
+        [SerializeField] private StatDescItem[] statDescItems;
+        [SerializeField] private StatsDescriptionPage statsDescPage;
 
         [Header("Группа основных действий")]
         [SerializeField] private Button productionFoldoutButton;
@@ -32,9 +40,21 @@ namespace Game.UI.GameScreen
         
         public void OnStart()
         {
+            moneyButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[0]));
+            fansButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[1]));
+            hypeButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[2]));
+
             productionFoldoutButton.onClick.AddListener(OnProductionClick);
             mainMenuButton.onClick.AddListener(OnMainMenuClick);
             TimeManager.Instance.onDayLeft += OnDayLeft;
+        }
+
+        /// <summary>
+        /// Открывает страницу с описанием основной характеристики
+        /// </summary>
+        private void ShowDescriptionPage(StatDescItem item)
+        {
+            statsDescPage.Show(item.Icon, item.NameKey, item.DescKey);
         }
 
         /// <summary>
@@ -42,7 +62,7 @@ namespace Game.UI.GameScreen
         /// </summary>
         public void UpdateHUD(PlayerData playerData)
         {
-            playerNickname.text = playerData.Info.NickName;
+            playerNickname.text = playerData.Info.NickName.ToUpper();
             playerMoney.text = playerData.Money.GetMoney();
             playerFans.text = playerData.Fans.GetDisplay();
             playerHype.text = playerData.Hype.ToString();
@@ -95,5 +115,13 @@ namespace Game.UI.GameScreen
         {
             TimeManager.Instance.onDayLeft -= OnDayLeft;
         }
+    }
+
+    [Serializable]
+    public class StatDescItem
+    {
+        public Sprite Icon;
+        public string NameKey;
+        public string DescKey;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Enums;
+using Models.Game;
 
 namespace Models.Player
 {
@@ -29,6 +30,8 @@ namespace Models.Player
         public List<Skills> Skills;
         public HashSet<int> Feats;
         public HashSet<int> Battles;
+
+        public Trends LastKnownTrends;
         
         public static PlayerData New => new PlayerData
         {
@@ -47,7 +50,9 @@ namespace Models.Player
             Styles = new List<Styles> { Enums.Styles.Underground },
             Skills = new List<Skills>(),
             Feats = new HashSet<int>(),
-            Battles = new HashSet<int>()
+            Battles = new HashSet<int>(),
+
+            LastKnownTrends = null
         };
     }
 }

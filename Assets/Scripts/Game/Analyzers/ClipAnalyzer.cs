@@ -38,8 +38,11 @@ namespace Game.Analyzers
         /// </summary>
         private float CalculateWorkPointsFactor(int dirPoints, int opPoints)
         {
-            float workPointsPercent = (1f - settings.ClipTrackListensImpact) * (1f / settings.ClipWorkPointsMax);
-            float workPointsFactor = Mathf.Min(dirPoints + opPoints, settings.ClipWorkPointsMax) * workPointsPercent;
+            float workPointsImpact = 1f - settings.ClipTrackListensImpact;
+            float workPointsRatio = 1f * (dirPoints + opPoints) / settings.ClipWorkPointsMax;
+
+            float workPointsFactor = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
+
             return workPointsFactor;
         }
 

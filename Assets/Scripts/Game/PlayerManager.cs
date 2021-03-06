@@ -5,6 +5,7 @@ using Core.Interfaces;
 using Enums;
 using Game.UI.GameScreen;
 using Localization;
+using Models.Game;
 using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
@@ -142,6 +143,20 @@ namespace Game
         {
             var teammate = Data.Team.TeammatesArray.First(e => e.Type == type);
             teammate.Cooldown = cooldown;
+        }
+
+        /// <summary>
+        /// Обновляет информацию о трендах
+        /// </summary>
+        public static void UpdateTrends(Styles style, Themes theme)
+        {
+            if (Data.LastKnownTrends == null)
+            {
+                Data.LastKnownTrends = Trends.New;
+            }
+
+            Data.LastKnownTrends.Style = style;
+            Data.LastKnownTrends.Theme = theme;
         }
     }
 }

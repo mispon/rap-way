@@ -1,8 +1,10 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Enums;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Game.Pages.Clip
 {
@@ -75,12 +77,15 @@ namespace Game.Pages.Clip
         /// </summary>
         private void GenerateWorkPoints()
         {
+            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
+            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
+
             var directorPointsValue = Random.Range(1, _clip.DirectorSkill + 1);
-            _clip.DirectorPoints += directorPointsValue;
+            _clip.DirectorPoints += directorPointsValue + equipBonus;
             directorWorkPoints.Show(directorPointsValue);
 
             var operatorPointsValue = Random.Range(1, _clip.OperatorSkill + 1);
-            _clip.OperatorPoints += operatorPointsValue;
+            _clip.OperatorPoints += operatorPointsValue + equipBonus;
             operatorWorkPoints.Show(operatorPointsValue);
 
             var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 1);

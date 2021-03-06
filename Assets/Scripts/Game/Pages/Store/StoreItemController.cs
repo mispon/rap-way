@@ -17,8 +17,9 @@ namespace Game.Pages.Store
         [SerializeField] private RectTransform itemIconBackgroundRect;
         [SerializeField] private RectTransform itemIconRect;
         [SerializeField] private float marginPadding = 20f;
-        
+
         [Header("Информация")]
+        [SerializeField] private Button itemBtn;
         [SerializeField] private Image iconImg;
         [SerializeField] private Text typeTxt;
         [SerializeField] private Text priceTxt;
@@ -32,7 +33,11 @@ namespace Game.Pages.Store
         /// <summary>
         /// Инициализация UI-элементов
         /// </summary>
-        public void Initialize(GoodsType type, GoodUI uiData, Action<GoodsType, short, int> onClickAction)
+        public void Initialize(
+            GoodsType type, GoodUI uiData,
+            Action<GoodsType, short, int> onBuyAction,
+            Action<GoodsType, short, int> onClickAction
+        )
         {
             if (_itemIconMaxSize == 0)
             {
@@ -47,7 +52,7 @@ namespace Game.Pages.Store
             if (uiData.Image != null)
             {
                 var texture = uiData.Image.texture;
-                var ratio =(float) texture.width / texture.height;
+                var ratio = (float) texture.width / texture.height;
                 var scale = ratio >= 1f
                     ? _itemIconMaxSize / texture.width
                     : _itemIconMaxSize / texture.height;
@@ -60,7 +65,10 @@ namespace Game.Pages.Store
             priceTxt.text = uiData.Price.GetMoney();
             
             buyBtn.onClick.RemoveAllListeners();
-            buyBtn.onClick.AddListener(() => onClickAction(Type, Level, uiData.Price));
+            buyBtn.onClick.AddListener(() => onBuyAction(Type, Level, uiData.Price));
+
+            itemBtn.onClick.RemoveAllListeners();
+            itemBtn.onClick.AddListener(() => onClickAction(Type, Level, uiData.Price));
         }
     }
 }

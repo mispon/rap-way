@@ -7,6 +7,8 @@ namespace Enums
     /// </summary>
     public enum SocialType
     {
+        [Description("social_trends")]
+        Trends,
         [Description("social_twit")]
         Eagler,
         [Description("social_photo")]
