@@ -12,14 +12,13 @@ namespace Game.Pages.Concert
     /// </summary>
     public class ConcertResultPage : Page
     {
-        [SerializeField] private int rewardExp;
-
         [Header("Компоменты")]
         [SerializeField] private Text header;
         [SerializeField] private Text ticketsSold;
         [SerializeField] private Text ticketCost;
         [SerializeField] private Text moneyIncome;
-        
+        [SerializeField] private Text expIncome;
+
         [Header("Анализатор концерта")]
         [SerializeField] private ConcertAnalyzer concertAnalyzer;
 
@@ -49,6 +48,7 @@ namespace Game.Pages.Concert
             ticketsSold.text = GetLocale("concert_result_sold", concert.TicketsSold.GetDisplay()).ToUpper();
             ticketCost.text = GetLocale("concert_result_cost", concert.TicketCost.GetMoney()).ToUpper();
             moneyIncome.text = $"+{concert.Income.GetMoney()}";
+            expIncome.text = $"+{settings.ConcertRewardExp}";
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Game.Pages.Concert
         private void SaveResult(ConcertInfo concert)
         {
             concert.Timestamp = TimeManager.Instance.Now;
-            PlayerManager.Instance.AddMoney(concert.Income, rewardExp);
+            PlayerManager.Instance.AddMoney(concert.Income, settings.ConcertRewardExp);
             ProductionManager.AddConcert(concert);
         }
 

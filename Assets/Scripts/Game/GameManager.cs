@@ -48,7 +48,7 @@ namespace Game
         /// </summary>
         public void LoadApplicationData()
         {
-            PlayerData = DataManager.Load<PlayerData>(playersDataKey) ?? PlayerData.New;
+            PlayerData = DataManager.Load<PlayerData>(playersDataKey);
             GameStats = DataManager.Load<GameStats>(gameDataKey) ?? GameStats.New;
         }
 
@@ -57,12 +57,13 @@ namespace Game
         /// </summary>
         public void SaveApplicationData()
         {
-    #if !UNITY_EDITOR
+            if (TimeManager.Instance == null)
+                return;
+
             GameStats.Now = TimeManager.Instance.Now;
             
             DataManager.Save(PlayerData, playersDataKey);
             DataManager.Save(GameStats, gameDataKey);
-    #endif
         }
 
         private void OnDisable()

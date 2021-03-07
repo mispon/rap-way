@@ -28,14 +28,16 @@ namespace Game.UI.MainMenu
 
         public void OnStart()
         {
-            SetUpButtons();
+            SetupButtons();
         }
         
         /// <summary>
         /// Создает обработчики нажатия на кнопки
         /// </summary>
-        private void SetUpButtons()
+        private void SetupButtons()
         {
+            continueGameButton.interactable = GameManager.Instance.PlayerData != null;
+
             newGameButton.onClick.AddListener(()=> ShowPanel(newPlayerPanel));
             continueGameButton.onClick.AddListener(ContinueGame);
             settingsButton.onClick.AddListener(()=> ShowPanel(settingsPanel));

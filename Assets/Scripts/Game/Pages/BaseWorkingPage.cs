@@ -11,7 +11,6 @@ namespace Game.Pages
     /// </summary>
     public abstract class BaseWorkingPage : Page
     {
-        [NonSerialized] protected GameSettings settings;
         [SerializeField] protected ProgressBar progressBar;
 
         /// <summary>
@@ -61,11 +60,6 @@ namespace Game.Pages
         {
             TimeManager.Instance.onDayLeft += OnDayLeft;
             TimeManager.Instance.SetActionMode();
-
-            if (settings == null)
-            {
-                settings = GameManager.Instance.Settings;
-            }
 
             progressBar.Init(GetDuration());
             progressBar.onFinish += FinishWork;

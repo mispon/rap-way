@@ -36,11 +36,12 @@ namespace Game.Pages.Social
         /// <summary>
         /// Сохраняет результат социального действия
         /// </summary>
-        private static void SaveResult(SocialInfo social)
+        private void SaveResult(SocialInfo social)
         {
             GameManager.Instance.GameStats.SocialsCooldown = GameManager.Instance.Settings.SocialsCooldown;
             PlayerManager.Instance.SpendMoney(social.CharityAmount);
             PlayerManager.Instance.AddHype(social.HypeIncome);
+            PlayerManager.Instance.AddExp(settings.SocialsRewardExp);
         }
 
         protected override void AfterPageClose()

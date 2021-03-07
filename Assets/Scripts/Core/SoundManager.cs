@@ -54,8 +54,7 @@ namespace Core
         {
             if (clip == null)
                 return;
-            
-            sfx.pitch = Random.Range(0.9f, 1.1f);
+
             sfx.PlayOneShot(clip);
         }
 

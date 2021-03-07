@@ -12,14 +12,13 @@ namespace Game.Pages.Album
     /// </summary>
     public class AlbumResultPage : Page
     {
-        [SerializeField] private int rewardExp;
-
         [Header("Компоменты")]
         [SerializeField] private Text header;
         [SerializeField] private Text listenAmount;
         [SerializeField] private Text chartInfo;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
 
         [Header("Анализатор альбома")]
         [SerializeField] private AlbumAnalyzer albumAnalyzer;
@@ -51,6 +50,7 @@ namespace Game.Pages.Album
                 : GetLocale("album_result_chart_miss");
             fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{album.MoneyIncome.GetMoney()}";
+            expIncome.text = $"+{settings.AlbumRewardExp}";
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Game.Pages.Album
         private void SaveResult(AlbumInfo album)
         {
             album.Timestamp = TimeManager.Instance.Now;
-            PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome, rewardExp);
+            PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome, settings.AlbumRewardExp);
             ProductionManager.AddAlbum(album);
         }
         

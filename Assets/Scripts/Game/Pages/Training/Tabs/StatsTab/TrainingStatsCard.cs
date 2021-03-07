@@ -73,8 +73,8 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         public void Hide()
         {
-            header.text = "";
-            desc.text = "";
+            header.text = string.Empty;
+            desc.text = string.Empty;
 
             DisplayLevel();
 

@@ -4,13 +4,11 @@ using Core;
 using Core.Interfaces;
 using Enums;
 using Game.UI.GameScreen;
-using Localization;
 using Models.Game;
 using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
 using Utils;
-using Utils.Extensions;
 
 namespace Game
 {
@@ -66,7 +64,7 @@ namespace Game
         public void AddFans(int fans, int exp = 0)
         {
             AddExp(exp);
-            Data.Fans += fans;
+            Data.Fans = SafetyAdd(Data.Fans, fans);
             onFansAdd.Invoke(Data.Fans);
             gameScreen.UpdateHUD(Data);
         }
@@ -77,7 +75,7 @@ namespace Game
         public void AddMoney(int money, int exp = 0)
         {
             AddExp(exp);
-            Data.Money += money;
+            Data.Money = SafetyAdd(Data.Money, money);
             onMoneyAdd.Invoke(Data.Money);
             gameScreen.UpdateHUD(Data);
         }
@@ -95,7 +93,7 @@ namespace Game
         /// <summary>
         /// Изменяет количество опыта 
         /// </summary>
-        private static void AddExp(int exp)
+        public void AddExp(int exp)
         {
             Data.Exp += exp;
         }
@@ -157,6 +155,16 @@ namespace Game
 
             Data.LastKnownTrends.Style = style;
             Data.LastKnownTrends.Theme = theme;
+        }
+
+        /// <summary>
+        /// Увеличивает значение, контроллируя верхнюю границу
+        /// </summary>
+        private static int SafetyAdd(int current, int increment)
+        {
+            return int.MaxValue - current > increment
+                ? current + increment
+                : int.MaxValue;
         }
     }
 }

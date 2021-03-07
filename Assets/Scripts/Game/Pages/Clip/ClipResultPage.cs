@@ -12,14 +12,13 @@ namespace Game.Pages.Clip
     /// </summary>
     public class ClipResultPage : Page
     {
-        [SerializeField] private int rewardExp;
-
         [Header("Компоменты")]
         [SerializeField] private Text header;
         [SerializeField] private Text viewsAmount;
         [SerializeField] private Text likesAndDislikes;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
 
         [Header("Анализатор клипа")]
         [SerializeField] private ClipAnalyzer clipAnalyzer;
@@ -49,6 +48,7 @@ namespace Game.Pages.Clip
             string fansPrefix = clip.FansIncome > 0 ? "+" : string.Empty;
             fansIncome.text = $"{fansPrefix}{clip.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{clip.MoneyIncome.GetMoney()}";
+            expIncome.text = $"+{settings.ClipRewardExp}";
         }
         
         /// <summary>
@@ -57,7 +57,7 @@ namespace Game.Pages.Clip
         private void SaveResult(ClipInfo clip)
         {
             clip.Timestamp = TimeManager.Instance.Now;
-            PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome, rewardExp);
+            PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome, settings.ClipRewardExp);
             ProductionManager.AddClip(clip);
         }
 

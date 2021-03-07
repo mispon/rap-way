@@ -146,7 +146,7 @@ namespace Game.Pages.Battle
 
         protected override void BeforePageOpen()
         {
-            playerName.text = PlayerManager.Data.Info.NickName;
+            playerName.text = PlayerManager.Data.Info.NickName.ToUpper();
             rapperName.text = _rapper.Name;
             playerPointsLabel.text = "0";
             rapperPointsLabel.text = "0";

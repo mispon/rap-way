@@ -9,16 +9,19 @@ namespace Models.Game
     [Serializable]
     public class GameStats
     {
-        // Глобальное состояние
+        /// <summary>
+        /// Глобальное состояние
+        /// </summary>
         public DateTime Now;
         public Trends Trends;
         public int SocialsCooldown;
         
-        // Настройки
+        /// <summary>
+        /// Настройки игры
+        /// </summary>
         public GameLang Lang;
         public float SoundVolume;
         public float MusicVolume;
-        public bool ShowAds;
         
         public static GameStats New => new GameStats
         {
@@ -26,8 +29,7 @@ namespace Models.Game
             Trends = Trends.New,
             Lang = GameLang.RU,
             SoundVolume = 1f,
-            MusicVolume = 1f,
-            ShowAds = true
+            MusicVolume = 1f
         };
     }
 }

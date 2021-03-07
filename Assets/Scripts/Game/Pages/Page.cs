@@ -1,4 +1,5 @@
-﻿using Localization;
+﻿using Core.Settings;
+using Localization;
 using UnityEngine;
 
 namespace Game.Pages
@@ -9,6 +10,8 @@ namespace Game.Pages
     public class Page : MonoBehaviour
     {
         private bool _isOpen;
+
+        protected GameSettings settings => GameManager.Instance.Settings;
 
         /// <summary>
         /// Открывает страницу

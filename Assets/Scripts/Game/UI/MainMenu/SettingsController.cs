@@ -16,6 +16,7 @@ namespace Game.UI.MainMenu
         [SerializeField] private Slider soundVolume;
         [SerializeField] private Slider musicVolume;
         [Space]
+        [SerializeField] private Button closeButton;
         [SerializeField] private Button saveButton;
 
         private void Start()
@@ -23,6 +24,7 @@ namespace Game.UI.MainMenu
             langCarousel.onChange += OnLangChanged;
             soundVolume.onValueChanged.AddListener(OnVolumeChanged);
             musicVolume.onValueChanged.AddListener(OnVolumeChanged);
+            closeButton.onClick.AddListener(OnClose);
             saveButton.onClick.AddListener(SaveSettings);
 
             SetupControls();
@@ -65,6 +67,12 @@ namespace Game.UI.MainMenu
             settings.Lang = StringToLang(langCarousel.GetLabel());
             settings.SoundVolume = soundVolume.value;
             settings.MusicVolume = musicVolume.value;
+            MainMenuController.SetPanelActivity(gameObject, false);
+        }
+
+        private void OnClose()
+        {
+            SoundManager.Instance.PlayClick();
             MainMenuController.SetPanelActivity(gameObject, false);
         }
 

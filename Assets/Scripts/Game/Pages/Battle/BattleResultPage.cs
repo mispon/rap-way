@@ -14,11 +14,7 @@ namespace Game.Pages.Battle
         [SerializeField] private Text resultMessage;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text hypeIncome;
-        [Space]
-        [SerializeField] private int rewardExp;
-        [SerializeField] private AnimationCurve fansChange;
-        [SerializeField] private int winnerHype;
-        [SerializeField] private int loserHype;
+        [SerializeField] private Text expIncome;
 
         private BattleResult _result;
         
@@ -29,7 +25,6 @@ namespace Game.Pages.Battle
         {
             _result = AnalyzeResult(rapper, playerPoints, rapperPoints);
             DisplayResult();
-            
             Open();
         }
         
@@ -42,8 +37,8 @@ namespace Game.Pages.Battle
                 ? playerPoints > rapperPoints
                 : Random.Range(0, 2) > 0;
 
-            int fans = (int) fansChange.Evaluate(PlayerManager.Data.Fans) * (isWin ? +1 : -1);
-            int hype = isWin ? winnerHype : loserHype;
+            int fans = (int) settings.BattleFansChange.Evaluate(PlayerManager.Data.Fans) * (isWin ? +1 : -1);
+            int hype = isWin ? settings.BattleWinnerHype : settings.BattleLoserHype;
             
             return new BattleResult
             {
@@ -59,15 +54,17 @@ namespace Game.Pages.Battle
         /// </summary>
         private void DisplayResult()
         {
-            string playerName = PlayerManager.Data.Info.NickName;
+            string playerName = PlayerManager.Data.Info.NickName.ToUpper();
             string rapperName = _result.RapperInfo.Name;
 
             resultMessage.text = _result.IsWin
                 ? GetLocale("battle_result", playerName, rapperName)
                 : GetLocale("battle_result", rapperName, playerName);
 
-            hypeIncome.text = $"{_result.HypeIncome}";
-            fansIncome.text = $"{_result.FansIncome.GetDisplay()}";
+            string prefix = _result.FansIncome > 0 ? "+" : string.Empty;
+            fansIncome.text = $"{prefix}{_result.FansIncome.GetDisplay()}";
+            hypeIncome.text = $"+{_result.HypeIncome}";
+            expIncome.text = $"+{settings.BattleRewardExp}";
         }
 
         /// <summary>
@@ -75,7 +72,7 @@ namespace Game.Pages.Battle
         /// </summary>
         private void SaveResult()
         {
-            PlayerManager.Instance.AddFans(_result.FansIncome, rewardExp);
+            PlayerManager.Instance.AddFans(_result.FansIncome, settings.BattleRewardExp);
             PlayerManager.Instance.AddHype(_result.HypeIncome);
 
             if (_result.IsWin)

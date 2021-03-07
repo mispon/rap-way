@@ -135,6 +135,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   TrackListenCost: 0.2
+  TrackRewardExp: 100
   AlbumWorkDuration: 5
   AlbumBaseHype: 0.2
   AlbumBaseQuality: 0.15
@@ -231,6 +232,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   AlbumListenCost: 0.4
+  AlbumRewardExp: 300
   ClipWorkDuration: 30
   ClipGradeCurve:
     serializedVersion: 2
@@ -303,6 +305,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   ClipViewCost: 0.25
+  ClipRewardExp: 200
   ConcertWorkDuration: 5
   ConcertGradeCurve:
     serializedVersion: 2
@@ -330,11 +333,40 @@ MonoBehaviour:
     m_RotationOrder: 4
   ConcertWorkPointsMax: 400
   ConcertAlbumListensImpact: 0.5
+  ConcertRewardExp: 700
   SocialsWorkDuration: 5
   SocialsCooldown: 10
   SocialsWorkPointsMax: 70
   SocialsCharitySizeImpact: 0.7
   SocialsActiveFansGroup: 0.5
-  RappersWorkDuration: 5
+  SocialsRewardExp: 100
   BattleWorkDuration: 5
+  BattleRewardExp: 500
+  BattleFansChange:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  BattleWinnerHype: 70
+  BattleLoserHype: 25
+  RappersWorkDuration: 5
   FeatWorkDuration: 5

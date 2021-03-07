@@ -12,14 +12,13 @@ namespace Game.Pages.Track
     /// </summary>
     public class TrackResultPage : Page
     {
-        [SerializeField] private int rewardExp;
-        
         [Header("Компоменты")]
         [SerializeField] private Text header;
         [SerializeField] private Text listenAmount;
         [SerializeField] private Text chartInfo;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
 
         [Header("Анализатор трека")]
         [SerializeField] private TrackAnalyzer trackAnalyzer;
@@ -53,6 +52,7 @@ namespace Game.Pages.Track
             string fansIncomePrefix = track.FansIncome > 0 ? "+" : string.Empty;
             fansIncome.text = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
+            expIncome.text = $"+{settings.TrackRewardExp}";
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Game.Pages.Track
         private void SaveResult(TrackInfo track) 
         {
             track.Timestamp = TimeManager.Instance.Now;
-            PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome, rewardExp);
+            PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome, settings.TrackRewardExp);
             ProductionManager.AddTrack(track);
 
             if (track.Feat != null)

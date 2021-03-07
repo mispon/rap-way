@@ -24,6 +24,8 @@ namespace Core.Settings
         public AnimationCurve TrackFansIncomeCurve;
         [Range(0.1f, 1f), Tooltip("Цена одного прослушивания")]
         public float TrackListenCost;
+        [Range(100, 1000), Tooltip("Количество очков опыта")]
+        public int TrackRewardExp;
 
         [Header("ALBUM")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
@@ -44,6 +46,8 @@ namespace Core.Settings
         public AnimationCurve AlbumFansIncomeCurve;
         [Range(0.1f, 1f), Tooltip("Цена одного прослушивания")]
         public float AlbumListenCost;
+        [Range(100, 1000), Tooltip("Количество очков опыта")]
+        public int AlbumRewardExp;
 
         [Header("CLIP")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
@@ -62,6 +66,8 @@ namespace Core.Settings
         public AnimationCurve ClipFansIncomeCurve;
         [Range(0.1f, 1f), Tooltip("Цена одного просмотра")]
         public float ClipViewCost;
+        [Range(100, 1000), Tooltip("Количество очков опыта")]
+        public int ClipRewardExp;
 
         [Header("CONCERT")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
@@ -72,6 +78,8 @@ namespace Core.Settings
         public int ConcertWorkPointsMax;
         [Range(0f, 1f), Tooltip("Сила влияния количества прослушиваний альбома")]
         public float ConcertAlbumListensImpact;
+        [Range(100, 1000), Tooltip("Количество очков опыта")]
+        public int ConcertRewardExp;
 
         [Header("SOCIALS")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
@@ -84,12 +92,24 @@ namespace Core.Settings
         public float SocialsCharitySizeImpact;
         [Range(0f, 1f), Tooltip("Доля активных фанатов от общего кол-ва, %")]
         public float SocialsActiveFansGroup;
+        [Range(100, 1000), Tooltip("Количество очков опыта")]
+        public int SocialsRewardExp;
+
+        [Header("BATTLE")]
+        [Range(5, 50), Tooltip("Длительность работы, дни")]
+        public int BattleWorkDuration;
+        [Tooltip("Зависимость изменения количества фанатов")]
+        public AnimationCurve BattleFansChange;
+        [Range(1, 100), Tooltip("Количество очков хайпа за победу")]
+        public int BattleWinnerHype;
+        [Range(1, 100), Tooltip("Количество очков хайпа за проигрыш")]
+        public int BattleLoserHype;
+        [Range(100, 1000), Tooltip("Количество очков опыта")]
+        public int BattleRewardExp;
 
         [Header("OTHER")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int RappersWorkDuration;
-        [Range(5, 50), Tooltip("Длительность работы, дни")]
-        public int BattleWorkDuration;
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int FeatWorkDuration;
     }
