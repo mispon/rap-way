@@ -145,7 +145,7 @@ namespace Game
 
         private void OnDestroy()
         {
-            //ToDo: (Андрей). Не уверен, что это необходимо.
+            // ToDo: (Андрей). Не уверен, что это необходимо.
             // 1. Нет никаких гарантий, что TeamManager.OnDestroy() вызовется раньше, чем TimeManamger.OnDestroy().
             //    В противном случае вылетит NullReferenceException
             // 2. TeamManager не существует нигде отдельно от TimeManager и наоброт.

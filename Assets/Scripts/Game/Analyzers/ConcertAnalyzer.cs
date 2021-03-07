@@ -24,7 +24,7 @@ namespace Game.Analyzers
             float repeatsDebuff = album.ConcertAmounts / 10f;
             concertQuality = Mathf.Max(concertQuality - repeatsDebuff, 0f);
 
-            int fansAmount = PlayerManager.Data.Fans;
+            int fansAmount = GetFans();
             concert.TicketsSold = CalculateTicketSales(concertQuality, fansAmount);
         }
 

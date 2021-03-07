@@ -22,7 +22,7 @@ namespace Game.Analyzers
             float trackListenFactor = Mathf.Min(listenImpact * GetListenRatio(track.ListenAmount), listenImpact);
             float clipQuality = trackListenFactor + CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints);
 
-            clip.Views = CalculateViewsAmount(clipQuality, PlayerManager.Data.Fans);
+            clip.Views = CalculateViewsAmount(clipQuality, GetFans());
 
             var (likes, dislikes) = CalculateReaction(clipQuality, clip.Views);
             clip.Likes = likes;
@@ -56,7 +56,7 @@ namespace Game.Analyzers
             float clipGrade = settings.ClipGradeCurve.Evaluate(clipQuality);
             float hypeFactor = Mathf.Max(0.1f, PlayerManager.Data.Hype / 100f);
 
-            int views = Convert.ToInt32(clipGrade * fansAmount * hypeFactor);
+            int views = Convert.ToInt32(fansAmount * (clipGrade + hypeFactor));
             if (isHit)
             {
                 views *= 2;

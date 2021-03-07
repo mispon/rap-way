@@ -1,5 +1,6 @@
 ﻿using System;
 using Localization;
+using Utils.Extensions;
 
 namespace Models.Game
 {
@@ -12,7 +13,7 @@ namespace Models.Game
         /// <summary>
         /// Глобальное состояние
         /// </summary>
-        public DateTime Now;
+        public string Now;
         public Trends Trends;
         public int SocialsCooldown;
         
@@ -25,7 +26,7 @@ namespace Models.Game
         
         public static GameStats New => new GameStats
         {
-            Now = DateTime.Now,
+            Now = DateTime.Now.DateToString(),
             Trends = Trends.New,
             Lang = GameLang.RU,
             SoundVolume = 1f,

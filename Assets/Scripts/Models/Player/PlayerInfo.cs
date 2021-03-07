@@ -1,9 +1,6 @@
 ﻿using System;
-using Core;
 using Enums;
-
-using InputField = UnityEngine.UI.InputField;
-using Dropdown = UnityEngine.UI.Dropdown;
+using Utils.Extensions;
 
 namespace Models.Player
 {
@@ -41,13 +38,14 @@ namespace Models.Player
         /// <summary>
         /// Дата создания персонажа, для презентации програсса игрока за определенный период
         /// </summary>
-        public DateTime CreationDate;
+        public string CreationDate;
 
         public static PlayerInfo New => new PlayerInfo
         {
-            FirstName = "Jon",
-            LastName = "Snow",
-            NickName = "White Wolf"
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            NickName = string.Empty,
+            CreationDate = DateTime.Now.DateToString()
         };
     }
 }

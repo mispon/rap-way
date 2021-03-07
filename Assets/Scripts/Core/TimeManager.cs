@@ -6,6 +6,7 @@ using Core.Interfaces;
 using Game;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 
 namespace Core
 {
@@ -18,7 +19,7 @@ namespace Core
         public DateTime Now { get; private set; }
         public string DisplayNow => Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-        [Header("Временные интервалы")]
+        [Header("Временные интервалы, сек")]
         [SerializeField] private int actionInterval;
         [SerializeField] private int inactionInterval;
 
@@ -37,8 +38,8 @@ namespace Core
         {
             _waitForSecondsActive = new WaitForSeconds(actionInterval);
             _waitForSecondsInactive = new WaitForSeconds(inactionInterval);
-            
-            Now = GameManager.Instance.GameStats.Now;
+
+            Now = GameManager.Instance.GameStats.Now.StringToDate();
             _timer = StartCoroutine(TickCoroutine());
         }
 

@@ -36,6 +36,10 @@ namespace Game.Pages.Training.Tabs.StatsTab
             var button = GetComponent<Button>();
             button.onClick.AddListener(HandleClick);
             upButton.onClick.AddListener(HandleLevelUpClick);
+
+            header.text = string.Empty;
+            upButton.gameObject.SetActive(false);
+            expBar.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -44,6 +48,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         public void SetIndex(int index)
         {
             _index = index;
+            DisplayLevel();
         }
 
         /// <summary>

@@ -3083,10 +3083,10 @@ RectTransform:
   m_Father: {fileID: 6193956132913642256}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 75, y: 0}
-  m_SizeDelta: {x: -150, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 175, y: 0}
+  m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1191073711366640922
 CanvasRenderer:
@@ -3110,6 +3110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 8412348543911220523}
   action: 0
+  playSound: 1
 --- !u!224 &1303097661821378434
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3241,18 +3242,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 45706243, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0, type: 3}
-      propertyPath: equipments.Array.size
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 45706243, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0, type: 3}
-      propertyPath: equipments.Array.data[8].Chance
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 45706243, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0, type: 3}
-      propertyPath: equipments.Array.data[8].WorkPoints
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 1929117383248465389, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
         type: 3}
       propertyPath: m_Name
@@ -3318,11 +3307,6 @@ PrefabInstance:
       propertyPath: gameScreen
       value: 
       objectReference: {fileID: 7191811041921544945}
-    - target: {fileID: 4065143081552390622, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: chance
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 4065143081552390622, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
         type: 3}
       propertyPath: eventMainPage
@@ -3477,6 +3461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 5587609202183954755}
   action: 0
+  playSound: 1
 --- !u!224 &2380335909314978991
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4129,12 +4114,12 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: a8fb6d887e7ce6440b3b3e43ed55dd88, type: 3}
-    m_FontSize: 14
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 64
-    m_Alignment: 4
+    m_MinSize: 3
+    m_MaxSize: 56
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -5245,6 +5230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 3695947919025734414}
   action: 0
+  playSound: 1
 --- !u!114 &5769600669675430335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5607,6 +5593,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 1977330760}
   action: 0
+  playSound: 1
 --- !u!114 &6231287779132659694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5621,6 +5608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 1143119998}
   action: 0
+  playSound: 1
 --- !u!222 &6351018685109397249
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6076,6 +6064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 1886770382}
   action: 0
+  playSound: 1
 --- !u!114 &7183766466818215461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6119,6 +6108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 1848112283}
   action: 0
+  playSound: 1
 --- !u!114 &7191811041746935561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6148,6 +6138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 1223137199}
   action: 0
+  playSound: 0
 --- !u!114 &7191811041921544945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6199,6 +6190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 1322945322}
   action: 0
+  playSound: 1
 --- !u!224 &7218724743310096488
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6809,6 +6801,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 1403339962}
   action: 0
+  playSound: 1
 --- !u!224 &8653938682945907979
 RectTransform:
   m_ObjectHideFlags: 0

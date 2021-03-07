@@ -84,18 +84,13 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void CreatePlayer()
         {
-            GameManager.Instance.RemoveSaves();
-            GameManager.Instance.LoadApplicationData();
-            
             var player = GameManager.Instance.PlayerData.Info;
 
             player.Gender = _maleSelected ? Gender.Male : Gender.Female;
-            player.FirstName = inputFields[0].text;
-            player.LastName  = inputFields[1].text;
-            player.NickName  = inputFields[2].text;
+            player.FirstName = inputFields[0].text.Trim();
+            player.LastName  = inputFields[1].text.Trim();
+            player.NickName  = inputFields[2].text.Trim();
             player.Age = Convert.ToInt32(ageCarousel.GetLabel());
-
-            player.CreationDate = DateTime.Now;
 
             SceneManager.Instance.LoadGameScene();
         }

@@ -44,7 +44,7 @@ namespace Game.Pages.Album
         {
             var nickname = PlayerManager.Data.Info.NickName;
             header.text = GetLocale("album_result_header", nickname, album.Name);
-            listenAmount.text = GetLocale("album_result_listens", nickname, album.Name);
+            listenAmount.text = GetLocale("album_result_listens", album.ListenAmount.GetDisplay());
             chartInfo.text = album.ChartPosition > 0
                 ? GetLocale("album_result_chart_pos", album.ChartPosition)
                 : GetLocale("album_result_chart_miss");

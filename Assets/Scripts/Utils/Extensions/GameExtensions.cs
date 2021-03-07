@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 
 namespace Utils.Extensions
 {
-    public static class EnumExtension {
+    public static class GameExtensions {
         /// <summary>
         /// Возвращает описание перечисления по значению
         /// </summary>
@@ -56,6 +57,22 @@ namespace Utils.Extensions
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> values)
         {
             return new HashSet<T>(values);
+        }
+
+        /// <summary>
+        /// Конвертирует строку в дату
+        /// </summary>
+        public static DateTime StringToDate(this string value)
+        {
+            return DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Конвертирует дату в строку
+        /// </summary>
+        public static string DateToString(this DateTime value)
+        {
+            return value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         }
     }
 }

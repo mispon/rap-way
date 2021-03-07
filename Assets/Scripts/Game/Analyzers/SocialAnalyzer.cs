@@ -18,7 +18,7 @@ namespace Game.Analyzers
                 ? CalculateCharityQuality(social.WorkPoints, social.CharityAmount)
                 : GetAllOtherQuality(social.WorkPoints);
 
-            float activeFans = PlayerManager.Data.Fans * settings.SocialsActiveFansGroup;
+            float activeFans = GetFans() * settings.SocialsActiveFansGroup;
 
             social.HypeIncome = Convert.ToInt32(quality * 100);
             social.Likes = Convert.ToInt32(activeFans * quality);

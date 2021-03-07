@@ -67,6 +67,7 @@ namespace Game.UI.MainMenu
             settings.Lang = StringToLang(langCarousel.GetLabel());
             settings.SoundVolume = soundVolume.value;
             settings.MusicVolume = musicVolume.value;
+            GameManager.Instance.SaveApplicationData();
             MainMenuController.SetPanelActivity(gameObject, false);
         }
 

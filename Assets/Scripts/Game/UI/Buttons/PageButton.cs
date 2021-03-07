@@ -19,6 +19,7 @@ namespace Game.UI.Buttons
         [Header("Настройки страницы")]
         [SerializeField] protected Page page;
         [SerializeField] protected PageActionType action;
+        [SerializeField] private bool playSound = true;
 
         private Button _button;
         
@@ -30,7 +31,10 @@ namespace Game.UI.Buttons
 
         private void OnClick()
         {
-            SoundManager.Instance.PlayClick();
+            if (playSound)
+            {
+                SoundManager.Instance.PlayClick();
+            }
             PageAction();
         }
 

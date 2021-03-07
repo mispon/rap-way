@@ -18,7 +18,7 @@ namespace Game.Analyzers
         {
             float qualityPoints = CalculateAlbumQuality(album);
 
-            album.ListenAmount = CalculateListensAmount(qualityPoints, PlayerManager.Data.Fans);
+            album.ListenAmount = CalculateListensAmount(qualityPoints, GetFans());
             album.ChartPosition = CalculateChartPosition(album.ListenAmount);
 
             var (fans, money) = CalculateIncomes(qualityPoints, album.ListenAmount);
@@ -71,7 +71,7 @@ namespace Game.Analyzers
             float albumGrade = settings.AlbumGradeCurve.Evaluate(albumQuality);
             float hypeFactor = CalculateHypeFactor();
 
-            int listens = Convert.ToInt32(albumGrade * fansAmount * hypeFactor);
+            int listens = Convert.ToInt32(fansAmount * (albumGrade + hypeFactor));
             if (isHit)
             {
                 listens *= 2;
@@ -102,9 +102,10 @@ namespace Game.Analyzers
         {
             float listenRatio = GetListenRatio(listensAmount);
 
-            if (listenRatio <= 0.5f)
+            if (listenRatio <= 0.5f || GetFans() < settings.MinFansForCharts)
             {
                 // альбом послушало меньше половины от общего кол-ва фанатов
+                // или слишком мало фанатов
                 return 0;
             }
 

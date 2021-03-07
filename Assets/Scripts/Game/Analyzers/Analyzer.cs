@@ -25,9 +25,17 @@ namespace Game.Analyzers
         /// <summary>
         /// Возвращает отношение прослушиваний к общему числу фанатов
         /// </summary>
-        protected static float GetListenRatio(int listensAmount)
+        protected float GetListenRatio(int listensAmount)
         {
-            return 1f * listensAmount / PlayerManager.Data.Fans;
+            return 1f * listensAmount / GetFans();
+        }
+
+        /// <summary>
+        /// Возвращает количество фанатов
+        /// </summary>
+        protected int GetFans()
+        {
+            return Mathf.Max(PlayerManager.Data.Fans, settings.BaseFans);
         }
     }
 }

@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
-  chance: 0.001
+  chance: 0.2
   eventMainPage: {fileID: 0}
   data: {fileID: 11400000, guid: 974a9531e92eb33448c26e19d9138621, type: 2}
 --- !u!1 &3036844871196652973
@@ -278,13 +278,8 @@ MonoBehaviour:
   - Name: Acoustic_1
     Type: 3
     Level: 1
-    WorkPoints: 6
-    Chance: 0.1
-  - Name: Acoustic_2
-    Type: 0
-    Level: 2
-    WorkPoints: 10
-    Chance: 0.2
+    WorkPoints: 12
+    Chance: 0.3
 --- !u!1 &3578829313049285354
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,15 +376,15 @@ MonoBehaviour:
     Salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
   - Type: 1
     Avatar: {fileID: 21300000, guid: 9b163cec97a11814484166b334619a8f, type: 3}
-    FansToUnlock: 2000
+    FansToUnlock: 5000
     Salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
   - Type: 2
     Avatar: {fileID: 21300000, guid: 3c9c20d3dab33fd46ac514fd859aaead, type: 3}
-    FansToUnlock: 3000
+    FansToUnlock: 100000
     Salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
   - Type: 3
     Avatar: {fileID: 21300000, guid: a7037060194b9524bbc3baffad14c681, type: 3}
-    FansToUnlock: 4000
+    FansToUnlock: 10000
     Salary: 01000000050000000a0000003200000064000000f4010000e8030000881300001027000050c30000
   unlockTeammatePage: {fileID: 0}
   trainingPage: {fileID: 0}
@@ -439,7 +434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroy: 0
   actionInterval: 2
-  inactionInterval: 2
+  inactionInterval: 30
 --- !u!1 &8616449362574666434
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,7 +22,7 @@ namespace Core.Settings
         public float TrackHitChance;
         [Tooltip("Зависимость изменения фанатов от качества трека, %")]
         public AnimationCurve TrackFansIncomeCurve;
-        [Range(0.1f, 1f), Tooltip("Цена одного прослушивания")]
+        [Range(0.001f, 0.01f), Tooltip("Цена одного прослушивания")]
         public float TrackListenCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int TrackRewardExp;
@@ -34,7 +34,7 @@ namespace Core.Settings
         public float AlbumBaseHype;
         [Range(0.1f, 0.7f), Tooltip("Базовое качество трека, %")]
         public float AlbumBaseQuality;
-        [Range(10, 250), Tooltip("Максимальное количество очков работы, шт")]
+        [Range(10, 400), Tooltip("Максимальное количество очков работы, шт")]
         public int AlbumWorkPointsMax;
         [Tooltip("Зависимость оценки от качества трека")]
         public AnimationCurve AlbumGradeCurve;
@@ -44,7 +44,7 @@ namespace Core.Settings
         public float AlbumHitChance;
         [Tooltip("Зависимость изменения фанатов от качества трека, %")]
         public AnimationCurve AlbumFansIncomeCurve;
-        [Range(0.1f, 1f), Tooltip("Цена одного прослушивания")]
+        [Range(0.001f, 0.01f), Tooltip("Цена одного прослушивания")]
         public float AlbumListenCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int AlbumRewardExp;
@@ -54,7 +54,7 @@ namespace Core.Settings
         public int ClipWorkDuration;
         [Tooltip("Зависимость оценки от качества клипа")]
         public AnimationCurve ClipGradeCurve;
-        [Range(10, 400), Tooltip("Максимальное количество очков работы, шт")]
+        [Range(10, 300), Tooltip("Максимальное количество очков работы, шт")]
         public int ClipWorkPointsMax;
         [Range(0f, 1f), Tooltip("Вероятность хита, %")]
         public float ClipHitChance;
@@ -64,7 +64,7 @@ namespace Core.Settings
         public float ClipActiveViewers;
         [Tooltip("Зависимость изменения фанатов от качества клипа, %")]
         public AnimationCurve ClipFansIncomeCurve;
-        [Range(0.1f, 1f), Tooltip("Цена одного просмотра")]
+        [Range(0.001f, 0.01f), Tooltip("Цена одного просмотра")]
         public float ClipViewCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int ClipRewardExp;
@@ -112,5 +112,9 @@ namespace Core.Settings
         public int RappersWorkDuration;
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int FeatWorkDuration;
+        [Range(100, 1000), Tooltip("Базовое значение фанатов в анализаторе")]
+        public int BaseFans;
+        [Range(50_000, 300_000), Tooltip("Минимальное кол-во фанатов для участия в чартах")]
+        public int MinFansForCharts;
     }
 }

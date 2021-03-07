@@ -18,7 +18,7 @@ namespace Game.Analyzers
         {
             float qualityPoints = CalculateTrackQuality(track);
 
-            track.ListenAmount = CalculateListensAmount(qualityPoints, PlayerManager.Data.Fans);
+            track.ListenAmount = CalculateListensAmount(qualityPoints, GetFans());
             track.ChartPosition = CalculateChartPosition(track.ListenAmount);
 
             var (fans, money) = CalculateIncomes(qualityPoints, track.ListenAmount);
@@ -71,7 +71,7 @@ namespace Game.Analyzers
             float trackGrade = settings.TrackGradeCurve.Evaluate(trackQuality);
             float hypeFactor = CalculateHypeFactor();
 
-            int listens = Convert.ToInt32(trackGrade * fansAmount * hypeFactor);
+            int listens = Convert.ToInt32(fansAmount * (trackGrade + hypeFactor));
             if (isHit)
             {
                 listens *= 2;
@@ -102,9 +102,10 @@ namespace Game.Analyzers
         {
             float listenRatio = GetListenRatio(listensAmount);
 
-            if (listenRatio <= 0.5f)
+            if (listenRatio <= 0.5f || GetFans() <= settings.MinFansForCharts)
             {
                 // Трек послушало меньше половины от общего кол-ва фанатов
+                // или слишком мало фанатов
                 return 0;
             }
 

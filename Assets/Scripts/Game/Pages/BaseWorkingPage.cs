@@ -1,6 +1,4 @@
-using System;
 using Core;
-using Core.Settings;
 using Game.UI;
 using UnityEngine;
 

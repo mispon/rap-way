@@ -36,7 +36,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void SetupButtons()
         {
-            continueGameButton.interactable = GameManager.Instance.PlayerData != null;
+            continueGameButton.interactable = GameManager.Instance.HasCharacter();
 
             newGameButton.onClick.AddListener(()=> ShowPanel(newPlayerPanel));
             continueGameButton.onClick.AddListener(ContinueGame);

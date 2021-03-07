@@ -6,6 +6,7 @@ using Models.Game;
 using Models.Player;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 
 namespace Game
 {
@@ -20,8 +21,9 @@ namespace Game
         [Header("Игровые настройки")]
         public GameSettings Settings;
 
-        public PlayerData PlayerData { get; private set; }
-        public GameStats GameStats { get; private set; }
+        [Header("STATE")]
+        public PlayerData PlayerData;
+        public GameStats GameStats;
 
         [NonSerialized] public bool IsReady;
         
@@ -46,9 +48,9 @@ namespace Game
         /// <summary>
         /// Загрузка данных приложения
         /// </summary>
-        public void LoadApplicationData()
+        private void LoadApplicationData()
         {
-            PlayerData = DataManager.Load<PlayerData>(playersDataKey);
+            PlayerData = DataManager.Load<PlayerData>(playersDataKey) ?? PlayerData.New;
             GameStats = DataManager.Load<GameStats>(gameDataKey) ?? GameStats.New;
         }
 
@@ -57,16 +59,24 @@ namespace Game
         /// </summary>
         public void SaveApplicationData()
         {
-            if (TimeManager.Instance == null)
-                return;
+            if (TimeManager.Instance != null)
+            {
+                GameStats.Now = TimeManager.Instance.Now.DateToString();
+            }
 
-            GameStats.Now = TimeManager.Instance.Now;
-            
             DataManager.Save(PlayerData, playersDataKey);
             DataManager.Save(GameStats, gameDataKey);
         }
 
-        private void OnDisable()
+        /// <summary>
+        /// Проверяет, создан ли персонаж
+        /// </summary>
+        public bool HasCharacter()
+        {
+            return !string.IsNullOrWhiteSpace(PlayerData.Info.NickName);
+        }
+
+        private void OnApplicationQuit()
         {
             SaveApplicationData();
         }

@@ -15,7 +15,7 @@ MonoBehaviour:
   TrackWorkDuration: 15
   TrackBaseHype: 0.3
   TrackBaseQuality: 0.15
-  TrackWorkPointsMax: 100
+  TrackWorkPointsMax: 150
   TrackGradeCurve:
     serializedVersion: 2
     m_Curve:
@@ -134,12 +134,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  TrackListenCost: 0.2
+  TrackListenCost: 0.005
   TrackRewardExp: 100
-  AlbumWorkDuration: 5
+  AlbumWorkDuration: 30
   AlbumBaseHype: 0.2
   AlbumBaseQuality: 0.15
-  AlbumWorkPointsMax: 150
+  AlbumWorkPointsMax: 300
   AlbumGradeCurve:
     serializedVersion: 2
     m_Curve:
@@ -231,9 +231,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  AlbumListenCost: 0.4
+  AlbumListenCost: 0.008
   AlbumRewardExp: 300
-  ClipWorkDuration: 30
+  ClipWorkDuration: 25
   ClipGradeCurve:
     serializedVersion: 2
     m_Curve:
@@ -258,7 +258,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ClipWorkPointsMax: 300
+  ClipWorkPointsMax: 250
   ClipHitChance: 0.25
   ClipTrackListensImpact: 0.6
   ClipActiveViewers: 0.5
@@ -304,9 +304,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ClipViewCost: 0.25
+  ClipViewCost: 0.0065
   ClipRewardExp: 200
-  ConcertWorkDuration: 5
+  ConcertWorkDuration: 40
   ConcertGradeCurve:
     serializedVersion: 2
     m_Curve:
@@ -334,22 +334,21 @@ MonoBehaviour:
   ConcertWorkPointsMax: 400
   ConcertAlbumListensImpact: 0.5
   ConcertRewardExp: 700
-  SocialsWorkDuration: 5
+  SocialsWorkDuration: 10
   SocialsCooldown: 10
   SocialsWorkPointsMax: 70
   SocialsCharitySizeImpact: 0.7
   SocialsActiveFansGroup: 0.5
   SocialsRewardExp: 100
-  BattleWorkDuration: 5
-  BattleRewardExp: 500
+  BattleWorkDuration: 15
   BattleFansChange:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -357,8 +356,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -368,5 +367,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   BattleWinnerHype: 70
   BattleLoserHype: 25
-  RappersWorkDuration: 5
-  FeatWorkDuration: 5
+  BattleRewardExp: 500
+  RappersWorkDuration: 15
+  FeatWorkDuration: 15
+  BaseFans: 1000
+  MinFansForCharts: 150000
