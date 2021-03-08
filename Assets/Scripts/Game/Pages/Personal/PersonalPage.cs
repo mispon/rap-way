@@ -141,7 +141,9 @@ namespace Game.Pages.Personal
                 GameObject item = lastActions[i].transform.parent.gameObject;
                 item.SetActive(i < actions.Count);
                 if (item.activeSelf)
+                {
                     lastActions[i].text = actions[i].GetLog();
+                }
             }
         }
     }

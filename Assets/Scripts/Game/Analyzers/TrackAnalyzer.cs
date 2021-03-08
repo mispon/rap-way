@@ -18,7 +18,13 @@ namespace Game.Analyzers
         {
             float qualityPoints = CalculateTrackQuality(track);
 
-            track.ListenAmount = CalculateListensAmount(qualityPoints, GetFans());
+            int featFansAmount = 0;
+            if (track.Feat != null)
+            {
+                featFansAmount = track.Feat.Fans * 1_000_000;
+            }
+
+            track.ListenAmount = CalculateListensAmount(qualityPoints, GetFans(), featFansAmount);
             track.ChartPosition = CalculateChartPosition(track.ListenAmount);
 
             var (fans, money) = CalculateIncomes(qualityPoints, track.ListenAmount);
@@ -64,20 +70,23 @@ namespace Game.Analyzers
         /// <summary>
         /// Вычисляет количество прослушиваний на основе качества трека, кол-ва фанатов и уровня хайпа
         /// </summary>
-        private int CalculateListensAmount(float trackQuality, int fansAmount)
+        private int CalculateListensAmount(float trackQuality, int fansAmount, int featFansAmount)
         {
             bool isHit = Random.Range(0f, 1f) <= settings.TrackHitChance;
 
             float trackGrade = settings.TrackGradeCurve.Evaluate(trackQuality);
             float hypeFactor = CalculateHypeFactor();
 
-            int listens = Convert.ToInt32(fansAmount * (trackGrade + hypeFactor));
+            int totalFansAmount = fansAmount + featFansAmount;
+
+            int listens = Convert.ToInt32(totalFansAmount * (trackGrade + hypeFactor));
             if (isHit)
             {
                 listens *= 2;
             }
 
-            return listens;
+            int randomizer = Convert.ToInt32(listens * TEN_PERCENTS);
+            return Random.Range(listens - randomizer, listens + randomizer);
         }
 
         /// <summary>

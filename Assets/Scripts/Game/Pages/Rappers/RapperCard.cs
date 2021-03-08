@@ -11,8 +11,6 @@ namespace Game.Pages.Rappers
     /// </summary>
     public class RapperCard : MonoBehaviour
     {
-        private const int MANAGER_COOLDOWN = 30;
-        
         [Header("Поля информации репера")]
         [SerializeField] private Image avatar;
         [SerializeField] private Text nickname;
@@ -48,7 +46,7 @@ namespace Game.Pages.Rappers
         private void StartConversation(bool isFeat)
         {
             SoundManager.Instance.PlayClick();
-            PlayerManager.SetTeammateCooldown(TeammateType.Manager, MANAGER_COOLDOWN);
+            PlayerManager.SetTeammateCooldown(TeammateType.Manager, GameManager.Instance.Settings.ManagerCooldown);
             workingPage.StartWork(_rapper, isFeat);
             rappersPage.Close();
         }

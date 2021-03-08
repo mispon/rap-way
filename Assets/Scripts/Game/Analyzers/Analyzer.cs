@@ -9,6 +9,7 @@ namespace Game.Analyzers
     public abstract class Analyzer<T> : MonoBehaviour
     {
         protected const float ONE_PERCENT = 0.01f;
+        protected const float TEN_PERCENTS = 0.1f;
 
         protected GameSettings settings;
 

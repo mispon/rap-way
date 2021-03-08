@@ -5,6 +5,14 @@ namespace Core.Settings
     [CreateAssetMenu(fileName = "GameSettings", menuName = "Game/Settings")]
     public class GameSettings : ScriptableObject
     {
+        [Header("PLAYER")]
+        [Range(100_000_000, 1_000_000_000), Tooltip("Максимальное кол-во фанатов, шт")]
+        public int MaxFans;
+        [Range(100_000_000, 1_500_000_000), Tooltip("Максимальное кол-во фанатов, шт")]
+        public int MaxMoney;
+        [Range(500, 5000), Tooltip("Базовое значение фанатов в анализаторе")]
+        public int BaseFans;
+
         [Header("TRACK")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int TrackWorkDuration;
@@ -72,6 +80,8 @@ namespace Core.Settings
         [Header("CONCERT")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int ConcertWorkDuration;
+        [Range(1, 60), Tooltip("Длительность отдыха после концерта, дни")]
+        public int ConcertCooldown;
         [Tooltip("Зависимость оценки от качества концерта")]
         public AnimationCurve ConcertGradeCurve;
         [Range(10, 400), Tooltip("Максимальное количество очков работы, шт")]
@@ -112,9 +122,9 @@ namespace Core.Settings
         public int RappersWorkDuration;
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int FeatWorkDuration;
-        [Range(100, 1000), Tooltip("Базовое значение фанатов в анализаторе")]
-        public int BaseFans;
         [Range(50_000, 300_000), Tooltip("Минимальное кол-во фанатов для участия в чартах")]
         public int MinFansForCharts;
+        [Range(1, 30), Tooltip("Длительность отдыха менеджера, дни")]
+        public int ManagerCooldown;
     }
 }

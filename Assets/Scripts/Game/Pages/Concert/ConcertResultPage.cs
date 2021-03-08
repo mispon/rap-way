@@ -56,9 +56,10 @@ namespace Game.Pages.Concert
         /// </summary>
         private void SaveResult(ConcertInfo concert)
         {
-            concert.Timestamp = TimeManager.Instance.Now;
+            concert.Timestamp = TimeManager.Instance.Now.DateToString();
             PlayerManager.Instance.AddMoney(concert.Income, settings.ConcertRewardExp);
             ProductionManager.AddConcert(concert);
+            GameManager.Instance.GameStats.ConcertCooldown = settings.ConcertCooldown;
         }
 
         protected override void BeforePageOpen()

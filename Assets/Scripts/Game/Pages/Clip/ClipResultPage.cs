@@ -37,7 +37,7 @@ namespace Game.Pages.Clip
             Open();
         }
 
-        /// <summary>
+        /// <summary>t
         /// Выводит результат работы 
         /// </summary>
         private void DisplayResult(ClipInfo clip)
@@ -56,7 +56,7 @@ namespace Game.Pages.Clip
         /// </summary>
         private void SaveResult(ClipInfo clip)
         {
-            clip.Timestamp = TimeManager.Instance.Now;
+            clip.Timestamp = TimeManager.Instance.Now.DateToString();
             PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome, settings.ClipRewardExp);
             ProductionManager.AddClip(clip);
         }

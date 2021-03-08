@@ -28,8 +28,8 @@ namespace Models.Player
         public List<Themes> Themes;
         public List<Styles> Styles;
         public List<Skills> Skills;
-        public HashSet<int> Feats;
-        public HashSet<int> Battles;
+        public List<int> Feats;
+        public List<int> Battles;
 
         public Trends LastKnownTrends;
         
@@ -45,8 +45,8 @@ namespace Models.Player
             Themes = new List<Themes> { Enums.Themes.Life },
             Styles = new List<Styles> { Enums.Styles.Underground },
             Skills = new List<Skills>(),
-            Feats = new HashSet<int>(),
-            Battles = new HashSet<int>(),
+            Feats = new List<int>(),
+            Battles = new List<int>(),
 
             LastKnownTrends = null
         };

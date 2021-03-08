@@ -196,6 +196,7 @@ namespace Game.Pages.Concert
         {
             bool canStart = PlayerManager.Data.Fans >= fansRequirement;
             canStart &= _lastAlbums.Any();
+            canStart &= GameManager.Instance.GameStats.ConcertCooldown == 0;
 
             startButton.interactable = canStart;
         }

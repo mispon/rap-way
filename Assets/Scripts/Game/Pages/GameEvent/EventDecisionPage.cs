@@ -28,7 +28,7 @@ namespace Game.Pages.GameEvent
         /// </summary>
         public void Show(string eventName, GameEventDecision eventDecision)
         {
-            nameText.text = eventName;
+            nameText.text = GetLocale(eventName);
             _eventDecision = eventDecision;
             Open();
         }
@@ -49,11 +49,13 @@ namespace Game.Pages.GameEvent
         /// </summary>
         private static MetricsIncome CalculateIncome(PlayerData playerData, GameEventDecision decision)
         {
+            int fansAmount = Mathf.Max(playerData.Fans, GameManager.Instance.Settings.BaseFans);
+
             return new MetricsIncome
             {
                 // NOTE: Изменение денег тоже зависит от фанатов
-                Money = Mathf.RoundToInt(playerData.Fans * decision.MoneyChange),
-                Fans = Mathf.RoundToInt(playerData.Fans * decision.FansChange),
+                Money = Mathf.RoundToInt(fansAmount * decision.MoneyChange),
+                Fans = Mathf.RoundToInt(fansAmount * decision.FansChange),
                 Hype = decision.HypeChange,
                 Exp = decision.ExpChange
             };
@@ -61,7 +63,7 @@ namespace Game.Pages.GameEvent
 
         protected override void BeforePageOpen()
         {
-            descriptionText.text = _eventDecision.Description;
+            descriptionText.text = GetLocale(_eventDecision.Description);
 
             var income = CalculateIncome(PlayerManager.Data, _eventDecision);
             

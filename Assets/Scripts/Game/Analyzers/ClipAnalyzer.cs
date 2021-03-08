@@ -62,7 +62,8 @@ namespace Game.Analyzers
                 views *= 2;
             }
 
-            return views;
+            int randomizer = Convert.ToInt32(views * TEN_PERCENTS);
+            return Random.Range(views - randomizer, views + randomizer);
         }
 
         /// <summary>
@@ -72,8 +73,8 @@ namespace Game.Analyzers
         {
             int activeViewers = Convert.ToInt32(views * settings.ClipActiveViewers);
 
-            int likes = Convert.ToInt32(clipQuality * activeViewers);
-            int dislikes = Convert.ToInt32((1f - clipQuality) * activeViewers);
+            int likes = Convert.ToInt32(clipQuality * activeViewers * 2f);
+            int dislikes = Convert.ToInt32((1f - clipQuality) * activeViewers * 0.5f);
 
             return (likes, dislikes);
         }
@@ -84,7 +85,7 @@ namespace Game.Analyzers
         private (int fans, int money) CalculateIncomes(float clipQuality, int views)
         {
             // Прирост фанатов - количество прослушиваний * коэф. прироста
-            int fans = Convert.ToInt32(views * settings.ClipFansIncomeCurve.Evaluate(clipQuality));
+            int fans = Convert.ToInt32(views * settings.ClipFansIncomeCurve.Evaluate(clipQuality) * TEN_PERCENTS);
             // Доход - количество прослушиваний * стоимость одного прослушивания
             int money = Convert.ToInt32(views * settings.ClipViewCost);
 

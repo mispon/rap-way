@@ -35,7 +35,7 @@ namespace Game.Pages.Store
         /// </summary>
         public void Initialize(
             GoodsType type, GoodUI uiData,
-            Action<GoodsType, short, int> onBuyAction,
+            Action<GoodsType, short, int, int> onBuyAction,
             Action<GoodsType, short, int> onClickAction
         )
         {
@@ -65,7 +65,7 @@ namespace Game.Pages.Store
             priceTxt.text = uiData.Price.GetMoney();
             
             buyBtn.onClick.RemoveAllListeners();
-            buyBtn.onClick.AddListener(() => onBuyAction(Type, Level, uiData.Price));
+            buyBtn.onClick.AddListener(() => onBuyAction(Type, Level, uiData.Price, uiData.Hype));
 
             itemBtn.onClick.RemoveAllListeners();
             itemBtn.onClick.AddListener(() => onClickAction(Type, Level, uiData.Price));

@@ -1,3 +1,4 @@
+using System;
 using Enums;
 
 namespace Models.Info
@@ -5,6 +6,7 @@ namespace Models.Info
     /// <summary>
     /// Информация о выбранных стиле и теме
     /// </summary>
+    [Serializable]
     public class TrendInfo
     {
         public Styles Style;

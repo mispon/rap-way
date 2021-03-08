@@ -22,6 +22,7 @@ namespace Game.Pages.History
 
         private int _orderNumber;
         private RectTransform _rectTransform;
+        private int _itemsAmount;
         
         /// <summary>
         /// Порядоквый номер элемента в таблице (начаниется с 1)
@@ -52,25 +53,39 @@ namespace Game.Pages.History
         public void Initialize(int index, string[] infos)
         {
             orderNumber = index;
+            _itemsAmount = Mathf.Min(infoTexts.Length, infos.Length);
 
-            panel.color = isEven ? evenRowColor : oddRowColor;
-            numText.color = isEven ? evenTextColor : oddTextColor;
-            
-            int amount = Mathf.Min(infoTexts.Length, infos.Length);
-            for (int i = 0; i < amount; i++)
+            for (int i = 0; i < _itemsAmount; i++)
             {
-                var item = infoTexts[i];
-                item.text = infos[i];
-                item.color = isEven ? evenTextColor : oddTextColor;
+                infoTexts[i].text = infos[i];
             }
+
+            SetupColor();
         }
 
         /// <summary>
-        /// Обновление порядоквого номера при добавлении новых записей в таблицу
+        /// Обновление порядкового номера при добавлении новых записей в таблицу
         /// </summary>
         public void UpdateNum(int increment)
         {
             orderNumber += increment;
+            SetupColor();
+        }
+
+        /// <summary>
+        /// Устанавливает цвет записи
+        /// </summary>
+        private void SetupColor()
+        {
+            Color panelColor = isEven ? evenRowColor : oddRowColor;
+            Color textColor = isEven ? evenTextColor : oddTextColor;
+
+            panel.color = panelColor;
+            numText.color = textColor;
+            for (int i = 0; i < _itemsAmount; i++)
+            {
+                infoTexts[i].color = textColor;
+            }
         }
 
         /// <summary>

@@ -70,8 +70,8 @@ namespace Game.Pages.GameEvent
         
         protected override void BeforePageOpen()
         {
-            nameText.text = _eventInfo.Name;
-            descriptionText.text = _eventInfo.Description;
+            nameText.text = GetLocale(_eventInfo.Name);
+            descriptionText.text = GetLocale(_eventInfo.Description);
         }
 
         protected override void AfterPageClose()

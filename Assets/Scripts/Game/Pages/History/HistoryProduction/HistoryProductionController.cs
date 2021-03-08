@@ -88,7 +88,9 @@ namespace Game.Pages.History.HistoryProduction
         public void SetActiveElements(bool value)
         {
             foreach (var itemController in generatedItemsList)
+            {
                 itemController.gameObject.SetActive(value);
+            }
         }
 
         /// <summary>

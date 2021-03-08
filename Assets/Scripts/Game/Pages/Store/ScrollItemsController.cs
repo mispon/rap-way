@@ -122,7 +122,7 @@ namespace Game.Pages.Store
         /// <summary>
         /// Событие нажатия кнопки "Купить"
         /// </summary>
-        private void OnPurchaseItemClick(GoodsType type, short level, int price)
+        private void OnPurchaseItemClick(GoodsType type, short level, int price, int hype)
         {
             if (!PlayerManager.Instance.SpendMoney(price))
                 return;
@@ -134,11 +134,12 @@ namespace Game.Pages.Store
                 PlayerManager.Data.Goods.Add(good);
             }
             good.Level = level;
+            good.Hype = hype;
 
             void Notification()
             {
                 var uIData = GetGoodUi(good.Type, good.Level);
-                _newGoodEffect.Show(uIData.Image, NotificationManager.Instance.UnlockIndependentQueue);    
+                _newGoodEffect.Show(uIData.Image, NotificationManager.Instance.UnlockIndependentQueue);
             }
             
             NotificationManager.Instance.AddIndependentNotification(Notification);
@@ -152,6 +153,12 @@ namespace Game.Pages.Store
             {
                 DrawItem(type, level, true);
             }
+
+            if (hype > 0)
+            {
+                // обновляем отображение хайпа
+                PlayerManager.Instance.AddHype(0);
+            }
         }
 
         /// <summary>
@@ -160,7 +167,7 @@ namespace Game.Pages.Store
         private void OnItemClick(GoodsType type, short level, int price)
         {
             var uIData = GetGoodUi(type, level);
-            infoPage.Show(uIData.Image, type, level, price);
+            infoPage.Show(uIData.Image, type, level, price, uIData.Hype);
         }
 
         /// <summary>

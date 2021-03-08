@@ -60,7 +60,7 @@ namespace Game.Pages.Track
         /// </summary>
         private void SaveResult(TrackInfo track) 
         {
-            track.Timestamp = TimeManager.Instance.Now;
+            track.Timestamp = TimeManager.Instance.Now.DateToString();
             PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome, settings.TrackRewardExp);
             ProductionManager.AddTrack(track);
 

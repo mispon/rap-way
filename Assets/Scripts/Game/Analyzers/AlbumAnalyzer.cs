@@ -77,7 +77,8 @@ namespace Game.Analyzers
                 listens *= 2;
             }
 
-            return listens;
+            int randomizer = Convert.ToInt32(listens * TEN_PERCENTS);
+            return Random.Range(listens - randomizer, listens + randomizer);
         }
 
         /// <summary>

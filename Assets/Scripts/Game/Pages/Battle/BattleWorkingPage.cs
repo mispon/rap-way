@@ -85,8 +85,8 @@ namespace Game.Pages.Battle
         private void GenerateWorkPoints()
         {
             int playerPoints = Random.Range(1, PlayerManager.Data.Stats.Vocobulary.Value + 1);
-            playerPoints += GenerateSkillsPoints();
             playerWorkPoints.Show(playerPoints);
+            playerPoints += GenerateSkillsPoints();
             _playerPoints += playerPoints;
 
             int rapperPoints = Random.Range(1, _rapper.Vocobulary + 1);

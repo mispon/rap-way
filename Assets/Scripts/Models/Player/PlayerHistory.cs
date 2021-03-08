@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Models.Info.Production;
+using Utils.Extensions;
 
 namespace Models.Player
 {
@@ -34,7 +35,7 @@ namespace Models.Player
             result.AddRange(ClipList);
             result.AddRange(ConcertList);
 
-            return result.OrderByDescending(e => e.Timestamp).Take(amount).ToList();
+            return result.OrderByDescending(e => e.Timestamp.StringToDate()).Take(amount).ToList();
         }
     }
 }

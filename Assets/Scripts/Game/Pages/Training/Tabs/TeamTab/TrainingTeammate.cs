@@ -3,6 +3,7 @@ using Game.UI;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Training.Tabs.TeamTab
 {
@@ -16,8 +17,10 @@ namespace Game.Pages.Training.Tabs.TeamTab
         [SerializeField] private Button upButton;
         [SerializeField] private Button payButton;
         [SerializeField] private ProgressBar expBar;
+        [SerializeField] private GameObject salaryLabel;
+        [SerializeField] private Text salaryText;
         [SerializeField] private GameObject inactiveLabel;
-        [Space] 
+        [Space]
         [SerializeField] private Sprite activeSprite;
         [SerializeField] private Sprite inactiveSprite;
 
@@ -44,6 +47,9 @@ namespace Game.Pages.Training.Tabs.TeamTab
                 SetLocked();
                 return;
             }
+
+            salaryText.text = TeamManager.Instance.GetSalary(teammate).GetMoney();
+            salaryLabel.SetActive(!teammate.HasPayment);
 
             avatar.sprite = teammate.HasPayment ? activeSprite : inactiveSprite;
             inactiveLabel.SetActive(false);

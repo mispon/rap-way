@@ -12,7 +12,7 @@ namespace Models.Info.Production
         public string Name;
         public int MoneyIncome;
         public int FansIncome;
-        public DateTime Timestamp;
+        public string Timestamp;
 
         /// <summary>
         /// Массив строк из полей класса для заполнения в таблице Истории

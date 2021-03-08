@@ -15,11 +15,12 @@ namespace Game.Pages.Store
         [SerializeField] private Text itemName;
         [SerializeField] private Text itemDesc;
         [SerializeField] private Text itemPrice;
+        [SerializeField] private Text itemHype;
 
         /// <summary>
         /// Отображает описание
         /// </summary>
-        public void Show(Sprite icon, GoodsType type, int level, int price)
+        public void Show(Sprite icon, GoodsType type, int level, int price, int hype)
         {
             var equip = GoodsManager.Instance.GetEquipmentInfo(type, level);
 
@@ -29,6 +30,7 @@ namespace Game.Pages.Store
                 ? GetLocale("equip_desc", equip.Chance * 100, equip.WorkPoints)
                 : GetLocale(GetStuffKey(type, level));
             itemPrice.text = GetLocale("cost_value", price.GetMoney()).ToUpper();
+            itemHype.text = hype > 0 ? GetLocale("hype_value", hype).ToUpper() : string.Empty;
 
             Open();
         }

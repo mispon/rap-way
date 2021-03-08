@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using Utils.Extensions;
 
 namespace Models.Info.Production
@@ -25,9 +26,9 @@ namespace Models.Info.Production
 
         public override string[] HistoryInfo => new[]
         {
-            Name,
+            ProductionManager.GetAlbum(AlbumId).Name,
             LocationName,
-            TicketCost.GetDisplay(),
+            TicketsSold.GetDisplay(),
             Income.GetMoney()
         };
         

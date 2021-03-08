@@ -58,7 +58,7 @@ namespace Game.Pages.Album
         /// </summary>
         private void SaveResult(AlbumInfo album)
         {
-            album.Timestamp = TimeManager.Instance.Now;
+            album.Timestamp = TimeManager.Instance.Now.DateToString();
             PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome, settings.AlbumRewardExp);
             ProductionManager.AddAlbum(album);
         }

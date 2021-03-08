@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Core;
+using Data;
 using Localization;
 using Utils.Extensions;
 
@@ -20,11 +21,11 @@ namespace Models.Info.Production
         
         public override string[] HistoryInfo => new[]
         {
-            Name,
+            ProductionManager.GetTrackName(Id),
             LocalizationManager.Instance.Get(TrendInfo.Style.GetDescription()),
             LocalizationManager.Instance.Get(TrendInfo.Theme.GetDescription()),
             ListenAmount.GetDisplay(),
-            ChartPosition.ToString()
+            ChartPosition > 0 ? ChartPosition.ToString() : "—"
         };
         
         public override string GetLog() {

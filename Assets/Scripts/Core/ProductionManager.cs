@@ -46,7 +46,9 @@ namespace Core
         {
             var track = GetTrack(trackId);
 
-            var featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : "";
+            var featInfo = track.Feat != null && !string.IsNullOrWhiteSpace(track.Feat.Name)
+                ? $" feat. {track.Feat.Name}"
+                : string.Empty;
             return $"{track.Name}{featInfo}";
         }
 

@@ -21,7 +21,7 @@ namespace Game
         [Header("Игровые настройки")]
         public GameSettings Settings;
 
-        [Header("STATE")]
+        [Header("GAME STATE")]
         public PlayerData PlayerData;
         public GameStats GameStats;
 

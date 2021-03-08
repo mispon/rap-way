@@ -64,7 +64,7 @@ namespace Game
         public void AddFans(int fans, int exp = 0)
         {
             AddExp(exp);
-            Data.Fans = SafetyAdd(Data.Fans, fans);
+            Data.Fans = SafetyAdd(Data.Fans, fans, GameManager.Instance.Settings.MaxFans);
             onFansAdd.Invoke(Data.Fans);
             gameScreen.UpdateHUD(Data);
         }
@@ -75,7 +75,7 @@ namespace Game
         public void AddMoney(int money, int exp = 0)
         {
             AddExp(exp);
-            Data.Money = SafetyAdd(Data.Money, money);
+            Data.Money = SafetyAdd(Data.Money, money, GameManager.Instance.Settings.MaxMoney);
             onMoneyAdd.Invoke(Data.Money);
             gameScreen.UpdateHUD(Data);
         }
@@ -85,7 +85,10 @@ namespace Game
         /// </summary>
         public void AddHype(int hype)
         {
-            Data.Hype = Mathf.Clamp(Data.Hype + hype, 0, 100);
+            int minHype = Data.Goods.Sum(e => e.Hype);
+            const int maxHype = 100;
+
+            Data.Hype = Mathf.Clamp(Data.Hype + hype, minHype, maxHype);
             onHypeAdd.Invoke(Data.Hype);
             gameScreen.UpdateHUD(Data);
         }
@@ -160,11 +163,11 @@ namespace Game
         /// <summary>
         /// Увеличивает значение, контроллируя верхнюю границу
         /// </summary>
-        private static int SafetyAdd(int current, int increment)
+        private static int SafetyAdd(int current, int increment, int maxValue)
         {
-            return int.MaxValue - current > increment
+            return maxValue - current > increment
                 ? current + increment
-                : int.MaxValue;
+                : maxValue;
         }
     }
 }

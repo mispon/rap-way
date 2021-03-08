@@ -19,7 +19,7 @@ namespace Models.Info.Production
             LocalizationManager.Instance.Get(TrendInfo.Style.GetDescription()),
             LocalizationManager.Instance.Get(TrendInfo.Theme.GetDescription()),
             ListenAmount.GetDisplay(),
-            ChartPosition.ToString()
+            ChartPosition > 0 ? ChartPosition.ToString() : "—"
         };
 
         public override string GetLog() {

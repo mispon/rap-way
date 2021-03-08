@@ -26,7 +26,7 @@ namespace Models.Info.Production
         {
             Name,
             Views.GetDisplay(),
-            $"{Likes} / {Dislikes}"
+            $"+{Likes.GetDisplay()} / -{Dislikes.GetDisplay()}"
         };
 
         public override string GetLog() {

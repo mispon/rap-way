@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Enums;
 using UnityEngine;
-using Utils;
 using Random = UnityEngine.Random;
 
 namespace Data
@@ -73,11 +71,11 @@ namespace Data
         [Tooltip("Описание события")]
         public string Description;
         
-        [Tooltip("Величина изменения количества денег как % от текущего (от 1% до 10%)")]
-        [Range(-0.25f, 0.25f)]
+        [Tooltip("Величина изменения количества денег как % от текущего (от 1% до 15%)")]
+        [Range(-0.15f, 0.15f)]
         public float MoneyChange;
         
-        [Tooltip("Величина изменения количества фанов как % от текущего (от 1% до 25%)")]
+        [Tooltip("Величина изменения количества фанов как % от текущего (от 1% до 10%)")]
         [Range(-0.1f, 0.1f)]
         public float FansChange;
         

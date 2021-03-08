@@ -18,5 +18,10 @@ namespace Models.Player
         /// Уровень прокачки шмотки
         /// </summary>
         public short Level;
+
+        /// <summary>
+        /// Бонус к хайпу
+        /// </summary>
+        public int Hype;
     }
 }
