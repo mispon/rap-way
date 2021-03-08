@@ -58,7 +58,15 @@ namespace Game.Pages.Social.Tabs
         /// </summary>
         protected virtual void OnOpen()
         {
-            startButton.interactable = GameManager.Instance.GameStats.SocialsCooldown == 0;
+            startButton.interactable = CheckStartConditions();
+        }
+
+        /// <summary>
+        /// Проверяет условия запуска соц. действия
+        /// </summary>
+        protected virtual bool CheckStartConditions()
+        {
+            return GameManager.Instance.GameStats.SocialsCooldown == 0;
         }
 
         /// <summary>

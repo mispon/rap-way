@@ -104,6 +104,8 @@ namespace Core.Settings
         public float SocialsActiveFansGroup;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int SocialsRewardExp;
+        [Range(1, 1000), Tooltip("Минимальная сумма баланса для возможности сделать пожертвование")]
+        public int MinBalanceForCharity;
 
         [Header("BATTLE")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]

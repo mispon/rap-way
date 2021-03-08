@@ -55,5 +55,14 @@ namespace Game.Pages.Social.Tabs
             trends.SetActive(hasTrendInfo);
             noInfo.SetActive(!hasTrendInfo);
         }
+
+        /// <summary>
+        /// Проверяет условия запуска соц. действия
+        /// </summary>
+        protected override bool CheckStartConditions()
+        {
+            bool noCooldown = base.CheckStartConditions();
+            return noCooldown && TeamManager.IsAvailable(TeammateType.PrMan);
+        }
     }
 }

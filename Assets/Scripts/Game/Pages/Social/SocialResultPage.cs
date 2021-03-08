@@ -38,7 +38,7 @@ namespace Game.Pages.Social
         /// </summary>
         private void SaveResult(SocialInfo social)
         {
-            // GameManager.Instance.GameStats.SocialsCooldown = GameManager.Instance.Settings.SocialsCooldown;
+            GameManager.Instance.GameStats.SocialsCooldown = GameManager.Instance.Settings.SocialsCooldown;
             PlayerManager.Instance.SpendMoney(social.CharityAmount);
             PlayerManager.Instance.AddHype(social.HypeIncome);
             PlayerManager.Instance.AddExp(settings.SocialsRewardExp);

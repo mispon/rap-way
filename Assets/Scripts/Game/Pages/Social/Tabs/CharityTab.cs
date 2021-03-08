@@ -64,14 +64,29 @@ namespace Game.Pages.Social.Tabs
         }
 
         /// <summary>
+        /// Проверяет условия запуска соц. действия
+        /// </summary>
+        protected override bool CheckStartConditions()
+        {
+            bool noCooldown = base.CheckStartConditions();
+            return noCooldown && PlayerManager.Data.Money >= GameManager.Instance.Settings.MinBalanceForCharity;
+        }
+
+        /// <summary>
         /// Устанавливает предельные границы пожертвования
         /// </summary>
         private void SetSliderBorders()
         {
             int money = PlayerManager.Data.Money;
 
-            int min = Mathf.Max(1, money / 100);
-            int max = min * 10;
+            int min = 0;
+            int max = 0;
+
+            if (money >= GameManager.Instance.Settings.MinBalanceForCharity)
+            {
+                min = Mathf.Max(1, money / 100);
+                max = min * 10;
+            }
 
             amountSlider.minValue = min;
             amountSlider.maxValue = max;
