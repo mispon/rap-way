@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Enums;
 using Game.Effects;
 using Game.Notifications;
+using Game.UI;
 using Models.Player;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ namespace Game.Pages.Store
     /// <summary>
     /// Класс управления UI-элементами товаров в ScrollView
     /// </summary>
-    public class ScrollItemsController: MonoBehaviour
+    public class StoreItemsController: MonoBehaviour
     {
         [Header("Элементы ScrollView")]
         [SerializeField] private RectTransform rectContent; 
@@ -32,40 +32,7 @@ namespace Game.Pages.Store
         /// </summary>
         private readonly List<StoreItemController> _itemsList = new List<StoreItemController>();
 
-        private float _elementTemplateHeight;
-        private float _containerBaseHeight;
         private NewItemEffect _newGoodEffect;
-
-        /// <summary>
-        /// Высота одного элемента
-        /// </summary>
-        private float ElementTemplateHeight
-        {
-            get
-            {
-                if (Math.Abs(_elementTemplateHeight) < 0.01f)
-                {
-                    _elementTemplateHeight = elementTemplate.transform.GetComponent<RectTransform>().rect.height;
-                }
-
-                return _elementTemplateHeight;
-            }
-        }
-        /// <summary>
-        /// Высота ViewPort'a
-        /// </summary>
-        private float ContainerBaseHeight
-        {
-            get
-            {
-                if (Math.Abs(_containerBaseHeight) < 0.01f)
-                {
-                    _containerBaseHeight = rectContent.parent.GetComponent<RectTransform>().rect.height;
-                }
-
-                return _containerBaseHeight;
-            }
-        }
 
         /// <summary>
         /// Инцниализация всех UI-элементов из GoodsData конкретного назначения (рабочие/понты)
@@ -89,7 +56,8 @@ namespace Game.Pages.Store
                     DrawItem(info.Type, (short) newItemLevel);
                 }
             }
-            ResizeContainer();
+
+            ShowIfNoItems();
         }
 
         /// <summary>
@@ -122,10 +90,13 @@ namespace Game.Pages.Store
         /// <summary>
         /// Событие нажатия кнопки "Купить"
         /// </summary>
-        private void OnPurchaseItemClick(GoodsType type, short level, int price, int hype)
+        private void OnPurchaseItemClick(GoodsType type, short level, int price, int hype, Price label)
         {
             if (!PlayerManager.Instance.SpendMoney(price))
+            {
+                label.ShowNoMoney();
                 return;
+            }
 
             var good = PlayerManager.Data.Goods.FirstOrDefault(g => g.Type == type);
             if (good == null)
@@ -173,13 +144,15 @@ namespace Game.Pages.Store
         /// <summary>
         /// Удаление контроллера UI-элементов товара по типу и уровню
         /// </summary>
-        private void DisposeItem(GoodsType type, short level, bool resizeContainer = true)
+        private void DisposeItem(GoodsType type, short level)
         {
             var itemController = _itemsList.FirstOrDefault(it => it.Type == type && it.Level == level);
             if (itemController == default)
+            {
                 return;
+            }
 
-            DisposeItem(itemController, resizeContainer);
+            DisposeItem(itemController);
         }
 
         /// <summary>
@@ -189,26 +162,15 @@ namespace Game.Pages.Store
         {
             _itemsList.Remove(itemController);
             Destroy(itemController.gameObject);
-            if (resizeContainer)
-            {
-                ResizeContainer();
-            }
+            ShowIfNoItems();
         }
-        
-        /// <summary>
-        /// Переопределение высоты контейнера ScrollView-элементов
-        /// </summary>
-        private void ResizeContainer()
-        {
-            var anyElements = _itemsList.Count > 0;
-            noElementsText.SetActive(!anyElements);
 
-            rectContent.SetSizeWithCurrentAnchors(
-                RectTransform.Axis.Vertical,
-                anyElements
-                    ? (ElementTemplateHeight + 10) * _itemsList.Count
-                    : ContainerBaseHeight
-            );
+        /// <summary>
+        /// Показывает сообщение о том, что нет товаров
+        /// </summary>
+        private void ShowIfNoItems()
+        {
+            noElementsText.SetActive(_itemsList.Count == 0);
         }
 
         /// <summary>

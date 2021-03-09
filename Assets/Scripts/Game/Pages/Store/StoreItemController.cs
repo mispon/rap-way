@@ -1,6 +1,7 @@
 using System;
 using Data;
 using Enums;
+using Game.UI;
 using Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ namespace Game.Pages.Store
         [SerializeField] private Button itemBtn;
         [SerializeField] private Image iconImg;
         [SerializeField] private Text typeTxt;
-        [SerializeField] private Text priceTxt;
+        [SerializeField] private Price price;
         [SerializeField] private Button buyBtn;
         
         public GoodsType Type { get; private set; }
@@ -35,7 +36,7 @@ namespace Game.Pages.Store
         /// </summary>
         public void Initialize(
             GoodsType type, GoodUI uiData,
-            Action<GoodsType, short, int, int> onBuyAction,
+            Action<GoodsType, short, int, int, Price> onBuyAction,
             Action<GoodsType, short, int> onClickAction
         )
         {
@@ -62,10 +63,10 @@ namespace Game.Pages.Store
             }
             
             typeTxt.text = LocalizationManager.Instance.Get(type.GetDescription()).ToUpper();
-            priceTxt.text = uiData.Price.GetMoney();
+            price.SetValue(uiData.Price.GetMoney());
             
             buyBtn.onClick.RemoveAllListeners();
-            buyBtn.onClick.AddListener(() => onBuyAction(Type, Level, uiData.Price, uiData.Hype));
+            buyBtn.onClick.AddListener(() => onBuyAction(Type, Level, uiData.Price, uiData.Hype, price));
 
             itemBtn.onClick.RemoveAllListeners();
             itemBtn.onClick.AddListener(() => onClickAction(Type, Level, uiData.Price));
