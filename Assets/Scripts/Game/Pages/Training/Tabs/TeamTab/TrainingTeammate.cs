@@ -48,7 +48,8 @@ namespace Game.Pages.Training.Tabs.TeamTab
                 return;
             }
 
-            salaryText.text = TeamManager.Instance.GetSalary(teammate).GetMoney();
+            int salaryAmount = TeamManager.Instance.GetSalary(teammate);
+            salaryText.text = salaryAmount.GetMoney();
             salaryLabel.SetActive(!teammate.HasPayment);
 
             avatar.sprite = teammate.HasPayment ? activeSprite : inactiveSprite;
@@ -61,7 +62,7 @@ namespace Game.Pages.Training.Tabs.TeamTab
             expBar.SetValue(exp, expToUp);
 
             upButton.interactable = noLimit && expEnough;
-            payButton.interactable = !teammate.HasPayment;
+            payButton.interactable = !teammate.HasPayment && salaryAmount <= PlayerManager.Data.Money;
         }
 
         /// <summary>

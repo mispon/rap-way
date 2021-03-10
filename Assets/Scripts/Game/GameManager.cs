@@ -37,6 +37,16 @@ namespace Game
         }
 
         /// <summary>
+        /// Создает новый объект персонажа
+        /// </summary>
+        public PlayerData CreateNewPlayer()
+        {
+            DataManager.Clear(playersDataKey);
+            PlayerData = PlayerData.New;
+            return PlayerData;
+        }
+
+        /// <summary>
         /// Удаляет игровые сохранения
         /// </summary>
         public void RemoveSaves()

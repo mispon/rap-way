@@ -42,7 +42,10 @@ namespace Core
         /// </summary>
         public static void Clear(string saveKey)
         {
-            PlayerPrefs.DeleteKey(saveKey);
+            if (PlayerPrefs.HasKey(saveKey))
+            {
+                PlayerPrefs.DeleteKey(saveKey);
+            }
         }
     }
 }

@@ -84,7 +84,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void CreatePlayer()
         {
-            var player = GameManager.Instance.PlayerData.Info;
+            var player = GameManager.Instance.CreateNewPlayer().Info;
 
             player.Gender = _maleSelected ? Gender.Male : Gender.Female;
             player.FirstName = inputFields[0].text.Trim();
