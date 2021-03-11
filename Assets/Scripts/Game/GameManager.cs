@@ -26,7 +26,7 @@ namespace Game
         public GameStats GameStats;
 
         [NonSerialized] public bool IsReady;
-        
+
         private void Start()
         {
             LoadApplicationData();
@@ -34,6 +34,8 @@ namespace Game
             SoundManager.Instance.Setup(GameStats.SoundVolume, GameStats.MusicVolume);
 
             IsReady = true;
+
+            AdsManager.Instance.Init();
         }
 
         /// <summary>

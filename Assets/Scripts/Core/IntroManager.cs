@@ -9,7 +9,6 @@ namespace Core
     public class IntroManager : MonoBehaviour
     {
         [SerializeField] private int delay = 3;
-        [SerializeField] private string mainSceneName = "Menu";
 
         private IEnumerator Start()
         {
@@ -18,7 +17,7 @@ namespace Core
             // запустить рекламный ролик
             // загрузить главное меню
             yield return new WaitForSeconds(delay);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(mainSceneName);
+            SceneManager.Instance.LoadMainScene();
         }
     }
 }
