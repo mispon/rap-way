@@ -34,8 +34,6 @@ namespace Game
             SoundManager.Instance.Setup(GameStats.SoundVolume, GameStats.MusicVolume);
 
             IsReady = true;
-
-            AdsManager.Instance.Init();
         }
 
         /// <summary>

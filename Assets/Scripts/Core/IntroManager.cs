@@ -8,15 +8,11 @@ namespace Core
     /// </summary>
     public class IntroManager : MonoBehaviour
     {
-        [SerializeField] private int delay = 3;
+        [SerializeField] private int loadingTime = 3;
 
         private IEnumerator Start()
         {
-            // todo:
-            // дождаться загрузки рекламы
-            // запустить рекламный ролик
-            // загрузить главное меню
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSeconds(loadingTime);
             SceneManager.Instance.LoadMainScene();
         }
     }
