@@ -98,7 +98,7 @@ namespace Localization
         {
             var request = UnityWebRequest.Get(path);
             yield return request.SendWebRequest();
-            if (request.isHttpError || request.isNetworkError)
+            if (request.result == UnityWebRequest.Result.ProtocolError)
                 Debug.LogError(request.error);
             else
                 callback.Invoke(request.downloadHandler.text);

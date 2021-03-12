@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -98,7 +98,8 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 2b817a7ef63935e4588ba6e4afbfc145,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -118,6 +119,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -635,6 +638,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1010,6 +1014,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1085,6 +1090,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1185,6 +1191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -1229,6 +1236,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1303,6 +1311,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1446,6 +1455,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &868735401
 Canvas:
   m_ObjectHideFlags: 0
@@ -1602,6 +1612,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2432,6 +2443,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.48627454, b: 0.45098042, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2651,6 +2663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -2715,6 +2728,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.8000001, g: 0.58431375, b: 0.45098042, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2768,6 +2782,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2796,6 +2811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -2847,6 +2863,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -3094,6 +3111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -3138,6 +3156,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3266,6 +3285,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3427,11 +3447,6 @@ PrefabInstance:
       objectReference: {fileID: 7191811041921544945}
     - target: {fileID: 4065143081552390622, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
         type: 3}
-      propertyPath: chance
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 4065143081552390622, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
       propertyPath: eventMainPage
       value: 
       objectReference: {fileID: 2126247625}
@@ -3450,206 +3465,6 @@ PrefabInstance:
       propertyPath: unlockTeammatePage
       value: 
       objectReference: {fileID: 464379089}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[0]
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[1]
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[2]
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[3]
-      value: 400
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[4]
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[5]
-      value: 600
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[6]
-      value: 700
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[7]
-      value: 800
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[8]
-      value: 900
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[0].Salary.Array.data[9]
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[0]
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[1]
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[2]
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[3]
-      value: 400
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[4]
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[5]
-      value: 600
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[6]
-      value: 700
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[7]
-      value: 800
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[8]
-      value: 900
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[1].Salary.Array.data[9]
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[0]
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[1]
-      value: 600
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[2]
-      value: 900
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[3]
-      value: 1200
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[4]
-      value: 1500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[5]
-      value: 1800
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[6]
-      value: 2100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[7]
-      value: 2400
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[8]
-      value: 2700
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[2].Salary.Array.data[9]
-      value: 3000
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[0]
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[1]
-      value: 400
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[2]
-      value: 600
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[3]
-      value: 800
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[4]
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[5]
-      value: 1200
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[6]
-      value: 1400
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[7]
-      value: 1600
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[8]
-      value: 1800
-      objectReference: {fileID: 0}
-    - target: {fileID: 4590614605083760112, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: teammateInfos.Array.data[3].Salary.Array.data[9]
-      value: 2000
-      objectReference: {fileID: 0}
     - target: {fileID: 6146707536476600465, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
         type: 3}
       propertyPath: newAchievementsPage
@@ -3660,11 +3475,6 @@ PrefabInstance:
       propertyPath: notificationButton
       value: 
       objectReference: {fileID: 232692415803124707}
-    - target: {fileID: 8446325927188917006, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0,
-        type: 3}
-      propertyPath: inactionInterval
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d4347a75f9c6fb44b9ab01a2b8be9e0, type: 3}
 --- !u!114 &1929117384531533427 stripped
@@ -4064,6 +3874,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.9803922, g: 0.9803922, b: 0.9803922, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4198,6 +4009,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
   m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4237,6 +4049,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &3321363261388051410
 GameObject:
   m_ObjectHideFlags: 0
@@ -4270,6 +4083,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.96470594, g: 0.77647066, b: 0.19215688, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4466,6 +4280,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.68235296, b: 0.5764706, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4499,6 +4314,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4546,6 +4362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -4590,6 +4407,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4673,6 +4491,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4702,6 +4521,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4908,6 +4728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -5050,6 +4871,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.25490198, g: 0.7254902, b: 0.7490196, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5350,6 +5172,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5399,6 +5222,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.9803922, g: 0.9803922, b: 0.9803922, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5432,6 +5256,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5620,6 +5445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -5683,6 +5509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -5753,6 +5580,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!114 &6135160815762473723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5768,6 +5596,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5820,6 +5649,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.9568628, b: 0.45882356, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5882,6 +5712,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!224 &6193956132913642256
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5917,6 +5748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -6143,6 +5975,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.9803922, g: 0.9803922, b: 0.9803922, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6226,6 +6059,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -6316,6 +6150,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.9803922, g: 0.9803922, b: 0.9803922, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6349,6 +6184,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6378,6 +6214,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6455,6 +6292,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6600,6 +6438,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6659,6 +6498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -6703,6 +6543,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6770,6 +6611,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -6854,6 +6696,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -6979,6 +6822,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -7042,6 +6886,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7071,6 +6916,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.8196079, g: 0.59607846, b: 0.9490197, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7240,6 +7086,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7269,6 +7116,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7298,6 +7146,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7353,6 +7202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
