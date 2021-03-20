@@ -16,6 +16,7 @@ namespace Models.Info.Production
         public string LocationName;
         public int LocationCapacity;
         
+        public int MaxTicketCost;
         public int TicketCost;
         public int TicketsSold;
 

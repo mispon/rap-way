@@ -17,6 +17,7 @@ namespace Game.Analyzers
         public override void Analyze(TrackInfo track)
         {
             float qualityPoints = CalculateTrackQuality(track);
+            track.Quality = qualityPoints;
 
             int featFansAmount = 0;
             if (track.Feat != null)
@@ -27,7 +28,7 @@ namespace Game.Analyzers
             track.ListenAmount = CalculateListensAmount(qualityPoints, GetFans(), featFansAmount);
             track.ChartPosition = CalculateChartPosition(track.ListenAmount);
 
-            var (fans, money) = CalculateIncomes(qualityPoints, track.ListenAmount);
+            var (fans, money) = CalculateIncomes(qualityPoints, track.ListenAmount, settings.TrackListenCost);
             track.FansIncome = fans;
             track.MoneyIncome = money;
         }
@@ -123,19 +124,6 @@ namespace Game.Analyzers
 
             int position = (int) Math.Round(MAX_POSITION * coef);
             return position;
-        }
-
-        /// <summary>
-        /// Вычисляет прибыльность трека
-        /// </summary>
-        private (int fans, int money) CalculateIncomes(float trackQuality, int listensAmount)
-        {
-            // Прирост фанатов - количество прослушиваний * коэф. прироста
-            var fans = listensAmount * settings.TrackFansIncomeCurve.Evaluate(trackQuality);
-            // Доход - количество прослушиваний * стоимость одного прослушивания
-            var money = listensAmount * settings.TrackListenCost;
-
-            return (Convert.ToInt32(fans), Convert.ToInt32(money));
         }
     }
 }

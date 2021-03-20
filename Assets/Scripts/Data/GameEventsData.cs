@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Enums;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -34,10 +35,10 @@ namespace Data
         /// Возвращает случайное игровое событие
         /// Возвращает null, если не найдено событий этого типа
         /// </summary>
-        public GameEventInfo GetRandomInfo(GameEventType type)
+        public GameEventInfo GetRandomInfo(GameEventType type, int fans)
         {
             return _gameEventInfosCollection.TryGetValue(type, out var value) 
-                ? value.GetRandom()
+                ? value.GetRandom(fans)
                 : null;
         }
     }
@@ -57,6 +58,9 @@ namespace Data
         [ArrayElementTitle("DecisionType")]
         [Tooltip("Набор данных, описывающих решение")]
         public GameEventDecision[] DecisionResults;
+
+        [Tooltip("Мин. требуемое кол-во фанатов")]
+        public int FansRequirement;
     }
 
     /// <summary>
@@ -91,9 +95,10 @@ namespace Data
         /// <summary>
         /// Возвращает случайное событие из набора. Если набор пусто, то возвращает null
         /// </summary>
-        public static GameEventInfo GetRandom(this GameEventInfo[] array)
+        public static GameEventInfo GetRandom(this GameEventInfo[] array, int fans)
         {
-            return array.Length > 0 ? array[Random.Range(0, array.Length)] : null;
+            var gameEvents = array.Where(e => e.FansRequirement <= fans).ToArray();
+            return gameEvents.Length > 0 ? gameEvents[Random.Range(0, gameEvents.Length)] : null;
         }
     }
 }

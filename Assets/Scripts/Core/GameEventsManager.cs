@@ -2,6 +2,7 @@ using System;
 using Core.Interfaces;
 using Data;
 using Enums;
+using Game;
 using Game.Pages.GameEvent;
 using UnityEngine;
 using Utils;
@@ -36,14 +37,11 @@ namespace Core
         {
             if (chance >= Random.Range(0f, 1f))
             {
-                var eventInfo = data.GetRandomInfo(type);
+                int fans = PlayerManager.Data.Fans;
+                GameEventInfo eventInfo = data.GetRandomInfo(type, fans);
                 if (eventInfo != null)
                 {
                     eventMainPage.Show(eventInfo);
-                } 
-                else
-                {
-                    Debug.LogAssertion($"Не добавлено ни одного игрового события типа \"{type}\"!");
                 }
             }
 

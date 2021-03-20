@@ -88,22 +88,22 @@ namespace Game.Pages.Concert
         {
             SoundManager.Instance.PlayWorkPoint();
 
-            int managerPoints = CreateManagementPoints(PlayerManager.Data);
-            int prPoints = CreatePrPoints(PlayerManager.Data);
-
             int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
             int equipBonus = Convert.ToInt32(addPoints * 0.5f);
 
-            _concert.ManagementPoints += managerPoints + equipBonus;
-            _concert.MarketingPoints += prPoints + equipBonus;
+            int managerPoints = CreateManagementPoints(PlayerManager.Data, equipBonus);
+            int prPoints = CreatePrPoints(PlayerManager.Data, equipBonus);
+
+            _concert.ManagementPoints += managerPoints;
+            _concert.MarketingPoints += prPoints;
         }
 
         /// <summary>
         /// Создает очки работы менеджмента
         /// </summary>
-        private int CreateManagementPoints(PlayerData data)
+        private int CreateManagementPoints(PlayerData data, int equipPoints)
         {
-            var playersManagementPoints = Random.Range(1, data.Stats.Management.Value + 1);
+            var playersManagementPoints = Random.Range(1, data.Stats.Management.Value + 1) + equipPoints;
             playerManagementWorkPoints.Show(playersManagementPoints);
 
             var managerPoints = 0;
@@ -119,9 +119,9 @@ namespace Game.Pages.Concert
         /// <summary>
         /// Создает очки работы маркетинга
         /// </summary>
-        private int CreatePrPoints(PlayerData data)
+        private int CreatePrPoints(PlayerData data, int equipPoints)
         {
-            var playersMarketingPoints = Random.Range(1, data.Stats.Marketing.Value + 1);
+            var playersMarketingPoints = Random.Range(1, data.Stats.Marketing.Value + 1) + equipPoints;
             playerPrWorkPoints.Show(playersMarketingPoints);
 
             var prManPoints = 0;

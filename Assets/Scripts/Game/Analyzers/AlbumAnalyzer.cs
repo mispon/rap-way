@@ -17,11 +17,12 @@ namespace Game.Analyzers
         public override void Analyze(AlbumInfo album)
         {
             float qualityPoints = CalculateAlbumQuality(album);
+            album.Quality = qualityPoints;
 
             album.ListenAmount = CalculateListensAmount(qualityPoints, GetFans());
             album.ChartPosition = CalculateChartPosition(album.ListenAmount);
 
-            var (fans, money) = CalculateIncomes(qualityPoints, album.ListenAmount);
+            var (fans, money) = CalculateIncomes(qualityPoints, album.ListenAmount, settings.AlbumListenCost);
             album.FansIncome = fans;
             album.MoneyIncome = money;
         }
@@ -115,19 +116,6 @@ namespace Game.Analyzers
 
             int position = (int) Math.Round(MAX_POSITION * coef);
             return position;
-        }
-
-        /// <summary>
-        /// Вычисляет прибыльность альбома
-        /// </summary>
-        private (int fans, int money) CalculateIncomes(float AlbumQuality, int listensAmount)
-        {
-            // Прирост фанатов - количество прослушиваний * коэф. прироста
-            var fans = listensAmount * settings.AlbumFansIncomeCurve.Evaluate(AlbumQuality);
-            // Доход - количество прослушиваний * стоимость одного прослушивания
-            var money = listensAmount * settings.AlbumListenCost;
-
-            return (Convert.ToInt32(fans), Convert.ToInt32(money));
         }
     }
 }

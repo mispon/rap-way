@@ -20,12 +20,13 @@ namespace Game.Analyzers
             float listenImpact = settings.ConcertAlbumListensImpact;
             float albumListenFactor = Mathf.Min(listenImpact * GetListenRatio(album.ListenAmount), listenImpact);
             float concertQuality = albumListenFactor + CalculateWorkPointsFactor(concert.ManagementPoints, concert.MarketingPoints);
+            concert.Quality = concertQuality;
 
             float repeatsDebuff = album.ConcertAmounts / 10f;
-            concertQuality = Mathf.Max(concertQuality - repeatsDebuff, 0f);
+            float costFactor = 1 - (1f * concert.TicketCost / concert.MaxTicketCost);
+            concertQuality = Mathf.Clamp(concertQuality - repeatsDebuff, 0.1f, 1f);
 
-            int fansAmount = GetFans();
-            concert.TicketsSold = CalculateTicketSales(concertQuality, fansAmount);
+            concert.TicketsSold = CalculateTicketSales(concertQuality, costFactor, concert.LocationCapacity);
         }
 
         /// <summary>
@@ -44,12 +45,13 @@ namespace Game.Analyzers
         /// <summary>
         /// Вычисляет количество продаж на основе качества концерта, кол-ва фанатов и уровня хайпа
         /// </summary>
-        private int CalculateTicketSales(float concertQuality, int fansAmount)
+        private int CalculateTicketSales(float concertQuality, float costFactor, int capacity)
         {
-            float concertGrade = settings.ConcertGradeCurve.Evaluate(concertQuality);
-            float hypeFactor = Mathf.Max(0.1f, PlayerManager.Data.Hype / 100f);
+            float grade = settings.ConcertGradeCurve.Evaluate(concertQuality);
+            float hypeFactor = PlayerManager.Data.Hype / 100f;
 
-            int ticketSales = Convert.ToInt32(concertGrade * fansAmount * hypeFactor);
+            float totalFactor = Mathf.Clamp(hypeFactor + costFactor, 0.1f, 1.0f);
+            int ticketSales = Convert.ToInt32(capacity * grade * totalFactor);
 
             return ticketSales;
         }

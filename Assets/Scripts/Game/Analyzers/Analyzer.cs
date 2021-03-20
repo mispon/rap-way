@@ -1,5 +1,7 @@
-﻿using Core.Settings;
+﻿using System;
+using Core.Settings;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game.Analyzers
 {
@@ -37,6 +39,30 @@ namespace Game.Analyzers
         protected int GetFans()
         {
             return Mathf.Max(PlayerManager.Data.Fans, settings.BaseFans);
+        }
+
+        /// <summary>
+        /// Рандомизирует значения доходов
+        /// </summary>
+        protected (int fans, int money) CalculateIncomes(float quality, int activitiesCount, float activityCost)
+        {
+            // Фанаты - 10% от активности (просмотры, прослушиваня и т.д.)
+            float fansRaw = Math.Min(activitiesCount * TEN_PERCENTS, settings.FansSignificantValue);
+            int fans = Convert.ToInt32(fansRaw * quality);
+
+            // Доход - количество прослушиваний * стоимость одного прослушивания
+            int money = Convert.ToInt32(activitiesCount * activityCost);
+
+            fans = Mathf.Min(fans, settings.MaxFansIncome);
+            int fansRandomizer = Convert.ToInt32(fans * TEN_PERCENTS);
+
+            money = Mathf.Min(money, settings.MaxMoneyIncome);
+            int moneyRandomizer = Convert.ToInt32(money * TEN_PERCENTS);
+
+            return (
+                Random.Range(fans - fansRandomizer, fans + fansRandomizer),
+                Random.Range(money - moneyRandomizer, money + moneyRandomizer)
+            );
         }
     }
 }

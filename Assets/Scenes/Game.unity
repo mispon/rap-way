@@ -280,7 +280,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!114 &283667024
 MonoBehaviour:
@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 401645332}
   - component: {fileID: 401645333}
   - component: {fileID: 401645334}
+  - component: {fileID: 401645335}
   m_Layer: 0
   m_Name: Analyzers
   m_TagString: Untagged
@@ -443,6 +444,108 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afb53a6d758f4c869bd57113a9e67884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &401645335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401645328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e230d3e17124307855bb94dd768a438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fans: 100
+  track:
+    Id: 1
+    Name: Test track
+    MoneyIncome: 0
+    FansIncome: 0
+    Timestamp: 
+    Quality: 0
+    TrendInfo:
+      Style: 0
+      Theme: 0
+      EqualityValue: 0
+    TextPoints: 50
+    BitPoints: 50
+    ListenAmount: 0
+    ChartPosition: 0
+    HasClip: 0
+    Feat:
+      Name: 
+      Id: 0
+      Avatar: {fileID: 0}
+      Fans: 0
+      Vocobulary: 0
+      Bitmaking: 0
+      Management: 0
+  album:
+    Id: 0
+    Name: 
+    MoneyIncome: 0
+    FansIncome: 0
+    Timestamp: 
+    Quality: 0
+    TrendInfo:
+      Style: 0
+      Theme: 0
+      EqualityValue: 0
+    TextPoints: 0
+    BitPoints: 0
+    ListenAmount: 0
+    ChartPosition: 0
+    HasClip: 0
+    Feat:
+      Name: 
+      Id: 0
+      Avatar: {fileID: 0}
+      Fans: 0
+      Vocobulary: 0
+      Bitmaking: 0
+      Management: 0
+    ConcertAmounts: 0
+  clip:
+    Id: 0
+    Name: 
+    MoneyIncome: 0
+    FansIncome: 0
+    Timestamp: 
+    Quality: 0
+    TrackId: 0
+    DirectorSkill: 0
+    OperatorSkill: 0
+    DirectorPoints: 0
+    OperatorPoints: 0
+    Views: 0
+    Likes: 0
+    Dislikes: 0
+  concert:
+    Id: 0
+    Name: 
+    MoneyIncome: 0
+    FansIncome: 0
+    Timestamp: 
+    Quality: 0
+    AlbumId: 0
+    LocationId: 0
+    LocationName: 
+    LocationCapacity: 0
+    MaxTicketCost: 0
+    TicketCost: 0
+    TicketsSold: 0
+    ManagementPoints: 0
+    MarketingPoints: 0
+  social:
+    Type: 0
+    MainText: 
+    AdditionalText: 
+    ModeIndex: 0
+    WorkPoints: 0
+    CharityAmount: 0
+    HypeIncome: 0
+    Likes: 0
 --- !u!224 &462056199 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8627969196587242980, guid: 9e3951eeb38121e4285ca00b2ae7cc3e,
@@ -4937,11 +5040,6 @@ PrefabInstance:
       propertyPath: concertAnalyzer
       value: 
       objectReference: {fileID: 401645333}
-    - target: {fileID: 7532720748755253849, guid: 9e3951eeb38121e4285ca00b2ae7cc3e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -100
-      objectReference: {fileID: 0}
     - target: {fileID: 8506936646938924978, guid: 9e3951eeb38121e4285ca00b2ae7cc3e,
         type: 3}
       propertyPath: clipAnalyzer

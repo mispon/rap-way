@@ -135,6 +135,7 @@ namespace Game.Pages.Concert
             _concert.LocationId = index;
             _concert.LocationName = place.NameKey;
             _concert.LocationCapacity = place.Capacity;
+            _concert.MaxTicketCost = place.TicketMaxCost;
             placeCapacityLabel.text = GetLocale("concert_capacity", place.Capacity.GetDisplay()).ToUpper();
 
             _placeCost = place.Cost;

@@ -28,8 +28,6 @@ namespace Core.Settings
         public AnimationCurve TrackChartCurve;
         [Range(0f, 1f), Tooltip("Вероятность хита, %")]
         public float TrackHitChance;
-        [Tooltip("Зависимость изменения фанатов от качества трека, %")]
-        public AnimationCurve TrackFansIncomeCurve;
         [Range(0.001f, 0.01f), Tooltip("Цена одного прослушивания")]
         public float TrackListenCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
@@ -50,8 +48,6 @@ namespace Core.Settings
         public AnimationCurve AlbumChartCurve;
         [Range(0f, 1f), Tooltip("Вероятность хита, %")]
         public float AlbumHitChance;
-        [Tooltip("Зависимость изменения фанатов от качества трека, %")]
-        public AnimationCurve AlbumFansIncomeCurve;
         [Range(0.001f, 0.01f), Tooltip("Цена одного прослушивания")]
         public float AlbumListenCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
@@ -70,8 +66,6 @@ namespace Core.Settings
         public float ClipTrackListensImpact;
         [Range(0f, 1f), Tooltip("Доля активных зрителей, %")]
         public float ClipActiveViewers;
-        [Tooltip("Зависимость изменения фанатов от качества клипа, %")]
-        public AnimationCurve ClipFansIncomeCurve;
         [Range(0.001f, 0.01f), Tooltip("Цена одного просмотра")]
         public float ClipViewCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
@@ -119,7 +113,13 @@ namespace Core.Settings
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int BattleRewardExp;
 
-        [Header("OTHER")]
+        [Header("COMMON")]
+        [Tooltip("Максимальное значащее число фанатов")]
+        public int FansSignificantValue;
+        [Tooltip("Максимальный прирост фанатов")]
+        public int MaxFansIncome;
+        [Tooltip("Максимальный прирост денег")]
+        public int MaxMoneyIncome;
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int RappersWorkDuration;
         [Range(5, 50), Tooltip("Длительность работы, дни")]

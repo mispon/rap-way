@@ -35,7 +35,7 @@ namespace Utils
 
             new NativeShare().AddFile(filePath)
                 .SetSubject("Rap Way")
-                .SetText($"{message}\r https://cutt.ly/Gxr2zDV")
+                .SetText($"{message} https://cutt.ly/Gxr2zDV")
                 .Share();
         }
     }

@@ -21,6 +21,7 @@ namespace Game.Analyzers
             float listenImpact = settings.ClipTrackListensImpact;
             float trackListenFactor = Mathf.Min(listenImpact * GetListenRatio(track.ListenAmount), listenImpact);
             float clipQuality = trackListenFactor + CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints);
+            clip.Quality = clipQuality;
 
             clip.Views = CalculateViewsAmount(clipQuality, GetFans());
 
@@ -28,7 +29,7 @@ namespace Game.Analyzers
             clip.Likes = likes;
             clip.Dislikes = dislikes;
 
-            var (fans, money) = CalculateIncomes(clipQuality, clip.Views);
+            var (fans, money) = CalculateIncomes(clipQuality, clip.Views, settings.ClipViewCost);
             clip.FansIncome = fans;
             clip.MoneyIncome = money;
         }
@@ -77,19 +78,6 @@ namespace Game.Analyzers
             int dislikes = Convert.ToInt32((1f - clipQuality) * activeViewers * 0.5f);
 
             return (likes, dislikes);
-        }
-
-        /// <summary>
-        /// Вычисляет прибыльность клипа
-        /// </summary>
-        private (int fans, int money) CalculateIncomes(float clipQuality, int views)
-        {
-            // Прирост фанатов - количество прослушиваний * коэф. прироста
-            int fans = Convert.ToInt32(views * settings.ClipFansIncomeCurve.Evaluate(clipQuality) * TEN_PERCENTS);
-            // Доход - количество прослушиваний * стоимость одного прослушивания
-            int money = Convert.ToInt32(views * settings.ClipViewCost);
-
-            return (fans, money);
         }
     }
 }

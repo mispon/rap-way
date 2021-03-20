@@ -17,7 +17,7 @@ MonoBehaviour:
   BaseFans: 1000
   TrackWorkDuration: 15
   TrackBaseHype: 0.3
-  TrackBaseQuality: 0.15
+  TrackBaseQuality: 0.1
   TrackWorkPointsMax: 150
   TrackGradeCurve:
     serializedVersion: 2
@@ -86,63 +86,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   TrackHitChance: 0.2
-  TrackFansIncomeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: -0.05
-      inSlope: 0.19967677
-      outSlope: 0.19967677
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.098626375
-      value: -0.030306606
-      inSlope: 0.20616406
-      outSlope: 0.20616406
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.19411886
-      value: -0.01
-      inSlope: 0.30383867
-      outSlope: 0.30383867
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.38959104
-      outWeight: 1
-    - serializedVersion: 3
-      time: 0.2
-      value: 0.05
-      inSlope: 0.057978693
-      outSlope: 0.057978693
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.14491758
-    - serializedVersion: 3
-      time: 1
-      value: 0.2
-      inSlope: 0.021900075
-      outSlope: 0.021900075
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.087568685
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   TrackListenCost: 0.005
   TrackRewardExp: 100
   AlbumWorkDuration: 30
   AlbumBaseHype: 0.2
   AlbumBaseQuality: 0.15
-  AlbumWorkPointsMax: 300
+  AlbumWorkPointsMax: 250
   AlbumGradeCurve:
     serializedVersion: 2
     m_Curve:
@@ -210,32 +159,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   AlbumHitChance: 0.15
-  AlbumFansIncomeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  AlbumListenCost: 0.008
-  AlbumRewardExp: 300
+  AlbumListenCost: 0.009
+  AlbumRewardExp: 200
   ClipWorkDuration: 25
   ClipGradeCurve:
     serializedVersion: 2
@@ -261,55 +186,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ClipWorkPointsMax: 250
+  ClipWorkPointsMax: 200
   ClipHitChance: 0.25
   ClipTrackListensImpact: 0.6
   ClipActiveViewers: 0.3
-  ClipFansIncomeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: -0.05
-      inSlope: 0.21052632
-      outSlope: 0.21052632
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.19
-      value: -0.01
-      inSlope: 0.20061797
-      outSlope: 0.20061797
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.1884644
-      outWeight: 0.08682869
-    - serializedVersion: 3
-      time: 0.2
-      value: 0.5
-      inSlope: 0.2469867
-      outSlope: 0.2469867
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.08653847
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.13606235
-      outSlope: 0.13606235
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.09100273
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   ClipViewCost: 0.0065
-  ClipRewardExp: 200
-  ConcertWorkDuration: 40
+  ClipRewardExp: 150
+  ConcertWorkDuration: 50
   ConcertCooldown: 60
   ConcertGradeCurve:
     serializedVersion: 2
@@ -336,16 +219,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   ConcertWorkPointsMax: 400
-  ConcertAlbumListensImpact: 0.5
-  ConcertRewardExp: 500
+  ConcertAlbumListensImpact: 0.4
+  ConcertRewardExp: 400
   SocialsWorkDuration: 10
-  SocialsCooldown: 10
+  SocialsCooldown: 20
   SocialsWorkPointsMax: 70
   SocialsCharitySizeImpact: 0.7
   SocialsActiveFansGroup: 0.5
   SocialsRewardExp: 100
   MinBalanceForCharity: 100
-  BattleWorkDuration: 15
+  BattleWorkDuration: 20
   BattleFansChange:
     serializedVersion: 2
     m_Curve:
@@ -373,7 +256,10 @@ MonoBehaviour:
   BattleWinnerHype: 70
   BattleLoserHype: 25
   BattleRewardExp: 500
-  RappersWorkDuration: 15
+  FansSignificantValue: 10000000
+  MaxFansIncome: 1000000
+  MaxMoneyIncome: 100000
+  RappersWorkDuration: 30
   FeatWorkDuration: 15
   MinFansForCharts: 100000
   ManagerCooldown: 30

@@ -63,11 +63,13 @@ namespace Game.UI.MainMenu
         
         private static bool CheckNotNullOrEmpty(InputField field)
         {
-            if (!string.IsNullOrEmpty(field.text))
-                return true;
-            
-            HighlightError(field);
-            return false;
+            if (string.IsNullOrWhiteSpace(field.text) || field.text.Length < 3)
+            {
+                HighlightError(field);
+                return false;
+            }
+
+            return true;
         }
         
         /// <summary>

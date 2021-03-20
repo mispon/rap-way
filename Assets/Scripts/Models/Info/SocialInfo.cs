@@ -1,3 +1,4 @@
+using System;
 using Enums;
 
 namespace Models.Info
@@ -5,6 +6,7 @@ namespace Models.Info
     /// <summary>
     /// Информация по выполнению социального действия
     /// </summary>
+    [Serializable]
     public class SocialInfo
     {
         /// <summary>
