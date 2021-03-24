@@ -13,7 +13,9 @@ namespace Localization
     public enum GameLang
     {
         RU,
-        EN
+        EN,
+        DE,
+        FR
     }
 
     /// <summary>
@@ -143,6 +145,10 @@ namespace Localization
                     return "ru.json";
                 case GameLang.EN:
                     return "en.json";
+                case GameLang.DE:
+                    return "de.json";
+                case GameLang.FR:
+                    return "fr.json";
                 default:
                     throw new RapWayException($"Неизвестное значение языка: {lang}!");
             }

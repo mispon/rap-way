@@ -79,10 +79,5 @@ namespace Utils
         {
             _socialAnalyzer.Analyze(social);
         }
-
-        private void OnDisable()
-        {
-            GameManager.Instance.RemoveSaves();
-        }
     }
 }
