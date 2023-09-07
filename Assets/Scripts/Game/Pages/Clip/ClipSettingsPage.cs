@@ -36,6 +36,10 @@ namespace Game.Pages.Clip
         [Header("Страница разработки")] 
         [SerializeField] private ClipWorkingPage workingPage;
 
+        [Header("Страница выбора")] 
+        [SerializeField]
+        private Page productSelectionPage;
+        
         [Header("Данные")] 
         [SerializeField] private ClipStaffData staffData;
 
@@ -97,6 +101,7 @@ namespace Game.Pages.Clip
             _clip.TrackId = track.Id;
             _clip.Name = track.Name;
             
+            productSelectionPage.Close();
             workingPage.StartWork(_clip);
             Close();
         }

@@ -23,18 +23,18 @@ namespace Game
         /// <summary>
         /// Событие добавления денег
         /// </summary>
-        public event Action<int> onMoneyAdd = value => {};
-        
+        public event Action<int> onMoneyAdd = _ => {};
+
         /// <summary>
         /// Событие добавления фанатов
         /// </summary>
-        public event Action<int> onFansAdd = value => {};
-        
+        public event Action<int> onFansAdd = _ => {};
+
         /// <summary>
         /// Событие добавления хайпа
         /// </summary>
-        public event Action<int> onHypeAdd = value => {};
-        
+        public event Action<int> onHypeAdd = _ => {};
+
         /// <summary>
         /// Данные игрока
         /// </summary>
@@ -57,9 +57,9 @@ namespace Game
             AddFans(fans, exp);
             AddMoney(money);
         }
-        
+
         /// <summary>
-        /// Изменяет количество фанатов 
+        /// Изменяет количество фанатов
         /// </summary>
         public void AddFans(int fans, int exp = 0)
         {
@@ -70,7 +70,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Изменяет количество денег 
+        /// Изменяет количество денег
         /// </summary>
         public void AddMoney(int money, int exp = 0)
         {
@@ -81,7 +81,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Изменяет количество хайпа 
+        /// Изменяет количество хайпа
         /// </summary>
         public void AddHype(int hype)
         {
@@ -94,7 +94,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Изменяет количество опыта 
+        /// Изменяет количество опыта
         /// </summary>
         public void AddExp(int exp)
         {
@@ -115,13 +115,13 @@ namespace Game
         }
 
         /// <summary>
-        /// Возвращает идентификатор для новой сущности 
+        /// Возвращает идентификатор для новой сущности
         /// </summary>
         public static int GetNextProductionId<T>() where T : Production
         {
             var history = Data.History;
             var id = 0;
-            
+
             if (typeof(T) == typeof(TrackInfo))
                 id = history.TrackList.Any() ? history.TrackList.Max(e => e.Id) : 0;
 
@@ -138,7 +138,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Устанавливает время отдыха указанному тиммейте 
+        /// Устанавливает время отдыха указанному тиммейту
         /// </summary>
         public static void SetTeammateCooldown(TeammateType type, int cooldown)
         {

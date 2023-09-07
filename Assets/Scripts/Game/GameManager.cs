@@ -90,5 +90,13 @@ namespace Game
         {
             SaveApplicationData();
         }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                SaveApplicationData();    
+            }
+        }
     }
 }

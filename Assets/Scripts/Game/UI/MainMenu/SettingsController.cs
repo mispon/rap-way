@@ -63,11 +63,14 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void SaveSettings()
         {
+            SoundManager.Instance.PlayClick();
+            
             var settings = GameManager.Instance.GameStats;
             settings.Lang = StringToLang(langCarousel.GetLabel());
             settings.SoundVolume = soundVolume.value;
             settings.MusicVolume = musicVolume.value;
             GameManager.Instance.SaveApplicationData();
+            
             MainMenuController.SetPanelActivity(gameObject, false);
         }
 

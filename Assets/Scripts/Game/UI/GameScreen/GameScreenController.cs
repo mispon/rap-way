@@ -1,6 +1,7 @@
 ﻿using System;
 using Core;
 using Core.Interfaces;
+using Enums;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ namespace Game.UI.GameScreen
     public class GameScreenController: Singleton<GameScreenController>, IStarter
     {
         [Header("HUD контроллы")]
+        [SerializeField] private Image playerAvatar;
         [SerializeField] private Text playerNickname;
         [SerializeField] private Text playerFans;
         [SerializeField] private Text playerMoney;
@@ -28,6 +30,10 @@ namespace Game.UI.GameScreen
         [SerializeField] private StatDescItem[] statDescItems;
         [SerializeField] private StatsDescriptionPage statsDescPage;
 
+        [Header("Иконки аватара")]
+        [SerializeField] private Sprite maleIcon;
+        [SerializeField] private Sprite femaleIcon;
+        
         [Header("Группа основных действий")]
         [SerializeField] private Button productionFoldoutButton;
         [SerializeField] private Animation foldoutAnimation;
@@ -62,6 +68,9 @@ namespace Game.UI.GameScreen
         /// </summary>
         public void UpdateHUD(PlayerData playerData)
         {
+            playerAvatar.sprite = PlayerManager.Data.Info.Gender == Gender.Male
+                ? maleIcon
+                : femaleIcon;
             playerNickname.text = playerData.Info.NickName.ToUpper();
             playerMoney.text = playerData.Money.GetMoney();
             playerFans.text = playerData.Fans.GetDisplay();

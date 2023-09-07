@@ -39,6 +39,10 @@ namespace Game.Pages.Concert
         [Header("Страница разработки")] 
         [SerializeField] private ConcertWorkingPage workingPage;
 
+        [Header("Страница выбора")] 
+        [SerializeField]
+        private Page productSelectionPage;
+        
         [Header("Данные")] 
         [SerializeField] private ConcertPlacesData placeData;
         [SerializeField] private ImagesBank imagesBank;
@@ -121,6 +125,7 @@ namespace Game.Pages.Concert
             _concert.AlbumId = album.Id;
             _concert.Id = PlayerManager.GetNextProductionId<ConcertInfo>();
 
+            productSelectionPage.Close();
             workingPage.StartWork(_concert);
             Close();
         }

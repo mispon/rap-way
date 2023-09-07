@@ -38,6 +38,10 @@ namespace Game.Pages.Track
         [Header("Страница разработки")] 
         [SerializeField]
         private BaseWorkingPage workingPage;
+        
+        [Header("Страница выбора")] 
+        [SerializeField]
+        private Page productSelectionPage;
 
         protected TrackInfo _track;
 
@@ -74,6 +78,7 @@ namespace Game.Pages.Track
                 Theme = themeCarousel.GetValue<Themes>()
             };
 
+            productSelectionPage.Close();
             workingPage.StartWork(_track);
             Close();
         }

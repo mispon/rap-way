@@ -27,13 +27,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6495241212439587857}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2671162671151712721}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6495241212439587863
 MonoBehaviour:
@@ -51,6 +52,91 @@ MonoBehaviour:
   playersDataKey: RapWay_PlayerSave
   gameDataKey: RapWay_GameSave
   Settings: {fileID: 11400000, guid: cc05ca9a524ec1743a742736398c4313, type: 2}
+  PlayerData:
+    Money: 0
+    Fans: 0
+    Hype: 0
+    Exp: 0
+    Info:
+      FirstName: 
+      LastName: 
+      NickName: 
+      Age: 0
+      Gender: 0
+      CreationDate: 
+    Stats:
+      Vocobulary:
+        Value: 0
+        Exp: 0
+      Bitmaking:
+        Value: 0
+        Exp: 0
+      Flow:
+        Value: 0
+        Exp: 0
+      Charisma:
+        Value: 0
+        Exp: 0
+      Management:
+        Value: 0
+        Exp: 0
+      Marketing:
+        Value: 0
+        Exp: 0
+    History:
+      TrackList: []
+      AlbumList: []
+      ClipList: []
+      ConcertList: []
+    Team:
+      BitMaker:
+        Type: 0
+        Skill:
+          Value: 0
+          Exp: 0
+        HasPayment: 0
+        Cooldown: 0
+      TextWriter:
+        Type: 0
+        Skill:
+          Value: 0
+          Exp: 0
+        HasPayment: 0
+        Cooldown: 0
+      Manager:
+        Type: 0
+        Skill:
+          Value: 0
+          Exp: 0
+        HasPayment: 0
+        Cooldown: 0
+      PrMan:
+        Type: 0
+        Skill:
+          Value: 0
+          Exp: 0
+        HasPayment: 0
+        Cooldown: 0
+    Goods: []
+    Achievements: []
+    Themes: 
+    Styles: 
+    Skills: 
+    Feats: 
+    Battles: 
+    LastKnownTrends:
+      Theme: 0
+      Style: 0
+  GameStats:
+    Now: 
+    Trends:
+      Theme: 0
+      Style: 0
+    SocialsCooldown: 0
+    ConcertCooldown: 0
+    Lang: 0
+    SoundVolume: 0
+    MusicVolume: 0
 --- !u!114 &1139880956695562372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,7 +153,7 @@ MonoBehaviour:
   ambient: {fileID: 6933188627971580042}
   sfx: {fileID: 9149940553316948705}
   ambientClips:
-  - {fileID: 8300000, guid: cf8686579952cd549b8a138c4f780c2f, type: 3}
+  - {fileID: 8300000, guid: 584a333ed5bba9649a3a773da02b087f, type: 3}
   click: {fileID: 8300000, guid: ca6774ebf85d836468ba496981a6d97c, type: 3}
   train: {fileID: 8300000, guid: 1b9090398b4701f4bbd51448459f5ba2, type: 3}
   pay: {fileID: 8300000, guid: 5fb2ab4dbe8a4fa45b93a20c1cf3bb01, type: 3}
@@ -132,12 +218,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8267020499360937889}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6495241212439587862}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &6933188627971580042
 AudioSource:
@@ -151,7 +238,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.2
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -247,7 +334,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0

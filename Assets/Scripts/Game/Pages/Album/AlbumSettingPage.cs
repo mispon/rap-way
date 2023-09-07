@@ -35,6 +35,10 @@ namespace Game.Pages.Album
         [Header("Страница разработки")] 
         [SerializeField] private BaseWorkingPage workingPage;
 
+        [Header("Страница выбора")] 
+        [SerializeField]
+        private Page productSelectionPage;
+        
         [Header("Данные")] 
         [SerializeField] private ImagesBank imagesBank;
 
@@ -73,6 +77,7 @@ namespace Game.Pages.Album
                 Theme = themeCarousel.GetValue<Themes>()
             };
 
+            productSelectionPage.Close();
             workingPage.StartWork(_album);
             Close();
         }

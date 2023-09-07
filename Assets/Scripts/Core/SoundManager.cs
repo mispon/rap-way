@@ -43,7 +43,7 @@ namespace Core
         /// </summary>
         public void SetVolume(float soundVolume, float musicVolume)
         {
-            ambient.volume = musicVolume * 0.1f;
+            ambient.volume = musicVolume;
             sfx.volume = soundVolume;
         }
 

@@ -10,13 +10,13 @@ namespace Utils.Extensions
         /// <summary>
         /// Возвращает описание перечисления по значению
         /// </summary>
-        public static string GetDescription(this Enum value) 
+        public static string GetDescription(this Enum value)
         {
             var fieldInfo = value.GetType().GetField(value.ToString());
             var descriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
-            
-            return descriptionAttribute != null 
-                ? descriptionAttribute.Description 
+
+            return descriptionAttribute != null
+                ? descriptionAttribute.Description
                 : value.ToString();
         }
 
@@ -27,13 +27,13 @@ namespace Utils.Extensions
         {
             var type = typeof(T);
             if (!type.IsEnum) throw new InvalidOperationException();
-            foreach (var field in type.GetFields()) 
+            foreach (var field in type.GetFields())
             {
-                if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute) 
+                if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
                 {
                     if (attribute.Description == desc) return (T) field.GetValue(null);
                 }
-                else 
+                else
                 {
                     if (field.Name == desc) return (T) field.GetValue(null);
                 }
@@ -43,20 +43,12 @@ namespace Utils.Extensions
         }
 
         /// <summary>
-        /// Возвращает список описаний всех элементов перечисления  
+        /// Возвращает список описаний всех элементов перечисления
         /// </summary>
         public static string[] GetDescriptions<T>() where T: Enum
         {
             var values = (T[]) Enum.GetValues(typeof(T));
             return values.Select(e => e.GetDescription()).ToArray();
-        }
-
-        /// <summary>
-        /// Преобразует коллекцию в хэш-список
-        /// </summary>
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> values)
-        {
-            return new HashSet<T>(values);
         }
 
         /// <summary>
