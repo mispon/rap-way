@@ -60,6 +60,7 @@ namespace Game.UI.GameScreen
         /// </summary>
         private void ShowDescriptionPage(StatDescItem item)
         {
+            SoundManager.Instance.PlayClick();
             statsDescPage.Show(item.Icon, item.NameKey, item.DescKey);
         }
 

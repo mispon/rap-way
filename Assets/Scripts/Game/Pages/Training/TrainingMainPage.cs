@@ -84,7 +84,7 @@ namespace Game.Pages.Training
         /// <summary>
         /// Отображает текущее количество очков опыта
         /// </summary>
-        private void DisplayExp() => expLabel.text = GetLocale("exp_value", PlayerManager.Data.Exp);
+        private void DisplayExp() => expLabel.text =  PlayerManager.Data.Exp.ToString();
 
         /// <summary>
         /// Вызывается перед открытием страницы

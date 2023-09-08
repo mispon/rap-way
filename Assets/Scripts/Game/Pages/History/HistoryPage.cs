@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Game.Pages.History.HistoryProduction;
+using Game.UI.ScrollViewController;
 using UnityEngine;
 
 namespace Game.Pages.History
@@ -22,7 +23,7 @@ namespace Game.Pages.History
         [SerializeField] private HistoryConcertController concertHistoryController;
 
         [Header("Контроллер ScrollView")]
-        [SerializeField] private HistoryScrollViewController scrollViewController;
+        [SerializeField] private ScrollViewController scrollViewController;
         
         /// <summary>
         /// Перечисление всех контроллеров UI-элементов определенного типа Production

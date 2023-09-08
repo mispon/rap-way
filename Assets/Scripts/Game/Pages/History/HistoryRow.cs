@@ -1,3 +1,4 @@
+using Game.UI.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ namespace Game.Pages.History
     /// <summary>
     /// Объект-информация об экземляре Production
     /// </summary>
-    public class HistoryInfoItemController: MonoBehaviour
+    public class HistoryRow: MonoBehaviour, IScrollViewControllerItem
     {
         [SerializeField] private Image panel;
         
@@ -45,7 +46,7 @@ namespace Game.Pages.History
         /// <summary>
         /// Высота элемента
         /// </summary>
-        public float Height { get; private set; }
+        private float _height { get; set; }
 
         /// <summary>
         /// Заполнение информации об экземпляре при создании
@@ -96,10 +97,15 @@ namespace Game.Pages.History
             if (_rectTransform == null)
                 _rectTransform = GetComponent<RectTransform>();
              
-            if (Height == 0)
-                Height = _rectTransform.rect.height;
+            if (_height == 0)
+                _height = _rectTransform.rect.height;
             
-            _rectTransform.anchoredPosition = Vector2.down * ((spacing * _orderNumber) + (Height * (_orderNumber-1)));
+            _rectTransform.anchoredPosition = Vector2.down * ((spacing * _orderNumber) + (_height * (_orderNumber-1)));
+        }
+
+        public float GetHeight()
+        {
+            return _height;
         }
     }
 }

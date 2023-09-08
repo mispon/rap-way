@@ -1,4 +1,5 @@
-﻿using Game.Pages.Social.Tabs;
+﻿using Core;
+using Game.Pages.Social.Tabs;
 using UnityEngine;
 using Models.Info;
 using Utils.Carousel;
@@ -42,6 +43,7 @@ namespace Game.Pages.Social
         /// </summary>
         private void StartSocial(SocialInfo info)
         {
+            SoundManager.Instance.PlayClick();
             workingPage.StartWork(info);
             Close();
         }

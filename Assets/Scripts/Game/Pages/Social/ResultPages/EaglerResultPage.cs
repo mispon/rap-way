@@ -1,3 +1,5 @@
+using Core;
+using Models.Game;
 using Models.Info;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,11 +23,15 @@ namespace Game.Pages.Social.ResultPages
         /// </summary>
         protected override void DisplayResult(SocialInfo info)
         {
-            nickname.text = PlayerManager.Data.Info.NickName;
+            var nn = PlayerManager.Data.Info.NickName;
+
+            nickname.text = nn;
             message.text = info.MainText;
 
             likes.text = info.Likes.ToString();
             hype.text = $"+{info.HypeIncome}";
+
+            EaglerManager.Instance.CreateUserEagle(nn, info.MainText, info.Likes);
         }
     }
 }

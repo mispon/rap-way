@@ -2,45 +2,35 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Game.Pages.History
+namespace Game.UI.ScrollViewController
 {
     /// <summary>
     /// Класс управления отображения в ScrollView информации экзепляров Production
     /// Управляет компонентом RectTransform и отвечает за создание/активацию объектов информации
     /// </summary>
-    public class HistoryScrollViewController: MonoBehaviour
+    public class ScrollViewController: MonoBehaviour
     {
         [Header("Контейнер элементов")] 
+        [SerializeField] private int baseHeight;
         [SerializeField] private RectTransform container;
 
         [Header("Отступ между элементами")] 
         [SerializeField] private float spacing;
-        
-        /// <summary>
-        /// Высота контейнера по умолчанию
-        /// </summary>
-        private float _baseHeight;
-
-        private void Start()
-        {
-            _baseHeight = container.parent.GetComponent<RectTransform>().rect.height;
-            Resize();
-        }
 
         /// <summary>
         /// Инициализация UI-элемента экземпляра Production
         /// </summary>
-        public HistoryInfoItemController InstantiatedElement(GameObject template)
+        public T InstantiatedElement<T>(GameObject template) where T: IScrollViewControllerItem
         {
             var newObject = Instantiate(template, container);
             newObject.SetActive(true);
-            return newObject.GetComponent<HistoryInfoItemController>();
+            return newObject.GetComponent<T>();
         }
 
         /// <summary>
         /// Переопределение положения UI-элементов экземпляров Production
         /// </summary>
-        public void RepositionElements(List<HistoryInfoItemController> itemControllers)
+        public void RepositionElements<T>(List<T> itemControllers) where T: IScrollViewControllerItem
         {
             var itemsCount = itemControllers.Count;
             if (itemsCount == 0)
@@ -49,7 +39,7 @@ namespace Game.Pages.History
             foreach (var itemController in itemControllers)
                 itemController.SetPosition(spacing);
 
-            Resize(itemsCount, itemControllers.First().Height);
+            Resize(itemsCount, itemControllers.First().GetHeight());
         }
 
         /// <summary>
@@ -59,7 +49,7 @@ namespace Game.Pages.History
         {
             container.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Vertical, 
-                Mathf.Max(_baseHeight, (spacing + height) * itemsCount));
+                Mathf.Max(baseHeight, (spacing + height) * itemsCount));
         }
     }
 }

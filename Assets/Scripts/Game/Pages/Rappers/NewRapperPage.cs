@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Data;
 using UnityEngine;
 using UnityEngine.UI;
@@ -82,6 +83,8 @@ namespace Game.Pages.Rappers
         
         private void CreateButtonClick()
         {
+            SoundManager.Instance.PlayClick();
+            
             var nickname = nameInput.text;
             if (nickname.Length < 3)
             {

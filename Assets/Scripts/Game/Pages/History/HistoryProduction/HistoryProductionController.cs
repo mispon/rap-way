@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Core;
+using Game.UI.ScrollViewController;
 using Models.Info.Production;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Game.Pages.History.HistoryProduction
@@ -24,12 +26,13 @@ namespace Game.Pages.History.HistoryProduction
 
         private bool _isInitialized;
         private HistoryPage _historyPage;
-        private HistoryScrollViewController _scrollViewController;
+        private ScrollViewController _scrollViewController;
         
         /// <summary>
         /// Список всех уже созданных UI-элементов экземпляров Production
         /// </summary>
-        public List<HistoryInfoItemController> generatedItemsList = new List<HistoryInfoItemController>();
+        [FormerlySerializedAs("generatedItemsList")]
+        public List<HistoryRow> historyRows = new List<HistoryRow>();
         
         /// <summary>
         /// Функция получения массива всех созданных игроком экземпляров Production
@@ -39,7 +42,7 @@ namespace Game.Pages.History.HistoryProduction
         /// <summary>
         /// Инициализация контроллера. Сохранение зависимостей и подписка на события выбора типа Production
         /// </summary>
-        public void Initialize(HistoryPage historyPage, HistoryScrollViewController scrollViewController)
+        public void Initialize(HistoryPage historyPage, ScrollViewController scrollViewController)
         {
             if(_isInitialized)
                 return;
@@ -87,7 +90,7 @@ namespace Game.Pages.History.HistoryProduction
         /// </summary>
         public void SetActiveElements(bool value)
         {
-            foreach (var itemController in generatedItemsList)
+            foreach (var itemController in historyRows)
             {
                 itemController.gameObject.SetActive(value);
             }
@@ -107,27 +110,27 @@ namespace Game.Pages.History.HistoryProduction
         /// Проверка, есть ли новые экземпляры выбранного Production
         /// </summary>
         private bool ProductionIsUpdated(in Production[] productionInfo)
-            => productionInfo.Length > generatedItemsList.Count;
+            => productionInfo.Length > historyRows.Count;
 
         /// <summary>
         /// Создаем новые UI-элементы экземпляров, обновляем порядковые номера старых, позиционируем UI-элементы
         /// </summary>
         private void GenerateNewItems(in Production[] productionInfo)
         {
-            var newElementsCount = productionInfo.Length - generatedItemsList.Count;
-            foreach (var generatedItems in generatedItemsList)
+            var newElementsCount = productionInfo.Length - historyRows.Count;
+            foreach (var generatedItems in historyRows)
             {
                 generatedItems.UpdateNum(newElementsCount);
             }
 
             for (int i = 0; i < newElementsCount; i++)
             {
-                var itemController = _scrollViewController.InstantiatedElement(templateObject);
-                itemController.Initialize(i + 1, productionInfo[i].HistoryInfo);
-                generatedItemsList.Add(itemController);
+                var row = _scrollViewController.InstantiatedElement<HistoryRow>(templateObject);
+                row.Initialize(i + 1, productionInfo[i].HistoryInfo);
+                historyRows.Add(row);
             }
             
-            _scrollViewController.RepositionElements(generatedItemsList);
+            _scrollViewController.RepositionElements(historyRows);
         }
     }
 }

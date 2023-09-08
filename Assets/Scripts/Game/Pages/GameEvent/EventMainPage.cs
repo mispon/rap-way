@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Core;
 using Data;
 using Enums;
 using UnityEngine;
@@ -50,6 +51,8 @@ namespace Game.Pages.GameEvent
         /// </summary>
         private void Decide(GameEventDecisionType type)
         {
+            SoundManager.Instance.PlayClick();
+            
             var decisionResult = _eventInfo.DecisionResults.FirstOrDefault(e => e.DecisionType == type);
             if (decisionResult != null)
                 eventDecisionPage.Show(_eventInfo.Name, decisionResult);
