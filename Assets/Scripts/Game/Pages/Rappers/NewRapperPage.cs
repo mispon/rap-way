@@ -35,9 +35,6 @@ namespace Game.Pages.Rappers
             createButton.onClick.RemoveAllListeners();
             createButton.onClick.AddListener(CreateButtonClick);
             
-            nameInput.onValueChanged.RemoveAllListeners();
-            nameInput.onValueChanged.AddListener(_ => nameInput.image.color = Color.white);
-            
             vocabularyBtnLeft.onClick.RemoveAllListeners();
             vocabularyBtnLeft.onClick.AddListener(() => OnBntLeftClick(vocabularyValue));
             vocabularyBtnRight.onClick.RemoveAllListeners();
@@ -88,7 +85,7 @@ namespace Game.Pages.Rappers
             var nickname = nameInput.text;
             if (nickname.Length < 3)
             {
-                nameInput.image.color = new Color(255, 0, 0, .3f);
+                HighlightError(nameInput);
                 return;
             }
             
@@ -107,6 +104,12 @@ namespace Game.Pages.Rappers
             grid.CreateItem(customRapper);
             
             Close();
+        }
+        
+        private static void HighlightError(Component component)
+        {
+            var errorAnim = component.GetComponentInChildren<Animation>();
+            errorAnim.Play();
         }
     }
 }
