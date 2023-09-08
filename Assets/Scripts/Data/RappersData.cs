@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Data
@@ -9,7 +10,7 @@ namespace Data
     [CreateAssetMenu(fileName = "Rappers", menuName = "Data/Rappers")]
     public class RappersData : ScriptableObject
     {
-        public RapperInfo[] Rappers;
+        public List<RapperInfo> Rappers;
     }
 
     [Serializable]
@@ -22,5 +23,6 @@ namespace Data
         public int Vocobulary;
         public int Bitmaking;
         public int Management;
+        public bool IsCustom;
     }
 }

@@ -12,13 +12,14 @@ namespace Game.Pages.Rappers
     public class RapperGridItem : MonoBehaviour
     {
         [SerializeField] private Image avatar;
+        [SerializeField] private Text nickname;
         
         public RapperInfo Info { get; private set; }
 
         /// <summary>
         /// Обработчик клика по элементу
         /// </summary>
-        public Action<RapperGridItem> onClick = item => {};
+        public Action<RapperGridItem> onClick = _ => {};
 
         private void Start()
         {
@@ -32,7 +33,11 @@ namespace Game.Pages.Rappers
         public void Setup(RapperInfo info)
         {
             Info = info;
-            avatar.sprite = info.Avatar;
+            nickname.text = info.Name;
+            if (!info.IsCustom)
+            {
+                avatar.sprite = info.Avatar;
+            }
         }
     }
 }

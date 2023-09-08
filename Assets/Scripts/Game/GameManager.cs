@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Core;
 using Core.Settings;
+using Data;
 using Localization;
+using Models.CustomRappers;
 using Models.Game;
 using Models.Player;
 using UnityEngine;
@@ -18,12 +22,14 @@ namespace Game
         [Header("Ключи сохранения данных")]
         [SerializeField] private string playersDataKey;
         [SerializeField] private string gameDataKey;
+        [SerializeField] private string customRappersDataKey;
         [Header("Игровые настройки")]
         public GameSettings Settings;
 
         [Header("GAME STATE")]
         public PlayerData PlayerData;
         public GameStats GameStats;
+        public List<RapperInfo> CustomRappers;
 
         [NonSerialized] public bool IsReady;
 
@@ -53,6 +59,7 @@ namespace Game
         {
             DataManager.Clear(playersDataKey);
             DataManager.Clear(gameDataKey);
+            DataManager.Clear(customRappersDataKey);
         }
 
         /// <summary>
@@ -62,6 +69,9 @@ namespace Game
         {
             PlayerData = DataManager.Load<PlayerData>(playersDataKey) ?? PlayerData.New;
             GameStats = DataManager.Load<GameStats>(gameDataKey) ?? GameStats.New;
+            
+            var customRappers = DataManager.Load<CustomRappersInfo>(customRappersDataKey) ?? new CustomRappersInfo();
+            CustomRappers = customRappers.Values?.ToList() ?? new List<RapperInfo>();
         }
 
         /// <summary>
@@ -76,6 +86,9 @@ namespace Game
 
             DataManager.Save(PlayerData, playersDataKey);
             DataManager.Save(GameStats, gameDataKey);
+
+            var customRappers = new CustomRappersInfo { Values = CustomRappers.ToArray() };
+            DataManager.Save(customRappers, customRappersDataKey);
         }
 
         /// <summary>

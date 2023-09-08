@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Core;
 using Data;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Pages.Rappers
 {
@@ -16,11 +17,11 @@ namespace Game.Pages.Rappers
 
         [Header("Персональная карточка")]
         [SerializeField] private RapperCard rapperCard;
-        
+
         [Header("Данные об исполнителях")]
         [SerializeField] private RappersData data;
 
-        private readonly List<RapperGridItem> _rappersList = new List<RapperGridItem>();
+        private readonly List<RapperGridItem> _rappersList = new();
 
         /// <summary>
         /// Инициализирует грид при первом вызове
@@ -29,8 +30,12 @@ namespace Game.Pages.Rappers
         {
             if (_rappersList.Count > 0)
                 return;
-
+            
             foreach (var rapperInfo in data.Rappers)
+            {
+                CreateItem(rapperInfo);
+            }
+            foreach (var rapperInfo in GameManager.Instance.CustomRappers)
             {
                 CreateItem(rapperInfo);
             }
@@ -39,7 +44,7 @@ namespace Game.Pages.Rappers
         /// <summary>
         /// Создает элемент списка реперов
         /// </summary>
-        private void CreateItem(RapperInfo info)
+        public void CreateItem(RapperInfo info)
         {
             var rapperItem = Instantiate(rapperItemTemplate, listContainer);
                 

@@ -69,7 +69,10 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void DisplayInfo(RapperInfo info)
         {
-            avatar.sprite = info.Avatar;
+            if (!info.IsCustom)
+            {
+                avatar.sprite = info.Avatar;    
+            }
             nickname.text = info.Name;
             vocobulary.text = info.Vocobulary.ToString();
             bitmaking.text = info.Bitmaking.ToString();
