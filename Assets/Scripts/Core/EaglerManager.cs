@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Data;
+using Game;
 using Localization;
 using Models.Game;
 using UnityEngine;
@@ -15,11 +17,24 @@ namespace Core
 
         private List<Eagle> _eagles = new();
 
+        private void Start()
+        {
+            LoadEagles();
+        }
+
         /// <summary>
         /// Возвращает список постов
         /// </summary>
         public List<Eagle> GetEagles() => _eagles;
 
+        /// <summary>
+        /// Загружает список постов
+        /// </summary>
+        public void LoadEagles()
+        {
+            _eagles = GameManager.Instance.Eagles;
+        }
+        
         /// <summary>
         /// Добавляет новый пост от игрока
         /// </summary>
@@ -27,7 +42,7 @@ namespace Core
         {
             var eagle = new Eagle
             {
-                Date = TimeManager.Instance.Now,
+                Date = TimeManager.Instance.DisplayNow,
                 Nickname = nickname,
                 Message = message,
                 Likes = likes,
@@ -68,7 +83,7 @@ namespace Core
             
             return new Eagle
             {
-                Date = TimeManager.Instance.Now,
+                Date = TimeManager.Instance.DisplayNow,
                 Nickname = nickname,
                 Message = message,
                 Likes = likes,

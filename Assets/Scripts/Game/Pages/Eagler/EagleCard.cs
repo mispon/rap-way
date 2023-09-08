@@ -1,4 +1,3 @@
-using System.Globalization;
 using Game.UI.ScrollViewController;
 using Models.Game;
 using UnityEngine;
@@ -31,7 +30,7 @@ namespace Game.Pages.Eagler
         {
             _index = i;
             nickname.text = $"@{eagle.Nickname}";
-            date.text = eagle.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);;
+            date.text = eagle.Date;
             message.text = eagle.Message;
             likes.text = eagle.Likes.GetDisplay();
             views.text = eagle.Views.GetDisplay();

@@ -11,7 +11,7 @@ namespace Core
         /// <summary>
         /// Выполняет сохранение игровых данных 
         /// </summary>
-        public static void Save<T>(T data, string saveKey) where T : class
+        public static void Save<T>(string saveKey, T data) where T : class
         {
             var jsonData = JsonUtility.ToJson(data);
             

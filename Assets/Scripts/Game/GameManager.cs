@@ -5,7 +5,6 @@ using Core;
 using Core.Settings;
 using Data;
 using Localization;
-using Models.CustomRappers;
 using Models.Game;
 using Models.Player;
 using UnityEngine;
@@ -14,6 +13,15 @@ using Utils.Extensions;
 
 namespace Game
 {
+    [Serializable]
+    public class GameData
+    {
+        public PlayerData PlayerData;
+        public GameStats GameStats;
+        public RapperInfo[] CustomRappers;
+        public Eagle[] Eagles;
+    }
+    
     /// <summary>
     /// Логика управления состоянием игры
     /// </summary>
@@ -23,10 +31,8 @@ namespace Game
         [SerializeField] private string appStoreURL;
         [SerializeField] private string googlePlayURL;
         
-        [Header("Ключи сохранения данных")]
-        [SerializeField] private string playersDataKey;
+        [Header("Ключ сохранения данных")]
         [SerializeField] private string gameDataKey;
-        [SerializeField] private string customRappersDataKey;
         [Header("Игровые настройки")]
         public GameSettings Settings;
 
@@ -34,6 +40,7 @@ namespace Game
         public PlayerData PlayerData;
         public GameStats GameStats;
         public List<RapperInfo> CustomRappers;
+        public List<Eagle> Eagles;
 
         [NonSerialized] public bool IsReady;
 
@@ -58,7 +65,6 @@ namespace Game
         /// </summary>
         public PlayerData CreateNewPlayer()
         {
-            DataManager.Clear(playersDataKey);
             PlayerData = PlayerData.New;
             return PlayerData;
         }
@@ -68,9 +74,7 @@ namespace Game
         /// </summary>
         public void RemoveSaves()
         {
-            DataManager.Clear(playersDataKey);
             DataManager.Clear(gameDataKey);
-            DataManager.Clear(customRappersDataKey);
         }
 
         /// <summary>
@@ -78,11 +82,17 @@ namespace Game
         /// </summary>
         private void LoadApplicationData()
         {
-            PlayerData = DataManager.Load<PlayerData>(playersDataKey) ?? PlayerData.New;
-            GameStats = DataManager.Load<GameStats>(gameDataKey) ?? GameStats.New;
+            var gameData = DataManager.Load<GameData>(gameDataKey) ?? new GameData
+            {
+                PlayerData = PlayerData.New,
+                GameStats = GameStats.New,
+                CustomRappers = Array.Empty<RapperInfo>(),
+            };
             
-            var customRappers = DataManager.Load<CustomRappersInfo>(customRappersDataKey) ?? new CustomRappersInfo();
-            CustomRappers = customRappers.Values?.ToList() ?? new List<RapperInfo>();
+            PlayerData = gameData.PlayerData;
+            GameStats = gameData.GameStats;
+            CustomRappers = gameData.CustomRappers.ToList();
+            Eagles = gameData.Eagles.ToList();
         }
 
         /// <summary>
@@ -95,11 +105,15 @@ namespace Game
                 GameStats.Now = TimeManager.Instance.Now.DateToString();
             }
 
-            DataManager.Save(PlayerData, playersDataKey);
-            DataManager.Save(GameStats, gameDataKey);
+            var gameData = new GameData
+            {
+                PlayerData = PlayerData,
+                GameStats = GameStats,
+                CustomRappers = CustomRappers.ToArray(),
+                Eagles = Eagles.Take(100).ToArray()
+            };
 
-            var customRappers = new CustomRappersInfo { Values = CustomRappers.ToArray() };
-            DataManager.Save(customRappers, customRappersDataKey);
+            DataManager.Save(gameDataKey, gameData);
         }
 
         /// <summary>
