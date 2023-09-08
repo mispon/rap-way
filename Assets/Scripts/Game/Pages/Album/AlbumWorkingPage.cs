@@ -103,13 +103,13 @@ namespace Game.Pages.Album
         /// </summary>
         private int CreateBitPoints(PlayerData data)
         {
-            var playersBitPoints = Random.Range(1, data.Stats.Bitmaking.Value + 1);
+            var playersBitPoints = Random.Range(1, data.Stats.Bitmaking.Value + 2);
             playerBitWorkPoints.Show(playersBitPoints);
 
             var bitmakerPoints = 0;
             if (_hasBitmaker)
             {
-                bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill.Value + 1);
+                bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill.Value + 2);
                 bitmakerWorkPoints.Show(bitmakerPoints);
             }
 
@@ -121,13 +121,13 @@ namespace Game.Pages.Album
         /// </summary>
         private int CreateTextPoints(PlayerData data)
         {
-            var playersTextPoints = Random.Range(1, data.Stats.Vocobulary.Value + 1);
+            var playersTextPoints = Random.Range(1, data.Stats.Vocobulary.Value + 2);
             playerTextWorkPoints.Show(playersTextPoints);
 
             var textwritterPoints = 0;
             if (_hasTextwritter)
             {
-                textwritterPoints = Random.Range(1, data.Team.TextWriter.Skill.Value + 1);
+                textwritterPoints = Random.Range(1, data.Team.TextWriter.Skill.Value + 2);
                 textwritterWorkPoints.Show(textwritterPoints);
             }
 

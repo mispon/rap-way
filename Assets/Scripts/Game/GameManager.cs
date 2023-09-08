@@ -19,6 +19,10 @@ namespace Game
     /// </summary>
     public class GameManager : Singleton<GameManager>
     {
+        [Header("Урлы в сторах")]
+        [SerializeField] private string appStoreURL;
+        [SerializeField] private string googlePlayURL;
+        
         [Header("Ключи сохранения данных")]
         [SerializeField] private string playersDataKey;
         [SerializeField] private string gameDataKey;
@@ -40,6 +44,13 @@ namespace Game
             SoundManager.Instance.Setup(GameStats.SoundVolume, GameStats.MusicVolume);
 
             IsReady = true;
+        }
+
+        public string GetStoreURL()
+        {
+            return Application.platform == RuntimePlatform.IPhonePlayer
+                ? appStoreURL
+                : googlePlayURL;
         }
 
         /// <summary>

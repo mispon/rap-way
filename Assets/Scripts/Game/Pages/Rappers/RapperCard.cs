@@ -12,6 +12,7 @@ namespace Game.Pages.Rappers
     public class RapperCard : MonoBehaviour
     {
         [Header("Поля информации репера")]
+        [SerializeField] private Sprite customImage;
         [SerializeField] private Image avatar;
         [SerializeField] private Text nickname;
         [Space]
@@ -69,10 +70,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void DisplayInfo(RapperInfo info)
         {
-            if (!info.IsCustom)
-            {
-                avatar.sprite = info.Avatar;    
-            }
+            avatar.sprite = info.IsCustom ? customImage : info.Avatar; 
             nickname.text = info.Name;
             vocobulary.text = info.Vocobulary.ToString();
             bitmaking.text = info.Bitmaking.ToString();

@@ -80,15 +80,15 @@ namespace Game.Pages.Clip
             int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
             int equipBonus = Convert.ToInt32(addPoints * 0.5f);
 
-            var directorPointsValue = Random.Range(1, _clip.DirectorSkill + 1);
+            var directorPointsValue = Random.Range(1, _clip.DirectorSkill + 2);
             _clip.DirectorPoints += directorPointsValue + equipBonus;
             directorWorkPoints.Show(directorPointsValue);
 
-            var operatorPointsValue = Random.Range(1, _clip.OperatorSkill + 1);
+            var operatorPointsValue = Random.Range(1, _clip.OperatorSkill + 2);
             _clip.OperatorPoints += operatorPointsValue + equipBonus;
             operatorWorkPoints.Show(operatorPointsValue);
 
-            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 1);
+            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 2);
             playerWorkPoints.Show(playerPointsValue);
 
             if (Random.Range(0, 2) > 0)

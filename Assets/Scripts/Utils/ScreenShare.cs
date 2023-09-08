@@ -1,6 +1,7 @@
 using System.Collections;
 using System.IO;
 using Core;
+using Game;
 using Localization;
 using UnityEngine;
 
@@ -32,10 +33,10 @@ namespace Utils
 
             // To avoid memory leaks
             Destroy(ss);
-
+            
             new NativeShare().AddFile(filePath)
                 .SetSubject("Rap Way")
-                .SetText($"{message} https://cutt.ly/Gxr2zDV")
+                .SetText($"{message} ${GameManager.Instance.GetStoreURL()}")
                 .Share();
         }
     }

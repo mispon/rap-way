@@ -78,10 +78,10 @@ namespace Game.Pages.Feat
             int playerSkill, WorkPoints playerPoints,
             int rapperSkill, WorkPoints rapperPoints
         ) {
-            var playerValue = Random.Range(1, playerSkill + 1);
+            var playerValue = Random.Range(1, playerSkill + 2);
             playerPoints.Show(playerValue);
 
-            var rapperValue = Random.Range(1, rapperSkill + 1);
+            var rapperValue = Random.Range(1, rapperSkill + 2);
             rapperPoints.Show(rapperValue);
 
             return playerValue + rapperValue;

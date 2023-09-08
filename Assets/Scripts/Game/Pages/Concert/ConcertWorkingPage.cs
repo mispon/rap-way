@@ -103,13 +103,13 @@ namespace Game.Pages.Concert
         /// </summary>
         private int CreateManagementPoints(PlayerData data, int equipPoints)
         {
-            var playersManagementPoints = Random.Range(1, data.Stats.Management.Value + 1) + equipPoints;
+            var playersManagementPoints = Random.Range(1, data.Stats.Management.Value + 2) + equipPoints;
             playerManagementWorkPoints.Show(playersManagementPoints);
 
             var managerPoints = 0;
             if (_hasPrMan)
             {
-                managerPoints = Random.Range(1, data.Team.Manager.Skill.Value + 1);
+                managerPoints = Random.Range(1, data.Team.Manager.Skill.Value + 2);
                 managerWorkPoints.Show(managerPoints);
             }
 
@@ -121,13 +121,13 @@ namespace Game.Pages.Concert
         /// </summary>
         private int CreatePrPoints(PlayerData data, int equipPoints)
         {
-            var playersMarketingPoints = Random.Range(1, data.Stats.Marketing.Value + 1) + equipPoints;
+            var playersMarketingPoints = Random.Range(1, data.Stats.Marketing.Value + 2) + equipPoints;
             playerPrWorkPoints.Show(playersMarketingPoints);
 
             var prManPoints = 0;
             if (_hasPrMan)
             {
-                prManPoints = Random.Range(1, data.Team.PrMan.Skill.Value + 1);
+                prManPoints = Random.Range(1, data.Team.PrMan.Skill.Value + 2);
                 prmanWorkPoints.Show(prManPoints);
             }
 
