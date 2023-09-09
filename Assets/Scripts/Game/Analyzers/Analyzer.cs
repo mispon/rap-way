@@ -26,11 +26,19 @@ namespace Game.Analyzers
         public abstract void Analyze(T social);
 
         /// <summary>
+        /// Возвращает коэффициент хайпа
+        /// </summary>
+        protected float GetHypeFactor()
+        {
+            return Mathf.Max(0.1f, PlayerManager.Data.Hype / 100f);
+        }
+        
+        /// <summary>
         /// Возвращает отношение прослушиваний к общему числу фанатов
         /// </summary>
         protected float GetListenRatio(int listensAmount)
         {
-            return 1f * listensAmount / GetFans();
+            return GetFans() / (1f * listensAmount);
         }
 
         /// <summary>
@@ -46,12 +54,14 @@ namespace Game.Analyzers
         /// </summary>
         protected (int fans, int money) CalculateIncomes(float quality, int activitiesCount, float activityCost)
         {
-            // Фанаты - 10% от активности (просмотры, прослушиваня и т.д.)
-            float fansRaw = Math.Min(activitiesCount * TEN_PERCENTS, settings.FansSignificantValue);
-            int fans = Convert.ToInt32(fansRaw * quality);
+            var (fansCor, moneyCor) = LowsFansCorrection();
+            
+            // Фанаты - quality % от активности (просмотры, прослушиваня и т.д.)
+            float fansRaw = Math.Min(activitiesCount, settings.FansSignificantValue);
+            int fans = Convert.ToInt32(fansRaw * ((fansCor * quality) / 3f));
 
             // Доход - количество прослушиваний * стоимость одного прослушивания
-            int money = Convert.ToInt32(activitiesCount * activityCost);
+            int money = Convert.ToInt32(activitiesCount * (moneyCor * activityCost));
 
             fans = Mathf.Min(fans, settings.MaxFansIncome);
             int fansRandomizer = Convert.ToInt32(fans * TEN_PERCENTS);
@@ -63,6 +73,17 @@ namespace Game.Analyzers
                 Random.Range(fans - fansRandomizer, fans + fansRandomizer),
                 Random.Range(money - moneyRandomizer, money + moneyRandomizer)
             );
+        }
+
+        private static (float, float) LowsFansCorrection()
+        {
+            return PlayerManager.Data.Fans switch
+            {
+                < 10000 => (6f, 2f),
+                < 50000 => (3f, 1.5f),
+                < 100000 => (2f, 1.2f),
+                _ => (1f, 1f)
+            };
         }
     }
 }

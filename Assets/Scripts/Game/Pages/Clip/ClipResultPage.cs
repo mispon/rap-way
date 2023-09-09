@@ -42,6 +42,8 @@ namespace Game.Pages.Clip
         /// </summary>
         private void DisplayResult(ClipInfo clip)
         {
+            DisplayEagles(clip.Quality);
+            
             header.text = GetLocale("clip_result_header", ProductionManager.GetTrackName(clip.TrackId));
             viewsAmount.text = GetLocale("clip_result_views", clip.Views.GetDisplay());
             likesAndDislikes.text = GetLocale("clip_result_reaction", clip.Likes.GetDisplay(), clip.Dislikes.GetDisplay());
@@ -49,6 +51,18 @@ namespace Game.Pages.Clip
             fansIncome.text = $"{fansPrefix}{clip.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{clip.MoneyIncome.GetMoney()}";
             expIncome.text = $"+{settings.ClipRewardExp}";
+        }
+        
+        private void DisplayEagles(float quality)
+        {
+            var fans = PlayerManager.Data.Fans;
+
+            var eagles = EaglerManager.Instance.GenerateEagles(quality, fans);
+            foreach (var eagle in eagles)
+            {
+                Debug.Log(eagle);
+                // todo
+            }
         }
         
         /// <summary>

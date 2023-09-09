@@ -87,6 +87,7 @@ namespace Game
                 PlayerData = PlayerData.New,
                 GameStats = GameStats.New,
                 CustomRappers = Array.Empty<RapperInfo>(),
+                Eagles = Array.Empty<Eagle>()
             };
             
             PlayerData = gameData.PlayerData;

@@ -11,6 +11,7 @@ namespace Game.Pages.Eagler
     /// </summary>
     public class EagleCard: MonoBehaviour, IScrollViewControllerItem
     {
+        [Header("Eagle fields")]
         [SerializeField] private Text nickname;
         [SerializeField] private Text date;
         [SerializeField] private Text message;

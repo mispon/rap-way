@@ -87,15 +87,9 @@ namespace Game.Pages.Track
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlayWorkPoint();
-
-            int bitWorkPoints = CreateBitPoints(PlayerManager.Data);
-            int textWorkPoints = CreateTextPoints(PlayerManager.Data);
-
-            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
-            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
-
-            _track.BitPoints += bitWorkPoints + equipBonus;
-            _track.TextPoints += textWorkPoints + equipBonus;
+            
+            _track.BitPoints +=  CreateBitPoints(PlayerManager.Data);
+            _track.TextPoints += CreateTextPoints(PlayerManager.Data);
         }
 
         /// <summary>

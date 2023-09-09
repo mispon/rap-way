@@ -33,7 +33,7 @@ namespace Models.Player
 
         public Trends LastKnownTrends;
         
-        public static PlayerData New => new PlayerData
+        public static PlayerData New => new()
         {
             Info = PlayerInfo.New,
             Stats = PlayerStats.New,

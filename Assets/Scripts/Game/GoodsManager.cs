@@ -3,13 +3,11 @@ using System.Linq;
 using Enums;
 using UnityEngine;
 using Utils;
-using Utils.Extensions;
-using Random = UnityEngine.Random;
 
 namespace Game
 {
     /// <summary>
-    /// Менеджер генерации рабочих очков
+    /// Менеджер предметов игрока
     /// </summary>
     public class GoodsManager : Singleton<GoodsManager>
     {
@@ -19,23 +17,19 @@ namespace Game
         /// <summary>
         /// Генерирует дополнительные очки работы в зависимости от наличия оборудования
         /// </summary>
-        public int GenerateAdditionalWorkPoints()
+        public float GetQualityImpact()
         {
             var goods = PlayerManager.Data.Goods;
             var equipTypes = equipments.Select(e => e.Type).ToHashSet();
 
-            int points = 0;
+            float impactTotal = 0;
             foreach (var good in goods.Where(g => equipTypes.Contains(g.Type)))
             {
                 var equip = GetEquipmentInfo(good.Type, good.Level);
-
-                if (Random.Range(0f, 1f) <= equip.Chance)
-                {
-                    points += equip.WorkPoints;
-                }
+                impactTotal += equip.Impact;
             }
 
-            return points;
+            return impactTotal;
         }
 
         /// <summary>
@@ -54,7 +48,7 @@ namespace Game
         public GoodsType Type;
         public short Level;
         public int WorkPoints;
-        [Range(0f, 1f)] public float Chance;
+        [Range(0.0f, 0.2f)] public float Impact;
 
         public override string ToString()
         {

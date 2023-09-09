@@ -44,11 +44,25 @@ namespace Game.Pages.Concert
         /// </summary>
         private void DisplayResult(ConcertInfo concert)
         {
+            DisplayEagles(concert.Quality);
+            
             header.text = GetLocale("concert_result_header", concert.LocationName);
             ticketsSold.text = GetLocale("concert_result_sold", concert.TicketsSold.GetDisplay()).ToUpper();
             ticketCost.text = GetLocale("concert_result_cost", concert.TicketCost.GetMoney()).ToUpper();
             moneyIncome.text = $"+{concert.Income.GetMoney()}";
             expIncome.text = $"+{settings.ConcertRewardExp}";
+        }
+        
+        private void DisplayEagles(float quality)
+        {
+            var fans = PlayerManager.Data.Fans;
+
+            var eagles = EaglerManager.Instance.GenerateEagles(quality, fans);
+            foreach (var eagle in eagles)
+            {
+                Debug.Log(eagle);
+                // todo
+            }
         }
 
         /// <summary>

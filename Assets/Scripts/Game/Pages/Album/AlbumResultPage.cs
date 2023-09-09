@@ -42,6 +42,8 @@ namespace Game.Pages.Album
         /// </summary>
         private void DisplayResult(AlbumInfo album)
         {
+            DisplayEagles(album.Quality);
+            
             var nickname = PlayerManager.Data.Info.NickName;
             header.text = GetLocale("album_result_header", nickname, album.Name);
             listenAmount.text = GetLocale("album_result_listens", album.ListenAmount.GetDisplay());
@@ -51,6 +53,18 @@ namespace Game.Pages.Album
             fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{album.MoneyIncome.GetMoney()}";
             expIncome.text = $"+{settings.AlbumRewardExp}";
+        }
+        
+        private void DisplayEagles(float quality)
+        {
+            var fans = PlayerManager.Data.Fans;
+
+            var eagles = EaglerManager.Instance.GenerateEagles(quality, fans);
+            foreach (var eagle in eagles)
+            {
+                Debug.Log(eagle);
+                // todo
+            }
         }
 
         /// <summary>

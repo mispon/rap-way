@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Data;
 using Game;
 using Localization;
@@ -64,6 +63,7 @@ namespace Core
             {
                 var eagle = GenerateRandomEagle(quality, fans);
                 AddEagle(eagle);
+                eagles.Add(eagle);
             }
             
             return eagles;
@@ -73,19 +73,21 @@ namespace Core
         {
             var likes = CalcLikes(fans);
             
-            var dice = Random.Range(0, 1);
+            var dice = Random.Range(0f, 1f);
             var messageKey = dice > quality 
                 ? $"{data.NegativePostKey}_{Random.Range(0, data.NegativePostsCount)}"
                 : $"{data.PositivePostKey}_{Random.Range(0, data.PositivePostsCount)}";
             var message = LocalizationManager.Instance.Get(messageKey);
             
             var nickname = data.Nicknames[Random.Range(0, data.Nicknames.Length)];
+            var playerName = PlayerManager.Data.Info.NickName;
+            var randomTag = data.Hashtags[Random.Range(0,  data.Hashtags.Length)];
             
             return new Eagle
             {
                 Date = TimeManager.Instance.DisplayNow,
                 Nickname = nickname,
-                Message = message,
+                Message = $"{message} <color=#109c22>#{playerName}</color> <color=#109c22>#{randomTag}</color>",
                 Likes = likes,
                 Views = CalcViews(likes),
                 Shares = CalcShares(likes)

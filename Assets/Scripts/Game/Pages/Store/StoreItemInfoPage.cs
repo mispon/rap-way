@@ -27,7 +27,7 @@ namespace Game.Pages.Store
             itemImage.sprite = icon;
             itemName.text = $"{GetLocale(type.GetDescription())} #{level}".ToUpper();
             itemDesc.text = equip != null
-                ? GetLocale("equip_desc", equip.Chance * 100, equip.WorkPoints)
+                ? GetLocale("equip_desc", equip.Impact * 100, equip.WorkPoints)
                 : GetLocale(GetStuffKey(type, level));
             itemPrice.text = GetLocale("cost_value", price.GetMoney()).ToUpper();
             itemHype.text = hype > 0 ? GetLocale("hype_value", hype).ToUpper() : string.Empty;

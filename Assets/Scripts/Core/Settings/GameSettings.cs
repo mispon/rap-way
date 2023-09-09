@@ -16,19 +16,13 @@ namespace Core.Settings
         [Header("TRACK")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int TrackWorkDuration;
-        [Range(0.1f, 0.8f), Tooltip("Базовая величина хайпа, %")]
-        public float TrackBaseHype;
-        [Range(0.1f, 0.7f), Tooltip("Базовое качество трека, %")]
-        public float TrackBaseQuality;
         [Range(10, 250), Tooltip("Максимальное количество очков работы, шт")]
         public int TrackWorkPointsMax;
-        [Tooltip("Зависимость оценки от качества трека")]
-        public AnimationCurve TrackGradeCurve;
-        [Tooltip("Зависимость позиции в чарте от прослушиваний")]
-        public AnimationCurve TrackChartCurve;
         [Range(0f, 1f), Tooltip("Вероятность хита, %")]
         public float TrackHitChance;
-        [Range(0.001f, 0.01f), Tooltip("Цена одного прослушивания")]
+        [Range(0f, 1f), Tooltip("Порог, выше которого трект считается хитом")]
+        public float TrackHitThreshold;
+        [Range(0.001f, 0.05f), Tooltip("Цена одного прослушивания")]
         public float TrackListenCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int TrackRewardExp;
@@ -42,13 +36,11 @@ namespace Core.Settings
         public float AlbumBaseQuality;
         [Range(10, 400), Tooltip("Максимальное количество очков работы, шт")]
         public int AlbumWorkPointsMax;
-        [Tooltip("Зависимость оценки от качества трека")]
-        public AnimationCurve AlbumGradeCurve;
-        [Tooltip("Зависимость позиции в чарте от прослушиваний")]
-        public AnimationCurve AlbumChartCurve;
         [Range(0f, 1f), Tooltip("Вероятность хита, %")]
         public float AlbumHitChance;
-        [Range(0.001f, 0.01f), Tooltip("Цена одного прослушивания")]
+        [Range(0f, 1f), Tooltip("Порог, выше которого альбом считается хитовым")]
+        public float AlbumHitThreshold;
+        [Range(0.001f, 0.1f), Tooltip("Цена одного прослушивания")]
         public float AlbumListenCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int AlbumRewardExp;
@@ -66,7 +58,7 @@ namespace Core.Settings
         public float ClipTrackListensImpact;
         [Range(0f, 1f), Tooltip("Доля активных зрителей, %")]
         public float ClipActiveViewers;
-        [Range(0.001f, 0.01f), Tooltip("Цена одного просмотра")]
+        [Range(0.001f, 0.05f), Tooltip("Цена одного просмотра")]
         public float ClipViewCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int ClipRewardExp;

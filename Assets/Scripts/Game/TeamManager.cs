@@ -68,6 +68,9 @@ namespace Game
         /// </summary>
         private void OnMonthLeft()
         {
+            if (TimeManager.Instance.Now.Month % 3 != 0)
+                return;
+            
             var teammates = GetTeammates(e => !e.IsEmpty);
             if (teammates.Length == 0)
                 return;
@@ -145,13 +148,6 @@ namespace Game
 
         private void OnDestroy()
         {
-            // ToDo: (Андрей). Не уверен, что это необходимо.
-            // 1. Нет никаких гарантий, что TeamManager.OnDestroy() вызовется раньше, чем TimeManamger.OnDestroy().
-            //    В противном случае вылетит NullReferenceException
-            // 2. TeamManager не существует нигде отдельно от TimeManager и наоброт.
-            //     Следовательно, разрушение любого из них сопровождается разрушением другого => вызов событий TimeManager'a не должен возникать
-            // 3. Если по-прежднему хочется отписываться, то лучше это делать OnDisable, так как тут гарантировано, что TimeManager.Instance все еще существует.
-        
             TimeManager.Instance.onDayLeft -= OnDayLeft;
             TimeManager.Instance.onMonthLeft -= OnMonthLeft;
         }

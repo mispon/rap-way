@@ -14,6 +14,7 @@ namespace Models.Info.Production
         public int FansIncome;
         public string Timestamp;
         public float Quality;
+        public bool IsHit;
 
         /// <summary>
         /// Массив строк из полей класса для заполнения в таблице Истории

@@ -9,7 +9,7 @@ namespace Game.Pages.Eagler
     {
         [SerializeField] private ScrollViewController feed;
         [SerializeField] private GameObject template;
-
+        
         private List<EagleCard> _feedItems = new();
         
         protected override void BeforePageOpen()

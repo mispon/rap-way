@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
@@ -42,6 +43,8 @@ namespace Game.Pages.Track
         /// </summary>
         private void DisplayResult(TrackInfo track)
         {
+            DisplayEagles(track.Quality);
+            
             var nickname = PlayerManager.Data.Info.NickName;
             string featInfo = track.Feat != null ? $" feat. {track.Feat.Name}" : string.Empty;
             header.text = GetLocale("track_result_header", nickname, track.Name, featInfo);
@@ -53,6 +56,18 @@ namespace Game.Pages.Track
             fansIncome.text = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
             expIncome.text = $"+{settings.TrackRewardExp}";
+        }
+
+        private void DisplayEagles(float quality)
+        {
+            var fans = PlayerManager.Data.Fans;
+
+            var eagles = EaglerManager.Instance.GenerateEagles(quality, fans);
+            foreach (var eagle in eagles)
+            {
+                Debug.Log(eagle);
+                // todo
+            }
         }
 
         /// <summary>

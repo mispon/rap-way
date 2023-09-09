@@ -1,5 +1,4 @@
-﻿using System;
-using Core;
+﻿using Core;
 using Enums;
 using Models.Info.Production;
 using UnityEngine;
@@ -77,15 +76,12 @@ namespace Game.Pages.Clip
         /// </summary>
         private void GenerateWorkPoints()
         {
-            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
-            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
-
             var directorPointsValue = Random.Range(1, _clip.DirectorSkill + 2);
-            _clip.DirectorPoints += directorPointsValue + equipBonus;
+            _clip.DirectorPoints += directorPointsValue;
             directorWorkPoints.Show(directorPointsValue);
 
             var operatorPointsValue = Random.Range(1, _clip.OperatorSkill + 2);
-            _clip.OperatorPoints += operatorPointsValue + equipBonus;
+            _clip.OperatorPoints += operatorPointsValue;
             operatorWorkPoints.Show(operatorPointsValue);
 
             var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 2);

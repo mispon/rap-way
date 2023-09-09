@@ -245,47 +245,47 @@ MonoBehaviour:
     Type: 0
     Level: 1
     WorkPoints: 2
-    Chance: 0.15
+    Impact: 0.05
   - Name: Micro_2
     Type: 0
     Level: 2
     WorkPoints: 4
-    Chance: 0.2
+    Impact: 0.1
   - Name: Micro_3
     Type: 0
     Level: 3
     WorkPoints: 6
-    Chance: 0.25
+    Impact: 0.15
   - Name: Micro_4
     Type: 0
     Level: 4
     WorkPoints: 8
-    Chance: 0.3
+    Impact: 0.2
   - Name: AudioCard_1
     Type: 1
     Level: 1
     WorkPoints: 3
-    Chance: 0.15
+    Impact: 0.05
   - Name: AudioCard_2
     Type: 1
     Level: 2
     WorkPoints: 6
-    Chance: 0.25
+    Impact: 0.1
   - Name: FxMixer_1
     Type: 2
     Level: 1
     WorkPoints: 4
-    Chance: 0.2
+    Impact: 0.05
   - Name: FxMixer_2
     Type: 2
     Level: 2
     WorkPoints: 8
-    Chance: 0.3
+    Impact: 0.1
   - Name: Acoustic_1
     Type: 3
     Level: 1
     WorkPoints: 12
-    Chance: 0.3
+    Impact: 0.1
 --- !u!1 &3578829313049285354
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,6 +406,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5422718150710687346}
+  - component: {fileID: 8569051545653958901}
   m_Layer: 0
   m_Name: EaglerManager
   m_TagString: Untagged
@@ -428,6 +429,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1929117383248465391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8569051545653958901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6246084751456593472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da62b3f78bcc43429a2ce0267c71f7cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0
+  data: {fileID: 11400000, guid: 1137433b7a773d34b93410050ff4d688, type: 2}
 --- !u!1 &8301132532118962818
 GameObject:
   m_ObjectHideFlags: 0

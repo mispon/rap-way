@@ -44,7 +44,10 @@ namespace Core
             data.SocialsCooldown = Math.Max(0, data.SocialsCooldown - 1);
             data.ConcertCooldown = Math.Max(0, data.ConcertCooldown - 1);
 
-            PlayerManager.Instance.AddHype(-1);
+            if (TimeManager.Instance.Now.Day % 3 == 0)
+            {
+                PlayerManager.Instance.AddHype(-1);
+            }
         }
 
         /// <summary>

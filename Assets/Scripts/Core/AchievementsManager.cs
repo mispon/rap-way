@@ -209,6 +209,9 @@ namespace Core
         /// </summary>
         private void AddAchievement(Achievement achievement, bool showUi = true)
         {
+            if (AlreadyExists(achievement))
+                return;
+            
             achievement.Unlocked = true;
             PlayerManager.Data.Achievements.Add(achievement);
 
@@ -226,6 +229,14 @@ namespace Core
             }
             
             NotificationManager.Instance.AddIndependentNotification(Notification);
+        }
+
+        private bool AlreadyExists(Achievement achievement)
+        {
+            return PlayerManager.Data.Achievements.Any(a =>
+                a.Type == achievement.Type &&
+                a.CompareValue == achievement.CompareValue
+            );
         }
 
         /// <summary>

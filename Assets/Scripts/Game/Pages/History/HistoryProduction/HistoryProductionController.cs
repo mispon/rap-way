@@ -80,8 +80,11 @@ namespace Game.Pages.History.HistoryProduction
                 return;
 
             if (!ProductionIsUpdated(in productionInfo))
+            {
+                _scrollViewController.RepositionElements(historyRows);
                 return;
-
+            }
+            
             GenerateNewItems(in productionInfo);
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using Core;
+﻿using Core;
 using Data;
 using Enums;
 using Models.Info.Production;
@@ -87,12 +86,9 @@ namespace Game.Pages.Concert
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlayWorkPoint();
-
-            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
-            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
-
-            int managerPoints = CreateManagementPoints(PlayerManager.Data, equipBonus);
-            int prPoints = CreatePrPoints(PlayerManager.Data, equipBonus);
+            
+            int managerPoints = CreateManagementPoints(PlayerManager.Data);
+            int prPoints = CreatePrPoints(PlayerManager.Data);
 
             _concert.ManagementPoints += managerPoints;
             _concert.MarketingPoints += prPoints;
@@ -101,9 +97,9 @@ namespace Game.Pages.Concert
         /// <summary>
         /// Создает очки работы менеджмента
         /// </summary>
-        private int CreateManagementPoints(PlayerData data, int equipPoints)
+        private int CreateManagementPoints(PlayerData data)
         {
-            var playersManagementPoints = Random.Range(1, data.Stats.Management.Value + 2) + equipPoints;
+            var playersManagementPoints = Random.Range(1, data.Stats.Management.Value + 2);
             playerManagementWorkPoints.Show(playersManagementPoints);
 
             var managerPoints = 0;
@@ -119,9 +115,9 @@ namespace Game.Pages.Concert
         /// <summary>
         /// Создает очки работы маркетинга
         /// </summary>
-        private int CreatePrPoints(PlayerData data, int equipPoints)
+        private int CreatePrPoints(PlayerData data)
         {
-            var playersMarketingPoints = Random.Range(1, data.Stats.Marketing.Value + 2) + equipPoints;
+            var playersMarketingPoints = Random.Range(1, data.Stats.Marketing.Value + 2);
             playerPrWorkPoints.Show(playersMarketingPoints);
 
             var prManPoints = 0;

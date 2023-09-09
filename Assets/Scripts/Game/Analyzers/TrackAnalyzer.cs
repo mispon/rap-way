@@ -16,17 +16,35 @@ namespace Game.Analyzers
         /// </summary>
         public override void Analyze(TrackInfo track)
         {
+            GameStatsManager.Analyze(track.TrendInfo);
+            
             float qualityPoints = CalculateTrackQuality(track);
             track.Quality = qualityPoints;
 
+            var hitDice = Random.Range(0f, 1f);
+            if (qualityPoints >= settings.TrackHitThreshold || hitDice <= settings.TrackHitChance) 
+            {
+                track.IsHit = true;
+            }
+            
             int featFansAmount = 0;
             if (track.Feat != null)
             {
                 featFansAmount = track.Feat.Fans * 1_000_000;
             }
 
-            track.ListenAmount = CalculateListensAmount(qualityPoints, GetFans(), featFansAmount);
-            track.ChartPosition = CalculateChartPosition(track.ListenAmount);
+            track.ListenAmount = CalculateListensAmount(
+                qualityPoints,
+                GetFans(), 
+                featFansAmount, 
+                track.TrendInfo.EqualityValue,
+                track.IsHit
+            );
+
+            if (track.IsHit)
+            {
+                track.ChartPosition = CalculateChartPosition();
+            }
 
             var (fans, money) = CalculateIncomes(qualityPoints, track.ListenAmount, settings.TrackListenCost);
             track.FansIncome = fans;
@@ -36,94 +54,78 @@ namespace Game.Analyzers
         /// <summary>
         /// Определяет качество трека в зависимости от очков работы и попадания в тренды
         /// </summary>
-        /// <returns>Показатель качества трека от [base] до 1.0</returns>
+        /// <returns>Показатель качества трека от 0.0 до 1.0</returns>
         private float CalculateTrackQuality(TrackInfo track)
         {
-            float qualityPoints = settings.TrackBaseQuality;
-
+            float qualityPoints = 0;
+            
             float workPointsFactor = CalculateWorkPointsFactor(track.TextPoints, track.BitPoints);
             qualityPoints += workPointsFactor;
 
-            // Определяем бонус в качество от попадания в тренды
-            GameStatsManager.Analyze(track.TrendInfo);
-            qualityPoints += track.TrendInfo.EqualityValue;
-
+            float equipPointsFactor = GoodsManager.Instance.GetQualityImpact();
+            qualityPoints += equipPointsFactor;
+            
             return Mathf.Min(qualityPoints, 1f);
         }
 
         /// <summary>
-        /// Фактор рабочих очков - это доля набранных рабочих очков в измерении качества трека
-        /// Пример расчёта, при базовом качестве [0.3] и кол-ве рабочих очков [130 из 250]:
-        /// определяем долю качества рабочих очков: 1.0 - 0.3 = 0.7
-        /// определяем 1% от доли игрока в масштабе макс. кол-ва очков: 0.7 * (1.0 / 250) = 0.0028
-        /// считаем суммарный фактор: 130 * 0.0028 = 0.364 - влад в качество от очков работы
+        /// Фактор рабочих очков - это доля набранных очков от максимального количества
+        /// Фактор максимум может составлять половину качества трека (другую половину составляет техника),
+        /// поэтому при подсчете значение делится еще на 2
         /// </summary>
         private float CalculateWorkPointsFactor(int textPoints, int bitPoints)
         {
-            float workPointsImpact = 1f - settings.TrackBaseQuality;
-            float workPointsRatio = 1f * (textPoints + bitPoints) / settings.TrackWorkPointsMax;
+            var workPointsTotal = textPoints + bitPoints;
+            var qualityPercent = (1f * workPointsTotal) / settings.TrackWorkPointsMax;
 
-            float workPointsFactor = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
-
-            return workPointsFactor;
+            qualityPercent /= 2;
+            
+            return Mathf.Min(qualityPercent, 0.5f);
         }
 
         /// <summary>
-        /// Вычисляет количество прослушиваний на основе качества трека, кол-ва фанатов и уровня хайпа
+        /// Вычисляет количество прослушиваний на основе кол-ва фанатов и уровня хайпа
         /// </summary>
-        private int CalculateListensAmount(float trackQuality, int fansAmount, int featFansAmount)
-        {
-            bool isHit = Random.Range(0f, 1f) <= settings.TrackHitChance;
-
-            float trackGrade = settings.TrackGradeCurve.Evaluate(trackQuality);
-            float hypeFactor = CalculateHypeFactor();
-
+        private int CalculateListensAmount(
+            float quality,
+            int fansAmount,
+            int featFansAmount,
+            float trandsMatchFactor, 
+            bool isHit
+        ) {
             int totalFansAmount = fansAmount + featFansAmount;
+            
+            // Количество фанатов, ждущих трек, зависит от уровня хайпа
+            int activeFansAmount = (int) (totalFansAmount * Mathf.Max(0.5f, GetHypeFactor()));
+            
+            // Активность прослушиваний трека фанатами зависит от его качества
+            const float maxFansActivity = 5f;
+            var listens = (int) (activeFansAmount * (maxFansActivity * quality));
 
-            int listens = Convert.ToInt32(totalFansAmount * (trackGrade + hypeFactor));
+            // Хайп не только влияет на активность фанатов, но и увеличивает прослушивания
+            listens = (int) (listens * (1f + GetHypeFactor()));
+            
+            // Попадание в тренды так же увеличивает прослушивания
+            listens = (int) (listens * (1f + trandsMatchFactor));
+            
             if (isHit)
             {
-                listens *= 2;
+                listens *= 5;
             }
 
             int randomizer = Convert.ToInt32(listens * TEN_PERCENTS);
             return Random.Range(listens - randomizer, listens + randomizer);
         }
-
-        /// <summary>
-        /// Фактор хайпа - это доля от общего числа фанов, которая послучает трек
-        /// Пример расчёта, при базовом значении хайпа [0.2] и уровне хайпа игрока [55 из 100]:
-        /// определяем долю хайпа игрока: 1.0 - 0.2 = 0.8
-        /// определяем 1% от доли игрока: 0.8 * 0.01 = 0.008
-        /// считаем суммарный фактор: 0.2 + (55 * 0.008) = 0.2 + 0.44 = 0.64
-        /// получаем 0.64 - такая доля от общего кол-ва фанатов послушает трек
-        /// </summary>
-        private float CalculateHypeFactor()
+        
+        private int CalculateChartPosition()
         {
-            float playerHypePercent = (1f - settings.TrackBaseHype) * ONE_PERCENT;
-            float hypeFactor = settings.TrackBaseHype + PlayerManager.Data.Hype * playerHypePercent;
-            return hypeFactor;
-        }
-
-        /// <summary>
-        /// Позиция в чарте - отношение прослушиваний к общей сумме фанов
-        /// </summary>
-        private int CalculateChartPosition(int listensAmount)
-        {
-            float listenRatio = GetListenRatio(listensAmount);
-
-            if (listenRatio <= 0.5f || GetFans() <= settings.MinFansForCharts)
+            if (GetFans() <= settings.MinFansForCharts)
             {
-                // Трек послушало меньше половины от общего кол-ва фанатов
-                // или слишком мало фанатов
                 return 0;
             }
 
-            const int MAX_POSITION = 100;
-            float coef = settings.TrackChartCurve.Evaluate(listenRatio);
-
-            int position = (int) Math.Round(MAX_POSITION * coef);
-            return position;
+            const int maxPosition = 100;
+            return Random.Range(1, maxPosition);
         }
     }
 }

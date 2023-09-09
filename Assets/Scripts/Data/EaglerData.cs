@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Data
 {
@@ -7,6 +6,7 @@ namespace Data
     public class EaglerData : ScriptableObject
     {
         public string[] Nicknames;
+        public string[] Hashtags;
         public string PositivePostKey;
         public int PositivePostsCount;
         public string NegativePostKey;

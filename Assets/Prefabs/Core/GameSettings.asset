@@ -14,152 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxFans: 500000000
   MaxMoney: 1000000000
-  BaseFans: 1000
+  BaseFans: 5000
   TrackWorkDuration: 15
-  TrackBaseHype: 0.3
-  TrackBaseQuality: 0.1
-  TrackWorkPointsMax: 150
-  TrackGradeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  TrackChartCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.49
-      value: 0
-      inSlope: -0.0000022430513
-      outSlope: -0.0000022430513
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.13097215
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: -2.1375155
-      outSlope: -2.1375155
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.1346116
-    - serializedVersion: 3
-      time: 1
-      value: 0.1
-      inSlope: -1.4981631
-      outSlope: -1.4981631
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.12134993
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  TrackWorkPointsMax: 230
   TrackHitChance: 0.2
-  TrackListenCost: 0.005
+  TrackHitThreshold: 0.95
+  TrackListenCost: 0.01
   TrackRewardExp: 100
   AlbumWorkDuration: 30
   AlbumBaseHype: 0.2
   AlbumBaseQuality: 0.15
-  AlbumWorkPointsMax: 250
-  AlbumGradeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  AlbumChartCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.49
-      value: 0
-      inSlope: -0
-      outSlope: -0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.11118288
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: -2.5302877
-      outSlope: -2.5302877
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.10439563
-    - serializedVersion: 3
-      time: 1
-      value: 0.1
-      inSlope: -1.8
-      outSlope: -1.8
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  AlbumWorkPointsMax: 400
   AlbumHitChance: 0.15
-  AlbumListenCost: 0.009
+  AlbumListenCost: 0.017
   AlbumRewardExp: 200
   ClipWorkDuration: 25
   ClipGradeCurve:
@@ -186,11 +53,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ClipWorkPointsMax: 200
+  ClipWorkPointsMax: 300
   ClipHitChance: 0.25
   ClipTrackListensImpact: 0.6
   ClipActiveViewers: 0.3
-  ClipViewCost: 0.0065
+  ClipViewCost: 0.01
   ClipRewardExp: 150
   ConcertWorkDuration: 50
   ConcertCooldown: 60
@@ -261,5 +128,5 @@ MonoBehaviour:
   MaxMoneyIncome: 100000
   RappersWorkDuration: 30
   FeatWorkDuration: 15
-  MinFansForCharts: 100000
+  MinFansForCharts: 50000
   ManagerCooldown: 30

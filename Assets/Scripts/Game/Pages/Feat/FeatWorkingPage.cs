@@ -1,4 +1,3 @@
-using System;
 using Core;
 using Models.Info.Production;
 using UnityEngine;
@@ -63,12 +62,9 @@ namespace Game.Pages.Feat
                 stats.Vocobulary.Value, playerTextWorkPoints,
                 _track.Feat.Bitmaking, rapperTextWorkPoints
             );
-
-            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
-            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
             
-            _track.BitPoints += bitWorkPoints + equipBonus;
-            _track.TextPoints += textWorkPoints + equipBonus;
+            _track.BitPoints += bitWorkPoints;
+            _track.TextPoints += textWorkPoints;
         }
 
         /// <summary>

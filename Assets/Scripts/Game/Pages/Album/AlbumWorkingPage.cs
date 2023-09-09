@@ -88,14 +88,8 @@ namespace Game.Pages.Album
         {
             SoundManager.Instance.PlayWorkPoint();
 
-            var bitWorkPoints = CreateBitPoints(PlayerManager.Data);
-            var textWorkPoints = CreateTextPoints(PlayerManager.Data);
-
-            int addPoints = GoodsManager.Instance.GenerateAdditionalWorkPoints();
-            int equipBonus = Convert.ToInt32(addPoints * 0.5f);
-
-            _album.BitPoints += bitWorkPoints + equipBonus;
-            _album.TextPoints += textWorkPoints + equipBonus;
+            _album.BitPoints += CreateBitPoints(PlayerManager.Data);
+            _album.TextPoints += CreateTextPoints(PlayerManager.Data);
         }
 
         /// <summary>
