@@ -51,6 +51,11 @@ namespace Game.Pages.Track
             startButton.onClick.AddListener(CreateTrack);
         }
 
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_track_page");
+        }
+
         /// <summary>
         /// Обработчик ввода названия трека 
         /// </summary>

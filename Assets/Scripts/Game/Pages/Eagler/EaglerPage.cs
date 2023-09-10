@@ -28,7 +28,12 @@ namespace Game.Pages.Eagler
 
             feed.RepositionElements(_feedItems);
         }
-
+        
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_eagler");
+        }
+        
         protected override void AfterPageClose()
         {
             foreach (var eagle in _feedItems)

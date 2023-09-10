@@ -20,6 +20,7 @@ namespace Game
         public GameStats GameStats;
         public RapperInfo[] CustomRappers;
         public Eagle[] Eagles;
+        public string[] ShowedTutorials;
     }
     
     /// <summary>
@@ -41,6 +42,7 @@ namespace Game
         public GameStats GameStats;
         public List<RapperInfo> CustomRappers;
         public List<Eagle> Eagles;
+        public HashSet<string> ShowedTutorials;
 
         [NonSerialized] public bool IsReady;
 
@@ -87,13 +89,15 @@ namespace Game
                 PlayerData = PlayerData.New,
                 GameStats = GameStats.New,
                 CustomRappers = Array.Empty<RapperInfo>(),
-                Eagles = Array.Empty<Eagle>()
+                Eagles = Array.Empty<Eagle>(),
+                ShowedTutorials = Array.Empty<string>()
             };
             
             PlayerData = gameData.PlayerData;
             GameStats = gameData.GameStats;
             CustomRappers = gameData.CustomRappers.ToList();
             Eagles = gameData.Eagles.ToList();
+            ShowedTutorials = gameData.ShowedTutorials.ToHashSet();
         }
 
         /// <summary>
@@ -111,7 +115,8 @@ namespace Game
                 PlayerData = PlayerData,
                 GameStats = GameStats,
                 CustomRappers = CustomRappers.ToArray(),
-                Eagles = Eagles.Take(100).ToArray()
+                Eagles = Eagles.Take(100).ToArray(),
+                ShowedTutorials = ShowedTutorials.ToArray()
             };
 
             DataManager.Save(gameDataKey, gameData);

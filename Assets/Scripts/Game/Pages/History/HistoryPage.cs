@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Core;
 using Game.Pages.History.HistoryProduction;
 using Game.UI.ScrollViewController;
 using UnityEngine;
@@ -24,6 +25,11 @@ namespace Game.Pages.History
 
         [Header("Контроллер ScrollView")]
         [SerializeField] private ScrollViewController scrollViewController;
+        
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_history");
+        }
         
         /// <summary>
         /// Перечисление всех контроллеров UI-элементов определенного типа Production

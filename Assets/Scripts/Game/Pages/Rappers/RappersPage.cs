@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 
 namespace Game.Pages.Rappers
@@ -14,6 +15,11 @@ namespace Game.Pages.Rappers
         {
             grid.Init();
             card.gameObject.SetActive(false);
+        }
+
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_rappers");
         }
     }
 }

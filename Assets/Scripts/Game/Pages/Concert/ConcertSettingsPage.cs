@@ -58,6 +58,11 @@ namespace Game.Pages.Concert
 
             SetupPlaceCarousel();
         }
+        
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_concert_page");
+        }
 
         /// <summary>
         /// Инициализирует карусель концертов 

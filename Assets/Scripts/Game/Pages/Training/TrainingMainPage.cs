@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Game.Pages.Training.Tabs;
 using UnityEngine;
 using UnityEngine.UI;
@@ -65,6 +66,7 @@ namespace Game.Pages.Training
         private void OpenTab(int index)
         {
             _tabIndex = index;
+            TutorialManager.Instance.ShowTutorial($"tutorial_training_{index}");
 
             for (var i = 0; i < tabs.Length; i++)
             {
@@ -97,6 +99,7 @@ namespace Game.Pages.Training
         protected override void AfterPageOpen()
         {
             tabsCarousel.SetIndex(_tabIndex);
+            TutorialManager.Instance.ShowTutorial($"tutorial_training_{_tabIndex}");
         }
 
         protected override void AfterPageClose()

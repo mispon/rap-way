@@ -49,6 +49,11 @@ namespace Game.Pages.Album
             albumNameInput.onValueChanged.AddListener(OnAlbumNameInput);
             startButton.onClick.AddListener(CreateAlbum);
         }
+        
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_album_page");
+        }
 
         /// <summary>
         /// Обработчик ввода названия альбома 

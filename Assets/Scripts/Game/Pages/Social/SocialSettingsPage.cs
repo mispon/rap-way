@@ -27,6 +27,11 @@ namespace Game.Pages.Social
             }
         }
 
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_socials");
+        }
+
         /// <summary>
         /// Обработчик изменения вкладки 
         /// </summary>

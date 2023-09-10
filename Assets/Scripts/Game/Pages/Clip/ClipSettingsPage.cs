@@ -55,6 +55,11 @@ namespace Game.Pages.Clip
             startButton.onClick.AddListener(CreateClip);
             SetupStaffCarousels();
         }
+        
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_clip_page");
+        }
 
         /// <summary>
         /// Инициализирует карусели 

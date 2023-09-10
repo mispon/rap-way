@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
 using Enums;
 using Models.Info.Production;
@@ -63,6 +64,11 @@ namespace Game.Pages.Personal
             SetupSkills(data.Skills);
             SetupBestTrack(data.History.TrackList);
             SetupLastActions(data.History.GetLastActions(3));
+        }
+
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_personal_page");
         }
 
         /// <summary>
