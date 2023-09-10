@@ -30,8 +30,6 @@ namespace Core.Settings
         [Header("ALBUM")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int AlbumWorkDuration;
-        [Range(0.1f, 0.8f), Tooltip("Базовая величина хайпа, %")]
-        public float AlbumBaseHype;
         [Range(0.1f, 0.7f), Tooltip("Базовое качество трека, %")]
         public float AlbumBaseQuality;
         [Range(10, 400), Tooltip("Максимальное количество очков работы, шт")]
@@ -48,14 +46,12 @@ namespace Core.Settings
         [Header("CLIP")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int ClipWorkDuration;
-        [Tooltip("Зависимость оценки от качества клипа")]
-        public AnimationCurve ClipGradeCurve;
         [Range(10, 300), Tooltip("Максимальное количество очков работы, шт")]
         public int ClipWorkPointsMax;
         [Range(0f, 1f), Tooltip("Вероятность хита, %")]
         public float ClipHitChance;
-        [Range(0f, 1f), Tooltip("Сила влияния количества прослушиваний трека")]
-        public float ClipTrackListensImpact;
+        [Range(0f, 1f), Tooltip("Порог, выше которого альбом считается хитовым")]
+        public float ClipHitThreshold;
         [Range(0f, 1f), Tooltip("Доля активных зрителей, %")]
         public float ClipActiveViewers;
         [Range(0.001f, 0.05f), Tooltip("Цена одного просмотра")]
@@ -68,12 +64,8 @@ namespace Core.Settings
         public int ConcertWorkDuration;
         [Range(1, 60), Tooltip("Длительность отдыха после концерта, дни")]
         public int ConcertCooldown;
-        [Tooltip("Зависимость оценки от качества концерта")]
-        public AnimationCurve ConcertGradeCurve;
         [Range(10, 400), Tooltip("Максимальное количество очков работы, шт")]
         public int ConcertWorkPointsMax;
-        [Range(0f, 1f), Tooltip("Сила влияния количества прослушиваний альбома")]
-        public float ConcertAlbumListensImpact;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int ConcertRewardExp;
 

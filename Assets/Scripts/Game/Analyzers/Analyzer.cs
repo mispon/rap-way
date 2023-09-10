@@ -38,7 +38,8 @@ namespace Game.Analyzers
         /// </summary>
         protected float GetListenRatio(int listensAmount)
         {
-            return GetFans() / (1f * listensAmount);
+            var ratio = (1f * listensAmount) / PlayerManager.Data.Fans;
+            return Mathf.Max(1f, ratio);
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace Game.Analyzers
         {
             return PlayerManager.Data.Fans switch
             {
-                < 10000 => (6f, 2f),
+                < 10000 => (5f, 2f),
                 < 50000 => (3f, 1.5f),
                 < 100000 => (2f, 1.2f),
                 _ => (1f, 1f)

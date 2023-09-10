@@ -35,7 +35,6 @@ namespace Game.Analyzers
 
             track.ListenAmount = CalculateListensAmount(
                 qualityPoints,
-                GetFans(), 
                 featFansAmount, 
                 track.TrendInfo.EqualityValue,
                 track.IsHit
@@ -87,20 +86,19 @@ namespace Game.Analyzers
         /// Вычисляет количество прослушиваний на основе кол-ва фанатов и уровня хайпа
         /// </summary>
         private int CalculateListensAmount(
-            float quality,
-            int fansAmount,
+            float trackQuality,
             int featFansAmount,
             float trandsMatchFactor, 
             bool isHit
         ) {
-            int totalFansAmount = fansAmount + featFansAmount;
+            int totalFansAmount = GetFans() + featFansAmount;
             
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
             int activeFansAmount = (int) (totalFansAmount * Mathf.Max(0.5f, GetHypeFactor()));
             
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
-            var listens = (int) (activeFansAmount * (maxFansActivity * quality));
+            var listens = (int) (activeFansAmount * (maxFansActivity * trackQuality));
 
             // Хайп не только влияет на активность фанатов, но и увеличивает прослушивания
             listens = (int) (listens * (1f + GetHypeFactor()));

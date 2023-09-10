@@ -60,7 +60,7 @@ namespace Game.Pages.Rappers
         private void OnBntLeftClick(Text value)
         {
             var current = int.Parse(value.text);
-            if (current == 0)
+            if (current == 1)
             {
                 return;
             }
