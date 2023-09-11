@@ -33,17 +33,17 @@ namespace Game.Pages.Battle
         /// </summary>
         private BattleResult AnalyzeResult(RapperInfo rapper, int playerPoints, int rapperPoints)
         {
-            bool isWin = playerPoints != rapperPoints
-                ? playerPoints > rapperPoints
-                : Random.Range(0, 2) > 0;
-
-            int fans = (int) settings.BattleFansChange.Evaluate(PlayerManager.Data.Fans) * (isWin ? +1 : -1);
+            bool isWin = playerPoints >= rapperPoints;
+            
+            int fansChange = (int) (PlayerManager.Data.Fans * 0.1f);
+            int fansFuzz = (int) (fansChange * 0.1f);
+            
             int hype = isWin ? settings.BattleWinnerHype : settings.BattleLoserHype;
             
             return new BattleResult
             {
                 RapperInfo = rapper,
-                FansIncome = fans,
+                FansIncome = Random.Range(fansChange - fansFuzz, fansChange + fansFuzz) * (isWin ? 1 : -1),
                 HypeIncome = hype,
                 IsWin = isWin
             };

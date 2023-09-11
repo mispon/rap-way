@@ -1,5 +1,4 @@
 using Core;
-using Models.Game;
 using Models.Info;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +13,7 @@ namespace Game.Pages.Social.ResultPages
         [Header("Контролы")]
         [SerializeField] private Text nickname;
         [SerializeField] protected Text message;
+        [SerializeField] protected Text date;
         [Space]
         [SerializeField] protected Text likes;
         [SerializeField] protected Text hype;
@@ -26,6 +26,7 @@ namespace Game.Pages.Social.ResultPages
             var nn = PlayerManager.Data.Info.NickName;
 
             nickname.text = nn;
+            date.text = TimeManager.Instance.DisplayNow;
             message.text = info.MainText;
 
             likes.text = info.Likes.ToString();

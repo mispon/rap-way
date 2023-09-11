@@ -21,11 +21,12 @@ namespace Game.Pages.Rappers
         [SerializeField] private WorkPoints playerWorkPoints;
         [SerializeField] private WorkPoints managerWorkPoints;
         [SerializeField] private WorkPoints rapperWorkPoints;
+        [SerializeField] private Sprite customRapperAvatar;
 
         [Header("Страница результата")]
         [SerializeField] private RapperResultPage rapperResult;
 
-        [Header("Даннык")]
+        [Header("Данные")]
         [SerializeField] private ImagesBank imagesBank;
 
         private RapperInfo _rapper;
@@ -105,10 +106,12 @@ namespace Game.Pages.Rappers
 
         protected override void BeforePageOpen()
         {
+            base.BeforePageOpen();
+            
             _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
             
-            rapperAvatar.sprite = _rapper.Avatar;
+            rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
             managementPointsLabel.text = "0";
             rapperPointsLabel.text = "0";
             _playerPoints = 0;

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using AppodealStack.Monetization.Api;
 using Core;
 using Data;
 using Enums;
@@ -51,7 +53,18 @@ namespace Game.Pages.Personal
         [Header("Данные")]
         [SerializeField] private GoodsData goods;
         [SerializeField] private ImagesBank imageBank;
-        
+
+        [Header("Реклама")]
+        [SerializeField] private Button cashButton;
+
+        private void Start()
+        {
+            cashButton.onClick.AddListener(() =>
+            {
+                AppodealManager.Instance.ShowRewarded();
+            });
+        }
+
         /// <summary>
         /// Вызывается перед открытием страницы
         /// </summary>

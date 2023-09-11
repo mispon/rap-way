@@ -16,6 +16,7 @@ namespace Game.Pages.Feat
         [Header("Настройки фита")]
         [SerializeField] private Text rapperName;
         [SerializeField] private Image rapperAvatar;
+        [SerializeField] private Sprite customRapperAvatar;
 
         private RapperInfo _rapper;
         
@@ -47,7 +48,7 @@ namespace Game.Pages.Feat
             _track = new TrackInfo {Feat = _rapper};
 
             rapperName.text = _rapper.Name;
-            rapperAvatar.sprite = _rapper.Avatar;
+            rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
             
             SetupCarousel(PlayerManager.Data);
             DisplaySkills(PlayerManager.Data);

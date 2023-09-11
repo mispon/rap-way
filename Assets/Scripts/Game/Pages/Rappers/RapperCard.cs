@@ -59,6 +59,7 @@ namespace Game.Pages.Rappers
 
         private void DeleteRapper()
         {
+            SoundManager.Instance.PlayClick();
             onDelete.Invoke(_rapper);
             gameObject.SetActive(false);
         }

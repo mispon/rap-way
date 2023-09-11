@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using Core;
+using Enums;
 using Game.Analyzers;
 using UnityEngine;
 using Models.Info;
@@ -48,7 +49,8 @@ namespace Game.Pages.Social
         {
             SaveResult(_social);
             _social = null;
+            
+            AppodealManager.Instance.HideBanner();
         }
     }
 }
-

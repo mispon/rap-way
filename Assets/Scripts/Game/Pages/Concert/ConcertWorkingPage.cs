@@ -141,6 +141,8 @@ namespace Game.Pages.Concert
 
         protected override void BeforePageOpen()
         {
+            base.BeforePageOpen();
+            
             _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
             _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
 

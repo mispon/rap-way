@@ -1,4 +1,6 @@
 ﻿using System;
+using AppodealStack.Monetization.Api;
+using AppodealStack.Monetization.Common;
 using Core;
 using Data;
 using Enums;
@@ -139,6 +141,8 @@ namespace Game.Pages.Track
 
         protected override void BeforePageOpen()
         {
+            base.BeforePageOpen();
+            
             _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextwritter = TeamManager.IsAvailable(TeammateType.TextWriter);
             

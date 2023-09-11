@@ -54,6 +54,11 @@ namespace Game.Pages
             }
         }
 
+        protected override void BeforePageOpen()
+        {
+            AppodealManager.Instance.ShowBanner();
+        }
+
         protected override void AfterPageOpen()
         {
             TimeManager.Instance.onDayLeft += OnDayLeft;
@@ -70,6 +75,11 @@ namespace Game.Pages
             TimeManager.Instance.ResetActionMode();
             
             progressBar.onFinish -= FinishWork;
+        }
+
+        protected override void AfterPageClose()
+        {
+            AppodealManager.Instance.HideBanner();
         }
     }
 }

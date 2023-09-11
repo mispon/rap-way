@@ -83,7 +83,11 @@ namespace Game.Pages.Track
                 Theme = themeCarousel.GetValue<Themes>()
             };
 
-            productSelectionPage.Close();
+            if (productSelectionPage != null)
+            {
+                productSelectionPage.Close();
+            }
+            
             workingPage.StartWork(_track);
             Close();
         }

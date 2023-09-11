@@ -97,6 +97,8 @@ namespace Game.Pages.Social
 
         protected override void BeforePageOpen()
         {
+            base.BeforePageOpen();
+            
             _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
             prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
         }
@@ -107,6 +109,11 @@ namespace Game.Pages.Social
 
             workPoints.text = "0";
             _social = null;
+        }
+
+        protected override void AfterPageClose()
+        {
+            // do nothing, override for prevent banner close
         }
     }
 }

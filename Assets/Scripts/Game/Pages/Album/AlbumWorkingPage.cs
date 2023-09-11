@@ -139,6 +139,8 @@ namespace Game.Pages.Album
 
         protected override void BeforePageOpen()
         {
+            base.BeforePageOpen();
+            
             _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextwritter = TeamManager.IsAvailable(TeammateType.TextWriter);
 

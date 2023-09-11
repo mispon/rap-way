@@ -88,8 +88,6 @@ namespace Core.Settings
         [Header("BATTLE")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int BattleWorkDuration;
-        [Tooltip("Зависимость изменения количества фанатов")]
-        public AnimationCurve BattleFansChange;
         [Range(1, 100), Tooltip("Количество очков хайпа за победу")]
         public int BattleWinnerHype;
         [Range(1, 100), Tooltip("Количество очков хайпа за проигрыш")]

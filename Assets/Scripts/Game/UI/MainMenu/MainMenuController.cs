@@ -28,6 +28,7 @@ namespace Game.UI.MainMenu
 
         public void OnStart()
         {
+            AppodealManager.Instance.ShowInterstitial();
             SetupButtons();
         }
         
@@ -72,4 +73,3 @@ namespace Game.UI.MainMenu
         }
     }    
 }
-

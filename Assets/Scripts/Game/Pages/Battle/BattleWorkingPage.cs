@@ -23,6 +23,7 @@ namespace Game.Pages.Battle
         [SerializeField] private Image rapperAvatar;
         [SerializeField] private Text rapperPointsLabel;
         [SerializeField] private WorkPoints rapperWorkPoints;
+        [SerializeField] private Sprite customRapperAvatar;
 
         [Header("Очки работы от скилов")]
         [SerializeField] private int skillChance;
@@ -104,8 +105,10 @@ namespace Game.Pages.Battle
                 if (!PlayerManager.Data.Skills.Contains(skill) || Random.Range(0, 100) > skillChance)
                     return 0;
 
-                workPoints.Show(1);
-                return 1;
+                var value = Random.Range(1, 6);
+                
+                workPoints.Show(value);
+                return value;
             }
 
             var result = GeneratePoint(Skills.DoubleTime, doubleTimePoint);
@@ -146,6 +149,8 @@ namespace Game.Pages.Battle
 
         protected override void BeforePageOpen()
         {
+            AppodealManager.Instance.ShowBannerRight();
+            
             playerName.text = PlayerManager.Data.Info.NickName.ToUpper();
             rapperName.text = _rapper.Name;
             playerPointsLabel.text = "0";
@@ -156,7 +161,7 @@ namespace Game.Pages.Battle
             playerAvatar.sprite = PlayerManager.Data.Info.Gender == Gender.Male
                 ? imagesBank.MaleAvatar
                 : imagesBank.FemaleAvatar;
-            rapperAvatar.sprite = _rapper.Avatar;
+            rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
         }
 
         protected override void BeforePageClose()

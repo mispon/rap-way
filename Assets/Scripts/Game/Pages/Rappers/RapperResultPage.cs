@@ -15,6 +15,7 @@ namespace Game.Pages.Rappers
         [Header("Контролы")]
         [SerializeField] private Text message;
         [SerializeField] private Image rapperAvatar;
+        [SerializeField] private Sprite customRapperAvatar;
         [Space]
         [SerializeField] private Button okButton;
         [SerializeField] private Button cancelButton;
@@ -64,7 +65,7 @@ namespace Game.Pages.Rappers
         {
             string key = result ? "conversations_success" : "conversations_fail";
             message.text = $"{GetLocale(key)} <color=#01C6B8>{rapperName}</color>!";
-            rapperAvatar.sprite = _rapper.Avatar;
+            rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
             
             okButton.gameObject.SetActive(!result);
             cancelButton.gameObject.SetActive(result);

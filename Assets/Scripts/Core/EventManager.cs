@@ -24,9 +24,9 @@ namespace Core
         /// </summary>
         public static void AddHandler(EventType type, Action<object[]> handler)
         {
-            if (_handlers.ContainsKey(type)) 
+            if (_handlers.TryGetValue(type, out var container)) 
             {
-                _handlers[type].Add(handler);
+                container.Add(handler);
             }
             else {
                 var handlers = new List<Action<object[]>> { handler };
@@ -39,9 +39,9 @@ namespace Core
         /// </summary>
         public static void RemoveHandler(EventType type, Action<object[]> handler) 
         {
-            if (_handlers.ContainsKey(type)) 
+            if (_handlers.TryGetValue(type, out var container)) 
             {
-                _handlers[type].Remove(handler);
+                container.Remove(handler);
             }
         }
 
@@ -50,9 +50,9 @@ namespace Core
         /// </summary>
         public static void RaiseEvent(EventType type, params object[] args) 
         {
-            if (_handlers.ContainsKey(type)) 
+            if (_handlers.TryGetValue(type, out var container)) 
             {
-                foreach (var handler in _handlers[type]) 
+                foreach (var handler in container) 
                 {
                     handler(args);
                 }

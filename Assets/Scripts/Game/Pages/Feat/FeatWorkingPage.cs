@@ -21,6 +21,7 @@ namespace Game.Pages.Feat
         [SerializeField] private WorkPoints rapperBitWorkPoints;
         [SerializeField] private WorkPoints rapperTextWorkPoints;
         [SerializeField] private Image rapperAvatar;
+        [SerializeField] private Sprite customRapperAvatar;
 
         [Header("Страница результата")]
         [SerializeField] private FeatResultPage featResult;
@@ -111,8 +112,10 @@ namespace Game.Pages.Feat
         
         protected override void BeforePageOpen()
         {
+            base.BeforePageOpen();
+            
             bitPoints.text = textPoints.text = "0";
-            rapperAvatar.sprite = _track.Feat.Avatar;
+            rapperAvatar.sprite = _track.Feat.IsCustom ? customRapperAvatar : _track.Feat.Avatar;
         }
 
         protected override void BeforePageClose()
