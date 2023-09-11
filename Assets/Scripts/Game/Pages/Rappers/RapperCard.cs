@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Data;
 using Enums;
@@ -23,6 +24,7 @@ namespace Game.Pages.Rappers
         [SerializeField] private Image managerAvatar;
         [SerializeField] private Button battleButton;
         [SerializeField] private Button featButton;
+        [SerializeField] private Button deleteButton;
         [Space]
         [SerializeField] private Text fans;
 
@@ -33,12 +35,15 @@ namespace Game.Pages.Rappers
         [Header("Банк картинок")]
         [SerializeField] private ImagesBank imagesBank;
 
+        public event Action<RapperInfo> onDelete = _ => {};
+        
         private RapperInfo _rapper;
 
         private void Start()
         {
             battleButton.onClick.AddListener(() => StartConversation(false));
             featButton.onClick.AddListener(() => StartConversation(true));
+            deleteButton.onClick.AddListener(DeleteRapper);
         }
 
         /// <summary>
@@ -51,6 +56,12 @@ namespace Game.Pages.Rappers
             workingPage.StartWork(_rapper, isFeat);
             rappersPage.Close();
         }
+
+        private void DeleteRapper()
+        {
+            onDelete.Invoke(_rapper);
+            gameObject.SetActive(false);
+        }
         
         /// <summary>
         /// Открывает персональную карточку репера
@@ -58,6 +69,8 @@ namespace Game.Pages.Rappers
         public void Show(RapperInfo rapperInfo)
         {
             _rapper = rapperInfo;
+            
+            deleteButton.gameObject.SetActive(_rapper.IsCustom);
             
             DisplayInfo(rapperInfo);
             CheckPlayerManager();

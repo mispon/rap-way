@@ -16,6 +16,7 @@ namespace Game.Pages.Store
         [SerializeField] private Text itemDesc;
         [SerializeField] private Text itemPrice;
         [SerializeField] private Text itemHype;
+        [SerializeField] private GameObject hypeContainer;
 
         /// <summary>
         /// Отображает описание
@@ -29,8 +30,17 @@ namespace Game.Pages.Store
             itemDesc.text = equip != null
                 ? GetLocale("equip_desc", equip.Impact * 100, equip.WorkPoints)
                 : GetLocale(GetStuffKey(type, level));
-            itemPrice.text = GetLocale("cost_value", price.GetMoney()).ToUpper();
-            itemHype.text = hype > 0 ? GetLocale("hype_value", hype).ToUpper() : string.Empty;
+            
+            itemPrice.text = price.GetMoney();
+
+            if (hype > 0)
+            {
+                itemHype.text = $"+{hype}";
+                hypeContainer.SetActive(true);
+            } else
+            {
+                hypeContainer.SetActive(false);
+            }
 
             Open();
         }

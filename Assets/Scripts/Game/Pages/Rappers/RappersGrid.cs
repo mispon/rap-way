@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Core;
 using Data;
 using UnityEngine;
@@ -30,6 +31,8 @@ namespace Game.Pages.Rappers
         {
             if (_rappersList.Count > 0)
                 return;
+
+            rapperCard.onDelete += HandleRapperDelete;
             
             foreach (var rapperInfo in data.Rappers)
             {
@@ -64,6 +67,21 @@ namespace Game.Pages.Rappers
             rapperCard.Show(item.Info);
         }
 
+        /// <summary>
+        /// Обрабатывает удаление кастомного реппера
+        /// </summary>
+        private void HandleRapperDelete(RapperInfo customRapper)
+        {
+            GameManager.Instance.CustomRappers.Remove(customRapper);
+            
+            var rapperItem = _rappersList.FirstOrDefault(r => r.Info.Id == customRapper.Id);
+            if (rapperItem != null)
+            {
+                _rappersList.Remove(rapperItem);
+                Destroy(rapperItem.gameObject);
+            }
+        }
+
         private void OnDestroy()
         {
             foreach (var rapperItem in _rappersList)
@@ -72,6 +90,7 @@ namespace Game.Pages.Rappers
             }
             
             _rappersList.Clear();
+            rapperCard.onDelete -= HandleRapperDelete;
         }
     }
 }

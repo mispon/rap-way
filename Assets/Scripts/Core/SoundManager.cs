@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using Utils;
 
@@ -14,8 +13,6 @@ namespace Core
         [SerializeField] private AudioSource sfx;
 
         [Header("Звуковые клипы")]
-        [SerializeField] private AudioClip[] ambientClips;
-        [Space]
         [SerializeField] private AudioClip click;
         [SerializeField] private AudioClip train;
         [SerializeField] private AudioClip pay;
@@ -25,17 +22,13 @@ namespace Core
         [SerializeField] private AudioClip workPoint;
         [SerializeField] private AudioClip unlock;
         [SerializeField] private AudioClip achive;
-
-        private int _ambientIndex;
-
+        
         /// <summary>
         /// Устанавливает значения из настроек 
         /// </summary>
         public void Setup(float soundVolume, float musicVolume)
         {
-            _ambientIndex = Random.Range(0, ambientClips.Length);
             SetVolume(soundVolume, musicVolume);
-            StartCoroutine(AmbientSoundRoutine());
         }
 
         /// <summary>
@@ -56,26 +49,6 @@ namespace Core
                 return;
 
             sfx.PlayOneShot(clip);
-        }
-
-        /// <summary>
-        /// Корутина цикличного воспроизведения фоновой музыки 
-        /// </summary>
-        // ReSharper disable once FunctionRecursiveOnAllPaths
-        private IEnumerator AmbientSoundRoutine()
-        {
-            if (ambientClips.Length == 0)
-                yield break;
-            
-            ambient.clip = ambientClips[_ambientIndex];
-            ambient.Play();
-            
-            yield return new WaitForSeconds(ambient.clip.length);
-
-            _ambientIndex++;
-            _ambientIndex %= ambientClips.Length;
-
-            yield return AmbientSoundRoutine();
         }
 
         #region SOUND EVENTS

@@ -55,10 +55,11 @@ namespace Core
         /// <summary>
         /// Создает три случайных твита
         /// </summary>
-        public List<Eagle> GenerateEagles(float quality, int fans)
+        public List<Eagle> GenerateEagles(float quality)
         {
             var eagles = new List<Eagle>(3);
 
+            var fans = PlayerManager.Data.Fans;
             for (int i = 0; i < 3; i++)
             {
                 var eagle = GenerateRandomEagle(quality, fans);
@@ -102,7 +103,7 @@ namespace Core
         private static int CalcViews(int likes)
         {
             var views = likes * 10 + 1;
-            views = Math.Min(100, views);
+            views = Math.Max(100, views);
             
             views = Random.Range(views - likes, views + likes);
             
@@ -112,7 +113,7 @@ namespace Core
         private static int CalcShares(int likes)
         {
             var shares = likes / 2 + 1;
-            shares = Math.Min(1, shares);
+            shares = Math.Max(1, shares);
             
             var fuzz = GetPercentOf(shares, 20);
             shares = Random.Range(shares - fuzz, shares + fuzz);
@@ -122,8 +123,8 @@ namespace Core
 
         private static int CalcLikes(int fans)
         {
-            var likes =  GetPercentOf(fans, 10);
-            likes = Math.Min(10, likes);
+            var likes =  GetPercentOf(fans, 1);
+            likes = Math.Max(10, likes);
 
             var fuzz = GetPercentOf(likes, 20);
             likes = Random.Range(likes - fuzz, likes + fuzz);
@@ -133,7 +134,7 @@ namespace Core
 
         private static int GetPercentOf(int value, int percent)
         {
-            return (value / 100 * percent) + 1;
+            return (value / 100) * percent + 1;
         }
     }
 }

@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26614065e4125d64e90133e9afed2e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroy: 0
+  dontDestroy: 1
   appStoreURL: todo
   googlePlayURL: todo
   gameDataKey: RapWay_GameData
@@ -156,8 +156,6 @@ MonoBehaviour:
   dontDestroy: 0
   ambient: {fileID: 6933188627971580042}
   sfx: {fileID: 3257084815037981546}
-  ambientClips:
-  - {fileID: 8300000, guid: defc9f34ba3b00844a724ece5dd6fe82, type: 3}
   click: {fileID: 8300000, guid: ca6774ebf85d836468ba496981a6d97c, type: 3}
   train: {fileID: 8300000, guid: 1b9090398b4701f4bbd51448459f5ba2, type: 3}
   pay: {fileID: 8300000, guid: 5fb2ab4dbe8a4fa45b93a20c1cf3bb01, type: 3}
@@ -239,8 +237,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: defc9f34ba3b00844a724ece5dd6fe82, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
   Loop: 1

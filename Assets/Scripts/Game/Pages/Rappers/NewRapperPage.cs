@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using Core;
 using Data;
 using UnityEngine;
@@ -9,7 +9,9 @@ namespace Game.Pages.Rappers
     public class NewRapperPage : Page
     {
         [SerializeField] private RappersGrid grid;
-
+        [SerializeField] private int minRapperId;
+        
+        [Space]
         [Header("Ввод имени")]
         [SerializeField] private InputField nameInput;
         [Header("Ввод словарного запаса")]
@@ -31,33 +33,29 @@ namespace Game.Pages.Rappers
         [Header("Кнопка создания")]
         [SerializeField] private Button createButton;
 
-        protected override void BeforePageOpen()
+        private void Start()
         {
-            createButton.onClick.RemoveAllListeners();
             createButton.onClick.AddListener(CreateButtonClick);
             
-            vocabularyBtnLeft.onClick.RemoveAllListeners();
             vocabularyBtnLeft.onClick.AddListener(() => OnBntLeftClick(vocabularyValue));
-            vocabularyBtnRight.onClick.RemoveAllListeners();
             vocabularyBtnRight.onClick.AddListener(() => OnBntRightClick(vocabularyValue, 10));
             
-            bitmakingBtnLeft.onClick.RemoveAllListeners();
             bitmakingBtnLeft.onClick.AddListener(() => OnBntLeftClick(bitmakingValue));
-            bitmakingBtnRight.onClick.RemoveAllListeners();
             bitmakingBtnRight.onClick.AddListener(() => OnBntRightClick(bitmakingValue, 10));
             
-            managementBtnLeft.onClick.RemoveAllListeners();
             managementBtnLeft.onClick.AddListener(() => OnBntLeftClick(managementValue));
-            managementBtnRight.onClick.RemoveAllListeners();
             managementBtnRight.onClick.AddListener(() => OnBntRightClick(managementValue, 10));
             
-            fansBtnLeft.onClick.RemoveAllListeners();
             fansBtnLeft.onClick.AddListener(() => OnBntLeftClick(fansValue));
-            fansBtnRight.onClick.RemoveAllListeners();
             fansBtnRight.onClick.AddListener(() => OnBntRightClick(fansValue, 50));
         }
+
+        protected override void BeforePageOpen()
+        {
+            nameInput.text = "";
+        }
         
-        private void OnBntLeftClick(Text value)
+        private static void OnBntLeftClick(Text value)
         {
             var current = int.Parse(value.text);
             if (current == 1)
@@ -69,7 +67,7 @@ namespace Game.Pages.Rappers
             value.text = current.ToString();
         }
         
-        private void OnBntRightClick(Text value, int maxValue)
+        private static void OnBntRightClick(Text value, int maxValue)
         {
             var current = int.Parse(value.text);
             if (current == maxValue)
@@ -91,10 +89,14 @@ namespace Game.Pages.Rappers
                 HighlightError(nameInput);
                 return;
             }
+
+            int lastId = GameManager.Instance.CustomRappers.Count > 0 
+                ? GameManager.Instance.CustomRappers.Max(r => r.Id)
+                : minRapperId;
             
             var customRapper = new RapperInfo
             {
-                Id = -1,
+                Id = lastId + 1,
                 Name = nickname,
                 Vocobulary = int.Parse(vocabularyValue.text),
                 Bitmaking = int.Parse(bitmakingValue.text),

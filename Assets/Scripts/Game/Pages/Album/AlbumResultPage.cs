@@ -57,9 +57,7 @@ namespace Game.Pages.Album
         
         private void DisplayEagles(float quality)
         {
-            var fans = PlayerManager.Data.Fans;
-
-            var eagles = EaglerManager.Instance.GenerateEagles(quality, fans);
+            var eagles = EaglerManager.Instance.GenerateEagles(quality);
             foreach (var eagle in eagles)
             {
                 Debug.Log(eagle);

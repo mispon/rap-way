@@ -10,6 +10,8 @@ namespace Game.Pages.Social.Tabs
     /// </summary>
     public abstract class BaseSocialsTab : MonoBehaviour
     {
+        [SerializeField] private Sprite normalSprite;
+        [SerializeField] private Sprite cooldownSprite;
         [SerializeField] private Button startButton;
         
         /// <summary>
@@ -58,7 +60,15 @@ namespace Game.Pages.Social.Tabs
         /// </summary>
         protected virtual void OnOpen()
         {
-            startButton.interactable = CheckStartConditions();
+            if (CheckStartConditions())
+            {
+                startButton.interactable = true;
+                startButton.image.sprite = normalSprite;
+            } else
+            {
+                startButton.interactable = false;
+                startButton.image.sprite = cooldownSprite;
+            }
         }
 
         /// <summary>
