@@ -26,6 +26,7 @@ namespace Game.Pages.Concert
         [SerializeField] private Carousel albumsCarousel;
         [SerializeField] private Slider ticketCostSlider;
         [SerializeField] private Button startButton;
+        [SerializeField] private GameObject cooldownIcon;
         
         [Header("Компоненты")]
         [SerializeField] private Text placeCapacityLabel;
@@ -49,7 +50,7 @@ namespace Game.Pages.Concert
 
         private ConcertInfo _concert;
         private int _placeCost;
-        private readonly List<AlbumInfo> _lastAlbums = new List<AlbumInfo>(MAX_ALBUMS_COUNT);
+        private readonly List<AlbumInfo> _lastAlbums = new(MAX_ALBUMS_COUNT);
 
         private void Start()
         {
@@ -207,7 +208,11 @@ namespace Game.Pages.Concert
         {
             bool canStart = PlayerManager.Data.Fans >= fansRequirement;
             canStart &= _lastAlbums.Any();
-            canStart &= GameManager.Instance.GameStats.ConcertCooldown == 0;
+            
+            bool hasCooldown = GameManager.Instance.GameStats.ConcertCooldown > 0;
+            cooldownIcon.SetActive(hasCooldown);
+            
+            canStart &= !hasCooldown;
 
             startButton.interactable = canStart;
         }
