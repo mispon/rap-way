@@ -65,7 +65,7 @@ namespace Game.Pages.Album
             
             chartInfo.text = album.ChartPosition > 0
                 ? $"{album.ChartPosition}. {nickname} - {album.Name}"
-                : GetLocale("album_result_no_chart");
+                : GetLocale("album_result_chart_miss");
             
             DisplayEagles(album.Quality);
         }

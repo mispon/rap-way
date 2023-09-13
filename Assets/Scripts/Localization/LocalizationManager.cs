@@ -45,7 +45,7 @@ namespace Localization
             if (item != null)
                 return item.value;
 
-            throw new RapWayException($"Не найдена локализация по ключу [{key}]!");
+            throw new RapWayException($"Not found localization by key [{key}]!");
         }
 
         /// <summary>
