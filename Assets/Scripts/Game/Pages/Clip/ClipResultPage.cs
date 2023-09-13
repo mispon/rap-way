@@ -1,5 +1,6 @@
 ﻿using Core;
 using Game.Analyzers;
+using Game.Pages.Eagler;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,12 +14,18 @@ namespace Game.Pages.Clip
     public class ClipResultPage : Page
     {
         [Header("Компоменты")]
-        [SerializeField] private Text header;
-        [SerializeField] private Text viewsAmount;
-        [SerializeField] private Text likesAndDislikes;
+        [SerializeField] private Text views;
+        [SerializeField] private Text likes;
+        [SerializeField] private Text dislikes;
+        [SerializeField] private Text clipNameLabel;
+        [SerializeField] private Text playerNameLabel;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text moneyIncome;
         [SerializeField] private Text expIncome;
+        [SerializeField] private GameObject hitBadge;
+        
+        [Header("Твитты фанатов")]
+        [SerializeField] private EagleCard[] eagleCards;
 
         [Header("Анализатор клипа")]
         [SerializeField] private ClipAnalyzer clipAnalyzer;
@@ -42,24 +49,29 @@ namespace Game.Pages.Clip
         /// </summary>
         private void DisplayResult(ClipInfo clip)
         {
-            DisplayEagles(clip.Quality);
-            
-            header.text = GetLocale("clip_result_header", ProductionManager.GetTrackName(clip.TrackId));
-            viewsAmount.text = GetLocale("clip_result_views", clip.Views.GetDisplay());
-            likesAndDislikes.text = GetLocale("clip_result_reaction", clip.Likes.GetDisplay(), clip.Dislikes.GetDisplay());
             string fansPrefix = clip.FansIncome > 0 ? "+" : string.Empty;
             fansIncome.text = $"{fansPrefix}{clip.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{clip.MoneyIncome.GetMoney()}";
             expIncome.text = $"+{settings.ClipRewardExp}";
+
+            clipNameLabel.text = ProductionManager.GetTrackName(clip.TrackId);
+            playerNameLabel.text = PlayerManager.Data.Info.NickName;
+            
+            views.text = clip.Views.GetDisplay();
+            likes.text = clip.Likes.GetDisplay();
+            dislikes.text = clip.Dislikes.GetDisplay();
+            
+            hitBadge.SetActive(clip.IsHit);
+            
+            DisplayEagles(clip.Quality);
         }
         
         private void DisplayEagles(float quality)
         {
             var eagles = EaglerManager.Instance.GenerateEagles(quality);
-            foreach (var eagle in eagles)
+            for (var i = 0; i < eagles.Count; i++)
             {
-                Debug.Log(eagle);
-                // todo
+                eagleCards[i].Initialize(i, eagles[i]);
             }
         }
         

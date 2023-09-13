@@ -1,5 +1,6 @@
 ﻿using Core;
 using Game.Analyzers;
+using Game.Pages.Eagler;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,12 +14,18 @@ namespace Game.Pages.Album
     public class AlbumResultPage : Page
     {
         [Header("Компоменты")]
-        [SerializeField] private Text header;
         [SerializeField] private Text listenAmount;
+        [SerializeField] private Text songs;
+        [SerializeField] private Text albumNameLabel;
+        [SerializeField] private Text playerNameLabel;
         [SerializeField] private Text chartInfo;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text moneyIncome;
         [SerializeField] private Text expIncome;
+        [SerializeField] private GameObject hitBadge;
+
+        [Header("Твитты фанатов")]
+        [SerializeField] private EagleCard[] eagleCards;
 
         [Header("Анализатор альбома")]
         [SerializeField] private AlbumAnalyzer albumAnalyzer;
@@ -42,26 +49,33 @@ namespace Game.Pages.Album
         /// </summary>
         private void DisplayResult(AlbumInfo album)
         {
-            DisplayEagles(album.Quality);
-            
             var nickname = PlayerManager.Data.Info.NickName;
-            header.text = GetLocale("album_result_header", nickname, album.Name);
-            listenAmount.text = GetLocale("album_result_listens", album.ListenAmount.GetDisplay());
-            chartInfo.text = album.ChartPosition > 0
-                ? GetLocale("album_result_chart_pos", album.ChartPosition)
-                : GetLocale("album_result_chart_miss");
+
+            albumNameLabel.text = album.Name;
+            playerNameLabel.text = nickname;
+            
             fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{album.MoneyIncome.GetMoney()}";
             expIncome.text = $"+{settings.AlbumRewardExp}";
+            
+            listenAmount.text = album.ListenAmount.GetDisplay();
+            songs.text = $"{Random.Range(8, 31)}";
+            
+            hitBadge.SetActive(album.IsHit);
+            
+            chartInfo.text = album.ChartPosition > 0
+                ? $"{album.ChartPosition}. {nickname} - {album.Name}"
+                : GetLocale("album_result_no_chart");
+            
+            DisplayEagles(album.Quality);
         }
         
         private void DisplayEagles(float quality)
         {
             var eagles = EaglerManager.Instance.GenerateEagles(quality);
-            foreach (var eagle in eagles)
+            for (var i = 0; i < eagles.Count; i++)
             {
-                Debug.Log(eagle);
-                // todo
+                eagleCards[i].Initialize(i, eagles[i]);
             }
         }
 

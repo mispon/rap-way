@@ -10,8 +10,8 @@ namespace Core
     {
         private void Start()
         {
-            const int adTypes = AppodealAdType.Interstitial | AppodealAdType.Banner | AppodealAdType.RewardedVideo | AppodealAdType.Mrec;
-            const string appKey = "";
+            const int adTypes = AppodealAdType.Interstitial | AppodealAdType.Banner | AppodealAdType.RewardedVideo;
+            const string appKey = "8799e5049fe3fec8966531205c563e62114a3abe25813f42";
             AppodealCallbacks.Sdk.OnInitialized += OnInitializationFinished;
             Appodeal.Initialize(appKey, adTypes);
 
