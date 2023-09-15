@@ -1,3 +1,4 @@
+using System;
 using AppodealStack.Monetization.Api;
 using AppodealStack.Monetization.Common;
 using Game;
@@ -14,21 +15,17 @@ namespace Core
             const string appKey = "8799e5049fe3fec8966531205c563e62114a3abe25813f42";
             AppodealCallbacks.Sdk.OnInitialized += OnInitializationFinished;
             Appodeal.Initialize(appKey, adTypes);
-
-            if (Appodeal.IsInitialized(AppodealAdType.RewardedVideo))
-            {
-                AppodealCallbacks.RewardedVideo.OnFinished += RewardedVideoFinished;
-            }
         }
-        private static void OnInitializationFinished(object sender, SdkInitializedEventArgs e)
+        private void OnInitializationFinished(object sender, SdkInitializedEventArgs e)
         {
             Debug.Log("Appodeal loaded");
+            AppodealCallbacks.RewardedVideo.OnFinished += RewardedVideoFinished;
         }
 
         private void RewardedVideoFinished(object sender, RewardedVideoFinishedEventArgs e)
         {
             var money = PlayerManager.Data.Money;
-            var reward = (money / 100) * 10;
+            var reward = Convert.ToInt32(money * 0.1);
             
             PlayerManager.Instance.AddMoney(reward);
         }

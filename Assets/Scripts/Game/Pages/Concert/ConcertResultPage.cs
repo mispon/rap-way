@@ -13,11 +13,13 @@ namespace Game.Pages.Concert
     public class ConcertResultPage : Page
     {
         [Header("Компоменты")]
-        [SerializeField] private Text header;
+        [SerializeField] private Text placeName;
+        [SerializeField] private Text playerName;
         [SerializeField] private Text ticketsSold;
         [SerializeField] private Text ticketCost;
         [SerializeField] private Text moneyIncome;
         [SerializeField] private Text expIncome;
+        [SerializeField] private GameObject soldOutBadge;
 
         [Header("Анализатор концерта")]
         [SerializeField] private ConcertAnalyzer concertAnalyzer;
@@ -44,23 +46,16 @@ namespace Game.Pages.Concert
         /// </summary>
         private void DisplayResult(ConcertInfo concert)
         {
-            DisplayEagles(concert.Quality);
+            placeName.text = concert.LocationName.ToUpper();
+            playerName.text = PlayerManager.Data.Info.NickName;
             
-            header.text = GetLocale("concert_result_header", concert.LocationName);
-            ticketsSold.text = GetLocale("concert_result_sold", concert.TicketsSold.GetDisplay()).ToUpper();
-            ticketCost.text = GetLocale("concert_result_cost", concert.TicketCost.GetMoney()).ToUpper();
             moneyIncome.text = $"+{concert.Income.GetMoney()}";
             expIncome.text = $"+{settings.ConcertRewardExp}";
-        }
-        
-        private void DisplayEagles(float quality)
-        {
-            var eagles = EaglerManager.Instance.GenerateEagles(quality);
-            foreach (var eagle in eagles)
-            {
-                Debug.Log(eagle);
-                // todo
-            }
+            
+            ticketsSold.text = $"{concert.TicketsSold} / {concert.LocationCapacity}";
+            ticketCost.text = concert.TicketCost.GetMoney();
+            
+            soldOutBadge.SetActive(concert.TicketsSold >= concert.LocationCapacity);
         }
 
         /// <summary>

@@ -41,9 +41,14 @@ namespace Game.UI.Buttons
         protected virtual void PageAction()
         {
             if (action == PageActionType.Open)
+            {
                 page.Open();
+            }
             else
+            {
+                AppodealManager.Instance.HideBanner();
                 page.Close();
+            }
         }
     }
 }

@@ -1,5 +1,8 @@
 using Core;
 using Data;
+using Enums;
+using Game.Pages.Eagler;
+using Models.Game;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Extensions;
@@ -15,7 +18,18 @@ namespace Game.Pages.Battle
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text hypeIncome;
         [SerializeField] private Text expIncome;
-
+        [Header("Картинки")]
+        [SerializeField] private Image playerImage;
+        [SerializeField] private GameObject playerLoseMask;
+        [SerializeField] private Image rapperImage;
+        [SerializeField] private GameObject rapperLoseMask;
+        [Header("Спрайты")]
+        [SerializeField] private Sprite playerAvatarMale;
+        [SerializeField] private Sprite playerAvatarFemale;
+        [SerializeField] private Sprite customAvatar;
+        [Space]
+        [SerializeField] private EagleCard[] eagleCards;
+        
         private BattleResult _result;
         
         /// <summary>
@@ -65,8 +79,29 @@ namespace Game.Pages.Battle
             fansIncome.text = $"{prefix}{_result.FansIncome.GetDisplay()}";
             hypeIncome.text = $"+{_result.HypeIncome}";
             expIncome.text = $"+{settings.BattleRewardExp}";
+
+            playerImage.sprite = PlayerManager.Data.Info.Gender == Gender.Male
+                ? playerAvatarMale
+                : playerAvatarFemale;
+            playerLoseMask.SetActive(!_result.IsWin);
+
+            rapperImage.sprite = _result.RapperInfo.IsCustom
+                ? customAvatar 
+                : _result.RapperInfo.Avatar;
+            rapperLoseMask.SetActive(_result.IsWin);
+
+            DisplayEagles(0.5f);
         }
 
+        private void DisplayEagles(float quality)
+        {
+            var eagles = EaglerManager.Instance.GenerateEagles(quality);
+            for (var i = 0; i < eagles.Count; i++)
+            {
+                eagleCards[i].Initialize(i, eagles[i]);
+            }
+        }
+        
         /// <summary>
         /// Сохраняет результаты батла
         /// </summary>
