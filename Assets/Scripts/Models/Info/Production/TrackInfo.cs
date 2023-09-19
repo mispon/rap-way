@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Data;
 using Localization;
 using Utils.Extensions;
@@ -24,6 +25,7 @@ namespace Models.Info.Production
             ProductionManager.GetTrackName(Id),
             LocalizationManager.Instance.Get(TrendInfo.Style.GetDescription()),
             LocalizationManager.Instance.Get(TrendInfo.Theme.GetDescription()),
+            $"{Convert.ToInt32(Quality * 100)}%",
             ListenAmount.GetDisplay(),
             ChartPosition > 0 ? ChartPosition.ToString() : "—"
         };

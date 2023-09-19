@@ -1,10 +1,12 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Game.Analyzers;
 using Game.Pages.Eagler;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Extensions;
+using Random = UnityEngine.Random;
 
 namespace Game.Pages.Album
 {
@@ -18,6 +20,7 @@ namespace Game.Pages.Album
         [SerializeField] private Text songs;
         [SerializeField] private Text albumNameLabel;
         [SerializeField] private Text playerNameLabel;
+        [SerializeField] private Text qualityLabel;
         [SerializeField] private Text chartInfo;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text moneyIncome;
@@ -57,7 +60,8 @@ namespace Game.Pages.Album
             fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{album.MoneyIncome.GetMoney()}";
             expIncome.text = $"+{settings.AlbumRewardExp}";
-            
+
+            qualityLabel.text = $"{Convert.ToInt32(album.Quality * 100)}%";
             listenAmount.text = album.ListenAmount.GetDisplay();
             songs.text = $"{Random.Range(8, 31)}";
             

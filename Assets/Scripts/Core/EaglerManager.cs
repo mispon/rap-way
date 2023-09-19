@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Data;
 using Game;
 using Localization;
@@ -24,7 +25,7 @@ namespace Core
         /// <summary>
         /// Возвращает список постов
         /// </summary>
-        public List<Eagle> GetEagles() => _eagles;
+        public List<Eagle> GetEagles() => _eagles.Take(20).ToList();
 
         /// <summary>
         /// Загружает список постов

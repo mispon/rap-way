@@ -115,7 +115,7 @@ namespace Game
                 PlayerData = PlayerData,
                 GameStats = GameStats,
                 CustomRappers = CustomRappers.ToArray(),
-                Eagles = Eagles.Take(100).ToArray(),
+                Eagles = Eagles.Take(20).ToArray(),
                 ShowedTutorials = ShowedTutorials.ToArray()
             };
 

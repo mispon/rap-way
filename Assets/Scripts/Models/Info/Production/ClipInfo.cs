@@ -25,6 +25,7 @@ namespace Models.Info.Production
         public override string[] HistoryInfo => new[]
         {
             Name,
+            $"{Convert.ToInt32(Quality * 100)}%",
             Views.GetDisplay(),
             $"+{Likes.GetDisplay()} / -{Dislikes.GetDisplay()}"
         };

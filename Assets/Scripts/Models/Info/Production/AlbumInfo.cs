@@ -18,6 +18,7 @@ namespace Models.Info.Production
             Name,
             LocalizationManager.Instance.Get(TrendInfo.Style.GetDescription()),
             LocalizationManager.Instance.Get(TrendInfo.Theme.GetDescription()),
+            $"{Convert.ToInt32(Quality * 100)}%",
             ListenAmount.GetDisplay(),
             ChartPosition > 0 ? ChartPosition.ToString() : "—"
         };

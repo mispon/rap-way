@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using AppodealStack.Monetization.Common;
 using Core;
 using Game.UI.ScrollViewController;
 using UnityEngine;
@@ -32,8 +31,8 @@ namespace Game.Pages.Eagler
         
         protected override void AfterPageOpen()
         {
-            AppodealManager.Instance.ShowBanner();
             TutorialManager.Instance.ShowTutorial("tutorial_eagler");
+            AppodealManager.Instance.ShowBanner();
         }
         
         protected override void AfterPageClose()

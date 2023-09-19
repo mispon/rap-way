@@ -63,7 +63,7 @@ namespace Game.UI.MainMenu
         
         private static bool CheckNotNullOrEmpty(InputField field)
         {
-            if (string.IsNullOrWhiteSpace(field.text) || field.text.Length < 3 || field.text.Length > 50)
+            if (string.IsNullOrWhiteSpace(field.text) || field.text.Length < 2 || field.text.Length > 20)
             {
                 HighlightError(field);
                 return false;

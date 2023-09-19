@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Game.Analyzers;
 using Game.Pages.Eagler;
 using Models.Info.Production;
@@ -19,6 +20,7 @@ namespace Game.Pages.Clip
         [SerializeField] private Text dislikes;
         [SerializeField] private Text clipNameLabel;
         [SerializeField] private Text playerNameLabel;
+        [SerializeField] private Text qualityLabel;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text moneyIncome;
         [SerializeField] private Text expIncome;
@@ -56,6 +58,7 @@ namespace Game.Pages.Clip
 
             clipNameLabel.text = ProductionManager.GetTrackName(clip.TrackId);
             playerNameLabel.text = PlayerManager.Data.Info.NickName;
+            qualityLabel.text = $"{Convert.ToInt32(clip.Quality * 100)}%";
             
             views.text = clip.Views.GetDisplay();
             likes.text = clip.Likes.GetDisplay();

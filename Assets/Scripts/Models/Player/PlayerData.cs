@@ -32,6 +32,7 @@ namespace Models.Player
         public List<int> Battles;
 
         public Trends LastKnownTrends;
+        public bool FinishPageShowed;
         
         public static PlayerData New => new()
         {
@@ -48,7 +49,8 @@ namespace Models.Player
             Feats = new List<int>(),
             Battles = new List<int>(),
 
-            LastKnownTrends = null
+            LastKnownTrends = null,
+            FinishPageShowed = false
         };
     }
 }

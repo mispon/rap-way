@@ -84,7 +84,7 @@ namespace Game.Pages.Rappers
             SoundManager.Instance.PlayClick();
             
             var nickname = nameInput.text;
-            if (nickname.Length is < 3 or > 50)
+            if (nickname.Length is < 3 or > 20)
             {
                 HighlightError(nameInput);
                 return;

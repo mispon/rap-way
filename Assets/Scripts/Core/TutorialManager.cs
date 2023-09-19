@@ -1,7 +1,7 @@
-using System;
 using Game;
 using Game.Pages.Tutorial;
 using Localization;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using Utils;
 
@@ -10,7 +10,7 @@ namespace Core
     public class TutorialManager : Singleton<TutorialManager>
     {
         [SerializeField] private TutorialPage page;
-
+        
         private void Start()
         {
             ShowTutorial("tutorial_on_start");

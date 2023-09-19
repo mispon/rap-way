@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Game.Analyzers;
 using Game.Pages.Eagler;
 using Models.Game;
@@ -6,6 +7,7 @@ using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Extensions;
+using Random = UnityEngine.Random;
 
 namespace Game.Pages.Track
 {
@@ -19,6 +21,7 @@ namespace Game.Pages.Track
         [SerializeField] private Text duration;
         [SerializeField] private Text trackNameLabel;
         [SerializeField] private Text playerNameLabel;
+        [SerializeField] private Text qualityLabel;
         [SerializeField] private Text chartInfo;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text moneyIncome;
@@ -65,6 +68,7 @@ namespace Game.Pages.Track
 
             trackNameLabel.text = trackName;
             playerNameLabel.text = nickname;
+            qualityLabel.text = $"{Convert.ToInt32(track.Quality * 100)}%";
             listenAmount.text = track.ListenAmount.GetDisplay();
             duration.text = GetDuration();
             
