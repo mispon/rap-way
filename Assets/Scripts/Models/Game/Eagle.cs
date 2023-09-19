@@ -11,5 +11,6 @@ namespace Models.Game
         public int Likes;
         public int Views;
         public int Shares;
+        public string Tags;
     }
 }

@@ -27,6 +27,7 @@ namespace Localization
     public class LocalizationManager : Singleton<LocalizationManager>
     {
         [SerializeField] private LocalizationData _data;
+        private LocalizationData _enBackup;
 
         public bool IsReady { get; private set; }
 
@@ -45,6 +46,10 @@ namespace Localization
             if (item != null)
                 return item.value;
 
+            item = _enBackup.items.FirstOrDefault(e => e.key == key);
+            if (item != null)
+                return item.value;
+            
             throw new RapWayException($"Not found localization by key [{key}]!");
         }
 
@@ -71,6 +76,7 @@ namespace Localization
         public void LoadLocalization(GameLang lang, bool sendEvent = false)
         {
             StartCoroutine(LoadLocalizationAsync(lang, sendEvent));
+            StartCoroutine(LoadBackupLocalizationAsync());
         }
 
         /// <summary>
@@ -85,13 +91,29 @@ namespace Localization
 #if UNITY_ANDROID
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
-            // TODO
+            yield return LoadAndroidLocalization(path, data => jsonData = data);
 #else
             jsonData = File.ReadAllText(path);
 #endif
             ParseLocalizationData(jsonData, sendEvent);
 
             IsReady = true;
+            yield return null;
+        }
+        
+        private IEnumerator LoadBackupLocalizationAsync()
+        {
+            string jsonData = "";
+            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(GameLang.EN));
+#if UNITY_ANDROID
+            yield return LoadAndroidLocalization(path, data => jsonData = data);
+#elif UNITY_IPHONE
+            yield return LoadAndroidLocalization(path, data => jsonData = data);
+#else
+            jsonData = File.ReadAllText(path);
+#endif
+            ParseBackupLocalizationData(jsonData);
+
             yield return null;
         }
 
@@ -122,6 +144,17 @@ namespace Localization
                 EventManager.RaiseEvent(EventType.LangChanged);
 
             IsReady = true;
+        }
+        
+        /// <summary>
+        /// Выполняет парсинг файла с локализацией
+        /// </summary>
+        private void ParseBackupLocalizationData(string jsonData)
+        {
+            if (string.IsNullOrEmpty(jsonData))
+                throw new RapWayException("Не найден файл локализации!");
+
+            _enBackup = JsonUtility.FromJson<LocalizationData>(jsonData);
         }
 
         /// <summary>

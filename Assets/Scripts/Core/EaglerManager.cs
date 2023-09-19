@@ -79,7 +79,6 @@ namespace Core
             var messageKey = dice > quality 
                 ? $"{data.NegativePostKey}_{Random.Range(0, data.NegativePostsCount)}"
                 : $"{data.PositivePostKey}_{Random.Range(0, data.PositivePostsCount)}";
-            var message = LocalizationManager.Instance.Get(messageKey);
             
             var nickname = data.Nicknames[Random.Range(0, data.Nicknames.Length)];
             var playerName = PlayerManager.Data.Info.NickName;
@@ -89,10 +88,11 @@ namespace Core
             {
                 Date = TimeManager.Instance.DisplayNow,
                 Nickname = nickname,
-                Message = $"{message} <color=#109c22>#{playerName}</color> <color=#109c22>#{randomTag}</color>",
+                Message = messageKey,
                 Likes = likes,
                 Views = CalcViews(likes),
-                Shares = CalcShares(likes)
+                Shares = CalcShares(likes),
+                Tags = $" <color=#109c22>#{playerName}</color> <color=#109c22>#{randomTag}</color>"
             };
         }
 

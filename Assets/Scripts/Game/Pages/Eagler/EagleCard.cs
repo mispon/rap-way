@@ -1,4 +1,5 @@
 using Game.UI.ScrollViewController;
+using Localization;
 using Models.Game;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,7 +33,7 @@ namespace Game.Pages.Eagler
             _index = i;
             nickname.text = $"@{eagle.Nickname}";
             date.text = eagle.Date;
-            message.text = eagle.Message;
+            message.text = $"{LocalizationManager.Instance.Get(eagle.Message)}{eagle.Tags}";
             likes.text = eagle.Likes.GetDisplay();
             views.text = eagle.Views.GetDisplay();
             shares.text = eagle.Shares.GetDisplay();
