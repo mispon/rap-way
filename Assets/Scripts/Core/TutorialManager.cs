@@ -1,7 +1,6 @@
 using Game;
 using Game.Pages.Tutorial;
 using Localization;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using Utils;
 

@@ -47,7 +47,8 @@ namespace Core
                 Message = message,
                 Likes = likes,
                 Views = CalcViews(likes),
-                Shares = CalcShares(likes)
+                Shares = CalcShares(likes),
+                IsUser = true
             };
             
             AddEagle(eagle);

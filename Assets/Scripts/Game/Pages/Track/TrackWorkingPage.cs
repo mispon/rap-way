@@ -1,7 +1,4 @@
-﻿using System;
-using AppodealStack.Monetization.Api;
-using AppodealStack.Monetization.Common;
-using Core;
+﻿using Core;
 using Data;
 using Enums;
 using Models.Player;

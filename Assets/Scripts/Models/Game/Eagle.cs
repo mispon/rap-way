@@ -12,5 +12,6 @@ namespace Models.Game
         public int Views;
         public int Shares;
         public string Tags;
+        public bool IsUser;
     }
 }

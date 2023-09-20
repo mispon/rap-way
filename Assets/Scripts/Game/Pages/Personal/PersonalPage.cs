@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppodealStack.Monetization.Api;
 using Core;
 using Data;
 using Enums;
