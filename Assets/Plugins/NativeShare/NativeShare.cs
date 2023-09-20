@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
-#if !UNITY_EDITOR && ( UNITY_ANDROID || UNITY_IOS )
+#if UNITY_ANDROID || UNITY_IOS
 using NativeShareNamespace;
 #endif
 
@@ -43,14 +43,17 @@ public class NativeShare
 	}
 #elif !UNITY_EDITOR && UNITY_IOS
 	[System.Runtime.InteropServices.DllImport( "__Internal" )]
-	private static extern void _NativeShare_Share( string[] files, int filesCount, string subject, string text );
+	private static extern void _NativeShare_Share( string[] files, int filesCount, string subject, string text, string link );
 #endif
 
 	private string subject = string.Empty;
 	private string text = string.Empty;
 	private string title = string.Empty;
+	private string url = string.Empty;
 
 #if UNITY_EDITOR || UNITY_ANDROID
+	private readonly List<string> emailRecipients = new List<string>( 0 );
+
 	private readonly List<string> targetPackages = new List<string>( 0 );
 	private readonly List<string> targetClasses = new List<string>( 0 );
 #endif
@@ -59,6 +62,23 @@ public class NativeShare
 	private readonly List<string> mimes = new List<string>( 0 );
 
 	private ShareResultCallback callback;
+
+	public NativeShare Clear()
+	{
+		subject = text = title = url = string.Empty;
+
+#if UNITY_EDITOR || UNITY_ANDROID
+		emailRecipients.Clear();
+		targetPackages.Clear();
+		targetClasses.Clear();
+#endif
+		files.Clear();
+		mimes.Clear();
+
+		callback = null;
+
+		return this;
+	}
 
 	public NativeShare SetSubject( string subject )
 	{
@@ -72,6 +92,12 @@ public class NativeShare
 		return this;
 	}
 
+	public NativeShare SetUrl( string url )
+	{
+		this.url = url ?? string.Empty;
+		return this;
+	}
+
 	public NativeShare SetTitle( string title )
 	{
 		this.title = title ?? string.Empty;
@@ -81,19 +107,6 @@ public class NativeShare
 	public NativeShare SetCallback( ShareResultCallback callback )
 	{
 		this.callback = callback;
-		return this;
-	}
-
-	[System.Obsolete( "Use AddTarget instead.", false )]
-	public NativeShare SetTarget( string androidPackageName, string androidClassName = null )
-	{
-#if UNITY_EDITOR || UNITY_ANDROID
-		targetPackages.Clear();
-		targetClasses.Clear();
-
-		AddTarget( androidPackageName, androidClassName );
-#endif
-
 		return this;
 	}
 
@@ -168,9 +181,19 @@ public class NativeShare
 		return this;
 	}
 
+	public NativeShare AddEmailRecipient( string emailAddress )
+	{
+#if UNITY_EDITOR || UNITY_ANDROID
+		if( !string.IsNullOrEmpty( emailAddress ) && !emailRecipients.Contains( emailAddress ) )
+			emailRecipients.Add( emailAddress );
+#endif
+
+		return this;
+	}
+
 	public void Share()
 	{
-		if( files.Count == 0 && subject.Length == 0 && text.Length == 0 )
+		if( files.Count == 0 && subject.Length == 0 && text.Length == 0 && url.Length == 0 )
 		{
 			Debug.LogWarning( "Share Error: attempting to share nothing!" );
 			return;
@@ -182,10 +205,17 @@ public class NativeShare
 		if( callback != null )
 			callback( ShareResult.Shared, null );
 #elif UNITY_ANDROID
-		AJC.CallStatic( "Share", Context, new NSShareResultCallbackAndroid( callback ), targetPackages.ToArray(), targetClasses.ToArray(), files.ToArray(), mimes.ToArray(), subject, text, title );
+		AJC.CallStatic( "Share", Context, new NSShareResultCallbackAndroid( callback ), targetPackages.ToArray(), targetClasses.ToArray(), files.ToArray(), mimes.ToArray(), emailRecipients.ToArray(), subject, CombineURLWithText(), title );
 #elif UNITY_IOS
 		NSShareResultCallbackiOS.Initialize( callback );
-		_NativeShare_Share( files.ToArray(), files.Count, subject, text );
+		if( files.Count == 0 )
+			_NativeShare_Share( new string[0], 0, subject, text, GetURLWithScheme() );
+		else
+		{
+			// While sharing both a URL and a file, some apps either don't show up in share sheet or omit the file
+			// If we append URL to text, the issue is resolved for at least some of these apps
+			_NativeShare_Share( files.ToArray(), files.Count, subject, CombineURLWithText(), "" );
+		}
 #else
 		Debug.LogWarning( "NativeShare is not supported on this platform!" );
 #endif
@@ -238,7 +268,22 @@ public class NativeShare
 	#endregion
 
 	#region Internal Functions
-	private static byte[] GetTextureBytes( Texture2D texture, bool isJpeg )
+	private string GetURLWithScheme()
+	{
+		return ( url.Length == 0 || url.Contains( "://" ) ) ? url : ( "https://" + url );
+	}
+
+	private string CombineURLWithText()
+	{
+		if( url.Length == 0 || text.IndexOf( url, System.StringComparison.OrdinalIgnoreCase ) >= 0 )
+			return text;
+		else if( text.Length == 0 )
+			return GetURLWithScheme();
+		else
+			return string.Concat( text, " ", GetURLWithScheme() );
+	}
+
+	private byte[] GetTextureBytes( Texture2D texture, bool isJpeg )
 	{
 		try
 		{
@@ -258,7 +303,7 @@ public class NativeShare
 #pragma warning restore 0162
 	}
 
-	private static byte[] GetTextureBytesFromCopy( Texture2D texture, bool isJpeg )
+	private byte[] GetTextureBytesFromCopy( Texture2D texture, bool isJpeg )
 	{
 		// Texture is marked as non-readable, create a readable copy and share it instead
 		Debug.LogWarning( "Sharing non-readable textures is slower than sharing readable textures" );

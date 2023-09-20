@@ -18,9 +18,9 @@ namespace Core
         }
         private void OnInitializationFinished(object sender, SdkInitializedEventArgs e)
         {
-            Debug.Log("Appodeal loaded");
-            AppodealCallbacks.RewardedVideo.OnFinished += RewardedVideoFinished;
+            Debug.Log("Appodeal is loaded");
             ShowInterstitial();
+            AppodealCallbacks.RewardedVideo.OnFinished += RewardedVideoFinished;
         }
 
         private void RewardedVideoFinished(object sender, RewardedVideoFinishedEventArgs e)
@@ -36,6 +36,9 @@ namespace Core
             if (Appodeal.IsLoaded(AppodealAdType.RewardedVideo))
             {
                 Appodeal.Show(AppodealAdType.RewardedVideo);
+            } else
+            {
+                Debug.LogError("ShowRewarded: not loaded");
             }
         }
         
@@ -44,6 +47,9 @@ namespace Core
             if (Appodeal.IsLoaded(AppodealAdType.Interstitial))
             {
                 Appodeal.Show(AppodealAdType.Interstitial);
+            } else
+            {
+                Debug.LogError("ShowInterstitial: not loaded");
             }
         }
         
@@ -52,6 +58,9 @@ namespace Core
             if (Appodeal.IsLoaded(AppodealAdType.Banner))
             {
                 Appodeal.Show(AppodealShowStyle.BannerLeft);
+            } else
+            {
+                Debug.LogError("ShowBanner: not loaded");
             }
         }
         
@@ -66,6 +75,6 @@ namespace Core
         public void HideBanner()
         {
             Appodeal.Hide(AppodealAdType.Banner);
-        }
+        } 
     }
 }
