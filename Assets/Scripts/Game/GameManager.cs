@@ -68,6 +68,8 @@ namespace Game
         public PlayerData CreateNewPlayer()
         {
             PlayerData = PlayerData.New;
+            Eagles = new List<Eagle>(0);
+            
             return PlayerData;
         }
 
