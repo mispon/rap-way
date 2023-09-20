@@ -6,11 +6,11 @@ namespace Core.Settings
     public class GameSettings : ScriptableObject
     {
         [Header("PLAYER")]
-        [Range(100_000_000, 1_000_000_000), Tooltip("Максимальное кол-во фанатов, шт")]
+        [Tooltip("Максимальное кол-во фанатов, шт")]
         public int MaxFans;
-        [Range(100_000_000, 1_500_000_000), Tooltip("Максимальное кол-во фанатов, шт")]
+        [Tooltip("Максимальное кол-во фанатов, шт")]
         public int MaxMoney;
-        [Range(500, 5000), Tooltip("Базовое значение фанатов в анализаторе")]
+        [Range(100, 500), Tooltip("Базовое значение фанатов в анализаторе")]
         public int BaseFans;
 
         [Header("TRACK")]
@@ -60,6 +60,8 @@ namespace Core.Settings
         public int ClipRewardExp;
 
         [Header("CONCERT")]
+        [Range(50, 500), Tooltip("Минимальное количество проданных билетов")]
+        public int MinTicketsSold;
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int ConcertWorkDuration;
         [Range(1, 60), Tooltip("Длительность отдыха после концерта, дни")]
@@ -96,18 +98,23 @@ namespace Core.Settings
         public int BattleRewardExp;
 
         [Header("COMMON")]
-        [Tooltip("Максимальное значащее число фанатов")]
-        public int FansSignificantValue;
+        [Tooltip("Минимальный прирост фанатов")]
+        public int MinFansIncome;
         [Tooltip("Максимальный прирост фанатов")]
         public int MaxFansIncome;
+        [Range(50_000, 300_000), Tooltip("Минимальное кол-во фанатов для участия в чартах")]
+        public int MinFansForCharts;
+        [Space]
+        [Tooltip("Минимальный прирост денег")]
+        public int MinMoneyIncome;
         [Tooltip("Максимальный прирост денег")]
         public int MaxMoneyIncome;
+        [Space]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int RappersWorkDuration;
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int FeatWorkDuration;
-        [Range(50_000, 300_000), Tooltip("Минимальное кол-во фанатов для участия в чартах")]
-        public int MinFansForCharts;
+        [Space]
         [Range(1, 30), Tooltip("Длительность отдыха менеджера, дни")]
         public int ManagerCooldown;
     }

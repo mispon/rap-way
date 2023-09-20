@@ -18,27 +18,31 @@ namespace Game.Analyzers
         {
             var track = ProductionManager.GetTrack(clip.TrackId);
             
-            float clipQuality = CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints);
-            clip.Quality = clipQuality;
+            float qualityPoints = CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints);
+            clip.Quality = qualityPoints;
 
             var hitDice = Random.Range(0f, 1f);
-            if (clipQuality >= settings.ClipHitThreshold || hitDice <= settings.ClipHitChance) 
+            if (qualityPoints >= settings.ClipHitThreshold || hitDice <= settings.ClipHitChance) 
             {
                 clip.IsHit = true;
             }
+
+            int fansAmount = GetFans();
             
-            float trackListenFactor = GetListenRatio(track.ListenAmount);
-            clip.Views = CalculateViewsAmount(clipQuality, trackListenFactor, clip.IsHit);
+            clip.Views = CalculateViewsAmount(
+                fansAmount, 
+                qualityPoints,
+                track.ListenAmount, 
+                clip.IsHit
+            );
 
             int activeViewers = Convert.ToInt32(clip.Views * settings.ClipActiveViewers);
-            
-            var (likes, dislikes) = CalculateReaction(clipQuality, activeViewers);
+            var (likes, dislikes) = CalculateReaction(qualityPoints, activeViewers);
             clip.Likes = likes;
             clip.Dislikes = dislikes;
 
-            var (fans, money) = CalculateIncomes(clipQuality, clip.Views, settings.ClipViewCost);
-            clip.FansIncome = Convert.ToInt32(fans * settings.ClipActiveViewers);
-            clip.MoneyIncome = money;
+            clip.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
+            clip.MoneyIncome = CalcMoneyIncome(clip.Views, settings.ClipViewCost);
         }
 
         /// <summary>
@@ -55,28 +59,30 @@ namespace Game.Analyzers
         /// <summary>
         /// Вычисляет количество просмотров на основе качества клипа, кол-ва фанатов и уровня хайпа
         /// </summary>
-        private int CalculateViewsAmount(float clipQuality, float trackFactor, bool isHit)
-        {
-            // Количество фанатов, ждущих клип, зависит от уровня хайпа
-            int activeFansAmount = (int) (GetFans() * Mathf.Max(0.5f, GetHypeFactor()));
-
+        private int CalculateViewsAmount(
+            int fans,
+            float quality, 
+            int trackListenAmount,
+            bool isHit
+        ) {
+            // Количество фанатов, ждущих трек, зависит от уровня хайпа
+            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor()));
+            
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
-            int views = (int) (activeFansAmount * (maxFansActivity * clipQuality));
- 
-            // Хайп не только влияет на активность фанатов, но и увеличивает просмотров
-            views = (int) (views * (1f + GetHypeFactor()));
+            float activity = 1.0f + (maxFansActivity * quality);
+
+            int views = Convert.ToInt32(Math.Ceiling(activeFans * activity));
             
             // Успешность трека увеличивает просмотры
-            views = (int) (views * trackFactor);
+            views += Convert.ToInt32(trackListenAmount * 0.1f);
             
             if (isHit)
             {
                 views *= 5;
             }
-
-            int randomizer = Convert.ToInt32(views * TEN_PERCENTS);
-            return Random.Range(views - randomizer, views + randomizer);
+            
+            return AddFuzzing(views);
         }
 
         /// <summary>
@@ -85,15 +91,9 @@ namespace Game.Analyzers
         private static (int likes, int dislikes) CalculateReaction(float clipQuality, int activeViewers)
         {
             int likes = Convert.ToInt32(clipQuality * activeViewers);
-            var likesFuzz =  Convert.ToInt32(likes * TEN_PERCENTS);
-            
             int dislikes = Convert.ToInt32((1f - clipQuality) * activeViewers);
-            var dislikesFuzz =  Convert.ToInt32(dislikes * TEN_PERCENTS);
             
-            return (
-                Random.Range(likes - likesFuzz, likes + likesFuzz), 
-                Random.Range(dislikes - dislikesFuzz, dislikes + dislikesFuzz)
-            );
+            return (AddFuzzing(likes), AddFuzzing(dislikes));
         }
     }
 }

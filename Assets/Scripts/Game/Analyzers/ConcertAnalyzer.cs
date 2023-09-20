@@ -19,16 +19,18 @@ namespace Game.Analyzers
             
             float concertQuality = CalculateWorkPointsFactor(concert.ManagementPoints, concert.MarketingPoints);
             concert.Quality = concertQuality;
+
+            int fansAmount = GetFans();
             
-            float albumListenFactor = GetListenRatio(album.ListenAmount);
             float repeatsDebuff = 1f - (album.ConcertAmounts / 10f);
             float costFactor = 1.5f - (1f * concert.TicketCost / concert.MaxTicketCost);
             
             concert.TicketsSold = CalculateTicketSales(
-                concertQuality, 
+                fansAmount,
+                concertQuality,
+                album.Quality,
                 costFactor, 
                 concert.LocationCapacity,
-                albumListenFactor,
                 repeatsDebuff
             );
         }
@@ -48,21 +50,24 @@ namespace Game.Analyzers
         /// Вычисляет количество продаж на основе качества концерта, кол-ва фанатов и уровня хайпа
         /// </summary>
         private int CalculateTicketSales(
-            float concertQuality, 
+            int fans,
+            float quality, 
+            float albumQuality,
             float costFactor, 
             int capacity,
-            float albumListenFactor,
             float repeatsDebuff
         ) {
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            int activeFansAmount = (int) (GetFans() * GetHypeFactor());
+            int activeFansAmount = Convert.ToInt32(fans * (0.5f + GetHypeFactor()));
 
+            quality = Math.Max(1.0f, quality + Math.Min(0.5f, albumQuality));
+            
             // Количество продаж билетов зависит от: качества концерта, прослушиваний альбома, цены билета и новизны альбома
-            float salesFactor = concertQuality * albumListenFactor * costFactor * repeatsDebuff;
-            activeFansAmount = (int) (activeFansAmount * salesFactor);
+            float salesFactor = quality * costFactor * repeatsDebuff;
+            activeFansAmount = Convert.ToInt32(activeFansAmount * salesFactor);
             
             var sold = Math.Min(activeFansAmount, capacity);
-            return Math.Max(0, sold);
+            return Math.Max(settings.MinTicketsSold, sold);
         }
     }
 }

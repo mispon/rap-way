@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxFans: 500000000
   MaxMoney: 1000000000
-  BaseFans: 5000
+  BaseFans: 100
   TrackWorkDuration: 15
   TrackWorkPointsMax: 230
   TrackHitChance: 0.1
@@ -35,6 +35,7 @@ MonoBehaviour:
   ClipActiveViewers: 0.3
   ClipViewCost: 0.015
   ClipRewardExp: 150
+  MinTicketsSold: 0
   ConcertWorkDuration: 50
   ConcertCooldown: 60
   ConcertWorkPointsMax: 400
@@ -47,37 +48,14 @@ MonoBehaviour:
   SocialsRewardExp: 100
   MinBalanceForCharity: 100
   BattleWorkDuration: 20
-  BattleFansChange:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   BattleWinnerHype: 70
   BattleLoserHype: 25
   BattleRewardExp: 500
-  FansSignificantValue: 10000000
-  MaxFansIncome: 1000000
-  MaxMoneyIncome: 100000
+  MinFansIncome: 10
+  MaxFansIncome: 3000000
+  MinFansForCharts: 150000
+  MinMoneyIncome: 10
+  MaxMoneyIncome: 1000000
   RappersWorkDuration: 30
   FeatWorkDuration: 15
-  MinFansForCharts: 50000
   ManagerCooldown: 30

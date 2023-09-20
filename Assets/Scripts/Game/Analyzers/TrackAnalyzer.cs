@@ -27,15 +27,15 @@ namespace Game.Analyzers
                 track.IsHit = true;
             }
             
-            int featFansAmount = 0;
+            int fansAmount = GetFans();
             if (track.Feat != null)
             {
-                featFansAmount = track.Feat.Fans * 1_000_000;
+                fansAmount += track.Feat.Fans * 1_000_000;
             }
 
             track.ListenAmount = CalculateListensAmount(
-                qualityPoints,
-                featFansAmount, 
+                fansAmount,
+                qualityPoints, 
                 track.TrendInfo.EqualityValue,
                 track.IsHit
             );
@@ -44,10 +44,9 @@ namespace Game.Analyzers
             {
                 track.ChartPosition = CalculateChartPosition();
             }
-
-            var (fans, money) = CalculateIncomes(qualityPoints, track.ListenAmount, settings.TrackListenCost);
-            track.FansIncome = fans;
-            track.MoneyIncome = money;
+            
+            track.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
+            track.MoneyIncome = CalcMoneyIncome(track.ListenAmount, settings.TrackListenCost);
         }
 
         /// <summary>
@@ -86,22 +85,19 @@ namespace Game.Analyzers
         /// Вычисляет количество прослушиваний на основе кол-ва фанатов и уровня хайпа
         /// </summary>
         private int CalculateListensAmount(
-            float trackQuality,
-            int featFansAmount,
+            int fans,
+            float quality,
             float trandsMatchFactor, 
             bool isHit
         ) {
-            int totalFansAmount = GetFans() + featFansAmount;
-            
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            int activeFansAmount = (int) (totalFansAmount * Mathf.Max(0.5f, GetHypeFactor()));
+            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor()));
             
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
-            var listens = (int) (activeFansAmount * (maxFansActivity * trackQuality));
+            float activity = 1.0f + (maxFansActivity * quality);
 
-            // Хайп не только влияет на активность фанатов, но и увеличивает прослушивания
-            listens = (int) (listens * (1f + GetHypeFactor()));
+            int listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
             
             // Попадание в тренды так же увеличивает прослушивания
             listens = (int) (listens * (1f + trandsMatchFactor));
@@ -110,9 +106,8 @@ namespace Game.Analyzers
             {
                 listens *= 5;
             }
-
-            int randomizer = Convert.ToInt32(listens * TEN_PERCENTS);
-            return Random.Range(listens - randomizer, listens + randomizer);
+            
+            return AddFuzzing(listens);
         }
         
         private int CalculateChartPosition()
