@@ -20,6 +20,7 @@ namespace Core
         {
             Debug.Log("Appodeal loaded");
             AppodealCallbacks.RewardedVideo.OnFinished += RewardedVideoFinished;
+            ShowInterstitial();
         }
 
         private void RewardedVideoFinished(object sender, RewardedVideoFinishedEventArgs e)
