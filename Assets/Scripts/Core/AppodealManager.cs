@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using AppodealStack.Monetization.Api;
 using AppodealStack.Monetization.Common;
 using Game;
@@ -19,8 +20,14 @@ namespace Core
         private void OnInitializationFinished(object sender, SdkInitializedEventArgs e)
         {
             Debug.Log("Appodeal is loaded");
-            ShowInterstitial();
+            StartCoroutine(AfterStartRoutine());
             AppodealCallbacks.RewardedVideo.OnFinished += RewardedVideoFinished;
+        }
+
+        private IEnumerator AfterStartRoutine()
+        {
+            yield return new WaitForSeconds(3);
+            ShowInterstitial();
         }
 
         private void RewardedVideoFinished(object sender, RewardedVideoFinishedEventArgs e)
