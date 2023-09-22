@@ -50,7 +50,7 @@ namespace Game.Pages.Social
             SaveResult(_social);
             _social = null;
             
-            AppodealManager.Instance.HideBanner();
+            //AppodealManager.Instance.HideBanner();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Game.Pages.Store
 
         protected override void BeforePageOpen()
         {
-            AppodealManager.Instance.ShowBanner();
+            //AppodealManager.Instance.ShowBanner();
             workStoreItemsController.Initialize(data.WorkTools, newGoodEffect);
             swagStoreItemsController.Initialize(data.Swag, newGoodEffect);
         }
@@ -32,7 +32,7 @@ namespace Game.Pages.Store
         {
             workStoreItemsController.Dispose();
             swagStoreItemsController.Dispose();
-            AppodealManager.Instance.HideBanner();
+            //AppodealManager.Instance.HideBanner();
         }
     }
 }
