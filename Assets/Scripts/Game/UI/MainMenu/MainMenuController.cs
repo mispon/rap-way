@@ -29,6 +29,7 @@ namespace Game.UI.MainMenu
         public void OnStart()
         {
             SetupButtons();
+            CasAdsManager.Instance.ShowInterstitial();
         }
         
         /// <summary>

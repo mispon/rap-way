@@ -32,7 +32,7 @@ namespace Game.Pages.Eagler
         protected override void AfterPageOpen()
         {
             TutorialManager.Instance.ShowTutorial("tutorial_eagler");
-            //AppodealManager.Instance.ShowBanner();
+            CasAdsManager.Instance.ShowBanner();
         }
         
         protected override void AfterPageClose()
@@ -43,7 +43,7 @@ namespace Game.Pages.Eagler
             }
             
             _feedItems.Clear();
-            //AppodealManager.Instance.HideBanner();
+            CasAdsManager.Instance.HideBanner();
         }
     }
 }

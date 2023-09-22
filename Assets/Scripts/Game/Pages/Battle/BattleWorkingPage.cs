@@ -149,7 +149,7 @@ namespace Game.Pages.Battle
 
         protected override void BeforePageOpen()
         {
-            //AppodealManager.Instance.ShowBannerRight();
+            CasAdsManager.Instance.ShowBanner();
             
             playerName.text = PlayerManager.Data.Info.NickName.ToUpper();
             rapperName.text = _rapper.Name;

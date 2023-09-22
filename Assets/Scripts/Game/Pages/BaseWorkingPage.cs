@@ -56,7 +56,7 @@ namespace Game.Pages
 
         protected override void BeforePageOpen()
         {
-            //AppodealManager.Instance.ShowBanner();
+            CasAdsManager.Instance.ShowBanner();
         }
 
         protected override void AfterPageOpen()
@@ -79,7 +79,7 @@ namespace Game.Pages
 
         protected override void AfterPageClose()
         {
-            //AppodealManager.Instance.HideBanner();
+            CasAdsManager.Instance.HideBanner();
         }
     }
 }

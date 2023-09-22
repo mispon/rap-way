@@ -59,7 +59,7 @@ namespace Game.Pages.Personal
         {
             cashButton.onClick.AddListener(() =>
             {
-                //AppodealManager.Instance.ShowRewarded();
+                CasAdsManager.Instance.ShowRewarded();
             });
         }
 
