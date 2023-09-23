@@ -57,9 +57,13 @@ namespace Game
 
         public string GetStoreURL()
         {
-            return Application.platform == RuntimePlatform.IPhonePlayer
-                ? appStoreURL
-                : googlePlayURL;
+#if UNITY_ANDROID
+            return googlePlayURL;
+#elif UNITY_IPHONE
+            return appStoreURL;
+#else
+            return "";
+#endif
         }
 
         /// <summary>
