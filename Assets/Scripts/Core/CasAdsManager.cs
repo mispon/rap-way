@@ -76,7 +76,7 @@ namespace Core
                 if (Application.isPlaying || Application.isFocused)
                 {
                     yield return new WaitForSeconds(300);
-                    ShowInterstitial();    
+                    ShowInterstitial();
                 } else
                 {
                     yield return new WaitForSeconds(10);
