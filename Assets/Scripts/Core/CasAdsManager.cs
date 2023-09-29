@@ -10,7 +10,6 @@ namespace Core
     public class CasAdsManager : Singleton<CasAdsManager>
     {
         private IMediationManager _manager;
-        private IAdView _banner;
         
         public void Start()
         {
@@ -18,8 +17,6 @@ namespace Core
             MobileAds.settings.allowInterstitialAdsWhenVideoCostAreLower = true;
             
             _manager = GetAdManager();
-            _banner = _manager.GetAdView(AdSize.ThinBanner);
-            
             _manager.OnRewardedAdCompleted += OnRewardedAdCompleted;
             
             StartCoroutine(ShowInterstitialLoop());
@@ -50,18 +47,23 @@ namespace Core
 
         public void ShowInterstitial()
         {
+            bool adLoaded = _manager.IsReadyAd(AdType.Interstitial);
+            if (!adLoaded)
+            {
+                _manager.LoadAd(AdType.Interstitial);
+            }
+            
             _manager.ShowAd(AdType.Interstitial);
         }
         
         public void ShowBanner()
         {
-            _banner.position = AdPosition.BottomCenter;
-            _banner.SetActive(true);
+            // do nothing
         }
 
         public void HideBanner()
         {
-            _banner.SetActive(false);
+           // do nothing
         }
         
         public void ShowRewarded()

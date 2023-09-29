@@ -36,7 +36,7 @@ namespace Utils
             
             new NativeShare().AddFile(filePath)
                 .SetSubject("Rap Way")
-                .SetText($"{message} ${GameManager.Instance.GetStoreURL()}")
+                .SetText($"{message} {GameManager.Instance.GetStoreURL()}")
                 .Share();
         }
     }
