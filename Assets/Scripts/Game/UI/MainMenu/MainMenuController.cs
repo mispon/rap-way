@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Interfaces;
+using Game.Pages.AskReview;
 using Models.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,9 @@ namespace Game.UI.MainMenu
         [SerializeField] private GameObject newPlayerPanel;
         [SerializeField] private GameObject settingsPanel;
         [SerializeField] private GameObject aboutPanel;
+        [Space]
+        [SerializeField] private AskReviewPage reviewPage;
+        
         
         [Header("CanvasGroup")] 
         [SerializeField] private CanvasGroupController menuCanvasGroupController;
@@ -29,7 +33,14 @@ namespace Game.UI.MainMenu
         public void OnStart()
         {
             SetupButtons();
-            CasAdsManager.Instance.ShowInterstitial();
+
+            if (!GameManager.Instance.GameStats.AskedReview && GameManager.Instance.PlayerData.Fans > 0)
+            {
+                reviewPage.Open();
+            } else
+            {
+                CasAdsManager.Instance.ShowInterstitial();
+            }
         }
         
         /// <summary>

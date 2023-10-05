@@ -17,6 +17,7 @@ namespace Models.Game
         public Trends Trends;
         public int SocialsCooldown;
         public int ConcertCooldown;
+        public bool AskedReview;
         
         /// <summary>
         /// Настройки игры
