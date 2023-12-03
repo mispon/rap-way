@@ -27,6 +27,7 @@ namespace Game.Pages.Rappers
         [SerializeField] private Button deleteButton;
         [Space]
         [SerializeField] private Text fans;
+        [SerializeField] private Text label;
 
         [Header("Страницы")]
         [SerializeField] private RappersPage rappersPage;
@@ -61,7 +62,6 @@ namespace Game.Pages.Rappers
         {
             SoundManager.Instance.PlayClick();
             onDelete.Invoke(_rapper);
-            gameObject.SetActive(false);
         }
         
         /// <summary>
@@ -90,6 +90,7 @@ namespace Game.Pages.Rappers
             bitmaking.text = info.Bitmaking.ToString();
             management.text = info.Management.ToString();
             fans.text = $"{info.Fans}M";
+            label.text = info.Label != "" ? info.Label : "-";
         }
 
         /// <summary>

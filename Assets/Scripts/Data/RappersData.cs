@@ -16,8 +16,9 @@ namespace Data
     [Serializable]
     public class RapperInfo
     {
-        public string Name;
         public int Id;
+        public string Name;
+        public string Label;
         public Sprite Avatar;
         public int Fans;
         public int Vocobulary;

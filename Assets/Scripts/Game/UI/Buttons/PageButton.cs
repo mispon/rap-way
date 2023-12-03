@@ -46,7 +46,6 @@ namespace Game.UI.Buttons
             }
             else
             {
-                //AppodealManager.Instance.HideBanner();
                 page.Close();
             }
         }
