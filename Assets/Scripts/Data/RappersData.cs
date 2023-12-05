@@ -25,5 +25,6 @@ namespace Data
         public int Bitmaking;
         public int Management;
         public bool IsCustom;
+        public bool IsPlayer;
     }
 }

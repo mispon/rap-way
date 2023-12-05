@@ -16,7 +16,6 @@ namespace Core
         {
             if (TimeManager.Instance.Now.Month % adsFrequency == 0)
             {
-                //AppodealManager.Instance.ShowInterstitial();
             }
         }
     }

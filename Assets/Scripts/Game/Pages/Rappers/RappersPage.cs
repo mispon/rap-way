@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
@@ -14,8 +13,6 @@ namespace Game.Pages.Rappers
     /// </summary>
     public class RappersPage : Page
     {
-        [Header("Данные об исполнителях")]
-        [SerializeField] private RappersData data;
         [Space]
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
@@ -60,19 +57,20 @@ namespace Game.Pages.Rappers
         /// <summary>
         /// Returns all rappers (internal and custom) sorted desc by fans count
         /// </summary>
-        private List<RapperInfo> GetAllRappers()
+        private static List<RapperInfo> GetAllRappers()
         {
-            int rappersTotal = data.Rappers.Count + GameManager.Instance.CustomRappers.Count;
-            var allRappers = new List<RapperInfo>(rappersTotal);
-                
-            foreach (var rapperInfo in data.Rappers)
+            var allRappers = RappersManager.Instance.GetAllRappers().ToList();
+            
+            allRappers.Add(new RapperInfo
             {
-                allRappers.Add(rapperInfo);
-            }
-            foreach (var rapperInfo in GameManager.Instance.CustomRappers)
-            {
-                allRappers.Add(rapperInfo);
-            }
+                Name = PlayerManager.Data.Info.NickName,
+                Fans = PlayerManager.Data.Fans / 1_000_000,
+                Vocobulary = PlayerManager.Data.Stats.Vocobulary.Value,
+                Bitmaking = PlayerManager.Data.Stats.Bitmaking.Value,
+                Management = PlayerManager.Data.Stats.Management.Value,
+                Label = "",
+                IsPlayer = true
+            });
 
             return allRappers.OrderByDescending(r => r.Fans).ToList();
         }

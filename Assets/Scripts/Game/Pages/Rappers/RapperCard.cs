@@ -14,6 +14,8 @@ namespace Game.Pages.Rappers
     {
         [Header("Поля информации репера")]
         [SerializeField] private Sprite customImage;
+        [SerializeField] private Sprite playerMaleImage;
+        [SerializeField] private Sprite playerFemaleImage;
         [SerializeField] private Image avatar;
         [SerializeField] private Text nickname;
         [Space]
@@ -84,13 +86,28 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void DisplayInfo(RapperInfo info)
         {
-            avatar.sprite = info.IsCustom ? customImage : info.Avatar; 
+            avatar.sprite = GetAvatar(info);
             nickname.text = info.Name;
             vocobulary.text = info.Vocobulary.ToString();
             bitmaking.text = info.Bitmaking.ToString();
             management.text = info.Management.ToString();
             fans.text = $"{info.Fans}M";
             label.text = info.Label != "" ? info.Label : "-";
+            
+            featButton.gameObject.SetActive(!info.IsPlayer);
+            battleButton.gameObject.SetActive(!info.IsPlayer);
+        }
+
+        private Sprite GetAvatar(RapperInfo info)
+        {
+            if (info.IsPlayer)
+            {
+                return PlayerManager.Data.Info.Gender == Gender.Male
+                    ? playerMaleImage
+                    : playerFemaleImage;
+            }
+            
+            return info.IsCustom || info.Avatar == null ? customImage : info.Avatar;
         }
 
         /// <summary>

@@ -129,6 +129,7 @@ Transform:
   - {fileID: 5293382500688123559}
   - {fileID: 1071507804230557114}
   - {fileID: 5422718150710687346}
+  - {fileID: 5014948586328903758}
   - {fileID: 2442274176063737926}
   - {fileID: 7548360988537913298}
   - {fileID: 631926535046156863}
@@ -492,6 +493,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroy: 0
   data: {fileID: 11400000, guid: 1137433b7a773d34b93410050ff4d688, type: 2}
+--- !u!1 &6485806368264999836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5014948586328903758}
+  - component: {fileID: 8468719038176704519}
+  m_Layer: 0
+  m_Name: RappersManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5014948586328903758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6485806368264999836}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1929117383248465391}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8468719038176704519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6485806368264999836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc907a12c624ca7a4a229325261ba93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0
+  fanUpdateFrequency: 2
+  data: {fileID: 11400000, guid: 4827d9250d9d42f499978cab5f09b8fd, type: 2}
 --- !u!1 &7170994580708335421
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,4 +723,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02ac98ece30ce014b8b3d617353e3ccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adsFrequency: 6
+  adsFrequency: 4

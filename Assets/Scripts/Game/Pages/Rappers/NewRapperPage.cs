@@ -120,9 +120,7 @@ namespace Game.Pages.Rappers
                 return;
             }
 
-            int lastId = GameManager.Instance.CustomRappers.Count > 0 
-                ? GameManager.Instance.CustomRappers.Max(r => r.Id)
-                : rappersData.Rappers.Max(r => r.Id);
+            int lastId = RappersManager.Instance.MaxCustomRapperID();
             
             var customRapper = new RapperInfo
             {

@@ -1,3 +1,4 @@
+using Core.Interfaces;
 using Game;
 using Game.Pages.Tutorial;
 using Localization;
@@ -6,11 +7,11 @@ using Utils;
 
 namespace Core
 {
-    public class TutorialManager : Singleton<TutorialManager>
+    public class TutorialManager : Singleton<TutorialManager>, IStarter
     {
         [SerializeField] private TutorialPage page;
         
-        private void Start()
+        public void OnStart()
         {
             ShowTutorial("tutorial_on_start");
         }

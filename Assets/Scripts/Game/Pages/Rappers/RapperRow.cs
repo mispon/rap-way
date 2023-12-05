@@ -27,7 +27,6 @@ namespace Game.Pages.Rappers
         
         private RectTransform _rectTransform;
 
-        public int Id => _rapperInfo.Id;
         private int _index { get; set; }
         private float _height { get; set; }
         
