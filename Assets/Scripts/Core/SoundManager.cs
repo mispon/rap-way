@@ -21,7 +21,8 @@ namespace Core
         [SerializeField] private AudioClip switcher;
         [SerializeField] private AudioClip workPoint;
         [SerializeField] private AudioClip unlock;
-        [SerializeField] private AudioClip achive;
+        [SerializeField] private AudioClip achieve;
+        [SerializeField] private AudioClip gameEnd;
         
         /// <summary>
         /// Устанавливает значения из настроек 
@@ -61,7 +62,8 @@ namespace Core
         public void PlaySwitch() => PlaySound(switcher);
         public void PlayWorkPoint() => PlaySound(workPoint);
         public void PlayUnlock() => PlaySound(unlock);
-        public void PlayAchieve() => PlaySound(achive);
+        public void PlayAchieve() => PlaySound(achieve);
+        public void PlayGameEnd() => PlaySound(gameEnd);
 
         #endregion
     }
