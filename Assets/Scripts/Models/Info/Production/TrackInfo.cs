@@ -31,7 +31,7 @@ namespace Models.Info.Production
         };
         
         public override string GetLog() {
-            return $"{Timestamp}: Завершил работу над треком {Name}";
+            return $"{Timestamp}: {LocalizationManager.Instance.Get("log_track")} {Name}";
         }
     }
 }

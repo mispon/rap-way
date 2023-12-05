@@ -24,7 +24,7 @@ namespace Models.Info.Production
         };
 
         public override string GetLog() {
-            return $"{Timestamp}: Завершил работу над альбомом {Name}";
+            return $"{Timestamp}: {LocalizationManager.Instance.Get("log_album")} {Name}";
         }
     }
 }

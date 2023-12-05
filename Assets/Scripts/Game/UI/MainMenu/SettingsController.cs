@@ -99,6 +99,8 @@ namespace Game.UI.MainMenu
                     return GameLang.IT;
                 case "ES":
                     return GameLang.ES;
+                case "PT":
+                    return GameLang.PT;
                 default:
                     throw new RapWayException($"StringToLang: Не найден матчинг для {value}!");
             }

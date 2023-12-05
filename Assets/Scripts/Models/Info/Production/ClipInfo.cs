@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Localization;
 using Utils.Extensions;
 
 namespace Models.Info.Production
@@ -32,7 +33,7 @@ namespace Models.Info.Production
 
         public override string GetLog() {
             string trackName = ProductionManager.GetTrackName(TrackId);
-            return $"{Timestamp}: Завершил съемку клипа на трек {trackName}";
+            return $"{Timestamp}: {LocalizationManager.Instance.Get("log_clip")} {trackName}";
         }
     }
 }

@@ -17,7 +17,8 @@ namespace Localization
         DE,
         FR,
         IT,
-        ES
+        ES,
+        PT
     }
 
     /// <summary>
@@ -188,6 +189,8 @@ namespace Localization
                     return "it.json";
                 case GameLang.ES:
                     return "es.json";
+                case GameLang.PT:
+                    return "pt.json";
                 default:
                     throw new RapWayException($"Неизвестное значение языка: {lang}!");
             }

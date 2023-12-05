@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Localization;
 using Utils.Extensions;
 
 namespace Models.Info.Production
@@ -34,7 +35,7 @@ namespace Models.Info.Production
         };
         
         public override string GetLog() {
-            return $"{Timestamp}: Провёл концерт на площадке \"{LocationName}\"";
+            return $"{Timestamp}: {LocalizationManager.Instance.Get("log_concert")} \"{LocationName}\"";
         }
     }
 }
