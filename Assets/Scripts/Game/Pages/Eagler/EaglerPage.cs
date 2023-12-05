@@ -32,7 +32,6 @@ namespace Game.Pages.Eagler
         protected override void AfterPageOpen()
         {
             TutorialManager.Instance.ShowTutorial("tutorial_eagler");
-            CasAdsManager.Instance.ShowBanner();
         }
         
         protected override void AfterPageClose()
@@ -43,7 +42,6 @@ namespace Game.Pages.Eagler
             }
             
             _feedItems.Clear();
-            CasAdsManager.Instance.HideBanner();
         }
     }
 }

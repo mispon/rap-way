@@ -2,6 +2,7 @@ using System;
 using Core;
 using Data;
 using Enums;
+using Game.Pages.Charts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,8 @@ namespace Game.Pages.Rappers
     {
         [Header("Поля информации репера")]
         [SerializeField] private Sprite customImage;
+        [SerializeField] private Sprite playerMaleImage;
+        [SerializeField] private Sprite playerFemaleImage;
         [SerializeField] private Image avatar;
         [SerializeField] private Text nickname;
         [Space]
@@ -27,8 +30,10 @@ namespace Game.Pages.Rappers
         [SerializeField] private Button deleteButton;
         [Space]
         [SerializeField] private Text fans;
+        [SerializeField] private Text label;
 
         [Header("Страницы")]
+        [SerializeField] private ChartsPage chartsPage;
         [SerializeField] private RappersPage rappersPage;
         [SerializeField] private RapperWorkingPage workingPage;
 
@@ -55,13 +60,13 @@ namespace Game.Pages.Rappers
             PlayerManager.SetTeammateCooldown(TeammateType.Manager, GameManager.Instance.Settings.ManagerCooldown);
             workingPage.StartWork(_rapper, isFeat);
             rappersPage.Close();
+            chartsPage.Hide();
         }
 
         private void DeleteRapper()
         {
             SoundManager.Instance.PlayClick();
             onDelete.Invoke(_rapper);
-            gameObject.SetActive(false);
         }
         
         /// <summary>
@@ -84,12 +89,28 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void DisplayInfo(RapperInfo info)
         {
-            avatar.sprite = info.IsCustom ? customImage : info.Avatar; 
+            avatar.sprite = GetAvatar(info);
             nickname.text = info.Name;
             vocobulary.text = info.Vocobulary.ToString();
             bitmaking.text = info.Bitmaking.ToString();
             management.text = info.Management.ToString();
             fans.text = $"{info.Fans}M";
+            label.text = info.Label != "" ? info.Label : "-";
+            
+            featButton.gameObject.SetActive(!info.IsPlayer);
+            battleButton.gameObject.SetActive(!info.IsPlayer);
+        }
+
+        private Sprite GetAvatar(RapperInfo info)
+        {
+            if (info.IsPlayer)
+            {
+                return PlayerManager.Data.Info.Gender == Gender.Male
+                    ? playerMaleImage
+                    : playerFemaleImage;
+            }
+            
+            return info.IsCustom || info.Avatar == null ? customImage : info.Avatar;
         }
 
         /// <summary>

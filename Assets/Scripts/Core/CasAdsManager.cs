@@ -56,16 +56,6 @@ namespace Core
             _manager.ShowAd(AdType.Interstitial);
         }
         
-        public void ShowBanner()
-        {
-            // do nothing
-        }
-
-        public void HideBanner()
-        {
-           // do nothing
-        }
-        
         public void ShowRewarded()
         {
             _manager.ShowAd(AdType.Rewarded);

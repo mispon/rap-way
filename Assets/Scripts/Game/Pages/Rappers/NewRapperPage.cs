@@ -1,6 +1,7 @@
 using System.Linq;
 using Core;
 using Data;
+using Game.Pages.Charts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,12 +9,14 @@ namespace Game.Pages.Rappers
 {
     public class NewRapperPage : Page
     {
-        [SerializeField] private RappersGrid grid;
-        [SerializeField] private int minRapperId;
+        [SerializeField] private RappersData rappersData;
+        [SerializeField] private RappersPage rappersPage;
+        [SerializeField] private ChartsPage chartsPage;
         
         [Space]
         [Header("Ввод имени")]
         [SerializeField] private InputField nameInput;
+        [SerializeField] private InputField labelInput;
         [Header("Ввод словарного запаса")]
         [SerializeField] private Button vocabularyBtnLeft;
         [SerializeField] private Button vocabularyBtnRight;
@@ -30,12 +33,15 @@ namespace Game.Pages.Rappers
         [SerializeField] private Button fansBtnLeft;
         [SerializeField] private Button fansBtnRight;
         [SerializeField] private Text fansValue;
-        [Header("Кнопка создания")]
+        
+        [Space]
         [SerializeField] private Button createButton;
+        [SerializeField] private Button backButton;
 
         private void Start()
         {
             createButton.onClick.AddListener(CreateButtonClick);
+            backButton.onClick.AddListener(BackButtonClick);
             
             vocabularyBtnLeft.onClick.AddListener(() => OnBntLeftClick(vocabularyValue));
             vocabularyBtnRight.onClick.AddListener(() => OnBntRightClick(vocabularyValue, 10));
@@ -47,16 +53,25 @@ namespace Game.Pages.Rappers
             managementBtnRight.onClick.AddListener(() => OnBntRightClick(managementValue, 10));
             
             fansBtnLeft.onClick.AddListener(() => OnBntLeftClick(fansValue));
-            fansBtnRight.onClick.AddListener(() => OnBntRightClick(fansValue, 50));
+            fansBtnRight.onClick.AddListener(() => OnBntRightClick(fansValue, 150));
         }
 
         protected override void BeforePageOpen()
         {
             nameInput.text = "";
+            labelInput.text = "";
+            chartsPage.Hide();
         }
-        
+
+        protected override void AfterPageClose()
+        {
+            chartsPage.Show();
+        }
+
         private static void OnBntLeftClick(Text value)
         {
+            SoundManager.Instance.PlaySwitch();
+            
             var current = int.Parse(value.text);
             if (current == 1)
             {
@@ -69,6 +84,8 @@ namespace Game.Pages.Rappers
         
         private static void OnBntRightClick(Text value, int maxValue)
         {
+            SoundManager.Instance.PlaySwitch();
+            
             var current = int.Parse(value.text);
             if (current == maxValue)
             {
@@ -81,23 +98,27 @@ namespace Game.Pages.Rappers
         
         private void CreateButtonClick()
         {
-            SoundManager.Instance.PlayClick();
-            
             var nickname = nameInput.text;
             if (nickname.Length is < 3 or > 20)
             {
                 HighlightError(nameInput);
                 return;
             }
+            
+            var label = labelInput.text;
+            if (label.Length is < 3 or > 20)
+            {
+                HighlightError(nameInput);
+                return;
+            }
 
-            int lastId = GameManager.Instance.CustomRappers.Count > 0 
-                ? GameManager.Instance.CustomRappers.Max(r => r.Id)
-                : minRapperId;
+            int lastId = RappersManager.Instance.MaxCustomRapperID();
             
             var customRapper = new RapperInfo
             {
                 Id = lastId + 1,
                 Name = nickname,
+                Label = label,
                 Vocobulary = int.Parse(vocabularyValue.text),
                 Bitmaking = int.Parse(bitmakingValue.text),
                 Management = int.Parse(managementValue.text),
@@ -106,8 +127,13 @@ namespace Game.Pages.Rappers
             }; 
             
             GameManager.Instance.CustomRappers.Add(customRapper);
-            grid.CreateItem(customRapper);
-            
+            BackButtonClick();
+        }
+
+        private void BackButtonClick()
+        {
+            SoundManager.Instance.PlayClick();
+            rappersPage.Open();
             Close();
         }
         

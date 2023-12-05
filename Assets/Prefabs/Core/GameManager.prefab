@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1139880956695562372}
   - component: {fileID: 6108130984381607496}
   - component: {fileID: 6495241212439587856}
+  - component: {fileID: 540135372571015710}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -137,9 +138,11 @@ MonoBehaviour:
       Style: 0
     SocialsCooldown: 0
     ConcertCooldown: 0
+    AskedReview: 0
     Lang: 0
     SoundVolume: 0
     MusicVolume: 0
+  Rappers: []
   CustomRappers: []
   Eagles: []
 --- !u!114 &1139880956695562372
@@ -154,18 +157,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad719046e3b49feadd469addf42bd50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroy: 0
+  dontDestroy: 1
   ambient: {fileID: 6933188627971580042}
   sfx: {fileID: 3257084815037981546}
-  click: {fileID: 8300000, guid: ca6774ebf85d836468ba496981a6d97c, type: 3}
-  train: {fileID: 8300000, guid: 1b9090398b4701f4bbd51448459f5ba2, type: 3}
-  pay: {fileID: 8300000, guid: 5fb2ab4dbe8a4fa45b93a20c1cf3bb01, type: 3}
-  levelUp: {fileID: 8300000, guid: 06ca0946ac461e347a684c5a11117949, type: 3}
-  notify: {fileID: 8300000, guid: 128e16c854789a8448b0d09cc1565c03, type: 3}
-  switcher: {fileID: 8300000, guid: 24aaa52ac5429bf429eb91b511598e0c, type: 3}
-  workPoint: {fileID: 8300000, guid: 07d45daddf52f2b47a5cb52b6fba3988, type: 3}
-  unlock: {fileID: 8300000, guid: c9a6241ed5a3abf41ae31b1f25cf85ee, type: 3}
-  achive: {fileID: 8300000, guid: 127a1577efa38cc49ac3b0366e02873c, type: 3}
+  click: {fileID: 8300000, guid: 8cb6302841293b94ca332e892b75f54e, type: 3}
+  train: {fileID: 8300000, guid: aff43848949f92c4088aea1d42c198c2, type: 3}
+  pay: {fileID: 8300000, guid: 603813a6cc5f42a4c9f8bcdaa3cf5ae0, type: 3}
+  levelUp: {fileID: 8300000, guid: 7c181680cf7aec4499ac76d0cdd1f019, type: 3}
+  notify: {fileID: 8300000, guid: 176501a4993f89544a826d3b10605c32, type: 3}
+  switcher: {fileID: 8300000, guid: 88ac92321ceba5b4fbe76c10201ffc52, type: 3}
+  workPoint: {fileID: 8300000, guid: 8cb6302841293b94ca332e892b75f54e, type: 3}
+  unlock: {fileID: 8300000, guid: b35fb26303602a64fa5301f9f2d0244c, type: 3}
+  achieve: {fileID: 8300000, guid: da7753d50ee447743bbcac184e2a4bcb, type: 3}
+  gameEnd: {fileID: 8300000, guid: 3749880eecd83f04ea358fbe209452c9, type: 3}
 --- !u!114 &6108130984381607496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +200,19 @@ MonoBehaviour:
   dontDestroy: 0
   _data:
     items: []
+--- !u!114 &540135372571015710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6495241212439587857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7262b48d84ce842989867d55985c49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0
 --- !u!1 &8267020499360937889
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,7 +255,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: defc9f34ba3b00844a724ece5dd6fe82, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 4159c8aca9026764eb33fe2bdf72dc2f, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
@@ -374,7 +391,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

@@ -46,7 +46,6 @@ namespace Game.UI.Buttons
             }
             else
             {
-                CasAdsManager.Instance.HideBanner();
                 page.Close();
             }
         }

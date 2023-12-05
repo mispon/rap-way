@@ -18,6 +18,7 @@ namespace Game
     {
         public PlayerData PlayerData;
         public GameStats GameStats;
+        public RapperInfo[] Rappers;
         public RapperInfo[] CustomRappers;
         public Eagle[] Eagles;
         public string[] ShowedTutorials;
@@ -40,6 +41,7 @@ namespace Game
         [Header("GAME STATE")]
         public PlayerData PlayerData;
         public GameStats GameStats;
+        public List<RapperInfo> Rappers;
         public List<RapperInfo> CustomRappers;
         public List<Eagle> Eagles;
         public HashSet<string> ShowedTutorials;
@@ -94,6 +96,7 @@ namespace Game
             {
                 PlayerData = PlayerData.New,
                 GameStats = GameStats.New,
+                Rappers = Array.Empty<RapperInfo>(),
                 CustomRappers = Array.Empty<RapperInfo>(),
                 Eagles = Array.Empty<Eagle>(),
                 ShowedTutorials = Array.Empty<string>()
@@ -101,6 +104,7 @@ namespace Game
             
             PlayerData = gameData.PlayerData;
             GameStats = gameData.GameStats;
+            Rappers = gameData.Rappers?.ToList() ?? new List<RapperInfo>(0);
             CustomRappers = gameData.CustomRappers.ToList();
             Eagles = gameData.Eagles.ToList();
             ShowedTutorials = gameData.ShowedTutorials.ToHashSet();
@@ -120,6 +124,7 @@ namespace Game
             {
                 PlayerData = PlayerData,
                 GameStats = GameStats,
+                Rappers = Rappers?.ToArray() ?? Array.Empty<RapperInfo>(),
                 CustomRappers = CustomRappers.ToArray(),
                 Eagles = Eagles.Take(20).ToArray(),
                 ShowedTutorials = ShowedTutorials.ToArray()

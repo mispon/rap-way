@@ -23,9 +23,11 @@ namespace Data
         public void Initialize()
         {
             foreach (var info in Infos)
+            {
                 info.Achievement.Unlocked = PlayerManager.Data.Achievements.Any(ach => ach == info.Achievement);
+            }
 
-            var lockedInfos = LockedInfos;
+            var lockedInfos = LockedInfos.ToList();
 
             lockedInfos.SetCondition(AchievementsType.Fans, OverflowConditionFunction);
             lockedInfos.SetCondition(AchievementsType.Money, OverflowConditionFunction);
@@ -44,20 +46,26 @@ namespace Data
         /// Проверка достижения порога
         /// </summary>
         private static bool OverflowConditionFunction(int inputValue, int achievementValue)
-            => inputValue >= achievementValue;
-   
+        {
+            return inputValue >= achievementValue;   
+        }
+
         /// <summary>
         /// Проверка попадания ниже границы
         /// </summary>
         private static bool ChartPositionConditionFunction(int inputValue, int achievementValue)
-            => inputValue <= achievementValue;
-        
+        {
+            return inputValue <= achievementValue;
+        }
+
         /// <summary>
         /// Проверка на соответсвие.
         /// В случае Концерта, Фита и Баттла передаем индекс Площадки/Репера в каком-либо перечислении
         /// </summary>
         private static bool EqualConditionFunction(int inputValue, int achievementValue)
-            => achievementValue == inputValue;
+        {
+            return achievementValue == inputValue;
+        }
     }
 
     /// <summary>
@@ -79,12 +87,19 @@ namespace Data
 
     public static partial class Extensions
     {
-        public static void SetCondition(this IEnumerable<AchievementInfo> infos, AchievementsType type,
-            Func<int, int, bool> conditionFunc)
-        {
-            var typedInfos = infos.Where(info => info.Achievement.Type == type);
+        public static void SetCondition(
+            this IEnumerable<AchievementInfo> infos, 
+            AchievementsType type,
+            Func<int, int, bool> conditionFunc
+        ) {
+            var typedInfos = infos
+                .Where(info => info.Achievement.Type == type)
+                .ToList();
+            
             foreach (var info in typedInfos)
+            {
                 info.CheckCondition = conditionFunc;
+            }
         }
     }
 }

@@ -45,5 +45,5 @@ namespace Utils
             var singleton = new GameObject($"{nameof(T)} (Singleton)");
             return singleton.AddComponent<T>();
         }
-    }
+    } 
 }

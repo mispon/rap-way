@@ -1,6 +1,7 @@
 using Core;
 using Data;
 using Game.Pages.Battle;
+using Game.Pages.Charts;
 using Game.Pages.Feat;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,8 @@ namespace Game.Pages.Rappers
         [SerializeField] private Button nextButton;
 
         [Header("Страницы")]
+        [SerializeField] private ChartsPage chartsPage;
+        [SerializeField] private RappersPage rappersPage;
         [SerializeField] private FeatSettingsPage featPage;
         [SerializeField] private BattleWorkingPage battlePage;
 
@@ -84,6 +87,7 @@ namespace Game.Pages.Rappers
             else
                 battlePage.StartWork(_rapper);
             
+            chartsPage.Close();
             Close();
         }
 
@@ -98,6 +102,10 @@ namespace Game.Pages.Rappers
         private void OnClose()
         {
             SoundManager.Instance.PlayClick();
+            
+            rappersPage.Open();
+            chartsPage.Show();
+            
             Close();
         }
     }

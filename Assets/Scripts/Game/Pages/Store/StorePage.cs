@@ -23,7 +23,6 @@ namespace Game.Pages.Store
 
         protected override void BeforePageOpen()
         {
-            CasAdsManager.Instance.ShowBanner();
             workStoreItemsController.Initialize(data.WorkTools, newGoodEffect);
             swagStoreItemsController.Initialize(data.Swag, newGoodEffect);
         }
@@ -32,7 +31,6 @@ namespace Game.Pages.Store
         {
             workStoreItemsController.Dispose();
             swagStoreItemsController.Dispose();
-            CasAdsManager.Instance.HideBanner();
         }
     }
 }

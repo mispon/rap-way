@@ -73,7 +73,7 @@ namespace Game.UI.GameScreen
                 ? maleIcon
                 : femaleIcon;
             playerNickname.text = playerData.Info.NickName.ToUpper();
-            playerMoney.text = playerData.Money.GetMoney();
+            playerMoney.text = $"{playerData.Money.GetMoney()}";
             playerFans.text = playerData.Fans.GetDisplay();
             playerHype.text = playerData.Hype.ToString();
             currentDate.text = TimeManager.Instance.DisplayNow;

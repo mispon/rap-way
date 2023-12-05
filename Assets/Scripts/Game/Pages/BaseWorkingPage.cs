@@ -53,12 +53,7 @@ namespace Game.Pages
                 anim.Refresh();
             }
         }
-
-        protected override void BeforePageOpen()
-        {
-            CasAdsManager.Instance.ShowBanner();
-        }
-
+        
         protected override void AfterPageOpen()
         {
             TimeManager.Instance.onDayLeft += OnDayLeft;
@@ -75,11 +70,6 @@ namespace Game.Pages
             TimeManager.Instance.ResetActionMode();
             
             progressBar.onFinish -= FinishWork;
-        }
-
-        protected override void AfterPageClose()
-        {
-            CasAdsManager.Instance.HideBanner();
         }
     }
 }

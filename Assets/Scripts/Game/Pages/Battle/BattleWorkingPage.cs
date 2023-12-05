@@ -149,10 +149,10 @@ namespace Game.Pages.Battle
 
         protected override void BeforePageOpen()
         {
-            CasAdsManager.Instance.ShowBanner();
-            
             playerName.text = PlayerManager.Data.Info.NickName.ToUpper();
             rapperName.text = _rapper.Name;
+
+            _playerPoints = _rapperPoints = 0;
             playerPointsLabel.text = "0";
             rapperPointsLabel.text = "0";
 

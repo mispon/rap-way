@@ -49,8 +49,6 @@ namespace Game.Pages.Social
         {
             SaveResult(_social);
             _social = null;
-            
-            CasAdsManager.Instance.HideBanner();
         }
     }
 }

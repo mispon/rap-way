@@ -115,7 +115,7 @@ namespace Core.Settings
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int FeatWorkDuration;
         [Space]
-        [Range(1, 30), Tooltip("Длительность отдыха менеджера, дни")]
+        [Range(1, 100), Tooltip("Длительность отдыха менеджера, дни")]
         public int ManagerCooldown;
     }
 }
