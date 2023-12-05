@@ -2,6 +2,7 @@ using System;
 using Core;
 using Data;
 using Enums;
+using Game.Pages.Charts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +33,7 @@ namespace Game.Pages.Rappers
         [SerializeField] private Text label;
 
         [Header("Страницы")]
+        [SerializeField] private ChartsPage chartsPage;
         [SerializeField] private RappersPage rappersPage;
         [SerializeField] private RapperWorkingPage workingPage;
 
@@ -58,6 +60,7 @@ namespace Game.Pages.Rappers
             PlayerManager.SetTeammateCooldown(TeammateType.Manager, GameManager.Instance.Settings.ManagerCooldown);
             workingPage.StartWork(_rapper, isFeat);
             rappersPage.Close();
+            chartsPage.Hide();
         }
 
         private void DeleteRapper()

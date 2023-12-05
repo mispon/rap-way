@@ -66,8 +66,8 @@ namespace Core
         /// </summary>
         private void UpdateCustomRappersIDs()
         {
-            var id = _rappers.Max(e => e.Id);
-
+            int id = _rappers.Max(e => e.Id);
+            
             foreach (var rapperInfo in _customRappers)
             {
                 id++;
@@ -109,14 +109,14 @@ namespace Core
 
         public IEnumerable<RapperInfo> GetAllRappers()
         {
+            var spitesMap = data.Rappers.ToDictionary(k => k.Id, v => v.Avatar);
+            
             foreach (var rapperInfo in _rappers)
             {
-                var rapper = data.Rappers.FirstOrDefault(e => e.Id == rapperInfo.Id);
-                if (rapper != null)
+                if (spitesMap.TryGetValue(rapperInfo.Id, out var avatar))
                 {
-                    rapperInfo.Avatar = rapper.Avatar;
+                    rapperInfo.Avatar = avatar;
                 }
-                
                 yield return rapperInfo;
             }
             

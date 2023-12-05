@@ -14,6 +14,11 @@ namespace Game.Pages
         protected GameSettings settings => GameManager.Instance.Settings;
 
         /// <summary>
+        /// Checks page open or not 
+        /// </summary>
+        public bool IsOpen() => _isOpen;
+        
+        /// <summary>
         /// Открывает страницу
         /// </summary>
         public void Open()

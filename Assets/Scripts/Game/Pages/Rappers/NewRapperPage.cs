@@ -1,6 +1,7 @@
 using System.Linq;
 using Core;
 using Data;
+using Game.Pages.Charts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,9 +11,7 @@ namespace Game.Pages.Rappers
     {
         [SerializeField] private RappersData rappersData;
         [SerializeField] private RappersPage rappersPage;
-
-        [Space]
-        [SerializeField] private GameObject[] mainPageControls;
+        [SerializeField] private ChartsPage chartsPage;
         
         [Space]
         [Header("Ввод имени")]
@@ -61,19 +60,12 @@ namespace Game.Pages.Rappers
         {
             nameInput.text = "";
             labelInput.text = "";
-            
-            foreach (var go in mainPageControls)
-            {
-                go.SetActive(false);
-            }
+            chartsPage.Hide();
         }
 
         protected override void AfterPageClose()
         {
-            foreach (var go in mainPageControls)
-            {
-                go.SetActive(true);
-            }
+            chartsPage.Show();
         }
 
         private static void OnBntLeftClick(Text value)

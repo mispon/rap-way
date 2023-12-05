@@ -5,6 +5,8 @@ namespace Game.Pages.Charts
 {
     public class ChartsPage : Page
     {
+        [SerializeField] private GameObject[] pageControls;
+        [Space]
         [SerializeField] private Button rappersTabButton;
         [SerializeField] private Button labelsTabButton;
         [Space]
@@ -14,29 +16,44 @@ namespace Game.Pages.Charts
         [Space]
         [SerializeField] private Color activeTabColor;
         [SerializeField] private Color inactiveTabColor;
-        
-        private bool _isRappersTabOpened;
-        
+
         private void Start()
         {
             rappersTabButton.onClick.AddListener(OpenRappersTab);
             labelsTabButton.onClick.AddListener(OpenLabelsTab);
         }
 
+        public void Show()
+        {
+            foreach (var go in pageControls)
+            {
+                go.SetActive(true);
+            }
+        }
+        
+        public void Hide()
+        {
+            foreach (var go in pageControls)
+            {
+                go.SetActive(false);
+            }
+        }
+
         protected override void AfterPageOpen()
         {
+            Show();
             base.AfterPageOpen();
             OpenRappersTab();
         }
 
         private void OpenRappersTab()
         {
-            if (_isRappersTabOpened) {
+            if (rappersTab.IsOpen())
+            {
                 return;
             }
-
+            
             UpdateTabsButtons(rappersTabButton, labelsTabButton);
-            _isRappersTabOpened = true;
             
             newRappersPage.Close();
             labelsTab.Close();
@@ -45,13 +62,13 @@ namespace Game.Pages.Charts
 
         private void OpenLabelsTab()
         {
-            if (!_isRappersTabOpened) {
+            if (labelsTab.IsOpen())
+            {
                 return;
             }
-
-            UpdateTabsButtons(labelsTabButton, rappersTabButton);
-            _isRappersTabOpened = false;
             
+            UpdateTabsButtons(labelsTabButton, rappersTabButton);
+     
             newRappersPage.Close();
             rappersTab.Close();
             labelsTab.Open();

@@ -39,7 +39,7 @@ namespace Game.Pages.Rappers
         {
             _index = pos;
             position.text = $"{pos}.";
-            nickname.text = info.Name;
+            nickname.text = info.IsPlayer ? $"<color=#00F475>{info.Name}</color>" : info.Name;
             fans.text = $"{info.Fans}M";
             label.text = info.Label != "" ? info.Label : "-";
 
