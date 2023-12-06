@@ -30,7 +30,7 @@ namespace Game.Analyzers
             int fansAmount = GetFans();
             if (track.Feat != null)
             {
-                fansAmount += track.Feat.Fans * 1_000_000;
+                fansAmount += (track.Feat.Fans * 1_000_000);
             }
 
             track.ListenAmount = CalculateListensAmount(
@@ -104,9 +104,16 @@ namespace Game.Analyzers
             
             if (isHit)
             {
-                listens *= 5;
+                try
+                {
+                    listens = checked(listens * 5);
+                }
+                catch (OverflowException e)
+                {
+                    listens = int.MaxValue;
+                }
             }
-            
+
             return AddFuzzing(listens);
         }
         

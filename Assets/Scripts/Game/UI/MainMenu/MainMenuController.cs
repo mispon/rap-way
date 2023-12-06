@@ -25,13 +25,14 @@ namespace Game.UI.MainMenu
         [SerializeField] private GameObject aboutPanel;
         [Space]
         [SerializeField] private AskReviewPage reviewPage;
-        
+        [SerializeField] private ProductionAnim anim;
         
         [Header("CanvasGroup")] 
         [SerializeField] private CanvasGroupController menuCanvasGroupController;
 
         public void OnStart()
         {
+            anim.Refresh();
             SetupButtons();
 
             if (!GameManager.Instance.GameStats.AskedReview && GameManager.Instance.PlayerData.Fans > 0)

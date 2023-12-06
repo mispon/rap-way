@@ -17,6 +17,9 @@ namespace Core
     
     public class RappersManager : Singleton<RappersManager>, IStarter
     {
+        [Header("Common no-avatar image")]
+        [SerializeField] private Sprite customRapperAvatar;
+        
         [Header("Frequency of rappers fans updates in months")]
         [SerializeField] private int fanUpdateFrequency = 2;
         
@@ -113,10 +116,10 @@ namespace Core
             
             foreach (var rapperInfo in _rappers)
             {
-                if (spitesMap.TryGetValue(rapperInfo.Id, out var avatar))
-                {
-                    rapperInfo.Avatar = avatar;
-                }
+                rapperInfo.Avatar = 
+                    spitesMap.TryGetValue(rapperInfo.Id, out var avatar) && avatar != null 
+                        ? avatar 
+                        : customRapperAvatar;
                 yield return rapperInfo;
             }
             

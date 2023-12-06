@@ -29,6 +29,7 @@ namespace Game.Pages.Social.Tabs
         /// </summary>
         protected override SocialInfo GetInfo()
         {
+            PlayerManager.SetTeammateCooldown(TeammateType.PrMan, GameManager.Instance.Settings.PrManagerCooldown);
             return new SocialInfo
             {
                 Type = SocialType.Trends
@@ -61,8 +62,8 @@ namespace Game.Pages.Social.Tabs
         /// </summary>
         protected override bool CheckStartConditions()
         {
-            bool noCooldown = base.CheckStartConditions();
-            return noCooldown && TeamManager.IsAvailable(TeammateType.PrMan);
+            var prManager = PlayerManager.Data.Team.PrMan;
+            return TeamManager.IsAvailable(TeammateType.PrMan) && prManager.Cooldown == 0;
         }
     }
 }

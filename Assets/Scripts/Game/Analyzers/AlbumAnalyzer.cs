@@ -99,7 +99,14 @@ namespace Game.Analyzers
             
             if (isHit)
             {
-                listens *= 5;
+                try
+                {
+                    listens = checked(listens * 5);
+                }
+                catch (OverflowException e)
+                {
+                    listens = int.MaxValue;
+                }
             }
             
             return AddFuzzing(listens);

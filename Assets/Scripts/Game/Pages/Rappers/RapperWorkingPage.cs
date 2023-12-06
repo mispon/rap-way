@@ -22,6 +22,7 @@ namespace Game.Pages.Rappers
         [SerializeField] private WorkPoints managerWorkPoints;
         [SerializeField] private WorkPoints rapperWorkPoints;
         [SerializeField] private Sprite customRapperAvatar;
+        [SerializeField] private Text playerHypeBonus;
 
         [Header("Страница результата")]
         [SerializeField] private RapperResultPage rapperResult;
@@ -114,6 +115,7 @@ namespace Game.Pages.Rappers
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
             managementPointsLabel.text = "0";
             rapperPointsLabel.text = "0";
+            playerHypeBonus.text = $"+{PlayerManager.Data.Hype / 5}";
             _playerPoints = 0;
             _rapperPoints = 0;
         }

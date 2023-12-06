@@ -60,7 +60,7 @@ namespace Game
         private void OnDayLeft()
         {
             CheckTeammatesUnlock();
-            DecreaseManagerCooldown();
+            DecreaseManagersCooldown();
         }
         
         /// <summary>
@@ -121,11 +121,15 @@ namespace Game
         /// <summary>
         /// Сокращает кулдаун менеджера
         /// </summary>
-        private static void DecreaseManagerCooldown()
+        private static void DecreaseManagersCooldown()
         {
             var manager = PlayerManager.Data.Team.Manager;
             if (manager.Cooldown > 0)
                 manager.Cooldown -= 1;
+            
+            var prManager = PlayerManager.Data.Team.PrMan;
+            if (prManager.Cooldown > 0)
+                prManager.Cooldown -= 1;
         }
 
         /// <summary>

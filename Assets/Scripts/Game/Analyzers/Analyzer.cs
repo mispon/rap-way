@@ -91,6 +91,13 @@ namespace Game.Analyzers
         {
             const float tenPercents = 0.1f;
             int fuzz = Convert.ToInt32(value * tenPercents);
+
+            if (value == int.MaxValue)
+            {
+                // to safe add back
+                value -= fuzz;
+            }
+            
             return Random.Range(value - fuzz, value + fuzz);
         }
 

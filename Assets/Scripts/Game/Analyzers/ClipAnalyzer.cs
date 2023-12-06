@@ -79,7 +79,14 @@ namespace Game.Analyzers
             
             if (isHit)
             {
-                views *= 5;
+                try
+                {
+                    views = checked(views * 5);
+                }
+                catch (OverflowException e)
+                {
+                    views = int.MaxValue;
+                }
             }
             
             return AddFuzzing(views);

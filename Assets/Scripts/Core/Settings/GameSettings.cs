@@ -117,5 +117,7 @@ namespace Core.Settings
         [Space]
         [Range(1, 100), Tooltip("Длительность отдыха менеджера, дни")]
         public int ManagerCooldown;
+        [Range(1, 50), Tooltip("Длительность отдыха PR-менеджера, дни")]
+        public int PrManagerCooldown;
     }
 }

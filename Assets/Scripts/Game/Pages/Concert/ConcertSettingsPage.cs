@@ -130,6 +130,7 @@ namespace Game.Pages.Concert
 
             _concert.AlbumId = album.Id;
             _concert.Id = PlayerManager.GetNextProductionId<ConcertInfo>();
+            _concert.TicketCost = Mathf.RoundToInt(ticketCostSlider.value);
 
             productSelectionPage.Close();
             workingPage.StartWork(_concert);
