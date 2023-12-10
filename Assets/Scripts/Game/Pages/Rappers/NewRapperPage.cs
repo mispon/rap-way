@@ -1,4 +1,3 @@
-using System.Linq;
 using Core;
 using Data;
 using Game.Pages.Charts;
@@ -106,9 +105,9 @@ namespace Game.Pages.Rappers
             }
             
             var label = labelInput.text;
-            if (label.Length is < 3 or > 20)
+            if (label.Length != 0 && label.Length is < 3 or > 20)
             {
-                HighlightError(nameInput);
+                HighlightError(labelInput);
                 return;
             }
 
@@ -124,9 +123,9 @@ namespace Game.Pages.Rappers
                 Management = int.Parse(managementValue.text),
                 Fans = int.Parse(fansValue.text),
                 IsCustom = true
-            }; 
-            
-            GameManager.Instance.CustomRappers.Add(customRapper);
+            };
+
+            RappersManager.Instance.AddCustom(customRapper);
             BackButtonClick();
         }
 

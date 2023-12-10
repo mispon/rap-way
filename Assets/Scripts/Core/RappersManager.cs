@@ -48,6 +48,14 @@ namespace Core
         }
 
         /// <summary>
+        /// Adds new custom rapper
+        /// </summary>
+        public void AddCustom(RapperInfo info)
+        {
+            _customRappers.Add(info);
+        }
+
+        /// <summary>
         /// Adds new rappers to saved data from static config
         /// </summary>
         private void AppendNewRappers()
@@ -131,7 +139,8 @@ namespace Core
 
         public int MaxCustomRapperID()
         {
-            return _customRappers.Max(e => e.Id);
+            const int minID = 0;
+            return _customRappers.Any() ? _customRappers.Max(e => e.Id) : minID;
         }
     }
 }
