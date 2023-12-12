@@ -6,6 +6,7 @@ namespace Data
     [CreateAssetMenu(fileName = "Labels", menuName = "Data/Labels")]
     public class LabelsData : ScriptableObject
     {
+        [ArrayElementTitle(new []{"Name"})]
         public LabelInfo[] Labels;
     }
 

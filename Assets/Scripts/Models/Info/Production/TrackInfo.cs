@@ -1,6 +1,6 @@
 ﻿using System;
-using Core;
 using Data;
+using Game;
 using Localization;
 using Utils.Extensions;
 
@@ -9,7 +9,7 @@ namespace Models.Info.Production
     /// <summary>
     /// Информация о выпущенном треке
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class TrackInfo: Production
     {
         public TrendInfo TrendInfo;

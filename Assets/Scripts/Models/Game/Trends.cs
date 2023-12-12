@@ -1,6 +1,6 @@
 ﻿using System;
-using Core;
 using Enums;
+using Game;
 
 namespace Models.Game
 {

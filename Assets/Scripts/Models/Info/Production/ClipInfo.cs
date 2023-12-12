@@ -1,5 +1,5 @@
 ﻿using System;
-using Core;
+using Game;
 using Localization;
 using Utils.Extensions;
 

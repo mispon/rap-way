@@ -10,6 +10,7 @@ namespace Data
     [CreateAssetMenu(fileName = "Rappers", menuName = "Data/Rappers")]
     public class RappersData : ScriptableObject
     {
+        [ArrayElementTitle(new []{"Name"})]
         public List<RapperInfo> Rappers;
     }
 

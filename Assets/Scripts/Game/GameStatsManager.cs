@@ -1,15 +1,16 @@
 using System;
 using System.Linq;
+using Core;
 using Core.Interfaces;
 using Data;
 using Enums;
-using Game;
 using Models.Game;
 using Models.Info;
 using UnityEngine;
 using Utils;
+// ReSharper disable CoVariantArrayConversion
 
-namespace Core
+namespace Game
 {
     /// <summary>
     /// Класс управления трендами

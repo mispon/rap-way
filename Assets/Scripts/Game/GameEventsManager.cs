@@ -8,7 +8,7 @@ using UnityEngine;
 using Utils;
 using Random = UnityEngine.Random;
 
-namespace Core
+namespace Game
 {
     /// <summary>
     /// Контроллер игровых событий

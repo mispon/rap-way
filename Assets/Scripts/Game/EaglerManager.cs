@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
-using Game;
-using Localization;
 using Models.Game;
 using UnityEngine;
 using Utils;
 using Random = UnityEngine.Random;
 
-namespace Core
+namespace Game
 {
     public class EaglerManager : Singleton<EaglerManager>
     {

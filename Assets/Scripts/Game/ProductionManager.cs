@@ -7,7 +7,7 @@ using Models.Info.Production;
 using Models.Player;
 using Utils;
 
-namespace Core
+namespace Game
 {
     /// <summary>
     /// Менеджер добавления новых Production в историю игрока.

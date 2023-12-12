@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Core.Interfaces;
 using Data;
 using Enums;
-using Game;
 using Game.Notifications;
 using Game.Pages.Achievement;
 using JetBrains.Annotations;
@@ -15,7 +15,7 @@ using UnityEngine;
 using Utils;
 using Utils.Extensions;
 
-namespace Core
+namespace Game
 {
     /// <summary>
     /// Менеджер Ачивок.
