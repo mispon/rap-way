@@ -20,6 +20,9 @@ namespace Game
         public GameStats GameStats;
         public RapperInfo[] Rappers;
         public RapperInfo[] CustomRappers;
+        public LabelInfo[] Labels;
+        public LabelInfo[] CustomLabels;
+        public LabelInfo PlayerLabel;
         public Eagle[] Eagles;
         public string[] ShowedTutorials;
     }
@@ -41,8 +44,14 @@ namespace Game
         [Header("GAME STATE")]
         public PlayerData PlayerData;
         public GameStats GameStats;
+        [Space]
         public List<RapperInfo> Rappers;
         public List<RapperInfo> CustomRappers;
+        [Space]
+        public List<LabelInfo> Labels; 
+        public List<LabelInfo> CustomLabels;
+        public LabelInfo PlayerLabel;
+        [Space]
         public List<Eagle> Eagles;
         public HashSet<string> ShowedTutorials;
 
@@ -96,17 +105,29 @@ namespace Game
             {
                 PlayerData = PlayerData.New,
                 GameStats = GameStats.New,
+                
                 Rappers = Array.Empty<RapperInfo>(),
                 CustomRappers = Array.Empty<RapperInfo>(),
+                
+                Labels = Array.Empty<LabelInfo>(),
+                CustomLabels = Array.Empty<LabelInfo>(),
+                PlayerLabel = null,
+                
                 Eagles = Array.Empty<Eagle>(),
                 ShowedTutorials = Array.Empty<string>()
             };
             
             PlayerData = gameData.PlayerData;
             GameStats = gameData.GameStats;
+            
             Rappers = gameData.Rappers?.ToList() ?? new List<RapperInfo>(0);
-            CustomRappers = gameData.CustomRappers.ToList();
-            Eagles = gameData.Eagles.ToList();
+            CustomRappers = gameData.CustomRappers?.ToList() ?? new List<RapperInfo>(0);
+            PlayerLabel = gameData.PlayerLabel;
+            
+            Labels = gameData.Labels?.ToList() ?? new List<LabelInfo>(0);
+            CustomLabels = gameData.CustomLabels?.ToList() ?? new List<LabelInfo>(0);
+            
+            Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
             ShowedTutorials = gameData.ShowedTutorials.ToHashSet();
         }
 
@@ -124,8 +145,14 @@ namespace Game
             {
                 PlayerData = PlayerData,
                 GameStats = GameStats,
+                
                 Rappers = Rappers?.ToArray() ?? Array.Empty<RapperInfo>(),
                 CustomRappers = CustomRappers.ToArray(),
+                
+                Labels = Labels?.ToArray() ?? Array.Empty<LabelInfo>(),
+                CustomLabels = CustomLabels?.ToArray(),
+                PlayerLabel = PlayerLabel,
+                
                 Eagles = Eagles.Take(20).ToArray(),
                 ShowedTutorials = ShowedTutorials.ToArray()
             };

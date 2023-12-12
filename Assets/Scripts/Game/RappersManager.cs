@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Core.Interfaces;
 using Data;
-using Game;
 using UnityEngine;
 using Utils;
 
-namespace Core
+namespace Game
 {
     public enum FansChangeDir
     {
@@ -23,9 +23,6 @@ namespace Core
         [Header("Frequency of rappers fans updates in months")]
         [SerializeField] private int fanUpdateFrequency = 2;
         
-        [Header("Frequency of rappers labels updates in months")]
-        [SerializeField] private int labelsUpdateFrequency = 4;
-
         [Header("Fans change limits")]
         [SerializeField] private int minRapperFans = 1;
         [SerializeField] private int maxRapperFans = 500_000_000;
@@ -92,10 +89,6 @@ namespace Core
             {
                 UpdateRappersFans();
             }
-            if (TimeManager.Instance.Now.Month % labelsUpdateFrequency == 0)
-            {
-                UpdateRappersLabels();
-            }
         }
 
         private void UpdateRappersFans()
@@ -113,11 +106,26 @@ namespace Core
             }
         }
 
-        private void UpdateRappersLabels()
+        /// <summary>
+        /// Returns any random rapper
+        /// </summary>
+        public RapperInfo GetRandomRapper()
         {
-            // todo:
+            int rappersTotal = _rappers.Count + _customRappers.Count;
+            int dice = Random.Range(0, rappersTotal);
+
+            if (dice < _rappers.Count)
+            {
+                return _rappers[dice];
+            }
+
+            dice -= _rappers.Count;
+            return _customRappers[dice];
         }
 
+        /// <summary>
+        /// Returns list of all rappers
+        /// </summary>
         public IEnumerable<RapperInfo> GetAllRappers()
         {
             var spitesMap = data.Rappers.ToDictionary(k => k.Id, v => v.Avatar);
@@ -132,6 +140,24 @@ namespace Core
             }
             
             foreach (var rapperInfo in _customRappers)
+            {
+                yield return rapperInfo;
+            }
+        }
+
+        /// <summary>
+        /// Returns all rappers from label
+        /// </summary>
+        public IEnumerable<RapperInfo> GetFromLabel(string label)
+        {
+            var rSource = _rappers.Where(rapperInfo => rapperInfo.Label == label);
+            foreach (var rapperInfo in rSource)
+            {
+                yield return rapperInfo;
+            }
+
+            var crSource = _customRappers.Where(rapperInfo => rapperInfo.Label == label);
+            foreach (var rapperInfo in crSource)
             {
                 yield return rapperInfo;
             }
