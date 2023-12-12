@@ -18,6 +18,8 @@ namespace Game.Pages.Charts
         [SerializeField] private Color activeTabColor;
         [SerializeField] private Color inactiveTabColor;
 
+        private bool _isFirstOpen = true;
+        
         private void Start()
         {
             rappersTabButton.onClick.AddListener(OpenRappersTab);
@@ -45,6 +47,8 @@ namespace Game.Pages.Charts
             Show();
             base.AfterPageOpen();
             OpenRappersTab();
+
+            _isFirstOpen = false;
         }
 
         private void OpenRappersTab()
@@ -54,8 +58,10 @@ namespace Game.Pages.Charts
                 return;
             }
             
-            SoundManager.Instance.PlaySwitch();
+            
             UpdateTabsButtons(rappersTabButton, labelsTabButton);
+            if (!_isFirstOpen) 
+                SoundManager.Instance.PlaySwitch();
             
             newRappersPage.Close();
             labelsTab.Close();
@@ -69,8 +75,8 @@ namespace Game.Pages.Charts
                 return;
             }
             
-            SoundManager.Instance.PlaySwitch();
             UpdateTabsButtons(labelsTabButton, rappersTabButton);
+            SoundManager.Instance.PlaySwitch();
      
             newRappersPage.Close();
             rappersTab.Close();

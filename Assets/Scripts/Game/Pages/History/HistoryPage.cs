@@ -69,7 +69,7 @@ namespace Game.Pages.History
                 historyController.Initialize(this, scrollViewController);   
             }
             
-            trackHistoryController.Show();
+            trackHistoryController.Show(silent: true);
         }
     }
 }

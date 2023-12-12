@@ -82,7 +82,7 @@ namespace Utils.Carousel
         public void SetIndex(int index)
         {
             _index = index;
-            OnArrowClicked(0);
+            OnArrowClicked(0, silent: true);
         }
         
         /// <summary>
@@ -127,9 +127,11 @@ namespace Utils.Carousel
         /// <summary>
         /// Обработчик переключения элемента 
         /// </summary>
-        private void OnArrowClicked(int direction)
+        private void OnArrowClicked(int direction, bool silent = false)
         {
-            SoundManager.Instance.PlaySwitch();
+            if (!silent)
+                SoundManager.Instance.PlaySwitch();
+            
             _index += direction;
             ClampIndex();
             UpdateItems();

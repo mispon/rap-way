@@ -51,7 +51,7 @@ namespace Game.Pages.History.HistoryProduction
             _scrollViewController = scrollViewController;
             
             _historyPage.onFoldoutInfoShow += SetActiveUi;
-            foldoutBtn.onClick.AddListener(Show);
+            foldoutBtn.onClick.AddListener(() => Show());
             
             _isInitialized = true;
         }
@@ -69,9 +69,10 @@ namespace Game.Pages.History.HistoryProduction
         /// <summary>
         /// Выбор Production. Переключение со старого Production на новый с отрисовкой новых экзепляров
         /// </summary>
-        public void Show()
+        public void Show(bool silent = false)
         {
-            SoundManager.Instance.PlaySwitch();
+            if (!silent)
+                SoundManager.Instance.PlaySwitch();
             
             _historyPage.ShowInfo(this);
 
