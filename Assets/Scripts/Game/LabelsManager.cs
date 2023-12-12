@@ -23,7 +23,7 @@ namespace Game
         [SerializeField] private int expChangeValue = 50;
         
         [Space]
-        [SerializeField] private int maxFans = 100_000_000;
+        [SerializeField] private int maxRapperValuableFans = 100_000_000;
         [SerializeField] private LabelsData data;
 
         private List<LabelInfo> _labels;
@@ -88,13 +88,16 @@ namespace Game
         /// <summary>
         /// Returns label prestige from 0 to 5 stars
         /// </summary>
-        public float GetLabelPrestige(LabelInfo label)
+        public static float GetLabelPrestige(LabelInfo label, int[] expToUp)
         {
             int level = label.Prestige.Value;
             int exp = label.Prestige.Exp;
             
-            int expToUpHalf = expToLabelsLevelUp[level] / 2;
-            float halfStar = exp > expToUpHalf ? 0.5f : 0f;
+            if (level == maxLabelLevel)
+                return 5f;
+            
+            int half = expToUp[level] / 2;
+            float halfStar = exp > half ? 0.5f : 0f;
 
             return level + halfStar;
         }
@@ -146,12 +149,15 @@ namespace Game
 
         private void RapperJoinLabelAction(RapperInfo rapper)
         {
-            int score = CalcRapperScore(rapper.Fans);
+            int score = CalcRapperScore(rapper.Fans, maxRapperValuableFans);
             float prestige = MapScoreToPrestige(score);
 
             // get all labels and cache prestige values
             var labels = GetAllLabels().ToArray();
-            var prestigeMap = labels.ToDictionary(k => k.Name, GetLabelPrestige);
+            var prestigeMap = labels.ToDictionary(
+                k => k.Name, 
+                v => GetLabelPrestige(v, expToLabelsLevelUp)
+            );
 
             // filter and sort labels by prestige value
             labels = labels
@@ -261,11 +267,11 @@ namespace Game
         private void RefreshScore(LabelInfo label)
         {
             var rappers = RappersManager.Instance.GetFromLabel(label.Name);
-            int newScore = rappers.Sum(rapper => CalcRapperScore(rapper.Fans));
+            int newScore = rappers.Sum(rapper => CalcRapperScore(rapper.Fans, maxRapperValuableFans));
             label.Score = newScore;
         }
 
-        private int CalcRapperScore(int rapperFans)
+        private static int CalcRapperScore(int rapperFans, int maxFans)
         {
             const int maxRapperScore = 100;
             var score = Convert.ToInt32(1f * rapperFans / maxFans * maxRapperScore);
