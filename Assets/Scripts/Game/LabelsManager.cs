@@ -115,6 +115,45 @@ namespace Game
                 yield return label;
             }
         }
+
+        /// <summary>
+        /// Adds new custom label
+        /// </summary>
+        public void AddCustom(LabelInfo label)
+        {
+            _customLabels.Add(label);
+        }
+        
+        /// <summary>
+        /// Adds new custom label
+        /// </summary>
+        public void RemoveCustom(LabelInfo label)
+        {
+            _customLabels.Remove(label);
+        }
+
+        /// <summary>
+        /// Checks if name already in use by another label
+        /// </summary>
+        public bool IsNameAlreadyTaken(string labelName)
+        {
+            foreach (var label in GetAllLabels())
+            {
+                if (string.Equals(label.Name, labelName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns label prestige from 0 to 5 stars
+        /// </summary>
+        public float GetLabelPrestige(LabelInfo label)
+        {
+            return GetLabelPrestige(label, expToLabelsLevelUp);
+        }
         
         /// <summary>
         /// Returns label prestige from 0 to 5 stars
@@ -174,7 +213,7 @@ namespace Game
             var labels = GetAllLabels().ToArray();
             var prestigeMap = labels.ToDictionary(
                 k => k.Name, 
-                v => GetLabelPrestige(v, expToLabelsLevelUp)
+                GetLabelPrestige
             );
 
             // filter and sort labels by prestige value
@@ -331,7 +370,7 @@ namespace Game
             float prestige = MapScoreToPrestige(score);
             
             var labels = GetAllLabels()
-                .Where(e => prestige >= GetLabelPrestige(e, expToLabelsLevelUp))
+                .Where(e => prestige >= GetLabelPrestige(e))
                 .ToArray();
 
             var randomIdx = Random.Range(0, labels.Length);

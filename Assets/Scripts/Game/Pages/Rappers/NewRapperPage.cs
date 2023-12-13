@@ -8,7 +8,6 @@ namespace Game.Pages.Rappers
 {
     public class NewRapperPage : Page
     {
-        [SerializeField] private RappersData rappersData;
         [SerializeField] private RappersPage rappersPage;
         [SerializeField] private ChartsPage chartsPage;
         

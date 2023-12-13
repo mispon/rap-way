@@ -51,6 +51,14 @@ namespace Game
         {
             _customRappers.Add(info);
         }
+        
+        /// <summary>
+        /// Remove custom rapper
+        /// </summary>
+        public void RemoveCustom(RapperInfo info)
+        {
+            _customRappers.Remove(info);
+        }
 
         /// <summary>
         /// Adds new rappers to saved data from static config

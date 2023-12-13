@@ -80,8 +80,6 @@ namespace Game.Pages.Rappers
             
             DisplayInfo(rapperInfo);
             CheckPlayerManager();
-            
-            gameObject.SetActive(true);
         }
 
         /// <summary>

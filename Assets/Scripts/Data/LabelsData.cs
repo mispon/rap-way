@@ -19,7 +19,7 @@ namespace Data
         public ExpValue Prestige;
         public ExpValue Production;
         public int Score;
-        
+        public bool IsCustom;
         // is custom player's label or not
         public bool IsPlayer;
         // is player's label frozen for non-payment or not

@@ -97,7 +97,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void HandleRapperDelete(RapperInfo customRapper)
         {
-            GameManager.Instance.CustomRappers.Remove(customRapper);
+            RappersManager.Instance.RemoveCustom(customRapper);
             AfterPageClose();
             BeforePageOpen();
         }
