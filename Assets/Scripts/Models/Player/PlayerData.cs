@@ -17,6 +17,7 @@ namespace Models.Player
         public int Fans;
         public int Hype;
         public int Exp;
+        public string Label;
         
         public PlayerInfo Info;
         public PlayerStats Stats;

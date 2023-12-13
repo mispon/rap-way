@@ -1,4 +1,5 @@
-﻿using Models.Game;
+﻿using System;
+using Models.Game;
 using UnityEngine;
 
 namespace Data
@@ -10,9 +11,11 @@ namespace Data
         public LabelInfo[] Labels;
     }
 
+    [Serializable]
     public class LabelInfo
     {
         public string Name;
+        public Sprite Logo;
         public ExpValue Prestige;
         public ExpValue Production;
         public int Score;

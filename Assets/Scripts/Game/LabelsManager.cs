@@ -4,6 +4,7 @@ using System.Linq;
 using Core;
 using Core.Interfaces;
 using Data;
+using Game.Notifications;
 using UnityEngine;
 using Utils;
 using Random = UnityEngine.Random;
@@ -17,21 +18,32 @@ namespace Game
     {
         [SerializeField] private int rappersActionsFrequency = 1;
         [SerializeField] private int labelsActionsFrequency = 2;
+        [SerializeField] private int invitePlayerFrequency = 6;
 
         [Space]
         [SerializeField] private int[] expToLabelsLevelUp;
-        [SerializeField] private int expChangeValue = 50;
+        [SerializeField] private int expChangeValue = 100;
         
         [Space]
         [SerializeField] private int maxRapperValuableFans = 100_000_000;
         [SerializeField] private LabelsData data;
-
+        [SerializeField] private Sprite customLabelsLogo;
+        
         private List<LabelInfo> _labels;
         private List<LabelInfo> _customLabels;
         private LabelInfo _playerLabel;
 
         private const int minLabelLevel = 0;
         private const int maxLabelLevel = 5;
+
+        /// <summary>
+        /// Used in tests for setup internal state
+        /// </summary>
+        public void TestSetup(int[] expToLevelUp, int expChangeVal)
+        {
+            expToLabelsLevelUp = expToLevelUp;
+            expChangeValue = expChangeVal;
+        }
         
         public void OnStart()
         {
@@ -42,6 +54,24 @@ namespace Game
             AppendNewLabels();
             
             TimeManager.Instance.onMonthLeft += OnMonthLeft;
+        }
+        
+        private void OnMonthLeft()
+        {
+            if (TimeManager.Instance.Now.Month % rappersActionsFrequency == 0)
+            {
+                RandomRapperLabelAction();
+            }
+            
+            if (TimeManager.Instance.Now.Month % labelsActionsFrequency == 0)
+            {
+                UpdateLabelsStats();
+            }
+            
+            if (TimeManager.Instance.Now.Month % invitePlayerFrequency == 0)
+            {
+                InvitePlayerToLabel();
+            }
         }
 
         /// <summary>
@@ -81,6 +111,7 @@ namespace Game
             
             foreach (var label in _customLabels)
             {
+                label.Logo = customLabelsLogo;
                 yield return label;
             }
         }
@@ -88,7 +119,7 @@ namespace Game
         /// <summary>
         /// Returns label prestige from 0 to 5 stars
         /// </summary>
-        public static float GetLabelPrestige(LabelInfo label, int[] expToUp)
+        public static float GetLabelPrestige(LabelInfo label, int[] expToLevelUp)
         {
             int level = label.Prestige.Value;
             int exp = label.Prestige.Exp;
@@ -96,7 +127,7 @@ namespace Game
             if (level == maxLabelLevel)
                 return 5f;
             
-            int half = expToUp[level] / 2;
+            int half = expToLevelUp[level] / 2;
             float halfStar = exp > half ? 0.5f : 0f;
 
             return level + halfStar;
@@ -115,19 +146,6 @@ namespace Game
                 {
                     _labels.Add(labelInfo);
                 }
-            }
-        }
-        
-        private void OnMonthLeft()
-        {
-            if (TimeManager.Instance.Now.Month % rappersActionsFrequency == 0)
-            {
-                RandomRapperLabelAction();
-            }
-            
-            if (TimeManager.Instance.Now.Month % labelsActionsFrequency == 0)
-            {
-                UpdateLabelsStats();
             }
         }
 
@@ -181,6 +199,7 @@ namespace Game
                     continue;
                 }
 
+                Debug.Log($"Rapper {rapper.Name} join to label {label.Name}");
                 rapper.Label = label.Name;
                 break;
             }
@@ -205,6 +224,7 @@ namespace Game
             int actionDice = Random.Range(0, 2); // 0 - leave, 1 - change
             if (actionDice == 0)
             {
+                Debug.Log($"Rapper {rapper.Name} leave from label {label.Name}");
                 rapper.Label = "";
                 return;
             }
@@ -220,7 +240,8 @@ namespace Game
             var labels = GetAllLabels();
             foreach (var label in labels)
             {
-                UpdatePrestige(label);
+                int dice = Random.Range(-1, 2); // [-1, 0, 1]
+                UpdatePrestige(label, dice);
                 RefreshScore(label); 
             }
 
@@ -230,9 +251,8 @@ namespace Game
             }
         }
 
-        private void UpdatePrestige(LabelInfo label)
+        private void UpdatePrestige(LabelInfo label, int dice)
         {
-            int dice = Random.Range(-1, 2); // [-1, 0, 1]
             if (dice == 0)
                 return;
             
@@ -241,14 +261,14 @@ namespace Game
             
             if (newExp > 0)
             {
-                if (level == maxLabelLevel) 
-                    return;
-                
-                int expToUp = expToLabelsLevelUp[level];
-                if (newExp >= expToUp)
+                if (level != maxLabelLevel)
                 {
-                    level += 1;
-                    newExp -= expToUp;
+                    int expToUp = expToLabelsLevelUp[level];
+                    if (newExp >= expToUp)
+                    {
+                        level += 1;
+                        newExp -= expToUp;
+                    }
                 }
             } else
             {
@@ -257,11 +277,12 @@ namespace Game
                 
                 int expToUp = expToLabelsLevelUp[level-1];
                 level -= 1;
-                newExp = expToUp - newExp;
+                newExp = expToUp + newExp;
             }
 
             label.Prestige.Value = level;
             label.Prestige.Exp = newExp;
+            Debug.Log($"{label.Name}: {label.Prestige}");
         }
 
         private void RefreshScore(LabelInfo label)
@@ -269,6 +290,7 @@ namespace Game
             var rappers = RappersManager.Instance.GetFromLabel(label.Name);
             int newScore = rappers.Sum(rapper => CalcRapperScore(rapper.Fans, maxRapperValuableFans));
             label.Score = newScore;
+            Debug.Log($"{label.Name} new score: {newScore}");
         }
 
         private static int CalcRapperScore(int rapperFans, int maxFans)
@@ -294,6 +316,32 @@ namespace Game
                 >= 5 => 0.5f,
                 _ => 0
             };
+        }
+
+        /// <summary>
+        /// Invites player to random available label
+        /// </summary>
+        private void InvitePlayerToLabel()
+        {
+            if (PlayerManager.Data.Label != "")
+                // already in label
+                return;
+            
+            int score = CalcRapperScore(PlayerManager.Data.Fans, maxRapperValuableFans);
+            float prestige = MapScoreToPrestige(score);
+            
+            var labels = GetAllLabels()
+                .Where(e => prestige >= GetLabelPrestige(e, expToLabelsLevelUp))
+                .ToArray();
+
+            var randomIdx = Random.Range(0, labels.Length);
+            var label = labels[randomIdx];
+            
+            NotificationManager.Instance.AddClickNotification(() =>
+            {
+                // open label's contract page
+                Debug.Log($"{label.Name} invites you!");
+            });
         }
     }
 }
