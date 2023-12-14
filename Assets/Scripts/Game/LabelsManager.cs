@@ -104,8 +104,14 @@ namespace Game
         /// </summary>
         public IEnumerable<LabelInfo> GetAllLabels()
         {
+            var logosMap = data.Labels.ToDictionary(k => k.Name, v => v.Logo);
+            
             foreach (var label in _labels)
             {
+                if (logosMap.TryGetValue(label.Name, out var logo))
+                {
+                    label.Logo = logo != null ? logo : customLabelsLogo;
+                }
                 yield return label;
             }
             

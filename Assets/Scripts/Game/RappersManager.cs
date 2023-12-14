@@ -140,10 +140,10 @@ namespace Game
             
             foreach (var rapperInfo in _rappers)
             {
-                rapperInfo.Avatar = 
-                    spitesMap.TryGetValue(rapperInfo.Id, out var avatar) && avatar != null 
-                        ? avatar 
-                        : customRapperAvatar;
+                if (spitesMap.TryGetValue(rapperInfo.Id, out var avatar))
+                {
+                    rapperInfo.Avatar = avatar != null ? avatar : customRapperAvatar;
+                }
                 yield return rapperInfo;
             }
             

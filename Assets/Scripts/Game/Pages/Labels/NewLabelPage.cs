@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using Core;
 using Data;
 using Game.Pages.Charts;
@@ -22,6 +24,7 @@ namespace Game.Pages.Labels
         [SerializeField] private Button prestigeBtnLeft;
         [SerializeField] private Button prestigeBtnRight;
         [SerializeField] private Text prestigeValue;
+        [SerializeField] private PrestigeStars stars;
         
         [Space]
         [SerializeField] private Button createButton;
@@ -32,11 +35,11 @@ namespace Game.Pages.Labels
             createButton.onClick.AddListener(CreateButtonClick);
             backButton.onClick.AddListener(BackButtonClick);
             
-            productionBtnLeft.onClick.AddListener(() => OnBntLeftClick(productionValue, 1));
-            productionBtnRight.onClick.AddListener(() => OnBntRightClick(productionValue, 5));
+            productionBtnLeft.onClick.AddListener(ProductionBntLeftClick);
+            productionBtnRight.onClick.AddListener(ProductionBntRightClick);
             
-            prestigeBtnLeft.onClick.AddListener(() => OnBntLeftClick(prestigeValue, 0));
-            prestigeBtnRight.onClick.AddListener(() => OnBntRightClick(prestigeValue, 5));
+            prestigeBtnLeft.onClick.AddListener(PrestigeBtnLeftClick);
+            prestigeBtnRight.onClick.AddListener(PrestigeBtnRightClick);
         }
 
         protected override void BeforePageOpen()
@@ -50,32 +53,63 @@ namespace Game.Pages.Labels
             chartsPage.Show();
         }
 
-        private static void OnBntLeftClick(Text value, int minValue)
+        private void ProductionBntLeftClick()
         {
             SoundManager.Instance.PlaySwitch();
             
-            var current = int.Parse(value.text);
+            var current = int.Parse(productionValue.text);
+            
+            const int minValue = 1;
             if (current == minValue)
-            {
                 return;
-            }
 
             current -= 1;
-            value.text = current.ToString();
+            productionValue.text = current.ToString();
         }
         
-        private static void OnBntRightClick(Text value, int maxValue)
+        private void ProductionBntRightClick()
         {
             SoundManager.Instance.PlaySwitch();
             
-            var current = int.Parse(value.text);
+            var current = int.Parse(productionValue.text);
+         
+            const int maxValue = 5;
             if (current == maxValue)
-            {
                 return;
-            }
 
             current += 1;
-            value.text = current.ToString();
+            productionValue.text = current.ToString();
+        }
+
+        private void PrestigeBtnLeftClick()
+        {
+            SoundManager.Instance.PlaySwitch();
+            
+            var current = float.Parse(prestigeValue.text, CultureInfo.InvariantCulture);
+            
+            const float minValue = 0.0f;
+            if (Math.Abs(current - minValue) < 0.1)
+                return;
+
+            current -= 0.5f;
+            prestigeValue.text = current.ToString(CultureInfo.InvariantCulture);
+            
+            stars.Display(current);
+        }
+        private void PrestigeBtnRightClick()
+        {
+            SoundManager.Instance.PlaySwitch();
+            
+            var current = float.Parse(prestigeValue.text, CultureInfo.InvariantCulture);
+            
+            const float maxValue = 5.0f;
+            if (Math.Abs(current - maxValue) < 0.1)
+                return;
+
+            current += 0.5f;
+            prestigeValue.text = current.ToString(CultureInfo.InvariantCulture);
+            
+            stars.Display(current);
         }
         
         private void CreateButtonClick()

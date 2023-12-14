@@ -13,9 +13,8 @@ namespace Game.Pages.Labels
         [Space]
         [SerializeField] private Text position;
         [SerializeField] private Text labelName;
-        [SerializeField] private Text prestige;
         [SerializeField] private Text score;
-
+        
         [Space]
         [SerializeField] private Color oddColor;
         [SerializeField] private Color evenColor;
@@ -42,8 +41,8 @@ namespace Game.Pages.Labels
             _index = pos;
             position.text = $"{pos}.";
             labelName.text = info.IsPlayer ? $"<color=#00F475>{info.Name}</color>" : info.Name;
-            // todo: display prestige stars
-
+            score.text = info.Score > 0 ? info.Score.ToString() : "N/A";
+            
             row.color = pos % 2 == 0 ? evenColor : oddColor;
 
             if (pos == 1)

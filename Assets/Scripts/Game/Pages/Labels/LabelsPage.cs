@@ -22,10 +22,10 @@ namespace Game.Pages.Labels
         
         private void Start()
         {
-            addNewLabelButton.onClick.AddListener(OpenNewRapperPage);
+            addNewLabelButton.onClick.AddListener(OpenNewLabelPage);
         }
 
-        private void OpenNewRapperPage()
+        private void OpenNewLabelPage()
         {
             SoundManager.Instance.PlayClick();
             newLabelPage.Open();
@@ -51,17 +51,20 @@ namespace Game.Pages.Labels
         }
 
         /// <summary>
-        /// Returns all rappers (internal and custom) sorted desc by fans count
+        /// Returns all labels (internal and custom) sorted desc by score and prestige
         /// </summary>
         private static List<LabelInfo> GetAllLabels()
         {
             var allRappers = LabelsManager.Instance.GetAllLabels().ToList();
             
-            allRappers.Add(GameManager.Instance.PlayerLabel);
+            if (GameManager.Instance.PlayerLabel != null)
+            {
+                allRappers.Add(GameManager.Instance.PlayerLabel);
+            }
 
             return allRappers
                 .OrderByDescending(e => e.Score)
-                .ThenBy(e => LabelsManager.Instance.GetLabelPrestige(e))
+                .ThenByDescending(e => LabelsManager.Instance.GetLabelPrestige(e))
                 .ToList();
         }
 
