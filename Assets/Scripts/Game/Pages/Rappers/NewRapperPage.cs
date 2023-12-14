@@ -1,8 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
 using Core;
 using Data;
 using Game.Pages.Charts;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Carousel;
 
 namespace Game.Pages.Rappers
 {
@@ -14,7 +17,7 @@ namespace Game.Pages.Rappers
         [Space]
         [Header("Ввод имени")]
         [SerializeField] private InputField nameInput;
-        [SerializeField] private InputField labelInput;
+        [SerializeField] private Carousel labelInput;
         [Header("Ввод словарного запаса")]
         [SerializeField] private Button vocabularyBtnLeft;
         [SerializeField] private Button vocabularyBtnRight;
@@ -56,14 +59,32 @@ namespace Game.Pages.Rappers
 
         protected override void BeforePageOpen()
         {
+            SetupLabelsCarousel();
             nameInput.text = "";
-            labelInput.text = "";
             chartsPage.Hide();
         }
 
         protected override void AfterPageClose()
         {
             chartsPage.Show();
+        }
+
+        private void SetupLabelsCarousel()
+        {
+            var labels = LabelsManager.Instance.GetAllLabels().ToArray();
+            var props = new List<CarouselProps>(labels.Length)
+            {
+                // empty value for no labels
+                new() {Text = "None"}
+            };
+
+            foreach (var label in labels)
+            {
+                props.Add(new CarouselProps {Text = label.Name});
+            }
+            
+            labelInput.Init(props.ToArray());
+            labelInput.SetIndex(0);
         }
 
         private static void OnBntLeftClick(Text value)
@@ -102,21 +123,15 @@ namespace Game.Pages.Rappers
                 HighlightError(nameInput);
                 return;
             }
-            
-            var label = labelInput.text;
-            if (label.Length != 0 && label.Length is < 3 or > 20)
-            {
-                HighlightError(labelInput);
-                return;
-            }
 
             int lastId = RappersManager.Instance.MaxCustomRapperID();
+            string label = labelInput.GetLabel();
             
             var customRapper = new RapperInfo
             {
                 Id = lastId + 1,
                 Name = nickname,
-                Label = label,
+                Label = label != "None" ? label : "",
                 Vocobulary = int.Parse(vocabularyValue.text),
                 Bitmaking = int.Parse(bitmakingValue.text),
                 Management = int.Parse(managementValue.text),

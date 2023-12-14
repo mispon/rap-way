@@ -126,12 +126,14 @@ namespace Game.Pages.Labels
                 HighlightError(nameInput);
                 return;
             }
+
+            float prestige = float.Parse(prestigeValue.text, CultureInfo.InvariantCulture);
             
             var customLabel = new LabelInfo
             {
                 Name = labelName,
                 Production = new ExpValue{Value = int.Parse(productionValue.text)},
-                Prestige = new ExpValue{Value = int.Parse(prestigeValue.text)},
+                Prestige = LabelsManager.Instance.FloatToExp(prestige),
                 IsCustom = true
             };
 

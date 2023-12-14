@@ -57,9 +57,9 @@ namespace Game.Pages.Labels
         {
             var allRappers = LabelsManager.Instance.GetAllLabels().ToList();
             
-            if (GameManager.Instance.PlayerLabel != null)
+            if (LabelsManager.Instance.HasPlayerLabel)
             {
-                allRappers.Add(GameManager.Instance.PlayerLabel);
+                allRappers.Add(LabelsManager.Instance.PlayerLabel);
             }
 
             return allRappers
@@ -70,6 +70,7 @@ namespace Game.Pages.Labels
 
         protected override void AfterPageOpen()
         {
+            // TODO:
             // TutorialManager.Instance.ShowTutorial("tutorial_labels");
         }
         

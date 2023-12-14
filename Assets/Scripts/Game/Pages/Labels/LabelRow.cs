@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Core;
+using Data;
 using Game.UI.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +32,11 @@ namespace Game.Pages.Labels
         
         private void Start()
         {
-            rowButton.onClick.AddListener(ShowRapperInfo);
+            rowButton.onClick.AddListener(() =>
+            {
+                SoundManager.Instance.PlayClick();
+                ShowRapperInfo();
+            });
         }
 
         public void Initialize(int pos, LabelInfo info)

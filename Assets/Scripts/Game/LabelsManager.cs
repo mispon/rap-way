@@ -5,6 +5,7 @@ using Core;
 using Core.Interfaces;
 using Data;
 using Game.Notifications;
+using Models.Game;
 using UnityEngine;
 using Utils;
 using Random = UnityEngine.Random;
@@ -36,6 +37,9 @@ namespace Game
         private const int minLabelLevel = 0;
         private const int maxLabelLevel = 5;
 
+        public LabelInfo PlayerLabel => _playerLabel;
+        public bool HasPlayerLabel => _playerLabel != null && _playerLabel.Name != "";
+        
         /// <summary>
         /// Used in tests for setup internal state
         /// </summary>
@@ -176,6 +180,22 @@ namespace Game
             float halfStar = exp > half ? 0.5f : 0f;
 
             return level + halfStar;
+        }
+        
+        /// <summary>
+        /// Convert prestige to exp value
+        /// </summary>
+        public ExpValue FloatToExp(float prestige)
+        {
+            int level = (int) prestige;
+            int exp = 0;
+
+            if (level < prestige)
+            {
+                exp = expToLabelsLevelUp[level] / 2 + 1;
+            }
+            
+            return new ExpValue {Value = level, Exp = exp};
         }
 
         /// <summary>
