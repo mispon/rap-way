@@ -5,6 +5,7 @@ using Core;
 using Core.Interfaces;
 using Data;
 using Game.Notifications;
+using Game.Pages.Contracts;
 using Models.Game;
 using UnityEngine;
 using Utils;
@@ -29,6 +30,9 @@ namespace Game
         [SerializeField] private int maxRapperValuableFans = 100_000_000;
         [SerializeField] private LabelsData data;
         [SerializeField] private Sprite customLabelsLogo;
+
+        [Space]
+        [SerializeField] private LabelContractPage contractPage;
         
         private List<LabelInfo> _labels;
         private List<LabelInfo> _customLabels;
@@ -404,8 +408,7 @@ namespace Game
             
             NotificationManager.Instance.AddClickNotification(() =>
             {
-                // open label's contract page
-                Debug.Log($"{label.Name} invites you!");
+                contractPage.Show(label);
             });
         }
     }
