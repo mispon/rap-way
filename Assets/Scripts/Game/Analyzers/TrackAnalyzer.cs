@@ -30,7 +30,7 @@ namespace Game.Analyzers
             int fansAmount = GetFans();
             if (track.Feat != null)
             {
-                fansAmount += (track.Feat.Fans * 1_000_000);
+                fansAmount += RappersManager.GetFansCount(track.Feat);
             }
 
             track.ListenAmount = CalculateListensAmount(

@@ -19,15 +19,14 @@ namespace Game
     public class LabelsManager : Singleton<LabelsManager>, IStarter
     {
         [SerializeField] private int rappersActionsFrequency = 1;
-        [SerializeField] private int labelsActionsFrequency = 2;
-        [SerializeField] private int invitePlayerFrequency = 6;
+        [SerializeField] private int invitePlayerFrequency = 3;
 
         [Space]
         [SerializeField] private int[] expToLabelsLevelUp;
         [SerializeField] private int expChangeValue = 100;
         
         [Space]
-        [SerializeField] private int maxRapperValuableFans = 100_000_000;
+        [SerializeField] private int maxRapperValuableFans = 50_000_000;
         [SerializeField] private LabelsData data;
         [SerializeField] private Sprite customLabelsLogo;
 
@@ -62,6 +61,7 @@ namespace Game
             AppendNewLabels();
             
             TimeManager.Instance.onMonthLeft += OnMonthLeft;
+            TimeManager.Instance.onWeekLeft += OnWeekLeft;
         }
         
         private void OnMonthLeft()
@@ -71,15 +71,15 @@ namespace Game
                 RandomRapperLabelAction();
             }
             
-            if (TimeManager.Instance.Now.Month % labelsActionsFrequency == 0)
-            {
-                UpdateLabelsStats();
-            }
-            
             if (TimeManager.Instance.Now.Month % invitePlayerFrequency == 0)
             {
                 InvitePlayerToLabel();
             }
+        }
+
+        private void OnWeekLeft()
+        {
+            UpdateLabelsStats();
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace Game
         {
             var rapper = RappersManager.Instance.GetRandomRapper();
             
-            if (string.IsNullOrEmpty(rapper.Label))
+            if (rapper.Label == "")
             {
                 RapperJoinLabelAction(rapper);
                 return;
@@ -236,7 +236,7 @@ namespace Game
 
         private void RapperJoinLabelAction(RapperInfo rapper)
         {
-            int score = CalcRapperScore(rapper.Fans, maxRapperValuableFans);
+            int score = CalcRapperScore(RappersManager.GetFansCount(rapper), maxRapperValuableFans);
             float prestige = MapScoreToPrestige(score);
 
             // get all labels and cache prestige values
@@ -248,8 +248,8 @@ namespace Game
 
             // filter and sort labels by prestige value
             labels = labels
-                .Where(e => prestige >= prestigeMap[e.Name])
-                .OrderByDescending(e => prestigeMap[e.Name])
+                .Where(e => prestige >= prestigeMap[e.Name] && (prestige - prestigeMap[e.Name]) <= 1.5f)
+                .OrderBy(e => prestigeMap[e.Name])
                 .ToArray();
             
             if (labels.Length == 0)
@@ -257,7 +257,7 @@ namespace Game
             
             // pick label by weighted random algorithm
             // the more prestige labels has a higher chance
-            float weightTotal = prestigeMap.Sum(pair => pair.Value);
+            float weightTotal = labels.Sum(e => prestigeMap[e.Name]);
             float dice = Random.Range(0, weightTotal);
 
             foreach (var label in labels)
@@ -283,7 +283,7 @@ namespace Game
                 return;
             }
             
-            int decisionThreshold = label.IsPlayer ? 25 : 50;
+            int decisionThreshold = label.IsPlayer ? 20 : 50;
             int decisionDice = Random.Range(0, 100);
             
             if (decisionDice >= decisionThreshold)
@@ -351,21 +351,21 @@ namespace Game
 
             label.Prestige.Value = level;
             label.Prestige.Exp = newExp;
-            Debug.Log($"{label.Name}: {label.Prestige}");
+            // labels production depends on prestige 
+            label.Production.Value = level;
         }
 
         private void RefreshScore(LabelInfo label)
         {
             var rappers = RappersManager.Instance.GetFromLabel(label.Name);
-            int newScore = rappers.Sum(rapper => CalcRapperScore(rapper.Fans, maxRapperValuableFans));
+            int newScore = rappers.Sum(rapper => CalcRapperScore(RappersManager.GetFansCount(rapper), maxRapperValuableFans));
             label.Score = newScore;
-            Debug.Log($"{label.Name} new score: {newScore}");
         }
 
         private static int CalcRapperScore(int rapperFans, int maxFans)
         {
             const int maxRapperScore = 100;
-            var score = Convert.ToInt32(1f * rapperFans / maxFans * maxRapperScore);
+            var score = Convert.ToInt32(((1f * rapperFans) / maxFans) * maxRapperScore);
             return Mathf.Min(score, maxRapperScore);
         }
 
@@ -403,6 +403,9 @@ namespace Game
                 .Where(e => prestige >= GetLabelPrestige(e))
                 .ToArray();
 
+            if (labels.Length == 0)
+                return;
+            
             var randomIdx = Random.Range(0, labels.Length);
             var label = labels[randomIdx];
             

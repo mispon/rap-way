@@ -176,5 +176,11 @@ namespace Game
             const int minID = 0;
             return _customRappers.Any() ? _customRappers.Max(e => e.Id) : minID;
         }
+
+        public static int GetFansCount(RapperInfo rapper)
+        {
+            const int factor = 1_000_000;
+            return rapper.Fans * factor;
+        }
     }
 }

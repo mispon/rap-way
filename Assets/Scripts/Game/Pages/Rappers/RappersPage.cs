@@ -68,7 +68,7 @@ namespace Game.Pages.Rappers
                 Vocobulary = PlayerManager.Data.Stats.Vocobulary.Value,
                 Bitmaking = PlayerManager.Data.Stats.Bitmaking.Value,
                 Management = PlayerManager.Data.Stats.Management.Value,
-                Label = "",
+                Label = PlayerManager.Data.Label,
                 IsPlayer = true
             });
 
