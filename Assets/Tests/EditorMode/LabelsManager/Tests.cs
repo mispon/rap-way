@@ -37,35 +37,6 @@ namespace Tests.EditorMode.LabelsManager
         }
 
         [Test]
-        public void CalcRapperScoreTest()
-        {
-            var method = TestUtils.CreateStaticMethod<Game.LabelsManager>("CalcRapperScore", _ => {});
-
-            const int maxFans = 100_000_000;
-            var testCases = new Dictionary<int, int>
-            {
-                [100] = 0,
-                [1000] = 0,
-                [10_000] = 0,
-                [100_000] = 0,
-                [1_000_000] = 1,
-                [10_000_000] = 10,
-                [25_000_000] = 25,
-                [50_000_000] = 50,
-                [75_000_000] = 75,
-                [100_000_000] = 100,
-            };
-
-            foreach (var (fans, wantScore) in testCases)
-            {
-                object[] args = {fans, maxFans};
-                var score = method(args);
-                
-                Assert.AreEqual(wantScore, score);
-            }
-        }
-
-        [Test]
         public void GetLabelPrestigeTest()
         {
             int[] expToLevelUp = {

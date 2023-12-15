@@ -46,7 +46,7 @@ namespace Game.Pages.Labels
             _index = pos;
             position.text = $"{pos}.";
             labelName.text = info.IsPlayer ? $"<color=#00F475>{info.Name}</color>" : info.Name;
-            score.text = info.Score > 0 ? info.Score.ToString() : "N/A";
+            score.text = info.Score.ToString();
             
             row.color = pos % 2 == 0 ? evenColor : oddColor;
 

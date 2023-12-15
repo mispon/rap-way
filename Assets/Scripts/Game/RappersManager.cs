@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Core.Interfaces;
 using Data;
 using UnityEngine;
 using Utils;
+using Random = UnityEngine.Random;
 
 namespace Game
 {
@@ -181,6 +183,16 @@ namespace Game
         {
             const int factor = 1_000_000;
             return rapper.Fans * factor;
+        }
+
+        public static int GetRapperScore(RapperInfo rapper, int maxFans)
+        {
+            const int maxRapperScore = 100;
+            
+            int fans = rapper.IsPlayer ? rapper.Fans : GetFansCount(rapper);
+            var score = Convert.ToInt32(((1f * fans) / maxFans) * maxRapperScore);
+
+            return Mathf.Min(score, maxRapperScore);
         }
     }
 }

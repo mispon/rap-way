@@ -15,6 +15,7 @@ namespace Data
     public class LabelInfo
     {
         public string Name;
+        public string Desc;
         public Sprite Logo;
         public ExpValue Prestige;
         public ExpValue Production;

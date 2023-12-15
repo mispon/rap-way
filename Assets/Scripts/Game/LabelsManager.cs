@@ -236,7 +236,7 @@ namespace Game
 
         private void RapperJoinLabelAction(RapperInfo rapper)
         {
-            int score = CalcRapperScore(RappersManager.GetFansCount(rapper), maxRapperValuableFans);
+            int score = RappersManager.GetRapperScore(rapper, maxRapperValuableFans);
             float prestige = MapScoreToPrestige(score);
 
             // get all labels and cache prestige values
@@ -358,15 +358,8 @@ namespace Game
         private void RefreshScore(LabelInfo label)
         {
             var rappers = RappersManager.Instance.GetFromLabel(label.Name);
-            int newScore = rappers.Sum(rapper => CalcRapperScore(RappersManager.GetFansCount(rapper), maxRapperValuableFans));
+            int newScore = rappers.Sum(rapper => RappersManager.GetRapperScore(rapper, maxRapperValuableFans));
             label.Score = newScore;
-        }
-
-        private static int CalcRapperScore(int rapperFans, int maxFans)
-        {
-            const int maxRapperScore = 100;
-            var score = Convert.ToInt32(((1f * rapperFans) / maxFans) * maxRapperScore);
-            return Mathf.Min(score, maxRapperScore);
         }
 
         private static float MapScoreToPrestige(int score)
@@ -395,8 +388,9 @@ namespace Game
             if (PlayerManager.Data.Label != "")
                 // already in label
                 return;
-            
-            int score = CalcRapperScore(PlayerManager.Data.Fans, maxRapperValuableFans);
+
+            var rapper = new RapperInfo {Fans = PlayerManager.Data.Fans, IsPlayer = true}; 
+            int score = RappersManager.GetRapperScore(rapper, maxRapperValuableFans);
             float prestige = MapScoreToPrestige(score);
             
             var labels = GetAllLabels()

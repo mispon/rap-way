@@ -51,6 +51,11 @@ namespace Game.Pages.Charts
             _isFirstOpen = false;
         }
 
+        protected override void AfterPageClose()
+        {
+            _isFirstOpen = true;
+        }
+
         private void OpenRappersTab()
         {
             if (rappersTab.IsOpen())

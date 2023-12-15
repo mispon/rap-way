@@ -1,80 +1,111 @@
-using System.Collections.Generic;
-using System.Linq;
 using Core;
-using Data;
-using Enums;
-using Models.Info.Production;
-using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Extensions;
 
 namespace Game.Pages.Personal
 {
+    internal enum TabsType
+    {
+        None,
+        Personal,
+        House,
+        Label
+    }
+    
     /// <summary>
     /// Персональная страница
     /// </summary>
-    public class PersonalPage : Page {
-        [Header("Персонажи")]
-        [SerializeField] private GameObject maleAvatar; 
-        [SerializeField] private GameObject femaleAvatar; 
+    public class PersonalPage : Page
+    {
+        [Header("Tabs Buttons")]
+        [SerializeField] private Button personalButton;
+        [SerializeField] private Button houseButton;
+        [SerializeField] private Button labelButton;
+        [Space]
+        [SerializeField] private Color activeTabColor;
+        [SerializeField] private Color inactiveTabColor;
         
-        [Header("Имущество игрока")]
-        [SerializeField] private Image microIcon;
-        [SerializeField] private Image acousticIcon;
-        [SerializeField] private Image mixerIcon;
-        [SerializeField] private Image soundCardIcon;
-        [SerializeField] private Image carIcon;
-        [SerializeField] private Image chainIcon;
-        [SerializeField] private Image swatchesIcon;
-        [SerializeField] private Image grillzIcon;
-
-        [Header("Навыки персонажа")]
-        [SerializeField] private Text vocobularyLevel;
-        [SerializeField] private Text bitmakingLevel;
-        [SerializeField] private Text flowLevel;
-        [SerializeField] private Text charismaLevel;
-        [SerializeField] private Text managementLevel;
-        [SerializeField] private Text marketingLevel;
-
-        [Header("Умения персонажа")]
-        [SerializeField] private Image[] skillsIcons;
-        [SerializeField] private GameObject noSkills;
-        
-        [Header("Лучший трек")]
-        [SerializeField] private Text bestTrackName;
-        [SerializeField] private Text listenAmount;
-
-        [Header("Последние действия")]
-        [SerializeField] private Text[] lastActions;
-
-        [Header("Данные")]
-        [SerializeField] private GoodsData goods;
-        [SerializeField] private ImagesBank imageBank;
+        [Header("Tabs")]
+        [SerializeField] private PersonalTab.PersonalTab personalTab;
+        [SerializeField] private HouseTab.HouseTab houseTab;
+        [SerializeField] private LabelTab.LabelTab labelTab;
 
         [Header("Реклама")]
         [SerializeField] private Button cashButton;
 
+        private TabsType _activeTab = TabsType.None;
+        private bool _isFirstOpen = true;
+        
         private void Start()
         {
             cashButton.onClick.AddListener(() =>
             {
+                SoundManager.Instance.PlayClick();
                 CasAdsManager.Instance.ShowRewarded();
             });
+            
+            personalButton.onClick.AddListener(OpenPersonalTab);
+            houseButton.onClick.AddListener(OpenHouseTab);
+            labelButton.onClick.AddListener(OpenLabelTab);
         }
 
-        /// <summary>
-        /// Вызывается перед открытием страницы
-        /// </summary>
-        protected override void BeforePageOpen() {
-            PlayerData data = PlayerManager.Data;
+        private void OpenPersonalTab()
+        {
+            if (!_isFirstOpen)
+            {
+                SoundManager.Instance.PlaySwitch();
+            }
+            _isFirstOpen = false;
 
-            SetupCharacter(data.Info.Gender);
-            SetupGoods(data.Goods);
-            SetupStats(data.Stats);
-            SetupSkills(data.Skills);
-            SetupBestTrack(data.History.TrackList);
-            SetupLastActions(data.History.GetLastActions(3));
+            if (_activeTab != TabsType.Personal)
+            {
+                _activeTab = TabsType.Personal;
+                UpdateTabs(personalTab, houseTab, labelTab);
+                UpdateTabButtons(personalButton, houseButton, labelButton);
+            }
+        }
+        
+        private void OpenHouseTab()
+        {
+            SoundManager.Instance.PlaySwitch();
+
+            if (_activeTab != TabsType.House)
+            {
+                _activeTab = TabsType.House;
+                UpdateTabs(houseTab, personalTab, labelTab);
+                UpdateTabButtons(houseButton, personalButton, labelButton);
+            }
+        }
+        
+        private void OpenLabelTab()
+        {
+            SoundManager.Instance.PlaySwitch();
+
+            if (_activeTab != TabsType.Label)
+            {
+                _activeTab = TabsType.Label;
+                UpdateTabs(labelTab, personalTab, houseTab);
+                UpdateTabButtons(labelButton, personalButton, houseButton);
+            }
+        }
+        
+        protected override void BeforePageOpen()
+        {
+            OpenPersonalTab();
+        }
+
+        private static void UpdateTabs(params Tab[] tabs)
+        {
+            tabs[0].Open();
+            tabs[1].Close();
+            tabs[2].Close();
+        }
+        
+        private void UpdateTabButtons(params Button[] buttons)
+        {
+            buttons[0].image.color = activeTabColor;
+            buttons[1].image.color = inactiveTabColor;
+            buttons[2].image.color = inactiveTabColor;
         }
 
         protected override void AfterPageOpen()
@@ -82,86 +113,10 @@ namespace Game.Pages.Personal
             TutorialManager.Instance.ShowTutorial("tutorial_personal_page");
         }
 
-        /// <summary>
-        /// Устанавливает аватар 
-        /// </summary>
-        private void SetupCharacter(Gender gender)
+        protected override void AfterPageClose()
         {
-            maleAvatar.SetActive(gender == Gender.Male);
-            femaleAvatar.SetActive(gender == Gender.Female);
-        }
-
-        /// <summary>
-        /// Устанавливает имущество
-        /// </summary>
-        private void SetupGoods(List<Good> playerGoods) {
-            Sprite GetGoodsSprite(GoodsType type) {
-                int level = playerGoods.FirstOrDefault(e => e.Type == type)?.Level ?? 0;
-                return goods.AllItems.First(e => e.Type == type).UI[level].PersonalPageImage;
-            }
-
-            microIcon.sprite = GetGoodsSprite(GoodsType.Micro);
-            soundCardIcon.sprite = GetGoodsSprite(GoodsType.AudioCard);
-            mixerIcon.sprite = GetGoodsSprite(GoodsType.FxMixer);
-            acousticIcon.sprite = GetGoodsSprite(GoodsType.Acoustic);
-            carIcon.sprite = GetGoodsSprite(GoodsType.Car);
-            swatchesIcon.sprite = GetGoodsSprite(GoodsType.Swatches);
-            chainIcon.sprite = GetGoodsSprite(GoodsType.Chain);
-            grillzIcon.sprite = GetGoodsSprite(GoodsType.Grillz);
-        }
-        
-        /// <summary>
-        /// Устанавливает навыки персонажа
-        /// </summary>
-        private void SetupStats(PlayerStats playerStats)
-        {
-            vocobularyLevel.text = playerStats.Vocobulary.Value.ToString();
-            bitmakingLevel.text = playerStats.Bitmaking.Value.ToString();
-            flowLevel.text = playerStats.Flow.Value.ToString();
-            charismaLevel.text = playerStats.Charisma.Value.ToString();
-            managementLevel.text = playerStats.Management.Value.ToString();
-            marketingLevel.text = playerStats.Marketing.Value.ToString();
-        }
-
-        /// <summary>
-        /// Устанавливает умения персонажа
-        /// </summary>
-        private void SetupSkills(List<Skills> playerSkills)
-        {
-            noSkills.SetActive(playerSkills.Count == 0);
-            
-            for (int i = 0; i < skillsIcons.Length; i++)
-            {
-                Image icon = skillsIcons[i];
-                icon.gameObject.SetActive(i < playerSkills.Count);
-                
-                if (icon.gameObject.activeSelf)
-                    skillsIcons[i].sprite = imageBank.Skills[(int) playerSkills[i]];    
-            }
-        }
-
-        /// <summary>
-        /// Устанавливает самый успешный трек
-        /// </summary>
-        private void SetupBestTrack(List<TrackInfo> trackList)
-        {
-            var bestTrack = trackList.OrderByDescending(e => e.ListenAmount).FirstOrDefault();
-            bestTrackName.text = bestTrack != null ? bestTrack.Name : GetLocale("no_tracks_yet").ToUpper();
-            listenAmount.text = bestTrack != null ? bestTrack.ListenAmount.GetDisplay() : "0";
-        }
-
-        /// <summary>
-        /// Выводит последние действия
-        /// </summary>
-        private void SetupLastActions(List<Production> actions) {
-            for (var i = 0; i < lastActions.Length; i++) {
-                GameObject item = lastActions[i].transform.parent.gameObject;
-                item.SetActive(i < actions.Count);
-                if (item.activeSelf)
-                {
-                    lastActions[i].text = actions[i].GetLog();
-                }
-            }
+            _activeTab = TabsType.None;
+            _isFirstOpen = true;
         }
     }
 }
