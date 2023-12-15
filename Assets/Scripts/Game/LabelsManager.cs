@@ -352,7 +352,7 @@ namespace Game
             label.Prestige.Value = level;
             label.Prestige.Exp = newExp;
             // labels production depends on prestige 
-            label.Production.Value = level;
+            label.Production.Value = Mathf.Max(1, level);
         }
 
         private void RefreshScore(LabelInfo label)
@@ -407,6 +407,24 @@ namespace Game
             {
                 contractPage.Show(label);
             });
+        }
+
+        /// <summary>
+        /// Creates player's label
+        /// </summary>
+        public void CreatePlayersLabel(LabelInfo label)
+        {
+            _playerLabel = label;
+            GameManager.Instance.PlayerLabel = label;
+        }
+        
+        /// <summary>
+        /// Removes player's label
+        /// </summary>
+        public void DisbandPlayersLabel()
+        {
+            _playerLabel = null;
+            GameManager.Instance.PlayerLabel = null;
         }
     }
 }

@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 2048
     height: 1079.2001
   m_ShowMode: 4
-  m_Title: Simulator
+  m_Title: Hierarchy
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 8823
+  controlID: 16
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 8824
+  controlID: 17
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 8825
+  controlID: 18
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SimulatorWindow
+  m_Name: SceneView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -191,12 +191,12 @@ MonoBehaviour:
     height: 579.2
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 12}
+  m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
   - {fileID: 12}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -216,8 +216,8 @@ MonoBehaviour:
     y: 0
     width: 392.79993
     height: 579.2
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
@@ -242,8 +242,8 @@ MonoBehaviour:
     y: 579.2
     width: 1563.2
     height: 449.99994
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 15}
@@ -269,8 +269,8 @@ MonoBehaviour:
     y: 0
     width: 484.80005
     height: 1029.2
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -423,7 +423,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 1
       id: unity-search-toolbar
       index: 1
@@ -475,7 +475,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Light Settings
       index: 0
@@ -501,7 +501,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Cloth Constraints
       index: 1
@@ -514,7 +514,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Cloth Collisions
       index: 2
@@ -566,7 +566,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Occlusion Culling
       index: 3
@@ -579,7 +579,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Physics Debugger
       index: 4
@@ -592,7 +592,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Scene Visibility
       index: 5
@@ -605,7 +605,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Particles
       index: 6
@@ -680,7 +680,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_WindowGUID: cc27987af1a868c49b0894db9c0f5429
   m_Gizmos: 1
-  m_OverrideSceneCullingMask: 6917529027641081856
+  m_OverrideSceneCullingMask: 4611686018427387905
   m_SceneIsLit: 1
   m_SceneLighting: 1
   m_2DMode: 1
@@ -688,9 +688,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 507.9458, y: 811.3126, z: 3.8189275}
+    m_Target: {x: 879.78876, y: 512.2327, z: 3.798759}
     speed: 2
-    m_Value: {x: 507.9458, y: 811.3126, z: 3.8189275}
+    m_Value: {x: 879.78876, y: 512.2327, z: 3.798759}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -740,9 +740,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 757.1787
+    m_Target: 655.60425
     speed: 2
-    m_Value: 757.1787
+    m_Value: 655.60425
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -805,9 +805,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: d8faffff
-      m_LastClickedID: 0
-      m_ExpandedIDs: 04a7f6ffaab4f6ff24b8f6ff42d3ffff4ad3ffff4ed3ffff7cd3ffff84d3ffff7ed4ffffb6d8ffff04d9ffff2afbfffff4ffffff6e510000
+      m_SelectedIDs: 96af0700
+      m_LastClickedID: 503702
+      m_ExpandedIDs: 54fbf6ff70fbf6ff6aad070042ae07008aae0700f0ae07001eaf07009caf07000cb00700
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -894,7 +894,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 219.00006}
     m_SelectedIDs: 08b80000
     m_LastClickedID: 47112
-    m_ExpandedIDs: 0000000060b2000062b2000064b2000066b2000068b200006ab200006cb200006eb2000070b2000072b200000cb3000010b3000000ca9a3b
+    m_ExpandedIDs: 000000006cb300006eb3000070b3000072b3000074b3000076b3000078b300007ab300007cb300007eb30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -922,7 +922,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000060b2000062b2000064b2000066b2000068b200006ab200006cb200006eb2000070b2000072b2000000ca9a3b
+    m_ExpandedIDs: 000000006cb300006eb3000070b3000072b3000074b3000076b3000078b300007ab300007cb300007eb30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1096,7 +1096,7 @@ MonoBehaviour:
     m_SaveData: []
     m_OverlaysVisible: 1
   m_Spl:
-    ID: 168
+    ID: 33345
     splitterInitialOffset: 0
     currentActiveSplitter: -1
     realSizes:
@@ -1163,7 +1163,7 @@ MonoBehaviour:
       name: Rap Way
       fullName: Rap Way
       resultStatus: 1
-      duration: 0.0747757
+      duration: 0.0597943
       messages: 
       output: 
       stacktrace: 
@@ -1179,7 +1179,7 @@ MonoBehaviour:
       name: EditorMode.dll
       fullName: C:/Users/meeps/Projects/rap-way/Library/ScriptAssemblies/EditorMode.dll
       resultStatus: 1
-      duration: 0.0478492
+      duration: 0.0386441
       messages: 
       output: 
       stacktrace: 
@@ -1195,7 +1195,7 @@ MonoBehaviour:
       name: Tests
       fullName: Tests
       resultStatus: 1
-      duration: 0.0472324
+      duration: 0.038118
       messages: 
       output: 
       stacktrace: 
@@ -1211,7 +1211,7 @@ MonoBehaviour:
       name: EditorMode
       fullName: Tests.EditorMode
       resultStatus: 1
-      duration: 0.0467576
+      duration: 0.034683
       messages: 
       output: 
       stacktrace: 
@@ -1227,7 +1227,7 @@ MonoBehaviour:
       name: LabelsManager
       fullName: Tests.EditorMode.LabelsManager
       resultStatus: 1
-      duration: 0.043201
+      duration: 0.0214341
       messages: 
       output: 
       stacktrace: 
@@ -1243,7 +1243,7 @@ MonoBehaviour:
       name: Tests
       fullName: Tests.EditorMode.LabelsManager.Tests
       resultStatus: 1
-      duration: 0.0389959
+      duration: 0.0167291
       messages: 
       output: 
       stacktrace: 
@@ -1254,34 +1254,12 @@ MonoBehaviour:
       categories: []
       parentId: 1009
       parentUniqueId: EditorMode.dll/Tests/EditorMode/[EditorMode][Tests.EditorMode.LabelsManager][suite]
-    - id: 1003
-      uniqueId: EditorMode.dll/Tests/EditorMode/LabelsManager/Tests/[EditorMode][Tests.EditorMode.LabelsManager.Tests.CalcRapperScoreTest]
-      name: CalcRapperScoreTest
-      fullName: Tests.EditorMode.LabelsManager.Tests.CalcRapperScoreTest
-      resultStatus: 1
-      duration: 0.0179588
-      messages: 
-      output: 'You are trying to create a MonoBehaviour using the ''new'' keyword. 
-        This is not allowed.  MonoBehaviours can only be added using AddComponent().
-        Alternatively, your script can inherit from ScriptableObject or no base class
-        at all
-
-'
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditorMode.dll/Tests/EditorMode/LabelsManager/[EditorMode][Tests.EditorMode.LabelsManager.Tests][suite]
     - id: 1004
       uniqueId: EditorMode.dll/Tests/EditorMode/LabelsManager/Tests/[EditorMode][Tests.EditorMode.LabelsManager.Tests.GetLabelPrestigeTest]
       name: GetLabelPrestigeTest
       fullName: Tests.EditorMode.LabelsManager.Tests.GetLabelPrestigeTest
       resultStatus: 1
-      duration: 0.0024837
+      duration: 0.0028999
       messages: 
       output: 
       stacktrace: 
@@ -1298,7 +1276,7 @@ MonoBehaviour:
       name: MapScoreToPrestigeTest
       fullName: Tests.EditorMode.LabelsManager.Tests.MapScoreToPrestigeTest
       resultStatus: 1
-      duration: 0.0021657
+      duration: 0.0060141
       messages: 
       output: 'You are trying to create a MonoBehaviour using the ''new'' keyword. 
         This is not allowed.  MonoBehaviours can only be added using AddComponent().
@@ -1320,23 +1298,12 @@ MonoBehaviour:
       name: UpdatePrestigeTest
       fullName: Tests.EditorMode.LabelsManager.Tests.UpdatePrestigeTest
       resultStatus: 1
-      duration: 0.0048568
+      duration: 0.0022614
       messages: 
       output: 'You are trying to create a MonoBehaviour using the ''new'' keyword. 
         This is not allowed.  MonoBehaviours can only be added using AddComponent().
         Alternatively, your script can inherit from ScriptableObject or no base class
         at all
-
-        Foo: Models.Game.ExpValue
-
-        Foo: Models.Game.ExpValue
-
-        Foo:
-        Models.Game.ExpValue
-
-        Foo: Models.Game.ExpValue
-
-        Foo: Models.Game.ExpValue
 
 '
       stacktrace: 
@@ -1348,32 +1315,62 @@ MonoBehaviour:
       - Uncategorized
       parentId: 1001
       parentUniqueId: EditorMode.dll/Tests/EditorMode/LabelsManager/[EditorMode][Tests.EditorMode.LabelsManager.Tests][suite]
-    m_ResultText: 'UpdatePrestigeTest (0,005s)
-
-      ---
-
-      You are trying to
-      create a MonoBehaviour using the ''new'' keyword.  This is not allowed.  MonoBehaviours
-      can only be added using AddComponent(). Alternatively, your script can inherit
-      from ScriptableObject or no base class at all
-
-      Foo: Models.Game.ExpValue
-
-      Foo:
-      Models.Game.ExpValue
-
-      Foo: Models.Game.ExpValue
-
-      Foo: Models.Game.ExpValue
-
-      Foo:
-      Models.Game.ExpValue'
+    - id: 1010
+      uniqueId: EditorMode.dll/Tests/EditorMode/[EditorMode][Tests.EditorMode.RappersManager][suite]
+      name: RappersManager
+      fullName: Tests.EditorMode.RappersManager
+      resultStatus: 1
+      duration: 0.009705
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1009
+      parentUniqueId: EditorMode.dll/Tests/[EditorMode][suite]
+    - id: 1001
+      uniqueId: EditorMode.dll/Tests/EditorMode/RappersManager/[EditorMode][Tests.EditorMode.RappersManager.Tests][suite]
+      name: Tests
+      fullName: Tests.EditorMode.RappersManager.Tests
+      resultStatus: 1
+      duration: 0.0012253
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1010
+      parentUniqueId: EditorMode.dll/Tests/EditorMode/[EditorMode][Tests.EditorMode.RappersManager][suite]
+    - id: 1002
+      uniqueId: EditorMode.dll/Tests/EditorMode/RappersManager/Tests/[EditorMode][Tests.EditorMode.RappersManager.Tests.GetRapperScoreTest]
+      name: GetRapperScoreTest
+      fullName: Tests.EditorMode.RappersManager.Tests.GetRapperScoreTest
+      resultStatus: 1
+      duration: 0.0002093
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: EditorMode.dll/Tests/EditorMode/RappersManager/[EditorMode][Tests.EditorMode.RappersManager.Tests][suite]
+    m_ResultText: GetRapperScoreTest (0,000s)
     m_ResultStacktrace: 
     m_TestListState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: f9533d43
-      m_LastClickedID: 1128092665
-      m_ExpandedIDs: 3dc912ac4613a1b24dad4bc4323dcae2ffd991130200f01687f1bb2da4290946ce727a6fffffff7f
+      m_SelectedIDs: 69489338
+      m_LastClickedID: 949176425
+      m_ExpandedIDs: 3dc912ac4613a1b24dad4bc41d35bfdb323dcae2ffd991130200f01687f1bb2d85fd3937a4290946ce727a6fffffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 

@@ -14,8 +14,8 @@ namespace Game.Pages.Labels
         [SerializeField] private Text production;
         [SerializeField] private Text score;
         [SerializeField] private PrestigeStars stars;
-        
         [Space]
+        [SerializeField] private Sprite customLabelLogo;
         [SerializeField] private Button deleteButton;
         
         public event Action<LabelInfo> onDelete = _ => {};
@@ -32,7 +32,7 @@ namespace Game.Pages.Labels
             _info = info;
             
             labelName.text = info.Name.ToUpper();
-            logo.sprite = info.Logo;
+            logo.sprite = info.IsPlayer ? customLabelLogo : info.Logo;
             production.text = $"{info.Production.Value}";
 
             string scoreText = LocalizationManager.Instance.GetFormat("score_label", info.Score);

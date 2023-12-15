@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Game.Pages.Labels;
@@ -10,18 +11,25 @@ namespace Game.Pages.Personal.LabelTab
 {
     public class GameLabelSubTab : Tab
     {
+        [SerializeField] private LabelTab labelTab;
         [Space]
-        private Image logo;
-        private Text labelName;
-        private Text labelDesc;
-        private Text production;
-        private PrestigeStars stars;
+        [SerializeField] private Image logo;
+        [SerializeField] private Text labelName;
+        [SerializeField] private Text labelDesc;
+        [SerializeField] private Text production;
+        [SerializeField] private PrestigeStars stars;
+        [SerializeField] private Button leaveButton;
         [Space]
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
         
         private List<LabelMemberRow> _listItems = new();
-        
+
+        private void Start()
+        {
+            leaveButton.onClick.AddListener(LeaveLabel);
+        }
+
         public void Show(LabelInfo label)
         {
             DisplayInfo(label);
@@ -77,6 +85,12 @@ namespace Game.Pages.Personal.LabelTab
             });
 
             return members.OrderByDescending(r => r.Fans).ToList();
+        }
+
+        private void LeaveLabel()
+        {
+            PlayerManager.Data.Label = "";
+            labelTab.Reload();
         }
 
         public override void Close()
