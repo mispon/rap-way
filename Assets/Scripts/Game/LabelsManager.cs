@@ -9,6 +9,7 @@ using Game.Pages.Contracts;
 using Models.Game;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 using Random = UnityEngine.Random;
 
 namespace Game
@@ -407,6 +408,23 @@ namespace Game
             {
                 contractPage.Show(label);
             });
+        }
+
+        /// <summary>
+        /// Returns label income from it's members
+        /// </summary>
+        public int GetPlayersLabelIncome()
+        {
+            if (_playerLabel == null || _playerLabel.Name == "")
+                return 0;
+            
+            var members = RappersManager.Instance
+                .GetAllRappers()
+                .Where(e => e.Label == _playerLabel.Name)
+                .ToList();
+
+            const int incomePercent = 10;
+            return members.Sum(e => e.Fans / 100 * incomePercent);
         }
 
         /// <summary>
