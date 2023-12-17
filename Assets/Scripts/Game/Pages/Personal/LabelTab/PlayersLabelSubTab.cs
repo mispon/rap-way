@@ -39,10 +39,18 @@ namespace Game.Pages.Personal.LabelTab
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
         [Space]
+        [SerializeField] private GameObject moneyReport;
+        [SerializeField] private Text moneyReportIncome;
+        [SerializeField] private Text moneyReportService;
+        [SerializeField] private Text moneyReportFrozenWarning;
+        [SerializeField] private Button moneyReportOkButton;
+        [Space]
         [SerializeField] private Button disbandButton;
         
         private List<LabelMemberRow> _listItems = new();
         private LabelInfo _label;
+        private int _income;
+        private int _cost;
 
         private const int minLabelCost = 250_000;
         private const int maxStatValue = 5;
@@ -54,6 +62,7 @@ namespace Game.Pages.Personal.LabelTab
             upProductionButton.onClick.AddListener(UpProduction);
             upPrestigeButton.onClick.AddListener(UpPrestige);
             disbandButton.onClick.AddListener(DisbandLabel);
+            moneyReportOkButton.onClick.AddListener(OnMoneyReportClose);
         }
 
         public void Show(LabelInfo label)
@@ -85,13 +94,15 @@ namespace Game.Pages.Personal.LabelTab
             upPrestigeButton.interactable = PlayerManager.Data.Exp >= expStep;
             
             exp.text = PlayerManager.Data.Exp.ToString();
-            income.text = LabelsManager.Instance.GetPlayersLabelIncome().GetMoney();
 
-            int cost = GetServiceCost();
-            service.text = cost.GetMoney();
+            _income = LabelsManager.Instance.GetPlayersLabelIncome();
+            income.text = _income.GetMoney();
+
+            _cost = GetServiceCost();
+            service.text = _cost.GetMoney();
             
             payServiceButton.gameObject.SetActive(label.IsFrozen);
-            payServiceButton.interactable = PlayerManager.Data.Money >= cost;
+            payServiceButton.interactable = PlayerManager.Data.Money >= _cost;
         }
 
         private void DisplayMembers(LabelInfo label)
@@ -140,11 +151,12 @@ namespace Game.Pages.Personal.LabelTab
 
         private void PayService()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlayPayment();
             
-            int cost = GetServiceCost();
-            PlayerManager.Instance.AddMoney(-cost);
-            GameManager.Instance.PlayerLabel.IsFrozen = false;
+            PlayerManager.Instance.AddMoney(-_cost);
+            _label.IsFrozen = false;
+            
+            DisplayInfo(_label);
         }
 
         private void UpProduction()
@@ -207,6 +219,49 @@ namespace Game.Pages.Personal.LabelTab
                     labelTab.Reload();
                 }
             );
+        }
+
+        public void ShowMoneyReport()
+        {
+            string incomeValue = (_label.IsFrozen ? 0 : _income).GetMoney();
+            moneyReportIncome.text = LocalizationManager.Instance
+                .GetFormat("label_monthly_income", incomeValue)
+                .ToUpper();
+
+            string serviceValue = (_label.IsFrozen ? 0 : _cost).GetMoney();
+            moneyReportService.text = LocalizationManager.Instance
+                .GetFormat("label_monthly_service", serviceValue)
+                .ToUpper();
+            
+            moneyReportFrozenWarning.gameObject.SetActive(_label.IsFrozen);
+            
+            moneyReport.SetActive(true);
+        }
+
+        private void OnMoneyReportClose()
+        {
+            SoundManager.Instance.PlayClick();
+
+            if (!_label.IsFrozen)
+            {
+                PlayerManager.Instance.AddMoney(_income);
+            }
+
+            _label.IsFrozen = true;
+            moneyReport.SetActive(false);
+            
+            DisplayInfo(_label);
+        }
+
+        public override void Close()
+        {
+            foreach (var row in _listItems)
+            {
+                Destroy(row.gameObject);
+            }
+            _listItems.Clear();
+            
+            base.Close();
         }
     }
 }

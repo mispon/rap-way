@@ -35,6 +35,11 @@ namespace Game.Pages.Personal.LabelTab
             base.Close();
         }
 
+        public void ShowMoneyReport()
+        {
+            playersLabelTab.ShowMoneyReport();
+        }
+
         public void Reload()
         {
             Close();

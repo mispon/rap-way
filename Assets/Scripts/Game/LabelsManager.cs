@@ -6,10 +6,10 @@ using Core.Interfaces;
 using Data;
 using Game.Notifications;
 using Game.Pages.Contracts;
+using Game.Pages.Personal;
 using Models.Game;
 using UnityEngine;
 using Utils;
-using Utils.Extensions;
 using Random = UnityEngine.Random;
 
 namespace Game
@@ -33,6 +33,8 @@ namespace Game
 
         [Space]
         [SerializeField] private LabelContractPage contractPage;
+        [SerializeField] private PersonalPage personalPage;
+        
         
         private List<LabelInfo> _labels;
         private List<LabelInfo> _customLabels;
@@ -76,6 +78,8 @@ namespace Game
             {
                 InvitePlayerToLabel();
             }
+
+            SendPlayersLabelIncomeNotification();
         }
 
         private void OnWeekLeft()
@@ -420,11 +424,11 @@ namespace Game
             
             var members = RappersManager.Instance
                 .GetAllRappers()
-                .Where(e => e.Label == _playerLabel.Name)
+                .Where(e => string.Equals(e.Label, _playerLabel.Name, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
-            const int incomePercent = 10;
-            return members.Sum(e => e.Fans / 100 * incomePercent);
+            const int incomePercent = 5;
+            return members.Sum(e => RappersManager.GetFansCount(e) / 100 * incomePercent);
         }
 
         /// <summary>
@@ -443,6 +447,17 @@ namespace Game
         {
             _playerLabel = null;
             GameManager.Instance.PlayerLabel = null;
+        }
+
+        private void SendPlayersLabelIncomeNotification()
+        {
+            if (!HasPlayerLabel)
+                return;
+            
+            NotificationManager.Instance.AddClickNotification(() =>
+            {
+                personalPage.ShowLabelMoneyReport();
+            });
         }
     }
 }

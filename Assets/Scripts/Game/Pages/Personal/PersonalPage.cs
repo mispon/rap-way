@@ -88,6 +88,18 @@ namespace Game.Pages.Personal
                 UpdateTabButtons(labelButton, personalButton, houseButton);
             }
         }
+
+        public void ShowLabelMoneyReport()
+        {
+            Open();
+            labelTab.Close();
+            
+            _activeTab = TabsType.Label;
+            UpdateTabs(labelTab, personalTab, houseTab);
+            UpdateTabButtons(labelButton, personalButton, houseButton);
+
+            labelTab.ShowMoneyReport();
+        }
         
         protected override void BeforePageOpen()
         {
