@@ -106,6 +106,7 @@ namespace Game
 
             if (_playerLabel != null && _playerLabel.Name == labelName)
             {
+                _playerLabel.Logo = customLabelsLogo;
                 return _playerLabel;
             }
 
@@ -458,6 +459,12 @@ namespace Game
             {
                 personalPage.ShowLabelMoneyReport();
             });
+        }
+
+        public bool IsPlayerInGameLabel()
+        {
+            string labelName = PlayerManager.Data.Label;
+            return labelName != "" && labelName != _playerLabel.Name;
         }
     }
 }

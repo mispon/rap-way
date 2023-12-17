@@ -1,5 +1,4 @@
-﻿using System;
-using Core;
+﻿using Core;
 using Data;
 using Enums;
 using Models.Info.Production;
@@ -24,8 +23,12 @@ namespace Game.Pages.Album
         [SerializeField] private WorkPoints playerTextWorkPoints;
         [SerializeField] private WorkPoints bitmakerWorkPoints;
         [SerializeField] private WorkPoints textwritterWorkPoints;
+        [SerializeField] private WorkPoints labelBitWorkPoints;
+        [SerializeField] private WorkPoints labelTextWorkPoints;
         [SerializeField] private Image bitmakerAvatar;
         [SerializeField] private Image textwritterAvatar;
+        [SerializeField] private Image labelAvatar;
+        [SerializeField] private GameObject labelFrozen;
 
         [Header("Данные")] 
         [SerializeField] private ImagesBank imagesBank;
@@ -35,7 +38,8 @@ namespace Game.Pages.Album
 
         private AlbumInfo _album;
         private bool _hasBitmaker;
-        private bool _hasTextwritter;
+        private bool _hasTextWriter;
+        private LabelInfo _label;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -106,8 +110,15 @@ namespace Game.Pages.Album
                 bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill.Value + 2);
                 bitmakerWorkPoints.Show(bitmakerPoints);
             }
+            
+            var labelPoints = 0;
+            if (_label is {IsFrozen: false})
+            {
+                labelPoints = Random.Range(1, _label.Production.Value + 1);
+                labelBitWorkPoints.Show(labelPoints);
+            }
 
-            return playersBitPoints + bitmakerPoints;
+            return playersBitPoints + bitmakerPoints + labelPoints;
         }
 
         /// <summary>
@@ -118,14 +129,21 @@ namespace Game.Pages.Album
             var playersTextPoints = Random.Range(1, data.Stats.Vocobulary.Value + 2);
             playerTextWorkPoints.Show(playersTextPoints);
 
-            var textwritterPoints = 0;
-            if (_hasTextwritter)
+            var textWriterPoints = 0;
+            if (_hasTextWriter)
             {
-                textwritterPoints = Random.Range(1, data.Team.TextWriter.Skill.Value + 2);
-                textwritterWorkPoints.Show(textwritterPoints);
+                textWriterPoints = Random.Range(1, data.Team.TextWriter.Skill.Value + 2);
+                textwritterWorkPoints.Show(textWriterPoints);
+            }
+            
+            var labelPoints = 0;
+            if (_label is {IsFrozen: false})
+            {
+                labelPoints = Random.Range(1, _label.Production.Value + 1);
+                labelTextWorkPoints.Show(labelPoints);
             }
 
-            return playersTextPoints + textwritterPoints;
+            return playersTextPoints + textWriterPoints + labelPoints;
         }
 
         /// <summary>
@@ -142,10 +160,25 @@ namespace Game.Pages.Album
             base.BeforePageOpen();
             
             _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
-            _hasTextwritter = TeamManager.IsAvailable(TeammateType.TextWriter);
+            _hasTextWriter = TeamManager.IsAvailable(TeammateType.TextWriter);
+            
+            if (PlayerManager.Data.Label != "")
+            {
+                _label = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
+            }
 
+            if (_label != null)
+            {
+                labelAvatar.gameObject.SetActive(true);
+                labelAvatar.sprite = _label.Logo;
+                labelFrozen.SetActive(_label.IsFrozen);
+            } else
+            {
+                labelAvatar.gameObject.SetActive(false);
+            }
+            
             bitmakerAvatar.sprite = _hasBitmaker ? imagesBank.BitmakerActive : imagesBank.BitmakerInactive;
-            textwritterAvatar.sprite = _hasTextwritter ? imagesBank.TextwritterActive : imagesBank.TextwritterInactive;
+            textwritterAvatar.sprite = _hasTextWriter ? imagesBank.TextwritterActive : imagesBank.TextwritterInactive;
         }
 
         protected override void BeforePageClose()

@@ -1,4 +1,5 @@
 ﻿using Core;
+using Data;
 using Enums;
 using Models.Info.Production;
 using UnityEngine;
@@ -17,14 +18,18 @@ namespace Game.Pages.Clip
 
         [Header("Команда игрока")] 
         [SerializeField] private WorkPoints playerWorkPoints;
-
+        [SerializeField] private WorkPoints labelWorkPoints;
         [SerializeField] private WorkPoints directorWorkPoints;
         [SerializeField] private WorkPoints operatorWorkPoints;
-
+        [Space]
+        [SerializeField] private Image labelAvatar;
+        [SerializeField] private GameObject labelFrozen;
+        
         [Header("Страница результата")] 
         [SerializeField] private ClipResultPage clipResult;
 
         private ClipInfo _clip;
+        private LabelInfo _label;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -91,6 +96,18 @@ namespace Game.Pages.Clip
                 _clip.DirectorPoints += playerPointsValue;
             else
                 _clip.OperatorPoints += playerPointsValue;
+            
+            var labelPoints = 0;
+            if (_label is {IsFrozen: false})
+            {
+                labelPoints = Random.Range(1, _label.Production.Value + 1);
+                labelWorkPoints.Show(labelPoints);
+            }
+            
+            if (Random.Range(0, 2) > 0)
+                _clip.DirectorPoints += labelPoints;
+            else
+                _clip.OperatorPoints += labelPoints;
         }
 
         /// <summary>
@@ -100,6 +117,26 @@ namespace Game.Pages.Clip
         {
             directorPoints.text = _clip.DirectorPoints.ToString();
             operatorPoints.text = _clip.OperatorPoints.ToString();
+        }
+
+        protected override void BeforePageOpen()
+        {
+            base.BeforePageOpen();
+            
+            if (PlayerManager.Data.Label != "")
+            {
+                _label = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
+            }
+
+            if (_label != null)
+            {
+                labelAvatar.gameObject.SetActive(true);
+                labelAvatar.sprite = _label.Logo;
+                labelFrozen.SetActive(_label.IsFrozen);
+            } else
+            {
+                labelAvatar.gameObject.SetActive(false);
+            }
         }
 
         protected override void BeforePageClose()

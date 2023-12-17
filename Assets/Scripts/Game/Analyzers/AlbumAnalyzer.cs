@@ -42,6 +42,12 @@ namespace Game.Analyzers
             
             album.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
             album.MoneyIncome = CalcMoneyIncome(album.ListenAmount, settings.AlbumListenCost);
+            
+            if (LabelsManager.Instance.IsPlayerInGameLabel())
+            {
+                int labelsFee = album.MoneyIncome / 100 * 20;
+                album.MoneyIncome -= labelsFee;
+            }
         }
 
         /// <summary>

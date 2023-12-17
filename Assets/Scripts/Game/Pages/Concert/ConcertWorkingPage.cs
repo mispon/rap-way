@@ -23,9 +23,13 @@ namespace Game.Pages.Concert
         [SerializeField] private WorkPoints playerPrWorkPoints;
         [SerializeField] private WorkPoints managerWorkPoints;
         [SerializeField] private WorkPoints prmanWorkPoints;
+        [SerializeField] private WorkPoints labelManagementWorkPoints;
+        [SerializeField] private WorkPoints labelPrWorkPoints;
         [SerializeField] private Image managerAvatar;
         [SerializeField] private Image prManAvatar;
-
+        [SerializeField] private Image labelAvatar;
+        [SerializeField] private GameObject labelFrozen;
+        
         [Header("Данные")]
         [SerializeField] private ImagesBank imagesBank;        
         
@@ -35,6 +39,7 @@ namespace Game.Pages.Concert
         private ConcertInfo _concert;
         private bool _hasManager;
         private bool _hasPrMan;
+        private LabelInfo _label;
 
         /// <summary>
         /// Начинает выполнение работы 
@@ -108,8 +113,15 @@ namespace Game.Pages.Concert
                 managerPoints = Random.Range(1, data.Team.Manager.Skill.Value + 2);
                 managerWorkPoints.Show(managerPoints);
             }
+            
+            var labelPoints = 0;
+            if (_label is {IsFrozen: false})
+            {
+                labelPoints = Random.Range(1, _label.Production.Value + 1);
+                labelManagementWorkPoints.Show(labelPoints);
+            }
 
-            return playersManagementPoints + managerPoints;
+            return playersManagementPoints + managerPoints + labelPoints;
         }
 
         /// <summary>
@@ -126,8 +138,15 @@ namespace Game.Pages.Concert
                 prManPoints = Random.Range(1, data.Team.PrMan.Skill.Value + 2);
                 prmanWorkPoints.Show(prManPoints);
             }
+            
+            var labelPoints = 0;
+            if (_label is {IsFrozen: false})
+            {
+                labelPoints = Random.Range(1, _label.Production.Value + 1);
+                labelPrWorkPoints.Show(labelPoints);
+            }
 
-            return playersMarketingPoints + prManPoints;
+            return playersMarketingPoints + prManPoints + labelPoints;
         }
 
         /// <summary>
@@ -148,6 +167,21 @@ namespace Game.Pages.Concert
 
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
             prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
+            
+            if (PlayerManager.Data.Label != "")
+            {
+                _label = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
+            }
+
+            if (_label != null)
+            {
+                labelAvatar.gameObject.SetActive(true);
+                labelAvatar.sprite = _label.Logo;
+                labelFrozen.SetActive(_label.IsFrozen);
+            } else
+            {
+                labelAvatar.gameObject.SetActive(false);
+            }
         }
 
         protected override void BeforePageClose()

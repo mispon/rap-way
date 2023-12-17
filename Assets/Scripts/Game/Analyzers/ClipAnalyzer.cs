@@ -43,6 +43,12 @@ namespace Game.Analyzers
 
             clip.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
             clip.MoneyIncome = CalcMoneyIncome(clip.Views, settings.ClipViewCost);
+            
+            if (LabelsManager.Instance.IsPlayerInGameLabel())
+            {
+                int labelsFee = clip.MoneyIncome / 100 * 20;
+                clip.MoneyIncome -= labelsFee;
+            }
         }
 
         /// <summary>

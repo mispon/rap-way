@@ -47,6 +47,12 @@ namespace Game.Analyzers
             
             track.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
             track.MoneyIncome = CalcMoneyIncome(track.ListenAmount, settings.TrackListenCost);
+
+            if (LabelsManager.Instance.IsPlayerInGameLabel() && track.Feat == null)
+            {
+                int labelsFee = track.MoneyIncome / 100 * 20;
+                track.MoneyIncome -= labelsFee;
+            }
         }
 
         /// <summary>
