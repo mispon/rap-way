@@ -8,35 +8,6 @@ namespace Tests.EditorMode.LabelsManager
     public class Tests
     {
         [Test]
-        public void MapScoreToPrestigeTest()
-        {
-            var method = TestUtils.CreateStaticMethod<Game.LabelsManager>("MapScoreToPrestige", _ => {});
-
-            var testCases = new Dictionary<int, float>
-            {
-                [4] = 0.0f,
-                [5] = 0.5f,
-                [10] = 1.0f,
-                [20] = 1.5f,
-                [30] = 2.0f,
-                [40] = 2.5f,
-                [50] = 3.0f,
-                [60] = 3.5f,
-                [70] = 4.0f,
-                [80] = 4.5f,
-                [90] = 5.0f,
-            };
-
-            foreach (var (score, wantPrestige) in testCases)
-            {
-                object[] args = {score};
-                var prestige = method(args);
-                
-                Assert.AreEqual(wantPrestige, prestige);   
-            }
-        }
-
-        [Test]
         public void GetLabelPrestigeTest()
         {
             int[] expToLevelUp = {

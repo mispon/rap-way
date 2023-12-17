@@ -42,9 +42,8 @@ namespace Game.Pages.Personal.LabelTab
                 // hack for properly getting score
                 info.Fans *= 1_000_000;
             }
-            
-            const int maxFans = 50_000_000;
-            score.text = RappersManager.GetRapperScore(info, maxFans).ToString();
+
+            score.text = RappersManager.GetRapperScore(info).ToString();
 
             row.color = index % 2 == 0 ? evenColor : oddColor;
         }

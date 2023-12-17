@@ -1,6 +1,7 @@
 using Core;
 using Data;
 using Enums;
+using Models.Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,7 @@ namespace Game.Pages.Rappers
         [SerializeField] private ImagesBank imagesBank;
 
         private RapperInfo _rapper;
-        private bool _isFeat;
+        private ConversationType _convType;
         private int _playerPoints;
         private int _rapperPoints;
         private bool _hasManager;
@@ -42,7 +43,7 @@ namespace Game.Pages.Rappers
         public override void StartWork(params object[] args)
         {
             _rapper = (RapperInfo) args[0]; 
-            _isFeat = (bool) args[1];
+            _convType = (ConversationType) args[1];
             
             Open();
             RefreshWorkAnims();
@@ -63,7 +64,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         protected override void FinishWork()
         {
-            rapperResult.Show(_rapper, _playerPoints, _rapperPoints, _isFeat);
+            rapperResult.Show(_rapper, _playerPoints, _rapperPoints, _convType);
             Close();
         }
 

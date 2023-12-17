@@ -3,6 +3,7 @@ using Data;
 using Game.Pages.Battle;
 using Game.Pages.Charts;
 using Game.Pages.Feat;
+using Models.Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +30,7 @@ namespace Game.Pages.Rappers
         [SerializeField] private BattleWorkingPage battlePage;
 
         private RapperInfo _rapper;
-        private bool _isFeat;
+        private ConversationType _convType;
 
         private void Start()
         {
@@ -41,10 +42,10 @@ namespace Game.Pages.Rappers
         /// <summary>
         /// Открывает страницу с результатами переговоров
         /// </summary>
-        public void Show(RapperInfo rapper, int playerPoints, int rapperPoints, bool isFeat)
+        public void Show(RapperInfo rapper, int playerPoints, int rapperPoints, ConversationType convType)
         {
             _rapper = rapper;
-            _isFeat = isFeat;
+            _convType = convType;
             
             bool result = AnalyzeConversations(playerPoints, rapperPoints);
             DisplayResult(result, rapper.Name);
@@ -81,11 +82,23 @@ namespace Game.Pages.Rappers
         private void OnNext()
         {
             SoundManager.Instance.PlayClick();
-            
-            if (_isFeat)
-                featPage.Show(_rapper);
-            else
-                battlePage.StartWork(_rapper);
+
+            switch (_convType)
+            {
+                case ConversationType.Feat:
+                    featPage.Show(_rapper);
+                    break;
+                case ConversationType.Battle:
+                    battlePage.StartWork(_rapper);
+                    break;
+                case ConversationType.Label:
+                    _rapper.Label = PlayerManager.Data.Label;
+                    LabelsManager.Instance.RefreshScore(_rapper.Label);
+                    break;
+                default:
+                    Debug.LogError($"Unexpected conv type {_convType.ToString()}");
+                    break;
+            }
             
             chartsPage.Close();
             Close();

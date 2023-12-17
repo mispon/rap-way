@@ -3,6 +3,7 @@ using Core;
 using Data;
 using Enums;
 using Game.Pages.Charts;
+using Models.Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,6 +28,7 @@ namespace Game.Pages.Rappers
         [SerializeField] private Image managerAvatar;
         [SerializeField] private Button battleButton;
         [SerializeField] private Button featButton;
+        [SerializeField] private Button labelButton;
         [SerializeField] private Button deleteButton;
         [Space]
         [SerializeField] private Text fans;
@@ -46,19 +48,20 @@ namespace Game.Pages.Rappers
 
         private void Start()
         {
-            battleButton.onClick.AddListener(() => StartConversation(false));
-            featButton.onClick.AddListener(() => StartConversation(true));
+            battleButton.onClick.AddListener(() => StartConversation(ConversationType.Battle));
+            featButton.onClick.AddListener(() => StartConversation(ConversationType.Feat));
+            labelButton.onClick.AddListener(() => StartConversation(ConversationType.Label));
             deleteButton.onClick.AddListener(DeleteRapper);
         }
 
         /// <summary>
         /// Обработчик кнопок
         /// </summary>
-        private void StartConversation(bool isFeat)
+        private void StartConversation(ConversationType convType)
         {
             SoundManager.Instance.PlayClick();
             PlayerManager.SetTeammateCooldown(TeammateType.Manager, GameManager.Instance.Settings.ManagerCooldown);
-            workingPage.StartWork(_rapper, isFeat);
+            workingPage.StartWork(_rapper, convType);
             rappersPage.Close();
             chartsPage.Hide();
         }
@@ -80,6 +83,7 @@ namespace Game.Pages.Rappers
             
             DisplayInfo(rapperInfo);
             CheckPlayerManager();
+            CheckPlayersLabel();
         }
 
         /// <summary>
@@ -97,6 +101,11 @@ namespace Game.Pages.Rappers
             
             featButton.gameObject.SetActive(!info.IsPlayer);
             battleButton.gameObject.SetActive(!info.IsPlayer);
+
+            bool labelsButtonActive = !info.IsPlayer && 
+                                      LabelsManager.Instance.HasPlayerLabel &&
+                                      !string.Equals(_rapper.Label, LabelsManager.Instance.PlayerLabel.Name, StringComparison.InvariantCultureIgnoreCase);
+            labelButton.gameObject.SetActive(labelsButtonActive);
         }
 
         private Sprite GetAvatar(RapperInfo info)
@@ -125,6 +134,25 @@ namespace Game.Pages.Rappers
             managerAvatar.sprite = TeamManager.IsAvailable(TeammateType.Manager)
                 ? imagesBank.ProducerActive
                 : imagesBank.ProducerInactive;
+        }
+
+        private void CheckPlayersLabel()
+        {
+            var manager = PlayerManager.Data.Team.Manager;
+            
+            bool canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
+
+            var labelInfo = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
+            if (labelInfo is {IsPlayer: true, IsFrozen: false})
+            {
+                float prestige = RappersManager.GetRapperPrestige(_rapper);
+                canInteract &= Mathf.Abs(prestige - labelInfo.Prestige.Value) <= 1.5f;
+            } else
+            {
+                canInteract = false;
+            }
+            
+            labelButton.interactable = canInteract;
         }
     }
 }

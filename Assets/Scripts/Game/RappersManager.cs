@@ -185,14 +185,35 @@ namespace Game
             return rapper.Fans * factor;
         }
 
-        public static int GetRapperScore(RapperInfo rapper, int maxFans)
+        public static int GetRapperScore(RapperInfo rapper)
         {
             const int maxRapperScore = 100;
+            const int maxValuableFans = 50_000_000;
             
             int fans = rapper.IsPlayer ? rapper.Fans : GetFansCount(rapper);
-            var score = Convert.ToInt32(((1f * fans) / maxFans) * maxRapperScore);
+            var score = Convert.ToInt32(((1f * fans) / maxValuableFans) * maxRapperScore);
 
             return Mathf.Min(score, maxRapperScore);
+        }
+        
+        public static float GetRapperPrestige(RapperInfo rapper)
+        {
+            int score = GetRapperScore(rapper);
+            
+            return score switch
+            {
+                >= 90 => 5.0f,
+                >= 80 => 4.5f,
+                >= 70 => 4.0f,
+                >= 60 => 3.5f,
+                >= 50 => 3.0f,
+                >= 40 => 2.5f,
+                >= 30 => 2.0f,
+                >= 20 => 1.5f,
+                >= 10 => 1.0f,
+                >= 5 => 0.5f,
+                _ => 0
+            };
         }
 
         public bool IsNameAlreadyTaken(string nickname)
