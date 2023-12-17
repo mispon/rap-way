@@ -3,6 +3,7 @@ using System.Linq;
 using Core;
 using Data;
 using Game.Pages.Charts;
+using Game.UI.GameError;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
@@ -18,6 +19,7 @@ namespace Game.Pages.Rappers
         [Header("Ввод имени")]
         [SerializeField] private InputField nameInput;
         [SerializeField] private Carousel labelInput;
+        [SerializeField] private GameError gameError;
         [Header("Ввод словарного запаса")]
         [SerializeField] private Button vocabularyBtnLeft;
         [SerializeField] private Button vocabularyBtnRight;
@@ -120,6 +122,16 @@ namespace Game.Pages.Rappers
             var nickname = nameInput.text;
             if (nickname.Length is < 3 or > 20)
             {
+                var errorMsg = GetLocale("invalid_rapper_name_err");
+                gameError.Show(errorMsg);
+                HighlightError(nameInput);
+                return;
+            }
+            
+            if (RappersManager.Instance.IsNameAlreadyTaken(nickname))
+            {
+                var errorMsg = GetLocale("rapper_name_exists_err");
+                gameError.Show(errorMsg);
                 HighlightError(nameInput);
                 return;
             }

@@ -194,5 +194,17 @@ namespace Game
 
             return Mathf.Min(score, maxRapperScore);
         }
+
+        public bool IsNameAlreadyTaken(string nickname)
+        {
+            foreach (var rapper in GetAllRappers())
+            {
+                if (string.Equals(nickname, rapper.Name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

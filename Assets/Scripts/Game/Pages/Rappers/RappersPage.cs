@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Data;
+using Game.UI.AskingWindow;
 using Game.UI.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,9 +15,9 @@ namespace Game.Pages.Rappers
     public class RappersPage : Page
     {
         [Space]
+        [SerializeField] private AskingWindow askingWindow;
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
-
         [Space]
         [SerializeField] private RapperCard rapperCard;
         [SerializeField] private Button addNewRapperButton;
@@ -97,9 +98,14 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void HandleRapperDelete(RapperInfo customRapper)
         {
-            RappersManager.Instance.RemoveCustom(customRapper);
-            AfterPageClose();
-            BeforePageOpen();
+            askingWindow.Show(
+                GetLocale("delete_rapper_question"),
+                () => {
+                    RappersManager.Instance.RemoveCustom(customRapper);
+                    AfterPageClose();
+                    BeforePageOpen();
+                }
+            );
         }
     }
 }

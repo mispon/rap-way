@@ -2,6 +2,7 @@
 using System.Linq;
 using Core;
 using Enums;
+using Localization;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;

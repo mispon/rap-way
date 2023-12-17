@@ -4,7 +4,9 @@ using Core;
 using Data;
 using Game.Pages.Labels;
 using Game.UI;
+using Game.UI.AskingWindow;
 using Game.UI.ScrollViewController;
+using Localization;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Extensions;
@@ -14,6 +16,7 @@ namespace Game.Pages.Personal.LabelTab
     public class PlayersLabelSubTab : Tab
     {
         [SerializeField] private LabelTab labelTab;
+        [SerializeField] private AskingWindow askingWindow;
         [SerializeField] private Sprite customLabelLogo;
         [Space]
         [SerializeField] private Image logo;
@@ -83,9 +86,12 @@ namespace Game.Pages.Personal.LabelTab
             
             exp.text = PlayerManager.Data.Exp.ToString();
             income.text = LabelsManager.Instance.GetPlayersLabelIncome().GetMoney();
-            service.text = GetServiceCost().GetMoney();
+
+            int cost = GetServiceCost();
+            service.text = cost.GetMoney();
             
             payServiceButton.gameObject.SetActive(label.IsFrozen);
+            payServiceButton.interactable = PlayerManager.Data.Money >= cost;
         }
 
         private void DisplayMembers(LabelInfo label)
@@ -137,12 +143,6 @@ namespace Game.Pages.Personal.LabelTab
             SoundManager.Instance.PlayClick();
             
             int cost = GetServiceCost();
-            if (PlayerManager.Data.Money < cost)
-            {
-                // todo: show error
-                return;
-            }
-            
             PlayerManager.Instance.AddMoney(-cost);
             GameManager.Instance.PlayerLabel.IsFrozen = false;
         }
@@ -157,6 +157,7 @@ namespace Game.Pages.Personal.LabelTab
             int newExp = _label.Production.Exp + expStep;
             if (newExp >= expToUp)
             {
+                SoundManager.Instance.PlayLevelUp();
                 newExp -= expToUp;
                 level += 1;
             }
@@ -178,6 +179,7 @@ namespace Game.Pages.Personal.LabelTab
             int newExp = _label.Prestige.Exp + expStep;
             if (newExp >= expToUp)
             {
+                SoundManager.Instance.PlayLevelUp();
                 newExp -= expToUp;
                 level += 1;
             }
@@ -191,15 +193,20 @@ namespace Game.Pages.Personal.LabelTab
         
         private void DisbandLabel()
         {
-            // todo: ask are you sure?
+            SoundManager.Instance.PlayClick();
             
-            var members = GetMembers(_label.Name);
-            members.ForEach(e => e.Label = "");
-            PlayerManager.Data.Label = "";
+            askingWindow.Show(
+                LocalizationManager.Instance.Get("disband_label_question").ToUpper(),
+                () => {
+                    var members = GetMembers(_label.Name);
+                    members.ForEach(e => e.Label = "");
+                    PlayerManager.Data.Label = "";
 
-            LabelsManager.Instance.DisbandPlayersLabel();
+                    LabelsManager.Instance.DisbandPlayersLabel();
             
-            labelTab.Reload();
+                    labelTab.Reload();
+                }
+            );
         }
     }
 }

@@ -88,7 +88,7 @@ namespace Game
         /// </summary>
         public LabelInfo GetLabel(string labelName)
         {
-            var label = _labels.FirstOrDefault(e => e.Name == labelName);
+            var label = _labels.FirstOrDefault(e => string.Equals(e.Name, labelName, StringComparison.InvariantCultureIgnoreCase));
             if (label != null)
             {
                 return label;
@@ -268,9 +268,9 @@ namespace Game
                 {
                     continue;
                 }
-
-                Debug.Log($"Rapper {rapper.Name} join to label {label.Name}");
+                
                 rapper.Label = label.Name;
+                RefreshScore(label);
                 break;
             }
         }
@@ -294,8 +294,8 @@ namespace Game
             int actionDice = Random.Range(0, 2); // 0 - leave, 1 - change
             if (actionDice == 0)
             {
-                Debug.Log($"Rapper {rapper.Name} leave from label {label.Name}");
                 rapper.Label = "";
+                RefreshScore(label);
                 return;
             }
 

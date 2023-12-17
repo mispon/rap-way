@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
 using Game.Pages.Labels;
+using Game.UI.AskingWindow;
 using Game.UI.ScrollViewController;
+using Localization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +15,7 @@ namespace Game.Pages.Personal.LabelTab
     public class GameLabelSubTab : Tab
     {
         [SerializeField] private LabelTab labelTab;
+        [SerializeField] private AskingWindow askingWindow;
         [Space]
         [SerializeField] private Image logo;
         [SerializeField] private Text labelName;
@@ -89,8 +93,15 @@ namespace Game.Pages.Personal.LabelTab
 
         private void LeaveLabel()
         {
-            PlayerManager.Data.Label = "";
-            labelTab.Reload();
+            SoundManager.Instance.PlayClick();
+            
+            askingWindow.Show(
+                LocalizationManager.Instance.Get("leave_label_question").ToUpper(),
+                () => {
+                    PlayerManager.Data.Label = "";
+                    labelTab.Reload();
+                }
+            );
         }
 
         public override void Close()

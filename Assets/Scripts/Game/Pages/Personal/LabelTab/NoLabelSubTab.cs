@@ -1,14 +1,19 @@
-﻿using Data;
+﻿using Core;
+using Data;
+using Game.UI.GameError;
+using Localization;
 using Models.Game;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Personal.LabelTab
 {
     public class NoLabelSubTab : Tab
     {
         [SerializeField] private LabelTab labelTab;
-
+        [SerializeField] private GameError gameError;
+        
         [Space]
         [SerializeField] private int fansRequirement = 10_000_000;
         [SerializeField] private Text noFansMessage;
@@ -30,20 +35,36 @@ namespace Game.Pages.Personal.LabelTab
             int fans = PlayerManager.Data.Fans;
             bool canCreateLabel = fans >= fansRequirement;
 
-            // noFansMessage.text = LocalizationManager.Instance.GetFormat("", fansRequirement.GetDisplay());
-            noFansMessage.gameObject.SetActive(!canCreateLabel);
             createLabelGroup.SetActive(canCreateLabel);
+            noFansMessage.gameObject.SetActive(!canCreateLabel);
+            noFansMessage.text = LocalizationManager.Instance
+                .GetFormat("label_fans_req_message", fansRequirement.GetDisplay())
+                .ToUpper();
             
             base.Open();
         }
 
         private void CreateLabel()
         {
+            SoundManager.Instance.PlayClick();
+            
             string labelName = labelNameInput.text;
 
+            if (labelName.Length is < 3 or > 25)
+            {
+                var errorMsg = LocalizationManager.Instance.Get("invalid_label_name_err");
+                gameError.Show(errorMsg);
+                HighlightError(labelNameInput);
+                
+                return;
+            }
+            
             if (LabelsManager.Instance.IsNameAlreadyTaken(labelName))
             {
-                // todo: show error
+                var errorMsg = LocalizationManager.Instance.Get("label_name_exists_err");
+                gameError.Show(errorMsg);
+                HighlightError(labelNameInput);
+                
                 return;
             }
 
@@ -58,6 +79,12 @@ namespace Game.Pages.Personal.LabelTab
             
             PlayerManager.Data.Label = labelName;
             labelTab.Reload();
+        }
+        
+        private static void HighlightError(Component component)
+        {
+            var errorAnim = component.GetComponentInChildren<Animation>();
+            errorAnim.Play();
         }
     }
 }

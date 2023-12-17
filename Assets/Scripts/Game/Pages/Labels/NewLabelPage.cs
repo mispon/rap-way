@@ -3,6 +3,7 @@ using System.Globalization;
 using Core;
 using Data;
 using Game.Pages.Charts;
+using Game.UI.GameError;
 using Models.Game;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ namespace Game.Pages.Labels
         
         [Space]
         [SerializeField] private InputField nameInput;
+        [SerializeField] private GameError gameError;
         [Header("Production inputs")]
         [SerializeField] private Button productionBtnLeft;
         [SerializeField] private Button productionBtnRight;
@@ -117,12 +119,16 @@ namespace Game.Pages.Labels
             var labelName = nameInput.text;
             if (labelName.Length is < 3 or > 20)
             {
+                var errorMsg = GetLocale("invalid_label_name_err");
+                gameError.Show(errorMsg);
                 HighlightError(nameInput);
                 return;
             }
 
             if (LabelsManager.Instance.IsNameAlreadyTaken(labelName))
             {
+                var errorMsg = GetLocale("label_name_exists_err");
+                gameError.Show(errorMsg);
                 HighlightError(nameInput);
                 return;
             }

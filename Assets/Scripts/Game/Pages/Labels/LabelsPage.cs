@@ -2,6 +2,7 @@
 using System.Linq;
 using Core;
 using Data;
+using Game.UI.AskingWindow;
 using Game.UI.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ namespace Game.Pages.Labels
     public class LabelsPage : Page
     {
         [Space]
+        [SerializeField] private AskingWindow askingWindow;
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
         [Space]
@@ -91,9 +93,14 @@ namespace Game.Pages.Labels
         /// </summary>
         private void HandleLabelDelete(LabelInfo customLabel)
         {
-            LabelsManager.Instance.RemoveCustom(customLabel);
-            AfterPageClose();
-            BeforePageOpen();
+            askingWindow.Show(
+                GetLocale("delete_label_question"),
+                () => {
+                    LabelsManager.Instance.RemoveCustom(customLabel);
+                    AfterPageClose();
+                    BeforePageOpen();
+                }
+            );
         }
     }
 }
