@@ -42,6 +42,8 @@ namespace Game.Pages.Personal.LabelTab
                 .ToUpper();
             
             base.Open();
+            
+            TutorialManager.Instance.ShowTutorial("tutorial_no_labels");
         }
 
         private void CreateLabel()

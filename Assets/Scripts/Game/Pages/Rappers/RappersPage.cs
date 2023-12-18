@@ -9,9 +9,6 @@ using UnityEngine.UI;
 
 namespace Game.Pages.Rappers
 {
-    /// <summary>
-    /// Страница реальных реперов
-    /// </summary>
     public class RappersPage : Page
     {
         [Space]

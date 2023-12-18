@@ -120,11 +120,6 @@ namespace Game.Pages.Personal
             buttons[2].image.color = inactiveTabColor;
         }
 
-        protected override void AfterPageOpen()
-        {
-            TutorialManager.Instance.ShowTutorial("tutorial_personal_page");
-        }
-
         protected override void AfterPageClose()
         {
             _activeTab = TabsType.None;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
 using Enums;
 using Localization;
@@ -62,6 +63,8 @@ namespace Game.Pages.Personal.PersonalTab
             SetupLastActions(data.History.GetLastActions(3));
             
             base.Open();
+            
+            TutorialManager.Instance.ShowTutorial("tutorial_personal_page");
         }
         
         /// <summary>

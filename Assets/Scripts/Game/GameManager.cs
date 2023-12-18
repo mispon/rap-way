@@ -25,6 +25,7 @@ namespace Game
         public LabelInfo PlayerLabel;
         public Eagle[] Eagles;
         public string[] ShowedTutorials;
+        public string[] ShowedHints;
     }
     
     /// <summary>
@@ -54,6 +55,7 @@ namespace Game
         [Space]
         public List<Eagle> Eagles;
         public HashSet<string> ShowedTutorials;
+        public HashSet<string> ShowedHints;
 
         [NonSerialized] public bool IsReady;
 
@@ -114,7 +116,8 @@ namespace Game
                 PlayerLabel = null,
                 
                 Eagles = Array.Empty<Eagle>(),
-                ShowedTutorials = Array.Empty<string>()
+                ShowedTutorials = Array.Empty<string>(),
+                ShowedHints = Array.Empty<string>()
             };
             
             PlayerData = gameData.PlayerData;
@@ -128,7 +131,8 @@ namespace Game
             CustomLabels = gameData.CustomLabels?.ToList() ?? new List<LabelInfo>(0);
             
             Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
-            ShowedTutorials = gameData.ShowedTutorials.ToHashSet();
+            ShowedTutorials = gameData.ShowedTutorials?.ToHashSet() ?? new HashSet<string>(0);
+            ShowedHints = gameData.ShowedHints?.ToHashSet() ?? new HashSet<string>(0);
         }
 
         /// <summary>
@@ -154,7 +158,8 @@ namespace Game
                 PlayerLabel = PlayerLabel,
                 
                 Eagles = Eagles.Take(20).ToArray(),
-                ShowedTutorials = ShowedTutorials.ToArray()
+                ShowedTutorials = ShowedTutorials.ToArray(),
+                ShowedHints = ShowedHints.ToArray()
             };
 
             DataManager.Save(gameDataKey, gameData);

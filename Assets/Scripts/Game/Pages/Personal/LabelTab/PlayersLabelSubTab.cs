@@ -71,6 +71,8 @@ namespace Game.Pages.Personal.LabelTab
             DisplayMembers(label);
             
             base.Open();
+            
+            TutorialManager.Instance.ShowTutorial("tutorial_players_label");
         }
         
         private void DisplayInfo(LabelInfo label)

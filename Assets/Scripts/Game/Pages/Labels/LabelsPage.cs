@@ -72,8 +72,7 @@ namespace Game.Pages.Labels
 
         protected override void AfterPageOpen()
         {
-            // TODO:
-            // TutorialManager.Instance.ShowTutorial("tutorial_labels");
+            TutorialManager.Instance.ShowTutorial("tutorial_labels");
         }
         
         protected override void AfterPageClose()
