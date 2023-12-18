@@ -86,6 +86,8 @@ namespace Game.Pages.Clip
             clip.Timestamp = TimeManager.Instance.Now.DateToString();
             PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome, settings.ClipRewardExp);
             ProductionManager.AddClip(clip);
+            
+            GameManager.Instance.SaveApplicationData();
         }
 
         /// <summary>

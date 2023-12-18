@@ -46,7 +46,7 @@ namespace Game.Pages.Personal.LabelTab
         {
             logo.sprite = label.Logo;
             labelName.text = label.Name;
-            labelDesc.text = label.Desc;
+            labelDesc.text = LocalizationManager.Instance.Get(label.Desc);
             production.text = label.Production.Value.ToString();
 
             float prestige = LabelsManager.Instance.GetLabelPrestige(label);

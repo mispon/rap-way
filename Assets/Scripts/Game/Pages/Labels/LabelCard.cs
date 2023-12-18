@@ -17,6 +17,11 @@ namespace Game.Pages.Labels
         [Space]
         [SerializeField] private Sprite customLabelLogo;
         [SerializeField] private Button deleteButton;
+        [Space]
+        [SerializeField] private GameObject infoView;
+        [SerializeField] private Text infoDesc;
+        [SerializeField] private Button openInfoButton;
+        [SerializeField] private Button closeInfoButton;
         
         public event Action<LabelInfo> onDelete = _ => {};
 
@@ -24,11 +29,15 @@ namespace Game.Pages.Labels
         
         private void Start()
         {
+            openInfoButton.onClick.AddListener(OpenInfoView);
+            closeInfoButton.onClick.AddListener(CloseInfoView);
             deleteButton.onClick.AddListener(DeleteLabel);
         }
         
         public void Show(LabelInfo info)
         {
+            CloseInfoView();
+            
             _info = info;
             
             labelName.text = info.Name.ToUpper();
@@ -42,8 +51,20 @@ namespace Game.Pages.Labels
             stars.Display(prestige);
             
             deleteButton.gameObject.SetActive(info.IsCustom);
+            openInfoButton.gameObject.SetActive(!info.IsPlayer);
         }
 
+        private void OpenInfoView()
+        {
+            infoDesc.text = LocalizationManager.Instance.Get(_info.Desc);
+            infoView.SetActive(true);
+        }
+        
+        private void CloseInfoView()
+        {
+            infoView.SetActive(false);
+        }
+        
         private void DeleteLabel()
         {
             SoundManager.Instance.PlayClick();

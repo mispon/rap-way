@@ -138,6 +138,7 @@ namespace Game.Pages.Labels
             var customLabel = new LabelInfo
             {
                 Name = labelName,
+                Desc = "custom_label_desc",
                 Production = new ExpValue{Value = int.Parse(productionValue.text)},
                 Prestige = LabelsManager.Instance.FloatToExp(prestige),
                 IsCustom = true

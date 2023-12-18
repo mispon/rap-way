@@ -110,6 +110,8 @@ namespace Game.Pages.Track
             {
                 ProductionManager.AddFeat(track.Feat);
             }
+            
+            GameManager.Instance.SaveApplicationData();
         }
         
         /// <summary>

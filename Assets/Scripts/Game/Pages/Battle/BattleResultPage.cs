@@ -114,6 +114,8 @@ namespace Game.Pages.Battle
             {
                 ProductionManager.AddBattle(_result.RapperInfo);
             }
+            
+            GameManager.Instance.SaveApplicationData();
         }
 
         protected override void AfterPageClose()

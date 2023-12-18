@@ -43,6 +43,8 @@ namespace Game.Pages.Social
             PlayerManager.Instance.SpendMoney(social.CharityAmount);
             PlayerManager.Instance.AddHype(social.HypeIncome);
             PlayerManager.Instance.AddExp(settings.SocialsRewardExp);
+            
+            GameManager.Instance.SaveApplicationData();
         }
 
         protected override void AfterPageClose()

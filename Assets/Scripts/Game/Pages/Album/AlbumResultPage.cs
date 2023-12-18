@@ -91,6 +91,8 @@ namespace Game.Pages.Album
             album.Timestamp = TimeManager.Instance.Now.DateToString();
             PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome, settings.AlbumRewardExp);
             ProductionManager.AddAlbum(album);
+            
+            GameManager.Instance.SaveApplicationData();
         }
         
         protected override void AfterPageClose()

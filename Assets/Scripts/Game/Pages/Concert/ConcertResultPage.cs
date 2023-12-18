@@ -67,6 +67,8 @@ namespace Game.Pages.Concert
             PlayerManager.Instance.AddMoney(concert.Income, settings.ConcertRewardExp);
             ProductionManager.AddConcert(concert);
             GameManager.Instance.GameStats.ConcertCooldown = settings.ConcertCooldown;
+            
+            GameManager.Instance.SaveApplicationData();
         }
 
         protected override void BeforePageOpen()
