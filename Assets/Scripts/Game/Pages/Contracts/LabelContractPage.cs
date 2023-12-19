@@ -24,6 +24,9 @@ namespace Game.Pages.Contracts
 
         public void Show(LabelInfo label)
         {
+            if (PlayerManager.Data.Label != "")
+                return;
+            
             string playerNickname = PlayerManager.Data.Info.NickName;
             _labelName = label.Name;
             
