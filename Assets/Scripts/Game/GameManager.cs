@@ -125,10 +125,10 @@ namespace Game
             
             Rappers = gameData.Rappers?.ToList() ?? new List<RapperInfo>(0);
             CustomRappers = gameData.CustomRappers?.ToList() ?? new List<RapperInfo>(0);
-            PlayerLabel = gameData.PlayerLabel;
             
             Labels = gameData.Labels?.ToList() ?? new List<LabelInfo>(0);
             CustomLabels = gameData.CustomLabels?.ToList() ?? new List<LabelInfo>(0);
+            PlayerLabel = gameData.PlayerLabel;
             
             Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
             ShowedTutorials = gameData.ShowedTutorials?.ToHashSet() ?? new HashSet<string>(0);

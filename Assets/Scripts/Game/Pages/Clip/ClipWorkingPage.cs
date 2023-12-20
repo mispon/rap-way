@@ -123,7 +123,7 @@ namespace Game.Pages.Clip
         {
             base.BeforePageOpen();
             
-            if (PlayerManager.Data.Label != "")
+            if (!string.IsNullOrEmpty(PlayerManager.Data.Label))
             {
                 _label = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
             }

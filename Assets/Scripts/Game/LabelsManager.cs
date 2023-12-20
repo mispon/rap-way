@@ -43,16 +43,7 @@ namespace Game
         private const int maxLabelLevel = 5;
 
         public LabelInfo PlayerLabel => _playerLabel;
-        public bool HasPlayerLabel => _playerLabel != null && _playerLabel.Name != "";
-        
-        /// <summary>
-        /// Used in tests for setup internal state
-        /// </summary>
-        public void TestSetup(int[] expToLevelUp, int expChangeVal)
-        {
-            expToLabelsLevelUp = expToLevelUp;
-            expChangeValue = expChangeVal;
-        }
+        public bool HasPlayerLabel => _playerLabel != null && !string.IsNullOrWhiteSpace(_playerLabel.Name);
         
         public void OnStart()
         {

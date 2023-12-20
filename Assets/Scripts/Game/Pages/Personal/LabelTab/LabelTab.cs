@@ -10,20 +10,27 @@ namespace Game.Pages.Personal.LabelTab
         
         public override void Open()
         {
+            base.Open();
+            
             string labelName = PlayerManager.Data.Label;
-            if (labelName != "")
-            {
-                var label = LabelsManager.Instance.GetLabel(labelName);
-                if (label.IsPlayer)
-                    playersLabelTab.Show(label);
-                else
-                    gameLabelTab.Show(label);
-            } else
+            if (string.IsNullOrEmpty(labelName))
             {
                 noLabelTab.Open();
+                return;
             }
-            
-            base.Open();
+
+            var label = LabelsManager.Instance.GetLabel(labelName);
+            if (label == null)
+            {
+                PlayerManager.Data.Label = "";
+                noLabelTab.Open();
+                return;
+            }
+                
+            if (label.IsPlayer)
+                playersLabelTab.Show(label);
+            else
+                gameLabelTab.Show(label);
         }
 
         public override void Close()

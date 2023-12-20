@@ -57,14 +57,14 @@ namespace Game.Pages.Labels
         /// </summary>
         private static List<LabelInfo> GetAllLabels()
         {
-            var allRappers = LabelsManager.Instance.GetAllLabels().ToList();
+            var labels = LabelsManager.Instance.GetAllLabels().ToList();
             
             if (LabelsManager.Instance.HasPlayerLabel)
             {
-                allRappers.Add(LabelsManager.Instance.PlayerLabel);
+                labels.Add(LabelsManager.Instance.PlayerLabel);
             }
 
-            return allRappers
+            return labels
                 .OrderByDescending(e => e.Score)
                 .ThenByDescending(e => LabelsManager.Instance.GetLabelPrestige(e))
                 .ToList();

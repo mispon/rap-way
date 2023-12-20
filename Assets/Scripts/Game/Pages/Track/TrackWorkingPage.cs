@@ -162,7 +162,7 @@ namespace Game.Pages.Track
             _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextWriter = TeamManager.IsAvailable(TeammateType.TextWriter);
             
-            if (PlayerManager.Data.Label != "")
+            if (!string.IsNullOrEmpty(PlayerManager.Data.Label))
             {
                 _label = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
             }

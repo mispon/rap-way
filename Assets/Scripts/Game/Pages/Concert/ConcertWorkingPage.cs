@@ -168,7 +168,7 @@ namespace Game.Pages.Concert
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
             prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
             
-            if (PlayerManager.Data.Label != "")
+            if (!string.IsNullOrEmpty(PlayerManager.Data.Label))
             {
                 _label = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
             }
