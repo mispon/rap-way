@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Firebase.Analytics;
 using Game.Analyzers;
 using Game.Pages.Eagler;
 using Models.Info.Production;
@@ -97,6 +98,7 @@ namespace Game.Pages.Album
         
         protected override void AfterPageClose()
         {
+            FirebaseAnalytics.LogEvent("album_finished");
             SaveResult(_albumInfo);
             _albumInfo = null;
         }

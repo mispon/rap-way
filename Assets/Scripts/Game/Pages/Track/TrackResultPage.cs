@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Firebase.Analytics;
 using Game.Analyzers;
 using Game.Pages.Eagler;
 using Models.Game;
@@ -119,6 +120,7 @@ namespace Game.Pages.Track
         /// </summary>
         protected override void AfterPageClose()
         {
+            FirebaseAnalytics.LogEvent("track_finished");
             SaveResult(_trackInfo);
             _trackInfo = null;
         }

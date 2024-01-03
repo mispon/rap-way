@@ -13,6 +13,7 @@ namespace Core
 
         private IEnumerator Start()
         {
+            InitFirebase();
             yield return new WaitForSeconds(loadingTime);
             SceneManager.Instance.LoadMainScene();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Firebase.Analytics;
 using Game.Analyzers;
 using Game.Pages.Eagler;
 using Models.Info.Production;
@@ -95,6 +96,7 @@ namespace Game.Pages.Clip
         /// </summary>
         protected override void AfterPageClose()
         {
+            FirebaseAnalytics.LogEvent("clip_finished");
             SaveResult(_clipInfo);
             _clipInfo = null;
         }
