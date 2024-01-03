@@ -98,7 +98,8 @@ namespace Game.Pages.Album
         
         protected override void AfterPageClose()
         {
-            FirebaseAnalytics.LogEvent("album_finished");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.AlbumResultShown);
+            
             SaveResult(_albumInfo);
             _albumInfo = null;
         }

@@ -166,11 +166,19 @@ namespace Game
         }
 
         /// <summary>
-        /// Проверяет, создан ли персонаж
+        /// Checks has been created character or not
         /// </summary>
         public bool HasCharacter()
         {
             return !string.IsNullOrWhiteSpace(PlayerData.Info.NickName);
+        }
+
+        /// <summary>
+        /// Checks any save exists or not
+        /// </summary>
+        public bool HasAnySaves()
+        {
+            return PlayerPrefs.HasKey(gameDataKey);
         }
 
         private void OnApplicationQuit()

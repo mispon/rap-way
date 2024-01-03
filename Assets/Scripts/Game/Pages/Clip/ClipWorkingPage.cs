@@ -1,6 +1,7 @@
 ﻿using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,6 +37,8 @@ namespace Game.Pages.Clip
         /// </summary>
         public override void StartWork(params object[] args)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateClipClick);
+            
             _clip = (ClipInfo) args[0];
             Open();
             RefreshWorkAnims();

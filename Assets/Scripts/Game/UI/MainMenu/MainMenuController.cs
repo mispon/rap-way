@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Interfaces;
+using Firebase.Analytics;
 using Game.Pages.AskReview;
 using Models.UI;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace Game.UI.MainMenu
         [SerializeField] private Button continueGameButton;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button aboutButton;
+        [SerializeField] private Button exitButton;
 
         [Header("Окна")] 
         [SerializeField] private GameObject newPlayerPanel;
@@ -34,36 +36,54 @@ namespace Game.UI.MainMenu
         {
             anim.Refresh();
             SetupButtons();
-
+            
+            if (GameManager.Instance.HasAnySaves())
+            {
+                FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
+            }
+            
             if (!GameManager.Instance.GameStats.AskedReview && GameManager.Instance.PlayerData.Fans > 0)
             {
                 reviewPage.Open();
-            } else
-            {
-                CasAdsManager.Instance.ShowInterstitial();
             }
         }
         
         /// <summary>
-        /// Создает обработчики нажатия на кнопки
+        /// Setups buttons
         /// </summary>
         private void SetupButtons()
         {
             continueGameButton.interactable = GameManager.Instance.HasCharacter();
 
-            newGameButton.onClick.AddListener(()=> ShowPanel(newPlayerPanel));
+            newGameButton.onClick.AddListener(() =>
+            {
+                FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGamePage);
+                ShowPanel(newPlayerPanel);
+            });
+            
             continueGameButton.onClick.AddListener(ContinueGame);
-            settingsButton.onClick.AddListener(()=> ShowPanel(settingsPanel));
-            aboutButton.onClick.AddListener(()=> ShowPanel(aboutPanel));
+            settingsButton.onClick.AddListener(() => ShowPanel(settingsPanel));
+            aboutButton.onClick.AddListener(() => ShowPanel(aboutPanel));
+            exitButton.onClick.AddListener(ExitGame);
         }
 
         /// <summary>
-        /// Загружает игровую сцену
+        /// Loads main game scene
         /// </summary>
         private static void ContinueGame()
         {
             SoundManager.Instance.PlayClick();
             SceneManager.Instance.LoadGameScene();
+        }
+
+        /// <summary>
+        /// Closes the game
+        /// </summary>
+        private static void ExitGame()
+        {
+            SoundManager.Instance.PlayClick();
+            GameManager.Instance.SaveApplicationData();
+            Application.Quit();
         }
 
         /// <summary>

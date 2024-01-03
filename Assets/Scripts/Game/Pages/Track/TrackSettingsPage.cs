@@ -3,6 +3,7 @@ using System.Linq;
 using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Game.UI.GameScreen;
 using Localization;
 using Models.Info;
@@ -54,6 +55,7 @@ namespace Game.Pages.Track
         protected override void AfterPageOpen()
         {
             TutorialManager.Instance.ShowTutorial("tutorial_track_page");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewTrackSelected);
         }
 
         /// <summary>

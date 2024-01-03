@@ -1,4 +1,5 @@
 ﻿using Core;
+using Firebase.Analytics;
 using Game.Pages.Social.Tabs;
 using UnityEngine;
 using Models.Info;
@@ -30,6 +31,7 @@ namespace Game.Pages.Social
         protected override void AfterPageOpen()
         {
             TutorialManager.Instance.ShowTutorial("tutorial_socials");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.SocialsPageOpened);
         }
 
         /// <summary>

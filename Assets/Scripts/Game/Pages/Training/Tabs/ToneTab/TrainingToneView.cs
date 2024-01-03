@@ -1,5 +1,6 @@
 using System;
 using Core;
+using Firebase.Analytics;
 using Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,6 +57,8 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void UnlockTone()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingOpenTone);
+            
             _context.onClick.Invoke(_context.Tone, _context.Cost);
             Hide();
         }

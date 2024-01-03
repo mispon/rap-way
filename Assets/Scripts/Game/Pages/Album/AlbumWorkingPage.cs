@@ -1,6 +1,7 @@
 ﻿using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Models.Info.Production;
 using Models.Player;
 using UnityEngine;
@@ -46,6 +47,8 @@ namespace Game.Pages.Album
         /// </summary>
         public override void StartWork(params object[] args)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateAlbumClick);
+            
             _album = (AlbumInfo) args[0];
             Open();
             RefreshWorkAnims();

@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using Core;
 using Data;
+using Firebase.Analytics;
 using Game.Pages.Charts;
 using Game.UI.GameError;
 using Models.Game;
@@ -46,6 +47,8 @@ namespace Game.Pages.Labels
 
         protected override void BeforePageOpen()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
+            
             nameInput.text = "";
             chartsPage.Hide();
         }
@@ -144,6 +147,7 @@ namespace Game.Pages.Labels
                 IsCustom = true
             };
 
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelCreated);
             LabelsManager.Instance.AddCustom(customLabel);
             BackButtonClick();
         }

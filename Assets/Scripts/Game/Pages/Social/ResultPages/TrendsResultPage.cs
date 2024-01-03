@@ -1,4 +1,6 @@
+using Core;
 using Data;
+using Firebase.Analytics;
 using Models.Info;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +33,7 @@ namespace Game.Pages.Social.ResultPages
             styleName.text = GetLocale(trends.Style.GetDescription()).ToUpper();
 
             PlayerManager.UpdateTrends(trends.Style, trends.Theme);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
         }
     }
 }

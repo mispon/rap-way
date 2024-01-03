@@ -1,5 +1,6 @@
 ﻿using Core;
 using Data;
+using Firebase.Analytics;
 using Game.UI.GameError;
 using Localization;
 using Models.Game;
@@ -70,6 +71,8 @@ namespace Game.Pages.Personal.LabelTab
                 return;
             }
 
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreatedOwnLabel);
+            
             var label = new LabelInfo
             {
                 Name = labelName,

@@ -2,6 +2,7 @@ using System;
 using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,6 +64,8 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         /// </summary>
         private void UnlockSkill()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingOpenSkill);
+            
             _onUnlock.Invoke(_skill);
             Hide();
         }

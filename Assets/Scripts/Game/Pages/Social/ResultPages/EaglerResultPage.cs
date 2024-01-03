@@ -1,4 +1,5 @@
 using Core;
+using Firebase.Analytics;
 using Models.Info;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,7 @@ namespace Game.Pages.Social.ResultPages
             hype.text = $"+{info.HypeIncome}";
 
             EaglerManager.Instance.CreateUserEagle(nn, info.MainText, info.Likes);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitPublished);
         }
     }
 }

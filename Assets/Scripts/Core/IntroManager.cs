@@ -25,6 +25,7 @@ namespace Core
                 if (dependencyStatus == Firebase.DependencyStatus.Available) 
                 {
                     FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+                    FirebaseAnalytics.SetUserId(SystemInfo.deviceUniqueIdentifier);
                 } 
                 else 
                 {

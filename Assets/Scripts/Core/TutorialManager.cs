@@ -26,7 +26,7 @@ namespace Core
             GameManager.Instance.ShowedTutorials.Add(key);
 
             var info = LocalizationManager.Instance.Get(key);
-            page.Show(info);
+            page.Show(key, info);
         }
     }
 }

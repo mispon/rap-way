@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Game.Effects;
 using Game.Notifications;
 using Game.UI;
@@ -97,6 +99,8 @@ namespace Game.Pages.Store
                 label.ShowNoMoney();
                 return;
             }
+            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopItemPurchased);
 
             var good = PlayerManager.Data.Goods.FirstOrDefault(g => g.Type == type);
             if (good == null)

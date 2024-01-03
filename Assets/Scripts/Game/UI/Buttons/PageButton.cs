@@ -20,7 +20,7 @@ namespace Game.UI.Buttons
         [SerializeField] protected Page page;
         [SerializeField] protected PageActionType action;
         [SerializeField] private bool playSound = true;
-
+        
         private Button _button;
         
         private void Awake()

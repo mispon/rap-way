@@ -1,6 +1,7 @@
 ﻿using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Models.Player;
 using Models.Info.Production;
 using UnityEngine;
@@ -46,6 +47,8 @@ namespace Game.Pages.Track
         /// </summary>
         public override void StartWork(params object[] args)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateTrackClick);
+            
             _track = (TrackInfo) args[0];
             Open();
             RefreshWorkAnims();

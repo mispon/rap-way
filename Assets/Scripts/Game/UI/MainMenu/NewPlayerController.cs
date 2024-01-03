@@ -2,6 +2,7 @@
 using System.Linq;
 using Core;
 using Enums;
+using Firebase.Analytics;
 using Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -95,6 +96,7 @@ namespace Game.UI.MainMenu
             player.NickName  = inputFields[2].text.Trim();
             player.Age = Convert.ToInt32(ageCarousel.GetLabel());
 
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
             SceneManager.Instance.LoadGameScene();
         }
 

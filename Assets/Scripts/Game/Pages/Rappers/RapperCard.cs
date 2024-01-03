@@ -2,6 +2,7 @@ using System;
 using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Game.Pages.Charts;
 using Models.Game;
 using UnityEngine;
@@ -59,9 +60,21 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void StartConversation(ConversationType convType)
         {
+            switch (convType)
+            {
+                case ConversationType.Battle:
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperBattleAction);
+                    break;
+                case ConversationType.Feat:
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperFeatAction);
+                    break;
+            }
+            
             SoundManager.Instance.PlayClick();
             PlayerManager.SetTeammateCooldown(TeammateType.Manager, GameManager.Instance.Settings.ManagerCooldown);
+            
             workingPage.StartWork(_rapper, convType);
+            
             rappersPage.Close();
             chartsPage.Hide();
         }

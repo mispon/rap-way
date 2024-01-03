@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Core;
 using Data;
+using Firebase.Analytics;
 using Game.UI;
 using Localization;
 using Models.Player;
@@ -113,7 +115,24 @@ namespace Game.Pages.Training.Tabs.StatsTab
         private void HandleLevelUpClick()
         {
             SoundManager.Instance.PlayClick();
+            SendFirebaseEvent();
+            
             onLevelUpClick.Invoke(_index);
+        }
+
+        private void SendFirebaseEvent()
+        {
+            var eventsMap = new Dictionary<int, string>
+            {
+                [0] = FirebaseGameEvents.TrainingVocabularyUpgrade,
+                [1] = FirebaseGameEvents.TrainingBitmakingUpgrade,
+                [2] = FirebaseGameEvents.TrainingFlowUpgrade,
+                [3] = FirebaseGameEvents.TrainingCharismaUpgrade,
+                [4] = FirebaseGameEvents.TrainingManagementUpgrade,
+                [5] = FirebaseGameEvents.TrainingMarketingUpgrade
+            };
+            
+            FirebaseAnalytics.LogEvent(eventsMap[_index]);
         }
     }
 }

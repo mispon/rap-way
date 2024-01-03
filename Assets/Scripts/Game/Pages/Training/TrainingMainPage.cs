@@ -1,5 +1,6 @@
 using System;
 using Core;
+using Firebase.Analytics;
 using Game.Pages.Training.Tabs;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,6 +36,8 @@ namespace Game.Pages.Training
         /// </summary>
         public void OpenPage(int tabIndex)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerTrainingPage);
+            
             _tabIndex = tabIndex;
             Open();
             OpenTab(tabIndex);

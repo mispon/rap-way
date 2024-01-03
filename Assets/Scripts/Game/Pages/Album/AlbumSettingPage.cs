@@ -3,6 +3,7 @@ using System.Linq;
 using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Game.UI.GameScreen;
 using Localization;
 using Models.Info;
@@ -53,6 +54,7 @@ namespace Game.Pages.Album
         protected override void AfterPageOpen()
         {
             TutorialManager.Instance.ShowTutorial("tutorial_album_page");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewAlbumSelected);
         }
 
         /// <summary>

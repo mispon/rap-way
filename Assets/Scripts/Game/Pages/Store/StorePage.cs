@@ -1,5 +1,6 @@
 using Core;
 using Data;
+using Firebase.Analytics;
 using Game.Effects;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ namespace Game.Pages.Store
         {
             workStoreItemsController.Initialize(data.WorkTools, newGoodEffect);
             swagStoreItemsController.Initialize(data.Swag, newGoodEffect);
+            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
         }
 
         protected override void AfterPageClose()

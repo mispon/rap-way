@@ -3,6 +3,7 @@ using System.Linq;
 using Core;
 using Data;
 using Enums;
+using Firebase.Analytics;
 using Game.UI;
 using Game.UI.GameScreen;
 using Models.Info.Production;
@@ -63,6 +64,7 @@ namespace Game.Pages.Concert
         protected override void AfterPageOpen()
         {
             TutorialManager.Instance.ShowTutorial("tutorial_concert_page");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
         }
 
         /// <summary>

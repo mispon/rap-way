@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Core;
+using Firebase.Analytics;
 using Game.UI.ScrollViewController;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ namespace Game.Pages.Eagler
         protected override void AfterPageOpen()
         {
             TutorialManager.Instance.ShowTutorial("tutorial_eagler");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
         }
         
         protected override void AfterPageClose()

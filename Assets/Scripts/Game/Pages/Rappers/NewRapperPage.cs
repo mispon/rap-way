@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Data;
+using Firebase.Analytics;
 using Game.Pages.Charts;
 using Game.UI.GameError;
 using UnityEngine;
@@ -61,6 +62,8 @@ namespace Game.Pages.Rappers
 
         protected override void BeforePageOpen()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperPageOpened);
+            
             SetupLabelsCarousel();
             nameInput.text = "";
             chartsPage.Hide();
@@ -151,6 +154,7 @@ namespace Game.Pages.Rappers
                 IsCustom = true
             };
 
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperCreated);
             RappersManager.Instance.AddCustom(customRapper);
             BackButtonClick();
         }

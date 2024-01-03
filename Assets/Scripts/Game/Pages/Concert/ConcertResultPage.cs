@@ -1,4 +1,5 @@
 ﻿using Core;
+using Firebase.Analytics;
 using Game.Analyzers;
 using Models.Info.Production;
 using UnityEngine;
@@ -78,6 +79,8 @@ namespace Game.Pages.Concert
 
         protected override void AfterPageClose()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ConcertResultShown);
+            
             SaveResult(_concert);
             _concert = null;
         }

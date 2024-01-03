@@ -96,7 +96,8 @@ namespace Game.Pages.Clip
         /// </summary>
         protected override void AfterPageClose()
         {
-            FirebaseAnalytics.LogEvent("clip_finished");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ClipResultShown);
+            
             SaveResult(_clipInfo);
             _clipInfo = null;
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Core;
+using Firebase.Analytics;
 using Game.Pages.History.HistoryProduction;
 using Game.UI.ScrollViewController;
 using UnityEngine;
@@ -64,6 +65,8 @@ namespace Game.Pages.History
 
         protected override void BeforePageOpen()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.HistoryPageOpened);
+            
             foreach (var historyController in historyControllers)
             {
                 historyController.Initialize(this, scrollViewController);   

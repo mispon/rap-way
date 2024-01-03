@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Data;
+using Firebase.Analytics;
 using Game.UI.AskingWindow;
 using Game.UI.ScrollViewController;
 using UnityEngine;
@@ -36,6 +37,8 @@ namespace Game.Pages.Rappers
 
         protected override void BeforePageOpen()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.RappersPageOpened);
+            
             rapperCard.onDelete += HandleRapperDelete;
             
             var rappers = GetAllRappers();

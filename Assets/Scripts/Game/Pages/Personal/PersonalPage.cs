@@ -1,4 +1,5 @@
 using Core;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,6 +58,8 @@ namespace Game.Pages.Personal
             }
             _isFirstOpen = false;
 
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.PersonalPageOpened);
+            
             if (_activeTab != TabsType.Personal)
             {
                 _activeTab = TabsType.Personal;
@@ -68,6 +71,7 @@ namespace Game.Pages.Personal
         private void OpenHouseTab()
         {
             SoundManager.Instance.PlaySwitch();
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.HousePageOpened);
 
             if (_activeTab != TabsType.House)
             {
@@ -80,6 +84,7 @@ namespace Game.Pages.Personal
         private void OpenLabelTab()
         {
             SoundManager.Instance.PlaySwitch();
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelInfoPageOpened);
 
             if (_activeTab != TabsType.Label)
             {

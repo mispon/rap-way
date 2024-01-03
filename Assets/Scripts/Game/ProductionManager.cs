@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Data;
+using Firebase.Analytics;
 using Game;
 using Models.Info.Production;
 using Models.Player;
@@ -30,6 +32,16 @@ namespace Game
         /// </summary>
         public static void AddTrack(TrackInfo info)
         {
+            switch (playerHistory.TrackList.Count)
+            {
+                case 0:
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerCreateFirstTrack);
+                    break;
+                case 1:
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerCreateSecondTrack);
+                    break;
+            }
+
             playerHistory.TrackList.AddProduction(info, Instance.onTrackAdd);
         }
         

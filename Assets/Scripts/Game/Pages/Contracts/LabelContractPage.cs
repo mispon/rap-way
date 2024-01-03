@@ -1,5 +1,6 @@
 ﻿using Core;
 using Data;
+using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,12 +41,14 @@ namespace Game.Pages.Contracts
         private void OnReject()
         {
             SoundManager.Instance.PlayClick();
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractDeclined);
             Close();
         }
         
         private void OnSign()
         {
             SoundManager.Instance.PlayClick();
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
             PlayerManager.Data.Label = _labelName;
             Close();
         }

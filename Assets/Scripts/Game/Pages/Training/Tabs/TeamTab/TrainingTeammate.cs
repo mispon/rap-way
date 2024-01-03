@@ -1,4 +1,6 @@
 using System;
+using Core;
+using Firebase.Analytics;
 using Game.UI;
 using Models.Player;
 using UnityEngine;
@@ -85,6 +87,8 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void OnUp()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateUpgraded);
+            
             onUp.Invoke(_teammate);
         }
 
@@ -93,6 +97,8 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void OnPay()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateSalaryPayed);
+            
             var salary = TeamManager.Instance.GetSalary(_teammate);
             onPay.Invoke(_teammate, salary);
         }

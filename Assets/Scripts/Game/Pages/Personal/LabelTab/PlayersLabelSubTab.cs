@@ -2,6 +2,7 @@
 using System.Linq;
 using Core;
 using Data;
+using Firebase.Analytics;
 using Game.Pages.Labels;
 using Game.UI;
 using Game.UI.AskingWindow;
@@ -208,6 +209,7 @@ namespace Game.Pages.Personal.LabelTab
         private void DisbandLabel()
         {
             SoundManager.Instance.PlayClick();
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.DisbandedOwnLabel);
             
             askingWindow.Show(
                 LocalizationManager.Instance.Get("disband_label_question").ToUpper(),

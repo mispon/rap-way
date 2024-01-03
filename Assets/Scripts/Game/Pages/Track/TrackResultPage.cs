@@ -120,7 +120,8 @@ namespace Game.Pages.Track
         /// </summary>
         protected override void AfterPageClose()
         {
-            FirebaseAnalytics.LogEvent("track_finished");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
+            
             SaveResult(_trackInfo);
             _trackInfo = null;
         }

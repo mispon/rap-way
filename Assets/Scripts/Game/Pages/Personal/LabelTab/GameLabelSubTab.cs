@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Data;
+using Firebase.Analytics;
 using Game.Pages.Labels;
 using Game.UI.AskingWindow;
 using Game.UI.ScrollViewController;
@@ -96,6 +97,7 @@ namespace Game.Pages.Personal.LabelTab
         private void LeaveLabel()
         {
             SoundManager.Instance.PlayClick();
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelLeaveAction);
             
             askingWindow.Show(
                 LocalizationManager.Instance.Get("leave_label_question").ToUpper(),
