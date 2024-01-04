@@ -94,7 +94,7 @@ namespace Game.Pages.Clip
         /// </summary>
         private void CreateClip()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
 
             if (!PlayerManager.Instance.SpendMoney(FullPrice))
             {

@@ -58,7 +58,7 @@ namespace Game.Pages.Battle
         /// </summary>
         protected override void DoDayWork()
         {
-            SoundManager.Instance.PlayWorkPoint();
+            SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             GenerateWorkPoints();
             DisplayWorkPoints();
         }

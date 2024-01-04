@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using CAS;
+using Data;
 using Game;
 using UnityEngine;
 using Utils;
@@ -28,7 +29,7 @@ namespace Core
             reward = Math.Max(50, reward);
             
             PlayerManager.Instance.AddMoney(reward);
-            SoundManager.Instance.PlayPayment();
+            SoundManager.Instance.PlaySound(UIActionType.Pay);
         }
 
         private static IMediationManager GetAdManager()

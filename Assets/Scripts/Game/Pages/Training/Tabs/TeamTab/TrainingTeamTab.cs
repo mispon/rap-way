@@ -1,4 +1,5 @@
 using Core;
+using Data;
 using Models.Player;
 using UnityEngine;
 
@@ -65,9 +66,9 @@ namespace Game.Pages.Training.Tabs.TeamTab
             }
             
             if (isLevelUp)
-                SoundManager.Instance.PlayLevelUp();
+                SoundManager.Instance.PlaySound(UIActionType.LevelUp);
             else
-                SoundManager.Instance.PlayTrain();
+                SoundManager.Instance.PlaySound(UIActionType.Train);
             
             onStartTraining.Invoke(() => trainingCost);
         }

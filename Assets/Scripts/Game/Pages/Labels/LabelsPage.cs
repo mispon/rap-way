@@ -30,7 +30,7 @@ namespace Game.Pages.Labels
 
         private void OpenNewLabelPage()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             newLabelPage.Open();
             Close();
         }

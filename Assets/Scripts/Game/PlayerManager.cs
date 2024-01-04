@@ -2,6 +2,7 @@
 using System.Linq;
 using Core;
 using Core.Interfaces;
+using Data;
 using Enums;
 using Game.UI.GameScreen;
 using Models.Game;
@@ -109,7 +110,7 @@ namespace Game
             if (Data.Money < money)
                 return false;
 
-            SoundManager.Instance.PlayPayment();
+            SoundManager.Instance.PlaySound(UIActionType.Pay);
             AddMoney(-money);
             return true;
         }

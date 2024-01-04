@@ -1,4 +1,5 @@
 using Core;
+using Data;
 using Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,7 +64,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void SaveSettings()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             
             var settings = GameManager.Instance.GameStats;
             settings.Lang = StringToLang(langCarousel.GetLabel());
@@ -76,7 +77,7 @@ namespace Game.UI.MainMenu
 
         private void OnClose()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             MainMenuController.SetPanelActivity(gameObject, false);
         }
 

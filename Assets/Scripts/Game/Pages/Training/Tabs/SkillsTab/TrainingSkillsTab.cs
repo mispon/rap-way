@@ -64,7 +64,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         /// </summary>
         private void OnLearnSkill(Skills skill)
         {
-            SoundManager.Instance.PlayUnlock();
+            SoundManager.Instance.PlaySound(UIActionType.Unlock);
             PlayerManager.Data.Skills.Add(skill);
             onStartTraining.Invoke(() => skillCost);
         }

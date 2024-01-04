@@ -1,4 +1,5 @@
 using Core;
+using Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +19,7 @@ namespace Game.UI.MainMenu
 
         private void OnClose()
         {
-            SoundManager.Instance.PlayClick();            
+            SoundManager.Instance.PlaySound(UIActionType.Click);            
             MainMenuController.SetPanelActivity(gameObject, false);
         }
     }

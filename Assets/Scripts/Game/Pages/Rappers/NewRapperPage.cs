@@ -94,7 +94,7 @@ namespace Game.Pages.Rappers
 
         private static void OnBntLeftClick(Text value)
         {
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             var current = int.Parse(value.text);
             if (current == 1)
@@ -108,7 +108,7 @@ namespace Game.Pages.Rappers
         
         private static void OnBntRightClick(Text value, int maxValue)
         {
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             var current = int.Parse(value.text);
             if (current == maxValue)
@@ -161,7 +161,7 @@ namespace Game.Pages.Rappers
 
         private void BackButtonClick()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             rappersPage.Open();
             Close();
         }

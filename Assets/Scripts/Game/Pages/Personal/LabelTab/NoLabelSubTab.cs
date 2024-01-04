@@ -49,7 +49,7 @@ namespace Game.Pages.Personal.LabelTab
 
         private void CreateLabel()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             
             string labelName = labelNameInput.text;
 

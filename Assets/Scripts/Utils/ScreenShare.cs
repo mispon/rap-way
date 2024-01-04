@@ -1,6 +1,7 @@
 using System.Collections;
 using System.IO;
 using Core;
+using Data;
 using Game;
 using Localization;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Utils
     {
         public void ShareSocials()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             StartCoroutine(TakeScreenshotAndShare());
         }
 

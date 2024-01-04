@@ -71,7 +71,7 @@ namespace Game.Pages.Track
         /// </summary>
         private void CreateTrack()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
 
             _track.Id = PlayerManager.GetNextProductionId<TrackInfo>();
             if (string.IsNullOrEmpty(_track.Name))

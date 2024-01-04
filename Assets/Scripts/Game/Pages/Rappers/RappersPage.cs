@@ -30,7 +30,7 @@ namespace Game.Pages.Rappers
 
         private void OpenNewRapperPage()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             newRapperPage.Open();
             Close();
         }

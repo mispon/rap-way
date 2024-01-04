@@ -1,3 +1,4 @@
+using Data;
 using UnityEngine;
 using Utils;
 
@@ -12,17 +13,7 @@ namespace Core
         [SerializeField] private AudioSource ambient;
         [SerializeField] private AudioSource sfx;
 
-        [Header("Звуковые клипы")]
-        [SerializeField] private AudioClip click;
-        [SerializeField] private AudioClip train;
-        [SerializeField] private AudioClip pay;
-        [SerializeField] private AudioClip levelUp;
-        [SerializeField] private AudioClip notify;
-        [SerializeField] private AudioClip switcher;
-        [SerializeField] private AudioClip workPoint;
-        [SerializeField] private AudioClip unlock;
-        [SerializeField] private AudioClip achieve;
-        [SerializeField] private AudioClip gameEnd;
+        [SerializeField] private UISoundSettings _uiSoundSettings;
         
         /// <summary>
         /// Устанавливает значения из настроек 
@@ -44,27 +35,9 @@ namespace Core
         /// <summary>
         /// Воспроизводит единичный звук 
         /// </summary>
-        private void PlaySound(AudioClip clip)
+        public void PlaySound(UIActionType actionType)
         {
-            if (clip == null)
-                return;
-
-            sfx.PlayOneShot(clip);
+            sfx?.PlayOneShot(_uiSoundSettings.GetSound(actionType));
         }
-
-        #region SOUND EVENTS
-
-        public void PlayClick() => PlaySound(click);
-        public void PlayTrain() => PlaySound(train);
-        public void PlayPayment() => PlaySound(pay);
-        public void PlayLevelUp() => PlaySound(levelUp);
-        public void PlayNotify() => PlaySound(notify);
-        public void PlaySwitch() => PlaySound(switcher);
-        public void PlayWorkPoint() => PlaySound(workPoint);
-        public void PlayUnlock() => PlaySound(unlock);
-        public void PlayAchieve() => PlaySound(achieve);
-        public void PlayGameEnd() => PlaySound(gameEnd);
-
-        #endregion
     }
 }

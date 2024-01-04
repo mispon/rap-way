@@ -70,7 +70,7 @@ namespace Game.Pages.Rappers
                     break;
             }
             
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             PlayerManager.SetTeammateCooldown(TeammateType.Manager, GameManager.Instance.Settings.ManagerCooldown);
             
             workingPage.StartWork(_rapper, convType);
@@ -81,7 +81,7 @@ namespace Game.Pages.Rappers
 
         private void DeleteRapper()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             onDelete.Invoke(_rapper);
         }
         

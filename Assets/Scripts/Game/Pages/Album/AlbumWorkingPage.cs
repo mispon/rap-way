@@ -93,7 +93,7 @@ namespace Game.Pages.Album
         /// </summary>
         private void GenerateWorkPoints()
         {
-            SoundManager.Instance.PlayWorkPoint();
+            SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
 
             _album.BitPoints += CreateBitPoints(PlayerManager.Data);
             _album.TextPoints += CreateTextPoints(PlayerManager.Data);

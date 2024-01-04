@@ -35,7 +35,7 @@ namespace Game.Pages.Rappers
         {
             rowButton.onClick.AddListener(() =>
             {
-                SoundManager.Instance.PlayClick();
+                SoundManager.Instance.PlaySound(UIActionType.Click);
                 ShowRapperInfo();
             });
         }

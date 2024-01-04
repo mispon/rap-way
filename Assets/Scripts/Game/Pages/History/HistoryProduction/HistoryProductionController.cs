@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Core;
+using Data;
 using Game.UI.ScrollViewController;
 using Models.Info.Production;
 using UnityEngine;
@@ -72,7 +73,7 @@ namespace Game.Pages.History.HistoryProduction
         public void Show(bool silent = false)
         {
             if (!silent)
-                SoundManager.Instance.PlaySwitch();
+                SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             _historyPage.ShowInfo(this);
 

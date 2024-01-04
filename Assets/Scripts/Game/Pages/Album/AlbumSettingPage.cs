@@ -70,7 +70,7 @@ namespace Game.Pages.Album
         /// </summary>
         private void CreateAlbum()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
 
             _album.Id = PlayerManager.GetNextProductionId<AlbumInfo>();
             if (string.IsNullOrEmpty(_album.Name))
