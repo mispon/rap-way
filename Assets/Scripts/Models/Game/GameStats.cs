@@ -23,16 +23,12 @@ namespace Models.Game
         /// Настройки игры
         /// </summary>
         public GameLang Lang;
-        public float SoundVolume;
-        public float MusicVolume;
         
         public static GameStats New => new GameStats
         {
             Now = DateTime.Now.DateToString(),
             Trends = Trends.New,
             Lang = GameLang.RU,
-            SoundVolume = 1f,
-            MusicVolume = 0.5f
         };
     }
 }

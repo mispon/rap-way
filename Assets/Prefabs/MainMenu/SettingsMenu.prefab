@@ -596,9 +596,9 @@ MonoBehaviour:
   m_FillRect: {fileID: 713331360789556502}
   m_HandleRect: {fileID: 2922911562395884293}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
+  m_MinValue: -80
+  m_MaxValue: 0
+  m_WholeNumbers: 1
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1678,9 +1678,9 @@ MonoBehaviour:
   m_FillRect: {fileID: 213693021158625042}
   m_HandleRect: {fileID: 6032723674301543746}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
+  m_MinValue: -80
+  m_MaxValue: 0
+  m_WholeNumbers: 1
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1917,9 +1917,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8a4ffea2c20497d9aa6cffa092eebcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 1752853591457898922}
+    - {fileID: 4435054302815191752}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: soundGroup
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[UnityEngine.UI.Slider, UnityEngine.UI],[System.String,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[UnityEngine.UI.Slider,
+        UnityEngine.UI]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 0
+    - Name: $v
+      Entry: 1
+      Data: MasterVolume
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 1
+    - Name: $v
+      Entry: 1
+      Data: MusicVolume
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   langCarousel: {fileID: 1063079512009546559}
-  soundVolume: {fileID: 1752853591457898922}
-  musicVolume: {fileID: 4435054302815191752}
+  audioMixerGroup: {fileID: 24300002, guid: 8e9e0ce5828df4d4888ce8cacb8efbd9, type: 2}
   closeButton: {fileID: 5696178244353978501}
   saveButton: {fileID: 8070395851005630154}
 --- !u!1 &8960746205980018255
