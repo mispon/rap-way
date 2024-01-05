@@ -1,39 +1,41 @@
+using System;
+using Core;
+using Data;
 using Game.UI.ScrollViewController;
-using Localization;
-using Models.Game;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Extensions;
 
-namespace Game.Pages.Eagler
+namespace Game.Pages.Store
 {
-    public class EagleCard: MonoBehaviour, IScrollViewControllerItem
+    public class StoreCategoryItem : MonoBehaviour, IScrollViewControllerItem
     {
-        [Header("Eagle fields")]
-        [SerializeField] private Text nickname;
-        [SerializeField] private Text date;
-        [SerializeField] private Text message;
-        [SerializeField] private Text likes;
-        [SerializeField] private Text views;
-        [SerializeField] private Text shares;
+        [SerializeField] private StoreItemsView itemsView;
+        [SerializeField] private Button itemsViewButton;
         
         private RectTransform _rectTransform;
         
         private int _index { get; set; }
         private float _height { get; set; }
         private float _width { get; set; }
-        
-        public void Initialize(int i, Eagle eagle)
+
+        private GoodInfo _info;
+
+        private void Start()
+        {
+            itemsViewButton.onClick.AddListener(ShowItems);
+        }
+
+        public void ShowItems()
+        {
+            SoundManager.Instance.PlayClick();
+            itemsView.Show(_info);
+        }
+
+        public void Initialize(int i, GoodInfo info)
         {
             _index = i;
-            nickname.text = $"@{eagle.Nickname}";
-            date.text = eagle.Date;
-            message.text = eagle.IsUser
-                ? eagle.Message
-                : $"{LocalizationManager.Instance.Get(eagle.Message)}{eagle.Tags}";
-            likes.text = eagle.Likes.GetDisplay();
-            views.text = eagle.Views.GetDisplay();
-            shares.text = eagle.Shares.GetDisplay();
+            _info = info;
         }
         
         public void SetPosition(float spacing)

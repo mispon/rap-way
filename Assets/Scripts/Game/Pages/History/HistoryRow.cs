@@ -38,19 +38,11 @@ namespace Game.Pages.History
             }
         }
 
-        /// <summary>
-        /// Четность элемента в списке
-        /// </summary>
         private bool isEven => _orderNumber % 2 == 0;
-        
-        /// <summary>
-        /// Высота элемента
-        /// </summary>
-        private float _height { get; set; }
 
-        /// <summary>
-        /// Заполнение информации об экземпляре при создании
-        /// </summary>
+        private float _height { get; set; }
+        private float _width { get; set; }
+        
         public void Initialize(int index, string[] infos)
         {
             orderNumber = index;
@@ -63,19 +55,13 @@ namespace Game.Pages.History
 
             SetupColor();
         }
-
-        /// <summary>
-        /// Обновление порядкового номера при добавлении новых записей в таблицу
-        /// </summary>
+        
         public void UpdateNum(int increment)
         {
             orderNumber += increment;
             SetupColor();
         }
-
-        /// <summary>
-        /// Устанавливает цвет записи
-        /// </summary>
+        
         private void SetupColor()
         {
             Color panelColor = isEven ? evenRowColor : oddRowColor;
@@ -88,10 +74,7 @@ namespace Game.Pages.History
                 infoTexts[i].color = textColor;
             }
         }
-
-        /// <summary>
-        /// Позиционирование элемента в таблице в соответсвии с его порядковым номером
-        /// </summary>
+        
         public void SetPosition(float spacing)
         {
             if (_rectTransform == null)
@@ -99,6 +82,8 @@ namespace Game.Pages.History
              
             if (_height == 0)
                 _height = _rectTransform.rect.height;
+            if (_width == 0)
+                _width = _rectTransform.rect.width;
             
             _rectTransform.anchoredPosition = Vector2.down * ((spacing * _orderNumber) + (_height * (_orderNumber-1)));
         }
@@ -106,6 +91,11 @@ namespace Game.Pages.History
         public float GetHeight()
         {
             return _height;
+        }
+
+        public float GetWidth()
+        {
+            return _width;
         }
     }
 }

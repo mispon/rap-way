@@ -40,9 +40,8 @@ namespace Game.Pages.Eagler
         {
             foreach (var eagle in _feedItems)
             {
-                Destroy(eagle);
+                Destroy(eagle.gameObject);
             }
-            
             _feedItems.Clear();
         }
     }

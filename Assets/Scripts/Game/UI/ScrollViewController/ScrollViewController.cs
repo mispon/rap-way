@@ -1,35 +1,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.UI.ScrollViewController
 {
-    /// <summary>
-    /// Класс управления отображения в ScrollView информации экзепляров Production
-    /// Управляет компонентом RectTransform и отвечает за создание/активацию объектов информации
-    /// </summary>
     public class ScrollViewController: MonoBehaviour
     {
         [Header("Контейнер элементов")] 
         [SerializeField] private int baseHeight;
+        [SerializeField] private int baseWidth;
         [SerializeField] private RectTransform container;
 
         [Header("Отступ между элементами")] 
         [SerializeField] private float spacing;
 
-        /// <summary>
-        /// Инициализация UI-элемента экземпляра Production
-        /// </summary>
+        [Header("Scroll direction")] 
+        [SerializeField] private RectTransform.Axis direction;
+        
         public T InstantiatedElement<T>(GameObject template) where T: IScrollViewControllerItem
         {
             var newObject = Instantiate(template, container);
             newObject.SetActive(true);
             return newObject.GetComponent<T>();
         }
-
-        /// <summary>
-        /// Переопределение положения UI-элементов экземпляров Production
-        /// </summary>
+        
         public void RepositionElements<T>(List<T> itemControllers) where T: IScrollViewControllerItem
         {
             var itemsCount = itemControllers.Count;
@@ -39,17 +34,29 @@ namespace Game.UI.ScrollViewController
             foreach (var itemController in itemControllers)
                 itemController.SetPosition(spacing);
 
-            Resize(itemsCount, itemControllers.First().GetHeight());
+            if (direction == RectTransform.Axis.Vertical)
+            {
+                ResizeVertical(itemsCount, itemControllers.First().GetHeight());
+            }
+            else
+            {
+                ResizeHorizontal(itemsCount, itemControllers.First().GetWidth());
+            }
         }
 
-        /// <summary>
-        /// Переопределение размера контейнера
-        /// </summary>
-        private void Resize(int itemsCount = 0, float height = 0)
+        private void ResizeVertical(int itemsCount = 0, float height = 0)
         {
             container.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Vertical, 
                 Mathf.Max(baseHeight, (spacing + height) * itemsCount));
+        }
+        
+        private void ResizeHorizontal(int itemsCount = 0, float width = 0)
+        {
+            container.SetSizeWithCurrentAnchors(
+                RectTransform.Axis.Horizontal, 
+                Mathf.Max(baseWidth, (spacing + width) * itemsCount)
+            );
         }
     }
 }

@@ -114,7 +114,7 @@ namespace Game.Analyzers
                 {
                     listens = checked(listens * 5);
                 }
-                catch (OverflowException e)
+                catch (OverflowException)
                 {
                     listens = int.MaxValue;
                 }

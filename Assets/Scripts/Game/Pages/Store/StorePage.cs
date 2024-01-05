@@ -1,39 +1,52 @@
+using System.Collections.Generic;
+using System.Linq;
 using Core;
 using Data;
 using Firebase.Analytics;
-using Game.Effects;
+using Game.UI.ScrollViewController;
 using UnityEngine;
 
 namespace Game.Pages.Store
 {
-    /// <summary>
-    /// Страница магазина
-    /// Инициализирует шмокти следующего уровня в двух ScrollView (шмотки для работы и понты)
-    /// </summary>
     public class StorePage: Page
     {
-        [Header("Контроллеры управления UI-элементов")]
-        [SerializeField] private StoreItemsController swagStoreItemsController;
-        [SerializeField] private StoreItemsController workStoreItemsController;
-        
-        [Header("Эффект открытия новой шмотки")]
-        [SerializeField] private NewItemEffect newGoodEffect;
-        
-        [Header("Данные")]
         [SerializeField] private GoodsData data;
+        
+        [Space, Header("Categories")]
+        [SerializeField] private ScrollViewController categories;
+        [SerializeField] private GameObject categoryItemTemplate;
 
+        private readonly List<StoreCategoryItem> _categoryItems = new();
+        
         protected override void BeforePageOpen()
         {
-            workStoreItemsController.Initialize(data.WorkTools, newGoodEffect);
-            swagStoreItemsController.Initialize(data.Swag, newGoodEffect);
-            
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
+
+            int i = 1;
+            foreach (var goodInfo in data.AllItems)
+            {
+                var row = categories.InstantiatedElement<StoreCategoryItem>(categoryItemTemplate);
+                
+                row.Initialize(i, goodInfo);
+                if (i == 1)
+                {
+                    row.ShowItems();
+                }
+                i++;
+                
+                _categoryItems.Add(row);
+            }
+            
+            categories.RepositionElements(_categoryItems);
         }
 
         protected override void AfterPageClose()
         {
-            workStoreItemsController.Dispose();
-            swagStoreItemsController.Dispose();
+            foreach (var item in _categoryItems)
+            {
+                Destroy(item.gameObject);
+            }
+            _categoryItems.Clear();
         }
     }
 }

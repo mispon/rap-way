@@ -73,7 +73,6 @@ namespace Data
         /// Возвращает иконку предмета на персональной странице, если она определена.
         /// Если неопределена - то иконку магазина
         /// </summary>
-        public Sprite PersonalPageImage
-            => personalPageImage == null ? Image : personalPageImage;
+        public Sprite PersonalPageImage => personalPageImage == null ? Image : personalPageImage;
     }
 }

@@ -89,7 +89,7 @@ namespace Game.Analyzers
                 {
                     views = checked(views * 5);
                 }
-                catch (OverflowException e)
+                catch (OverflowException)
                 {
                     views = int.MaxValue;
                 }
