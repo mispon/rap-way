@@ -39,7 +39,7 @@ namespace Game.Pages.Store
 
         protected override void AfterPageOpen()
         {
-            _categoryItems[0].ShowItems();
+            _categoryItems[0].ShowItems(true);
         }
 
         protected override void AfterPageClose()

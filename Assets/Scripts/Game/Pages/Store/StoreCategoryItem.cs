@@ -25,12 +25,14 @@ namespace Game.Pages.Store
 
         private void Start()
         {
-            itemsViewButton.onClick.AddListener(ShowItems);
+            itemsViewButton.onClick.AddListener(() => ShowItems());
         }
 
-        public void ShowItems()
+        public void ShowItems(bool silent = false)
         {
-            SoundManager.Instance.PlaySound(UIActionType.Click);
+            if (!silent)
+                SoundManager.Instance.PlaySound(UIActionType.Click);
+            
             itemsView.Show(_itemsInfo);
         }
 

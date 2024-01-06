@@ -7,9 +7,13 @@ using Data;
 using Localization;
 using Models.Game;
 using Models.Player;
+using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;
+
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 
 namespace Game
 {
@@ -33,30 +37,29 @@ namespace Game
     /// </summary>
     public class GameManager : Singleton<GameManager>
     {
-        [Header("Урлы в сторах")]
-        [SerializeField] private string appStoreURL;
-        [SerializeField] private string googlePlayURL;
+        [BoxGroup("Stores URLs"), SerializeField] private string appStoreURL;
+        [BoxGroup("Stores URLs"), SerializeField] private string googlePlayURL;
         
-        [Header("Ключ сохранения данных")]
-        [SerializeField] private string gameDataKey;
-        [Header("Игровые настройки")]
-        public GameSettings Settings;
-
-        [Header("GAME STATE")]
-        public PlayerData PlayerData;
-        public GameStats GameStats;
-        [Space]
-        public List<RapperInfo> Rappers;
-        public List<RapperInfo> CustomRappers;
-        [Space]
-        public List<LabelInfo> Labels; 
-        public List<LabelInfo> CustomLabels;
-        public LabelInfo PlayerLabel;
-        [Space]
-        public List<Eagle> Eagles;
-        public HashSet<string> ShowedTutorials;
-        public HashSet<string> ShowedHints;
-
+        [BoxGroup("Save Key")]  [SerializeField] private string gameDataKey;
+        [BoxGroup("Game Settings")] public GameSettings Settings;
+        
+        // TODO: make full state as private
+        [TabGroup("state", "Player")] public PlayerData PlayerData;
+        [TabGroup("state", "Game")] public GameStats GameStats;
+        
+        [TabGroup("rappers", "Rappers")] public List<RapperInfo> Rappers;
+        [TabGroup("rappers", "Custom Rappers")] public List<RapperInfo> CustomRappers;
+        
+        [TabGroup("labels", "Labels")] public List<LabelInfo> Labels; 
+        [TabGroup("labels", "Custom Labels")] public List<LabelInfo> CustomLabels;
+        [TabGroup("labels", "Player Label")] public LabelInfo PlayerLabel;
+        
+        [BoxGroup("Eagles")] public List<Eagle> Eagles;
+        
+        [TabGroup("tutorials", "Tutorials")] public HashSet<string> ShowedTutorials;
+        [TabGroup("tutorials", "Hints")] public HashSet<string> ShowedHints;
+        
+        [NonSerialized] public readonly MessageBroker MessageBroker = new();
         [NonSerialized] public bool IsReady;
 
         private void Start()
@@ -64,6 +67,8 @@ namespace Game
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
 
+            GameManagerEvents.Init();
+            
             IsReady = true;
         }
 

@@ -84,7 +84,7 @@ namespace Game.Pages.Personal.PersonalTab
             {
                 var good = playerGoods.FirstOrDefault(e => e.Type == type);
                 if (good == null)
-                    return null;
+                    return imageBank.Empty;
 
                 return goods.Items[type]
                     .First(e => e.Level == good.Level)

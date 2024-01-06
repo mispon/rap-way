@@ -4,7 +4,6 @@ using Core;
 using Core.Interfaces;
 using Data;
 using Enums;
-using Game.UI.GameScreen;
 using Models.Game;
 using Models.Player;
 using Models.Info.Production;
@@ -16,11 +15,9 @@ namespace Game
     /// <summary>
     /// Логика взаимодействия с данными игрока
     /// </summary>
+    /// TODO: Перейти на MessageBroker и избавиться от этого менеджера
     public class PlayerManager : Singleton<PlayerManager>, IStarter
     {
-        [Header("HUD")]
-        [SerializeField] private GameScreenController gameScreen;
-
         /// <summary>
         /// Событие добавления денег
         /// </summary>
@@ -47,7 +44,6 @@ namespace Game
         public void OnStart()
         {
             Data = GameManager.Instance.PlayerData;
-            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -67,18 +63,17 @@ namespace Game
             AddExp(exp);
             Data.Fans = SafetyAdd(Data.Fans, fans, GameManager.Instance.Settings.MaxFans);
             onFansAdd.Invoke(Data.Fans);
-            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
         /// Изменяет количество денег
         /// </summary>
+        // TODO: DELETE
         public void AddMoney(int money, int exp = 0)
         {
             AddExp(exp);
             Data.Money = SafetyAdd(Data.Money, money, GameManager.Instance.Settings.MaxMoney);
             onMoneyAdd.Invoke(Data.Money);
-            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -91,7 +86,6 @@ namespace Game
 
             Data.Hype = Mathf.Clamp(Data.Hype + hype, minHype, maxHype);
             onHypeAdd.Invoke(Data.Hype);
-            gameScreen.UpdateHUD(Data);
         }
 
         /// <summary>
@@ -160,10 +154,7 @@ namespace Game
             Data.LastKnownTrends.Style = style;
             Data.LastKnownTrends.Theme = theme;
         }
-
-        /// <summary>
-        /// Увеличивает значение, контроллируя верхнюю границу
-        /// </summary>
+        
         private static int SafetyAdd(int current, int increment, int maxValue)
         {
             return maxValue - current > increment
