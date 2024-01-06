@@ -23,7 +23,7 @@ namespace Game.Pages.Store
         {
             _info = info;
             
-            icon.sprite = info.Image;
+            icon.sprite = info.SquareImage;
             price.text = $"PRICE: {info.Price.GetMoney()}".ToUpper();
             
             Open();

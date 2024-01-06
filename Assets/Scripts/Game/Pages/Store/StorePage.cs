@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Core;
 using Data;
 using Firebase.Analytics;
@@ -23,7 +22,7 @@ namespace Game.Pages.Store
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
             int i = 1;
-            foreach (var goodInfo in data.AllItems)
+            foreach (var goodInfo in data.Items)
             {
                 var row = categories.InstantiatedElement<StoreCategoryItem>(categoryItemTemplate);
                 

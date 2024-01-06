@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Enums;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Data
@@ -9,15 +10,9 @@ namespace Data
     /// Наборы данных по каждому из типов товаров (для работы/понты)
     /// </summary>
     [CreateAssetMenu(fileName = "Goods", menuName = "Data/Goods")]
-    public class GoodsData: ScriptableObject
+    public class GoodsData: SerializedScriptableObject
     {
-        [Header("Рабочее"), ArrayElementTitle("Type")]
-        public GoodInfo[] WorkTools;
-        
-        [Header("Личное"), ArrayElementTitle("Type")]
-        public GoodInfo[] Swag;
-        
-        public GoodInfo[] AllItems => WorkTools.Concat(Swag).ToArray();
+        public GoodInfo[] Items;
     }
 
     /// <summary>
@@ -49,15 +44,10 @@ namespace Data
         public short Level;
         
         /// <summary>
-        /// Иконка предмета
+        /// Иконки предмета
         /// </summary>
-        public Sprite Image;
-
-        /// <summary>
-        /// Иконка предмета на персональной странице
-        /// </summary>
-        [SerializeField] 
-        private Sprite personalPageImage;
+        public Sprite SquareImage;
+        private Sprite RectImage;
         
         /// <summary>
         /// Цена предмета
@@ -73,6 +63,6 @@ namespace Data
         /// Возвращает иконку предмета на персональной странице, если она определена.
         /// Если неопределена - то иконку магазина
         /// </summary>
-        public Sprite PersonalPageImage => personalPageImage == null ? Image : personalPageImage;
+        public Sprite PersonalPageImage => RectImage == null ? SquareImage : RectImage;
     }
 }

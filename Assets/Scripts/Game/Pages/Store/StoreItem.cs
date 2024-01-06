@@ -37,7 +37,7 @@ namespace Game.Pages.Store
             _index = i;
             _info = info;
 
-            icon.sprite = info.Image;
+            icon.sprite = info.SquareImage;
         }
         
         public void SetPosition(float spacing)
