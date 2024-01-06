@@ -86,9 +86,8 @@ namespace Game.Pages.Personal.PersonalTab
                 if (good == null)
                     return null;
 
-                return goods.Items
-                    .First(e => e.Type == type)
-                    .UI[good.Level]
+                return goods.Items[type]
+                    .First(e => e.Level == good.Level)
                     .PersonalPageImage;
             }
 

@@ -13,12 +13,12 @@ namespace Game.Pages.Store
         
         private readonly List<StoreItem> _storeItems = new();
         
-        public void Show(GoodInfo info)
+        public void Show(GoodInfo[] itemsInfo)
         {
             Clear();
             
             int i = 1;
-            foreach (var itemInfo in info.UI)
+            foreach (var itemInfo in itemsInfo)
             {
                 var item = items.InstantiatedElement<StoreItem>(itemTemplate);
                 

@@ -3,17 +3,18 @@ using Core;
 using Data;
 using Firebase.Analytics;
 using Game.UI.ScrollViewController;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using Utils.Extensions;
 
 namespace Game.Pages.Store
 {
     public class StorePage: Page
     {
-        [SerializeField] private GoodsData data;
+        [BoxGroup("Data")] [SerializeField] private GoodsData data;
         
-        [Space, Header("Categories")]
-        [SerializeField] private ScrollViewController categories;
-        [SerializeField] private GameObject categoryItemTemplate;
+        [BoxGroup("Categories")] [SerializeField] private ScrollViewController categories;
+        [BoxGroup("Categories")] [SerializeField] private GameObject categoryItemTemplate;
 
         private readonly List<StoreCategoryItem> _categoryItems = new();
         
@@ -22,21 +23,23 @@ namespace Game.Pages.Store
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
             int i = 1;
-            foreach (var goodInfo in data.Items)
+            foreach (var (type, itemsInfo) in data.Items)
             {
                 var row = categories.InstantiatedElement<StoreCategoryItem>(categoryItemTemplate);
-                
-                row.Initialize(i, goodInfo);
-                if (i == 1)
-                {
-                    row.ShowItems();
-                }
+
+                var categoryIcon = data.Categories[type];
+                row.Initialize(i, categoryIcon, GetLocale(type.GetDescription()), itemsInfo);
                 i++;
                 
                 _categoryItems.Add(row);
             }
             
             categories.RepositionElements(_categoryItems);
+        }
+
+        protected override void AfterPageOpen()
+        {
+            _categoryItems[0].ShowItems();
         }
 
         protected override void AfterPageClose()

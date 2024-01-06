@@ -12,14 +12,14 @@ namespace Game.Pages.Store
         [SerializeField] private Text price;
         [SerializeField] private Button buyButton;
 
-        private GoodUI _info;
+        private GoodInfo _info;
         
         private void Start()
         {
             buyButton.onClick.AddListener(BuyItem);
         }
 
-        public void Show(GoodUI info)
+        public void Show(GoodInfo info)
         {
             _info = info;
             
