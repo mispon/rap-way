@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,13 +30,13 @@ namespace Game.UI.AskingWindow
 
         private void OnReject()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             gameObject.SetActive(false);
         }
 
         private void OnAccept()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             
             _action.Invoke();
             gameObject.SetActive(false);

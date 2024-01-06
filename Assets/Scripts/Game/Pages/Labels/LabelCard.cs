@@ -56,7 +56,7 @@ namespace Game.Pages.Labels
 
         private void OpenInfoView()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             
             infoDesc.text = LocalizationManager.Instance.Get(_info.Desc);
             infoView.SetActive(true);
@@ -64,13 +64,13 @@ namespace Game.Pages.Labels
         
         private void CloseInfoView()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             infoView.SetActive(false);
         }
         
         private void DeleteLabel()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             onDelete.Invoke(_info);
         }
     }

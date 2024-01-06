@@ -154,7 +154,7 @@ namespace Game.Pages.Personal.LabelTab
 
         private void PayService()
         {
-            SoundManager.Instance.PlayPayment();
+            SoundManager.Instance.PlaySound(UIActionType.Pay);
             
             PlayerManager.Instance.AddMoney(-_cost);
             _label.IsFrozen = false;
@@ -164,7 +164,7 @@ namespace Game.Pages.Personal.LabelTab
 
         private void UpProduction()
         {
-            SoundManager.Instance.PlayTrain();
+            SoundManager.Instance.PlaySound(UIActionType.Train);
             
             int level = _label.Production.Value;
             int expToUp = expToProductionLevelUp[level];
@@ -172,7 +172,7 @@ namespace Game.Pages.Personal.LabelTab
             int newExp = _label.Production.Exp + expStep;
             if (newExp >= expToUp)
             {
-                SoundManager.Instance.PlayLevelUp();
+                SoundManager.Instance.PlaySound(UIActionType.LevelUp);
                 newExp -= expToUp;
                 level += 1;
             }
@@ -186,7 +186,7 @@ namespace Game.Pages.Personal.LabelTab
 
         private void UpPrestige()
         {
-            SoundManager.Instance.PlayTrain();
+            SoundManager.Instance.PlaySound(UIActionType.Train);
             
             int level = _label.Prestige.Value;
             int expToUp = expToPrestigeLevelUp[level];
@@ -194,7 +194,7 @@ namespace Game.Pages.Personal.LabelTab
             int newExp = _label.Prestige.Exp + expStep;
             if (newExp >= expToUp)
             {
-                SoundManager.Instance.PlayLevelUp();
+                SoundManager.Instance.PlaySound(UIActionType.LevelUp);
                 newExp -= expToUp;
                 level += 1;
             }
@@ -208,7 +208,7 @@ namespace Game.Pages.Personal.LabelTab
         
         private void DisbandLabel()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.DisbandedOwnLabel);
             
             askingWindow.Show(
@@ -244,7 +244,7 @@ namespace Game.Pages.Personal.LabelTab
 
         private void OnMoneyReportClose()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
 
             if (!_label.IsFrozen)
             {

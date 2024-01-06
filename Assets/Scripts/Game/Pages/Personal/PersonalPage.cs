@@ -1,4 +1,5 @@
 using Core;
+using Data;
 using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,7 +42,7 @@ namespace Game.Pages.Personal
         {
             cashButton.onClick.AddListener(() =>
             {
-                SoundManager.Instance.PlayClick();
+                SoundManager.Instance.PlaySound(UIActionType.Click);
                 CasAdsManager.Instance.ShowRewarded();
             });
             
@@ -54,7 +55,7 @@ namespace Game.Pages.Personal
         {
             if (!_isFirstOpen)
             {
-                SoundManager.Instance.PlaySwitch();
+                SoundManager.Instance.PlaySound(UIActionType.Switcher);
             }
             _isFirstOpen = false;
 
@@ -70,7 +71,7 @@ namespace Game.Pages.Personal
         
         private void OpenHouseTab()
         {
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.HousePageOpened);
 
             if (_activeTab != TabsType.House)
@@ -83,7 +84,7 @@ namespace Game.Pages.Personal
         
         private void OpenLabelTab()
         {
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelInfoPageOpened);
 
             if (_activeTab != TabsType.Label)

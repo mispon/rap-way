@@ -83,7 +83,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void OnUpgradeStats(int index)
         {
-            SoundManager.Instance.PlayTrain();
+            SoundManager.Instance.PlaySound(UIActionType.Train);
             int cost = _trainingActions[index].Invoke();
             onStartTraining.Invoke(() => cost);
         }
@@ -111,7 +111,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
             {
                 stat.Value += 1;
                 stat.Exp -= expToUp;
-                SoundManager.Instance.PlayLevelUp();
+                SoundManager.Instance.PlaySound(UIActionType.LevelUp);
             }
             
             return trainingCost;

@@ -60,7 +60,7 @@ namespace Game.Pages.Labels
 
         private void ProductionBntLeftClick()
         {
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             var current = int.Parse(productionValue.text);
             
@@ -74,7 +74,7 @@ namespace Game.Pages.Labels
         
         private void ProductionBntRightClick()
         {
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             var current = int.Parse(productionValue.text);
          
@@ -88,7 +88,7 @@ namespace Game.Pages.Labels
 
         private void PrestigeBtnLeftClick()
         {
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             var current = float.Parse(prestigeValue.text, CultureInfo.InvariantCulture);
             
@@ -103,7 +103,7 @@ namespace Game.Pages.Labels
         }
         private void PrestigeBtnRightClick()
         {
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             var current = float.Parse(prestigeValue.text, CultureInfo.InvariantCulture);
             
@@ -154,7 +154,7 @@ namespace Game.Pages.Labels
 
         private void BackButtonClick()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             labelsPage.Open();
             Close();
         }

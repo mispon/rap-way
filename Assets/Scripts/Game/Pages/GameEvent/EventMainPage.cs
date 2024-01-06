@@ -51,7 +51,7 @@ namespace Game.Pages.GameEvent
         /// </summary>
         private void Decide(GameEventDecisionType type)
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             
             var decisionResult = _eventInfo.DecisionResults.FirstOrDefault(e => e.DecisionType == type);
             if (decisionResult != null)

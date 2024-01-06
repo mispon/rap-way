@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Core;
+using Data;
 using Enums;
 using Firebase.Analytics;
 using Localization;
@@ -44,7 +45,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void OnGenderChange(bool isMale)
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             _maleSelected = isMale;
             maleButton.image.sprite = isMale ? maleAvatar : maleAvatarInactive;
             femaleButton.image.sprite = !isMale ? femaleAvatar : femaleAvatarInactive;
@@ -55,7 +56,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private void OnStartClick()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
 
             if (inputFields.Any(field => !CheckNotNullOrEmpty(field)))
                 return;
@@ -102,7 +103,7 @@ namespace Game.UI.MainMenu
 
         private void OnClose()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             MainMenuController.SetPanelActivity(gameObject, false);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Core;
+using Data;
 using Firebase.Analytics;
 using Game.Pages.Social.Tabs;
 using UnityEngine;
@@ -50,7 +51,7 @@ namespace Game.Pages.Social
         /// </summary>
         private void StartSocial(SocialInfo info)
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             workingPage.StartWork(info);
             Close();
         }

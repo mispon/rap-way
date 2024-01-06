@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Interfaces;
+using Data;
 using Firebase.Analytics;
 using Game.Pages.AskReview;
 using Models.UI;
@@ -72,7 +73,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private static void ContinueGame()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             SceneManager.Instance.LoadGameScene();
         }
 
@@ -81,7 +82,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private static void ExitGame()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             GameManager.Instance.SaveApplicationData();
             Application.Quit();
         }
@@ -91,7 +92,7 @@ namespace Game.UI.MainMenu
         /// </summary>
         private static void ShowPanel(GameObject panel)
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             SetPanelActivity(panel, true);
         }
         

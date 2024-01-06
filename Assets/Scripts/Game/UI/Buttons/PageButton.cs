@@ -1,4 +1,5 @@
 ﻿using Core;
+using Data;
 using Game.Pages;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +34,7 @@ namespace Game.UI.Buttons
         {
             if (playSound)
             {
-                SoundManager.Instance.PlayClick();
+                SoundManager.Instance.PlaySound(UIActionType.Click);
             }
             PageAction();
         }

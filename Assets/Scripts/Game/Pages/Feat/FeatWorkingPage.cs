@@ -1,4 +1,5 @@
 using Core;
+using Data;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,7 +44,7 @@ namespace Game.Pages.Feat
         /// </summary>
         protected override void DoDayWork()
         {
-            SoundManager.Instance.PlayWorkPoint();
+            SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             GenerateWorkPoints();
             DisplayWorkPoints();
         }

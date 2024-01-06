@@ -28,7 +28,7 @@ namespace Game.Pages.Store
 
         public void ShowItems()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             itemsView.Show(_info);
         }
 

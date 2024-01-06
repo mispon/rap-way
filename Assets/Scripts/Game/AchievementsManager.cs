@@ -225,7 +225,7 @@ namespace Game
                 string achievementInfo = string.Format(achivementTemplate, achivementValue);
             
                 newAchievementsPage.ShowNewAchievement(achievementInfo);
-                SoundManager.Instance.PlayAchieve();
+                SoundManager.Instance.PlaySound(UIActionType.Achieve);
             }
             
             NotificationManager.Instance.AddIndependentNotification(Notification);

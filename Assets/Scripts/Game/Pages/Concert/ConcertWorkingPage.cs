@@ -93,7 +93,7 @@ namespace Game.Pages.Concert
         /// </summary>
         private void GenerateWorkPoints()
         {
-            SoundManager.Instance.PlayWorkPoint();
+            SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             
             int managerPoints = CreateManagementPoints(PlayerManager.Data);
             int prPoints = CreatePrPoints(PlayerManager.Data);

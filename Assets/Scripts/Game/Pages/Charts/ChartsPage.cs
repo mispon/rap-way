@@ -1,4 +1,5 @@
 ﻿using Core;
+using Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,7 +67,7 @@ namespace Game.Pages.Charts
             
             UpdateTabsButtons(rappersTabButton, labelsTabButton);
             if (!_isFirstOpen) 
-                SoundManager.Instance.PlaySwitch();
+                SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             newRappersPage.Close();
             labelsTab.Close();
@@ -81,7 +82,7 @@ namespace Game.Pages.Charts
             }
             
             UpdateTabsButtons(labelsTabButton, rappersTabButton);
-            SoundManager.Instance.PlaySwitch();
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
      
             newRappersPage.Close();
             rappersTab.Close();

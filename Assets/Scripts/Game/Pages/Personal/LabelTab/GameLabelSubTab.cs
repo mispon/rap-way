@@ -96,7 +96,7 @@ namespace Game.Pages.Personal.LabelTab
 
         private void LeaveLabel()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelLeaveAction);
             
             askingWindow.Show(

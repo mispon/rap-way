@@ -28,7 +28,7 @@ namespace Game.Pages.Store
 
         private void ShowItemCard()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             itemCard.Show(_info);
         }
 

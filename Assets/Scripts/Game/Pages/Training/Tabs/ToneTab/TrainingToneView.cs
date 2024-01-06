@@ -1,5 +1,6 @@
 using System;
 using Core;
+using Data;
 using Firebase.Analytics;
 using Localization;
 using UnityEngine;
@@ -48,7 +49,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void Hide()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             gameObject.SetActive(false);
         }
 
