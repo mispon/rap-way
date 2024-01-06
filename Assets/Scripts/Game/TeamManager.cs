@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Core;
+using Data;
 using Enums;
 using Game.Effects;
 using Game.Notifications;
@@ -109,7 +110,7 @@ namespace Game
 
             void Notification()
             {
-                SoundManager.Instance.PlayAchieve();
+                SoundManager.Instance.PlaySound(UIActionType.Achieve);
                 
                 var info = GetInfo(teammate.Type);
                 newTeammateEffect.Show(info.Avatar, () => unlockTeammatePage.Show(teammate, info.Avatar));

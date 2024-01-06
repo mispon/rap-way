@@ -81,7 +81,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void OnNext()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
 
             switch (_convType)
             {
@@ -114,7 +114,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         private void OnClose()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             
             rappersPage.Open();
             chartsPage.Show();

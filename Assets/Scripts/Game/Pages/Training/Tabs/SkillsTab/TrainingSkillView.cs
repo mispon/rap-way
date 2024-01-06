@@ -55,7 +55,7 @@ namespace Game.Pages.Training.Tabs.SkillsTab
         /// </summary>
         private void Hide()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             gameObject.SetActive(false);
         }
         

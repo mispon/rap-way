@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -120,7 +121,7 @@ namespace Utils.Carousel
         /// </summary>
         private void onElementClicked()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             onClick.Invoke(_index);
         }
 
@@ -130,7 +131,7 @@ namespace Utils.Carousel
         private void OnArrowClicked(int direction, bool silent = false)
         {
             if (!silent)
-                SoundManager.Instance.PlaySwitch();
+                SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             _index += direction;
             ClampIndex();

@@ -93,7 +93,7 @@ namespace Game.Pages.Track
         /// </summary>
         private void GenerateWorkPoints()
         {
-            SoundManager.Instance.PlayWorkPoint();
+            SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             
             _track.BitPoints +=  CreateBitPoints(PlayerManager.Data);
             _track.TextPoints += CreateTextPoints(PlayerManager.Data);

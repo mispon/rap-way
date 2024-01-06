@@ -1,4 +1,5 @@
 using Core;
+using Data;
 
 namespace Game.Pages.GameFinish
 {
@@ -6,7 +7,7 @@ namespace Game.Pages.GameFinish
     {
         protected override void AfterPageOpen()
         {
-            SoundManager.Instance.PlayGameEnd();
+            SoundManager.Instance.PlaySound(UIActionType.GameEnd);
         }
     }
 }

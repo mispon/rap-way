@@ -94,7 +94,7 @@ namespace Game.Pages.Training.Tabs.ToneTab
         /// </summary>
         private void OnLearnTone(Enum tone, int cost)
         {
-            SoundManager.Instance.PlayUnlock();
+            SoundManager.Instance.PlaySound(UIActionType.Unlock);
             
             if (tone is Themes theme)
                 PlayerManager.Data.Themes.Add(theme);

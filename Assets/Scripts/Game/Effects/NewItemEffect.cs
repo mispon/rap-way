@@ -1,5 +1,6 @@
 using System;
 using Core;
+using Data;
 using Game.UI.GameScreen;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace Game.Effects
         public void OnPointerClick(PointerEventData eventData)
         {
             CanvasController.SetActive(true);
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             GameScreenController.Instance.SetVisibility(true);
             onClose.Invoke();
             

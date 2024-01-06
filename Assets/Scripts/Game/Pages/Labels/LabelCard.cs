@@ -67,7 +67,7 @@ namespace Game.Pages.Labels
         
         private void DeleteLabel()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             onDelete.Invoke(_info);
         }
     }

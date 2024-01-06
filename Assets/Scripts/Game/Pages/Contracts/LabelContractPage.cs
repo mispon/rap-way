@@ -40,14 +40,14 @@ namespace Game.Pages.Contracts
 
         private void OnReject()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractDeclined);
             Close();
         }
         
         private void OnSign()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
             PlayerManager.Data.Label = _labelName;
             Close();

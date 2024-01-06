@@ -42,7 +42,7 @@ namespace Game.Pages.Social
         /// </summary>
         protected override void DoDayWork()
         {
-            SoundManager.Instance.PlayWorkPoint();
+            SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             GenerateWorkPoints();
             DisplayWorkPoints();
         }

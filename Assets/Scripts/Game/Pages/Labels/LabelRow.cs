@@ -34,7 +34,7 @@ namespace Game.Pages.Labels
         {
             rowButton.onClick.AddListener(() =>
             {
-                SoundManager.Instance.PlayClick();
+                SoundManager.Instance.PlaySound(UIActionType.Click);
                 ShowRapperInfo();
             });
         }

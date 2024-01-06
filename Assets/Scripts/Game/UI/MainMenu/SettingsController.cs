@@ -1,6 +1,11 @@
+using System.Collections.Generic;
 using Core;
+using Data;
 using Localization;
+using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 using Utils;
 using Utils.Carousel;
@@ -10,20 +15,24 @@ namespace Game.UI.MainMenu
     /// <summary>
     /// Окно настроек игры
     /// </summary>
-    public class SettingsController : MonoBehaviour
+    public class SettingsController : SerializedMonoBehaviour
     {
-        [SerializeField] private Carousel langCarousel;
-        [SerializeField] private Slider soundVolume;
-        [SerializeField] private Slider musicVolume;
-        [Space]
-        [SerializeField] private Button closeButton;
-        [SerializeField] private Button saveButton;
+        [BoxGroup("Language")] [SerializeField] private Carousel langCarousel;
+        
+        [BoxGroup("Sound")] [SerializeField] private AudioMixerGroup audioMixerGroup;
+        [BoxGroup("Sound")] [SerializeField] private Dictionary<Slider, string> soundGroup;
+
+        [BoxGroup("Button")] [SerializeField] private Button closeButton;
+        [BoxGroup("Button")] [SerializeField] private Button saveButton;
 
         private void Start()
         {
             langCarousel.onChange += OnLangChanged;
-            soundVolume.onValueChanged.AddListener(OnVolumeChanged);
-            musicVolume.onValueChanged.AddListener(OnVolumeChanged);
+            
+            foreach (var group in soundGroup)
+                group.Key.OnValueChangedAsObservable()
+                    .Subscribe(value => OnChangeVolume(group.Value, value));
+            
             closeButton.onClick.AddListener(OnClose);
             saveButton.onClick.AddListener(SaveSettings);
 
@@ -37,8 +46,9 @@ namespace Game.UI.MainMenu
         {
             var settings = GameManager.Instance.GameStats;
             langCarousel.SetIndex(settings.Lang.ToString());
-            soundVolume.value = settings.SoundVolume;
-            musicVolume.value = settings.MusicVolume;
+
+            foreach (var group in soundGroup)
+                group.Key.value = LoadVolume(group.Value);
         }
 
         /// <summary>
@@ -51,32 +61,53 @@ namespace Game.UI.MainMenu
         }
 
         /// <summary>
-        /// Обработчик изменения громкости звука
-        /// </summary>
-        private void OnVolumeChanged(float volume)
-        {
-            SoundManager.Instance.SetVolume(soundVolume.value, musicVolume.value);
-        }
-
-        /// <summary>
         /// Сохраняет выбранные настройки
         /// </summary>
         private void SaveSettings()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             
             var settings = GameManager.Instance.GameStats;
             settings.Lang = StringToLang(langCarousel.GetLabel());
-            settings.SoundVolume = soundVolume.value;
-            settings.MusicVolume = musicVolume.value;
+            
+            foreach (var group in soundGroup)
+                SaveVolume(group.Value, group.Key.value);
+            
             GameManager.Instance.SaveApplicationData();
             
             MainMenuController.SetPanelActivity(gameObject, false);
         }
 
+        #region SoundSettings
+        private void OnChangeVolume(string groupName, float volume)
+        {
+            audioMixerGroup.audioMixer.SetFloat(groupName, volume);
+        }
+        
+        private void SaveVolume(string groupName, float volume)
+        {
+            PlayerPrefs.SetFloat(groupName, volume);
+        }
+        
+        private float LoadVolume(string groupName)
+        {
+            if (PlayerPrefs.HasKey(groupName) is false)
+            {
+                const float maxVolume = 0;
+                SaveVolume(groupName, maxVolume);
+                audioMixerGroup.audioMixer.SetFloat(groupName, maxVolume);
+                return maxVolume;
+            }
+                
+            float volume = PlayerPrefs.GetFloat(groupName);
+            audioMixerGroup.audioMixer.SetFloat(groupName, volume);
+            return volume;
+        }
+        #endregion
+
         private void OnClose()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             MainMenuController.SetPanelActivity(gameObject, false);
         }
 

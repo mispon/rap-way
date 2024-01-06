@@ -105,7 +105,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void HandleClick()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             onClick.Invoke(_index);
         }
 
@@ -114,7 +114,7 @@ namespace Game.Pages.Training.Tabs.StatsTab
         /// </summary>
         private void HandleLevelUpClick()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             SendFirebaseEvent();
             
             onLevelUpClick.Invoke(_index);

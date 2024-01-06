@@ -119,7 +119,7 @@ namespace Game.Pages.Concert
         /// </summary>
         private void CreateConcert()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
 
             if (!PlayerManager.Instance.SpendMoney(_placeCost))
             {

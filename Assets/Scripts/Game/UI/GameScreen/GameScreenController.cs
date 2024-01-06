@@ -1,6 +1,7 @@
 ﻿using System;
 using Core;
 using Core.Interfaces;
+using Data;
 using Enums;
 using Models.Player;
 using UnityEngine;
@@ -72,7 +73,7 @@ namespace Game.UI.GameScreen
         /// </summary>
         private void ShowDescriptionPage(StatDescItem item)
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             statsDescPage.Show(item.Icon, item.NameKey, item.DescKey);
         }
 
@@ -118,7 +119,7 @@ namespace Game.UI.GameScreen
         /// </summary>
         private void OnProductionClick()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             _productionShown = !_productionShown;
             foldoutAnimation.Play(_productionShown ? foldoutShowAnim : foldoutHideAnim);
         }
@@ -128,7 +129,7 @@ namespace Game.UI.GameScreen
         /// </summary>
         private static void OnMainMenuClick()
         {
-            SoundManager.Instance.PlayClick();
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             GameManager.Instance.SaveApplicationData();
             SceneManager.Instance.LoadMainScene();
         }

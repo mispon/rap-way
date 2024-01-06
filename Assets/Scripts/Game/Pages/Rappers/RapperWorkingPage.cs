@@ -54,7 +54,7 @@ namespace Game.Pages.Rappers
         /// </summary>
         protected override void DoDayWork()
         {
-            SoundManager.Instance.PlayWorkPoint();
+            SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             GeneratePlayerWorkPoints();
             GenerateRapperWorkPoints();
         }
