@@ -9,10 +9,7 @@ namespace Core
     /// </summary>
     public class SoundManager : Singleton<SoundManager>
     {
-        [Header("Источники звука")]
-        [SerializeField] private AudioSource ambient;
         [SerializeField] private AudioSource sfx;
-
         [SerializeField] private UISoundSettings _uiSoundSettings;
 
         /// <summary>
@@ -20,7 +17,12 @@ namespace Core
         /// </summary>
         public void PlaySound(UIActionType actionType)
         {
-            sfx?.PlayOneShot(_uiSoundSettings.GetSound(actionType));
+            var sound = _uiSoundSettings.GetSound(actionType);
+            
+            if (sound == null)
+                return;
+            
+            sfx.PlayOneShot(sound);
         }
     }
 }

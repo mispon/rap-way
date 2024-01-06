@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -10,12 +9,11 @@ namespace Data
         menuName = "Audio/UISoundSettings")]
     public class UISoundSettings : SerializedScriptableObject
     {
-        [SerializeField] private Dictionary<UIActionType, AudioClip> _uiSoundSettings;
+        [SerializeField] private Dictionary<UIActionType, AudioClip> uiSoundSettings;
 
         public AudioClip GetSound(UIActionType actionType)
         {
-            if (_uiSoundSettings.TryGetValue(actionType, out var sound)) return sound;
-            throw new NotImplementedException($"UISoundSettings dont have settings {actionType}!");
+            return uiSoundSettings.GetValueOrDefault(actionType);
         }
     }
     
