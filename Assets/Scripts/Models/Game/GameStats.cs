@@ -28,7 +28,7 @@ namespace Models.Game
         {
             Now = DateTime.Now.DateToString(),
             Trends = Trends.New,
-            Lang = GameLang.RU,
+            Lang = GameLang.EN,
         };
     }
 }
