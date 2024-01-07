@@ -59,15 +59,13 @@ namespace Game
         [TabGroup("tutorials", "Tutorials")] public HashSet<string> ShowedTutorials;
         [TabGroup("tutorials", "Hints")] public HashSet<string> ShowedHints;
         
-        [NonSerialized] public readonly MessageBroker MessageBroker = new();
+        [NonSerialized] public readonly UniRx.MessageBroker MessageBroker = new();
         [NonSerialized] public bool IsReady;
 
         private void Start()
         {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
-
-            GameManagerEvents.Init();
             
             IsReady = true;
         }

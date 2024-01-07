@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data;
+using Enums;
 using Game.UI.ScrollViewController;
 using UnityEngine;
 

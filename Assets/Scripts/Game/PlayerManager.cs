@@ -63,6 +63,7 @@ namespace Game
             AddExp(exp);
             Data.Fans = SafetyAdd(Data.Fans, fans, GameManager.Instance.Settings.MaxFans);
             onFansAdd.Invoke(Data.Fans);
+            // fans changed
         }
 
         /// <summary>

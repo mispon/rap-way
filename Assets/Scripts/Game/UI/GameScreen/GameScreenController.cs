@@ -3,7 +3,7 @@ using Core;
 using Core.Interfaces;
 using Data;
 using Enums;
-using Messages.State;
+using MessageBroker.Messages.State;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;

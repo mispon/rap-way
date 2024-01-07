@@ -24,6 +24,8 @@ namespace Enums
         [Description("GoodsType_Chain")]
         Chain, 
         [Description("GoodsType_Grillz")]
-        Grillz
+        Grillz,
+        [Description("GoodsType_Donate")]
+        Donate
     }
 }

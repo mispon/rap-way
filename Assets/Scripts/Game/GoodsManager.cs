@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Enums;
+using UniRx;
 using UnityEngine;
 using Utils;
 
@@ -47,7 +48,6 @@ namespace Game
         public string Name;
         public GoodsType Type;
         public short Level;
-        public int WorkPoints;
         [Range(0.0f, 0.2f)] public float Impact;
 
         public override string ToString()

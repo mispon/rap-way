@@ -82,7 +82,10 @@ namespace Game.Pages.Personal.PersonalTab
         private void SetupGoods(List<Good> playerGoods) {
             Sprite GetGoodsSprite(GoodsType type)
             {
-                var good = playerGoods.FirstOrDefault(e => e.Type == type);
+                var good = playerGoods
+                    .OrderByDescending(e => e.Level)
+                    .FirstOrDefault(e => e.Type == type);
+                
                 if (good == null)
                     return imageBank.Empty;
 
