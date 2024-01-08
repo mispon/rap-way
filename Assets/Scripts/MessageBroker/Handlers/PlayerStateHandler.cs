@@ -3,7 +3,6 @@ using Core.Interfaces;
 using Core.Settings;
 using Game;
 using MessageBroker.Messages.State;
-using Models.Player;
 using UniRx;
 using UnityEngine;
 
@@ -12,14 +11,11 @@ namespace MessageBroker.Handlers
     public class PlayerStateHandler : MonoBehaviour, IStarter
     {
         private IMessageBroker _messageBroker;
-        
-        private PlayerData _playerData;
         private GameSettings _settings;
         
         public void OnStart()
         {
             _messageBroker = GameManager.Instance.MessageBroker;
-            _playerData = GameManager.Instance.PlayerData;
             _settings = GameManager.Instance.Settings;
 
             HandleFullState();
@@ -36,15 +32,17 @@ namespace MessageBroker.Handlers
                 .Receive<FullStateRequest>()
                 .Subscribe(_ =>
                 {
+                    var playerData = GameManager.Instance.PlayerData;
+                    
                     _messageBroker.Publish(new FullStateResponse
                     {
-                        NickName = _playerData.Info.NickName,
-                        Gender = _playerData.Info.Gender,
-                        Money = _playerData.Money,
-                        Donate = _playerData.Donate,
-                        Fans = _playerData.Fans,
-                        Hype = _playerData.Hype,
-                        Exp = _playerData.Exp
+                        NickName = playerData.Info.NickName,
+                        Gender = playerData.Info.Gender,
+                        Money = playerData.Money,
+                        Donate = playerData.Donate,
+                        Fans = playerData.Fans,
+                        Hype = playerData.Hype,
+                        Exp = playerData.Exp
                     });
                 });
         }
@@ -55,10 +53,12 @@ namespace MessageBroker.Handlers
                 .Receive<AddMoneyEvent>()
                 .Subscribe(e =>
                 {
-                    int oldVal = _playerData.Money;
-                    int newVal = SafetyAdd(_playerData.Money, e.Amount, _settings.MaxMoney);
+                    var playerData = GameManager.Instance.PlayerData;
+                    
+                    int oldVal = playerData.Money;
+                    int newVal = SafetyAdd(playerData.Money, e.Amount, _settings.MaxMoney);
 
-                    _playerData.Money = newVal;
+                    playerData.Money = newVal;
                     _messageBroker.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
                 });
         }
@@ -69,14 +69,16 @@ namespace MessageBroker.Handlers
                 .Receive<SpendMoneyRequest>()
                 .Subscribe(e =>
                 {
-                    int oldVal = _playerData.Money;
+                    var playerData = GameManager.Instance.PlayerData;
+                    
+                    int oldVal = playerData.Money;
                     
                     bool ok = false;
-                    if (_playerData.Money >= e.Amount)
+                    if (playerData.Money >= e.Amount)
                     {
-                        int newVal = _playerData.Money - e.Amount;
+                        int newVal = playerData.Money - e.Amount;
 
-                        _playerData.Money = newVal;
+                        playerData.Money = newVal;
                         _messageBroker.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
                         
                         ok = true;
@@ -92,13 +94,15 @@ namespace MessageBroker.Handlers
                 .Receive<ChangeFansEvent>()
                 .Subscribe(e =>
                 {
-                    int oldVal = _playerData.Fans;
-                    int newVal = SafetyAdd(_playerData.Money, e.Amount, _settings.MaxFans);
+                    var playerData = GameManager.Instance.PlayerData;
+                    
+                    int oldVal = playerData.Fans;
+                    int newVal = SafetyAdd(playerData.Money, e.Amount, _settings.MaxFans);
                     
                     const int minFans = 0;
                     newVal = Mathf.Max(newVal, minFans);
                     
-                    _playerData.Fans = newVal;
+                    playerData.Fans = newVal;
                     _messageBroker.Publish(new FansChangedEvent {OldVal = oldVal, NewVal = newVal});
                 });
         }
@@ -109,10 +113,12 @@ namespace MessageBroker.Handlers
                 .Receive<ChangeHypeEvent>()
                 .Subscribe(e =>
                 {
-                    int oldVal = _playerData.Hype;
-                    int newVal = _playerData.Hype + e.Amount;
+                    var playerData = GameManager.Instance.PlayerData;
+                    
+                    int oldVal = playerData.Hype;
+                    int newVal = playerData.Hype + e.Amount;
 
-                    int minHype = _playerData.Goods
+                    int minHype = playerData.Goods
                         .GroupBy(g => g.Type)
                         .ToDictionary(k => k, v => v.Max(g => g.Hype))
                         .Sum(g => g.Value);
@@ -120,7 +126,7 @@ namespace MessageBroker.Handlers
                     
                     newVal = Mathf.Clamp(newVal, minHype, maxHype);
 
-                    _playerData.Hype = newVal;
+                    playerData.Hype = newVal;
                     _messageBroker.Publish(new HypeChangedEvent {OldVal = oldVal, NewVal = newVal});
                 });
         }
@@ -131,13 +137,15 @@ namespace MessageBroker.Handlers
                 .Receive<ChangeExpEvent>()
                 .Subscribe(e =>
                 {
-                    int oldVal = _playerData.Exp;
-                    int newVal = _playerData.Exp + e.Amount;
+                    var playerData = GameManager.Instance.PlayerData;
+                    
+                    int oldVal = playerData.Exp;
+                    int newVal = playerData.Exp + e.Amount;
                     
                     const int minExp = 0;
                     newVal = Mathf.Max(newVal, minExp);
 
-                    _playerData.Exp = newVal;
+                    playerData.Exp = newVal;
                     _messageBroker.Publish(new ExpChangedEvent {OldVal = oldVal, NewVal = newVal});
                 });
         }

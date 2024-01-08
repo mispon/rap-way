@@ -17,6 +17,8 @@ namespace Game.UI.GameScreen
     /// </summary>
     public class GameScreenController: Singleton<GameScreenController>, IStarter
     {
+        private readonly CompositeDisposable _disposable = new();
+        
         [Header("HUD контроллы")]
         [SerializeField] private Image playerAvatar;
         [SerializeField] private Text playerNickname;
@@ -90,15 +92,21 @@ namespace Game.UI.GameScreen
         {
             _messageBroker
                 .Receive<MoneyChangedEvent>()
-                .Subscribe(e => playerMoney.text = e.NewVal.GetMoney());
+                .Subscribe(e => playerMoney.text = e.NewVal.GetMoney())
+                .AddTo(_disposable);
             _messageBroker
                 .Receive<FansChangedEvent>()
-                .Subscribe(e => playerFans.text = e.NewVal.GetDisplay());
+                .Subscribe(e => playerFans.text = e.NewVal.GetDisplay())
+                .AddTo(_disposable);
             _messageBroker
                 .Receive<HypeChangedEvent>()
-                .Subscribe(e => playerHype.text = e.NewVal.ToString());
-
-            _messageBroker.Receive<FullStateResponse>().Subscribe(UpdateHUD);
+                .Subscribe(e => playerHype.text = e.NewVal.ToString())
+                .AddTo(_disposable);
+            _messageBroker
+                .Receive<FullStateResponse>()
+                .Subscribe(UpdateHUD)
+                .AddTo(_disposable);
+            
             _messageBroker.Publish(new FullStateRequest());
         }
         
@@ -159,6 +167,7 @@ namespace Game.UI.GameScreen
         
         private void OnDestroy()
         {
+            _disposable.Clear();
             TimeManager.Instance.onDayLeft -= OnDayLeft;
         }
     }
