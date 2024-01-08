@@ -25,8 +25,6 @@ namespace MessageBroker.Handlers
             HandleFullState();
             HandleAddMoney();
             HandleSpendMoney();
-            HandleAddDonate();
-            HandleSpendDonate();
             HandleChangeFans();
             HandleChangeHype();
             HandleChangeExp();
@@ -85,43 +83,6 @@ namespace MessageBroker.Handlers
                     } 
                     
                     _messageBroker.Publish(new SpendMoneyResponse {OK = ok});
-                });
-        }
-        
-        private void HandleAddDonate()
-        {
-            _messageBroker
-                .Receive<AddDonateEvent>()
-                .Subscribe(e =>
-                {
-                    int oldVal = _playerData.Donate;
-                    int newVal = _playerData.Donate + e.Amount;
-
-                    _playerData.Money = newVal;
-                    _messageBroker.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
-                });
-        }
-        
-        private void HandleSpendDonate()
-        {
-            _messageBroker
-                .Receive<SpendDonateRequest>()
-                .Subscribe(e =>
-                {
-                    int oldVal = _playerData.Donate;
-                    
-                    bool ok = false;
-                    if (_playerData.Donate >= e.Amount)
-                    {
-                        int newVal = _playerData.Donate - e.Amount;
-
-                        _playerData.Donate = newVal;
-                        _messageBroker.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
-                        
-                        ok = true;
-                    } 
-                    
-                    _messageBroker.Publish(new SpendDonateResponse {OK = ok});
                 });
         }
 

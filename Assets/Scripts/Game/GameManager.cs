@@ -8,7 +8,6 @@ using Localization;
 using Models.Game;
 using Models.Player;
 using Sirenix.OdinInspector;
-using UniRx;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;
@@ -41,6 +40,8 @@ namespace Game
         [BoxGroup("Stores URLs"), SerializeField] private string googlePlayURL;
         
         [BoxGroup("Save Key")]  [SerializeField] private string gameDataKey;
+        [BoxGroup("Save Key")]  [SerializeField] private string noAdsDataKey;
+        [BoxGroup("Save Key")]  [SerializeField] private string donateDataKey;
         [BoxGroup("Game Settings")] public GameSettings Settings;
         
         // TODO: make full state as private
@@ -82,22 +83,52 @@ namespace Game
         }
 
         /// <summary>
-        /// Создает новый объект персонажа
+        /// Creates new players Save
         /// </summary>
         public PlayerData CreateNewPlayer()
         {
             PlayerData = PlayerData.New;
             Eagles = new List<Eagle>(0);
             
+            Rappers = new List<RapperInfo>(0);
+            CustomRappers = new List<RapperInfo>(0);
+
+            Labels = new List<LabelInfo>(0);
+            CustomLabels = new List<LabelInfo>(0);
+            
             return PlayerData;
         }
 
         /// <summary>
-        /// Удаляет игровые сохранения
+        /// Saves no ads setting
         /// </summary>
-        public void RemoveSaves()
+        public void SaveNoAds()
         {
-            DataManager.Clear(gameDataKey);
+            PlayerPrefs.SetInt(noAdsDataKey, 1);
+        }
+        
+        /// <summary>
+        /// Loads no ads setting 
+        /// </summary>
+        public bool LoadNoAds()
+        {
+            return PlayerPrefs.GetInt(noAdsDataKey) == 1;
+        }
+        
+        /// <summary>
+        /// Saves donate balance
+        /// </summary>
+        public void SaveDonateBalance()
+        {
+            PlayerPrefs.SetInt(donateDataKey, PlayerData.Donate);
+        }
+        
+        /// <summary>
+        /// Loads donate balance
+        /// </summary>
+        private void LoadDonateBalance()
+        {
+            PlayerData.Donate = PlayerPrefs.GetInt(donateDataKey);
         }
 
         /// <summary>
@@ -135,6 +166,8 @@ namespace Game
             Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
             ShowedTutorials = gameData.ShowedTutorials?.ToHashSet() ?? new HashSet<string>(0);
             ShowedHints = gameData.ShowedHints?.ToHashSet() ?? new HashSet<string>(0);
+            
+            LoadDonateBalance();
         }
 
         /// <summary>
@@ -142,6 +175,8 @@ namespace Game
         /// </summary>
         public void SaveApplicationData()
         {
+            SaveDonateBalance();
+            
             if (TimeManager.Instance != null)
             {
                 GameStats.Now = TimeManager.Instance.Now.DateToString();
@@ -163,7 +198,7 @@ namespace Game
                 ShowedTutorials = ShowedTutorials.ToArray(),
                 ShowedHints = ShowedHints.ToArray()
             };
-
+            
             DataManager.Save(gameDataKey, gameData);
         }
 

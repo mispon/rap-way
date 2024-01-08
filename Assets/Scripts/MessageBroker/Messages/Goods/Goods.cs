@@ -14,6 +14,7 @@ namespace MessageBroker.Messages.Goods
     {
         public GoodsType Type;
         public short Level;
+        public bool IsNoAds;
     }
     
     public struct GoodExistsResponse

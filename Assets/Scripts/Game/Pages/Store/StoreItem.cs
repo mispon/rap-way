@@ -3,6 +3,7 @@ using Data;
 using Enums;
 using Game.Pages.Store.Purchase;
 using Game.UI.ScrollViewController;
+using MessageBroker.Messages.Donate;
 using MessageBroker.Messages.Goods;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -60,7 +61,11 @@ namespace Game.Pages.Store
                 .Receive<AddNewGoodEvent>()
                 .Subscribe(e => OnItemPurchased(e.Type, e.Level))
                 .AddTo(_disposable);
-
+            messageBroker
+                .Receive<NoAdsPurchaseEvent>()
+                .Subscribe(_ => OnNoAdsPurchased())
+                .AddTo(_disposable);
+            
             var disposable = messageBroker
                 .Receive<GoodExistsResponse>()
                 .Subscribe(e =>
@@ -68,14 +73,25 @@ namespace Game.Pages.Store
                     if (e.Status) 
                         SetPurchased();
                 });
-            
-            messageBroker.Publish(new GoodExistsRequest {Type = _info.Type, Level = _info.Level});
+
+            messageBroker.Publish(_info is NoAds
+                ? new GoodExistsRequest {IsNoAds = true}
+                : new GoodExistsRequest {Type = _info.Type, Level = _info.Level});
+
             disposable.Dispose();
         }
 
         private void OnItemPurchased(GoodsType type, int level)
         {
             if (level == _info.Level && type == _info.Type)
+            {
+                SetPurchased();
+            }
+        }
+
+        private void OnNoAdsPurchased()
+        {
+            if (_info is NoAds)
             {
                 SetPurchased();
             }

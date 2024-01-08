@@ -49,7 +49,10 @@ namespace MessageBroker.Handlers
                 .Receive<GoodExistsRequest>()
                 .Subscribe(e =>
                 {
-                    bool exists = _playerData.Goods.Any(g => g.Type == e.Type && g.Level == e.Level);
+                    bool exists = e.IsNoAds
+                        ? GameManager.Instance.LoadNoAds()
+                        : _playerData.Goods.Any(g => g.Type == e.Type && g.Level == e.Level);
+                    
                     _messageBroker.Publish(new GoodExistsResponse {Status = exists});
                 });
         }

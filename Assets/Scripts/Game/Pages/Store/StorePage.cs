@@ -3,6 +3,7 @@ using Core;
 using Data;
 using Firebase.Analytics;
 using Game.UI.ScrollViewController;
+using MessageBroker.Messages.Donate;
 using MessageBroker.Messages.State;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -46,12 +47,12 @@ namespace Game.Pages.Store
         private void ShowCategoriesList()
         {
             int i = 1;
-            foreach (var (type, itemsInfo) in data.Items)
+            foreach (var category in data.Categories)
             {
                 var row = categories.InstantiatedElement<StoreCategoryItem>(categoryItemTemplate);
 
-                var categoryIcon = data.Categories[type];
-                row.Initialize(i, categoryIcon, GetLocale(type.GetDescription()), itemsInfo);
+                var itemsInfo = data.Items[category.Type];
+                row.Initialize(i, category.Icon, GetLocale(category.Type.GetDescription()), itemsInfo);
                 i++;
                 
                 _categoryItems.Add(row);

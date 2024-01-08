@@ -10,10 +10,17 @@ namespace Data
     public class GoodsData: SerializedScriptableObject
     {
         [TabGroup("Categories")] 
-        public Dictionary<GoodsType, Sprite> Categories;
+        public CategoryInfo[] Categories;
         
         [TabGroup("Items")]
         public Dictionary<GoodsType, GoodInfo[]> Items;
+    }
+
+    [Serializable]
+    public class CategoryInfo
+    {
+        public GoodsType Type;
+        public Sprite Icon;
     }
     
     [Serializable]
@@ -57,6 +64,13 @@ namespace Data
     [Serializable]
     public class DonateCoins : GoodInfo
     {
+        public string ProductId;
         public int Amount;
+    }
+    
+    [Serializable]
+    public class NoAds : GoodInfo
+    {
+        public string ProductId;
     }
 }

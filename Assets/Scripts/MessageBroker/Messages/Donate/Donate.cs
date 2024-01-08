@@ -1,4 +1,4 @@
-namespace MessageBroker.Messages.State
+namespace MessageBroker.Messages.Donate
 {
     public struct SpendDonateRequest
     {
@@ -15,9 +15,13 @@ namespace MessageBroker.Messages.State
         public int Amount;
     }
     
+    public struct DonateAddedEvent {}
+    
     public struct DonateChangedEvent
     {
         public int OldVal;
         public int NewVal;
     }
+    
+    public struct NoAdsPurchaseEvent {}
 }

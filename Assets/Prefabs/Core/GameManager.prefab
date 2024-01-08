@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3131923410109465423}
   - component: {fileID: 3153165302359463637}
   - component: {fileID: 4403589597053160321}
+  - component: {fileID: 2263179969477790770}
   m_Layer: 0
   m_Name: Handlers
   m_TagString: Untagged
@@ -55,6 +56,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bcd211a936846f491e34328e0af1919, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2263179969477790770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60039106637959916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1943002cd6194595b9f7efc04f9bd061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &273639073219535793
@@ -105,6 +118,7 @@ MonoBehaviour:
   starters:
   - {fileID: 3153165302359463637}
   - {fileID: 4403589597053160321}
+  - {fileID: 2263179969477790770}
 --- !u!1 &6495241212439587857
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +133,7 @@ GameObject:
   - component: {fileID: 6108130984381607496}
   - component: {fileID: 6495241212439587856}
   - component: {fileID: 540135372571015710}
+  - component: {fileID: 5314307375714560629}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -160,6 +175,8 @@ MonoBehaviour:
   appStoreURL: todo
   googlePlayURL: https://play.google.com/store/apps/details?id=com.Meepson.RapWay
   gameDataKey: RapWay_GameData5
+  noAdsDataKey: RapWay_NoAdds
+  donateDataKey: RapWay_DonateBalance
   Settings: {fileID: 11400000, guid: cc05ca9a524ec1743a742736398c4313, type: 2}
   PlayerData:
     Money: 0
@@ -326,6 +343,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
+--- !u!114 &5314307375714560629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6495241212439587857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bacf31722946aea8c6dcc83461784c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  environment: production
 --- !u!1 &8267020499360937889
 GameObject:
   m_ObjectHideFlags: 0

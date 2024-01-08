@@ -48,6 +48,9 @@ namespace Core
 
         public void ShowInterstitial()
         {
+            if (GameManager.Instance.LoadNoAds())
+                return;
+            
             bool adLoaded = _manager.IsReadyAd(AdType.Interstitial);
             if (!adLoaded)
             {

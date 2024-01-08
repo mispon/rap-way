@@ -1,6 +1,8 @@
+using System;
 using Core;
 using Data;
 using Game.UI.GameError;
+using MessageBroker.Messages.Donate;
 using MessageBroker.Messages.State;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -13,7 +15,8 @@ namespace Game.Pages.Store.Purchase
     public class StoreItemPurchaseCard : Page
     {
         private readonly CompositeDisposable _disposable = new();
-
+        
+        [BoxGroup("Purchaser")] [SerializeField] private StoreItemPurchaser _purchaser;
         [BoxGroup("Error")] [SerializeField] private GameError gameError;
         [BoxGroup("Card")] [SerializeField] private Image icon;
         [BoxGroup("Card")] [SerializeField] private Text itemName;
@@ -57,26 +60,41 @@ namespace Game.Pages.Store.Purchase
             Close();
         }
 
+        private void HandleDonatePurchase()
+        {
+            Close();
+        }
+
         private void BuyItemClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-
-            if (StoreItemPurchaser.IsDonateCoins(_info))
-            {
-                // todo:
-                return;
-            }
             
-            if (StoreItemPurchaser.IsDonateItem(_info))
-                SendMessage(new SpendDonateRequest{Amount = _info.Price});
-            else 
-                SendMessage(new SpendMoneyRequest{Amount = _info.Price});
+            var itemType = StoreItemPurchaser.GetStoreItemType(_info);
+            switch (itemType)
+            {
+                case StoreItemType.Donate:
+                    SendMessage(new SpendDonateRequest{Amount = _info.Price});
+                    break;
+                
+                case StoreItemType.Game:
+                    SendMessage(new SpendMoneyRequest{Amount = _info.Price});    
+                    break;
+                
+                case StoreItemType.Purchase:
+                    _purchaser.PurchaseStoreItem(_info);
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
         
         protected override void BeforePageOpen()
         {
-            RecvMessage<SpendMoneyResponse>(e => HandleItemPurchase(e.OK), _disposable);
             RecvMessage<SpendDonateResponse>(e => HandleItemPurchase(e.OK), _disposable);
+            RecvMessage<SpendMoneyResponse>(e => HandleItemPurchase(e.OK), _disposable);
+            RecvMessage<DonateAddedEvent>(_ => HandleDonatePurchase(), _disposable);
+            RecvMessage<NoAdsPurchaseEvent>(_ => HandleDonatePurchase(), _disposable);
         }
 
         protected override void AfterPageClose()
