@@ -1,16 +1,18 @@
-﻿using Game.UI.Enums;
+using Core;
+using Data;
+using Firebase.Analytics;
+using Game.UI.Enums;
 using Game.UI.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.UI.OverlayWindows
+namespace Game.UI.Buttons
 {
-    [RequireComponent(typeof(Button))]
-    public sealed class ShowOverlayWindow : MonoBehaviour
+    public class NewGameButton : MonoBehaviour
     {
-        [SerializeField]
-        private OverlayWindowType _toOverlayWindow;
+        [SerializeField] private OverlayWindowType _toOverlayWindow;
+        [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
         {   
@@ -18,6 +20,10 @@ namespace Game.UI.OverlayWindows
             button.OnClickAsObservable()
                 .Subscribe(_ =>
                 {
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGamePage);
+                    
+                    SoundManager.Instance.PlaySound(_soundType);
+                    
                     UIManager.Instance.MessageBroker
                         .Publish(new OverlayWindowControlMessage()
                         {

@@ -6,26 +6,26 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.UI.Windows
+namespace Game.UI.OverlayWindows
 {
     [RequireComponent(typeof(Button))]
-    public sealed class ChangeWindowButton: MonoBehaviour
+    public sealed class ShowOverlayWindowButton : MonoBehaviour
     {
-        [SerializeField] private WindowType _toWindow;
+        [SerializeField] private OverlayWindowType _toOverlayWindow;
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
-        { 
+        {   
             var button = GetComponent<Button>();
             button.OnClickAsObservable()
                 .Subscribe(_ =>
                 {
                     SoundManager.Instance.PlaySound(_soundType);
-
+                    
                     UIManager.Instance.MessageBroker
-                        .Publish(new WindowControlMessage()
+                        .Publish(new OverlayWindowControlMessage()
                         {
-                            WindowType = _toWindow
+                            OverlayWindowType = _toOverlayWindow
                         });
                 });
         }

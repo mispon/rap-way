@@ -2,19 +2,15 @@
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 using Utils;
 
 namespace Game.UI
 {
-    [RequireComponent(typeof(Canvas), typeof(CanvasGroup))]
+    [RequireComponent(typeof(Canvas), typeof(CanvasGroup), typeof(GraphicRaycaster))]
     public abstract class CanvasUIElement : SerializedMonoBehaviour, IUIElement
     {
-        [BoxGroup("CanvasUIElement"), ChildGameObjectsOnly]
-        [SerializeField]
         private Canvas _canvas;
-
-        [BoxGroup("CanvasUIElement"), ChildGameObjectsOnly]
-        [SerializeField]
         private CanvasGroup _canvasGroup;
         
         public bool IsActive => _isActive;
@@ -22,12 +18,15 @@ namespace Game.UI
         public CanvasGroup CanvasGroup => _canvasGroup;
 
         private bool _isActive;
-        protected MessageBroker _uiMessageBus;
+        protected MessageBroker uiMessageBus;
         protected CompositeDisposableImmediate disposables;
 
         public virtual void Initialize()
         {
-            _uiMessageBus = UIManager.Instance.MessageBroker;
+            _canvas = GetComponent<Canvas>();
+            _canvasGroup = GetComponent<CanvasGroup>();
+            
+            uiMessageBus = UIManager.Instance.MessageBroker;
             disposables = new CompositeDisposableImmediate();
 
             Hide();

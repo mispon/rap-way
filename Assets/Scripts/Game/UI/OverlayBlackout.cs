@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
-    [RequireComponent(typeof(GraphicRaycaster))]
+    [RequireComponent(typeof(GraphicRaycaster), typeof(GraphicRaycaster))]
     public class OverlayBlackout : MonoBehaviour, IUIElement
     {
         private GraphicRaycaster _graphicRaycaster;
