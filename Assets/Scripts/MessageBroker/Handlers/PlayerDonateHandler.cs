@@ -1,7 +1,7 @@
+using System;
 using Core.Interfaces;
 using Game;
 using MessageBroker.Messages.Donate;
-using Models.Player;
 using UniRx;
 using UnityEngine;
 
@@ -9,14 +9,13 @@ namespace MessageBroker.Handlers
 {
     public class PlayerDonateHandler : MonoBehaviour, IStarter
     {
-        private IMessageBroker _messageBroker;
+        private readonly CompositeDisposable _disposable = new(); 
         
-        private PlayerData _playerData;
+        private IMessageBroker _messageBroker;
         
         public void OnStart()
         {
             _messageBroker = GameManager.Instance.MessageBroker;
-            _playerData = GameManager.Instance.PlayerData;
             
             HandleAddDonate();
             HandleSpendDonate();
@@ -29,15 +28,18 @@ namespace MessageBroker.Handlers
                 .Receive<AddDonateEvent>()
                 .Subscribe(e =>
                 {
-                    int oldVal = _playerData.Donate;
-                    int newVal = _playerData.Donate + e.Amount;
+                    var playerData = GameManager.Instance.PlayerData;
+                    
+                    int oldVal = playerData.Donate;
+                    int newVal = playerData.Donate + e.Amount;
 
-                    _playerData.Donate = newVal;
+                    playerData.Donate = newVal;
                     _messageBroker.Publish(new DonateAddedEvent());
                     _messageBroker.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
                     
                     GameManager.Instance.SaveDonateBalance();
-                });
+                })
+                .AddTo(_disposable);
         }
         
         private void HandleSpendDonate()
@@ -46,14 +48,16 @@ namespace MessageBroker.Handlers
                 .Receive<SpendDonateRequest>()
                 .Subscribe(e =>
                 {
-                    int oldVal = _playerData.Donate;
+                    var playerData = GameManager.Instance.PlayerData;
+                    
+                    int oldVal = playerData.Donate;
                     
                     bool ok = false;
-                    if (_playerData.Donate >= e.Amount)
+                    if (playerData.Donate >= e.Amount)
                     {
-                        int newVal = _playerData.Donate - e.Amount;
+                        int newVal = playerData.Donate - e.Amount;
 
-                        _playerData.Donate = newVal;
+                        playerData.Donate = newVal;
                         _messageBroker.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
                         
                         GameManager.Instance.SaveDonateBalance();
@@ -61,7 +65,8 @@ namespace MessageBroker.Handlers
                     } 
                     
                     _messageBroker.Publish(new SpendDonateResponse {OK = ok});
-                });
+                })
+                .AddTo(_disposable);
         }
 
         private void HandleNoAddPurchase()
@@ -71,7 +76,13 @@ namespace MessageBroker.Handlers
                 .Subscribe(_ =>
                 {
                     GameManager.Instance.SaveNoAds();
-                });
+                })
+                .AddTo(_disposable);
+        }
+
+        private void OnDestroy()
+        {
+            _disposable.Clear();
         }
     }
 }

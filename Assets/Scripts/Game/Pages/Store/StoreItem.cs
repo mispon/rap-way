@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Data;
 using Enums;
@@ -15,6 +16,7 @@ namespace Game.Pages.Store
 {
     public class StoreItem : MonoBehaviour, IScrollViewControllerItem
     {
+        private IDisposable _singleDispose;
         private readonly CompositeDisposable _disposable = new();
         
         [BoxGroup("Card")] [SerializeField] private StoreItemPurchaseCard itemCard;
@@ -66,19 +68,19 @@ namespace Game.Pages.Store
                 .Subscribe(_ => OnNoAdsPurchased())
                 .AddTo(_disposable);
             
-            var disposable = messageBroker
+            _singleDispose = messageBroker
                 .Receive<GoodExistsResponse>()
                 .Subscribe(e =>
                 {
                     if (e.Status) 
                         SetPurchased();
+                    
+                    _singleDispose?.Dispose();
                 });
 
             messageBroker.Publish(_info is NoAds
                 ? new GoodExistsRequest {IsNoAds = true}
                 : new GoodExistsRequest {Type = _info.Type, Level = _info.Level});
-
-            disposable.Dispose();
         }
 
         private void OnItemPurchased(GoodsType type, int level)

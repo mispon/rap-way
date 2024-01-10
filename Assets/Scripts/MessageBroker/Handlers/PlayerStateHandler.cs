@@ -10,7 +10,10 @@ namespace MessageBroker.Handlers
 {
     public class PlayerStateHandler : MonoBehaviour, IStarter
     {
+        private readonly CompositeDisposable _disposable = new(); 
+        
         private IMessageBroker _messageBroker;
+        
         private GameSettings _settings;
         
         public void OnStart()
@@ -44,7 +47,8 @@ namespace MessageBroker.Handlers
                         Hype = playerData.Hype,
                         Exp = playerData.Exp
                     });
-                });
+                })
+                .AddTo(_disposable);
         }
         
         private void HandleAddMoney()
@@ -60,7 +64,8 @@ namespace MessageBroker.Handlers
 
                     playerData.Money = newVal;
                     _messageBroker.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
-                });
+                })
+                .AddTo(_disposable);
         }
         
         private void HandleSpendMoney()
@@ -85,7 +90,8 @@ namespace MessageBroker.Handlers
                     } 
                     
                     _messageBroker.Publish(new SpendMoneyResponse {OK = ok});
-                });
+                })
+                .AddTo(_disposable);
         }
 
         private void HandleChangeFans()
@@ -104,7 +110,8 @@ namespace MessageBroker.Handlers
                     
                     playerData.Fans = newVal;
                     _messageBroker.Publish(new FansChangedEvent {OldVal = oldVal, NewVal = newVal});
-                });
+                })
+                .AddTo(_disposable);
         }
         
         private void HandleChangeHype()
@@ -128,7 +135,8 @@ namespace MessageBroker.Handlers
 
                     playerData.Hype = newVal;
                     _messageBroker.Publish(new HypeChangedEvent {OldVal = oldVal, NewVal = newVal});
-                });
+                })
+                .AddTo(_disposable);
         }
         
         private void HandleChangeExp()
@@ -147,7 +155,8 @@ namespace MessageBroker.Handlers
 
                     playerData.Exp = newVal;
                     _messageBroker.Publish(new ExpChangedEvent {OldVal = oldVal, NewVal = newVal});
-                });
+                })
+                .AddTo(_disposable);
         }
         
         private static int SafetyAdd(int current, int increment, int maxValue)
@@ -155,6 +164,11 @@ namespace MessageBroker.Handlers
             return maxValue - current > increment
                 ? current + increment
                 : maxValue;
+        }
+
+        private void OnDestroy()
+        {
+            _disposable.Clear();
         }
     }
 }

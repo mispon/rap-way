@@ -8,6 +8,7 @@ using Models.Game;
 using Models.Info;
 using UnityEngine;
 using Utils;
+
 // ReSharper disable CoVariantArrayConversion
 
 namespace Game

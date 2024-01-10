@@ -1,6 +1,8 @@
 ﻿using System;
-using Core;
+using System.Threading;
+using MessageBroker.Messages.Goods;
 using Models.Info.Production;
+using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,6 +13,8 @@ namespace Game.Analyzers
     /// </summary>
     public class TrackAnalyzer : Analyzer<TrackInfo>
     {
+        private IDisposable _disposable;
+        
         /// <summary>
         /// Анализирует успешность трека
         /// </summary>
@@ -66,10 +70,36 @@ namespace Game.Analyzers
             float workPointsFactor = CalculateWorkPointsFactor(track.TextPoints, track.BitPoints);
             qualityPoints += workPointsFactor;
 
-            float equipPointsFactor = GoodsManager.Instance.GetQualityImpact();
-            qualityPoints += equipPointsFactor;
+            float goodsPointsFactor = GetGoodsQualityImpact();
+            qualityPoints += goodsPointsFactor;
             
             return Mathf.Min(qualityPoints, 1f);
+        }
+
+        /// <summary>
+        /// TODO: удалить этот костыль, подумать как зарефакторить аналайзеры 
+        /// </summary>
+        private float GetGoodsQualityImpact()
+        {
+            float impact = 0f;
+            bool isDone = false;
+
+            _disposable = messageBroker
+                .Receive<GoodsQualityImpactResponse>()
+                .Subscribe(e =>
+                {
+                    impact = e.Value;
+                    isDone = true;
+                    _disposable?.Dispose();
+                });
+            messageBroker.Publish(new GoodsQualityImpactRequest());
+            
+            while (!isDone)
+            {
+                Thread.Sleep(100);
+            }
+
+            return impact;
         }
 
         /// <summary>

@@ -21,4 +21,11 @@ namespace MessageBroker.Messages.Goods
     {
         public bool Status;
     }
+
+    public struct GoodsQualityImpactRequest {}
+
+    public struct GoodsQualityImpactResponse
+    {
+        public float Value;
+    }
 }
