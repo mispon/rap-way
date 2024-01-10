@@ -22,10 +22,10 @@ namespace Game.UI.Windows
                 {
                     SoundManager.Instance.PlaySound(_soundType);
 
-                    UIManager.Instance.MessageBroker
+                    UIMessageBroker.Instance.MessageBroker
                         .Publish(new WindowControlMessage()
                         {
-                            WindowType = _toWindow
+                            Type = _toWindow
                         });
                 });
         }

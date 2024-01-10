@@ -1,4 +1,5 @@
 ﻿using Game.UI.Interfaces;
+using Game.UI.Messages;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Game.UI
         public bool IsActive { get; private set; } = false;
 
         protected MessageBroker uiMessageBroker;
-        protected CompositeDisposable disposables = new CompositeDisposable();
+        protected readonly CompositeDisposable disposables = new CompositeDisposable();
 
         /// <summary>
         /// Do not use the Awake method it is can be invoked the player return to main menu. 
@@ -23,7 +24,7 @@ namespace Game.UI
             Canvas = GetComponent<Canvas>();
             Canvas.enabled = false;
 
-            uiMessageBroker = UIManager.Instance.MessageBroker;
+            uiMessageBroker = UIMessageBroker.Instance.MessageBroker;
         }
 
         protected virtual void Activate()
@@ -43,7 +44,8 @@ namespace Game.UI
         }
 
 
-        protected abstract void SetupListeners();
+        protected virtual void SetupListeners() { }
+
         protected virtual void DisposeListeners()
         {
             disposables?.Dispose();

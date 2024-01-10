@@ -10,25 +10,21 @@ namespace Game.UI.Windows
 {
     public class WindowContainer : UIElementContainer
     {
-        [SerializeField]
-        private Dictionary<WindowType, CanvasUIElement> _windows;
-
-        [SerializeField]
-        private WindowType _startWindow;
+        [SerializeField] private Dictionary<WindowType, CanvasUIElement> _windows;
+        [SerializeField] private WindowType _startWindow;
 
         public WindowType StartWindow => _startWindow;
 
         private WindowType _activeWindow;
-        private MementoHistory<IUIElement> _windowHistory;
+        private readonly Stack<IUIElement> _windowHistory = new Stack<IUIElement>();
 
         public override void Initialize()
         {
             base.Initialize();
-            _windowHistory = new MementoHistory<IUIElement>();
 
             uiMessageBroker
                 .Receive<WindowControlMessage>()
-                .Subscribe(msg => ManageWindowControl(msg.WindowType))
+                .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
 
             foreach (var window in _windows.Values)
@@ -43,7 +39,7 @@ namespace Game.UI.Windows
             if (newWindow is null) return;
             Activate();
 
-            _windowHistory.AddNewElement(newWindow);
+            _windowHistory.Push(newWindow);
             HideCurrentWindow();
             newWindow.Show();
             
@@ -55,19 +51,19 @@ namespace Game.UI.Windows
             switch (windowType)
             {
                 case WindowType.Previous:
-                    var prevUIElement = _windowHistory.GetPreviousElement();
-                    if (prevUIElement is null)
+                    var prevUIElement = _windowHistory.TryPop(out IUIElement result);
+                    if (prevUIElement is false)
                     {
                         Deactivate();
                         return;
                     }
 
-                    var prevWindow = prevUIElement as CanvasUIElement;
+                    var prevWindow = result as CanvasUIElement;
                     var prevWindowType = GetWindowType(prevWindow);
                     ChangeWindow(prevWindowType);
                     break;
                 case WindowType.None:
-                    _windowHistory.ClearHistory();
+                    _windowHistory.Clear();
                     Deactivate();
                     break;
                 default:
@@ -95,13 +91,7 @@ namespace Game.UI.Windows
         private void HideCurrentWindow()
         {
             var currentWindow = GetWindow(_activeWindow);
-            if (currentWindow is null == false)
-                currentWindow.Hide();
-        }
-
-        protected override void SetupListeners() 
-        { 
-            
+            currentWindow?.Hide();
         }
         
         public void HideAnyWindow()

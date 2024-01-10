@@ -24,7 +24,7 @@ namespace Game.UI.Windows
             if (!GameManager.Instance.GameStats.AskedReview && GameManager.Instance.PlayerData.Fans > 0)
                 uiMessageBus.Publish(new WindowControlMessage()
                 {
-                    WindowType = WindowType.AskReview
+                    Type = WindowType.AskReview
                 });
             
             _continueGameButton.interactable = GameManager.Instance.HasCharacter();

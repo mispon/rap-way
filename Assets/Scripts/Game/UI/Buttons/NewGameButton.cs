@@ -24,10 +24,10 @@ namespace Game.UI.Buttons
                     
                     SoundManager.Instance.PlaySound(_soundType);
                     
-                    UIManager.Instance.MessageBroker
+                    UIMessageBroker.Instance.MessageBroker
                         .Publish(new OverlayWindowControlMessage()
                         {
-                            OverlayWindowType = _toOverlayWindow
+                            Type = _toOverlayWindow
                         });
                 });
         }

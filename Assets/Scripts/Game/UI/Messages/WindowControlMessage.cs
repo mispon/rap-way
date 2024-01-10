@@ -4,6 +4,6 @@ namespace Game.UI.Messages
 {
     public struct WindowControlMessage
     {
-        public WindowType WindowType;
+        public WindowType Type;
     }
 }

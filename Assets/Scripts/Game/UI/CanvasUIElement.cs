@@ -1,4 +1,5 @@
 ﻿using Game.UI.Interfaces;
+using Game.UI.Messages;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
@@ -19,15 +20,15 @@ namespace Game.UI
 
         private bool _isActive;
         protected MessageBroker uiMessageBus;
-        protected CompositeDisposableImmediate disposables;
+        protected CompositeDisposable disposables;
 
         public virtual void Initialize()
         {
             _canvas = GetComponent<Canvas>();
             _canvasGroup = GetComponent<CanvasGroup>();
             
-            uiMessageBus = UIManager.Instance.MessageBroker;
-            disposables = new CompositeDisposableImmediate();
+            uiMessageBus = UIMessageBroker.Instance.MessageBroker;
+            disposables = new CompositeDisposable();
 
             Hide();
             SetupListenersOnInitialize();
