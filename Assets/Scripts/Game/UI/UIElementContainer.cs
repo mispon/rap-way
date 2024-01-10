@@ -14,11 +14,7 @@ namespace Game.UI
 
         protected MessageBroker uiMessageBroker;
         protected readonly CompositeDisposable disposables = new CompositeDisposable();
-
-        /// <summary>
-        /// Do not use the Awake method it is can be invoked the player return to main menu. 
-        /// Use the Initialize method instead. 
-        /// </summary>
+        
         public virtual void Initialize()
         {
             Canvas = GetComponent<Canvas>();
@@ -42,7 +38,6 @@ namespace Game.UI
             Canvas.enabled = false;
             Dispose();
         }
-
 
         protected virtual void SetupListeners() { }
 

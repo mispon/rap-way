@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Data;
 using Enums;
 using Models.Player;
+using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -131,7 +132,11 @@ namespace Game.UI.GameScreen
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             GameManager.Instance.SaveApplicationData();
-            SceneManager.Instance.LoadMainScene();
+            ScenesController.Instance.MessageBroker
+                .Publish(new SceneLoadMessage()
+                {
+                    sceneType = SceneTypes.MainMenu
+                });
         }
         
         private void OnDestroy()

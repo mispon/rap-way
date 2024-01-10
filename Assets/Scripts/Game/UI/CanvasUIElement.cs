@@ -4,7 +4,6 @@ using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
 
 namespace Game.UI
 {

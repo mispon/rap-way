@@ -9,7 +9,7 @@ namespace Scenes
     [RequireComponent(typeof(Button))]
     public sealed class ChangeSceneButton: MonoBehaviour
     {
-        [SerializeField] private string _sceneName;
+        [SerializeField] private SceneTypes _sceneTypes;
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
@@ -21,7 +21,11 @@ namespace Scenes
                 {
                     SoundManager.Instance.PlaySound(_soundType);
                     
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(_sceneName);
+                    ScenesController.Instance.MessageBroker
+                        .Publish(new SceneLoadMessage()
+                        {
+                            sceneType = _sceneTypes
+                        });
                 })
                 .AddTo(this);
         }

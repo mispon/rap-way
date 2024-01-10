@@ -16,7 +16,7 @@ namespace Core
         private IEnumerator Start()
         {
             yield return new WaitUntil(() => GameManager.Instance.IsReady);
-            
+
             foreach (var starter in starters)
                 (starter as IStarter)?.OnStart();
         }

@@ -4,7 +4,6 @@ using Game.UI.Interfaces;
 using Game.UI.Messages;
 using UniRx;
 using UnityEngine;
-using Utils;
 
 namespace Game.UI.Windows
 {
@@ -31,7 +30,7 @@ namespace Game.UI.Windows
                 window.Initialize();
         }
 
-        public void ChangeWindow(WindowType windowType)
+        private void ChangeWindow(WindowType windowType)
         {
             if (windowType == _activeWindow && windowType != _startWindow) return;
             

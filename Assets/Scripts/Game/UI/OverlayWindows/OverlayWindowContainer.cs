@@ -29,8 +29,6 @@ namespace Game.UI.OverlayWindows
         {
             base.Initialize();
 
-            SetupListeners();
-
             uiMessageBroker
                 .Receive<OverlayWindowControlMessage>()
                 .Subscribe(msg => ManageOverlayWindowControl(msg.Type))

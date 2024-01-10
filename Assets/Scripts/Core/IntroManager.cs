@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using Firebase.Analytics;
+﻿using Firebase.Analytics;
+using Scenes;
 using UnityEngine;
 
 namespace Core
@@ -9,13 +9,14 @@ namespace Core
     /// </summary>
     public class IntroManager : MonoBehaviour
     {
-        [SerializeField] private int loadingTime = 3;
-
-        private IEnumerator Start()
+        private void Start()
         {
             InitFirebase();
-            yield return new WaitForSeconds(loadingTime);
-            SceneManager.Instance.LoadMainScene();
+            ScenesController.Instance.MessageBroker
+                .Publish(new SceneLoadMessage()
+                {
+                    sceneType = SceneTypes.MainMenu
+                });
         }
 
         private static void InitFirebase()

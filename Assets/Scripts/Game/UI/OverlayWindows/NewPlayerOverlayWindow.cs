@@ -4,7 +4,7 @@ using Core;
 using Data;
 using Enums;
 using Firebase.Analytics;
-using Game.UI.MainMenu;
+using Scenes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -95,7 +95,11 @@ namespace Game.UI.OverlayWindows
             player.Age = Convert.ToInt32(_ageCarousel.GetLabel());
 
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
-            SceneManager.Instance.LoadGameScene();
+            ScenesController.Instance.MessageBroker
+                .Publish(new SceneLoadMessage()
+                {
+                    sceneType = SceneTypes.Game
+                });
         }
     }
 }
