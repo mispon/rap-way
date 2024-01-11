@@ -175,25 +175,17 @@ namespace Localization
         /// </summary>
         private static string GetFileName(GameLang lang)
         {
-            switch (lang)
+            return lang switch
             {
-                case GameLang.RU:
-                    return "ru.json";
-                case GameLang.EN:
-                    return "en.json";
-                case GameLang.DE:
-                    return "de.json";
-                case GameLang.FR:
-                    return "fr.json";
-                case GameLang.IT:
-                    return "it.json";
-                case GameLang.ES:
-                    return "es.json";
-                case GameLang.PT:
-                    return "pt.json";
-                default:
-                    throw new RapWayException($"Неизвестное значение языка: {lang}!");
-            }
+                GameLang.RU => "ru.json",
+                GameLang.EN => "en.json",
+                GameLang.DE => "de.json",
+                GameLang.FR => "fr.json",
+                GameLang.IT => "it.json",
+                GameLang.ES => "es.json",
+                GameLang.PT => "pt.json",
+                _ => throw new RapWayException($"Неизвестное значение языка: {lang}!")
+            };
         }
     }
 }

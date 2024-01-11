@@ -7,9 +7,12 @@ using Data;
 using Localization;
 using Models.Game;
 using Models.Player;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;
+
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 
 namespace Game
 {
@@ -33,37 +36,40 @@ namespace Game
     /// </summary>
     public class GameManager : Singleton<GameManager>
     {
-        [Header("Урлы в сторах")]
-        [SerializeField] private string appStoreURL;
-        [SerializeField] private string googlePlayURL;
-        
-        [Header("Ключ сохранения данных")]
-        [SerializeField] private string gameDataKey;
-        [Header("Игровые настройки")]
-        public GameSettings Settings;
-
-        [Header("GAME STATE")]
-        public PlayerData PlayerData;
-        public GameStats GameStats;
-        [Space]
-        public List<RapperInfo> Rappers;
-        public List<RapperInfo> CustomRappers;
-        [Space]
-        public List<LabelInfo> Labels; 
-        public List<LabelInfo> CustomLabels;
-        public LabelInfo PlayerLabel;
-        [Space]
         public List<Eagle> Eagles;
-        public HashSet<string> ShowedTutorials;
-        public HashSet<string> ShowedHints;
-
+        
+        [BoxGroup("Stores URLs"), SerializeField] private string appStoreURL;
+        [BoxGroup("Stores URLs"), SerializeField] private string googlePlayURL;
+        
+        [BoxGroup("Save Key")]  [SerializeField] private string gameDataKey;
+        [BoxGroup("Save Key")]  [SerializeField] private string noAdsDataKey;
+        [BoxGroup("Save Key")]  [SerializeField] private string donateDataKey;
+        [BoxGroup("Game Settings")] public GameSettings Settings;
+        
+        // TODO: make full state as private
+        [TabGroup("state", "Player")] public PlayerData PlayerData;
+        [TabGroup("state", "Game")] public GameStats GameStats;
+        
+        [TabGroup("rappers", "Rappers")] public List<RapperInfo> Rappers;
+        [TabGroup("rappers", "Custom Rappers")] public List<RapperInfo> CustomRappers;
+        
+        [TabGroup("labels", "Labels")] public List<LabelInfo> Labels; 
+        [TabGroup("labels", "Custom Labels")] public List<LabelInfo> CustomLabels;
+        [TabGroup("labels", "Player Label")] public LabelInfo PlayerLabel;
+        
+        [TabGroup("tutorials", "Tutorials")] public HashSet<string> ShowedTutorials;
+        [TabGroup("tutorials", "Hints")] public HashSet<string> ShowedHints;
+        
+        [NonSerialized] public readonly UniRx.MessageBroker MessageBroker = new();
         [NonSerialized] public bool IsReady;
 
-        private void Start()
+        private async void Start()
         {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
-
+            
+            await GetComponent<UnityServicesInitializer>().Initialize();
+            
             IsReady = true;
         }
 
@@ -79,22 +85,52 @@ namespace Game
         }
 
         /// <summary>
-        /// Создает новый объект персонажа
+        /// Creates new players Save
         /// </summary>
         public PlayerData CreateNewPlayer()
         {
             PlayerData = PlayerData.New;
             Eagles = new List<Eagle>(0);
             
+            Rappers = new List<RapperInfo>(0);
+            CustomRappers = new List<RapperInfo>(0);
+
+            Labels = new List<LabelInfo>(0);
+            CustomLabels = new List<LabelInfo>(0);
+            
             return PlayerData;
         }
 
         /// <summary>
-        /// Удаляет игровые сохранения
+        /// Saves no ads setting
         /// </summary>
-        public void RemoveSaves()
+        public void SaveNoAds()
         {
-            DataManager.Clear(gameDataKey);
+            PlayerPrefs.SetInt(noAdsDataKey, 1);
+        }
+        
+        /// <summary>
+        /// Loads no ads setting 
+        /// </summary>
+        public bool LoadNoAds()
+        {
+            return PlayerPrefs.GetInt(noAdsDataKey) == 1;
+        }
+        
+        /// <summary>
+        /// Saves donate balance
+        /// </summary>
+        public void SaveDonateBalance()
+        {
+            PlayerPrefs.SetInt(donateDataKey, PlayerData.Donate);
+        }
+        
+        /// <summary>
+        /// Loads donate balance
+        /// </summary>
+        private void LoadDonateBalance()
+        {
+            PlayerData.Donate = PlayerPrefs.GetInt(donateDataKey);
         }
 
         /// <summary>
@@ -132,6 +168,8 @@ namespace Game
             Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
             ShowedTutorials = gameData.ShowedTutorials?.ToHashSet() ?? new HashSet<string>(0);
             ShowedHints = gameData.ShowedHints?.ToHashSet() ?? new HashSet<string>(0);
+            
+            LoadDonateBalance();
         }
 
         /// <summary>
@@ -139,6 +177,8 @@ namespace Game
         /// </summary>
         public void SaveApplicationData()
         {
+            SaveDonateBalance();
+            
             if (TimeManager.Instance != null)
             {
                 GameStats.Now = TimeManager.Instance.Now.DateToString();
@@ -160,7 +200,7 @@ namespace Game
                 ShowedTutorials = ShowedTutorials.ToArray(),
                 ShowedHints = ShowedHints.ToArray()
             };
-
+            
             DataManager.Save(gameDataKey, gameData);
         }
 

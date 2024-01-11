@@ -21,5 +21,11 @@ namespace Game.UI.GameError
             yield return new WaitForSeconds(3);
             gameObject.SetActive(false);
         }
+
+        public void ForceHide()
+        {
+            error.text = "";
+            gameObject.SetActive(false);
+        }
     }
 }

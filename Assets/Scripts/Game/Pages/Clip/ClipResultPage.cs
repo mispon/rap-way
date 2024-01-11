@@ -3,6 +3,7 @@ using Core;
 using Firebase.Analytics;
 using Game.Analyzers;
 using Game.Pages.Eagler;
+using MessageBroker.Messages.Production;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -85,10 +86,14 @@ namespace Game.Pages.Clip
         private void SaveResult(ClipInfo clip)
         {
             clip.Timestamp = TimeManager.Instance.Now.DateToString();
-            PlayerManager.Instance.GiveReward(clip.FansIncome, clip.MoneyIncome, settings.ClipRewardExp);
             ProductionManager.AddClip(clip);
             
-            GameManager.Instance.SaveApplicationData();
+            GameManager.Instance.MessageBroker.Publish(new ProductionRewardEvent
+            {
+                MoneyIncome = clip.MoneyIncome,
+                FansIncome = clip.FansIncome,
+                Exp = settings.ClipRewardExp
+            });
         }
 
         /// <summary>

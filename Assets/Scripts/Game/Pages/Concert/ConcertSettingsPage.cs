@@ -5,8 +5,12 @@ using Data;
 using Enums;
 using Firebase.Analytics;
 using Game.UI;
+using Game.UI.GameError;
 using Game.UI.GameScreen;
+using MessageBroker.Messages.State;
 using Models.Info.Production;
+using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
@@ -20,38 +24,35 @@ namespace Game.Pages.Concert
     /// </summary>
     public class ConcertSettingsPage : Page
     {
-        private const int MAX_ALBUMS_COUNT = 5;
-
-        [Header("Контролы")]
-        [SerializeField] private Carousel placeCarousel;
-        [SerializeField] private Carousel albumsCarousel;
-        [SerializeField] private Slider ticketCostSlider;
-        [SerializeField] private Button startButton;
-        [SerializeField] private GameObject cooldownIcon;
+        [BoxGroup("Controls"), SerializeField] private Carousel placeCarousel;
+        [BoxGroup("Controls"), SerializeField] private Carousel albumsCarousel;
+        [BoxGroup("Controls"), SerializeField] private Slider ticketCostSlider;
+        [BoxGroup("Controls"), SerializeField] private Button startButton;
         
-        [Header("Компоненты")]
-        [SerializeField] private Text placeCapacityLabel;
-        [SerializeField] private Text fansRequirementLabel;
-        [SerializeField] private Text ticketCost;
-        [SerializeField] private Price concertPrice;
-        [Space]
-        [SerializeField] private Image managerAvatar;
-        [SerializeField] private Image prAvatar;
-
-        [Header("Страница разработки")] 
-        [SerializeField] private ConcertWorkingPage workingPage;
-
-        [Header("Страница выбора")] 
-        [SerializeField]
-        private Page productSelectionPage;
+        [BoxGroup("Labels"), SerializeField] private Text placeCapacityLabel;
+        [BoxGroup("Labels"), SerializeField] private Text fansRequirementLabel;
+        [BoxGroup("Labels"), SerializeField] private Text ticketCost;
+        [BoxGroup("Labels"), SerializeField] private GameObject cooldownIcon;
         
-        [Header("Данные")] 
-        [SerializeField] private ConcertPlacesData placeData;
-        [SerializeField] private ImagesBank imagesBank;
-
+        [BoxGroup("Avatars"), SerializeField] private Image managerAvatar;
+        [BoxGroup("Avatars"), SerializeField] private Image prAvatar;
+        
+        [BoxGroup("Price"), SerializeField] private Price concertPrice;
+        [BoxGroup("Price"), SerializeField] private GameError noMoneyErr;
+        
+        [BoxGroup("Pages"), SerializeField] private ConcertWorkingPage workingPage;
+        [BoxGroup("Pages"), SerializeField] private Page productSelectionPage;
+        
+        [BoxGroup("Data"), SerializeField] private ConcertPlacesData placeData;
+        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
+        
         private ConcertInfo _concert;
         private int _placeCost;
+        
+        private const int MAX_ALBUMS_COUNT = 5;
         private readonly List<AlbumInfo> _lastAlbums = new(MAX_ALBUMS_COUNT);
+
+        private readonly CompositeDisposable _disposable = new();
 
         private void Start()
         {
@@ -61,72 +62,21 @@ namespace Game.Pages.Concert
             SetupPlaceCarousel();
         }
         
-        protected override void AfterPageOpen()
-        {
-            TutorialManager.Instance.ShowTutorial("tutorial_concert_page");
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
-        }
-
-        /// <summary>
-        /// Инициализирует карусель концертов 
-        /// </summary>
-        private void SetupPlaceCarousel()
-        {
-            var placeProps = placeData.Places.Select(ConvertPlaceToCarouselProps).ToArray();
-            placeCarousel.Init(placeProps);
-            placeCarousel.onChange += OnPlaceChanged;
-        }
-        
-        /// <summary>
-        /// Отображает состояние членов команды
-        /// </summary>
-        private void SetupTeam()
-        {
-            managerAvatar.sprite = TeamManager.IsAvailable(TeammateType.Manager)
-                ? imagesBank.ProducerActive
-                : imagesBank.ProducerInactive;
-            prAvatar.sprite = TeamManager.IsAvailable(TeammateType.PrMan)
-                ? imagesBank.PrManActive
-                : imagesBank.PrManInactive;
-        }
-
-        /// <summary>
-        /// Конвертирует площадку в свойство карусели
-        /// </summary>
-        private static CarouselProps ConvertPlaceToCarouselProps(ConcertPlace placeInfo)
-        {
-            return new CarouselProps
-            {
-                Text = placeInfo.NameKey,
-                Value = placeInfo
-            };
-        }
-
-        /// <summary>
-        /// Конвертирует альбом в свойство карусели
-        /// </summary>
-        private static CarouselProps ConvertAlbumToCarouselProps(AlbumInfo albumInfo)
-        {
-            return new CarouselProps
-            {
-                Text = albumInfo.Name,
-                Value = albumInfo
-            };
-        }
-
-        /// <summary>
-        /// Запускает подготовку концерта 
-        /// </summary>
         private void CreateConcert()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
+            SendMessage(new SpendMoneyRequest {Amount = _placeCost});
+        }
 
-            if (!PlayerManager.Instance.SpendMoney(_placeCost))
+        private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
+        {
+            if (!resp.OK)
             {
+                noMoneyErr.Show(GetLocale("not_enough_money"));
                 concertPrice.ShowNoMoney();
                 return;
             }
-
+            
             var album = albumsCarousel.GetValue<AlbumInfo>();
             album.ConcertAmounts += 1;
 
@@ -136,12 +86,20 @@ namespace Game.Pages.Concert
 
             productSelectionPage.Close();
             workingPage.StartWork(_concert);
+            
             Close();
         }
-
-        /// <summary>
-        /// Обработчик изменения площадки 
-        /// </summary>
+        
+        private void SetupPlaceCarousel()
+        {
+            var placeProps = placeData.Places
+                .Select(e => new CarouselProps {Text = e.NameKey, Value = e})
+                .ToArray();
+            
+            placeCarousel.Init(placeProps);
+            placeCarousel.onChange += OnPlaceChanged;
+        }
+        
         private void OnPlaceChanged(int index)
         {
             var place = placeData.Places[index];
@@ -162,51 +120,7 @@ namespace Game.Pages.Concert
             fansRequirementLabel.text = GetLocale("concert_fans_requirement", place.FansRequirement.GetDisplay());
             CheckConcertConditions(place.FansRequirement);
         }
-
-        /// <summary>
-        /// Обработчик изменения цены билета 
-        /// </summary>
-        private void OnTicketPriceChanged(float value)
-        {
-            int cost = Mathf.RoundToInt(value);
-            _concert.TicketCost = cost;
-            ticketCost.text = $"{cost.GetMoney()}";
-        }
-
-        /// <summary>
-        /// Кэширует самые новые альбомы игрока
-        /// </summary>
-        private void CacheLastAlbums()
-        {
-            var albums = PlayerManager.Data.History.AlbumList
-                .Where(e => e.ConcertAmounts < 3)
-                .OrderByDescending(e => e.Id)
-                .Take(MAX_ALBUMS_COUNT);
-            _lastAlbums.AddRange(albums);
-        }
-
-        /// <summary>
-        /// Сбрасывает стоимость билетов в минимальное значение
-        /// </summary>
-        private void ResetTicketCost()
-        {
-            int minValue = Mathf.RoundToInt(ticketCostSlider.minValue);
-            ticketCostSlider.SetValueWithoutNotify(minValue);
-            ticketCost.text = $"{minValue.GetMoney()}";
-        }
-
-        /// <summary>
-        /// Сбрасывает состояние команды
-        /// </summary>
-        private void ResetTeam(object[] args)
-        {
-            managerAvatar.sprite = imagesBank.ProducerInactive;
-            prAvatar.sprite = imagesBank.PrManInactive;
-        }
-
-        /// <summary>
-        /// Проверяет соответствие всех требований 
-        /// </summary>
+        
         private void CheckConcertConditions(int fansRequirement)
         {
             bool canStart = PlayerManager.Data.Fans >= fansRequirement;
@@ -219,7 +133,14 @@ namespace Game.Pages.Concert
 
             startButton.interactable = canStart;
         }
-
+        
+        private void OnTicketPriceChanged(float value)
+        {
+            int cost = Mathf.RoundToInt(value);
+            _concert.TicketCost = cost;
+            ticketCost.text = $"{cost.GetMoney()}";
+        }
+        
         protected override void BeforePageOpen()
         {
             _concert = new ConcertInfo();
@@ -227,9 +148,10 @@ namespace Game.Pages.Concert
 
             var anyAlbums = _lastAlbums.Any();
             var albumProps = anyAlbums
-                ? _lastAlbums.Select(ConvertAlbumToCarouselProps).ToArray()
-                : new[]
-                {
+                ? _lastAlbums
+                    .Select(e => new CarouselProps {Text = e.Name, Value = e})
+                    .ToArray()
+                : new[] {
                     new CarouselProps
                     {
                         Text = GetLocale("no_albums_yet"),
@@ -244,6 +166,14 @@ namespace Game.Pages.Concert
             EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
             GameScreenController.Instance.HideProductionGroup();
         }
+        
+        protected override void AfterPageOpen()
+        {
+            TutorialManager.Instance.ShowTutorial("tutorial_concert_page");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
+            
+            RecvMessage<SpendMoneyResponse>(HandleSpendMoneyResponse, _disposable);
+        }
 
         protected override void AfterPageClose()
         {
@@ -252,6 +182,42 @@ namespace Game.Pages.Concert
             _concert = null;
             _lastAlbums.Clear();
             ResetTicketCost();
+            
+            _disposable.Clear();
+        }
+        
+        private void CacheLastAlbums()
+        {
+            var albums = PlayerManager.Data.History.AlbumList
+                .Where(e => e.ConcertAmounts < 3)
+                .OrderByDescending(e => e.Id)
+                .Take(MAX_ALBUMS_COUNT);
+            
+            _lastAlbums.AddRange(albums);
+        }
+        
+        private void SetupTeam()
+        {
+            managerAvatar.sprite = TeamManager.IsAvailable(TeammateType.Manager)
+                ? imagesBank.ProducerActive
+                : imagesBank.ProducerInactive;
+            
+            prAvatar.sprite = TeamManager.IsAvailable(TeammateType.PrMan)
+                ? imagesBank.PrManActive
+                : imagesBank.PrManInactive;
+        }
+        
+        private void ResetTeam(object[] args)
+        {
+            managerAvatar.sprite = imagesBank.ProducerInactive;
+            prAvatar.sprite = imagesBank.PrManInactive;
+        }
+        
+        private void ResetTicketCost()
+        {
+            int minValue = Mathf.RoundToInt(ticketCostSlider.minValue);
+            ticketCostSlider.SetValueWithoutNotify(minValue);
+            ticketCost.text = $"{minValue.GetMoney()}";
         }
     }
 }

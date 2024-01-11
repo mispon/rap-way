@@ -1,8 +1,7 @@
-using System;
 using Core;
 using Data;
 using Game.UI.ScrollViewController;
-using UniRx;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +9,11 @@ namespace Game.Pages.Store
 {
     public class StoreCategoryItem : MonoBehaviour, IScrollViewControllerItem
     {
-        [SerializeField] private StoreItemsView itemsView;
-        [SerializeField] private Button itemsViewButton;
+        [BoxGroup("View")] [SerializeField] private StoreItemsView itemsView;
+        
+        [BoxGroup("Category")] [SerializeField] private Image categoryIcon;
+        [BoxGroup("Category")] [SerializeField] private Text categoryName;
+        [BoxGroup("Category")] [SerializeField] private Button itemsViewButton;
         
         private RectTransform _rectTransform;
         
@@ -19,23 +21,28 @@ namespace Game.Pages.Store
         private float _height { get; set; }
         private float _width { get; set; }
 
-        private GoodInfo _info;
+        private GoodInfo[] _itemsInfo;
 
         private void Start()
         {
-            itemsViewButton.onClick.AddListener(ShowItems);
+            itemsViewButton.onClick.AddListener(() => ShowItems());
         }
 
-        public void ShowItems()
+        public void ShowItems(bool silent = false)
         {
-            SoundManager.Instance.PlaySound(UIActionType.Click);
-            itemsView.Show(_info);
+            if (!silent)
+                SoundManager.Instance.PlaySound(UIActionType.Click);
+            
+            itemsView.Show(_itemsInfo);
         }
 
-        public void Initialize(int i, GoodInfo info)
+        public void Initialize(int i, Sprite cIcon, string cName, GoodInfo[] itemsInfo)
         {
             _index = i;
-            _info = info;
+            _itemsInfo = itemsInfo;
+
+            categoryIcon.sprite = cIcon;
+            categoryName.text = cName;
         }
         
         public void SetPosition(float spacing)

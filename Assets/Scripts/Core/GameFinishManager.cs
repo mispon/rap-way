@@ -1,7 +1,10 @@
+using System;
 using Core.Interfaces;
 using Core.Settings;
 using Game;
 using Game.Pages.GameFinish;
+using MessageBroker.Messages.State;
+using UniRx;
 using UnityEngine;
 
 namespace Core
@@ -11,9 +14,13 @@ namespace Core
         [SerializeField] private GameSettings settings;
         [SerializeField] private GameFinishPage page;
         
+        private IDisposable _disposable;
+        
         public void OnStart()
         {
-            PlayerManager.Instance.onFansAdd += OnFansChanged;
+            _disposable = GameManager.Instance.MessageBroker
+                .Receive<FansChangedEvent>()
+                .Subscribe(e => OnFansChanged(e.NewVal));
         }
 
         private void OnFansChanged(int value)
@@ -28,6 +35,11 @@ namespace Core
                 page.Open();
                 PlayerManager.Data.FinishPageShowed = true;
             }
+        }
+
+        private void OnDestroy()
+        {
+            _disposable?.Dispose();
         }
     }
 }

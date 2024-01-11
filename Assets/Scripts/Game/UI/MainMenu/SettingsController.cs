@@ -96,12 +96,10 @@ namespace Game.UI.MainMenu
             {
                 const float maxVolume = 0;
                 SaveVolume(groupName, maxVolume);
-                audioMixerGroup.audioMixer.SetFloat(groupName, maxVolume);
                 return maxVolume;
             }
                 
             float volume = PlayerPrefs.GetFloat(groupName);
-            audioMixerGroup.audioMixer.SetFloat(groupName, volume);
             return volume;
         }
         #endregion

@@ -9,8 +9,10 @@ using Game.Notifications;
 using Game.Pages.Achievement;
 using JetBrains.Annotations;
 using Localization;
+using MessageBroker.Messages.State;
 using Models.Info.Production;
 using Models.Player;
+using UniRx;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;
@@ -22,6 +24,8 @@ namespace Game
     /// </summary>
     public class AchievementsManager: Singleton<AchievementsManager>, IStarter
     {
+        private readonly CompositeDisposable _disposable = new();
+        
         [Header("Страница новых достижений")]
         [SerializeField] private NewAchievementsPage newAchievementsPage;
 
@@ -39,18 +43,29 @@ namespace Game
         private string _lastRapperName;
         
         /// <summary>
-        /// На каждое событие изменения одной из сущностей вешается листенер, который выбирает все НЕРАЗБЛОКИРОВАННЫЕ AchievementInfo конкретного AchievementsType.
+        /// На каждое событие изменения одной из сущностей вешается листенер,
+        /// который выбирает все НЕРАЗБЛОКИРОВАННЫЕ AchievementInfo конкретного AchievementsType.
         /// В зависимсоти от логики ищется первое отсортированное по CompareValue или же все , прошедшие условия.
         /// Найденное отображается в UI
         /// </summary>
         public void OnStart()
         {
-            achievementsData.Initialize();
+            var messageBroker = GameManager.Instance.MessageBroker;
 
-            PlayerManager.Instance.onMoneyAdd += CheckMoney;
-            PlayerManager.Instance.onFansAdd += CheckFans;
-            PlayerManager.Instance.onHypeAdd += CheckHype;
+            messageBroker
+                .Receive<MoneyChangedEvent>()
+                .Subscribe(e => CheckMoney(e.NewVal))
+                .AddTo(_disposable);
+            messageBroker
+                .Receive<FansChangedEvent>()
+                .Subscribe(e => CheckFans(e.NewVal))
+                .AddTo(_disposable);
+            messageBroker
+                .Receive<HypeChangedEvent>()
+                .Subscribe(e => CheckHype(e.NewVal))
+                .AddTo(_disposable);
             
+            // todo: change to events
             ProductionManager.Instance.onTrackAdd += CheckTrackChartPosition;
             ProductionManager.Instance.onAlbumAdd += CheckAlbumChartPosition;
             ProductionManager.Instance.onClipAdd += CheckClipLoser;
@@ -58,6 +73,8 @@ namespace Game
             
             ProductionManager.Instance.onFeat += CheckFeat;
             ProductionManager.Instance.onBattle += CheckBattle;
+            
+            achievementsData.Initialize();
         }
         
         /// <summary>

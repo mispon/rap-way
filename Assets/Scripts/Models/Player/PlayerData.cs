@@ -14,6 +14,7 @@ namespace Models.Player
         public const int MAX_SKILL = 10;
         
         public int Money;
+        public int Donate;
         public int Fans;
         public int Hype;
         public int Exp;

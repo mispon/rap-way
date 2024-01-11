@@ -5,6 +5,8 @@ using Data;
 using Enums;
 using Models.Player;
 using Scenes;
+using MessageBroker.Messages.State;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -17,6 +19,8 @@ namespace Game.UI.GameScreen
     /// </summary>
     public class GameScreenController: Singleton<GameScreenController>, IStarter
     {
+        private readonly CompositeDisposable _disposable = new();
+        
         [Header("HUD контроллы")]
         [SerializeField] private Image playerAvatar;
         [SerializeField] private Text playerNickname;
@@ -48,11 +52,14 @@ namespace Game.UI.GameScreen
 
         [Space]
         [SerializeField] private GameObject personalPageHint;
-        
+
+        private IMessageBroker _messageBroker;
         private bool _productionShown;
         
         public void OnStart()
         {
+            _messageBroker = GameManager.Instance.MessageBroker;
+            
             moneyButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[0]));
             fansButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[1]));
             hypeButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[2]));
@@ -67,6 +74,8 @@ namespace Game.UI.GameScreen
                 personalPageHint.SetActive(true);
                 GameManager.Instance.ShowedHints.Add("personal_page_hint");
             }
+            
+            HandleStateEvents();
         }
 
         /// <summary>
@@ -79,17 +88,40 @@ namespace Game.UI.GameScreen
         }
 
         /// <summary>
-        /// Обновляет интерфейс игрока
+        /// Handles player's state updates
         /// </summary>
-        public void UpdateHUD(PlayerData playerData)
+        private void HandleStateEvents()
         {
-            playerAvatar.sprite = PlayerManager.Data.Info.Gender == Gender.Male
-                ? maleIcon
-                : femaleIcon;
-            playerNickname.text = playerData.Info.NickName.ToUpper();
-            playerMoney.text = $"{playerData.Money.GetMoney()}";
-            playerFans.text = playerData.Fans.GetDisplay();
-            playerHype.text = playerData.Hype.ToString();
+            _messageBroker
+                .Receive<MoneyChangedEvent>()
+                .Subscribe(e => playerMoney.text = e.NewVal.GetMoney())
+                .AddTo(_disposable);
+            _messageBroker
+                .Receive<FansChangedEvent>()
+                .Subscribe(e => playerFans.text = e.NewVal.GetDisplay())
+                .AddTo(_disposable);
+            _messageBroker
+                .Receive<HypeChangedEvent>()
+                .Subscribe(e => playerHype.text = e.NewVal.ToString())
+                .AddTo(_disposable);
+            _messageBroker
+                .Receive<FullStateResponse>()
+                .Subscribe(UpdateHUD)
+                .AddTo(_disposable);
+            
+            _messageBroker.Publish(new FullStateRequest());
+        }
+        
+        /// <summary>
+        /// Updates main HUD
+        /// </summary>
+        private void UpdateHUD(FullStateResponse resp)
+        {
+            playerNickname.text = resp.NickName.ToUpper();
+            playerAvatar.sprite = resp.Gender == Gender.Male ? maleIcon : femaleIcon;
+            playerMoney.text = resp.Money.GetMoney();
+            playerFans.text = resp.Fans.GetDisplay();
+            playerHype.text = resp.Hype.ToString();
             currentDate.text = TimeManager.Instance.DisplayNow;
         }
 

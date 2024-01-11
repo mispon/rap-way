@@ -1,5 +1,6 @@
 using Core;
 using Data;
+using MessageBroker.Messages.State;
 using Models.Player;
 using UnityEngine;
 
@@ -64,12 +65,8 @@ namespace Game.Pages.Training.Tabs.TeamTab
                 teammate.Skill.Exp -= expToUp;
                 isLevelUp = true;
             }
-            
-            if (isLevelUp)
-                SoundManager.Instance.PlaySound(UIActionType.LevelUp);
-            else
-                SoundManager.Instance.PlaySound(UIActionType.Train);
-            
+
+            SoundManager.Instance.PlaySound(isLevelUp ? UIActionType.LevelUp : UIActionType.Train);
             onStartTraining.Invoke(() => trainingCost);
         }
         
@@ -78,7 +75,7 @@ namespace Game.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void GivePayment(Teammate teammate, int salary)
         {
-            PlayerManager.Instance.SpendMoney(salary);
+            GameManager.Instance.MessageBroker.Publish(new ChangeMoneyEvent {Amount = -salary});
             teammate.HasPayment = true;
   
             onStartTraining.Invoke(() => 0);

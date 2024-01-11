@@ -375,6 +375,12 @@ namespace Game
                 // already in label
                 return;
 
+            if (PlayerManager.Data.Fans < 50_000)
+            {
+                // too low count of fans
+                return;
+            }
+
             var rapper = new RapperInfo {Fans = PlayerManager.Data.Fans, IsPlayer = true}; 
             float prestige = RappersManager.GetRapperPrestige(rapper);
             
