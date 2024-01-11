@@ -21,13 +21,13 @@ namespace Game.UI.Windows
         {
             base.Initialize();
 
+            foreach (var window in _windows.Values)
+                window.Initialize();
+            
             uiMessageBroker
                 .Receive<WindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
-
-            foreach (var window in _windows.Values)
-                window.Initialize();
         }
 
         private void ChangeWindow(WindowType windowType)
@@ -73,10 +73,7 @@ namespace Game.UI.Windows
 
         private CanvasUIElement GetWindow(WindowType windowType)
         {
-            return 
-                _windows.ContainsKey(windowType) ? 
-                _windows[windowType] : 
-                null;
+            return _windows.GetValueOrDefault(windowType);
         }
 
         private WindowType GetWindowType(CanvasUIElement window)
@@ -92,8 +89,8 @@ namespace Game.UI.Windows
             var currentWindow = GetWindow(_activeWindow);
             currentWindow?.Hide();
         }
-        
-        public void HideAnyWindow()
+
+        private void HideAnyWindow()
         {
             HideCurrentWindow();
             _activeWindow = WindowType.None;

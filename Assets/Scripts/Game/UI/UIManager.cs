@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Game.UI.Enums;
 using Game.UI.Messages;
@@ -8,9 +9,11 @@ using UnityEngine;
 
 namespace Game.UI
 {
-    public class UIManager : SerializedMonoBehaviour
+    public class UIManager : SerializedMonoBehaviour, IDisposable
     {
         [SerializeField] private List<UIElementContainer> _uiElementContainers;
+        
+        private readonly CompositeDisposable disposables = new CompositeDisposable();
         
         private void Awake()
         {
@@ -24,7 +27,12 @@ namespace Game.UI
                     if (msg.sceneType == SceneTypes.MainMenu) MenuSceneInitialize();
                     if (msg.sceneType == SceneTypes.Game) GameSceneInitialize();
                 })
-                .AddTo(this);
+                .AddTo(disposables);
+            
+            ScenesController.Instance.MessageBroker
+                .Receive<SceneLoadMessage>()
+                .Subscribe(msg => Dispose())
+                .AddTo(disposables);
         }
 
         private void MenuSceneInitialize()
@@ -45,6 +53,14 @@ namespace Game.UI
         private void GameSceneInitialize()
         {
             
+        }
+
+        public void Dispose()
+        {
+            disposables?.Dispose();
+            
+            foreach (var container in _uiElementContainers)
+                container.Dispose();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Game.UI.Interfaces;
+﻿using System;
+using Game.UI.Interfaces;
 using Game.UI.Messages;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -45,7 +46,10 @@ namespace Game.UI
         {
             disposables?.Dispose();
         }
-        
-        public virtual void Dispose() { }
+
+        public virtual void Dispose()
+        {
+            DisposeListeners();
+        }
     }
 }

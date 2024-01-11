@@ -1,4 +1,5 @@
-﻿using Game.UI.Interfaces;
+﻿using System;
+using Game.UI.Interfaces;
 using Game.UI.Messages;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 namespace Game.UI
 {
     [RequireComponent(typeof(Canvas), typeof(CanvasGroup), typeof(GraphicRaycaster))]
-    public abstract class CanvasUIElement : SerializedMonoBehaviour, IUIElement
+    public abstract class CanvasUIElement : SerializedMonoBehaviour, IUIElement, IDisposable
     {
         private Canvas _canvas;
         private CanvasGroup _canvasGroup;
@@ -58,6 +59,12 @@ namespace Game.UI
         protected virtual void DisposeListeners()
         {
             disposables?.Dispose();
+        }
+
+        public void Dispose()
+        {
+            DisposeContainers();
+            DisposeListeners();
         }
     }
 }

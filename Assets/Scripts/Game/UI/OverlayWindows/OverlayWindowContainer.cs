@@ -5,7 +5,6 @@ using Game.UI.Messages;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
-using Utils;
 
 namespace Game.UI.OverlayWindows
 {
@@ -28,14 +27,14 @@ namespace Game.UI.OverlayWindows
         public override void Initialize()
         {
             base.Initialize();
+            
+            foreach (var overlayWindow in _overlaysWindows.Values)
+                overlayWindow.Initialize();
 
             uiMessageBroker
                 .Receive<OverlayWindowControlMessage>()
                 .Subscribe(msg => ManageOverlayWindowControl(msg.Type))
                 .AddTo(disposables);
-
-            foreach (var overlayWindow in _overlaysWindows.Values)
-                overlayWindow.Initialize();
         }
 
         private void ShowOverlayWindow(OverlayWindowType overlayWindowType, bool pause = true)
@@ -98,10 +97,7 @@ namespace Game.UI.OverlayWindows
 
         private CanvasUIElement GetOverlayWindow(OverlayWindowType overlayWindowType)
         {
-            return
-                _overlaysWindows.ContainsKey(overlayWindowType) ?
-                _overlaysWindows[overlayWindowType] :
-                null;
+            return _overlaysWindows.GetValueOrDefault(overlayWindowType);
         }
 
         private OverlayWindowType GetOverlayWindowType(CanvasUIElement window)
