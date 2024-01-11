@@ -14,8 +14,6 @@ namespace Scenes
         [SerializeField] private float _countFilling;
         
         [BoxGroup("Fade times")] [SerializeField] private float _fadeTimeStart;
-        [BoxGroup("Fade times")] [SerializeField] private float _fadeTimeShow;
-        [BoxGroup("Fade times")] [SerializeField] private float _fadeTimeHide;
         [BoxGroup("Fade times")] [SerializeField] private float _fadeTimeEnd;
         
         [SerializeField] private Dictionary<SceneTypes, string> _sceneNames;
@@ -29,8 +27,6 @@ namespace Scenes
         public float LoadingDelay => _loadingDelay;
         public float CountFilling => _countFilling;
         public float FadeTimeStart => _fadeTimeStart;
-        public float FadeTimeShow => _fadeTimeShow;
-        public float FadeTimeHide => _fadeTimeHide;
         public float FadeTimeEnd => _fadeTimeEnd;
     }
 }
