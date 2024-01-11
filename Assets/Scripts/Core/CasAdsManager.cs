@@ -3,6 +3,7 @@ using System.Collections;
 using CAS;
 using Data;
 using Game;
+using MessageBroker.Messages.State;
 using UnityEngine;
 using Utils;
 
@@ -28,8 +29,8 @@ namespace Core
             int reward = Convert.ToInt32(PlayerManager.Data.Money * 0.1f);
             reward = Math.Max(50, reward);
             
-            PlayerManager.Instance.AddMoney(reward);
             SoundManager.Instance.PlaySound(UIActionType.Pay);
+            GameManager.Instance.MessageBroker.Publish(new ChangeMoneyEvent {Amount = reward});
         }
 
         private static IMediationManager GetAdManager()

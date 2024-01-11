@@ -3,6 +3,7 @@ using Core;
 using Firebase.Analytics;
 using Game.Analyzers;
 using Game.Pages.Eagler;
+using MessageBroker.Messages.Production;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -90,10 +91,14 @@ namespace Game.Pages.Album
         private void SaveResult(AlbumInfo album)
         {
             album.Timestamp = TimeManager.Instance.Now.DateToString();
-            PlayerManager.Instance.GiveReward(album.FansIncome, album.MoneyIncome, settings.AlbumRewardExp);
             ProductionManager.AddAlbum(album);
             
-            GameManager.Instance.SaveApplicationData();
+            SendMessage(new ProductionRewardEvent
+            {
+                MoneyIncome = album.MoneyIncome,
+                FansIncome = album.FansIncome,
+                Exp = settings.AlbumRewardExp
+            });
         }
         
         protected override void AfterPageClose()

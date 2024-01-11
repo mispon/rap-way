@@ -14,6 +14,7 @@ namespace Game.Pages
     {
         private bool _isOpen;
 
+        protected IMessageBroker messageBroker => GameManager.Instance.MessageBroker;
         protected GameSettings settings => GameManager.Instance.Settings;
 
         /// <summary>
@@ -59,12 +60,12 @@ namespace Game.Pages
 
         protected void SendMessage<T>(T msg) where T: struct
         {
-            GameManager.Instance.MessageBroker.Publish(msg);
+            messageBroker.Publish(msg);
         }
         
         protected void RecvMessage<T>(Action<T> handler, ICollection<IDisposable> disposable) where T: struct
         {
-            GameManager.Instance.MessageBroker
+            messageBroker
                 .Receive<T>()
                 .Subscribe(handler)
                 .AddTo(disposable);

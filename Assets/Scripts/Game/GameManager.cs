@@ -36,6 +36,8 @@ namespace Game
     /// </summary>
     public class GameManager : Singleton<GameManager>
     {
+        public List<Eagle> Eagles;
+        
         [BoxGroup("Stores URLs"), SerializeField] private string appStoreURL;
         [BoxGroup("Stores URLs"), SerializeField] private string googlePlayURL;
         
@@ -55,18 +57,18 @@ namespace Game
         [TabGroup("labels", "Custom Labels")] public List<LabelInfo> CustomLabels;
         [TabGroup("labels", "Player Label")] public LabelInfo PlayerLabel;
         
-        [BoxGroup("Eagles")] public List<Eagle> Eagles;
-        
         [TabGroup("tutorials", "Tutorials")] public HashSet<string> ShowedTutorials;
         [TabGroup("tutorials", "Hints")] public HashSet<string> ShowedHints;
         
         [NonSerialized] public readonly UniRx.MessageBroker MessageBroker = new();
         [NonSerialized] public bool IsReady;
 
-        private void Start()
+        private async void Start()
         {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
+            
+            await GetComponent<UnityServicesInitializer>().Initialize();
             
             IsReady = true;
         }

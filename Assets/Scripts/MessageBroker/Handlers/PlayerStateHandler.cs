@@ -2,6 +2,7 @@ using System.Linq;
 using Core.Interfaces;
 using Core.Settings;
 using Game;
+using MessageBroker.Messages.Production;
 using MessageBroker.Messages.State;
 using UniRx;
 using UnityEngine;
@@ -21,15 +22,17 @@ namespace MessageBroker.Handlers
             _messageBroker = GameManager.Instance.MessageBroker;
             _settings = GameManager.Instance.Settings;
 
-            HandleFullState();
-            HandleAddMoney();
-            HandleSpendMoney();
+            HandleFullStateRequest();
+            HandleSpendMoneyRequest();
+            HandleChangeMoney();
             HandleChangeFans();
             HandleChangeHype();
             HandleChangeExp();
+            HandleProductionReward();
+            HandleConvertReward();
         }
 
-        private void HandleFullState()
+        private void HandleFullStateRequest()
         {
             _messageBroker
                 .Receive<FullStateRequest>()
@@ -51,45 +54,26 @@ namespace MessageBroker.Handlers
                 .AddTo(_disposable);
         }
         
-        private void HandleAddMoney()
+        private void HandleChangeMoney()
         {
             _messageBroker
-                .Receive<AddMoneyEvent>()
-                .Subscribe(e =>
-                {
-                    var playerData = GameManager.Instance.PlayerData;
-                    
-                    int oldVal = playerData.Money;
-                    int newVal = SafetyAdd(playerData.Money, e.Amount, _settings.MaxMoney);
-
-                    playerData.Money = newVal;
-                    _messageBroker.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
-                })
+                .Receive<ChangeMoneyEvent>()
+                .Subscribe(e => UpdateMoney(e.Amount))
                 .AddTo(_disposable);
         }
         
-        private void HandleSpendMoney()
+        private void HandleSpendMoneyRequest()
         {
             _messageBroker
                 .Receive<SpendMoneyRequest>()
                 .Subscribe(e =>
                 {
-                    var playerData = GameManager.Instance.PlayerData;
+                    bool isMoneyEnough = GameManager.Instance.PlayerData.Money >= e.Amount;
                     
-                    int oldVal = playerData.Money;
+                    if (isMoneyEnough)
+                        UpdateMoney(-e.Amount);
                     
-                    bool ok = false;
-                    if (playerData.Money >= e.Amount)
-                    {
-                        int newVal = playerData.Money - e.Amount;
-
-                        playerData.Money = newVal;
-                        _messageBroker.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
-                        
-                        ok = true;
-                    } 
-                    
-                    _messageBroker.Publish(new SpendMoneyResponse {OK = ok});
+                    _messageBroker.Publish(new SpendMoneyResponse {OK = isMoneyEnough});
                 })
                 .AddTo(_disposable);
         }
@@ -98,19 +82,7 @@ namespace MessageBroker.Handlers
         {
             _messageBroker
                 .Receive<ChangeFansEvent>()
-                .Subscribe(e =>
-                {
-                    var playerData = GameManager.Instance.PlayerData;
-                    
-                    int oldVal = playerData.Fans;
-                    int newVal = SafetyAdd(playerData.Money, e.Amount, _settings.MaxFans);
-                    
-                    const int minFans = 0;
-                    newVal = Mathf.Max(newVal, minFans);
-                    
-                    playerData.Fans = newVal;
-                    _messageBroker.Publish(new FansChangedEvent {OldVal = oldVal, NewVal = newVal});
-                })
+                .Subscribe(e => UpdateFans(e.Amount))
                 .AddTo(_disposable);
         }
         
@@ -118,24 +90,7 @@ namespace MessageBroker.Handlers
         {
             _messageBroker
                 .Receive<ChangeHypeEvent>()
-                .Subscribe(e =>
-                {
-                    var playerData = GameManager.Instance.PlayerData;
-                    
-                    int oldVal = playerData.Hype;
-                    int newVal = playerData.Hype + e.Amount;
-
-                    int minHype = playerData.Goods
-                        .GroupBy(g => g.Type)
-                        .ToDictionary(k => k, v => v.Max(g => g.Hype))
-                        .Sum(g => g.Value);
-                    const int maxHype = 100;
-                    
-                    newVal = Mathf.Clamp(newVal, minHype, maxHype);
-
-                    playerData.Hype = newVal;
-                    _messageBroker.Publish(new HypeChangedEvent {OldVal = oldVal, NewVal = newVal});
-                })
+                .Subscribe(e => UpdateHype(e.Amount))
                 .AddTo(_disposable);
         }
         
@@ -143,20 +98,98 @@ namespace MessageBroker.Handlers
         {
             _messageBroker
                 .Receive<ChangeExpEvent>()
+                .Subscribe(e => UpdateExp(e.Amount))
+                .AddTo(_disposable);
+        }
+
+        private void HandleProductionReward()
+        {
+            _messageBroker
+                .Receive<ProductionRewardEvent>()
                 .Subscribe(e =>
                 {
-                    var playerData = GameManager.Instance.PlayerData;
+                    UpdateMoney(e.MoneyIncome);
+                    UpdateFans(e.FansIncome);
+                    UpdateHype(e.HypeIncome);
+                    UpdateExp(e.Exp);
                     
-                    int oldVal = playerData.Exp;
-                    int newVal = playerData.Exp + e.Amount;
+                    if (e.WithSocialCooldown)
+                        GameManager.Instance.GameStats.SocialsCooldown = _settings.SocialsCooldown;
                     
-                    const int minExp = 0;
-                    newVal = Mathf.Max(newVal, minExp);
-
-                    playerData.Exp = newVal;
-                    _messageBroker.Publish(new ExpChangedEvent {OldVal = oldVal, NewVal = newVal});
+                    GameManager.Instance.SaveApplicationData();
                 })
                 .AddTo(_disposable);
+        }
+
+        private void HandleConvertReward()
+        {
+            _messageBroker
+                .Receive<ConcertRewardEvent>()
+                .Subscribe(e =>
+                {
+                    UpdateMoney(e.MoneyIncome);
+                    GameManager.Instance.GameStats.ConcertCooldown = _settings.ConcertCooldown;
+                    GameManager.Instance.SaveApplicationData();
+                })
+                .AddTo(_disposable);
+        }
+
+        private void UpdateMoney(int value)
+        {
+            var playerData = GameManager.Instance.PlayerData;
+                    
+            int oldVal = playerData.Money;
+            int newVal = SafetyAdd(oldVal, value, _settings.MaxMoney);
+
+            playerData.Money = newVal;
+            _messageBroker.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
+        }
+
+        private void UpdateFans(int value)
+        {
+            var playerData = GameManager.Instance.PlayerData;
+                    
+            int oldVal = playerData.Fans;
+            int newVal = SafetyAdd(oldVal, value, _settings.MaxFans);
+                    
+            const int minFans = 0;
+            newVal = Mathf.Max(newVal, minFans);
+                    
+            playerData.Fans = newVal;
+            _messageBroker.Publish(new FansChangedEvent {OldVal = oldVal, NewVal = newVal});
+        }
+
+        private void UpdateExp(int value)
+        {
+            var playerData = GameManager.Instance.PlayerData;
+                    
+            int oldVal = playerData.Exp;
+            int newVal = playerData.Exp + value;
+                    
+            const int minExp = 0;
+            newVal = Mathf.Max(newVal, minExp);
+
+            playerData.Exp = newVal;
+            _messageBroker.Publish(new ExpChangedEvent {OldVal = oldVal, NewVal = newVal});
+        }
+
+        private void UpdateHype(int value)
+        {
+            var playerData = GameManager.Instance.PlayerData;
+                    
+            int oldVal = playerData.Hype;
+            int newVal = playerData.Hype + value;
+
+            int minHype = playerData.Goods
+                .GroupBy(g => g.Type)
+                .ToDictionary(k => k, v => v.Max(g => g.Hype))
+                .Sum(g => g.Value);
+            const int maxHype = 100;
+                    
+            newVal = Mathf.Clamp(newVal, minHype, maxHype);
+
+            playerData.Hype = newVal;
+            _messageBroker.Publish(new HypeChangedEvent {OldVal = oldVal, NewVal = newVal});
         }
         
         private static int SafetyAdd(int current, int increment, int maxValue)

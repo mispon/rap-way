@@ -1,29 +1,25 @@
-using Core;
 using Data;
 using Enums;
 using Game.Pages.Eagler;
-using Models.Game;
+using MessageBroker.Messages.Production;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Extensions;
 
 namespace Game.Pages.Battle
 {
-    /// <summary>
-    /// Страница с результатами батла
-    /// </summary>
     public class BattleResultPage : Page
     {
         [SerializeField] private Text resultMessage;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text hypeIncome;
         [SerializeField] private Text expIncome;
-        [Header("Картинки")]
+        [Header("Images")]
         [SerializeField] private Image playerImage;
         [SerializeField] private GameObject playerLoseMask;
         [SerializeField] private Image rapperImage;
         [SerializeField] private GameObject rapperLoseMask;
-        [Header("Спрайты")]
+        [Header("Sprites")]
         [SerializeField] private Sprite playerAvatarMale;
         [SerializeField] private Sprite playerAvatarFemale;
         [SerializeField] private Sprite customAvatar;
@@ -107,15 +103,17 @@ namespace Game.Pages.Battle
         /// </summary>
         private void SaveResult()
         {
-            PlayerManager.Instance.AddFans(_result.FansIncome, settings.BattleRewardExp);
-            PlayerManager.Instance.AddHype(_result.HypeIncome);
-
             if (_result.IsWin)
             {
                 ProductionManager.AddBattle(_result.RapperInfo);
             }
             
-            GameManager.Instance.SaveApplicationData();
+            SendMessage(new ProductionRewardEvent
+            {
+                FansIncome = _result.FansIncome,
+                HypeIncome = _result.HypeIncome,
+                Exp = settings.BattleRewardExp
+            });
         }
 
         protected override void AfterPageClose()

@@ -1,4 +1,5 @@
 using Data;
+using MessageBroker.Messages.Production;
 using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,9 +40,13 @@ namespace Game.Pages.GameEvent
         private void SaveResult()
         {
             var income = CalculateIncome(PlayerManager.Data, _eventDecision);
-            
-            PlayerManager.Instance.GiveReward(income.Fans, income.Money, income.Exp);
-            PlayerManager.Instance.AddHype(income.Hype);
+            GameManager.Instance.MessageBroker.Publish(new ProductionRewardEvent
+            {
+                MoneyIncome = income.Money,
+                FansIncome = income.Fans,
+                HypeIncome = income.Hype,
+                Exp = income.Exp,
+            });
         }
 
         /// <summary>

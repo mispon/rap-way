@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Data;
 using Enums;
@@ -31,7 +32,7 @@ namespace Game.Pages.Store.Purchase
         private readonly Dictionary<string, DonateCoins> _coinItemsMap = new();
         private NoAds _noAdsItem;
         
-        private void Start()
+        private IEnumerator Start()
         {
             _messageBroker = GameManager.Instance.MessageBroker;
 
@@ -54,7 +55,8 @@ namespace Game.Pages.Store.Purchase
                         continue;
                 }
             }
-            
+
+            yield return new WaitUntil(() => GameManager.Instance.IsReady);
             UnityPurchasing.Initialize(this, builder);
         }
 

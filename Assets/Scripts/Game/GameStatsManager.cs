@@ -4,6 +4,7 @@ using Core;
 using Core.Interfaces;
 using Data;
 using Enums;
+using MessageBroker.Messages.State;
 using Models.Game;
 using Models.Info;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace Game
         
         public void OnStart()
         {
+            // todo: переделать на ивенты брокера
             TimeManager.Instance.onDayLeft += OnDayLeft;
             TimeManager.Instance.onWeekLeft += OnWeekLeft;
         }
@@ -46,9 +48,10 @@ namespace Game
             data.SocialsCooldown = Math.Max(0, data.SocialsCooldown - 1);
             data.ConcertCooldown = Math.Max(0, data.ConcertCooldown - 1);
 
+            // todo: этот ивент можно будет отправлять внутри хендлера брокера
             if (TimeManager.Instance.Now.Day % 3 == 0)
             {
-                PlayerManager.Instance.AddHype(-1);
+                GameManager.Instance.MessageBroker.Publish(new ChangeHypeEvent {Amount = -1});
             }
         }
 

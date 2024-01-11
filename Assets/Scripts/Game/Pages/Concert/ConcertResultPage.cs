@@ -1,6 +1,7 @@
 ﻿using Core;
 using Firebase.Analytics;
 using Game.Analyzers;
+using MessageBroker.Messages.Production;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -65,11 +66,9 @@ namespace Game.Pages.Concert
         private void SaveResult(ConcertInfo concert)
         {
             concert.Timestamp = TimeManager.Instance.Now.DateToString();
-            PlayerManager.Instance.AddMoney(concert.Income, settings.ConcertRewardExp);
             ProductionManager.AddConcert(concert);
-            GameManager.Instance.GameStats.ConcertCooldown = settings.ConcertCooldown;
             
-            GameManager.Instance.SaveApplicationData();
+            SendMessage(new ConcertRewardEvent {MoneyIncome = concert.Income});
         }
 
         protected override void BeforePageOpen()

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Unity.Services.Core;
 using Unity.Services.Core.Environments;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Core
     {
         [SerializeField] private string environment = "production";
 
-        private async void Start()
+        public async Task Initialize()
         {
             try
             {

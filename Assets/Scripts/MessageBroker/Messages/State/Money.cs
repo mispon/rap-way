@@ -10,7 +10,7 @@ namespace MessageBroker.Messages.State
         public bool OK;
     }
 
-    public struct AddMoneyEvent
+    public struct ChangeMoneyEvent
     {
         public int Amount;
     }
