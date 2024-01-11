@@ -13,7 +13,7 @@ namespace Game.UI
         public Canvas Canvas { get; private set; }
         public bool IsActive { get; private set; } = false;
 
-        protected MessageBroker uiMessageBroker;
+        protected UniRx.MessageBroker uiMessageBroker;
         protected readonly CompositeDisposable disposables = new CompositeDisposable();
         
         public virtual void Initialize()
@@ -37,7 +37,6 @@ namespace Game.UI
             if (IsActive == false) return;
             IsActive = false;
             Canvas.enabled = false;
-            Dispose();
         }
 
         protected virtual void SetupListeners() { }

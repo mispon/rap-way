@@ -11,7 +11,7 @@ namespace Scenes
         [SerializeField] private ScenesControllerSettings _settings;
         [SerializeField] private LoadingScreen _loadingScreen; 
         
-        public MessageBroker MessageBroker { get; } = new();
+        public UniRx.MessageBroker MessageBroker { get; } = new();
 
         private string _currentScene;
         private SceneTypes _loadingScene;

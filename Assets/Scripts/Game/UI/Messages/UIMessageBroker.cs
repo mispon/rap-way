@@ -5,6 +5,6 @@ namespace Game.UI.Messages
 {
     public class UIMessageBroker : Singleton<UIMessageBroker>
     {
-        public MessageBroker MessageBroker { get; } = new();
+        public UniRx.MessageBroker MessageBroker { get; } = new();
     }
 }

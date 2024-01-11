@@ -19,7 +19,7 @@ namespace Game.UI
         public CanvasGroup CanvasGroup => _canvasGroup;
 
         private bool _isActive;
-        protected MessageBroker uiMessageBus;
+        protected UniRx.MessageBroker uiMessageBus;
         protected CompositeDisposable disposables;
 
         public virtual void Initialize()

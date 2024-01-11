@@ -38,7 +38,7 @@ namespace Game.UI.Windows
             if (newWindow is null) return;
             Activate();
 
-            _windowHistory.Push(newWindow);
+            _windowHistory.Push(GetWindow(_activeWindow));
             HideCurrentWindow();
             newWindow.Show();
             

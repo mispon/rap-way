@@ -45,7 +45,7 @@ namespace Game.UI.OverlayWindows
             if (newOverlayWindow is null) return;
             Activate();
 
-            _windowHistory.Push(newOverlayWindow);
+            _windowHistory.Push(GetOverlayWindow(_activeOverlayWindowType));
 
             CloseCurrentOverlayWindow();
             //if (pause == true) TimeCustom.Pause();
