@@ -24,14 +24,14 @@ namespace Scenes
 
             MessageBroker
                 .Receive<SceneLoadMessage>()
-                .Subscribe(msg => LoadScene(msg.sceneType));
+                .Subscribe(OnSceneLoadMessage);
         }
         
-        private void LoadScene(SceneTypes sceneType)
+        private void OnSceneLoadMessage(SceneLoadMessage msg)
         {
             _currentScene = SceneManager.GetActiveScene().name;
 
-            _loadingScene = sceneType;
+            _loadingScene = msg.sceneType;
             _isSceneLoaded = false;
             
             _loadingScreen.onFadeComplete += LoadNewScene;
@@ -40,6 +40,8 @@ namespace Scenes
 
         private void LoadNewScene()
         {
+            _loadingScreen.onFadeComplete -= LoadNewScene;
+
             AsyncOperation newScene = SceneManager
                 .LoadSceneAsync(_settings.GetSceneName(_loadingScene), LoadSceneMode.Additive);
             
@@ -75,14 +77,8 @@ namespace Scenes
                 .UnloadSceneAsync(_currentScene)
                 .AsObservable()
                 .Last()
-                .Subscribe(_ => HideLoadingScreen())
+                .Subscribe(_ => _loadingScreen.EndLoading(_settings.FadeTimeEnd))
                 .AddTo(this);
-        }
-
-        private void HideLoadingScreen()
-        {
-            _loadingScreen.onFadeComplete -= LoadNewScene;
-            _loadingScreen.EndLoading(_settings.FadeTimeEnd);
         }
     }
 }
