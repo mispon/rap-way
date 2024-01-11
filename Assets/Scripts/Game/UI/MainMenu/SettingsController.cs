@@ -22,15 +22,16 @@ namespace Game.UI.MainMenu
         [BoxGroup("Sound")] [SerializeField] private AudioMixerGroup audioMixerGroup;
         [BoxGroup("Sound")] [SerializeField] private Dictionary<Slider, string> soundGroup;
 
-        [BoxGroup("Button")] [SerializeField] private Button closeButton;
-        [BoxGroup("Button")] [SerializeField] private Button saveButton;
+        [BoxGroup("Buttons")] [SerializeField] private Button closeButton;
+        [BoxGroup("Buttons")] [SerializeField] private Button saveButton;
 
         private void Start()
         {
             langCarousel.onChange += OnLangChanged;
             
             foreach (var group in soundGroup)
-                group.Key.OnValueChangedAsObservable()
+                group.Key
+                    .OnValueChangedAsObservable()
                     .Subscribe(value => OnChangeVolume(group.Value, value));
             
             closeButton.onClick.AddListener(OnClose);
@@ -95,12 +96,10 @@ namespace Game.UI.MainMenu
             {
                 const float maxVolume = 0;
                 SaveVolume(groupName, maxVolume);
-                audioMixerGroup.audioMixer.SetFloat(groupName, maxVolume);
                 return maxVolume;
             }
                 
             float volume = PlayerPrefs.GetFloat(groupName);
-            audioMixerGroup.audioMixer.SetFloat(groupName, volume);
             return volume;
         }
         #endregion

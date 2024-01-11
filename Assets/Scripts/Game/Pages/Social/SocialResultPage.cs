@@ -1,6 +1,6 @@
-﻿using Core;
-using Enums;
+﻿using Enums;
 using Game.Analyzers;
+using MessageBroker.Messages.Production;
 using UnityEngine;
 using Models.Info;
 
@@ -21,10 +21,8 @@ namespace Game.Pages.Social
             _social = social;
 
             if (social.Type != SocialType.Trends)
-            {
                 analyzer.Analyze(_social);
-            }
-
+            
             Open();
             DisplayResult(social);
         }
@@ -39,12 +37,13 @@ namespace Game.Pages.Social
         /// </summary>
         private void SaveResult(SocialInfo social)
         {
-            GameManager.Instance.GameStats.SocialsCooldown = GameManager.Instance.Settings.SocialsCooldown;
-            PlayerManager.Instance.SpendMoney(social.CharityAmount);
-            PlayerManager.Instance.AddHype(social.HypeIncome);
-            PlayerManager.Instance.AddExp(settings.SocialsRewardExp);
-            
-            GameManager.Instance.SaveApplicationData();
+            GameManager.Instance.MessageBroker.Publish(new ProductionRewardEvent
+            {
+                MoneyIncome = -social.CharityAmount,
+                HypeIncome = social.HypeIncome,
+                Exp = settings.SocialsRewardExp,
+                WithSocialCooldown = true
+            });
         }
 
         protected override void AfterPageClose()

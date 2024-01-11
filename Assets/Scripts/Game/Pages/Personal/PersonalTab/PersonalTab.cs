@@ -80,9 +80,18 @@ namespace Game.Pages.Personal.PersonalTab
         /// Устанавливает имущество
         /// </summary>
         private void SetupGoods(List<Good> playerGoods) {
-            Sprite GetGoodsSprite(GoodsType type) {
-                int level = playerGoods.FirstOrDefault(e => e.Type == type)?.Level ?? 0;
-                return goods.AllItems.First(e => e.Type == type).UI[level].PersonalPageImage;
+            Sprite GetGoodsSprite(GoodsType type)
+            {
+                var good = playerGoods
+                    .OrderByDescending(e => e.Level)
+                    .FirstOrDefault(e => e.Type == type);
+                
+                if (good == null)
+                    return imageBank.Empty;
+
+                return goods.Items[type]
+                    .First(e => e.Level == good.Level)
+                    .PersonalPageImage;
             }
 
             microIcon.sprite = GetGoodsSprite(GoodsType.Micro);

@@ -1,4 +1,4 @@
-﻿namespace Models.Game
+﻿namespace Enums
 {
     public enum ConversationType
     {

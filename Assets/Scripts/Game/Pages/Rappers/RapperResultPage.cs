@@ -1,5 +1,6 @@
 using Core;
 using Data;
+using Enums;
 using Game.Pages.Battle;
 using Game.Pages.Charts;
 using Game.Pages.Feat;

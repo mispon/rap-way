@@ -24,6 +24,7 @@ namespace Game.Pages.Personal.LabelTab
 
         private int _index { get; set; }
         private float _height { get; set; }
+        private float _width { get; set; }
         
         public void Initialize(int index, RapperInfo info)
         {
@@ -54,7 +55,9 @@ namespace Game.Pages.Personal.LabelTab
                 _rectTransform = GetComponent<RectTransform>();
              
             if (_height == 0)
-                _height = _rectTransform.rect.height;
+                _height = _rectTransform.rect.height; 
+            if (_width == 0)
+                _width = _rectTransform.rect.width;
             
             var pos = Vector2.down * ((spacing * (_index-1)) + (_height * (_index-1)));
             _rectTransform.anchoredPosition = pos;
@@ -63,6 +66,11 @@ namespace Game.Pages.Personal.LabelTab
         public float GetHeight()
         {
             return _height;
+        }
+
+        public float GetWidth()
+        {
+            return _width;
         }
     }
 }

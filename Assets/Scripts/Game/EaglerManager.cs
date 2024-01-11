@@ -10,29 +10,14 @@ using Random = UnityEngine.Random;
 
 namespace Game
 {
+    /// <summary>
+    /// TODO: replace with message broker
+    /// </summary>
     public class EaglerManager : Singleton<EaglerManager>
     {
         [SerializeField] private EaglerData data;
 
-        private List<Eagle> _eagles = new();
-
-        private void Start()
-        {
-            LoadEagles();
-        }
-
-        /// <summary>
-        /// Возвращает список постов
-        /// </summary>
-        public List<Eagle> GetEagles() => _eagles.Take(20).ToList();
-
-        /// <summary>
-        /// Загружает список постов
-        /// </summary>
-        public void LoadEagles()
-        {
-            _eagles = GameManager.Instance.Eagles;
-        }
+        public List<Eagle> GetEagles() => GameManager.Instance.Eagles.Take(20).ToList();
         
         /// <summary>
         /// Добавляет новый пост от игрока
@@ -98,7 +83,7 @@ namespace Game
 
         private void AddEagle(Eagle eagle)
         {
-            _eagles.Insert(0, eagle);
+            GameManager.Instance.Eagles.Insert(0, eagle);
         }
 
         private static int CalcViews(int likes)

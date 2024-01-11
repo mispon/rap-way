@@ -1,39 +1,91 @@
+using System.Collections.Generic;
 using Core;
 using Data;
 using Firebase.Analytics;
-using Game.Effects;
+using Game.UI.ScrollViewController;
+using MessageBroker.Messages.Donate;
+using MessageBroker.Messages.State;
+using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
+using Utils.Extensions;
 
 namespace Game.Pages.Store
 {
-    /// <summary>
-    /// Страница магазина
-    /// Инициализирует шмокти следующего уровня в двух ScrollView (шмотки для работы и понты)
-    /// </summary>
     public class StorePage: Page
     {
-        [Header("Контроллеры управления UI-элементов")]
-        [SerializeField] private StoreItemsController swagStoreItemsController;
-        [SerializeField] private StoreItemsController workStoreItemsController;
+        private readonly CompositeDisposable _disposable = new();
         
-        [Header("Эффект открытия новой шмотки")]
-        [SerializeField] private NewItemEffect newGoodEffect;
+        [BoxGroup("Data")] [SerializeField] private GoodsData data;
         
-        [Header("Данные")]
-        [SerializeField] private GoodsData data;
+        [BoxGroup("Header")] [SerializeField] private Text gameBalance;
+        [BoxGroup("Header")] [SerializeField] private Text donateBalance;
+        
+        [BoxGroup("Categories")] [SerializeField] private ScrollViewController categories;
+        [BoxGroup("Categories")] [SerializeField] private GameObject categoryItemTemplate;
 
+        private readonly List<StoreCategoryItem> _categoryItems = new();
+        
         protected override void BeforePageOpen()
         {
-            workStoreItemsController.Initialize(data.WorkTools, newGoodEffect);
-            swagStoreItemsController.Initialize(data.Swag, newGoodEffect);
-            
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
+
+            RecvMessage<MoneyChangedEvent>(e => UpdateGameBalance(e.NewVal), _disposable);
+            RecvMessage<DonateChangedEvent>(e => UpdateDonateBalance(e.NewVal), _disposable);
+            RecvMessage<FullStateResponse>(UpdateHUD, _disposable);
+            SendMessage(new FullStateRequest());
+            
+            ShowCategoriesList();
+        }
+
+        protected override void AfterPageOpen()
+        {
+            _categoryItems[0].ShowItems(true);
+        }
+
+        private void ShowCategoriesList()
+        {
+            int i = 1;
+            foreach (var category in data.Categories)
+            {
+                var row = categories.InstantiatedElement<StoreCategoryItem>(categoryItemTemplate);
+
+                var itemsInfo = data.Items[category.Type];
+                row.Initialize(i, category.Icon, GetLocale(category.Type.GetDescription()), itemsInfo);
+                i++;
+                
+                _categoryItems.Add(row);
+            }
+            
+            categories.RepositionElements(_categoryItems);
+        }
+
+        private void UpdateHUD(FullStateResponse resp)
+        {
+            UpdateGameBalance(resp.Money);
+            UpdateDonateBalance(resp.Donate);
+        }
+        
+        private void UpdateGameBalance(int money)
+        {
+            gameBalance.text = money.GetMoney();
+        }
+        
+        private void UpdateDonateBalance(int donate)
+        {
+            donateBalance.text = donate.GetMoney();
         }
 
         protected override void AfterPageClose()
         {
-            workStoreItemsController.Dispose();
-            swagStoreItemsController.Dispose();
+            foreach (var item in _categoryItems)
+            {
+                Destroy(item.gameObject);
+            }
+            
+            _categoryItems.Clear();
+            _disposable.Clear();
         }
     }
 }

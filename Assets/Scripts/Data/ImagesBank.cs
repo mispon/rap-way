@@ -8,6 +8,8 @@ namespace Data
     [CreateAssetMenu(fileName = "ImagesBank", menuName = "Data/ImagesBank")]
     public class ImagesBank : ScriptableObject
     {
+        public Sprite Empty;
+        
         [Header("Персонаж")]
         public Sprite MaleAvatar;
         public Sprite FemaleAvatar;

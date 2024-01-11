@@ -56,12 +56,15 @@ namespace Game.Pages.Labels
 
         private void OpenInfoView()
         {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
+            
             infoDesc.text = LocalizationManager.Instance.Get(_info.Desc);
             infoView.SetActive(true);
         }
         
         private void CloseInfoView()
         {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             infoView.SetActive(false);
         }
         

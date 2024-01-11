@@ -3,7 +3,7 @@ using Core;
 using Firebase.Analytics;
 using Game.Analyzers;
 using Game.Pages.Eagler;
-using Models.Game;
+using MessageBroker.Messages.Production;
 using Models.Info.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,12 +12,9 @@ using Random = UnityEngine.Random;
 
 namespace Game.Pages.Track
 {
-    /// <summary>
-    /// Страница результатов трека
-    /// </summary>
     public class TrackResultPage : Page
     {
-        [Header("Компоменты")]
+        [Header("Components")]
         [SerializeField] private Text listenAmount;
         [SerializeField] private Text duration;
         [SerializeField] private Text trackNameLabel;
@@ -29,10 +26,10 @@ namespace Game.Pages.Track
         [SerializeField] private Text expIncome;
         [SerializeField] private GameObject hitBadge;
 
-        [Header("Твитты фанатов")]
+        [Header("Fans tweets")]
         [SerializeField] private EagleCard[] eagleCards;
 
-        [Header("Анализатор трека")]
+        [Header("Track analyzer")]
         [SerializeField] private TrackAnalyzer trackAnalyzer;
 
         private TrackInfo _trackInfo;
@@ -101,10 +98,9 @@ namespace Game.Pages.Track
         /// <summary>
         /// Сохраняет результаты трека
         /// </summary>
-        private void SaveResult(TrackInfo track) 
+        private void SaveResult(TrackInfo track)
         {
             track.Timestamp = TimeManager.Instance.Now.DateToString();
-            PlayerManager.Instance.GiveReward(track.FansIncome, track.MoneyIncome, settings.TrackRewardExp);
             ProductionManager.AddTrack(track);
 
             if (track.Feat != null)
@@ -112,7 +108,12 @@ namespace Game.Pages.Track
                 ProductionManager.AddFeat(track.Feat);
             }
             
-            GameManager.Instance.SaveApplicationData();
+            SendMessage(new ProductionRewardEvent
+            {
+                MoneyIncome = track.MoneyIncome,
+                FansIncome = track.FansIncome,
+                Exp = settings.TrackRewardExp
+            });
         }
         
         /// <summary>

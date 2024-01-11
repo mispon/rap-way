@@ -4,5 +4,6 @@ namespace Game.UI.ScrollViewController
     {
         void SetPosition(float spacing);
         float GetHeight();
+        float GetWidth();
     }
 }

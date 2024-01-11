@@ -7,9 +7,6 @@ using Utils.Extensions;
 
 namespace Game.Pages.Eagler
 {
-    /// <summary>
-    /// Объект-информация об экземляре Production
-    /// </summary>
     public class EagleCard: MonoBehaviour, IScrollViewControllerItem
     {
         [Header("Eagle fields")]
@@ -24,10 +21,8 @@ namespace Game.Pages.Eagler
         
         private int _index { get; set; }
         private float _height { get; set; }
-
-        /// <summary>
-        /// Заполнение информации об экземпляре при создании
-        /// </summary>
+        private float _width { get; set; }
+        
         public void Initialize(int i, Eagle eagle)
         {
             _index = i;
@@ -41,9 +36,6 @@ namespace Game.Pages.Eagler
             shares.text = eagle.Shares.GetDisplay();
         }
         
-        /// <summary>
-        /// Позиционирование элемента в таблице в соответсвии с его порядковым номером
-        /// </summary>
         public void SetPosition(float spacing)
         {
             if (_rectTransform == null)
@@ -51,6 +43,8 @@ namespace Game.Pages.Eagler
              
             if (_height == 0)
                 _height = _rectTransform.rect.height;
+            if (_width == 0)
+                _width = _rectTransform.rect.width;
             
             var pos = Vector2.down * ((spacing * (_index-1)) + (_height * (_index-1)));
             _rectTransform.anchoredPosition = pos;
@@ -59,6 +53,11 @@ namespace Game.Pages.Eagler
         public float GetHeight()
         {
             return _height;
+        }
+
+        public float GetWidth()
+        {
+            return _width;
         }
     }
 }

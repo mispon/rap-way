@@ -19,12 +19,12 @@ namespace Game.Notifications
         /// <summary>
         /// Очередь действий по клику на иконку уведомлений
         /// </summary>
-        private readonly Queue<Action> _clickNotificationActions = new Queue<Action>();
+        private readonly Queue<Action> _clickNotificationActions = new();
 
         /// <summary>
         /// Очередь независимых событий, отображаемых в любой момент игры
         /// </summary>
-        private readonly Queue<Action> _independentNotificationActions = new Queue<Action>();
+        private readonly Queue<Action> _independentNotificationActions = new();
 
         /// <summary>
         /// Текущее состояние очереди: показывается сейчас что-нибудь или нет

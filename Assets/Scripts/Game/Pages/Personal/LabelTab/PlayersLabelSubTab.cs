@@ -8,6 +8,8 @@ using Game.UI;
 using Game.UI.AskingWindow;
 using Game.UI.ScrollViewController;
 using Localization;
+using MessageBroker.Messages.State;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Extensions;
@@ -47,8 +49,11 @@ namespace Game.Pages.Personal.LabelTab
         [SerializeField] private Button moneyReportOkButton;
         [Space]
         [SerializeField] private Button disbandButton;
-        
-        private List<LabelMemberRow> _listItems = new();
+
+        private readonly CompositeDisposable _disposable = new();
+        private readonly List<LabelMemberRow> _listItems = new();
+
+        private IMessageBroker _messageBroker;
         private LabelInfo _label;
         private int _income;
         private int _cost;
@@ -59,6 +64,8 @@ namespace Game.Pages.Personal.LabelTab
         
         private void Start()
         {
+            _messageBroker = GameManager.Instance.MessageBroker;
+            
             payServiceButton.onClick.AddListener(PayService);
             upProductionButton.onClick.AddListener(UpProduction);
             upPrestigeButton.onClick.AddListener(UpPrestige);
@@ -156,7 +163,7 @@ namespace Game.Pages.Personal.LabelTab
         {
             SoundManager.Instance.PlaySound(UIActionType.Pay);
             
-            PlayerManager.Instance.AddMoney(-_cost);
+            _messageBroker.Publish(new ChangeMoneyEvent {Amount = -_cost});
             _label.IsFrozen = false;
             
             DisplayInfo(_label);
@@ -180,7 +187,7 @@ namespace Game.Pages.Personal.LabelTab
             _label.Production.Value = level;
             _label.Production.Exp = newExp;
             
-            PlayerManager.Instance.AddExp(-expStep);
+            _messageBroker.Publish(new ChangeExpEvent {Amount = -expStep});
             DisplayInfo(_label);
         }
 
@@ -202,7 +209,7 @@ namespace Game.Pages.Personal.LabelTab
             _label.Prestige.Value = level;
             _label.Prestige.Exp = newExp;
             
-            PlayerManager.Instance.AddExp(-expStep);
+            _messageBroker.Publish(new ChangeExpEvent {Amount = -expStep});
             DisplayInfo(_label);
         }
         
@@ -247,9 +254,7 @@ namespace Game.Pages.Personal.LabelTab
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             if (!_label.IsFrozen)
-            {
-                PlayerManager.Instance.AddMoney(_income);
-            }
+                _messageBroker.Publish(new ChangeMoneyEvent {Amount = _income});
 
             _label.IsFrozen = true;
             moneyReport.SetActive(false);
@@ -265,6 +270,7 @@ namespace Game.Pages.Personal.LabelTab
             }
             _listItems.Clear();
             
+            _disposable.Clear();
             base.Close();
         }
     }

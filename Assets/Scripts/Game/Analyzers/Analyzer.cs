@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Settings;
+using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,17 +11,19 @@ namespace Game.Analyzers
     /// </summary>
     public abstract class Analyzer<T> : MonoBehaviour
     {
+        protected IMessageBroker messageBroker;
         protected GameSettings settings;
 
         private void Start()
         {
+            messageBroker = GameManager.Instance.MessageBroker;
             settings = GameManager.Instance.Settings;
         }
 
         /// <summary>
         /// Анализирует успешность деятельности игрока 
         /// </summary>
-        public abstract void Analyze(T social);
+        public abstract void Analyze(T product);
 
         /// <summary>
         /// Рассчитывает прирост фанатов
