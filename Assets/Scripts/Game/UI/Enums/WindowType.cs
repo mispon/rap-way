@@ -6,7 +6,7 @@ namespace Game.UI.Enums
         About        = 1,
         AskReview    = 2,
         
-        Previous    = 98,
-        None        = 99
+        Previous     = 98,
+        None         = 99
     }
 }

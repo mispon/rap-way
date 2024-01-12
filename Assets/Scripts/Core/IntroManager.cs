@@ -1,4 +1,5 @@
-﻿using Firebase.Analytics;
+﻿using System.Collections;
+using Firebase.Analytics;
 using Scenes;
 using UnityEngine;
 
@@ -9,14 +10,15 @@ namespace Core
     /// </summary>
     public class IntroManager : MonoBehaviour
     {
-        private void Start()
+        private IEnumerator Start()
         {
             InitFirebase();
-            ScenesController.Instance.MessageBroker
-                .Publish(new SceneLoadMessage()
-                {
-                    sceneType = SceneTypes.MainMenu
-                });
+            yield return new WaitForSeconds(3);
+            
+            ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage
+            {
+                Type = SceneTypes.MainMenu
+            });
         }
 
         private static void InitFirebase()
@@ -33,7 +35,6 @@ namespace Core
                     Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
                 }
             });
-
         }
     }
 }

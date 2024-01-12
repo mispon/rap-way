@@ -12,10 +12,8 @@ namespace Game.UI.Windows
         [SerializeField] private Dictionary<WindowType, CanvasUIElement> _windows;
         [SerializeField] private WindowType _startWindow;
 
-        public WindowType StartWindow => _startWindow;
-
         private WindowType _activeWindow;
-        private readonly Stack<IUIElement> _windowHistory = new Stack<IUIElement>();
+        private readonly Stack<IUIElement> _windowHistory = new();
 
         public override void Initialize()
         {
@@ -28,14 +26,19 @@ namespace Game.UI.Windows
                 .Receive<WindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
+            
+            uiMessageBroker.Publish(new WindowControlMessage{ Type = _startWindow });
         }
 
         private void ChangeWindow(WindowType windowType)
         {
-            if (windowType == _activeWindow && windowType != _startWindow) return;
+            if (windowType == _activeWindow && windowType != _startWindow) 
+                return;
             
             var newWindow = GetWindow(windowType);
-            if (newWindow is null) return;
+            if (newWindow == null) 
+                return;
+            
             Activate();
 
             _windowHistory.Push(GetWindow(_activeWindow));
@@ -61,10 +64,12 @@ namespace Game.UI.Windows
                     var prevWindowType = GetWindowType(prevWindow);
                     ChangeWindow(prevWindowType);
                     break;
+                
                 case WindowType.None:
                     _windowHistory.Clear();
                     Deactivate();
                     break;
+                
                 default:
                     ChangeWindow(windowType);
                     break;
@@ -79,8 +84,11 @@ namespace Game.UI.Windows
         private WindowType GetWindowType(CanvasUIElement window)
         {
             foreach (var windowData in _windows)
+            {
                 if (windowData.Value == window)
                     return windowData.Key;
+            }
+            
             return WindowType.None;
         }
 

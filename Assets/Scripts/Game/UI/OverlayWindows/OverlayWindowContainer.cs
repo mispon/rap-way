@@ -10,25 +10,19 @@ namespace Game.UI.OverlayWindows
 {
     public sealed class OverlayWindowContainer: UIElementContainer
     {
-        [SerializeField]
-        private Dictionary<OverlayWindowType, CanvasUIElement> _overlaysWindows;
-
+        [SerializeField] private Dictionary<OverlayWindowType, CanvasUIElement> overlaysWindows;
+        [SerializeField] private OverlayWindowType startOverlayWindow;
+        [SerializeField, ChildGameObjectsOnly] private OverlayBlackout overlayBlackout;
+        
         private OverlayWindowType _activeOverlayWindowType = OverlayWindowType.None;
 
-        [SerializeField]
-        private OverlayWindowType _startOverlayWindow;
-
-        [ChildGameObjectsOnly]
-        [SerializeField]
-        private OverlayBlackout _overlayBlackout;
-
-        private readonly Stack<IUIElement> _windowHistory = new Stack<IUIElement>();
+        private readonly Stack<IUIElement> _windowHistory = new();
 
         public override void Initialize()
         {
             base.Initialize();
             
-            foreach (var overlayWindow in _overlaysWindows.Values)
+            foreach (var overlayWindow in overlaysWindows.Values)
                 overlayWindow.Initialize();
 
             uiMessageBroker
@@ -48,11 +42,10 @@ namespace Game.UI.OverlayWindows
             _windowHistory.Push(GetOverlayWindow(_activeOverlayWindowType));
 
             CloseCurrentOverlayWindow();
-            //if (pause == true) TimeCustom.Pause();
             newOverlayWindow.Show();
             _activeOverlayWindowType = overlayWindowType;
 
-            _overlayBlackout.Show();
+            overlayBlackout.Show();
         }
 
         private void CloseCurrentOverlayWindow()
@@ -61,8 +54,7 @@ namespace Game.UI.OverlayWindows
             currentOverlayWindow?.Hide();
 
             _activeOverlayWindowType = OverlayWindowType.None;
-            _overlayBlackout.Hide();
-            //TimeCustom.Play();
+            overlayBlackout.Hide();
         }
 
         private void ManageOverlayWindowControl(OverlayWindowType windowType)
@@ -84,11 +76,13 @@ namespace Game.UI.OverlayWindows
                     var prevWindowType = GetOverlayWindowType(prevOverlayWindow);
                     ShowOverlayWindow(prevWindowType);
                     break;
+                
                 case OverlayWindowType.None:
                     _windowHistory.Clear();
                     CloseCurrentOverlayWindow();
                     Deactivate();
                     break;
+                
                 default:
                     ShowOverlayWindow(windowType);
                     break;
@@ -97,14 +91,17 @@ namespace Game.UI.OverlayWindows
 
         private CanvasUIElement GetOverlayWindow(OverlayWindowType overlayWindowType)
         {
-            return _overlaysWindows.GetValueOrDefault(overlayWindowType);
+            return overlaysWindows.GetValueOrDefault(overlayWindowType);
         }
 
         private OverlayWindowType GetOverlayWindowType(CanvasUIElement window)
         {
-            foreach (var windowData in _overlaysWindows)
+            foreach (var windowData in overlaysWindows)
+            {
                 if (windowData.Value == window)
                     return windowData.Key;
+            }
+            
             return OverlayWindowType.None;
         }
     }

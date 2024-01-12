@@ -98,7 +98,7 @@ namespace Game.UI.OverlayWindows
             ScenesController.Instance.MessageBroker
                 .Publish(new SceneLoadMessage()
                 {
-                    sceneType = SceneTypes.Game
+                    Type = SceneTypes.Game
                 });
         }
     }

@@ -11,9 +11,10 @@ namespace Scenes
         [SerializeField] private Image _imageFadeOut;
         [SerializeField] private RectTransform _progressBarParent;
         [SerializeField] private Image _progressBar;
+        [SerializeField] private bool _showProgressBar;
 
         private Canvas _canvas;
-        private IDisposable _fade;
+        private IDisposable _fadeDisposable;
         private bool _isFadeIn;
         
         public Action onFadeComplete;
@@ -47,10 +48,10 @@ namespace Scenes
 
         private void StartFade(float fadeTime)
         {
-            _fade?.Dispose();
+            _fadeDisposable?.Dispose();
 
             float opacity = 0;
-            _fade = Observable
+            _fadeDisposable = Observable
                 .EveryUpdate()
                 .TakeWhile(_ => opacity <= 1)
                 .Finally(() => onFadeComplete?.Invoke())
@@ -67,6 +68,9 @@ namespace Scenes
         
         public void ShowProgress()
         {
+            if (!_showProgressBar) 
+                return;
+            
             _progressBarParent.gameObject.SetActive(true);
         }
 
@@ -78,13 +82,16 @@ namespace Scenes
 
         public void SetProgress(float loadProgressRatio)
         {
+            if (!_showProgressBar) 
+                return;
+            
             _progressBar.fillAmount = loadProgressRatio;
         }
         
         public void Dispose()
         {
             onFadeComplete = null;
-            _fade?.Dispose();
+            _fadeDisposable?.Dispose();
             _progressBarParent.gameObject.SetActive(false);
             _canvas.enabled = false;
         }

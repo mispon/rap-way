@@ -4,7 +4,6 @@ using Core;
 using Data;
 using Enums;
 using Firebase.Analytics;
-using Localization;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
@@ -98,7 +97,6 @@ namespace Game.UI.MainMenu
             player.Age = Convert.ToInt32(ageCarousel.GetLabel());
 
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
-            SceneManager.Instance.LoadGameScene();
         }
 
         private void OnClose()

@@ -20,7 +20,8 @@ namespace Game.UI
 
         private bool _isActive;
         protected UniRx.MessageBroker uiMessageBus;
-        protected CompositeDisposable disposables;
+        
+        private CompositeDisposable _disposables;
 
         public virtual void Initialize()
         {
@@ -28,7 +29,7 @@ namespace Game.UI
             _canvasGroup = GetComponent<CanvasGroup>();
             
             uiMessageBus = UIMessageBroker.Instance.MessageBroker;
-            disposables = new CompositeDisposable();
+            _disposables = new CompositeDisposable();
 
             Hide();
             SetupListenersOnInitialize();
@@ -58,7 +59,7 @@ namespace Game.UI
         protected virtual void DisposeContainers() { }
         protected virtual void DisposeListeners()
         {
-            disposables?.Dispose();
+            _disposables?.Dispose();
         }
 
         public void Dispose()

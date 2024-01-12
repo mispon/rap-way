@@ -2,11 +2,11 @@
 {
     public struct SceneLoadMessage
     {
-        public SceneTypes sceneType;
+        public SceneTypes Type;
     }
 
     public struct SceneReadyMessage
     {
-        public SceneTypes sceneType;
+        public SceneTypes Type;
     }
 }

@@ -31,7 +31,7 @@ namespace Scenes
         {
             _currentScene = SceneManager.GetActiveScene().name;
 
-            _loadingScene = msg.sceneType;
+            _loadingScene = msg.Type;
             _isSceneLoaded = false;
             
             _loadingScreen.onFadeComplete += LoadNewScene;
@@ -61,10 +61,7 @@ namespace Scenes
 
                     if (progress < 1 || _isSceneLoaded is false) return;
                     
-                    MessageBroker.Publish(new SceneReadyMessage()
-                    {
-                        sceneType = _loadingScene,
-                    });
+                    MessageBroker.Publish(new SceneReadyMessage {Type =_loadingScene});
                     
                     UnloadCurrentScene();
                     _delayListener.Dispose();

@@ -11,55 +11,45 @@ namespace Game.UI
 {
     public class UIManager : SerializedMonoBehaviour, IDisposable
     {
-        [SerializeField] private List<UIElementContainer> _uiElementContainers;
+        [SerializeField] private List<UIElementContainer> uiElementContainers;
         
-        private readonly CompositeDisposable disposables = new CompositeDisposable();
+        private readonly CompositeDisposable _disposables = new();
         
-        private void Awake()
+        private void Start()
         {
-            foreach (var container in _uiElementContainers)
+            foreach (var container in uiElementContainers)
                 container.Initialize();
             
             ScenesController.Instance.MessageBroker
                 .Receive<SceneReadyMessage>()
                 .Subscribe(msg =>
                 {
-                    if (msg.sceneType == SceneTypes.MainMenu) MenuSceneInitialize();
-                    if (msg.sceneType == SceneTypes.Game) GameSceneInitialize();
+                    if (msg.Type == SceneTypes.MainMenu)
+                    {
+                        MenuSceneInitialize();
+                    }
                 })
-                .AddTo(disposables);
+                .AddTo(_disposables);
             
             ScenesController.Instance.MessageBroker
                 .Receive<SceneLoadMessage>()
                 .Subscribe(msg => Dispose())
-                .AddTo(disposables);
+                .AddTo(_disposables);
         }
 
-        private void MenuSceneInitialize()
+        private static void MenuSceneInitialize()
         {
-            UIMessageBroker.Instance.MessageBroker
-                .Publish(new WindowControlMessage()
-                {
-                    Type = WindowType.MainMenu
-                });
+            var uiBroker =  UIMessageBroker.Instance.MessageBroker;
             
-            UIMessageBroker.Instance.MessageBroker
-                .Publish(new OverlayWindowControlMessage()
-                {
-                    Type = OverlayWindowType.None
-                });
-        }
-        
-        private void GameSceneInitialize()
-        {
-            
+            uiBroker.Publish(new WindowControlMessage {Type = WindowType.MainMenu});
+            uiBroker.Publish(new OverlayWindowControlMessage {Type = OverlayWindowType.None});
         }
 
         public void Dispose()
         {
-            disposables?.Dispose();
+            _disposables?.Dispose();
             
-            foreach (var container in _uiElementContainers)
+            foreach (var container in uiElementContainers)
                 container.Dispose();
         }
     }

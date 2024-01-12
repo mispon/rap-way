@@ -62,19 +62,9 @@ namespace Game.UI.MainMenu
                 ShowPanel(newPlayerPanel);
             });
             
-            continueGameButton.onClick.AddListener(ContinueGame);
             settingsButton.onClick.AddListener(() => ShowPanel(settingsPanel));
             aboutButton.onClick.AddListener(() => ShowPanel(aboutPanel));
             exitButton.onClick.AddListener(ExitGame);
-        }
-
-        /// <summary>
-        /// Loads main game scene
-        /// </summary>
-        private static void ContinueGame()
-        {
-            SoundManager.Instance.PlaySound(UIActionType.Click);
-            SceneManager.Instance.LoadGameScene();
         }
 
         /// <summary>

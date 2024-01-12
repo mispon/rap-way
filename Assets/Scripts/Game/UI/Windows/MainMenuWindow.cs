@@ -1,3 +1,4 @@
+using System.Collections;
 using Core;
 using Firebase.Analytics;
 using Game.UI.Enums;
@@ -11,7 +12,6 @@ namespace Game.UI.Windows
     public class MainMenuWindow : CanvasUIElement
     {
         [BoxGroup("Buttons")] [SerializeField] private Button _continueGameButton;
-        
         [BoxGroup("Animations")] [SerializeField] private ProductionAnim _productionAnim;
 
         public override void Initialize()
@@ -22,18 +22,24 @@ namespace Game.UI.Windows
                 FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
             
             if (!GameManager.Instance.GameStats.AskedReview && GameManager.Instance.PlayerData.Fans > 0)
-                uiMessageBus.Publish(new WindowControlMessage()
+                uiMessageBus.Publish(new WindowControlMessage
                 {
                     Type = WindowType.AskReview
                 });
-            
-            _continueGameButton.interactable = GameManager.Instance.HasCharacter();
+
+            StartCoroutine(SetupContinueButton());
         }
 
         public override void Show()
         {
             base.Show();
             _productionAnim.Refresh();
+        }
+
+        private IEnumerator SetupContinueButton()
+        {
+            yield return new WaitUntil(() => GameManager.Instance.IsReady);
+            _continueGameButton.interactable = GameManager.Instance.HasCharacter();
         }
     }
 }

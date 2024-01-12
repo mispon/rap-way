@@ -64,7 +64,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: _overlaysWindows
+    - Name: overlaysWindows
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[Game.UI.Enums.OverlayWindowType,
         Assembly-CSharp],[Game.UI.CanvasUIElement, Assembly-CSharp]], mscorlib
@@ -114,8 +114,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  _startOverlayWindow: 99
-  _overlayBlackout: {fileID: 1765903287128197215}
+  startOverlayWindow: 99
+  overlayBlackout: {fileID: 1765903287128197215}
 --- !u!223 &1274337253627189285
 Canvas:
   m_ObjectHideFlags: 0
@@ -217,7 +217,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  _uiElementContainers:
+  uiElementContainers:
   - {fileID: 7458378252696006524}
   - {fileID: 600982457064611721}
 --- !u!1 &6291666853112119266
@@ -459,14 +459,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 52c98cbd1e73c854c9dc8957f630db18, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -903,6 +903,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6667604672464413363, guid: 2972e317e267c40db8cb4fee337cc12f,
+        type: 3}
+      propertyPath: _toWindow
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7088912737215014953, guid: 2972e317e267c40db8cb4fee337cc12f,
         type: 3}
       propertyPath: m_BlockingMask.m_Bits
@@ -1088,7 +1093,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9070435158939240642, guid: 726ca38fd792e47cd82e3d113edf4556,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5280190370042565744}
   m_SourcePrefab: {fileID: 100100000, guid: 726ca38fd792e47cd82e3d113edf4556, type: 3}
 --- !u!224 &2739125542209492106 stripped
 RectTransform:
@@ -1108,6 +1117,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c869eb545449f78248a587b58c335c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7288011205585652379 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9070435158939240642, guid: 726ca38fd792e47cd82e3d113edf4556,
+    type: 3}
+  m_PrefabInstance: {fileID: 1784726362418201177}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5280190370042565744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7288011205585652379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72dfeb45c4d94cd2a392084e69964d93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _toOverlayWindow: 99
+  _soundType: 0
 --- !u!1001 &4636475726285011954
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1651,6 +1680,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5118247584042894310, guid: 976a4d06b9e734f7fbfbdfbb2a023324,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6596307790285974389, guid: 976a4d06b9e734f7fbfbdfbb2a023324,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1834,17 +1868,17 @@ PrefabInstance:
     - target: {fileID: 9194409109779863859, guid: 976a4d06b9e734f7fbfbdfbb2a023324,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 9194409109779863859, guid: 976a4d06b9e734f7fbfbdfbb2a023324,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 9194409109779863859, guid: 976a4d06b9e734f7fbfbdfbb2a023324,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 9194409109779863859, guid: 976a4d06b9e734f7fbfbdfbb2a023324,
         type: 3}
