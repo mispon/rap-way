@@ -20,6 +20,7 @@ namespace Utils
             if (Instance == null) 
             {
                 Instance = GetInstance();
+                InitializeSingleton();
             }
             else if (Instance != this)
             {
@@ -45,5 +46,7 @@ namespace Utils
             var singleton = new GameObject($"{nameof(T)} (Singleton)");
             return singleton.AddComponent<T>();
         }
+        
+        protected virtual void InitializeSingleton() { }
     } 
 }

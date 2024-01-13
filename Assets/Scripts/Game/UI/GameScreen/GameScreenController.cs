@@ -3,6 +3,7 @@ using Core;
 using Core.Interfaces;
 using Data;
 using Enums;
+using Scenes;
 using MessageBroker.Messages.State;
 using UniRx;
 using UnityEngine;
@@ -162,13 +163,16 @@ namespace Game.UI.GameScreen
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             GameManager.Instance.SaveApplicationData();
-            SceneManager.Instance.LoadMainScene();
+            
+            ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage {
+                    Type = SceneTypes.MainMenu
+                });
         }
         
         private void OnDestroy()
         {
-            _disposable.Clear();
             TimeManager.Instance.onDayLeft -= OnDayLeft;
+            _disposable.Clear();
         }
     }
 

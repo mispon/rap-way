@@ -36,8 +36,6 @@ namespace Game
     /// </summary>
     public class GameManager : Singleton<GameManager>
     {
-        public List<Eagle> Eagles;
-        
         [BoxGroup("Stores URLs"), SerializeField] private string appStoreURL;
         [BoxGroup("Stores URLs"), SerializeField] private string googlePlayURL;
         
@@ -56,6 +54,8 @@ namespace Game
         [TabGroup("labels", "Labels")] public List<LabelInfo> Labels; 
         [TabGroup("labels", "Custom Labels")] public List<LabelInfo> CustomLabels;
         [TabGroup("labels", "Player Label")] public LabelInfo PlayerLabel;
+        
+        [BoxGroup("Eagles")] public List<Eagle> Eagles;
         
         [TabGroup("tutorials", "Tutorials")] public HashSet<string> ShowedTutorials;
         [TabGroup("tutorials", "Hints")] public HashSet<string> ShowedHints;
@@ -97,6 +97,8 @@ namespace Game
 
             Labels = new List<LabelInfo>(0);
             CustomLabels = new List<LabelInfo>(0);
+            
+            LoadDonateBalance();
             
             return PlayerData;
         }
