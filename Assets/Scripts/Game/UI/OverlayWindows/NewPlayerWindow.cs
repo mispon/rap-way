@@ -12,7 +12,7 @@ using Utils.Carousel;
 
 namespace Game.UI.OverlayWindows
 {
-    public class NewPlayerOverlayWindow : CanvasUIElement
+    public class NewPlayerWindow : CanvasUIElement
     {
         [BoxGroup("Sprites")] [SerializeField] private Sprite _maleAvatar;
         [BoxGroup("Sprites")] [SerializeField] private Sprite _femaleAvatar;

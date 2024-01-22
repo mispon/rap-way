@@ -12,7 +12,7 @@ using Utils.Carousel;
 
 namespace Game.UI.OverlayWindows
 {
-    public class SettingsOverlayWindow : CanvasUIElement
+    public class SettingsWindow : CanvasUIElement
     {
         [BoxGroup("Language")] [SerializeField] private Carousel _langCarousel;
         
