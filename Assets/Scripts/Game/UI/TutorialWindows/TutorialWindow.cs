@@ -1,78 +1,100 @@
-using System.Collections.Generic;
 using Game.UI.Enums;
 using Game.UI.Messages;
 using Sirenix.OdinInspector;
-using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Game.UI.TutorialWindows
 {
-    public abstract class TutorialWindow : CanvasUIElement, IPointerClickHandler
+    public class TutorialWindow : CanvasUIElement, IPointerClickHandler
     {
-        [SerializeField] private TMP_Text _textTutorial;
-        [SerializeField] private KeyValuePair<Image, string>[] _uiElementsTutorial;
+        [SerializeField] private Text _textTutorial;
+        [SerializeField] private TutorialSettings[] _uiElementsTutorial;
+        
+        [BoxGroup("First tutorial")] [SerializeField] private bool _isFirstTutorial;
+        [ShowIf("_isFirstTutorial"), BoxGroup("First tutorial")] [SerializeField] private Button _buttonFirstTutorial;
+        [ShowIf("_isFirstTutorial"), BoxGroup("First tutorial"), TextArea] [SerializeField] private string _textFirstTutorial;
 
-        [BoxGroup("First tutorial")] private const string SAVE_KEY_FIRST_TUTORIAL = "FirstTutorial";
-        [BoxGroup("First tutorial")] private string _textFirstTutorial;
-
-        private bool _isFirstTutorial;
+        private bool _isBlockClick;
         private int _tutorialIndex;
 
-        public override void Show()
-        {
-            base.Show();
-           
-            _isFirstTutorial = PlayerPrefs.HasKey($"{SAVE_KEY_FIRST_TUTORIAL}{this.name}") is false;
-           
-            if (_isFirstTutorial) ShowFirstTutorial();
-            else ShowTutorial(_tutorialIndex);
-        }
+        public bool IsFirstTutorial => _isFirstTutorial;
+        public bool IsContainsTutorials => _uiElementsTutorial.Length > 0;
 
-        private void ShowFirstTutorial()
+        public void ShowFirstTutorial()
         {
-            PlayerPrefs.SetInt($"{SAVE_KEY_FIRST_TUTORIAL}{this.name}", 1);
+            if (_isFirstTutorial is false) return;
+            
+            ClearTutorial();
+
+            _isBlockClick = true;
+            _buttonFirstTutorial.gameObject.SetActive(true);
             _textTutorial.text = _textFirstTutorial;
+
+            _buttonFirstTutorial.OnClickAsObservable()
+                .Subscribe(_ =>
+                {
+                    _buttonFirstTutorial.gameObject.SetActive(false);
+
+                    _isBlockClick = false;
+                    
+                    uiMessageBus.Publish(new TutorialWindowControlMessage()
+                    {
+                        Type = TutorialWindowType.None
+                    });
+                });
         }
 
-        private void ShowTutorial(int index)
+        public void ShowTutorial()
         {
             if (_uiElementsTutorial is null || _uiElementsTutorial.Length == 0) return;
+           
+            ClearTutorial();
             
-            HideLastTutorial();
-            
-            if (index > _uiElementsTutorial.Length) 
+            if (_tutorialIndex >= _uiElementsTutorial.Length)
+            {
                 UIMessageBroker.Instance.MessageBroker
                     .Publish(new TutorialWindowControlMessage()
                     {
                         Type = TutorialWindowType.None
                     });
+                
+                return;
+            }
 
-            _uiElementsTutorial[index].Key.enabled = true;
-            _textTutorial.text = _uiElementsTutorial[index].Value;
+            _uiElementsTutorial[_tutorialIndex].image.enabled = true;
+            _textTutorial.text = _uiElementsTutorial[_tutorialIndex].text;
         }
 
-        private void HideLastTutorial()
+        private void ClearTutorial()
         {
             _textTutorial.text = "";
             for (int i = 0; i < _uiElementsTutorial?.Length; i++)
-                _uiElementsTutorial[i].Key.enabled = false;
+                _uiElementsTutorial[i].image.enabled = false;
         }
 
         protected override void DisposeContainers()
         {
             base.DisposeContainers();
             
-            HideLastTutorial();
+            ClearTutorial();
             _tutorialIndex = 0;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (_isFirstTutorial is true) return;
+            if (_isBlockClick is true) return;
             
-            ShowTutorial(++_tutorialIndex);
+            ++_tutorialIndex;
+            ShowTutorial();
+        }
+        
+        private struct TutorialSettings
+        {
+            public Image image;
+            public string text;
         }
     }
 }

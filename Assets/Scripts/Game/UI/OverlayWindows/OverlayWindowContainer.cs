@@ -10,20 +10,22 @@ namespace Game.UI.OverlayWindows
 {
     public sealed class OverlayWindowContainer: UIElementContainer
     {
-        [SerializeField] private Dictionary<OverlayWindowType, CanvasUIElement> _windows;
+        [DictionaryDrawerSettings(KeyLabel = "Window type", ValueLabel = "Window settings")]
+        [SerializeField] private Dictionary<OverlayWindowType, WindowSettings> _windows;
         [SerializeField] private OverlayWindowType _startWindow;
         [SerializeField, ChildGameObjectsOnly] private OverlayBlackout overlayBlackout;
         
         private OverlayWindowType _activeWindowType;
 
         private readonly Stack<IUIElement> _windowHistory = new();
+        private const string SAVE_KEY_FIRST_TUTORIAL = "FirstTutorial";
 
         public override void Initialize()
         {
             base.Initialize();
             
             foreach (var overlayWindow in _windows.Values)
-                overlayWindow.Initialize();
+                overlayWindow.canvas.Initialize();
 
             uiMessageBroker
                 .Receive<OverlayWindowControlMessage>()
@@ -49,6 +51,8 @@ namespace Game.UI.OverlayWindows
             _activeWindowType = windowType;
 
             overlayBlackout.Show();
+            
+            CheckFirstTutorial(windowType);
         }
 
         private void CloseCurrentWindow()
@@ -91,21 +95,46 @@ namespace Game.UI.OverlayWindows
                     break;
             }
         }
-
+        
         private CanvasUIElement GetWindow(OverlayWindowType windowType)
         {
-            return _windows.GetValueOrDefault(windowType);
+            return _windows.TryGetValue(windowType, out var window) ? window.canvas : null;
         }
 
         private OverlayWindowType GetOverlayWindowType(CanvasUIElement window)
         {
             foreach (var windowData in _windows)
             {
-                if (windowData.Value == window)
+                if (windowData.Value.canvas == window)
                     return windowData.Key;
             }
             
             return OverlayWindowType.None;
+        }
+        
+        private void CheckFirstTutorial(OverlayWindowType windowType)
+        {
+            TutorialWindowType tutorial = GetFirstTutorial(windowType);
+            if (tutorial == TutorialWindowType.None) return;
+            
+            if (PlayerPrefs.HasKey($"{SAVE_KEY_FIRST_TUTORIAL}{windowType}") is true) return;
+            
+            PlayerPrefs.SetInt($"{SAVE_KEY_FIRST_TUTORIAL}{windowType}", 1);
+            uiMessageBroker.Publish(new FirstTutorialControlMessage
+            {
+                Type = tutorial
+            });
+        }
+        
+        private TutorialWindowType GetFirstTutorial(OverlayWindowType windowType)
+        {
+            return _windows.TryGetValue(windowType, out var window) ? window.tutorialType : TutorialWindowType.None;
+        }
+        
+        private struct WindowSettings
+        {
+            [LabelWidth(100)] public CanvasUIElement canvas;
+            [LabelWidth(100)] public TutorialWindowType tutorialType;
         }
     }
 }

@@ -3,6 +3,8 @@ using Core;
 using Core.Interfaces;
 using Data;
 using Enums;
+using Game.UI.Enums;
+using Game.UI.Messages;
 using Scenes;
 using MessageBroker.Messages.State;
 using UniRx;
@@ -109,6 +111,11 @@ namespace Game.UI.GameScreen
                 .AddTo(_disposable);
             
             _messageBroker.Publish(new FullStateRequest());
+            
+            UIMessageBroker.Instance.MessageBroker.Publish(new FirstTutorialControlMessage()
+            {
+                Type = TutorialWindowType.GameScreen
+            });
         }
         
         /// <summary>

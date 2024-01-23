@@ -6,4 +6,9 @@ namespace Game.UI.Messages
     {
         public TutorialWindowType Type;
     }
+    
+    public struct FirstTutorialControlMessage
+    {
+        public TutorialWindowType Type;
+    }
 }
