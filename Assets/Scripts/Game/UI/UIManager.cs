@@ -13,20 +13,14 @@ namespace Game.UI
     {
         [SerializeField] private List<UIElementContainer> uiElementContainers;
 
-        private UniRx.MessageBroker uiMessageBroker;
         private readonly CompositeDisposable _disposables = new();
-
-        private void Awake()
-        {
-            uiMessageBroker = UIMessageBroker.Instance.MessageBroker;
-        }
 
         private void Start()
         {
             foreach (var container in uiElementContainers)
                 container.Initialize();
             
-            ScenesController.Instance.MessageBroker
+            /*ScenesController.Instance.MessageBroker
                 .Receive<SceneReadyMessage>()
                 .Subscribe(msg =>
                 {
@@ -36,7 +30,7 @@ namespace Game.UI
                         if (msg.SceneType == SceneTypes.Game) GameSceneInitialize();
                     }
                 })
-                .AddTo(_disposables);
+                .AddTo(_disposables);*/
             
             ScenesController.Instance.MessageBroker
                 .Receive<SceneLoadMessage>()
@@ -44,19 +38,23 @@ namespace Game.UI
                 .AddTo(_disposables);
         }
 
-        private void MenuSceneInitialize()
+        /*private void MenuSceneInitialize()
         {
+            var uiMessageBroker =  UIMessageBroker.Instance.MessageBroker;
+            
             uiMessageBroker.Publish(new WindowControlMessage {Type = WindowType.MainMenu});
             uiMessageBroker.Publish(new OverlayWindowControlMessage {Type = OverlayWindowType.None});
-            uiMessageBroker.Publish(new TutorialWindowControlMessage() {Type = TutorialWindowType.None});
+            uiMessageBroker.Publish(new TutorialWindowControlMessage {Type = TutorialWindowType.None});
         }
         
         private void GameSceneInitialize()
         {
+            var uiMessageBroker =  UIMessageBroker.Instance.MessageBroker;
+
             uiMessageBroker.Publish(new WindowControlMessage {Type = WindowType.None});
             uiMessageBroker.Publish(new OverlayWindowControlMessage {Type = OverlayWindowType.None});
-            uiMessageBroker.Publish(new TutorialWindowControlMessage() {Type = TutorialWindowType.None});
-        }
+            uiMessageBroker.Publish(new TutorialWindowControlMessage {Type = TutorialWindowType.None});
+        }*/
 
         public void Dispose()
         {

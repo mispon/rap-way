@@ -10,6 +10,7 @@ namespace Game.UI.Windows
     public class WindowContainer : UIElementContainer
     {
         [SerializeField] private Dictionary<WindowType, CanvasUIElement> _windows;
+        [SerializeField] private WindowType _startWindow;
 
         private WindowType _activeWindow;
         private readonly Stack<IUIElement> _windowHistory = new();
@@ -17,7 +18,7 @@ namespace Game.UI.Windows
         public override void Initialize()
         {
             base.Initialize();
-
+            
             foreach (var window in _windows.Values)
                 window.Initialize();
             
@@ -25,6 +26,9 @@ namespace Game.UI.Windows
                 .Receive<WindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
+            
+            HideAnyWindow();
+            ManageWindowControl(_startWindow);
         }
 
         private void ChangeWindow(WindowType windowType)

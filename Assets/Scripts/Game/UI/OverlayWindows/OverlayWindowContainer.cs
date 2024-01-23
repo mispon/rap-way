@@ -11,9 +11,10 @@ namespace Game.UI.OverlayWindows
     public sealed class OverlayWindowContainer: UIElementContainer
     {
         [SerializeField] private Dictionary<OverlayWindowType, CanvasUIElement> _windows;
+        [SerializeField] private OverlayWindowType _startWindow;
         [SerializeField, ChildGameObjectsOnly] private OverlayBlackout overlayBlackout;
         
-        private OverlayWindowType _activeWindowType = OverlayWindowType.None;
+        private OverlayWindowType _activeWindowType;
 
         private readonly Stack<IUIElement> _windowHistory = new();
 
@@ -28,6 +29,9 @@ namespace Game.UI.OverlayWindows
                 .Receive<OverlayWindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
+            
+            CloseCurrentWindow();
+            ManageWindowControl(_startWindow);
         }
 
         private void ShowWindow(OverlayWindowType windowType, bool pause = true)

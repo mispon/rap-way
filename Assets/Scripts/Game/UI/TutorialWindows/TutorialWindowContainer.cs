@@ -11,9 +11,10 @@ namespace Game.UI.TutorialWindows
     public sealed class TutorialWindowContainer: UIElementContainer
     {
         [SerializeField] private Dictionary<TutorialWindowType, TutorialWindow> _windows;
+        [SerializeField] private TutorialWindowType _startWindow;
         [SerializeField, ChildGameObjectsOnly] private OverlayBlackout overlayBlackout;
         
-        private TutorialWindowType _activeWindowType = TutorialWindowType.None;
+        private TutorialWindowType _activeWindowType;
 
         private readonly Stack<IUIElement> _windowHistory = new();
 
@@ -28,6 +29,9 @@ namespace Game.UI.TutorialWindows
                 .Receive<TutorialWindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
+            
+            CloseCurrentWindow();
+            ManageWindowControl(_startWindow);
         }
 
         private void ShowWindow(TutorialWindowType windowType, bool pause = true)
