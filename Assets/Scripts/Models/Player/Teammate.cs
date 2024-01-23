@@ -11,7 +11,7 @@ namespace Models.Player
     [Serializable]
     public class Teammate
     {
-        public static Teammate New(TeammateType type) => new Teammate {Type = type};
+        public static Teammate New(TeammateType type) => new() {Type = type};
         
         /// <summary>
         /// Тип тиммейта

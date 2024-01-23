@@ -1,0 +1,120 @@
+﻿using Core;
+using Enums;
+using Game.Player;
+using Models.Production;
+using ScriptableObjects;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace UI.Windows.Pages.Social
+{
+    /// <summary>
+    /// Страница работы социального действия
+    /// </summary>
+    public class SocialWorkingPage : BaseWorkingPage
+    {
+        [Header("Идентификаторы прогресса работы")]
+        [SerializeField] private Text workPoints;
+        [SerializeField] private WorkPoints playerWorkPoints;
+        [SerializeField] private WorkPoints prManWorkPoints;
+        [SerializeField] private Image prManAvatar;
+
+        [Header("Страницы результата")]
+        [SerializeField] private SocialResultPage[] socialResults;
+
+        [Header("Данные")]
+        [SerializeField] private ImagesBank imagesBank;
+        
+        private SocialInfo _social;
+        private bool _hasPrMan;
+
+        /// <summary>
+        /// Начинает выполнение работы 
+        /// </summary>
+        public override void StartWork(params object[] args)
+        {
+            _social = (SocialInfo) args[0];
+            Open();
+            RefreshWorkAnims();
+        }
+
+        /// <summary>
+        /// Работа, выполняемая за один день
+        /// </summary>
+        protected override void DoDayWork()
+        {
+            SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
+            GenerateWorkPoints();
+            DisplayWorkPoints();
+        }
+
+        /// <summary>
+        /// Генерирует очки работы
+        /// </summary>
+        private void GenerateWorkPoints()
+        {
+            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 2);
+            playerWorkPoints.Show(playerPointsValue);
+
+            var prManPointsValue = 0;
+            if (_hasPrMan)
+            {
+                prManPointsValue = Random.Range(1, PlayerManager.Data.Team.PrMan.Skill.Value + 2);
+                prManWorkPoints.Show(prManPointsValue);
+            }
+            
+            _social.WorkPoints += playerPointsValue + prManPointsValue;
+        }
+
+        /// <summary>
+        /// Отображает количество сгенерированных очков работы
+        /// </summary>
+        private void DisplayWorkPoints()
+        {
+            workPoints.text = _social.WorkPoints.ToString();
+        }
+        
+        /// <summary>
+        /// Обработчик завершения работы
+        /// </summary>
+        protected override void FinishWork()
+        {
+            GetPage(_social.Type).ShowPage(_social);
+            Close();
+        }
+
+        /// <summary>
+        /// Возвращает длительность действия
+        /// </summary>
+        protected override int GetDuration()
+        {
+            return settings.SocialsWorkDuration;
+        }
+        
+        /// <summary>
+        /// Возвращает страницу для указанного типа соц. события 
+        /// </summary>
+        private SocialResultPage GetPage(SocialType type) => socialResults[(int) type];
+
+        protected override void BeforePageOpen()
+        {
+            base.BeforePageOpen();
+            
+            _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
+            prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
+        }
+
+        protected override void BeforePageClose()
+        {
+            base.BeforePageClose();
+
+            workPoints.text = "0";
+            _social = null;
+        }
+
+        protected override void AfterPageClose()
+        {
+            // do nothing, override for prevent banner close
+        }
+    }
+}

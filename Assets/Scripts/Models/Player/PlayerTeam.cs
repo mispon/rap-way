@@ -17,7 +17,7 @@ namespace Models.Player
 
         public Teammate[] TeammatesArray => new[] {BitMaker, TextWriter, Manager, PrMan};
 
-        public static PlayerTeam New => new PlayerTeam
+        public static PlayerTeam New => new()
         {
             BitMaker = Teammate.New(TeammateType.BitMaker),
             TextWriter = Teammate.New(TeammateType.TextWriter),

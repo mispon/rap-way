@@ -1,8 +1,8 @@
 using System;
 using Core;
-using Data;
-using Game.UI.GameScreen;
 using JetBrains.Annotations;
+using ScriptableObjects;
+using UI.GameScreen;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

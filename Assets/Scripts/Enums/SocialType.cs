@@ -2,9 +2,6 @@ using System.ComponentModel;
 
 namespace Enums
 {
-    /// <summary>
-    /// Типы социальных действий
-    /// </summary>
     public enum SocialType
     {
         [Description("social_trends")]

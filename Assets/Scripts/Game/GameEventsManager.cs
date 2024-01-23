@@ -1,11 +1,11 @@
 using System;
-using Core.Interfaces;
-using Data;
+using Core;
+using Core.OrderedStarter;
 using Enums;
-using Game;
-using Game.Pages.GameEvent;
+using Game.Player;
+using ScriptableObjects;
+using UI.Windows.Pages.GameEvent;
 using UnityEngine;
-using Utils;
 using Random = UnityEngine.Random;
 
 namespace Game

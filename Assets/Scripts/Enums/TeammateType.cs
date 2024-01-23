@@ -2,9 +2,6 @@ using System.ComponentModel;
 
 namespace Enums
 {
-    /// <summary>
-    /// Типы тиммейтов игрока
-    /// </summary>
     public enum TeammateType
     {
         [Description("teammate_bitmaker")]

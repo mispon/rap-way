@@ -1,7 +1,6 @@
-using Data;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Audio;
-using Utils;
 
 namespace Core
 {

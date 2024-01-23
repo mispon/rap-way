@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Core.Settings;
-using Data;
-using Localization;
+using Core.Data;
+using Core.Localization;
+using Extensions;
+using Game.Time;
+using Models.Eagler;
 using Models.Game;
 using Models.Player;
+using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Utils;
-using Utils.Extensions;
 
 #pragma warning disable CS0414 // Field is assigned but its value is never used
 

@@ -1,14 +1,13 @@
 using System;
 using System.Linq;
 using Core;
-using Core.Interfaces;
-using Data;
+using Core.OrderedStarter;
 using Enums;
+using Game.Time;
 using MessageBroker.Messages.State;
-using Models.Game;
-using Models.Info;
+using Models.Trends;
+using ScriptableObjects;
 using UnityEngine;
-using Utils;
 
 // ReSharper disable CoVariantArrayConversion
 
@@ -96,7 +95,7 @@ namespace Game
         }
     }
     
-    public static partial class Extension
+    public static class Extension
     {
         /// <summary>
         /// Получение оценки совпдаения выбранного и текущего значения

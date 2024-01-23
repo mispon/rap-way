@@ -2,10 +2,6 @@ using System.ComponentModel;
 
 namespace Enums
 {
-    /// <summary>
-    /// Достижения игрока
-    /// Делаю сложный префикс ключа локализации "achievements_type", так как поидеи должно еще появиться описание на каждую из ачивок 
-    /// </summary>
     public enum AchievementsType
     {
         [Description("achievements_type_fans")]

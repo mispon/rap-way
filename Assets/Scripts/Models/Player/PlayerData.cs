@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Enums;
-using Models.Game;
+using TrendsData = Models.Trends.Trends;
 
 namespace Models.Player
 {
@@ -33,7 +33,7 @@ namespace Models.Player
         public List<int> Feats;
         public List<int> Battles;
 
-        public Trends LastKnownTrends;
+        public TrendsData LastKnownTrends;
         public bool FinishPageShowed;
         
         public static PlayerData New => new()

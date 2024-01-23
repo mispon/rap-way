@@ -2,9 +2,6 @@ using System.ComponentModel;
 
 namespace Enums
 {
-    /// <summary>
-    /// Стилистика трека / альбома
-    /// </summary>
     public enum Styles
     {
         [Description("styles_CloudRap")]
@@ -32,10 +29,7 @@ namespace Enums
         [Description("styles_CountryRap")]
         CountryRap
     }
-
-    /// <summary>
-    /// Тематика трека / альбома
-    /// </summary>
+    
     public enum Themes
     {
         [Description("theme_life")]
