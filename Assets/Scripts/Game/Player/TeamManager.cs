@@ -6,7 +6,6 @@ using Core.PropertyAttributes;
 using Enums;
 using Game.Effects;
 using Game.Notifications;
-using Game.Pages.Training;
 using Game.Time;
 using Models.Player;
 using ScriptableObjects;

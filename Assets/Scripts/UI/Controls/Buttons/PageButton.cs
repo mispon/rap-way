@@ -1,5 +1,4 @@
 ﻿using Core;
-using Game.Pages;
 using ScriptableObjects;
 using UI.Windows.Pages;
 using UnityEngine;

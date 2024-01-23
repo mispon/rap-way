@@ -1,4 +1,3 @@
-using Game.Pages;
 using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
