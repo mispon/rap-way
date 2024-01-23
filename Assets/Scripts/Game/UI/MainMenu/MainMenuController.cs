@@ -38,7 +38,7 @@ namespace Game.UI.MainMenu
             anim.Refresh();
             SetupButtons();
             
-            if (GameManager.Instance.HasAnySaves())
+            if (!GameManager.Instance.HasAnySaves())
             {
                 FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
             }
