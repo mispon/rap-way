@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
 
-namespace Game.UI.OverlayWindows
+namespace Game.UI.OverlayWindows.Concrete
 {
     public class NewPlayerWindow : CanvasUIElement
     {
@@ -98,7 +98,7 @@ namespace Game.UI.OverlayWindows
             ScenesController.Instance.MessageBroker
                 .Publish(new SceneLoadMessage()
                 {
-                    Type = SceneTypes.Game
+                    SceneType = SceneTypes.Game
                 });
         }
     }

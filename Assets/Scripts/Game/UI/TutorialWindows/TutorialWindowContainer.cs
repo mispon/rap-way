@@ -6,14 +6,14 @@ using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 
-namespace Game.UI.OverlayWindows
+namespace Game.UI.TutorialWindows
 {
-    public sealed class OverlayWindowContainer: UIElementContainer
+    public sealed class TutorialWindowContainer: UIElementContainer
     {
-        [SerializeField] private Dictionary<OverlayWindowType, CanvasUIElement> _windows;
+        [SerializeField] private Dictionary<TutorialWindowType, TutorialWindow> _windows;
         [SerializeField, ChildGameObjectsOnly] private OverlayBlackout overlayBlackout;
         
-        private OverlayWindowType _activeWindowType = OverlayWindowType.None;
+        private TutorialWindowType _activeWindowType = TutorialWindowType.None;
 
         private readonly Stack<IUIElement> _windowHistory = new();
 
@@ -25,12 +25,12 @@ namespace Game.UI.OverlayWindows
                 overlayWindow.Initialize();
 
             uiMessageBroker
-                .Receive<OverlayWindowControlMessage>()
+                .Receive<TutorialWindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
         }
 
-        private void ShowWindow(OverlayWindowType windowType, bool pause = true)
+        private void ShowWindow(TutorialWindowType windowType, bool pause = true)
         {
             if (windowType == _activeWindowType) return;
 
@@ -52,15 +52,15 @@ namespace Game.UI.OverlayWindows
             var currentWindow = GetWindow(_activeWindowType);
             currentWindow?.Hide();
 
-            _activeWindowType = OverlayWindowType.None;
+            _activeWindowType = TutorialWindowType.None;
             overlayBlackout.Hide();
         }
 
-        private void ManageWindowControl(OverlayWindowType windowType)
+        private void ManageWindowControl(TutorialWindowType windowType)
         {
             switch (windowType)
             {
-                case OverlayWindowType.Previous:
+                case TutorialWindowType.Previous:
                     var prevUIElement = _windowHistory.TryPop(out IUIElement result);
                     if (prevUIElement is false)
                     {
@@ -72,11 +72,11 @@ namespace Game.UI.OverlayWindows
                     }
 
                     var prevWindow = result as CanvasUIElement;
-                    var prevWindowType = GetOverlayWindowType(prevWindow);
+                    var prevWindowType = GetWindowType(prevWindow);
                     ShowWindow(prevWindowType);
                     break;
                 
-                case OverlayWindowType.None:
+                case TutorialWindowType.None:
                     _windowHistory.Clear();
                     CloseCurrentWindow();
                     Deactivate();
@@ -88,12 +88,12 @@ namespace Game.UI.OverlayWindows
             }
         }
 
-        private CanvasUIElement GetWindow(OverlayWindowType windowType)
+        private CanvasUIElement GetWindow(TutorialWindowType windowType)
         {
             return _windows.GetValueOrDefault(windowType);
         }
 
-        private OverlayWindowType GetOverlayWindowType(CanvasUIElement window)
+        private TutorialWindowType GetWindowType(CanvasUIElement window)
         {
             foreach (var windowData in _windows)
             {
@@ -101,7 +101,7 @@ namespace Game.UI.OverlayWindows
                     return windowData.Key;
             }
             
-            return OverlayWindowType.None;
+            return TutorialWindowType.None;
         }
     }
 }

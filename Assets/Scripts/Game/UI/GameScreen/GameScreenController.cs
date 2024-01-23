@@ -165,7 +165,7 @@ namespace Game.UI.GameScreen
             GameManager.Instance.SaveApplicationData();
             
             ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage {
-                    Type = SceneTypes.MainMenu
+                    SceneType = SceneTypes.MainMenu
                 });
         }
         

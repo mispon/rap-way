@@ -1,33 +1,33 @@
 ﻿using Core;
 using Data;
+using Game.UI.Enums;
+using Game.UI.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Scenes
+namespace Game.UI.TutorialWindows
 {
     [RequireComponent(typeof(Button))]
-    public sealed class ChangeSceneButton: MonoBehaviour
+    public sealed class ShowTutorialWindowButton : MonoBehaviour
     {
-        [SerializeField] private SceneTypes _sceneTypes;
+        [SerializeField] private TutorialWindowType _toTutorialWindow;
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
-        {
+        {   
             var button = GetComponent<Button>();
-            button
-                .OnClickAsObservable()
+            button.OnClickAsObservable()
                 .Subscribe(_ =>
                 {
                     SoundManager.Instance.PlaySound(_soundType);
                     
-                    ScenesController.Instance.MessageBroker
-                        .Publish(new SceneLoadMessage()
+                    UIMessageBroker.Instance.MessageBroker
+                        .Publish(new TutorialWindowControlMessage()
                         {
-                            SceneType = _sceneTypes
+                            Type = _toTutorialWindow
                         });
-                })
-                .AddTo(this);
+                });
         }
     }
 }

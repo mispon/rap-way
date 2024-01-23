@@ -10,7 +10,6 @@ namespace Game.UI.Windows
     public class WindowContainer : UIElementContainer
     {
         [SerializeField] private Dictionary<WindowType, CanvasUIElement> _windows;
-        [SerializeField] private WindowType _startWindow;
 
         private WindowType _activeWindow;
         private readonly Stack<IUIElement> _windowHistory = new();
@@ -26,13 +25,11 @@ namespace Game.UI.Windows
                 .Receive<WindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
-            
-            uiMessageBroker.Publish(new WindowControlMessage{ Type = _startWindow });
         }
 
         private void ChangeWindow(WindowType windowType)
         {
-            if (windowType == _activeWindow && windowType != _startWindow) 
+            if (windowType == _activeWindow) 
                 return;
             
             var newWindow = GetWindow(windowType);
