@@ -112,9 +112,10 @@ namespace Game.UI.GameScreen
             
             _messageBroker.Publish(new FullStateRequest());
             
-            UIMessageBroker.Instance.MessageBroker.Publish(new FirstTutorialControlMessage()
+            //TODO for example
+            UIMessageBroker.Instance.MessageBroker.Publish(new WindowControlMessage()
             {
-                Type = TutorialWindowType.GameScreen
+                Type = WindowType.GameScreen
             });
         }
         

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.UI.Enums;
-using Game.UI.Messages;
 using Scenes;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -20,41 +18,11 @@ namespace Game.UI
             foreach (var container in uiElementContainers)
                 container.Initialize();
             
-            /*ScenesController.Instance.MessageBroker
-                .Receive<SceneReadyMessage>()
-                .Subscribe(msg =>
-                {
-                    if (msg.SceneType == SceneTypes.MainMenu)
-                    {
-                        if (msg.SceneType == SceneTypes.MainMenu) MenuSceneInitialize();
-                        if (msg.SceneType == SceneTypes.Game) GameSceneInitialize();
-                    }
-                })
-                .AddTo(_disposables);*/
-            
             ScenesController.Instance.MessageBroker
                 .Receive<SceneLoadMessage>()
                 .Subscribe(msg => Dispose())
                 .AddTo(_disposables);
         }
-
-        /*private void MenuSceneInitialize()
-        {
-            var uiMessageBroker =  UIMessageBroker.Instance.MessageBroker;
-            
-            uiMessageBroker.Publish(new WindowControlMessage {Type = WindowType.MainMenu});
-            uiMessageBroker.Publish(new OverlayWindowControlMessage {Type = OverlayWindowType.None});
-            uiMessageBroker.Publish(new TutorialWindowControlMessage {Type = TutorialWindowType.None});
-        }
-        
-        private void GameSceneInitialize()
-        {
-            var uiMessageBroker =  UIMessageBroker.Instance.MessageBroker;
-
-            uiMessageBroker.Publish(new WindowControlMessage {Type = WindowType.None});
-            uiMessageBroker.Publish(new OverlayWindowControlMessage {Type = OverlayWindowType.None});
-            uiMessageBroker.Publish(new TutorialWindowControlMessage {Type = TutorialWindowType.None});
-        }*/
 
         public void Dispose()
         {

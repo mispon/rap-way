@@ -11,19 +11,18 @@ namespace Game.UI.Windows
     public class WindowContainer : UIElementContainer
     {
         [DictionaryDrawerSettings(KeyLabel = "Window type", ValueLabel = "Window settings")]
-        [SerializeField] private Dictionary<WindowType, WindowSettings> _windows;
+        [SerializeField] private Dictionary<WindowType, CanvasUIElement> _windows;
         [SerializeField] private WindowType _startWindow;
 
         private WindowType _activeWindow;
         private readonly Stack<IUIElement> _windowHistory = new();
-        private const string SAVE_KEY_FIRST_TUTORIAL = "FirstTutorial";
 
         public override void Initialize()
         {
             base.Initialize();
             
             foreach (var window in _windows.Values)
-                window.canvas.Initialize();
+                window.Initialize();
             
             uiMessageBroker
                 .Receive<WindowControlMessage>()
@@ -50,8 +49,6 @@ namespace Game.UI.Windows
             newWindow.Show();
             
             _activeWindow = windowType;
-            
-            CheckFirstTutorial(windowType);
         }
 
         private void ManageWindowControl(WindowType windowType)
@@ -84,37 +81,18 @@ namespace Game.UI.Windows
 
         private CanvasUIElement GetWindow(WindowType windowType)
         {
-            return _windows.TryGetValue(windowType, out var window) ? window.canvas : null;
+            return _windows.GetValueOrDefault(windowType);
         }
 
         private WindowType GetWindowType(CanvasUIElement window)
         {
             foreach (var windowData in _windows)
             {
-                if (windowData.Value.canvas == window)
+                if (windowData.Value == window)
                     return windowData.Key;
             }
             
             return WindowType.None;
-        }
-
-        private void CheckFirstTutorial(WindowType windowType)
-        {
-            TutorialWindowType tutorial = GetFirstTutorial(windowType);
-            if (tutorial == TutorialWindowType.None) return;
-            
-            if (PlayerPrefs.HasKey($"{SAVE_KEY_FIRST_TUTORIAL}{windowType}") is true) return;
-            
-            PlayerPrefs.SetInt($"{SAVE_KEY_FIRST_TUTORIAL}{windowType}", 1);
-            uiMessageBroker.Publish(new FirstTutorialControlMessage
-            {
-                Type = tutorial
-            });
-        }
-
-        private TutorialWindowType GetFirstTutorial(WindowType windowType)
-        {
-            return _windows.TryGetValue(windowType, out var window) ? window.tutorialType : TutorialWindowType.None;
         }
 
         private void HideCurrentWindow()
@@ -133,12 +111,6 @@ namespace Game.UI.Windows
         {
             base.Deactivate();
             HideAnyWindow();
-        }
-        
-        private struct WindowSettings
-        {
-            [LabelWidth(100)] public CanvasUIElement canvas;
-            [LabelWidth(100)] public TutorialWindowType tutorialType;
         }
     }
 }

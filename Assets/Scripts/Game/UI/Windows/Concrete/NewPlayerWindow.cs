@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
 
-namespace Game.UI.OverlayWindows.Concrete
+namespace Game.UI.Windows.Concrete
 {
     public class NewPlayerWindow : CanvasUIElement
     {

@@ -11,7 +11,7 @@ namespace Game.UI.TutorialWindows
     [RequireComponent(typeof(Button))]
     public sealed class ShowTutorialWindowButton : MonoBehaviour
     {
-        [SerializeField] private TutorialWindowType _toTutorialWindow;
+        [SerializeField] private WindowType _toTutorialWindow;
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()

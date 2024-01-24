@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using Utils;
 using Utils.Carousel;
 
-namespace Game.UI.OverlayWindows.Concrete
+namespace Game.UI.Windows.Concrete
 {
     public class SettingsWindow : CanvasUIElement
     {

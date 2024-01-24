@@ -11,7 +11,7 @@ namespace Game.UI.Buttons
 {
     public class NewGameButton : MonoBehaviour
     {
-        [SerializeField] private OverlayWindowType _toOverlayWindow;
+        [SerializeField] private WindowType _toWindow;
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
@@ -25,9 +25,9 @@ namespace Game.UI.Buttons
                     SoundManager.Instance.PlaySound(_soundType);
                     
                     UIMessageBroker.Instance.MessageBroker
-                        .Publish(new OverlayWindowControlMessage()
+                        .Publish(new WindowControlMessage()
                         {
-                            Type = _toOverlayWindow
+                            Type = _toWindow
                         });
                 });
         }

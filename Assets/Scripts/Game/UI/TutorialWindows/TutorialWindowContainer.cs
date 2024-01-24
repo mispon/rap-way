@@ -9,69 +9,98 @@ namespace Game.UI.TutorialWindows
 {
     public sealed class TutorialWindowContainer: UIElementContainer
     {
-        [SerializeField] private Dictionary<TutorialWindowType, TutorialWindow> _windows;
+        [SerializeField] private Dictionary<WindowType, TutorialWindow> _tutorials;
         [SerializeField, ChildGameObjectsOnly] private OverlayBlackout overlayBlackout;
         
-        private TutorialWindowType _activeWindowType;
+        private TutorialWindow _activeTutorial;
+        private const string SAVE_KEY_FIRST_TUTORIAL = "FirstTutorial";
 
         public override void Initialize()
         {
             base.Initialize();
             
-            foreach (var overlayWindow in _windows.Values)
-                overlayWindow.Initialize();
+            foreach (var tutorial in _tutorials.Values)
+                tutorial.Initialize();
 
             uiMessageBroker
                 .Receive<TutorialWindowControlMessage>()
-                .Subscribe(msg => ShowWindow(msg.Type))
+                .Subscribe(msg => ShowTutorial(msg.Type))
                 .AddTo(disposables);
             
             uiMessageBroker
-                .Receive<FirstTutorialControlMessage>()
-                .Subscribe(msg => ShowWindow(msg.Type, true))
+                .Receive<WindowControlMessage>()
+                .Subscribe(msg => ShowFirstTutorial(msg.Type))
                 .AddTo(disposables);
         }
 
-        private void ShowWindow(TutorialWindowType windowType, bool isFirstTutorial = false)
+        private void ShowTutorial(WindowType windowType)
         {
-            if (windowType == _activeWindowType) return;
+            if (windowType == WindowType.None) Deactivate();
             
-            if (windowType == TutorialWindowType.None)
-            {
-                CloseCurrentWindow();
-                Deactivate();
-            }
+            var newTutorial = GetTutorial(windowType);
+            if (newTutorial is null) return;
+            if (newTutorial == _activeTutorial) return;
+            if (newTutorial.IsContainsTutorials is false) return;
 
-            var newWindow = GetWindow(windowType);
-            if (newWindow is null) return;
-            
-            if (isFirstTutorial is true && newWindow.IsFirstTutorial is false) return;
-            if (isFirstTutorial is false && newWindow.IsContainsTutorials is false) return;
-            
             Activate();
-            CloseCurrentWindow();
+            CloseCurrentTutorial();
             
-            newWindow.Show();
-            if (isFirstTutorial is false) newWindow.ShowTutorial();
-            else newWindow.ShowFirstTutorial();
+            newTutorial.Show();
+            newTutorial.ShowTutorial();
 
-            _activeWindowType = windowType;
+            _activeTutorial = newTutorial;
 
             overlayBlackout.Show();
         }
-
-        private void CloseCurrentWindow()
+        
+        private void ShowFirstTutorial(WindowType windowType)
         {
-            var currentWindow = GetWindow(_activeWindowType);
-            currentWindow?.Hide();
+            if (windowType == WindowType.None) Deactivate();
 
-            _activeWindowType = TutorialWindowType.None;
+            if (CheckCompleteFirstTutorial(windowType) is true) return;
+            
+            var newTutorial = GetTutorial(windowType);
+            if (newTutorial is null) return;
+            if (newTutorial.IsFirstTutorial is false) return;
+            
+            Activate();
+            CloseCurrentTutorial();
+            
+            newTutorial.Show();
+            newTutorial.ShowFirstTutorial();
+
+            _activeTutorial = newTutorial;
+
+            overlayBlackout.Show();
+        }
+        
+        private bool CheckCompleteFirstTutorial(WindowType windowType)
+        {
+            if (PlayerPrefs.HasKey($"{SAVE_KEY_FIRST_TUTORIAL}{windowType}") is true) 
+                return true;
+            else
+            {
+                PlayerPrefs.SetInt($"{SAVE_KEY_FIRST_TUTORIAL}{windowType}", 1);
+                return false;
+            }
+        }
+
+        private void CloseCurrentTutorial()
+        {
+            _activeTutorial?.Hide();
+            _activeTutorial = null;
             overlayBlackout.Hide();
         }
 
-        private TutorialWindow GetWindow(TutorialWindowType windowType)
+        private TutorialWindow GetTutorial(WindowType windowType)
         {
-            return _windows.GetValueOrDefault(windowType);
+            return _tutorials.GetValueOrDefault(windowType);
+        }
+
+        protected override void Deactivate()
+        {
+            base.Deactivate();
+            CloseCurrentTutorial();
         }
     }
 }

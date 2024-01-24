@@ -11,12 +11,13 @@ namespace Game.UI.TutorialWindows
     public class TutorialWindow : CanvasUIElement, IPointerClickHandler
     {
         [SerializeField] private Text _textTutorial;
-        [SerializeField] private TutorialSettings[] _uiElementsTutorial;
-        
+
         [BoxGroup("First tutorial")] [SerializeField] private bool _isFirstTutorial;
         [ShowIf("_isFirstTutorial"), BoxGroup("First tutorial")] [SerializeField] private Button _buttonFirstTutorial;
         [ShowIf("_isFirstTutorial"), BoxGroup("First tutorial"), TextArea] [SerializeField] private string _textFirstTutorial;
 
+        [BoxGroup("Tutorial")] [SerializeField] private TutorialSettings[] _uiElementsTutorial;
+        
         private bool _isBlockClick;
         private int _tutorialIndex;
 
@@ -36,13 +37,11 @@ namespace Game.UI.TutorialWindows
             _buttonFirstTutorial.OnClickAsObservable()
                 .Subscribe(_ =>
                 {
-                    _buttonFirstTutorial.gameObject.SetActive(false);
-
                     _isBlockClick = false;
                     
                     uiMessageBus.Publish(new TutorialWindowControlMessage()
                     {
-                        Type = TutorialWindowType.None
+                        Type = WindowType.None
                     });
                 });
         }
@@ -58,7 +57,7 @@ namespace Game.UI.TutorialWindows
                 UIMessageBroker.Instance.MessageBroker
                     .Publish(new TutorialWindowControlMessage()
                     {
-                        Type = TutorialWindowType.None
+                        Type = WindowType.None
                     });
                 
                 return;
@@ -70,6 +69,8 @@ namespace Game.UI.TutorialWindows
 
         private void ClearTutorial()
         {
+            _buttonFirstTutorial.gameObject.SetActive(false);
+
             _textTutorial.text = "";
             for (int i = 0; i < _uiElementsTutorial?.Length; i++)
                 _uiElementsTutorial[i].image.enabled = false;
