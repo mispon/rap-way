@@ -10,9 +10,9 @@ using UnityEngine.UI;
 using Utils;
 using Utils.Carousel;
 
-namespace Game.UI.OverlayWindows
+namespace Game.UI.Windows.Concrete
 {
-    public class SettingsOverlayWindow : CanvasUIElement
+    public class SettingsWindow : CanvasUIElement
     {
         [BoxGroup("Language")] [SerializeField] private Carousel _langCarousel;
         

@@ -2,7 +2,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.UI.Windows
+namespace Game.UI.Windows.Concrete
 {
     public class AskReviewWindow : CanvasUIElement
     {

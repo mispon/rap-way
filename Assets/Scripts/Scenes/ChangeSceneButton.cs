@@ -24,7 +24,7 @@ namespace Scenes
                     ScenesController.Instance.MessageBroker
                         .Publish(new SceneLoadMessage()
                         {
-                            Type = _sceneTypes
+                            SceneType = _sceneTypes
                         });
                 })
                 .AddTo(this);

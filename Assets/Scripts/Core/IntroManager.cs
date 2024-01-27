@@ -17,7 +17,7 @@ namespace Core
             
             ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage
             {
-                Type = SceneTypes.MainMenu
+                SceneType = SceneTypes.MainMenu
             });
         }
 

@@ -3,6 +3,8 @@ using Core;
 using Core.Interfaces;
 using Data;
 using Enums;
+using Game.UI.Enums;
+using Game.UI.Messages;
 using Scenes;
 using MessageBroker.Messages.State;
 using UniRx;
@@ -109,6 +111,12 @@ namespace Game.UI.GameScreen
                 .AddTo(_disposable);
             
             _messageBroker.Publish(new FullStateRequest());
+            
+            //TODO for example
+            UIMessageBroker.Instance.MessageBroker.Publish(new WindowControlMessage()
+            {
+                Type = WindowType.GameScreen
+            });
         }
         
         /// <summary>
@@ -165,7 +173,7 @@ namespace Game.UI.GameScreen
             GameManager.Instance.SaveApplicationData();
             
             ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage {
-                    Type = SceneTypes.MainMenu
+                    SceneType = SceneTypes.MainMenu
                 });
         }
         

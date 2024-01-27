@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Game.UI.Enums;
 using Game.UI.Interfaces;
 using Game.UI.Messages;
+using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Game.UI.Windows
 {
     public class WindowContainer : UIElementContainer
     {
+        [DictionaryDrawerSettings(KeyLabel = "Window type", ValueLabel = "Window settings")]
         [SerializeField] private Dictionary<WindowType, CanvasUIElement> _windows;
         [SerializeField] private WindowType _startWindow;
 
@@ -18,7 +20,7 @@ namespace Game.UI.Windows
         public override void Initialize()
         {
             base.Initialize();
-
+            
             foreach (var window in _windows.Values)
                 window.Initialize();
             
@@ -27,12 +29,13 @@ namespace Game.UI.Windows
                 .Subscribe(msg => ManageWindowControl(msg.Type))
                 .AddTo(disposables);
             
-            uiMessageBroker.Publish(new WindowControlMessage{ Type = _startWindow });
+            HideAnyWindow();
+            ManageWindowControl(_startWindow);
         }
 
         private void ChangeWindow(WindowType windowType)
         {
-            if (windowType == _activeWindow && windowType != _startWindow) 
+            if (windowType == _activeWindow) 
                 return;
             
             var newWindow = GetWindow(windowType);

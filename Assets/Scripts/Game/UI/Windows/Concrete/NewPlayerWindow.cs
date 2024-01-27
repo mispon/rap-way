@@ -10,9 +10,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils.Carousel;
 
-namespace Game.UI.OverlayWindows
+namespace Game.UI.Windows.Concrete
 {
-    public class NewPlayerOverlayWindow : CanvasUIElement
+    public class NewPlayerWindow : CanvasUIElement
     {
         [BoxGroup("Sprites")] [SerializeField] private Sprite _maleAvatar;
         [BoxGroup("Sprites")] [SerializeField] private Sprite _femaleAvatar;
@@ -98,7 +98,7 @@ namespace Game.UI.OverlayWindows
             ScenesController.Instance.MessageBroker
                 .Publish(new SceneLoadMessage()
                 {
-                    Type = SceneTypes.Game
+                    SceneType = SceneTypes.Game
                 });
         }
     }
