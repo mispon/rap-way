@@ -4,6 +4,7 @@ using Core;
 using Core.OrderedStarter;
 using Enums;
 using Game.Time;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using Models.Trends;
 using ScriptableObjects;
@@ -50,7 +51,7 @@ namespace Game
             // todo: этот ивент можно будет отправлять внутри хендлера брокера
             if (TimeManager.Instance.Now.Day % 3 == 0)
             {
-                GameManager.Instance.MessageBroker.Publish(new ChangeHypeEvent {Amount = -1});
+                MainMessageBroker.Instance.Publish(new ChangeHypeEvent {Amount = -1});
             }
         }
 

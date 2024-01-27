@@ -8,7 +8,8 @@ namespace UI.Controls.Buttons
 {
     public enum PageActionType
     {
-        Open, Close
+        Open, 
+        Close
     }
     
     /// <summary>

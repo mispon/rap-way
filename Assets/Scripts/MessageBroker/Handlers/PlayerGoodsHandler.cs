@@ -14,13 +14,9 @@ namespace MessageBroker.Handlers
     public class PlayerGoodsHandler : MonoBehaviour, IStarter
     {
         private readonly CompositeDisposable _disposable = new(); 
-            
-        private IMessageBroker _messageBroker;
         
         public void OnStart()
         {
-            _messageBroker = GameManager.Instance.MessageBroker;
-
             HandleAddNewGood();
             HandleGoodExistsRequest();
             HandleQualityImpactRequest();
@@ -28,7 +24,7 @@ namespace MessageBroker.Handlers
 
         private void HandleAddNewGood()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<AddNewGoodEvent>()
                 .Subscribe(e =>
                 {
@@ -43,14 +39,14 @@ namespace MessageBroker.Handlers
                     };
                     playerData.Goods.Add(good);
                     
-                    _messageBroker.Publish(new ChangeHypeEvent());
+                    MainMessageBroker.Instance.Publish(new ChangeHypeEvent());
                 })
                 .AddTo(_disposable);
         }
 
         private void HandleGoodExistsRequest()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<GoodExistsRequest>()
                 .Subscribe(e =>
                 {
@@ -60,14 +56,14 @@ namespace MessageBroker.Handlers
                         ? GameManager.Instance.LoadNoAds()
                         : playerData.Goods.Any(g => g.Type == e.Type && g.Level == e.Level);
                     
-                    _messageBroker.Publish(new GoodExistsResponse {Status = exists});
+                    MainMessageBroker.Instance.Publish(new GoodExistsResponse {Status = exists});
                 })
                 .AddTo(_disposable);
         }
 
         private void HandleQualityImpactRequest()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<GoodsQualityImpactRequest>()
                 .Subscribe(_ =>
                 {
@@ -87,7 +83,7 @@ namespace MessageBroker.Handlers
                         .ToDictionary(k => k, v => v.Max(g => g.QualityImpact));
 
                     float impactTotal = playerEquipment.Sum(p => p.Value);
-                    _messageBroker.Publish(new GoodsQualityImpactResponse {Value = impactTotal});
+                    MainMessageBroker.Instance.Publish(new GoodsQualityImpactResponse {Value = impactTotal});
                 })
                 .AddTo(_disposable);
         }

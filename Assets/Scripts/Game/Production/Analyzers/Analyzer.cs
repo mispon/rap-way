@@ -1,7 +1,6 @@
 ﻿using System;
 using Game.Player;
 using ScriptableObjects;
-using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,12 +11,10 @@ namespace Game.Production.Analyzers
     /// </summary>
     public abstract class Analyzer<T> : MonoBehaviour
     {
-        protected IMessageBroker messageBroker;
         protected GameSettings settings;
 
         private void Start()
         {
-            messageBroker = GameManager.Instance.MessageBroker;
             settings = GameManager.Instance.Settings;
         }
 

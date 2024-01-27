@@ -5,6 +5,7 @@ using Game.Player;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Time;
+using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
 using UnityEngine;
@@ -71,7 +72,7 @@ namespace UI.Windows.Pages.Concert
             concert.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddConcert(concert);
             
-            SendMessage(new ConcertRewardEvent {MoneyIncome = concert.Income});
+            MainMessageBroker.Instance.Publish(new ConcertRewardEvent {MoneyIncome = concert.Income});
         }
 
         protected override void BeforePageOpen()

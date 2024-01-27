@@ -14,8 +14,7 @@ namespace UI.Windows.Pages
     public class Page : MonoBehaviour
     {
         private bool _isOpen;
-
-        protected IMessageBroker messageBroker => GameManager.Instance.MessageBroker;
+        
         protected GameSettings settings => GameManager.Instance.Settings;
 
         /// <summary>
@@ -57,19 +56,6 @@ namespace UI.Windows.Pages
             return args.Length > 0
                 ? LocalizationManager.Instance.GetFormat(key, args)
                 : LocalizationManager.Instance.Get(key);
-        }
-
-        protected void SendMessage<T>(T msg) where T: struct
-        {
-            messageBroker.Publish(msg);
-        }
-        
-        protected void RecvMessage<T>(Action<T> handler, ICollection<IDisposable> disposable) where T: struct
-        {
-            messageBroker
-                .Receive<T>()
-                .Subscribe(handler)
-                .AddTo(disposable);
         }
 
         /// <summary>

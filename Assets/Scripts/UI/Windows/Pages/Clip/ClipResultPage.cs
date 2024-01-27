@@ -2,12 +2,12 @@
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game;
 using Game.Player;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Socials;
 using Game.Time;
+using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
 using UI.Windows.Pages.Eagler;
@@ -93,7 +93,7 @@ namespace UI.Windows.Pages.Clip
             clip.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddClip(clip);
             
-            GameManager.Instance.MessageBroker.Publish(new ProductionRewardEvent
+            MainMessageBroker.Instance.Publish(new ProductionRewardEvent
             {
                 MoneyIncome = clip.MoneyIncome,
                 FansIncome = clip.FansIncome,

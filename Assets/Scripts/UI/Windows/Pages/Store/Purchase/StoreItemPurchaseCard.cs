@@ -1,6 +1,7 @@
 using System;
 using Core;
 using Extensions;
+using MessageBroker;
 using MessageBroker.Messages.Donate;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
@@ -55,7 +56,7 @@ namespace UI.Windows.Pages.Store.Purchase
             SoundManager.Instance.PlaySound(UIActionType.Pay);
 
             var newGoodEvent = StoreItemPurchaser.CreateNewGoodEvent(_info);
-            SendMessage(newGoodEvent);
+            MainMessageBroker.Instance.Publish(newGoodEvent);
             
             Close();
         }
@@ -73,11 +74,11 @@ namespace UI.Windows.Pages.Store.Purchase
             switch (itemType)
             {
                 case StoreItemType.Donate:
-                    SendMessage(new SpendDonateRequest{Amount = _info.Price});
+                    MainMessageBroker.Instance.Publish(new SpendDonateRequest{Amount = _info.Price});
                     break;
                 
                 case StoreItemType.Game:
-                    SendMessage(new SpendMoneyRequest{Amount = _info.Price});    
+                    MainMessageBroker.Instance.Publish(new SpendMoneyRequest{Amount = _info.Price});    
                     break;
                 
                 case StoreItemType.Purchase:
@@ -91,10 +92,22 @@ namespace UI.Windows.Pages.Store.Purchase
         
         protected override void BeforePageOpen()
         {
-            RecvMessage<SpendDonateResponse>(e => HandleItemPurchase(e.OK), _disposable);
-            RecvMessage<SpendMoneyResponse>(e => HandleItemPurchase(e.OK), _disposable);
-            RecvMessage<DonateAddedEvent>(_ => HandleDonatePurchase(), _disposable);
-            RecvMessage<NoAdsPurchaseEvent>(_ => HandleDonatePurchase(), _disposable);
+            MainMessageBroker.Instance
+                .Receive<SpendDonateResponse>()
+                .Subscribe(e => HandleItemPurchase(e.OK))
+                .AddTo(_disposable);
+            MainMessageBroker.Instance
+                .Receive<SpendMoneyResponse>()
+                .Subscribe(e => HandleItemPurchase(e.OK))
+                .AddTo(_disposable);
+            MainMessageBroker.Instance
+                .Receive<DonateAddedEvent>()
+                .Subscribe(_ => HandleDonatePurchase())
+                .AddTo(_disposable);
+            MainMessageBroker.Instance
+                .Receive<NoAdsPurchaseEvent>()
+                .Subscribe(_ => HandleDonatePurchase())
+                .AddTo(_disposable);
         }
 
         protected override void AfterPageClose()

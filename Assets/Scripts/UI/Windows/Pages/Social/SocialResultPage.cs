@@ -1,6 +1,6 @@
 ﻿using Enums;
-using Game;
 using Game.Production.Analyzers;
+using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
 using UnityEngine;
@@ -38,7 +38,7 @@ namespace UI.Windows.Pages.Social
         /// </summary>
         private void SaveResult(SocialInfo social)
         {
-            GameManager.Instance.MessageBroker.Publish(new ProductionRewardEvent
+            MainMessageBroker.Instance.Publish(new ProductionRewardEvent
             {
                 MoneyIncome = -social.CharityAmount,
                 HypeIncome = social.HypeIncome,

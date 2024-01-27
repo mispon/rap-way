@@ -1,6 +1,6 @@
 using Core;
-using Game;
 using Game.Player;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using Models.Player;
 using ScriptableObjects;
@@ -77,7 +77,7 @@ namespace UI.Windows.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void GivePayment(Teammate teammate, int salary)
         {
-            GameManager.Instance.MessageBroker.Publish(new ChangeMoneyEvent {Amount = -salary});
+            MainMessageBroker.Instance.Publish(new ChangeMoneyEvent {Amount = -salary});
             teammate.HasPayment = true;
   
             onStartTraining.Invoke(() => 0);

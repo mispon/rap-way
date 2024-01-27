@@ -9,6 +9,7 @@ using Extensions;
 using Game.Notifications;
 using Game.Production;
 using JetBrains.Annotations;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using Models.Player;
 using Models.Production;
@@ -50,17 +51,15 @@ namespace Game.Player
         /// </summary>
         public void OnStart()
         {
-            var messageBroker = GameManager.Instance.MessageBroker;
-
-            messageBroker
+            MainMessageBroker.Instance
                 .Receive<MoneyChangedEvent>()
                 .Subscribe(e => CheckMoney(e.NewVal))
                 .AddTo(_disposable);
-            messageBroker
+            MainMessageBroker.Instance
                 .Receive<FansChangedEvent>()
                 .Subscribe(e => CheckFans(e.NewVal))
                 .AddTo(_disposable);
-            messageBroker
+            MainMessageBroker.Instance
                 .Receive<HypeChangedEvent>()
                 .Subscribe(e => CheckHype(e.NewVal))
                 .AddTo(_disposable);

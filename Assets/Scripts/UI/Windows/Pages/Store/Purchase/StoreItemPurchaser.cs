@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Enums;
 using Game;
+using MessageBroker;
 using MessageBroker.Messages.Donate;
 using MessageBroker.Messages.Goods;
 using ScriptableObjects;
-using UniRx;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
@@ -27,7 +27,6 @@ namespace UI.Windows.Pages.Store.Purchase
     {
         [SerializeField] private GoodsData data;
         
-        private IMessageBroker _messageBroker;
         private IStoreController _controller;
 
         private readonly Dictionary<string, DonateCoins> _coinItemsMap = new();
@@ -35,8 +34,6 @@ namespace UI.Windows.Pages.Store.Purchase
         
         private IEnumerator Start()
         {
-            _messageBroker = GameManager.Instance.MessageBroker;
-
             var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
             var storeItems = data.Items[GoodsType.Donate];
@@ -126,11 +123,11 @@ namespace UI.Windows.Pages.Store.Purchase
 
             if (_coinItemsMap.TryGetValue(productId, out var item))
             {
-                _messageBroker.Publish(new AddDonateEvent {Amount = item.Amount});
+                MainMessageBroker.Instance.Publish(new AddDonateEvent {Amount = item.Amount});
             } 
             else if (productId == _noAdsItem.ProductId)
             {
-                _messageBroker.Publish(new NoAdsPurchaseEvent());
+                MainMessageBroker.Instance.Publish(new NoAdsPurchaseEvent());
             } 
             
             return PurchaseProcessingResult.Complete;
@@ -151,7 +148,7 @@ namespace UI.Windows.Pages.Store.Purchase
             var product = _controller.products.WithID(_noAdsItem.ProductId);
             if (product is {hasReceipt: true})
             {
-                _messageBroker.Publish(new NoAdsPurchaseEvent());
+                MainMessageBroker.Instance.Publish(new NoAdsPurchaseEvent());
             }
         }
 

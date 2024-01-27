@@ -6,6 +6,7 @@ using Extensions;
 using Firebase.Analytics;
 using Game.Player;
 using Game.Tutorial;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using Models.Production;
 using ScriptableObjects;
@@ -75,7 +76,7 @@ namespace UI.Windows.Pages.Clip
         private void CreateClip()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            SendMessage(new SpendMoneyRequest {Amount = _clipCost});
+            MainMessageBroker.Instance.Publish(new SpendMoneyRequest {Amount = _clipCost});
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
@@ -156,8 +157,11 @@ namespace UI.Windows.Pages.Clip
         {
             TutorialManager.Instance.ShowTutorial("tutorial_clip_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
-            
-            RecvMessage<SpendMoneyResponse>(HandleSpendMoneyResponse, _disposable);
+
+            MainMessageBroker.Instance
+                .Receive<SpendMoneyResponse>()
+                .Subscribe(HandleSpendMoneyResponse)
+                .AddTo(_disposable);
         }
 
         protected override void AfterPageClose()

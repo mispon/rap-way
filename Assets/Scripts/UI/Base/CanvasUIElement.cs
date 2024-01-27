@@ -1,7 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UI.Base.Interfaces;
-using UI.MessageBroker;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,8 +18,6 @@ namespace UI.Base
         public CanvasGroup CanvasGroup => _canvasGroup;
 
         private bool _isActive;
-        protected UniRx.MessageBroker uiMessageBus;
-        
         private CompositeDisposable _disposables;
 
         public virtual void Initialize()
@@ -28,7 +25,6 @@ namespace UI.Base
             _canvas = GetComponent<Canvas>();
             _canvasGroup = GetComponent<CanvasGroup>();
             
-            uiMessageBus = UIMessageBroker.Instance.MessageBroker;
             _disposables = new CompositeDisposable();
 
             Hide();

@@ -7,12 +7,16 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
+<<<<<<<< HEAD:Assets/Scripts/UI/Controls/Buttons/ShowOverlayWindowButton.cs
 namespace UI.Controls.Buttons
+========
+namespace Game.UI.TutorialWindows
+>>>>>>>> main:Assets/Scripts/UI/Controls/TutorialWindows/ShowTutorialWindowButton.cs
 {
     [RequireComponent(typeof(Button))]
-    public sealed class ShowOverlayWindowButton : MonoBehaviour
+    public sealed class ShowTutorialWindowButton : MonoBehaviour
     {
-        [SerializeField] private OverlayWindowType _toOverlayWindow;
+        [SerializeField] private WindowType _toTutorialWindow;
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
@@ -24,9 +28,9 @@ namespace UI.Controls.Buttons
                     SoundManager.Instance.PlaySound(_soundType);
                     
                     UIMessageBroker.Instance.MessageBroker
-                        .Publish(new OverlayWindowControlMessage()
+                        .Publish(new TutorialWindowControlMessage()
                         {
-                            Type = _toOverlayWindow
+                            Type = _toTutorialWindow
                         });
                 });
         }

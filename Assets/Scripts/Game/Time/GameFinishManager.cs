@@ -1,6 +1,7 @@
 using System;
 using Core.OrderedStarter;
 using Game.Player;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
 using UI.Windows.Pages.GameFinish;
@@ -18,7 +19,7 @@ namespace Game.Time
         
         public void OnStart()
         {
-            _disposable = GameManager.Instance.MessageBroker
+            _disposable = MainMessageBroker.Instance
                 .Receive<FansChangedEvent>()
                 .Subscribe(e => OnFansChanged(e.NewVal));
         }

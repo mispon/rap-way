@@ -61,7 +61,6 @@ namespace Game
         [TabGroup("tutorials", "Tutorials")] public HashSet<string> ShowedTutorials;
         [TabGroup("tutorials", "Hints")] public HashSet<string> ShowedHints;
         
-        [NonSerialized] public readonly UniRx.MessageBroker MessageBroker = new();
         [NonSerialized] public bool IsReady;
 
         private async void Start()
@@ -221,6 +220,11 @@ namespace Game
         public bool HasAnySaves()
         {
             return PlayerPrefs.HasKey(gameDataKey);
+        }
+
+        public bool NeedAskReview()
+        {
+            return !GameStats.AskedReview && PlayerData.Fans > 0;
         }
 
         private void OnApplicationQuit()

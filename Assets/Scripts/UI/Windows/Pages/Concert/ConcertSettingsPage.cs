@@ -8,6 +8,7 @@ using Firebase.Analytics;
 using Game;
 using Game.Player;
 using Game.Tutorial;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using Models.Production;
 using ScriptableObjects;
@@ -69,7 +70,7 @@ namespace UI.Windows.Pages.Concert
         private void CreateConcert()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            SendMessage(new SpendMoneyRequest {Amount = _placeCost});
+            MainMessageBroker.Instance.Publish(new SpendMoneyRequest {Amount = _placeCost});
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
@@ -175,8 +176,11 @@ namespace UI.Windows.Pages.Concert
         {
             TutorialManager.Instance.ShowTutorial("tutorial_concert_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
-            
-            RecvMessage<SpendMoneyResponse>(HandleSpendMoneyResponse, _disposable);
+
+            MainMessageBroker.Instance
+                .Receive<SpendMoneyResponse>()
+                .Subscribe(HandleSpendMoneyResponse)
+                .AddTo(_disposable);
         }
 
         protected override void AfterPageClose()

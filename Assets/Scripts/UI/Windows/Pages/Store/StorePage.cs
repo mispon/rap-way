@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
+using MessageBroker;
 using MessageBroker.Messages.Donate;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
@@ -31,10 +32,19 @@ namespace UI.Windows.Pages.Store
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
-            RecvMessage<MoneyChangedEvent>(e => UpdateGameBalance(e.NewVal), _disposable);
-            RecvMessage<DonateChangedEvent>(e => UpdateDonateBalance(e.NewVal), _disposable);
-            RecvMessage<FullStateResponse>(UpdateHUD, _disposable);
-            SendMessage(new FullStateRequest());
+            MainMessageBroker.Instance
+                .Receive<MoneyChangedEvent>()
+                .Subscribe(e => UpdateGameBalance(e.NewVal))
+                .AddTo(_disposable);
+            MainMessageBroker.Instance
+                .Receive<DonateChangedEvent>()
+                .Subscribe(e => UpdateDonateBalance(e.NewVal))
+                .AddTo(_disposable);
+            MainMessageBroker.Instance
+                .Receive<FullStateResponse>()
+                .Subscribe(UpdateHUD)
+                .AddTo(_disposable);
+            MainMessageBroker.Instance.Publish(new FullStateRequest());
             
             ShowCategoriesList();
         }

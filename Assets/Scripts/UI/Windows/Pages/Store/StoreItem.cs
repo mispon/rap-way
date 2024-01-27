@@ -2,7 +2,7 @@ using System;
 using Core;
 using Enums;
 using Extensions;
-using Game;
+using MessageBroker;
 using MessageBroker.Messages.Donate;
 using MessageBroker.Messages.Goods;
 using ScriptableObjects;
@@ -58,18 +58,16 @@ namespace UI.Windows.Pages.Store
 
         private void HandleEvents()
         {
-            var messageBroker = GameManager.Instance.MessageBroker;
-            
-            messageBroker
+            MainMessageBroker.Instance
                 .Receive<AddNewGoodEvent>()
                 .Subscribe(e => OnItemPurchased(e.Type, e.Level))
                 .AddTo(_disposable);
-            messageBroker
+            MainMessageBroker.Instance
                 .Receive<NoAdsPurchaseEvent>()
                 .Subscribe(_ => OnNoAdsPurchased())
                 .AddTo(_disposable);
             
-            _singleDispose = messageBroker
+            _singleDispose = MainMessageBroker.Instance
                 .Receive<GoodExistsResponse>()
                 .Subscribe(e =>
                 {
@@ -79,7 +77,7 @@ namespace UI.Windows.Pages.Store
                     _singleDispose?.Dispose();
                 });
 
-            messageBroker.Publish(_info is NoAds
+            MainMessageBroker.Instance.Publish(_info is NoAds
                 ? new GoodExistsRequest {IsNoAds = true}
                 : new GoodExistsRequest {Type = _info.Type, Level = _info.Level});
         }

@@ -5,11 +5,11 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game;
 using Game.Labels;
 using Game.Player;
 using Game.Rappers;
 using Game.Tutorial;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
 using UI.Controls.Ask;
@@ -24,7 +24,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
 {
     public class PlayersLabelSubTab : Tab
     {
-        [SerializeField] private global::UI.Windows.Pages.Personal.LabelTab.LabelTab labelTab;
+        [SerializeField] private LabelTab labelTab;
         [SerializeField] private AskingWindow askingWindow;
         [SerializeField] private Sprite customLabelLogo;
         [Space]
@@ -58,8 +58,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
 
         private readonly CompositeDisposable _disposable = new();
         private readonly List<LabelMemberRow> _listItems = new();
-
-        private IMessageBroker _messageBroker;
+        
         private LabelInfo _label;
         private int _income;
         private int _cost;
@@ -70,8 +69,6 @@ namespace UI.Windows.Pages.Personal.LabelTab
         
         private void Start()
         {
-            _messageBroker = GameManager.Instance.MessageBroker;
-            
             payServiceButton.onClick.AddListener(PayService);
             upProductionButton.onClick.AddListener(UpProduction);
             upPrestigeButton.onClick.AddListener(UpPrestige);
@@ -169,7 +166,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
         {
             SoundManager.Instance.PlaySound(UIActionType.Pay);
             
-            _messageBroker.Publish(new ChangeMoneyEvent {Amount = -_cost});
+            MainMessageBroker.Instance.Publish(new ChangeMoneyEvent {Amount = -_cost});
             _label.IsFrozen = false;
             
             DisplayInfo(_label);
@@ -193,7 +190,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             _label.Production.Value = level;
             _label.Production.Exp = newExp;
             
-            _messageBroker.Publish(new ChangeExpEvent {Amount = -expStep});
+            MainMessageBroker.Instance.Publish(new ChangeExpEvent {Amount = -expStep});
             DisplayInfo(_label);
         }
 
@@ -215,7 +212,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             _label.Prestige.Value = level;
             _label.Prestige.Exp = newExp;
             
-            _messageBroker.Publish(new ChangeExpEvent {Amount = -expStep});
+            MainMessageBroker.Instance.Publish(new ChangeExpEvent {Amount = -expStep});
             DisplayInfo(_label);
         }
         
@@ -251,7 +248,6 @@ namespace UI.Windows.Pages.Personal.LabelTab
                 .ToUpper();
             
             moneyReportFrozenWarning.gameObject.SetActive(_label.IsFrozen);
-            
             moneyReport.SetActive(true);
         }
 
@@ -260,7 +256,9 @@ namespace UI.Windows.Pages.Personal.LabelTab
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             if (!_label.IsFrozen)
-                _messageBroker.Publish(new ChangeMoneyEvent {Amount = _income});
+            {
+                MainMessageBroker.Instance.Publish(new ChangeMoneyEvent {Amount = _income});
+            }
 
             _label.IsFrozen = true;
             moneyReport.SetActive(false);

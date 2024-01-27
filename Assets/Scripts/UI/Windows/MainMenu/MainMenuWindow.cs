@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using UI.Base;
 using UI.Controls;
 using UI.Enums;
+using UI.MessageBroker;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,15 +21,16 @@ namespace UI.Windows.MainMenu
         public override void Initialize()
         {
             base.Initialize();
-            
+
             if (GameManager.Instance.HasAnySaves())
+            {
                 FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
-            
-            if (!GameManager.Instance.GameStats.AskedReview && GameManager.Instance.PlayerData.Fans > 0)
-                uiMessageBus.Publish(new WindowControlMessage
-                {
-                    Type = WindowType.AskReview
-                });
+            }
+
+            if (GameManager.Instance.NeedAskReview())
+            {
+                UIMessageBroker.Instance.Publish(new WindowControlMessage {Type = WindowType.AskReview});
+            }
 
             StartCoroutine(SetupContinueButton());
         }

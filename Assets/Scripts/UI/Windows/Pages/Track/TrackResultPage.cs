@@ -7,6 +7,7 @@ using Game.Production;
 using Game.Production.Analyzers;
 using Game.Socials;
 using Game.Time;
+using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
 using UI.Windows.Pages.Eagler;
@@ -112,7 +113,7 @@ namespace UI.Windows.Pages.Track
                 ProductionManager.AddFeat(track.Feat);
             }
             
-            SendMessage(new ProductionRewardEvent
+            MainMessageBroker.Instance.Publish(new ProductionRewardEvent
             {
                 MoneyIncome = track.MoneyIncome,
                 FansIncome = track.FansIncome,

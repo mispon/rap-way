@@ -3,6 +3,7 @@ using Extensions;
 using Game.Player;
 using Game.Production;
 using Game.Socials;
+using MessageBroker;
 using MessageBroker.Messages.Production;
 using ScriptableObjects;
 using UI.Windows.Pages.Eagler;
@@ -111,7 +112,7 @@ namespace UI.Windows.Pages.Battle
                 ProductionManager.AddBattle(_result.RapperInfo);
             }
             
-            SendMessage(new ProductionRewardEvent
+            MainMessageBroker.Instance.Publish(new ProductionRewardEvent
             {
                 FansIncome = _result.FansIncome,
                 HypeIncome = _result.HypeIncome,

@@ -22,12 +22,7 @@ namespace UI.Controls.Buttons
                 .Subscribe(_ =>
                 {
                     SoundManager.Instance.PlaySound(_soundType);
-
-                    UIMessageBroker.Instance.MessageBroker
-                        .Publish(new WindowControlMessage()
-                        {
-                            Type = _toWindow
-                        });
+                    UIMessageBroker.Instance.Publish(new WindowControlMessage {Type = _toWindow});
                 });
         }
     }

@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 namespace UI.Windows.MainMenu
 {
-    public class NewPlayerOverlayWindow : CanvasUIElement
+    public class NewPlayerWindow : CanvasUIElement
     {
         [BoxGroup("Sprites")] [SerializeField] private Sprite _maleAvatar;
         [BoxGroup("Sprites")] [SerializeField] private Sprite _femaleAvatar;
@@ -100,7 +100,7 @@ namespace UI.Windows.MainMenu
             ScenesController.Instance.MessageBroker
                 .Publish(new SceneLoadMessage()
                 {
-                    Type = SceneTypes.Game
+                    SceneType = SceneTypes.Game
                 });
         }
     }

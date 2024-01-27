@@ -1,6 +1,7 @@
 using Extensions;
 using Game;
 using Game.Player;
+using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Player;
 using ScriptableObjects;
@@ -42,7 +43,7 @@ namespace UI.Windows.Pages.GameEvent
         private void SaveResult()
         {
             var income = CalculateIncome(PlayerManager.Data, _eventDecision);
-            GameManager.Instance.MessageBroker.Publish(new ProductionRewardEvent
+            MainMessageBroker.Instance.Publish(new ProductionRewardEvent
             {
                 MoneyIncome = income.Money,
                 FansIncome = income.Fans,

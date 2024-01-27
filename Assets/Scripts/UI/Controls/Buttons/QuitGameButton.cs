@@ -21,9 +21,7 @@ namespace UI.Controls.Buttons
                 .Subscribe(_ =>
                 {
                     SoundManager.Instance.PlaySound(_soundType);
-
                     GameManager.Instance.SaveApplicationData();
-                    
                     Application.Quit();
                 });
 #endif

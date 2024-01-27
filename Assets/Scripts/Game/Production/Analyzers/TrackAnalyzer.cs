@@ -2,6 +2,7 @@
 using System.Threading;
 using Game.Labels;
 using Game.Rappers;
+using MessageBroker;
 using MessageBroker.Messages.Goods;
 using Models.Production;
 using UniRx;
@@ -86,7 +87,7 @@ namespace Game.Production.Analyzers
             float impact = 0f;
             bool isDone = false;
 
-            _disposable = messageBroker
+            _disposable = MainMessageBroker.Instance
                 .Receive<GoodsQualityImpactResponse>()
                 .Subscribe(e =>
                 {
@@ -94,7 +95,7 @@ namespace Game.Production.Analyzers
                     isDone = true;
                     _disposable?.Dispose();
                 });
-            messageBroker.Publish(new GoodsQualityImpactRequest());
+            MainMessageBroker.Instance.Publish(new GoodsQualityImpactRequest());
             
             while (!isDone)
             {

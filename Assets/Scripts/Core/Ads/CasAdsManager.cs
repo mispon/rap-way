@@ -3,6 +3,7 @@ using System.Collections;
 using CAS;
 using Game;
 using Game.Player;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
 using UnityEngine;
@@ -30,7 +31,7 @@ namespace Core.Ads
             reward = Math.Max(50, reward);
             
             SoundManager.Instance.PlaySound(UIActionType.Pay);
-            GameManager.Instance.MessageBroker.Publish(new ChangeMoneyEvent {Amount = reward});
+            MainMessageBroker.Instance.Publish(new ChangeMoneyEvent {Amount = reward});
         }
 
         private static IMediationManager GetAdManager()
@@ -38,16 +39,11 @@ namespace Core.Ads
             // Configure MobileAds.settings before initialize
             return MobileAds.BuildManager()
                 // Optional initialize listener
-                .WithCompletionListener((config) => {
-                    string initErrorOrNull = config.error;
-                    string userCountryISO2OrNull = config.countryCode;
-                    bool protectionApplied = config.isConsentRequired;
-                    IMediationManager manager = config.manager;
-                })
+                .WithCompletionListener(config => { })
                 .Build();
         }
 
-        public void ShowInterstitial()
+        private void ShowInterstitial()
         {
             if (GameManager.Instance.LoadNoAds())
                 return;

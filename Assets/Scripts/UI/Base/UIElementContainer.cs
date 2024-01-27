@@ -1,6 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using UI.Base.Interfaces;
-using UI.MessageBroker;
 using UniRx;
 using UnityEngine;
 
@@ -10,25 +9,23 @@ namespace UI.Base
     public abstract class UIElementContainer : SerializedMonoBehaviour, IUIElementContainer
     {
         public Canvas Canvas { get; private set; }
-        public bool IsActive { get; private set; } = false;
-
-        protected UniRx.MessageBroker uiMessageBroker;
-        protected readonly CompositeDisposable disposables = new CompositeDisposable();
+        public bool IsActive { get; private set; }
+        
+        protected readonly CompositeDisposable disposables = new();
         
         public virtual void Initialize()
         {
             Canvas = GetComponent<Canvas>();
             Canvas.enabled = false;
-
-            uiMessageBroker = UIMessageBroker.Instance.MessageBroker;
         }
 
-        protected virtual void Activate()
+        protected void Activate()
         {
-            if (IsActive == true) return;
+            if (IsActive) 
+                return;
+            
             IsActive = true;
             Canvas.enabled = true;
-            
         }
 
         protected virtual void Deactivate()
@@ -38,16 +35,14 @@ namespace UI.Base
             Canvas.enabled = false;
         }
 
-        protected virtual void SetupListeners() { }
-
-        protected virtual void DisposeListeners()
-        {
-            disposables?.Dispose();
-        }
-
         public virtual void Dispose()
         {
             DisposeListeners();
+        }
+        
+        private void DisposeListeners()
+        {
+            disposables?.Dispose();
         }
     }
 }

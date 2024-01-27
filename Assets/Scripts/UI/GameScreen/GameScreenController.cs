@@ -6,6 +6,7 @@ using Extensions;
 using Game;
 using Game.Scenes;
 using Game.Time;
+using MessageBroker;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
 using UniRx;
@@ -53,13 +54,10 @@ namespace UI.GameScreen
         [Space]
         [SerializeField] private GameObject personalPageHint;
 
-        private IMessageBroker _messageBroker;
         private bool _productionShown;
         
         public void OnStart()
         {
-            _messageBroker = GameManager.Instance.MessageBroker;
-            
             moneyButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[0]));
             fansButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[1]));
             hypeButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[2]));
@@ -92,24 +90,24 @@ namespace UI.GameScreen
         /// </summary>
         private void HandleStateEvents()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<MoneyChangedEvent>()
                 .Subscribe(e => playerMoney.text = e.NewVal.GetMoney())
                 .AddTo(_disposable);
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<FansChangedEvent>()
                 .Subscribe(e => playerFans.text = e.NewVal.GetDisplay())
                 .AddTo(_disposable);
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<HypeChangedEvent>()
                 .Subscribe(e => playerHype.text = e.NewVal.ToString())
                 .AddTo(_disposable);
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<FullStateResponse>()
                 .Subscribe(UpdateHUD)
                 .AddTo(_disposable);
             
-            _messageBroker.Publish(new FullStateRequest());
+            MainMessageBroker.Instance.Publish(new FullStateRequest());
         }
         
         /// <summary>
@@ -166,7 +164,7 @@ namespace UI.GameScreen
             GameManager.Instance.SaveApplicationData();
             
             ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage {
-                    Type = SceneTypes.MainMenu
+                    SceneType = SceneTypes.MainMenu
                 });
         }
         

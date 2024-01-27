@@ -13,7 +13,7 @@ namespace UI.Controls.Buttons
 {
     public class NewGameButton : MonoBehaviour
     {
-        [SerializeField] private OverlayWindowType _toOverlayWindow;
+        [SerializeField] private WindowType _toWindow;
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
@@ -22,14 +22,12 @@ namespace UI.Controls.Buttons
             button.OnClickAsObservable()
                 .Subscribe(_ =>
                 {
+                    SoundManager.Instance.PlaySound(_soundType);
                     FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGamePage);
                     
-                    SoundManager.Instance.PlaySound(_soundType);
-                    
-                    UIMessageBroker.Instance.MessageBroker
-                        .Publish(new OverlayWindowControlMessage()
+                    UIMessageBroker.Instance.Publish(new WindowControlMessage
                         {
-                            Type = _toOverlayWindow
+                            Type = _toWindow
                         });
                 });
         }

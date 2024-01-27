@@ -13,7 +13,7 @@ using UnityEngine.UI;
 
 namespace UI.Windows.MainMenu
 {
-    public class SettingsOverlayWindow : CanvasUIElement
+    public class SettingsWindow : CanvasUIElement
     {
         [BoxGroup("Language")] [SerializeField] private Carousel _langCarousel;
         
