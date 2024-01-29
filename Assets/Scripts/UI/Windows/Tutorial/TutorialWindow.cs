@@ -1,12 +1,14 @@
-using Game.UI.Enums;
-using Game.UI.Messages;
 using Sirenix.OdinInspector;
+using UI.Base;
+using UI.Enums;
+using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Game.UI.TutorialWindows
+namespace UI.Windows.Tutorial
 {
     public class TutorialWindow : CanvasUIElement, IPointerClickHandler
     {
@@ -39,7 +41,7 @@ namespace Game.UI.TutorialWindows
                 {
                     _isBlockClick = false;
                     
-                    uiMessageBus.Publish(new TutorialWindowControlMessage()
+                    UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage
                     {
                         Type = WindowType.None
                     });
@@ -54,12 +56,7 @@ namespace Game.UI.TutorialWindows
             
             if (_tutorialIndex >= _uiElementsTutorial.Length)
             {
-                UIMessageBroker.Instance.MessageBroker
-                    .Publish(new TutorialWindowControlMessage()
-                    {
-                        Type = WindowType.None
-                    });
-                
+                UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage {Type = WindowType.None});
                 return;
             }
 

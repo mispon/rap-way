@@ -1,17 +1,13 @@
 ﻿using Core;
-using Game.UI.Messages;
 using ScriptableObjects;
 using UI.Enums;
 using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-<<<<<<<< HEAD:Assets/Scripts/UI/Controls/Buttons/ShowOverlayWindowButton.cs
 namespace UI.Controls.Buttons
-========
-namespace Game.UI.TutorialWindows
->>>>>>>> main:Assets/Scripts/UI/Controls/TutorialWindows/ShowTutorialWindowButton.cs
 {
     [RequireComponent(typeof(Button))]
     public sealed class ShowTutorialWindowButton : MonoBehaviour
@@ -26,12 +22,7 @@ namespace Game.UI.TutorialWindows
                 .Subscribe(_ =>
                 {
                     SoundManager.Instance.PlaySound(_soundType);
-                    
-                    UIMessageBroker.Instance.MessageBroker
-                        .Publish(new TutorialWindowControlMessage()
-                        {
-                            Type = _toTutorialWindow
-                        });
+                    UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage {Type = _toTutorialWindow});
                 });
         }
     }

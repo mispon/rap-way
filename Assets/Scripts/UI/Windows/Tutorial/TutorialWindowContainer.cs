@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
-using Game.UI.Enums;
-using Game.UI.Messages;
 using Sirenix.OdinInspector;
+using UI.Base;
+using UI.Enums;
+using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 
-namespace Game.UI.TutorialWindows
+namespace UI.Windows.Tutorial
 {
     public sealed class TutorialWindowContainer: UIElementContainer
     {
@@ -22,12 +24,12 @@ namespace Game.UI.TutorialWindows
             foreach (var tutorial in _tutorials.Values)
                 tutorial.Initialize();
 
-            uiMessageBroker
+            UIMessageBroker.Instance
                 .Receive<TutorialWindowControlMessage>()
                 .Subscribe(msg => ShowTutorial(msg.Type))
                 .AddTo(disposables);
             
-            uiMessageBroker
+            UIMessageBroker.Instance
                 .Receive<WindowControlMessage>()
                 .Subscribe(msg => ShowFirstTutorial(msg.Type))
                 .AddTo(disposables);
@@ -35,12 +37,13 @@ namespace Game.UI.TutorialWindows
 
         private void ShowTutorial(WindowType windowType)
         {
-            if (windowType == WindowType.None) Deactivate();
+            if (windowType == WindowType.None) 
+                Deactivate();
             
             var newTutorial = GetTutorial(windowType);
-            if (newTutorial is null) return;
-            if (newTutorial == _activeTutorial) return;
-            if (newTutorial.IsContainsTutorials is false) return;
+            
+            if (newTutorial == null || newTutorial == _activeTutorial || !newTutorial.IsContainsTutorials) 
+                return;
 
             Activate();
             CloseCurrentTutorial();
@@ -49,7 +52,6 @@ namespace Game.UI.TutorialWindows
             newTutorial.ShowTutorial();
 
             _activeTutorial = newTutorial;
-
             overlayBlackout.Show();
         }
         
@@ -57,9 +59,10 @@ namespace Game.UI.TutorialWindows
         {
             if (windowType == WindowType.None) Deactivate();
 
-            if (CheckCompleteFirstTutorial(windowType) is true) return;
+            if (IsTutorialShowed(windowType)) return;
             
             var newTutorial = GetTutorial(windowType);
+            
             if (newTutorial is null) return;
             if (newTutorial.IsFirstTutorial is false) return;
             
@@ -74,15 +77,15 @@ namespace Game.UI.TutorialWindows
             overlayBlackout.Show();
         }
         
-        private bool CheckCompleteFirstTutorial(WindowType windowType)
+        private static bool IsTutorialShowed(WindowType windowType)
         {
-            if (PlayerPrefs.HasKey($"{SAVE_KEY_FIRST_TUTORIAL}{windowType}") is true) 
+            string key = $"{SAVE_KEY_FIRST_TUTORIAL}{windowType}";
+            
+            if (PlayerPrefs.HasKey(key)) 
                 return true;
-            else
-            {
-                PlayerPrefs.SetInt($"{SAVE_KEY_FIRST_TUTORIAL}{windowType}", 1);
-                return false;
-            }
+            
+            PlayerPrefs.SetInt(key, 1);
+            return false;
         }
 
         private void CloseCurrentTutorial()

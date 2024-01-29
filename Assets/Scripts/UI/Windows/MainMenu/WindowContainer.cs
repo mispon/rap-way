@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Game.UI.Messages;
 using UI.Base;
 using UI.Base.Interfaces;
 using UI.Enums;
 using Sirenix.OdinInspector;
 using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 

@@ -2,12 +2,12 @@ using System.Collections;
 using Enums;
 using Firebase.Analytics;
 using Game;
-using Game.UI.Messages;
 using Sirenix.OdinInspector;
 using UI.Base;
 using UI.Controls;
 using UI.Enums;
 using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UnityEngine;
 using UnityEngine.UI;
 

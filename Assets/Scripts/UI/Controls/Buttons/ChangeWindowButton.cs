@@ -1,8 +1,8 @@
 ﻿using Core;
-using Game.UI.Messages;
 using ScriptableObjects;
 using UI.Enums;
 using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;

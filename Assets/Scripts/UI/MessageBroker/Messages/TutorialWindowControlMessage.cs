@@ -1,6 +1,6 @@
-﻿using Game.UI.Enums;
+﻿using UI.Enums;
 
-namespace Game.UI.Messages
+namespace UI.MessageBroker.Messages
 {
     public struct TutorialWindowControlMessage
     {
