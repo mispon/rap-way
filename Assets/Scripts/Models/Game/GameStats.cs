@@ -1,7 +1,7 @@
 ﻿using System;
-using Localization;
+using Core.Localization;
+using Extensions;
 using UnityEngine;
-using Utils.Extensions;
 using Application = UnityEngine.Device.Application;
 
 namespace Models.Game
@@ -16,7 +16,7 @@ namespace Models.Game
         /// Глобальное состояние
         /// </summary>
         public string Now;
-        public Trends Trends;
+        public Trends.Trends Trends;
         public int SocialsCooldown;
         public int ConcertCooldown;
         public bool AskedReview;
@@ -29,7 +29,7 @@ namespace Models.Game
         public static GameStats New => new()
         {
             Now = DateTime.Now.DateToString(),
-            Trends = Trends.New,
+            Trends = Models.Trends.Trends.New,
             Lang = GetDeviceLang(),
         };
 

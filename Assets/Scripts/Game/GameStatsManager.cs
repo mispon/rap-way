@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
 using Core;
-using Core.Interfaces;
-using Data;
+using Core.OrderedStarter;
 using Enums;
+using Game.Time;
+using MessageBroker;
 using MessageBroker.Messages.State;
-using Models.Game;
-using Models.Info;
+using Models.Trends;
+using ScriptableObjects;
 using UnityEngine;
-using Utils;
 
 // ReSharper disable CoVariantArrayConversion
 
@@ -51,7 +51,7 @@ namespace Game
             // todo: этот ивент можно будет отправлять внутри хендлера брокера
             if (TimeManager.Instance.Now.Day % 3 == 0)
             {
-                GameManager.Instance.MessageBroker.Publish(new ChangeHypeEvent {Amount = -1});
+                MainMessageBroker.Instance.Publish(new ChangeHypeEvent {Amount = -1});
             }
         }
 
@@ -96,7 +96,7 @@ namespace Game
         }
     }
     
-    public static partial class Extension
+    public static class Extension
     {
         /// <summary>
         /// Получение оценки совпдаения выбранного и текущего значения

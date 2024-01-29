@@ -1,9 +1,9 @@
 using System.Linq;
-using Core.Interfaces;
-using Core.Settings;
+using Core.OrderedStarter;
 using Game;
 using MessageBroker.Messages.Production;
 using MessageBroker.Messages.State;
+using ScriptableObjects;
 using UniRx;
 using UnityEngine;
 
@@ -13,13 +13,10 @@ namespace MessageBroker.Handlers
     {
         private readonly CompositeDisposable _disposable = new(); 
         
-        private IMessageBroker _messageBroker;
-        
         private GameSettings _settings;
         
         public void OnStart()
         {
-            _messageBroker = GameManager.Instance.MessageBroker;
             _settings = GameManager.Instance.Settings;
 
             HandleFullStateRequest();
@@ -34,13 +31,13 @@ namespace MessageBroker.Handlers
 
         private void HandleFullStateRequest()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<FullStateRequest>()
                 .Subscribe(_ =>
                 {
                     var playerData = GameManager.Instance.PlayerData;
                     
-                    _messageBroker.Publish(new FullStateResponse
+                    MainMessageBroker.Instance.Publish(new FullStateResponse
                     {
                         NickName = playerData.Info.NickName,
                         Gender = playerData.Info.Gender,
@@ -56,7 +53,7 @@ namespace MessageBroker.Handlers
         
         private void HandleChangeMoney()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<ChangeMoneyEvent>()
                 .Subscribe(e => UpdateMoney(e.Amount))
                 .AddTo(_disposable);
@@ -64,7 +61,7 @@ namespace MessageBroker.Handlers
         
         private void HandleSpendMoneyRequest()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<SpendMoneyRequest>()
                 .Subscribe(e =>
                 {
@@ -73,14 +70,14 @@ namespace MessageBroker.Handlers
                     if (isMoneyEnough)
                         UpdateMoney(-e.Amount);
                     
-                    _messageBroker.Publish(new SpendMoneyResponse {OK = isMoneyEnough});
+                    MainMessageBroker.Instance.Publish(new SpendMoneyResponse {OK = isMoneyEnough});
                 })
                 .AddTo(_disposable);
         }
 
         private void HandleChangeFans()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<ChangeFansEvent>()
                 .Subscribe(e => UpdateFans(e.Amount))
                 .AddTo(_disposable);
@@ -88,7 +85,7 @@ namespace MessageBroker.Handlers
         
         private void HandleChangeHype()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<ChangeHypeEvent>()
                 .Subscribe(e => UpdateHype(e.Amount))
                 .AddTo(_disposable);
@@ -96,7 +93,7 @@ namespace MessageBroker.Handlers
         
         private void HandleChangeExp()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<ChangeExpEvent>()
                 .Subscribe(e => UpdateExp(e.Amount))
                 .AddTo(_disposable);
@@ -104,7 +101,7 @@ namespace MessageBroker.Handlers
 
         private void HandleProductionReward()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<ProductionRewardEvent>()
                 .Subscribe(e =>
                 {
@@ -123,7 +120,7 @@ namespace MessageBroker.Handlers
 
         private void HandleConvertReward()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<ConcertRewardEvent>()
                 .Subscribe(e =>
                 {
@@ -142,7 +139,7 @@ namespace MessageBroker.Handlers
             int newVal = SafetyAdd(oldVal, value, _settings.MaxMoney);
 
             playerData.Money = newVal;
-            _messageBroker.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
+            MainMessageBroker.Instance.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
         }
 
         private void UpdateFans(int value)
@@ -156,7 +153,7 @@ namespace MessageBroker.Handlers
             newVal = Mathf.Max(newVal, minFans);
                     
             playerData.Fans = newVal;
-            _messageBroker.Publish(new FansChangedEvent {OldVal = oldVal, NewVal = newVal});
+            MainMessageBroker.Instance.Publish(new FansChangedEvent {OldVal = oldVal, NewVal = newVal});
         }
 
         private void UpdateExp(int value)
@@ -170,7 +167,7 @@ namespace MessageBroker.Handlers
             newVal = Mathf.Max(newVal, minExp);
 
             playerData.Exp = newVal;
-            _messageBroker.Publish(new ExpChangedEvent {OldVal = oldVal, NewVal = newVal});
+            MainMessageBroker.Instance.Publish(new ExpChangedEvent {OldVal = oldVal, NewVal = newVal});
         }
 
         private void UpdateHype(int value)
@@ -189,7 +186,7 @@ namespace MessageBroker.Handlers
             newVal = Mathf.Clamp(newVal, minHype, maxHype);
 
             playerData.Hype = newVal;
-            _messageBroker.Publish(new HypeChangedEvent {OldVal = oldVal, NewVal = newVal});
+            MainMessageBroker.Instance.Publish(new HypeChangedEvent {OldVal = oldVal, NewVal = newVal});
         }
         
         private static int SafetyAdd(int current, int increment, int maxValue)

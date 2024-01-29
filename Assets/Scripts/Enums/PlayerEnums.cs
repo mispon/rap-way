@@ -2,9 +2,6 @@
 
 namespace Enums
 {
-    /// <summary>
-    /// Пол персонажа
-    /// </summary>
     public enum Gender
     {
         [Description("gender_male")]
@@ -12,10 +9,7 @@ namespace Enums
         [Description("gender_female")]
         Female
     }
-
-    /// <summary>
-    /// Раса персонажа
-    /// </summary>
+    
     public enum Race
     {
         [Description("race_white")]
@@ -31,10 +25,7 @@ namespace Enums
         [Description("race_indian")]
         Indian
     }
-
-    /// <summary>
-    /// Навыки персонажа
-    /// </summary>
+    
     public enum Skills
     {
         [Description("skill_autotune")]

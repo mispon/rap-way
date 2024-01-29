@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Data;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
 
 namespace Game.Notifications
 {

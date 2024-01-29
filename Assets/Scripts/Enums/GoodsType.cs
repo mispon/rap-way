@@ -2,9 +2,6 @@ using System.ComponentModel;
 
 namespace Enums
 {
-    /// <summary>
-    /// Имущество игрока
-    /// </summary>
     public enum GoodsType
     {
         [Description("GoodsType_Micro")]

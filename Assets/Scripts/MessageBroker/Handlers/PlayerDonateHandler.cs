@@ -1,5 +1,4 @@
-using System;
-using Core.Interfaces;
+using Core.OrderedStarter;
 using Game;
 using MessageBroker.Messages.Donate;
 using UniRx;
@@ -11,12 +10,8 @@ namespace MessageBroker.Handlers
     {
         private readonly CompositeDisposable _disposable = new(); 
         
-        private IMessageBroker _messageBroker;
-        
         public void OnStart()
         {
-            _messageBroker = GameManager.Instance.MessageBroker;
-            
             HandleAddDonate();
             HandleSpendDonate();
             HandleNoAddPurchase();
@@ -24,7 +19,7 @@ namespace MessageBroker.Handlers
         
         private void HandleAddDonate()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<AddDonateEvent>()
                 .Subscribe(e =>
                 {
@@ -34,8 +29,8 @@ namespace MessageBroker.Handlers
                     int newVal = playerData.Donate + e.Amount;
 
                     playerData.Donate = newVal;
-                    _messageBroker.Publish(new DonateAddedEvent());
-                    _messageBroker.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
+                    MainMessageBroker.Instance.Publish(new DonateAddedEvent());
+                    MainMessageBroker.Instance.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
                     
                     GameManager.Instance.SaveDonateBalance();
                 })
@@ -44,7 +39,7 @@ namespace MessageBroker.Handlers
         
         private void HandleSpendDonate()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<SpendDonateRequest>()
                 .Subscribe(e =>
                 {
@@ -58,20 +53,20 @@ namespace MessageBroker.Handlers
                         int newVal = playerData.Donate - e.Amount;
 
                         playerData.Donate = newVal;
-                        _messageBroker.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
+                        MainMessageBroker.Instance.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
                         
                         GameManager.Instance.SaveDonateBalance();
                         ok = true;
                     } 
                     
-                    _messageBroker.Publish(new SpendDonateResponse {OK = ok});
+                    MainMessageBroker.Instance.Publish(new SpendDonateResponse {OK = ok});
                 })
                 .AddTo(_disposable);
         }
 
         private void HandleNoAddPurchase()
         {
-            _messageBroker
+            MainMessageBroker.Instance
                 .Receive<NoAdsPurchaseEvent>()
                 .Subscribe(_ =>
                 {
