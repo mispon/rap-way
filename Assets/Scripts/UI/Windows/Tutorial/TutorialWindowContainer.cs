@@ -11,7 +11,7 @@ namespace UI.Windows.Tutorial
 {
     public sealed class TutorialWindowContainer: UIElementContainer
     {
-        [SerializeField] private Dictionary<WindowType, TutorialWindow> _tutorials;
+        [SerializeField] private Dictionary<WindowType, TutorialWindow> tutorials;
         [SerializeField, ChildGameObjectsOnly] private OverlayBlackout overlayBlackout;
         
         private TutorialWindow _activeTutorial;
@@ -21,7 +21,7 @@ namespace UI.Windows.Tutorial
         {
             base.Initialize();
             
-            foreach (var tutorial in _tutorials.Values)
+            foreach (var tutorial in tutorials.Values)
                 tutorial.Initialize();
 
             UIMessageBroker.Instance
@@ -58,34 +58,45 @@ namespace UI.Windows.Tutorial
         private void ShowFirstTutorial(WindowType windowType)
         {
             if (windowType == WindowType.None) Deactivate();
-
-            if (IsTutorialShowed(windowType)) return;
             
             var newTutorial = GetTutorial(windowType);
             
             if (newTutorial is null) return;
-            if (newTutorial.IsFirstTutorial is false) return;
-            
+            if (newTutorial.IsFirstTutorial == false) return;
+            if (GetIndexTutorial(windowType, out var indexTutorial) == false) return;
+
             Activate();
             CloseCurrentTutorial();
             
             newTutorial.Show();
-            newTutorial.ShowFirstTutorial();
+            newTutorial.ShowFirstTutorial(indexTutorial);
 
             _activeTutorial = newTutorial;
 
             overlayBlackout.Show();
         }
         
-        private static bool IsTutorialShowed(WindowType windowType)
+        private bool GetIndexTutorial(WindowType windowType, out int nextIndex)
         {
             string key = $"{SAVE_KEY_FIRST_TUTORIAL}{windowType}";
-            
-            if (PlayerPrefs.HasKey(key)) 
+
+            nextIndex = 0;
+
+            if (PlayerPrefs.HasKey(key))
+            {
+                var index = PlayerPrefs.GetInt(key);
+                nextIndex = ++index;
+                
+                if (nextIndex >= GetTutorial(windowType).FirstTutorialCount) return false;
+
+                PlayerPrefs.SetInt(key, nextIndex);
                 return true;
-            
-            PlayerPrefs.SetInt(key, 1);
-            return false;
+            }
+            else
+            { 
+                PlayerPrefs.SetInt(key, nextIndex);
+                return true;
+            }
         }
 
         private void CloseCurrentTutorial()
@@ -97,7 +108,7 @@ namespace UI.Windows.Tutorial
 
         private TutorialWindow GetTutorial(WindowType windowType)
         {
-            return _tutorials.GetValueOrDefault(windowType);
+            return tutorials.GetValueOrDefault(windowType);
         }
 
         protected override void Deactivate()

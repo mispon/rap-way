@@ -9,6 +9,9 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
+using UI.Enums;
+using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -108,6 +111,9 @@ namespace UI.GameScreen
                 .AddTo(_disposable);
             
             MainMessageBroker.Instance.Publish(new FullStateRequest());
+            
+            //First tutorial
+            UIMessageBroker.Instance.Publish(new WindowControlMessage(type: WindowType.GameScreen));
         }
         
         /// <summary>

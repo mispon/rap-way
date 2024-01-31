@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UI.Base;
 using UI.Enums;
@@ -10,33 +12,36 @@ using UnityEngine.UI;
 
 namespace UI.Windows.Tutorial
 {
-    public class TutorialWindow : CanvasUIElement, IPointerClickHandler
+    internal class TutorialWindow : CanvasUIElement, IPointerClickHandler
     {
         [SerializeField] private Text _textTutorial;
 
-        [BoxGroup("First tutorial")] [SerializeField] private bool _isFirstTutorial;
-        [ShowIf("_isFirstTutorial"), BoxGroup("First tutorial")] [SerializeField] private Button _buttonFirstTutorial;
-        [ShowIf("_isFirstTutorial"), BoxGroup("First tutorial"), TextArea] [SerializeField] private string _textFirstTutorial;
+        [BoxGroup("First tutorial")] [SerializeField] private bool isFirstTutorial;
+        
+        [BoxGroup("First tutorial"), ShowIf("isFirstTutorial")]
+        [SerializeField] private FirstTutorialSettings[] firstTutorials;
 
         [BoxGroup("Tutorial")] [SerializeField] private TutorialSettings[] _uiElementsTutorial;
         
         private bool _isBlockClick;
         private int _tutorialIndex;
+        private IDisposable _clickDisposable;
 
-        public bool IsFirstTutorial => _isFirstTutorial;
-        public bool IsContainsTutorials => _uiElementsTutorial.Length > 0;
+        internal bool IsFirstTutorial => isFirstTutorial && firstTutorials.Length > 0;
+        internal int FirstTutorialCount => firstTutorials.Length;
+        internal bool IsContainsTutorials => _uiElementsTutorial.Length > 0;
 
-        public void ShowFirstTutorial()
+        internal void ShowFirstTutorial(int index)
         {
-            if (_isFirstTutorial is false) return;
+            if (isFirstTutorial is false) return;
             
             ClearTutorial();
 
             _isBlockClick = true;
-            _buttonFirstTutorial.gameObject.SetActive(true);
-            _textTutorial.text = _textFirstTutorial;
+            firstTutorials[index].button.gameObject.SetActive(true);
+            _textTutorial.text = firstTutorials[index].text;
 
-            _buttonFirstTutorial.OnClickAsObservable()
+            _clickDisposable = firstTutorials[index].button.OnClickAsObservable()
                 .Subscribe(_ =>
                 {
                     _isBlockClick = false;
@@ -45,10 +50,12 @@ namespace UI.Windows.Tutorial
                     {
                         Type = WindowType.None
                     });
+                    
+                    _clickDisposable.Dispose();
                 });
         }
 
-        public void ShowTutorial()
+        internal void ShowTutorial()
         {
             if (_uiElementsTutorial is null || _uiElementsTutorial.Length == 0) return;
            
@@ -66,7 +73,8 @@ namespace UI.Windows.Tutorial
 
         private void ClearTutorial()
         {
-            _buttonFirstTutorial.gameObject.SetActive(false);
+            for (int i = 0; i < firstTutorials?.Length; i++) 
+                firstTutorials[i].button.gameObject.SetActive(false);
 
             _textTutorial.text = "";
             for (int i = 0; i < _uiElementsTutorial?.Length; i++)
@@ -89,10 +97,18 @@ namespace UI.Windows.Tutorial
             ShowTutorial();
         }
         
+        [Serializable]
+        private struct FirstTutorialSettings
+        {
+            [SerializeField] [HideLabel, HorizontalGroup] public Button button;
+            [SerializeField] [HorizontalGroup, HideLabel] public string text;
+        }
+        
+        [Serializable]
         private struct TutorialSettings
         {
-            public Image image;
-            public string text;
+            [SerializeField] [PreviewField, HideLabel, HorizontalGroup] public Image image;
+            [SerializeField] [HorizontalGroup(width:250), HideLabel, TextArea] public string text;
         }
     }
 }
