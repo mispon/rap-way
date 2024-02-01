@@ -22,7 +22,7 @@ namespace UI.Windows.MainMenu
         {
             base.Initialize();
 
-            if (GameManager.Instance.HasAnySaves())
+            if (!GameManager.Instance.HasAnySaves())
             {
                 FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
             }
