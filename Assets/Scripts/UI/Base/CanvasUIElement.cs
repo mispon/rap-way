@@ -1,7 +1,6 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UI.Base.Interfaces;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,40 +10,66 @@ namespace UI.Base
     public abstract class CanvasUIElement : SerializedMonoBehaviour, IUIElement, IDisposable
     {
         private Canvas _canvas;
-        private CanvasGroup _canvasGroup;
+        private Canvas canvas
+        {
+            get
+            {
+                if (_canvas == null)
+                {
+                    _canvas = GetComponent<Canvas>();
+                }
+                return _canvas;
+            }
+        }
         
-        public bool IsActive => _isActive;
-        public Canvas Canvas => _canvas;
-        public CanvasGroup CanvasGroup => _canvasGroup;
+        private CanvasGroup _canvasGroup;
 
+        private CanvasGroup canvasGroup
+        {
+            get
+            {
+                if (_canvasGroup == null)
+                {
+                    _canvasGroup = GetComponent<CanvasGroup>();
+                }
+                return _canvasGroup;
+            }
+        }
+        
         private bool _isActive;
-        private CompositeDisposable _disposables;
 
         public virtual void Initialize()
         {
-            _canvas = GetComponent<Canvas>();
-            _canvasGroup = GetComponent<CanvasGroup>();
-            
-            _disposables = new CompositeDisposable();
-
             Hide();
             SetupListenersOnInitialize();
         }
         
         public virtual void Show()
         {
+            if (_isActive) return;
+            
             _isActive = true;
-            _canvasGroup.interactable = true;
-            _canvas.enabled = true;
+            canvasGroup.interactable = true;
+            canvas.enabled = true;
+            
             SetupListenersOnShow();
             SendRequests();
         }
         
         public virtual void Hide()
         {
+            if (!_isActive) return;
+            
             _isActive = false;
-            _canvasGroup.interactable = false;
-            _canvas.enabled = false;
+            canvasGroup.interactable = false;
+            canvas.enabled = false;
+            
+            DisposeContainers();
+            DisposeListeners();
+        }
+        
+        public void Dispose()
+        {
             DisposeContainers();
             DisposeListeners();
         }
@@ -53,15 +78,6 @@ namespace UI.Base
         protected virtual void SetupListenersOnShow() { }
         protected virtual void SendRequests() { }
         protected virtual void DisposeContainers() { }
-        protected virtual void DisposeListeners()
-        {
-            _disposables?.Dispose();
-        }
-
-        public void Dispose()
-        {
-            DisposeContainers();
-            DisposeListeners();
-        }
+        protected virtual void DisposeListeners() {}
     }
 }

@@ -3,9 +3,9 @@ using Firebase.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Tutorial
+namespace UI.Windows.Pages.Hints
 {
-    public class TutorialPage : Page
+    public class HintsPage : Page
     {
         [SerializeField] private Text info;
 

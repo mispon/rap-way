@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Sirenix.OdinInspector;
+﻿using System;
 using UI.Base;
-using UI.Enums;
 using UI.MessageBroker;
 using UI.MessageBroker.Messages;
 using UniRx;
@@ -9,101 +7,64 @@ using UnityEngine;
 
 namespace UI.Windows.Tutorial
 {
+    [Serializable]
+    public class TutorialStageSettings
+    {
+        public string Text;
+        public bool[] ButtonsActivity;
+    }
+    
     public sealed class TutorialWindowContainer: UIElementContainer
     {
-        [SerializeField] private Dictionary<WindowType, TutorialWindow> _tutorials;
-        [SerializeField, ChildGameObjectsOnly] private OverlayBlackout overlayBlackout;
+        [SerializeField] private TutorialWindow tutorialWindow;
+        [SerializeField] private TutorialStageSettings[] tutorialStages;
         
-        private TutorialWindow _activeTutorial;
-        private const string SAVE_KEY_FIRST_TUTORIAL = "FirstTutorial";
-
+        private const int NO_STAGES = -1;
+        private const string TUTORIAL_STAGE_INDEX_KEY = "RapWay_TutorialStage";
+        
         public override void Initialize()
         {
-            base.Initialize();
+            tutorialWindow.Initialize();
             
-            foreach (var tutorial in _tutorials.Values)
-                tutorial.Initialize();
-
             UIMessageBroker.Instance
                 .Receive<TutorialWindowControlMessage>()
-                .Subscribe(msg => ShowTutorial(msg.Type))
-                .AddTo(disposables);
-            
-            UIMessageBroker.Instance
-                .Receive<WindowControlMessage>()
-                .Subscribe(msg => ShowFirstTutorial(msg.Type))
+                .Subscribe(msg => ShowNextTutorialStage())
                 .AddTo(disposables);
         }
 
-        private void ShowTutorial(WindowType windowType)
+        private void ShowNextTutorialStage()
         {
-            if (windowType == WindowType.None) 
-                Deactivate();
+            int stageIndex = GetNextTutorialStageIndex();
             
-            var newTutorial = GetTutorial(windowType);
-            
-            if (newTutorial == null || newTutorial == _activeTutorial || !newTutorial.IsContainsTutorials) 
+            // player passed all tutorial stages
+            if (stageIndex == NO_STAGES)
                 return;
 
-            Activate();
-            CloseCurrentTutorial();
-            
-            newTutorial.Show();
-            newTutorial.ShowTutorial();
-
-            _activeTutorial = newTutorial;
-            overlayBlackout.Show();
+            var nextStage = tutorialStages[stageIndex];
+            tutorialWindow.ShowTutorial(nextStage);
         }
         
-        private void ShowFirstTutorial(WindowType windowType)
+        private int GetNextTutorialStageIndex()
         {
-            if (windowType == WindowType.None) Deactivate();
+            int index = PlayerPrefs.HasKey(TUTORIAL_STAGE_INDEX_KEY) 
+                ? PlayerPrefs.GetInt(TUTORIAL_STAGE_INDEX_KEY)
+                : -1;
+            
+            if (index >= tutorialStages.Length-1)
+            {
+                return NO_STAGES;
+            }
 
-            if (IsTutorialShowed(windowType)) return;
+            index++;
+            PlayerPrefs.SetInt(TUTORIAL_STAGE_INDEX_KEY, index);
             
-            var newTutorial = GetTutorial(windowType);
-            
-            if (newTutorial is null) return;
-            if (newTutorial.IsFirstTutorial is false) return;
-            
-            Activate();
-            CloseCurrentTutorial();
-            
-            newTutorial.Show();
-            newTutorial.ShowFirstTutorial();
-
-            _activeTutorial = newTutorial;
-
-            overlayBlackout.Show();
+            return index;
         }
         
-        private static bool IsTutorialShowed(WindowType windowType)
-        {
-            string key = $"{SAVE_KEY_FIRST_TUTORIAL}{windowType}";
-            
-            if (PlayerPrefs.HasKey(key)) 
-                return true;
-            
-            PlayerPrefs.SetInt(key, 1);
-            return false;
-        }
-
-        private void CloseCurrentTutorial()
-        {
-            _activeTutorial?.Hide();
-            _activeTutorial = null;
-            overlayBlackout.Hide();
-        }
-
-        private TutorialWindow GetTutorial(WindowType windowType)
-        {
-            return _tutorials.GetValueOrDefault(windowType);
-        }
-
         protected override void Deactivate()
         {
             base.Deactivate();
-            CloseCurrentTutorial();
+            tutorialWindow.Hide();
         }
     }
 }

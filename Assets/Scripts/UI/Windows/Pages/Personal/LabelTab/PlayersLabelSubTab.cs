@@ -8,7 +8,6 @@ using Firebase.Analytics;
 using Game.Labels;
 using Game.Player;
 using Game.Rappers;
-using Game.Tutorial;
 using MessageBroker;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
@@ -83,7 +82,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             
             base.Open();
             
-            TutorialManager.Instance.ShowTutorial("tutorial_players_label");
+            HintsManager.Instance.ShowHint("tutorial_players_label");
         }
         
         private void DisplayInfo(LabelInfo label)

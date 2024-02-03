@@ -2,8 +2,9 @@ using System;
 using Enums;
 using Firebase.Analytics;
 using Game.Player;
-using Game.Tutorial;
 using UI.Controls.Carousel;
+using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UI.Windows.Pages.Training.Tabs;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +32,18 @@ namespace UI.Windows.Pages.Training
                 tab.Init();
                 tab.onStartTraining += ApplyTraining;
             }
+        }
+        
+        public override void Show()
+        {
+            base.Show();
+            Open();
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            Close();
         }
 
         /// <summary>
@@ -71,7 +84,7 @@ namespace UI.Windows.Pages.Training
         private void OpenTab(int index)
         {
             _tabIndex = index;
-            TutorialManager.Instance.ShowTutorial($"tutorial_training_{index}");
+            HintsManager.Instance.ShowHint($"tutorial_training_{index}");
 
             for (var i = 0; i < tabs.Length; i++)
             {
@@ -104,11 +117,13 @@ namespace UI.Windows.Pages.Training
         protected override void AfterPageOpen()
         {
             tabsCarousel.SetIndex(_tabIndex);
-            TutorialManager.Instance.ShowTutorial($"tutorial_training_{_tabIndex}");
+            HintsManager.Instance.ShowHint($"tutorial_training_{_tabIndex}");
         }
 
         protected override void AfterPageClose()
         {
+            UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage());
+            
             tabsCarousel.SetIndex(0);
         }
 

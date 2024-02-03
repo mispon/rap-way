@@ -7,7 +7,6 @@ using Extensions;
 using Firebase.Analytics;
 using Game;
 using Game.Player;
-using Game.Tutorial;
 using MessageBroker;
 using MessageBroker.Messages.State;
 using Models.Production;
@@ -174,7 +173,7 @@ namespace UI.Windows.Pages.Concert
         
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_concert_page");
+            HintsManager.Instance.ShowHint("tutorial_concert_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
 
             MainMessageBroker.Instance

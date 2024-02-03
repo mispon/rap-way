@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using UI.Base;
+using Sirenix.OdinInspector;
 using UI.Base.Interfaces;
 using UI.Enums;
-using Sirenix.OdinInspector;
 using UI.MessageBroker;
 using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 
-namespace UI.Windows.MainMenu
+namespace UI.Base
 {
     public class WindowContainer : UIElementContainer
     {

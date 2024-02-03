@@ -9,6 +9,9 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
+using UI.Enums;
+using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +28,6 @@ namespace UI.GameScreen
         [Header("HUD контроллы")]
         [SerializeField] private Image playerAvatar;
         [SerializeField] private Text playerNickname;
-        [SerializeField] private Button playerButton;
         [SerializeField] private Text playerFans;
         [SerializeField] private Text playerMoney;
         [SerializeField] private Text playerHype;
@@ -51,9 +53,6 @@ namespace UI.GameScreen
         [Space]
         [SerializeField] private Button mainMenuButton;
 
-        [Space]
-        [SerializeField] private GameObject personalPageHint;
-
         private bool _productionShown;
         
         public void OnStart()
@@ -61,17 +60,10 @@ namespace UI.GameScreen
             moneyButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[0]));
             fansButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[1]));
             hypeButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[2]));
-            playerButton.onClick.AddListener(() => personalPageHint.SetActive(false));
 
             productionFoldoutButton.onClick.AddListener(OnProductionClick);
             mainMenuButton.onClick.AddListener(OnMainMenuClick);
             TimeManager.Instance.onDayLeft += OnDayLeft;
-
-            if (!GameManager.Instance.ShowedHints.Contains("personal_page_hint"))
-            {
-                personalPageHint.SetActive(true);
-                GameManager.Instance.ShowedHints.Add("personal_page_hint");
-            }
             
             HandleStateEvents();
         }
@@ -108,6 +100,9 @@ namespace UI.GameScreen
                 .AddTo(_disposable);
             
             MainMessageBroker.Instance.Publish(new FullStateRequest());
+            
+            //First tutorial
+            UIMessageBroker.Instance.Publish(new WindowControlMessage(type: WindowType.GameScreen));
         }
         
         /// <summary>

@@ -28,6 +28,18 @@ namespace UI.Windows.Pages.Store
 
         private readonly List<StoreCategoryItem> _categoryItems = new();
         
+        public override void Show()
+        {
+            base.Show();
+            Open();
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            Close();
+        }
+        
         protected override void BeforePageOpen()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);

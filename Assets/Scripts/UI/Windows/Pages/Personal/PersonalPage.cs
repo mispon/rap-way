@@ -3,6 +3,8 @@ using Core.Ads;
 using Enums;
 using Firebase.Analytics;
 using ScriptableObjects;
+using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +53,18 @@ namespace UI.Windows.Pages.Personal
             personalButton.onClick.AddListener(OpenPersonalTab);
             houseButton.onClick.AddListener(OpenHouseTab);
             labelButton.onClick.AddListener(OpenLabelTab);
+        }
+        
+        public override void Show()
+        {
+            base.Show();
+            Open();
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            Close();
         }
 
         private void OpenPersonalTab()
@@ -132,6 +146,8 @@ namespace UI.Windows.Pages.Personal
         {
             _activeTab = TabsType.None;
             _isFirstOpen = true;
+            
+            UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage());
         }
     }
 }

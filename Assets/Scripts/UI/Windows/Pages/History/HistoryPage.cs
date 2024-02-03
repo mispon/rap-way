@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Enums;
 using Firebase.Analytics;
-using Game.Tutorial;
+using Game.Player;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Pages.History.HistoryProduction;
 using UnityEngine;
@@ -30,7 +30,7 @@ namespace UI.Windows.Pages.History
         
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_history");
+            HintsManager.Instance.ShowHint("tutorial_history");
         }
         
         /// <summary>

@@ -5,7 +5,6 @@ using Enums;
 using Firebase.Analytics;
 using Game.Player;
 using Game.Rappers;
-using Game.Tutorial;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
@@ -82,7 +81,7 @@ namespace UI.Windows.Pages.Rappers
 
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_rappers");
+            HintsManager.Instance.ShowHint("tutorial_rappers");
         }
         
         protected override void AfterPageClose()

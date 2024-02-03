@@ -1,7 +1,7 @@
 ﻿using Core;
 using Enums;
 using Firebase.Analytics;
-using Game.Tutorial;
+using Game.Player;
 using Models.Production;
 using ScriptableObjects;
 using UI.Controls.Carousel;
@@ -33,7 +33,7 @@ namespace UI.Windows.Pages.Social
 
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_socials");
+            HintsManager.Instance.ShowHint("tutorial_socials");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.SocialsPageOpened);
         }
 

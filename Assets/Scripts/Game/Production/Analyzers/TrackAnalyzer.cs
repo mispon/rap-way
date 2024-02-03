@@ -28,6 +28,12 @@ namespace Game.Production.Analyzers
             float qualityPoints = CalculateTrackQuality(track);
             track.Quality = qualityPoints;
 
+            if (track.Id == 2)
+            {
+                // fake boost quality for tutorial
+                track.Quality = Math.Max(track.Quality, 0.1f);
+            }
+            
             var hitDice = Random.Range(0f, 1f);
             if (qualityPoints >= settings.TrackHitThreshold || hitDice <= settings.TrackHitChance) 
             {

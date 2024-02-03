@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Core.Localization;
+﻿using Core.Localization;
 using Game;
 using ScriptableObjects;
-using UniRx;
-using UnityEngine;
+using UI.Base;
 
 namespace UI.Windows.Pages
 {
     /// <summary>
     /// Базовый класс всех страниц игры
     /// </summary>
-    public class Page : MonoBehaviour
+    public class Page : CanvasUIElement
     {
         private bool _isOpen;
         
@@ -30,8 +27,11 @@ namespace UI.Windows.Pages
             if (_isOpen) return;
             
             BeforePageOpen();
+            
             _isOpen = true;
             gameObject.SetActive(true);
+            Show();
+            
             AfterPageOpen();
         }
         
@@ -43,8 +43,11 @@ namespace UI.Windows.Pages
             if (!_isOpen) return;
             
             BeforePageClose();
+            
             _isOpen = false;
             gameObject.SetActive(false);
+            Hide();
+            
             AfterPageClose();
         }
 

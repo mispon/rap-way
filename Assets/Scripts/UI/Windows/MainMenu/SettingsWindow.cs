@@ -22,15 +22,15 @@ namespace UI.Windows.MainMenu
 
         [BoxGroup("Buttons")] [SerializeField] private Button _saveButton;
 
-        public override void Initialize()
+        public override void Show()
         {
-            base.Initialize();
-            
             var settings = GameManager.Instance.GameStats;
             _langCarousel.SetIndex(settings.Lang.ToString());
 
             foreach (var group in _soundGroup)
                 group.Key.value = LoadVolume(group.Value);
+            
+            base.Show();
         }
 
         protected override void SetupListenersOnInitialize()
