@@ -7,7 +7,6 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using Game.Player;
-using Game.Tutorial;
 using Models.Player;
 using Models.Production;
 using Models.Trends;
@@ -57,8 +56,20 @@ namespace UI.Windows.Pages.Track
 
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_track_page");
+            HintsManager.Instance.ShowHint("tutorial_track_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewTrackSelected);
+        }
+
+        public override void Show()
+        {
+            base.Show();
+            Open();
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            Close();
         }
 
         /// <summary>

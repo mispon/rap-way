@@ -5,7 +5,6 @@ using Extensions;
 using Firebase.Analytics;
 using Game.Labels;
 using Game.Player;
-using Game.Tutorial;
 using Models.Game;
 using ScriptableObjects;
 using UI.Controls.Error;
@@ -48,7 +47,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             
             base.Open();
             
-            TutorialManager.Instance.ShowTutorial("tutorial_no_labels");
+            HintsManager.Instance.ShowHint("tutorial_no_labels");
         }
 
         private void CreateLabel()

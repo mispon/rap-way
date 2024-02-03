@@ -10,6 +10,8 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
+using UI.MessageBroker;
+using UI.MessageBroker.Messages;
 using UI.Windows.Pages.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
@@ -127,6 +129,8 @@ namespace UI.Windows.Pages.Track
         protected override void AfterPageClose()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
+            
+            UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage());
             
             SaveResult(_trackInfo);
             _trackInfo = null;

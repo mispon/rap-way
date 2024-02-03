@@ -5,7 +5,6 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using Game.Player;
-using Game.Tutorial;
 using MessageBroker;
 using MessageBroker.Messages.State;
 using Models.Production;
@@ -155,7 +154,7 @@ namespace UI.Windows.Pages.Clip
         
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_clip_page");
+            HintsManager.Instance.ShowHint("tutorial_clip_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
 
             MainMessageBroker.Instance

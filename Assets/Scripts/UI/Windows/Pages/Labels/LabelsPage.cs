@@ -4,7 +4,7 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game.Labels;
-using Game.Tutorial;
+using Game.Player;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
@@ -78,7 +78,7 @@ namespace UI.Windows.Pages.Labels
 
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_labels");
+            HintsManager.Instance.ShowHint("tutorial_labels");
         }
         
         protected override void AfterPageClose()

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Enums;
 using Firebase.Analytics;
+using Game.Player;
 using Game.Socials;
-using Game.Tutorial;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
 
@@ -34,7 +34,7 @@ namespace UI.Windows.Pages.Eagler
         
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_eagler");
+            HintsManager.Instance.ShowHint("tutorial_eagler");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
         }
         

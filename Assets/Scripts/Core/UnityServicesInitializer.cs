@@ -16,6 +16,7 @@ namespace Core
             {
                 var options = new InitializationOptions().SetEnvironmentName(environment);
                 await UnityServices.InitializeAsync(options);
+                Debug.Log("UnityServicesInitializer: OK");
             }
             catch (Exception ex)
             {

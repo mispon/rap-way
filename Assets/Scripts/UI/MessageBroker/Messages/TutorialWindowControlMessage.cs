@@ -1,9 +1,4 @@
-﻿using UI.Enums;
-
-namespace UI.MessageBroker.Messages
+﻿namespace UI.MessageBroker.Messages
 {
-    public struct TutorialWindowControlMessage
-    {
-        public WindowType Type;
-    }
+    public struct TutorialWindowControlMessage { }
 }

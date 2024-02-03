@@ -7,7 +7,6 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using Game.Player;
-using Game.Tutorial;
 using Models.Player;
 using Models.Production;
 using Models.Trends;
@@ -56,7 +55,7 @@ namespace UI.Windows.Pages.Album
         
         protected override void AfterPageOpen()
         {
-            TutorialManager.Instance.ShowTutorial("tutorial_album_page");
+            HintsManager.Instance.ShowHint("tutorial_album_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewAlbumSelected);
         }
 

@@ -4,7 +4,6 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Game.Player;
-using Game.Tutorial;
 using Models.Player;
 using Models.Production;
 using ScriptableObjects;
@@ -65,7 +64,7 @@ namespace UI.Windows.Pages.Personal.PersonalTab
             
             base.Open();
             
-            TutorialManager.Instance.ShowTutorial("tutorial_personal_page");
+            HintsManager.Instance.ShowHint("tutorial_personal_page");
         }
         
         /// <summary>

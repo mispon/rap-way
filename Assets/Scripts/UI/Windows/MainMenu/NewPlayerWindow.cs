@@ -97,11 +97,10 @@ namespace UI.Windows.MainMenu
             player.Age = Convert.ToInt32(_ageCarousel.GetLabel());
 
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
-            ScenesController.Instance.MessageBroker
-                .Publish(new SceneLoadMessage()
-                {
-                    SceneType = SceneTypes.Game
-                });
+            ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage
+            {
+                SceneType = SceneTypes.Game
+            });
         }
     }
 }

@@ -451,7 +451,7 @@ namespace Game.Labels
         public bool IsPlayerInGameLabel()
         {
             string labelName = PlayerManager.Data.Label;
-            return labelName != "" && labelName != _playerLabel.Name;
+            return labelName != "" && _playerLabel != null && labelName != _playerLabel.Name;
         }
     }
 }

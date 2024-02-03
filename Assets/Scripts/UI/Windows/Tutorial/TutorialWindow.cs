@@ -1,5 +1,7 @@
-using System;
-using System.Collections.Generic;
+using Core.Localization;
+using Enums;
+using Game.Player;
+using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Base;
 using UI.Enums;
@@ -7,108 +9,65 @@ using UI.MessageBroker;
 using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Windows.Tutorial
 {
-    internal class TutorialWindow : CanvasUIElement, IPointerClickHandler
+    public class TutorialWindow : CanvasUIElement
     {
-        [SerializeField] private Text _textTutorial;
-
-        [BoxGroup("First tutorial")] [SerializeField] private bool isFirstTutorial;
+        [SerializeField] private ImagesBank imagesBank;
         
-        [BoxGroup("First tutorial"), ShowIf("isFirstTutorial")]
-        [SerializeField] private FirstTutorialSettings[] firstTutorials;
-
-        [BoxGroup("Tutorial")] [SerializeField] private TutorialSettings[] _uiElementsTutorial;
+        [BoxGroup("Player"), SerializeField] private Text nickname;
+        [BoxGroup("Player"), SerializeField] private Image playerIcon;
         
-        private bool _isBlockClick;
-        private int _tutorialIndex;
-        private IDisposable _clickDisposable;
+        [BoxGroup("Controls"), SerializeField] private Text info;
+        [BoxGroup("Controls"), SerializeField] private Button[] gameButtons;
 
-        internal bool IsFirstTutorial => isFirstTutorial && firstTutorials.Length > 0;
-        internal int FirstTutorialCount => firstTutorials.Length;
-        internal bool IsContainsTutorials => _uiElementsTutorial.Length > 0;
-
-        internal void ShowFirstTutorial(int index)
+        private readonly CompositeDisposable _disposable = new();
+        
+        protected override void SetupListenersOnShow()
         {
-            if (isFirstTutorial is false) return;
-            
-            ClearTutorial();
-
-            _isBlockClick = true;
-            firstTutorials[index].button.gameObject.SetActive(true);
-            _textTutorial.text = firstTutorials[index].text;
-
-            _clickDisposable = firstTutorials[index].button.OnClickAsObservable()
-                .Subscribe(_ =>
-                {
-                    _isBlockClick = false;
-                    
-                    UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage
-                    {
-                        Type = WindowType.None
-                    });
-                    
-                    _clickDisposable.Dispose();
-                });
+            gameButtons[0].OnClickAsObservable().
+                Subscribe(e => OpenGameWindow(WindowType.ProductionTrackSettings)).
+                AddTo(_disposable);
+            gameButtons[2].OnClickAsObservable().
+                Subscribe(e => OpenGameWindow(WindowType.Training)).
+                AddTo(_disposable);
+            gameButtons[3].OnClickAsObservable().
+                Subscribe(e => OpenGameWindow(WindowType.Store)).
+                AddTo(_disposable);
+            gameButtons[4].OnClickAsObservable().
+                Subscribe(e => OpenGameWindow(WindowType.Personal)).
+                AddTo(_disposable);
         }
 
-        internal void ShowTutorial()
+        public void ShowTutorial(TutorialStageSettings stageSettings)
         {
-            if (_uiElementsTutorial is null || _uiElementsTutorial.Length == 0) return;
-           
-            ClearTutorial();
+            var playerInfo = PlayerManager.Data.Info;
             
-            if (_tutorialIndex >= _uiElementsTutorial.Length)
+            nickname.text = playerInfo.NickName;
+            playerIcon.sprite = playerInfo.Gender == Gender.Male
+                ? imagesBank.MaleAvatar
+                : imagesBank.FemaleAvatar;
+            
+            info.text = LocalizationManager.Instance.Get(stageSettings.Text);
+            for (int i = 0; i < gameButtons.Length; i++)
             {
-                UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage {Type = WindowType.None});
-                return;
+                gameButtons[i].interactable = stageSettings.ButtonsActivity[i];
             }
-
-            _uiElementsTutorial[_tutorialIndex].image.enabled = true;
-            _textTutorial.text = _uiElementsTutorial[_tutorialIndex].text;
-        }
-
-        private void ClearTutorial()
-        {
-            for (int i = 0; i < firstTutorials?.Length; i++) 
-                firstTutorials[i].button.gameObject.SetActive(false);
-
-            _textTutorial.text = "";
-            for (int i = 0; i < _uiElementsTutorial?.Length; i++)
-                _uiElementsTutorial[i].image.enabled = false;
-        }
-
-        protected override void DisposeContainers()
-        {
-            base.DisposeContainers();
             
-            ClearTutorial();
-            _tutorialIndex = 0;
+            Show();
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        private void OpenGameWindow(WindowType type)
         {
-            if (_isBlockClick is true) return;
-            
-            ++_tutorialIndex;
-            ShowTutorial();
+            UIMessageBroker.Instance.Publish(new WindowControlMessage {Type = type});
+            Hide();
         }
-        
-        [Serializable]
-        private struct FirstTutorialSettings
+
+        protected override void DisposeListeners()
         {
-            [SerializeField] [HideLabel, HorizontalGroup] public Button button;
-            [SerializeField] [HorizontalGroup, HideLabel] public string text;
-        }
-        
-        [Serializable]
-        private struct TutorialSettings
-        {
-            [SerializeField] [PreviewField, HideLabel, HorizontalGroup] public Image image;
-            [SerializeField] [HorizontalGroup(width:250), HideLabel, TextArea] public string text;
+            _disposable.Clear();
         }
     }
 }

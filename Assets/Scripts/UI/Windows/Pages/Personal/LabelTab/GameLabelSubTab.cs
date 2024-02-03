@@ -7,7 +7,6 @@ using Firebase.Analytics;
 using Game.Labels;
 using Game.Player;
 using Game.Rappers;
-using Game.Tutorial;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
@@ -46,7 +45,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             
             base.Open();
             
-            TutorialManager.Instance.ShowTutorial("tutorial_game_label");
+            HintsManager.Instance.ShowHint("tutorial_game_label");
         }
 
         private void DisplayInfo(LabelInfo label)
