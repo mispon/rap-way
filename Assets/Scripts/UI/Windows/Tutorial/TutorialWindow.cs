@@ -4,9 +4,6 @@ using Game.Player;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Base;
-using UI.Enums;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,18 +24,12 @@ namespace UI.Windows.Tutorial
         
         protected override void SetupListenersOnShow()
         {
-            gameButtons[0].OnClickAsObservable().
-                Subscribe(e => OpenGameWindow(WindowType.ProductionTrackSettings)).
-                AddTo(_disposable);
-            gameButtons[2].OnClickAsObservable().
-                Subscribe(e => OpenGameWindow(WindowType.Training)).
-                AddTo(_disposable);
-            gameButtons[3].OnClickAsObservable().
-                Subscribe(e => OpenGameWindow(WindowType.Store)).
-                AddTo(_disposable);
-            gameButtons[4].OnClickAsObservable().
-                Subscribe(e => OpenGameWindow(WindowType.Personal)).
-                AddTo(_disposable);
+            foreach (var gameBtn in gameButtons)
+            {
+                gameBtn.OnClickAsObservable()
+                    .Subscribe(e => Hide())
+                    .AddTo(_disposable);
+            }
         }
 
         public void ShowTutorial(TutorialStageSettings stageSettings)
@@ -57,12 +48,6 @@ namespace UI.Windows.Tutorial
             }
             
             Show();
-        }
-
-        private void OpenGameWindow(WindowType type)
-        {
-            UIMessageBroker.Instance.Publish(new WindowControlMessage {Type = type});
-            Hide();
         }
 
         protected override void DisposeListeners()
