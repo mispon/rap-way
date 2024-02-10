@@ -13,6 +13,10 @@ namespace Core
         [SerializeField] private AudioSource sfx;
         [SerializeField] private UISoundSettings _uiSoundSettings;
 
+        private const float realMinVolume = -80;
+        private const float minVolume = -30;
+        private const float maxVolume = 0;
+        
         private void Start()
         {
             LoadVolume("MasterVolume");
@@ -32,16 +36,25 @@ namespace Core
             sfx.PlayOneShot(sound);
         }
 
+        public void SetVolume(string volumeKey, float volume)
+        {
+            if (volume <= minVolume)
+            {
+                volume = realMinVolume;
+            }
+            
+            audioMixerGroup.audioMixer.SetFloat(volumeKey, volume);
+        }
+        
         private void LoadVolume(string volumeKey)
         {
-            if (PlayerPrefs.HasKey(volumeKey) is false)
+            if (!PlayerPrefs.HasKey(volumeKey))
             {
-                const float maxVolume = 0;
                 PlayerPrefs.SetFloat(volumeKey, maxVolume);
             }
             
             var volume = PlayerPrefs.GetFloat(volumeKey);
-            audioMixerGroup.audioMixer.SetFloat(volumeKey, volume);
+            SetVolume(volumeKey, volume);
         }
     }
 }

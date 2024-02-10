@@ -4,9 +4,4 @@
     {
         public SceneTypes SceneType;
     }
-
-    public struct SceneReadyMessage
-    {
-        public SceneTypes SceneType;
-    }
 }

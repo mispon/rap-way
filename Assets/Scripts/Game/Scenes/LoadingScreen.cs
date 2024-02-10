@@ -8,14 +8,17 @@ namespace Game.Scenes
     [RequireComponent(typeof(Canvas))]
     public class LoadingScreen : MonoBehaviour, IDisposable
     {
-        [SerializeField] private Image _imageFadeOut;
-        [SerializeField] private RectTransform _progressBarParent;
-        [SerializeField] private Image _progressBar;
-        [SerializeField] private bool _showProgressBar;
+        [SerializeField] private Image imageFadeOut;
+        [SerializeField] private Image loadingLabel;
+        [SerializeField] private RectTransform progressBarParent;
+        [SerializeField] private Image progressBar;
+        [SerializeField] private bool showProgressBar;
 
         private Canvas _canvas;
-        private IDisposable _fadeDisposable;
         private bool _isFadeIn;
+        
+        private IDisposable _fadeDisposable;
+        private IDisposable _progressDisposable;
         
         public Action onFadeComplete;
 
@@ -24,76 +27,94 @@ namespace Game.Scenes
             _canvas = GetComponent<Canvas>();
             _canvas.enabled = false;
 
-            HideProgress();
-            Color color = _imageFadeOut.color;
+            HideProgressBar();
+            
+            Color color = imageFadeOut.color;
             color.a = 0;
-            _imageFadeOut.color = color;
+            imageFadeOut.color = color;
         }
         
         public void StartLoading(float fadeTime)
         {
-            _canvas.enabled = true;
-            HideProgress();
             _isFadeIn = true;
+            _canvas.enabled = true;
+            
+            HideProgressBar();
             StartFade(fadeTime);
         }
         
         public void EndLoading(float fadeTime)
         {
-            HideProgress();
             _isFadeIn = false;
             onFadeComplete += Dispose;
+            
+            HideProgressBar();
             StartFade(fadeTime);
         }
 
         private void StartFade(float fadeTime)
         {
-            _fadeDisposable?.Dispose();
-
             float opacity = 0;
             _fadeDisposable = Observable
                 .EveryUpdate()
-                .TakeWhile(_ => opacity <= 1)
-                .Finally(() => onFadeComplete?.Invoke())
+                .TakeWhile(_ => opacity < 1)
+                .Finally(() =>
+                {
+                    _fadeDisposable?.Dispose();
+                    onFadeComplete?.Invoke();
+                })
                 .Subscribe(_ =>
                 {
                     opacity += UnityEngine.Time.deltaTime / fadeTime;
-                   
                     float alpha = _isFadeIn ? opacity : 1 - opacity;
-                    Color color = _imageFadeOut.color;
+                    
+                    Color color = imageFadeOut.color;
                     color.a = alpha;
-                    _imageFadeOut.color = color;
+                    imageFadeOut.color = color;
                 });
         }
         
-        public void ShowProgress()
+        public IObservable<bool> ShowProgressBar(float duration)
         {
-            if (!_showProgressBar) 
-                return;
+            if (!showProgressBar) 
+                return Observable.Return(true);
             
-            _progressBarParent.gameObject.SetActive(true);
+            SetLabelsActive(true);
+
+            return Observable.Create<bool>(observer =>
+            {
+                return Observable
+                    .EveryUpdate()
+                    .TakeWhile(_ => progressBar.fillAmount < 1)
+                    .Finally(observer.OnCompleted)
+                    .Subscribe(_ =>
+                    {
+                        progressBar.fillAmount += UnityEngine.Time.deltaTime / duration;
+                    });
+            });
         }
 
-        private void HideProgress()
+        private void HideProgressBar()
         {
-            SetProgress(0);
-            _progressBarParent.gameObject.SetActive(false);
-        }
-
-        public void SetProgress(float loadProgressRatio)
-        {
-            if (!_showProgressBar) 
-                return;
-            
-            _progressBar.fillAmount = loadProgressRatio;
+            progressBar.fillAmount = 0;
+            SetLabelsActive(false);
         }
         
         public void Dispose()
         {
-            onFadeComplete = null;
             _fadeDisposable?.Dispose();
-            _progressBarParent.gameObject.SetActive(false);
+            _progressDisposable?.Dispose();
+            
             _canvas.enabled = false;
+            onFadeComplete = null;
+
+            SetLabelsActive(false);
+        }
+
+        private void SetLabelsActive(bool activity)
+        {
+            progressBarParent.gameObject.SetActive(activity);
+            loadingLabel.gameObject.SetActive(activity);
         }
     }
 }
