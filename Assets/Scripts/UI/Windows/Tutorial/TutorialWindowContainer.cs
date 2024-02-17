@@ -28,7 +28,7 @@ namespace UI.Windows.Tutorial
             
             UIMessageBroker.Instance
                 .Receive<TutorialWindowControlMessage>()
-                .Subscribe(msg => ShowNextTutorialStage())
+                .Subscribe(_ => ShowNextTutorialStage())
                 .AddTo(disposables);
         }
 

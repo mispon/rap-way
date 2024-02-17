@@ -19,12 +19,20 @@ namespace UI.Windows.Pages.Store.Purchase
         
         [BoxGroup("Purchaser")] [SerializeField] private StoreItemPurchaser _purchaser;
         [BoxGroup("Error")] [SerializeField] private GameError gameError;
+        [Space]
+        [BoxGroup("Money Icon")] [SerializeField] private Sprite moneySprite;
+        [BoxGroup("Money Icon")] [SerializeField] private Sprite donateSprite;
+        [BoxGroup("Money Icon")] [SerializeField] private Sprite realMoneySprite;
+        [Space]
         [BoxGroup("Card")] [SerializeField] private Image icon;
         [BoxGroup("Card")] [SerializeField] private Text itemName;
         [BoxGroup("Card")] [SerializeField] private Text itemDesc;
+        [BoxGroup("Card")] [SerializeField] private Image moneyIcon;
         [BoxGroup("Card")] [SerializeField] private Text price;
         [BoxGroup("Card")] [SerializeField] private Button buyButton;
-
+        [Space]
+        [SerializeField] private StoreItemPurchased purchasedItem;
+        
         private GoodInfo _info;
         
         private void Start()
@@ -39,7 +47,9 @@ namespace UI.Windows.Pages.Store.Purchase
             icon.sprite = info.SquareImage;
             itemName.text = info.Name;
             itemDesc.text = !string.IsNullOrEmpty(info.Desc) ? GetLocale(info.Desc) : "";
-            price.text = $"Item cost: {info.Price.GetMoney()}";
+
+            moneyIcon.sprite = GetMoneyIcon(info);
+            price.text = info.Price.GetDisplay();
             
             gameError.ForceHide();
             Open();
@@ -58,11 +68,13 @@ namespace UI.Windows.Pages.Store.Purchase
             var newGoodEvent = StoreItemPurchaser.CreateNewGoodEvent(_info);
             MainMessageBroker.Instance.Publish(newGoodEvent);
             
+            purchasedItem.Show(_info);
             Close();
         }
 
         private void HandleDonatePurchase()
         {
+            purchasedItem.Show(_info);
             Close();
         }
 
@@ -88,6 +100,23 @@ namespace UI.Windows.Pages.Store.Purchase
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private Sprite GetMoneyIcon(GoodInfo item)
+        {
+            return item switch
+            {
+                SwagGood  => moneySprite,
+                EquipGood => moneySprite,
+                
+                DonateSwagGood  => donateSprite,
+                DonateEquipGood => donateSprite,
+                
+                DonateCoins => realMoneySprite,
+                NoAds       => realMoneySprite,
+                
+                _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
+            };
         }
         
         protected override void BeforePageOpen()

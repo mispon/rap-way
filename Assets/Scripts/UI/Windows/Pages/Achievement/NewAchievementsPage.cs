@@ -24,10 +24,13 @@ namespace UI.Windows.Pages.Achievement
         {
             _achievements.Enqueue(achievement);
 
-            if (!gameObject.activeSelf)
+            try
             {
-                Open();
-            }
+                if (!gameObject.activeSelf)
+                {
+                    Open();
+                }    
+            } catch(MissingReferenceException) {}
         }
 
         protected override void BeforePageOpen()

@@ -91,12 +91,12 @@ namespace UI.Windows.Pages.Store
         
         private void UpdateGameBalance(int money)
         {
-            gameBalance.text = money.GetMoney();
+            gameBalance.text = money.GetDisplay();
         }
         
         private void UpdateDonateBalance(int donate)
         {
-            donateBalance.text = donate.GetMoney();
+            donateBalance.text = donate.GetDisplay();
         }
 
         protected override void AfterPageClose()

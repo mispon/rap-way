@@ -22,9 +22,15 @@ namespace UI.Windows.Pages.Store
         
         [BoxGroup("Card")] [SerializeField] private StoreItemPurchaseCard itemCard;
         [Space]
+        [BoxGroup("Money Icon")] [SerializeField] private Sprite moneySprite;
+        [BoxGroup("Money Icon")] [SerializeField] private Sprite donateSprite;
+        [BoxGroup("Money Icon")] [SerializeField] private Sprite realMoneySprite;
+        [Space]
         [BoxGroup("Item")] [SerializeField] private Image icon;
         [BoxGroup("Item")] [SerializeField] private Text price;
+        [BoxGroup("Item")] [SerializeField] private Image priceIcon;
         [BoxGroup("Item")] [SerializeField] private Button itemButton;
+        [BoxGroup("Item")] [SerializeField] private GameObject purchased;
         
         private RectTransform _rectTransform;
         
@@ -51,9 +57,27 @@ namespace UI.Windows.Pages.Store
             _info = info;
             
             icon.sprite = info.SquareImage;
-            price.text = info.Price.GetMoney();
-
+            price.text = info.Price.GetDisplay();
+            priceIcon.sprite = GetMoneyIcon(info);
+            
             HandleEvents();
+        }
+        
+        private Sprite GetMoneyIcon(GoodInfo item)
+        {
+            return item switch
+            {
+                SwagGood  => moneySprite,
+                EquipGood => moneySprite,
+                
+                DonateSwagGood  => donateSprite,
+                DonateEquipGood => donateSprite,
+                
+                DonateCoins => realMoneySprite,
+                NoAds       => realMoneySprite,
+                
+                _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
+            };
         }
 
         private void HandleEvents()
@@ -100,8 +124,8 @@ namespace UI.Windows.Pages.Store
 
         private void SetPurchased()
         {
-            itemButton.interactable = false;
-            itemButton.image.color = Color.cyan;
+            itemButton.gameObject.SetActive(false);
+            purchased.SetActive(true);
         }
         
         public void SetPosition(float spacing)
