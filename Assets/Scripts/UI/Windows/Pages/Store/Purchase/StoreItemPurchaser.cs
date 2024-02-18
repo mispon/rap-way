@@ -107,8 +107,8 @@ namespace UI.Windows.Pages.Store.Purchase
             string productId = item switch
             {
                 DonateCoins dc => dc.ProductId,
-                NoAds na => na.ProductId,
-                _ => ""
+                NoAds na       => na.ProductId,
+                _              => ""
             };
 
             if (string.IsNullOrEmpty(productId))
