@@ -38,5 +38,8 @@ namespace ScriptableObjects
         [Header("Иконки скиллов")]
         [Tooltip("Индекс элемента соответствует значению enum Skills")]
         public Sprite[] Skills;
+        
+        [Header("Houses images")]
+        public Sprite[] Houses;
     }
 }
