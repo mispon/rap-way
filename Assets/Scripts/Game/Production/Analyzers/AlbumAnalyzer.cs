@@ -35,7 +35,7 @@ namespace Game.Production.Analyzers
                 album.IsHit
             );
 
-            if (album.IsHit)
+            if (qualityPoints >= settings.AlbumChartsThreshold)
             {
                 album.ChartPosition = CalculateChartPosition();
             }

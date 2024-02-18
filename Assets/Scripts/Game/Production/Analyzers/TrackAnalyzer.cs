@@ -53,7 +53,7 @@ namespace Game.Production.Analyzers
                 track.IsHit
             );
 
-            if (track.IsHit)
+            if (qualityPoints >= settings.TrackChartsThreshold)
             {
                 track.ChartPosition = CalculateChartPosition();
             }

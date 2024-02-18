@@ -26,7 +26,9 @@ namespace ScriptableObjects
         public float TrackListenCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int TrackRewardExp;
-
+        [Range(0.0f, 1.0f), Tooltip("Порог качества для попадания в чарты")]
+        public float TrackChartsThreshold;
+        
         [Header("ALBUM")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int AlbumWorkDuration;
@@ -42,7 +44,9 @@ namespace ScriptableObjects
         public float AlbumListenCost;
         [Range(100, 1000), Tooltip("Количество очков опыта")]
         public int AlbumRewardExp;
-
+        [Range(0.0f, 1.0f), Tooltip("Порог качества для попадания в чарты")]
+        public float AlbumChartsThreshold;
+        
         [Header("CLIP")]
         [Range(5, 50), Tooltip("Длительность работы, дни")]
         public int ClipWorkDuration;

@@ -1,3 +1,4 @@
+using System.Threading;
 using Core;
 using UniRx;
 using UnityEngine;
@@ -14,7 +15,8 @@ namespace Game.Scenes
 
         private string _currentScene;
         private SceneTypes _loadingScene;
-
+        private long _ack;
+        
         protected override void InitializeSingleton()
         {
             base.InitializeSingleton();
@@ -26,7 +28,6 @@ namespace Game.Scenes
         
         private void OnSceneLoadMessage(SceneLoadMessage msg)
         {
-            _currentScene = SceneManager.GetActiveScene().name;
             _loadingScene = msg.SceneType;
             
             loadingScreen.onFadeComplete += LoadNewScene;
@@ -35,6 +36,9 @@ namespace Game.Scenes
 
         private void LoadNewScene()
         {
+            _ack = 0;
+            _currentScene = SceneManager.GetActiveScene().name;
+            
             loadingScreen.onFadeComplete -= LoadNewScene;
             loadingScreen
                 .ShowProgressBar(settings.LoadingDelay)
@@ -43,11 +47,20 @@ namespace Game.Scenes
                 .AddTo(this);
             
             string sceneName = settings.GetSceneName(_loadingScene);
-            SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            SceneManager
+                .LoadSceneAsync(sceneName, LoadSceneMode.Additive)
+                .AsObservable()
+                .Last()
+                .Subscribe(_ => UnloadCurrentScene());
         }
 
         private void UnloadCurrentScene()
         {
+            // we need 2 acks to unload last scene
+            Interlocked.Increment(ref _ack);
+            if (Interlocked.Read(ref _ack) != 2)
+                return;
+            
             SceneManager
                 .UnloadSceneAsync(_currentScene)
                 .AsObservable()
