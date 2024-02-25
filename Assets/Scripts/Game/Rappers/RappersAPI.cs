@@ -10,7 +10,7 @@ namespace Game.Rappers
     /// <summary>
     /// Rappers public API
     /// </summary>
-    public partial class RappersPackage : GamePackage<RappersPackage>
+    public partial class RappersPackage
     {
         /// <summary>
         /// Adds new custom rapper

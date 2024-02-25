@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Game.Labels
 {
-    public partial class LabelsPackage : IStarter
+    public partial class LabelsPackage : GamePackage<LabelsPackage>, IStarter
     {
         [SerializeField] private LabelContractPage contractPage;
         [SerializeField] private PersonalPage personalPage;

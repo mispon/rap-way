@@ -11,7 +11,7 @@ namespace Game.Rappers
     /// <summary>
     /// Initial logic of rappers package
     /// </summary>
-    public partial class RappersPackage : IStarter
+    public partial class RappersPackage : GamePackage<RappersPackage>, IStarter
     {
         [SerializeField] private RappersData data;
         [SerializeField] private ImagesBank imagesBank;

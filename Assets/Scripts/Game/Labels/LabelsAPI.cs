@@ -10,7 +10,7 @@ namespace Game.Labels
     /// <summary>
     /// Music labels public API
     /// </summary>
-    public partial class LabelsPackage : GamePackage<LabelsPackage>
+    public partial class LabelsPackage
     {
         /// <summary>
         /// Returns label by name
