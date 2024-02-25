@@ -1,10 +1,10 @@
 using MessageBroker;
-using MessageBroker.Messages.Donate;
+using MessageBroker.Messages.Player;
 using UniRx;
 
 namespace Game.Player.Donate
 {
-    public class DonateEventsHandler : BaseEventsHandler
+    public class DonateMessagesHandler : BaseMessagesHandler
     {
         protected override void RegisterHandlers()
         {
@@ -16,7 +16,7 @@ namespace Game.Player.Donate
         private void HandleAddDonate()
         {
             MainMessageBroker.Instance
-                .Receive<AddDonateEvent>()
+                .Receive<AddDonateMessage>()
                 .Subscribe(e =>
                 {
                     var playerData = GameManager.Instance.PlayerData;
@@ -25,8 +25,8 @@ namespace Game.Player.Donate
                     int newVal = playerData.Donate + e.Amount;
 
                     playerData.Donate = newVal;
-                    MainMessageBroker.Instance.Publish(new DonateAddedEvent());
-                    MainMessageBroker.Instance.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
+                    MainMessageBroker.Instance.Publish(new DonateAddedMessage());
+                    MainMessageBroker.Instance.Publish(new DonateChangedMessage {OldVal = oldVal, NewVal = newVal});
                     
                     GameManager.Instance.SaveDonateBalance();
                 })
@@ -49,7 +49,7 @@ namespace Game.Player.Donate
                         int newVal = playerData.Donate - e.Amount;
 
                         playerData.Donate = newVal;
-                        MainMessageBroker.Instance.Publish(new DonateChangedEvent {OldVal = oldVal, NewVal = newVal});
+                        MainMessageBroker.Instance.Publish(new DonateChangedMessage {OldVal = oldVal, NewVal = newVal});
                         
                         GameManager.Instance.SaveDonateBalance();
                         ok = true;
@@ -63,7 +63,7 @@ namespace Game.Player.Donate
         private void HandleNoAddPurchase()
         {
             MainMessageBroker.Instance
-                .Receive<NoAdsPurchaseEvent>()
+                .Receive<NoAdsPurchaseMessage>()
                 .Subscribe(_ =>
                 {
                     GameManager.Instance.SaveNoAds();

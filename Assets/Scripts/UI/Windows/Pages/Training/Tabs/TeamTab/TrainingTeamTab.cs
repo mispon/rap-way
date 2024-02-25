@@ -3,7 +3,7 @@ using Game.Player;
 using Game.Player.Team;
 using Game.Player.Team.Desc;
 using MessageBroker;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -78,7 +78,7 @@ namespace UI.Windows.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void GivePayment(Teammate teammate, int salary)
         {
-            MainMessageBroker.Instance.Publish(new ChangeMoneyEvent {Amount = -salary});
+            MainMessageBroker.Instance.Publish(new ChangeMoneyMessage {Amount = -salary});
             teammate.HasPayment = true;
   
             onStartTraining.Invoke(() => 0);

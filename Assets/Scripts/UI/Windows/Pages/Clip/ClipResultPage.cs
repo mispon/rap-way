@@ -93,7 +93,7 @@ namespace UI.Windows.Pages.Clip
             clip.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddClip(clip);
             
-            MainMessageBroker.Instance.Publish(new ProductionRewardEvent
+            MainMessageBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = clip.MoneyIncome,
                 FansIncome = clip.FansIncome,

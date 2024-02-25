@@ -31,11 +31,9 @@ namespace UI.Windows.MainMenu
         [BoxGroup("Buttons")] [SerializeField] private Button _startButton;
 
         private bool _maleSelected = true;
-        
-        protected override void SetupListenersOnInitialize()
+
+        public override void Initialize()
         {
-            base.SetupListenersOnInitialize();
-            
             _maleButton.onClick.AddListener(() => OnGenderChange(true));
             _femaleButton.onClick.AddListener(() => OnGenderChange(false));
             _startButton.onClick.AddListener(OnStartClick);
@@ -44,6 +42,7 @@ namespace UI.Windows.MainMenu
         private void OnGenderChange(bool isMale)
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
+            
             _maleSelected = isMale;
             _maleButton.image.sprite = isMale ? _maleAvatar : _maleAvatarInactive;
             _femaleButton.image.sprite = !isMale ? _femaleAvatar : _femaleAvatarInactive;

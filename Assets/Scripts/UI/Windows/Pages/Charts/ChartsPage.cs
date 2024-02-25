@@ -27,7 +27,7 @@ namespace UI.Windows.Pages.Charts
             labelsTabButton.onClick.AddListener(OpenLabelsTab);
         }
 
-        public void Show()
+        public void ShowControls()
         {
             foreach (var go in pageControls)
             {
@@ -35,7 +35,7 @@ namespace UI.Windows.Pages.Charts
             }
         }
         
-        public void Hide()
+        public void HideControls()
         {
             foreach (var go in pageControls)
             {
@@ -45,7 +45,7 @@ namespace UI.Windows.Pages.Charts
 
         protected override void AfterPageOpen()
         {
-            Show();
+            ShowControls();
             base.AfterPageOpen();
             OpenRappersTab();
 

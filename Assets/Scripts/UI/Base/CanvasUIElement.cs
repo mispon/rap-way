@@ -1,13 +1,16 @@
-﻿using System;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UI.Base.Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Base
 {
-    [RequireComponent(typeof(Canvas), typeof(CanvasGroup), typeof(GraphicRaycaster))]
-    public abstract class CanvasUIElement : SerializedMonoBehaviour, IUIElement, IDisposable
+    [RequireComponent(
+        typeof(Canvas), 
+        typeof(CanvasGroup), 
+        typeof(GraphicRaycaster)
+    )]
+    public abstract class CanvasUIElement : SerializedMonoBehaviour, IUIElement
     {
         private Canvas _canvas;
         private Canvas canvas
@@ -23,7 +26,6 @@ namespace UI.Base
         }
         
         private CanvasGroup _canvasGroup;
-
         private CanvasGroup canvasGroup
         {
             get
@@ -37,47 +39,43 @@ namespace UI.Base
         }
         
         private bool _isActive;
-
-        public virtual void Initialize()
-        {
-            Hide();
-            SetupListenersOnInitialize();
-        }
         
-        public virtual void Show()
+        public virtual void Show(object context)
         {
             if (_isActive) return;
+            
+            BeforeShow();
             
             _isActive = true;
             canvasGroup.interactable = true;
             canvas.enabled = true;
             
-            SetupListenersOnShow();
-            SendRequests();
+            AfterShow();
         }
         
         public virtual void Hide()
         {
             if (!_isActive) return;
             
+            BeforeHide();
+            
             _isActive = false;
             canvasGroup.interactable = false;
             canvas.enabled = false;
-            
-            DisposeContainers();
-            DisposeListeners();
+
+            AfterHide();
         }
         
         public void Dispose()
         {
-            DisposeContainers();
-            DisposeListeners();
+            BeforeHide();
+            AfterHide();
         }
         
-        protected virtual void SetupListenersOnInitialize() { }
-        protected virtual void SetupListenersOnShow() { }
-        protected virtual void SendRequests() { }
-        protected virtual void DisposeContainers() { }
-        protected virtual void DisposeListeners() {}
+        public    virtual void Initialize() {}
+        protected virtual void BeforeShow() {}
+        protected virtual void AfterShow() {}
+        protected virtual void BeforeHide() {}
+        protected virtual void AfterHide() {}
     }
 }

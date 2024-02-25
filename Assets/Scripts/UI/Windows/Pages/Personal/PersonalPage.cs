@@ -55,9 +55,9 @@ namespace UI.Windows.Pages.Personal
             labelButton.onClick.AddListener(OpenLabelTab);
         }
         
-        public override void Show()
+        public override void Show(object ctx)
         {
-            base.Show();
+            base.Show(ctx);
             Open();
         }
 

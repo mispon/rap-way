@@ -9,7 +9,7 @@ using Game.Labels.Desc;
 using Game.Player;
 using Game.Rappers.Desc;
 using MessageBroker;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.Progress;
@@ -168,7 +168,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
         {
             SoundManager.Instance.PlaySound(UIActionType.Pay);
             
-            MainMessageBroker.Instance.Publish(new ChangeMoneyEvent {Amount = -_cost});
+            MainMessageBroker.Instance.Publish(new ChangeMoneyMessage {Amount = -_cost});
             _label.IsFrozen = false;
             
             DisplayInfo(_label);
@@ -192,7 +192,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             _label.Production.Value = level;
             _label.Production.Exp = newExp;
             
-            MainMessageBroker.Instance.Publish(new ChangeExpEvent {Amount = -expStep});
+            MainMessageBroker.Instance.Publish(new ChangeExpMessage {Amount = -expStep});
             DisplayInfo(_label);
         }
 
@@ -214,7 +214,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             _label.Prestige.Value = level;
             _label.Prestige.Exp = newExp;
             
-            MainMessageBroker.Instance.Publish(new ChangeExpEvent {Amount = -expStep});
+            MainMessageBroker.Instance.Publish(new ChangeExpMessage {Amount = -expStep});
             DisplayInfo(_label);
         }
         
@@ -259,7 +259,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
 
             if (!_label.IsFrozen)
             {
-                MainMessageBroker.Instance.Publish(new ChangeMoneyEvent {Amount = _income});
+                MainMessageBroker.Instance.Publish(new ChangeMoneyMessage {Amount = _income});
             }
 
             _label.IsFrozen = true;

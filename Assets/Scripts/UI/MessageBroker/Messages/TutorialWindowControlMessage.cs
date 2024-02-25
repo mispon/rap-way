@@ -1,4 +1,4 @@
 ﻿namespace UI.MessageBroker.Messages
 {
-    public struct TutorialWindowControlMessage { }
+    public struct TutorialWindowControlMessage {}
 }

@@ -8,8 +8,9 @@ using Firebase.Analytics;
 using Game;
 using Game.Player;
 using Game.Player.Team;
+using Game.Production;
 using MessageBroker;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player.State;
 using Models.Production;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
@@ -87,7 +88,7 @@ namespace UI.Windows.Pages.Concert
             album.ConcertAmounts += 1;
 
             _concert.AlbumId = album.Id;
-            _concert.Id = PlayerManager.GetNextProductionId<ConcertInfo>();
+            _concert.Id = ProductionManager.GetNextProductionId<ConcertInfo>();
             _concert.TicketCost = Mathf.RoundToInt(ticketCostSlider.value);
 
             productSelectionPage.Close();

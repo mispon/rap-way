@@ -58,7 +58,7 @@ namespace UI.Windows.Pages.Labels
 
         protected override void AfterPageClose()
         {
-            chartsPage.Show();
+            chartsPage.ShowControls();
         }
 
         private void ProductionBntLeftClick()

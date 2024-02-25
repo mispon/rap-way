@@ -1,7 +1,6 @@
 ﻿using Core.Localization;
 using Game;
 using Game.Settings;
-using ScriptableObjects;
 using UI.Base;
 
 namespace UI.Windows.Pages
@@ -31,7 +30,7 @@ namespace UI.Windows.Pages
             
             _isOpen = true;
             gameObject.SetActive(true);
-            Show();
+            Show(new object());
             
             AfterPageOpen();
         }

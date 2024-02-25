@@ -60,11 +60,5 @@ namespace UI.Windows.Tutorial
             
             return index;
         }
-        
-        protected override void Deactivate()
-        {
-            base.Deactivate();
-            tutorialWindow.Hide();
-        }
     }
 }

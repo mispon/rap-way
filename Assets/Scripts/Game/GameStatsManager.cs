@@ -5,7 +5,6 @@ using Core.OrderedStarter;
 using Enums;
 using Game.Time;
 using MessageBroker;
-using MessageBroker.Messages.State;
 using MessageBroker.Messages.Time;
 using Models.Trends;
 using ScriptableObjects;
@@ -32,11 +31,11 @@ namespace Game
         public void OnStart()
         {
             MainMessageBroker.Instance
-                .Receive<DayLeftEvent>()
+                .Receive<DayLeftMessage>()
                 .Subscribe(e => OnDayLeft())
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<WeekLeftEvent>()
+                .Receive<WeekLeftMessage>()
                 .Subscribe(e => OnWeekLeft())
                 .AddTo(_disposable);
         }

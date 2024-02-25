@@ -6,6 +6,8 @@ using Game;
 using Game.Player;
 using Game.Player.Team;
 using Game.Rappers.Desc;
+using MessageBroker;
+using MessageBroker.Messages.Player;
 using ScriptableObjects;
 using UI.Windows.Pages.Charts;
 using UnityEngine;
@@ -76,9 +78,13 @@ namespace UI.Windows.Pages.Rappers
                     FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperFeatAction);
                     break;
             }
-
+            
             int cooldown = GameManager.Instance.Settings.Team.ManagerCooldown;
-            PlayerManager.SetTeammateCooldown(TeammateType.Manager, cooldown);
+            MainMessageBroker.Instance.Publish(new TeammateCooldownMessage
+            {
+                Type = TeammateType.Manager,
+                Cooldown = cooldown
+            });
             
             workingPage.StartWork(_rapper, convType);
             

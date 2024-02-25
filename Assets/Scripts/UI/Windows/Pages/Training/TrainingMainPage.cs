@@ -1,4 +1,5 @@
 using System;
+using Core.Context;
 using Enums;
 using Firebase.Analytics;
 using Game.Player;
@@ -35,10 +36,13 @@ namespace UI.Windows.Pages.Training
             }
         }
         
-        public override void Show()
+        public override void Show(object ctx)
         {
-            base.Show();
+            base.Show(ctx);
+
+            _tabIndex = ctx.Value<int>();
             Open();
+            OpenTab(_tabIndex);
         }
 
         public override void Hide()

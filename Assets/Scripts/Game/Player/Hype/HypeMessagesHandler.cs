@@ -1,14 +1,14 @@
 using System.Linq;
 using MessageBroker;
+using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Production;
-using MessageBroker.Messages.State;
 using MessageBroker.Messages.Time;
 using UniRx;
 using UnityEngine;
 
 namespace Game.Player.Hype
 {
-    public class HypeEventsHandler : BaseEventsHandler
+    public class HypeMessagesHandler : BaseMessagesHandler
     {
         protected override void RegisterHandlers()
         {
@@ -20,12 +20,12 @@ namespace Game.Player.Hype
         private void HandleDayLeft()
         {
             MainMessageBroker.Instance
-                .Receive<DayLeftEvent>()
+                .Receive<DayLeftMessage>()
                 .Subscribe(e =>
                 {
                     if (e.Day % 3 == 0)
                     {
-                        MainMessageBroker.Instance.Publish(new ChangeHypeEvent {Amount = -1});
+                        MainMessageBroker.Instance.Publish(new ChangeHypeMessage {Amount = -1});
                     } 
                 })
                 .AddTo(disposable);
@@ -34,7 +34,7 @@ namespace Game.Player.Hype
         private void HandleChangeHype()
         {
             MainMessageBroker.Instance
-                .Receive<ChangeHypeEvent>()
+                .Receive<ChangeHypeMessage>()
                 .Subscribe(e => UpdateHype(e.Amount))
                 .AddTo(disposable);
         }
@@ -42,7 +42,7 @@ namespace Game.Player.Hype
         private void HandleProductionReward()
         {
             MainMessageBroker.Instance
-                .Receive<ProductionRewardEvent>()
+                .Receive<ProductionRewardMessage>()
                 .Subscribe(e => UpdateHype(e.HypeIncome))
                 .AddTo(disposable);
         }
@@ -63,7 +63,7 @@ namespace Game.Player.Hype
             newVal = Mathf.Clamp(newVal, minHype, maxHype);
 
             playerData.Hype = newVal;
-            MainMessageBroker.Instance.Publish(new HypeChangedEvent {OldVal = oldVal, NewVal = newVal});
+            MainMessageBroker.Instance.Publish(new HypeChangedMessage {OldVal = oldVal, NewVal = newVal});
         }
     }
 }

@@ -9,6 +9,7 @@ using Firebase.Analytics;
 using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
+using Game.Production;
 using Models.Production;
 using Models.Trends;
 using ScriptableObjects;
@@ -76,7 +77,7 @@ namespace UI.Windows.Pages.Album
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
-            _album.Id = PlayerManager.GetNextProductionId<AlbumInfo>();
+            _album.Id = ProductionManager.GetNextProductionId<AlbumInfo>();
             if (string.IsNullOrEmpty(_album.Name))
             {
                 _album.Name = $"Album {_album.Id}";

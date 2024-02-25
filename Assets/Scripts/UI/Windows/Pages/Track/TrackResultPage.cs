@@ -115,7 +115,7 @@ namespace UI.Windows.Pages.Track
                 ProductionManager.AddFeat(track.Feat);
             }
             
-            MainMessageBroker.Instance.Publish(new ProductionRewardEvent
+            MainMessageBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = track.MoneyIncome,
                 FansIncome = track.FansIncome,

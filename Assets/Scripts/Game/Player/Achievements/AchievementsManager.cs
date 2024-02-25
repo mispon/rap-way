@@ -12,7 +12,7 @@ using Game.Production;
 using Game.Rappers.Desc;
 using JetBrains.Annotations;
 using MessageBroker;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player.State;
 using Models.Production;
 using ScriptableObjects;
 using UI.Windows.Pages.Achievement;
@@ -50,15 +50,15 @@ namespace Game.Player.Achievements
         public void OnStart()
         {
             MainMessageBroker.Instance
-                .Receive<MoneyChangedEvent>()
+                .Receive<MoneyChangedMessage>()
                 .Subscribe(e => CheckMoney(e.NewVal))
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<FansChangedEvent>()
+                .Receive<FansChangedMessage>()
                 .Subscribe(e => CheckFans(e.NewVal))
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<HypeChangedEvent>()
+                .Receive<HypeChangedMessage>()
                 .Subscribe(e => CheckHype(e.NewVal))
                 .AddTo(_disposable);
             

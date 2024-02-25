@@ -9,6 +9,7 @@ using Firebase.Analytics;
 using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
+using Game.Production;
 using Models.Production;
 using Models.Trends;
 using ScriptableObjects;
@@ -62,9 +63,9 @@ namespace UI.Windows.Pages.Track
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewTrackSelected);
         }
 
-        public override void Show()
+        public override void Show(object ctx)
         {
-            base.Show();
+            base.Show(ctx);
             Open();
         }
 
@@ -89,7 +90,7 @@ namespace UI.Windows.Pages.Track
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
-            _track.Id = PlayerManager.GetNextProductionId<TrackInfo>();
+            _track.Id = ProductionManager.GetNextProductionId<TrackInfo>();
             if (string.IsNullOrEmpty(_track.Name))
             {
                 _track.Name = $"Track {_track.Id}";

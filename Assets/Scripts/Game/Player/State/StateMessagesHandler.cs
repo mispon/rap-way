@@ -1,13 +1,13 @@
 using Game.Settings;
 using MessageBroker;
+using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Production;
-using MessageBroker.Messages.State;
 using UniRx;
 using UnityEngine;
 
 namespace Game.Player.State
 {
-    public class StateEventsHandler : BaseEventsHandler
+    public class StateMessagesHandler : BaseMessagesHandler
     {
         private GameSettings _settings;
 
@@ -49,7 +49,7 @@ namespace Game.Player.State
         private void HandleChangeMoney()
         {
             MainMessageBroker.Instance
-                .Receive<ChangeMoneyEvent>()
+                .Receive<ChangeMoneyMessage>()
                 .Subscribe(e => UpdateMoney(e.Amount))
                 .AddTo(disposable);
         }
@@ -73,7 +73,7 @@ namespace Game.Player.State
         private void HandleChangeFans()
         {
             MainMessageBroker.Instance
-                .Receive<ChangeFansEvent>()
+                .Receive<ChangeFansMessage>()
                 .Subscribe(e => UpdateFans(e.Amount))
                 .AddTo(disposable);
         }
@@ -81,7 +81,7 @@ namespace Game.Player.State
         private void HandleChangeExp()
         {
             MainMessageBroker.Instance
-                .Receive<ChangeExpEvent>()
+                .Receive<ChangeExpMessage>()
                 .Subscribe(e => UpdateExp(e.Amount))
                 .AddTo(disposable);
         }
@@ -89,7 +89,7 @@ namespace Game.Player.State
         private void HandleProductionReward()
         {
             MainMessageBroker.Instance
-                .Receive<ProductionRewardEvent>()
+                .Receive<ProductionRewardMessage>()
                 .Subscribe(e =>
                 {
                     UpdateMoney(e.MoneyIncome);
@@ -107,7 +107,7 @@ namespace Game.Player.State
         private void HandleConvertReward()
         {
             MainMessageBroker.Instance
-                .Receive<ConcertRewardEvent>()
+                .Receive<ConcertRewardMessage>()
                 .Subscribe(e =>
                 {
                     UpdateMoney(e.MoneyIncome);
@@ -125,7 +125,7 @@ namespace Game.Player.State
             int newVal = SafetyAdd(oldVal, value, _settings.Player.MaxMoney);
 
             playerData.Money = newVal;
-            MainMessageBroker.Instance.Publish(new MoneyChangedEvent {OldVal = oldVal, NewVal = newVal});
+            MainMessageBroker.Instance.Publish(new MoneyChangedMessage {OldVal = oldVal, NewVal = newVal});
         }
 
         private void UpdateFans(int value)
@@ -139,7 +139,7 @@ namespace Game.Player.State
             newVal = Mathf.Max(newVal, minFans);
                     
             playerData.Fans = newVal;
-            MainMessageBroker.Instance.Publish(new FansChangedEvent {OldVal = oldVal, NewVal = newVal});
+            MainMessageBroker.Instance.Publish(new FansChangedMessage {OldVal = oldVal, NewVal = newVal});
         }
 
         private static void UpdateExp(int value)
@@ -153,7 +153,7 @@ namespace Game.Player.State
             newVal = Mathf.Max(newVal, minExp);
 
             playerData.Exp = newVal;
-            MainMessageBroker.Instance.Publish(new ExpChangedEvent {OldVal = oldVal, NewVal = newVal});
+            MainMessageBroker.Instance.Publish(new ExpChangedMessage {OldVal = oldVal, NewVal = newVal});
         }
         
         private static int SafetyAdd(int current, int increment, int maxValue)

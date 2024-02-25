@@ -6,7 +6,7 @@ using Extensions;
 using Firebase.Analytics;
 using Game.Player;
 using MessageBroker;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player.State;
 using Models.Production;
 using ScriptableObjects;
 using Sirenix.OdinInspector;

@@ -18,7 +18,7 @@ namespace Game.Labels
         private void HandleWeekLeft()
         {
             MainMessageBroker.Instance
-                .Receive<WeekLeftEvent>()
+                .Receive<WeekLeftMessage>()
                 .Subscribe(e =>
                 {
                     UpdateLabelsStats();
@@ -29,7 +29,7 @@ namespace Game.Labels
         private void HandleMonthLeft()
         {
             MainMessageBroker.Instance
-                .Receive<MonthLeftEvent>()
+                .Receive<MonthLeftMessage>()
                 .Subscribe(e =>
                 {
                     if (e.Month % _settings.Labels.RappersActionsFrequency == 0)

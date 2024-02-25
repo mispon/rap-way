@@ -17,7 +17,7 @@ namespace Game.Rappers
         private void HandleMonthLeft()
         {
             MainMessageBroker.Instance
-                .Receive<MonthLeftEvent>()
+                .Receive<MonthLeftMessage>()
                 .Subscribe(e =>
                 {
                     if (e.Month % _settings.Rappers.FansUpdateFrequency == 0)

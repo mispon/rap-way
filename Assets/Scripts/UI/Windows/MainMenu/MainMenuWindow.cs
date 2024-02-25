@@ -20,8 +20,6 @@ namespace UI.Windows.MainMenu
 
         public override void Initialize()
         {
-            base.Initialize();
-
             if (!GameManager.Instance.HasAnySaves())
             {
                 FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
@@ -35,9 +33,9 @@ namespace UI.Windows.MainMenu
             StartCoroutine(SetupContinueButton());
         }
 
-        public override void Show()
+        public override void Show(object ctx)
         {
-            base.Show();
+            base.Show(ctx);
             _productionAnim.Refresh();
         }
 

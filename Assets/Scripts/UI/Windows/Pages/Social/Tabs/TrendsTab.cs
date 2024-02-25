@@ -4,6 +4,8 @@ using Extensions;
 using Game;
 using Game.Player;
 using Game.Player.Team;
+using MessageBroker;
+using MessageBroker.Messages.Player;
 using Models.Production;
 using ScriptableObjects;
 using UnityEngine;
@@ -33,7 +35,12 @@ namespace UI.Windows.Pages.Social.Tabs
         protected override SocialInfo GetInfo()
         {
             int cooldown = GameManager.Instance.Settings.Team.PrManagerCooldown;
-            PlayerManager.SetTeammateCooldown(TeammateType.PrMan, cooldown);
+            MainMessageBroker.Instance.Publish(new TeammateCooldownMessage
+            {
+                Type = TeammateType.PrMan,
+                Cooldown = cooldown
+            });
+            
             return new SocialInfo {Type = SocialType.Trends};
         }
 

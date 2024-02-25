@@ -1,4 +1,4 @@
-namespace MessageBroker.Messages.State
+namespace MessageBroker.Messages.Player.State
 {
     public struct SpendMoneyRequest
     {
@@ -10,12 +10,12 @@ namespace MessageBroker.Messages.State
         public bool OK;
     }
 
-    public struct ChangeMoneyEvent
+    public struct ChangeMoneyMessage
     {
         public int Amount;
     }
     
-    public struct MoneyChangedEvent
+    public struct MoneyChangedMessage
     {
         public int OldVal;
         public int NewVal;

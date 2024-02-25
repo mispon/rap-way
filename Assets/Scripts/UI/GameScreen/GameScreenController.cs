@@ -6,7 +6,7 @@ using Extensions;
 using Game;
 using Game.Time;
 using MessageBroker;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Time;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
@@ -75,19 +75,19 @@ namespace UI.GameScreen
         private void HandleStateEvents()
         {
             MainMessageBroker.Instance
-                .Receive<DayLeftEvent>()
+                .Receive<DayLeftMessage>()
                 .Subscribe(e => OnDayLeft())
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<MoneyChangedEvent>()
+                .Receive<MoneyChangedMessage>()
                 .Subscribe(e => playerMoney.text = e.NewVal.GetMoney())
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<FansChangedEvent>()
+                .Receive<FansChangedMessage>()
                 .Subscribe(e => playerFans.text = e.NewVal.GetDisplay())
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<HypeChangedEvent>()
+                .Receive<HypeChangedMessage>()
                 .Subscribe(e => playerHype.text = e.NewVal.ToString())
                 .AddTo(_disposable);
             MainMessageBroker.Instance

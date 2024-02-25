@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using Core;
 using Core.Localization;
 using Game;
-using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Base;
 using UI.Controls.Carousel;
 using UniRx;
@@ -20,7 +18,7 @@ namespace UI.Windows.MainMenu
 
         private readonly CompositeDisposable _disposable = new();
         
-        public override void Show()
+        public override void Show(object ctx)
         {
             var settings = GameManager.Instance.GameStats;
             
@@ -42,7 +40,7 @@ namespace UI.Windows.MainMenu
                 .AddTo(_disposable);
                 
             
-            base.Show();
+            base.Show(ctx);
         }
 
         public override void Hide()

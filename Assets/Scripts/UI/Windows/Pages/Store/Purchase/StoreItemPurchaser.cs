@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using Enums;
 using Game;
 using MessageBroker;
-using MessageBroker.Messages.Donate;
-using MessageBroker.Messages.Goods;
+using MessageBroker.Messages.Player;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -75,9 +74,9 @@ namespace UI.Windows.Pages.Store.Purchase
             };
         }
 
-        public static AddNewGoodEvent CreateNewGoodEvent(GoodInfo item)
+        public static AddNewGoodMessage CreateNewGoodEvent(GoodInfo item)
         {
-            var goodEvent = new AddNewGoodEvent
+            var goodEvent = new AddNewGoodMessage
             {
                 Type = item.Type,
                 Level = item.Level,
@@ -123,11 +122,11 @@ namespace UI.Windows.Pages.Store.Purchase
 
             if (_coinItemsMap.TryGetValue(productId, out var item))
             {
-                MainMessageBroker.Instance.Publish(new AddDonateEvent {Amount = item.Amount});
+                MainMessageBroker.Instance.Publish(new AddDonateMessage {Amount = item.Amount});
             } 
             else if (productId == _noAdsItem.ProductId)
             {
-                MainMessageBroker.Instance.Publish(new NoAdsPurchaseEvent());
+                MainMessageBroker.Instance.Publish(new NoAdsPurchaseMessage());
             } 
             
             return PurchaseProcessingResult.Complete;
@@ -148,7 +147,7 @@ namespace UI.Windows.Pages.Store.Purchase
             var product = _controller.products.WithID(_noAdsItem.ProductId);
             if (product is {hasReceipt: true})
             {
-                MainMessageBroker.Instance.Publish(new NoAdsPurchaseEvent());
+                MainMessageBroker.Instance.Publish(new NoAdsPurchaseMessage());
             }
         }
 

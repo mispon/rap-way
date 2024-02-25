@@ -86,17 +86,17 @@ namespace Game.Time
         {
             Now = Now.AddDays(1);
             
-            MainMessageBroker.Instance.Publish(new DayLeftEvent {Day = Now.Day});
+            MainMessageBroker.Instance.Publish(new DayLeftMessage {Day = Now.Day});
             
             if (IsWeekLeft())
             {
                 int week = (Now.Day - 1) / 7 + 1;
-                MainMessageBroker.Instance.Publish(new WeekLeftEvent {Week = week});
+                MainMessageBroker.Instance.Publish(new WeekLeftMessage {Week = week});
             }
             
             if (IsMonthLeft())
             {
-                MainMessageBroker.Instance.Publish(new MonthLeftEvent {Month = Now.Month});   
+                MainMessageBroker.Instance.Publish(new MonthLeftMessage {Month = Now.Month});   
             }
         }
 

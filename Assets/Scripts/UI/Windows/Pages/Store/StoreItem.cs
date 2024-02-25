@@ -3,8 +3,7 @@ using Core;
 using Enums;
 using Extensions;
 using MessageBroker;
-using MessageBroker.Messages.Donate;
-using MessageBroker.Messages.Goods;
+using MessageBroker.Messages.Player;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
@@ -83,11 +82,11 @@ namespace UI.Windows.Pages.Store
         private void HandleEvents()
         {
             MainMessageBroker.Instance
-                .Receive<AddNewGoodEvent>()
+                .Receive<AddNewGoodMessage>()
                 .Subscribe(e => OnItemPurchased(e.Type, e.Level))
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<NoAdsPurchaseEvent>()
+                .Receive<NoAdsPurchaseMessage>()
                 .Subscribe(_ => OnNoAdsPurchased())
                 .AddTo(_disposable);
             

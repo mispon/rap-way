@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UI.Base.Interfaces;
 using UI.Enums;
 using UI.MessageBroker;
 using UI.MessageBroker.Messages;
@@ -16,7 +15,7 @@ namespace UI.Base
         [SerializeField] private WindowType _startWindow;
 
         private WindowType _activeWindow;
-        private readonly Stack<IUIElement> _windowHistory = new();
+        private readonly Stack<WindowType> _windowsHistory = new();
 
         public override void Initialize()
         {
@@ -27,73 +26,53 @@ namespace UI.Base
             
             UIMessageBroker.Instance
                 .Receive<WindowControlMessage>()
-                .Subscribe(msg => ManageWindowControl(msg.Type))
+                .Subscribe(msg => ManageWindowControl(msg.Type, msg.Context))
                 .AddTo(disposables);
             
             HideAnyWindow();
-            ManageWindowControl(_startWindow);
+            ManageWindowControl(_startWindow, new object());
         }
 
-        private void ChangeWindow(WindowType windowType)
-        {
-            if (windowType == _activeWindow) 
-                return;
-            
-            var newWindow = GetWindow(windowType);
-            if (newWindow == null) 
-                return;
-            
-            Activate();
-
-            _windowHistory.Push(GetWindow(_activeWindow));
-            HideCurrentWindow();
-            newWindow.Show();
-            
-            _activeWindow = windowType;
-        }
-
-        private void ManageWindowControl(WindowType windowType)
+        private void ManageWindowControl(WindowType windowType, object ctx)
         {
             switch (windowType)
             {
                 case WindowType.Previous:
-                    var prevUIElement = _windowHistory.TryPop(out IUIElement result);
-                    if (prevUIElement is false)
+                    if (_windowsHistory.TryPop(out var prevType))
                     {
-                        Deactivate();
-                        return;
+                        ChangeWindow(prevType, ctx);   
                     }
-
-                    var prevWindow = result as CanvasUIElement;
-                    var prevWindowType = GetWindowType(prevWindow);
-                    ChangeWindow(prevWindowType);
                     break;
                 
                 case WindowType.None:
-                    _windowHistory.Clear();
-                    Deactivate();
+                    _windowsHistory.Clear();
                     break;
                 
                 default:
-                    ChangeWindow(windowType);
+                    ChangeWindow(windowType, ctx);
                     break;
             }
+        }
+        
+        private void ChangeWindow(WindowType windowType, object ctx)
+        {
+            if (windowType == _activeWindow) 
+                return;
+            
+            var window = GetWindow(windowType);
+            if (window == null) 
+                return;
+            
+            HideCurrentWindow();
+            window.Show(ctx);
+            
+            _windowsHistory.Push(_activeWindow);
+            _activeWindow = windowType;
         }
 
         private CanvasUIElement GetWindow(WindowType windowType)
         {
             return _windows.GetValueOrDefault(windowType);
-        }
-
-        private WindowType GetWindowType(CanvasUIElement window)
-        {
-            foreach (var windowData in _windows)
-            {
-                if (windowData.Value == window)
-                    return windowData.Key;
-            }
-            
-            return WindowType.None;
         }
 
         private void HideCurrentWindow()
@@ -106,12 +85,6 @@ namespace UI.Base
         {
             HideCurrentWindow();
             _activeWindow = WindowType.None;
-        }
-        
-        protected override void Deactivate()
-        {
-            base.Deactivate();
-            HideAnyWindow();
         }
     }
 }

@@ -3,7 +3,7 @@ using Core.OrderedStarter;
 using Game.Player;
 using Game.Settings;
 using MessageBroker;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player.State;
 using UI.Windows.Pages.GameFinish;
 using UniRx;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace Game
         public void OnStart()
         {
             _disposable = MainMessageBroker.Instance
-                .Receive<FansChangedEvent>()
+                .Receive<FansChangedMessage>()
                 .Subscribe(e => OnFansChanged(e.NewVal));
         }
 

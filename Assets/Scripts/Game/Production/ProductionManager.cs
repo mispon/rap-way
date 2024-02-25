@@ -4,7 +4,6 @@ using System.Linq;
 using Core;
 using Enums;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Models.Production;
@@ -24,7 +23,7 @@ namespace Game.Production
         public event Action<RapperInfo> onFeat = rapper => {};
         public event Action<RapperInfo> onBattle = rapper => {}; 
         
-        private static PlayerData data => PlayerManager.Data;
+        private static PlayerData data => GameManager.Instance.PlayerData;
         private static PlayerHistory playerHistory => data.History;
         
         /// <summary>
@@ -95,12 +94,6 @@ namespace Game.Production
         }
 
         /// <summary>
-        /// Возвращает кол-во проведенных концертов по идентификатору альбома
-        /// </summary>
-        public static int SameConcertsCount(int albumId)
-            => playerHistory.ConcertList.Count(c => c.AlbumId ==  albumId);
-
-        /// <summary>
         /// Сохраняет информацию о фите
         /// </summary>
         public static void AddFeat(RapperInfo rapperInfo)
@@ -122,6 +115,29 @@ namespace Game.Production
 
             data.Battles.Add(rapperInfo.Id);
             Instance.onBattle.Invoke(rapperInfo);
+        }
+        
+        /// <summary>
+        /// Возвращает идентификатор для новой сущности
+        /// </summary>
+        public static int GetNextProductionId<T>() where T : ProductionBase
+        {
+            var history = data.History;
+            var id = 0;
+
+            if (typeof(T) == typeof(TrackInfo))
+                id = history.TrackList.Any() ? history.TrackList.Max(e => e.Id) : 0;
+
+            if (typeof(T) == typeof(ClipInfo))
+                id = history.ClipList.Any() ? history.ClipList.Max(e => e.Id) : 0;
+
+            if (typeof(T) == typeof(AlbumInfo))
+                id = history.AlbumList.Any() ? history.AlbumList.Max(e => e.Id) : 0;
+
+            if (typeof(T) == typeof(ConcertInfo))
+                id = history.ConcertList.Any() ? history.ConcertList.Max(e => e.Id) : 0;
+
+            return id + 1;
         }
     }
 

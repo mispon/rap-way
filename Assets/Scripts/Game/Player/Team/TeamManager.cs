@@ -1,21 +1,15 @@
 using System;
 using System.Linq;
 using Core;
-using Core.Events;
 using Core.PropertyAttributes;
 using Enums;
 using Game.Effects;
 using Game.Notifications;
 using Game.Player.Team.Desc;
-using Game.Time;
-using MessageBroker;
-using MessageBroker.Messages.Time;
 using ScriptableObjects;
 using UI.Windows.Pages.Team;
 using UI.Windows.Pages.Training;
-using UniRx;
 using UnityEngine;
-using EventType = Core.Events.EventType;
 
 namespace Game.Player.Team
 {

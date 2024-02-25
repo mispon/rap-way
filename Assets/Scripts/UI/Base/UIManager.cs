@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Scenes;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using Sirenix.OdinInspector;
@@ -11,13 +10,13 @@ namespace UI.Base
 {
     public class UIManager : SerializedMonoBehaviour, IDisposable
     {
-        [SerializeField] private List<UIElementContainer> uiElementContainers;
+        [SerializeField] private UIElementContainer[] containers;
 
         private readonly CompositeDisposable _disposables = new();
 
         private void Start()
         {
-            foreach (var container in uiElementContainers)
+            foreach (var container in containers)
                 container.Initialize();
             
             SceneMessageBroker.Instance
@@ -30,7 +29,7 @@ namespace UI.Base
         {
             _disposables?.Dispose();
             
-            foreach (var container in uiElementContainers)
+            foreach (var container in containers)
                 container.Dispose();
         }
     }

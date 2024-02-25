@@ -65,7 +65,7 @@ namespace UI.Windows.Pages
         {
             TimeManager.Instance.SetActionMode();
             _disposable = MainMessageBroker.Instance
-                .Receive<DayLeftEvent>()
+                .Receive<DayLeftMessage>()
                 .Subscribe(e => OnDayLeft());
 
             progressBar.Init(GetDuration());

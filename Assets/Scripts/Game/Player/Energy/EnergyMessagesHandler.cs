@@ -4,7 +4,7 @@ using UniRx;
 
 namespace Game.Player.Energy
 {
-    public class EnergyEventsHandler : BaseEventsHandler
+    public class EnergyMessagesHandler : BaseMessagesHandler
     {
         protected override void RegisterHandlers()
         {
@@ -14,7 +14,7 @@ namespace Game.Player.Energy
         private void HandleDayLeft()
         {
             MainMessageBroker.Instance
-                .Receive<DayLeftEvent>()
+                .Receive<DayLeftMessage>()
                 .Subscribe()
                 .AddTo(disposable);
         }

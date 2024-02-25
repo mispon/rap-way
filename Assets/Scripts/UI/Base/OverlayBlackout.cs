@@ -17,7 +17,7 @@ namespace UI.Base
             _graphicRaycaster.enabled = false;
         }
 
-        public void Show()
+        public void Show(object ctx)
         {
             _graphicRaycaster.enabled = true;
             _canvas.enabled = true;
@@ -28,5 +28,7 @@ namespace UI.Base
             _graphicRaycaster.enabled = false;
             _canvas.enabled = false;
         }
+
+        public void Dispose() {}
     }
 }

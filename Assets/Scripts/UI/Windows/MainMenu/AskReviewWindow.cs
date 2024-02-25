@@ -1,3 +1,4 @@
+using System;
 using Game;
 using UI.Base;
 using UniRx;
@@ -8,18 +9,26 @@ namespace UI.Windows.MainMenu
 {
     public class AskReviewWindow : CanvasUIElement
     {
-        [SerializeField] private string _reviewPageURL;
-        [SerializeField] private Button _reviewButton;
+        [SerializeField] private string reviewPageURL;
+        [SerializeField] private Button reviewButton;
 
-        protected override void SetupListenersOnInitialize()
+        private IDisposable _disposable;
+        
+        protected override void AfterShow()
         {
-            _reviewButton.OnClickAsObservable()
-                .Subscribe(_ => Application.OpenURL(_reviewPageURL));
+            _disposable = reviewButton
+                .OnClickAsObservable()
+                .Subscribe(_ => Application.OpenURL(reviewPageURL));
         }
 
-        public override void Show()
+        public override void Show(object ctx)
         {
             GameManager.Instance.GameStats.AskedReview = true;
+        }
+
+        protected override void AfterHide()
+        {
+            _disposable?.Dispose();
         }
     }
 }

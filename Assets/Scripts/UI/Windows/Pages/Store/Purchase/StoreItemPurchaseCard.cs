@@ -2,8 +2,8 @@ using System;
 using Core;
 using Extensions;
 using MessageBroker;
-using MessageBroker.Messages.Donate;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player;
+using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.Error;
@@ -130,11 +130,11 @@ namespace UI.Windows.Pages.Store.Purchase
                 .Subscribe(e => HandleItemPurchase(e.OK))
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<DonateAddedEvent>()
+                .Receive<DonateAddedMessage>()
                 .Subscribe(_ => HandleDonatePurchase())
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<NoAdsPurchaseEvent>()
+                .Receive<NoAdsPurchaseMessage>()
                 .Subscribe(_ => HandleDonatePurchase())
                 .AddTo(_disposable);
         }

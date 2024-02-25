@@ -3,8 +3,8 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using MessageBroker;
-using MessageBroker.Messages.Donate;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player;
+using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
@@ -28,9 +28,9 @@ namespace UI.Windows.Pages.Store
 
         private readonly List<StoreCategoryItem> _categoryItems = new();
         
-        public override void Show()
+        public override void Show(object ctx)
         {
-            base.Show();
+            base.Show(ctx);
             Open();
         }
 
@@ -45,11 +45,11 @@ namespace UI.Windows.Pages.Store
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
             MainMessageBroker.Instance
-                .Receive<MoneyChangedEvent>()
+                .Receive<MoneyChangedMessage>()
                 .Subscribe(e => UpdateGameBalance(e.NewVal))
                 .AddTo(_disposable);
             MainMessageBroker.Instance
-                .Receive<DonateChangedEvent>()
+                .Receive<DonateChangedMessage>()
                 .Subscribe(e => UpdateDonateBalance(e.NewVal))
                 .AddTo(_disposable);
             MainMessageBroker.Instance

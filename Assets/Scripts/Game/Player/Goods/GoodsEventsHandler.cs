@@ -3,8 +3,8 @@ using System.Linq;
 using Core.OrderedStarter;
 using Enums;
 using MessageBroker;
-using MessageBroker.Messages.Goods;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player;
+using MessageBroker.Messages.Player.State;
 using UniRx;
 using UnityEngine;
 
@@ -24,7 +24,7 @@ namespace Game.Player.Goods
         private void HandleAddNewGood()
         {
             MainMessageBroker.Instance
-                .Receive<AddNewGoodEvent>()
+                .Receive<AddNewGoodMessage>()
                 .Subscribe(e =>
                 {
                     var playerData = GameManager.Instance.PlayerData;
@@ -38,7 +38,7 @@ namespace Game.Player.Goods
                     };
                     playerData.Goods.Add(good);
                     
-                    MainMessageBroker.Instance.Publish(new ChangeHypeEvent());
+                    MainMessageBroker.Instance.Publish(new ChangeHypeMessage());
                 })
                 .AddTo(_disposable);
         }

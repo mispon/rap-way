@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MessageBroker
 {
-    public abstract class BaseEventsHandler : MonoBehaviour, IStarter
+    public abstract class BaseMessagesHandler : MonoBehaviour, IStarter
     {
         protected readonly CompositeDisposable disposable = new();
         

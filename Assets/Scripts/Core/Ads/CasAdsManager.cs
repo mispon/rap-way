@@ -4,7 +4,7 @@ using CAS;
 using Game;
 using Game.Player;
 using MessageBroker;
-using MessageBroker.Messages.State;
+using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -31,7 +31,7 @@ namespace Core.Ads
             reward = Math.Max(50, reward);
             
             SoundManager.Instance.PlaySound(UIActionType.Pay);
-            MainMessageBroker.Instance.Publish(new ChangeMoneyEvent {Amount = reward});
+            MainMessageBroker.Instance.Publish(new ChangeMoneyMessage {Amount = reward});
         }
 
         private static IMediationManager GetAdManager()

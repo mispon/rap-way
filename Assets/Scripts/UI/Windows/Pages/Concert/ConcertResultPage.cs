@@ -72,7 +72,7 @@ namespace UI.Windows.Pages.Concert
             concert.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddConcert(concert);
             
-            MainMessageBroker.Instance.Publish(new ConcertRewardEvent {MoneyIncome = concert.Income});
+            MainMessageBroker.Instance.Publish(new ConcertRewardMessage {MoneyIncome = concert.Income});
         }
 
         protected override void BeforePageOpen()

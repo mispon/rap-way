@@ -75,7 +75,7 @@ namespace UI.Windows.Pages.Rappers
 
         protected override void AfterPageClose()
         {
-            chartsPage.Show();
+            chartsPage.ShowControls();
         }
 
         private void SetupLabelsCarousel()

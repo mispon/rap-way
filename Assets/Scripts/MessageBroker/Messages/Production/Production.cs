@@ -1,6 +1,6 @@
 namespace MessageBroker.Messages.Production
 {
-    public struct ProductionRewardEvent
+    public struct ProductionRewardMessage
     {
         public int MoneyIncome;
         public int FansIncome;
@@ -9,7 +9,7 @@ namespace MessageBroker.Messages.Production
         public bool WithSocialCooldown;
     }
 
-    public struct ConcertRewardEvent
+    public struct ConcertRewardMessage
     {
         public int MoneyIncome;
     }

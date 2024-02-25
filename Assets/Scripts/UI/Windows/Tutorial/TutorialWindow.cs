@@ -22,7 +22,7 @@ namespace UI.Windows.Tutorial
 
         private readonly CompositeDisposable _disposable = new();
         
-        protected override void SetupListenersOnShow()
+        protected override void AfterShow()
         {
             foreach (var gameBtn in gameButtons)
             {
@@ -47,10 +47,10 @@ namespace UI.Windows.Tutorial
                 gameButtons[i].interactable = stageSettings.ButtonsActivity[i];
             }
             
-            Show();
+            Show(new object());
         }
 
-        protected override void DisposeListeners()
+        protected override void AfterHide()
         {
             _disposable.Clear();
         }

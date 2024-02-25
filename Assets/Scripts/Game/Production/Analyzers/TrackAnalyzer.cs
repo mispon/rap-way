@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using MessageBroker;
-using MessageBroker.Messages.Goods;
+using MessageBroker.Messages.Player;
 using Models.Production;
 using UniRx;
 using UnityEngine;

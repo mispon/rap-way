@@ -9,7 +9,7 @@ using UniRx;
 
 namespace Game.Player.Team
 {
-    public class TeamEventsHandler : BaseEventsHandler
+    public class TeamMessagesHandler : BaseMessagesHandler
     {
         protected override void RegisterHandlers()
         {
@@ -20,7 +20,7 @@ namespace Game.Player.Team
         private void HandleDayLeft()
         {
             MainMessageBroker.Instance
-                .Receive<DayLeftEvent>()
+                .Receive<DayLeftMessage>()
                 .Subscribe(e =>
                 {
                     TeamManager.Instance.TryUnlockTeammates();
@@ -32,7 +32,7 @@ namespace Game.Player.Team
         private void HandleMonthLeft()
         {
             MainMessageBroker.Instance
-                .Receive<MonthLeftEvent>()
+                .Receive<MonthLeftMessage>()
                 .Subscribe(e => OnMonthLeft(e.Month))
                 .AddTo(disposable);
         }
@@ -63,12 +63,10 @@ namespace Game.Player.Team
             const int teamTab = 3;
             NotificationManager.Instance.AddClickNotification(() =>
             {
-                // todo:
-                // trainingPage.OpenPage(teamTab);
                 UIMessageBroker.Instance.Publish(new WindowControlMessage
                 {
                     Type = WindowType.Training,
-                    Meta = teamTab
+                    Context = teamTab
                 });
             });
             

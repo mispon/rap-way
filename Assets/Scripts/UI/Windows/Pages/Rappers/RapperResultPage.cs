@@ -120,7 +120,7 @@ namespace UI.Windows.Pages.Rappers
             SoundManager.Instance.PlaySound(UIActionType.Click);
             
             rappersPage.Open();
-            chartsPage.Show();
+            chartsPage.ShowControls();
             
             Close();
         }

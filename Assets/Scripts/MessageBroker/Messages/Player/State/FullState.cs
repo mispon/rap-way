@@ -1,6 +1,6 @@
 using Enums;
 
-namespace MessageBroker.Messages.State 
+namespace MessageBroker.Messages.Player.State 
 {
     public struct FullStateRequest {}
 

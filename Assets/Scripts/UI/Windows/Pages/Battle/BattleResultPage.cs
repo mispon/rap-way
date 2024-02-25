@@ -112,7 +112,7 @@ namespace UI.Windows.Pages.Battle
                 ProductionManager.AddBattle(_result.RapperInfo);
             }
             
-            MainMessageBroker.Instance.Publish(new ProductionRewardEvent
+            MainMessageBroker.Instance.Publish(new ProductionRewardMessage
             {
                 FansIncome = _result.FansIncome,
                 HypeIncome = _result.HypeIncome,

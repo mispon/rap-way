@@ -1,16 +1,16 @@
 namespace MessageBroker.Messages.Time
 {
-    public struct DayLeftEvent
+    public struct DayLeftMessage
     {
         public int Day;
     }
 
-    public struct WeekLeftEvent
+    public struct WeekLeftMessage
     {
         public int Week;
     }
 
-    public struct MonthLeftEvent
+    public struct MonthLeftMessage
     {
         public int Month;
     }

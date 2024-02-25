@@ -1,8 +1,8 @@
 using Enums;
 
-namespace MessageBroker.Messages.Goods
+namespace MessageBroker.Messages.Player
 {
-    public struct AddNewGoodEvent
+    public struct AddNewGoodMessage
     {
         public GoodsType Type;
         public short Level;
