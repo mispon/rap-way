@@ -56,7 +56,7 @@ namespace UI.Windows.Pages.Concert
             playerName.text = PlayerManager.Data.Info.NickName;
             
             moneyIncome.text = $"+{concert.Income.GetMoney()}";
-            expIncome.text = $"+{settings.ConcertRewardExp}";
+            expIncome.text = $"+{settings.Concert.RewardExp}";
             
             ticketsSold.text = $"{concert.TicketsSold} / {concert.LocationCapacity}";
             ticketCost.text = concert.TicketCost.GetMoney();

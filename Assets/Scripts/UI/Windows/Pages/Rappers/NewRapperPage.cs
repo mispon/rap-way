@@ -3,14 +3,15 @@ using System.Linq;
 using Core;
 using Enums;
 using Firebase.Analytics;
-using Game.Labels;
-using Game.Rappers;
+using Game.Rappers.Desc;
 using ScriptableObjects;
 using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Windows.Pages.Charts;
 using UnityEngine;
 using UnityEngine.UI;
+using RappersAPI = Game.Rappers.RappersPackage;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Rappers
 {
@@ -79,7 +80,7 @@ namespace UI.Windows.Pages.Rappers
 
         private void SetupLabelsCarousel()
         {
-            var labels = LabelsManager.Instance.GetAllLabels().ToArray();
+            var labels = LabelsAPI.Instance.GetAll().ToArray();
             var props = new List<CarouselProps>(labels.Length)
             {
                 // empty value for no labels
@@ -134,7 +135,7 @@ namespace UI.Windows.Pages.Rappers
                 return;
             }
             
-            if (RappersManager.Instance.IsNameAlreadyTaken(nickname))
+            if (RappersAPI.Instance.IsNameAlreadyTaken(nickname))
             {
                 var errorMsg = GetLocale("rapper_name_exists_err");
                 gameError.Show(errorMsg);
@@ -142,7 +143,7 @@ namespace UI.Windows.Pages.Rappers
                 return;
             }
 
-            int lastId = RappersManager.Instance.MaxCustomRapperID();
+            int lastId = RappersAPI.Instance.MaxCustomRapperID();
             string label = labelInput.GetLabel();
             
             var customRapper = new RapperInfo
@@ -158,7 +159,7 @@ namespace UI.Windows.Pages.Rappers
             };
 
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperCreated);
-            RappersManager.Instance.AddCustom(customRapper);
+            RappersAPI.Instance.AddCustom(customRapper);
             BackButtonClick();
         }
 

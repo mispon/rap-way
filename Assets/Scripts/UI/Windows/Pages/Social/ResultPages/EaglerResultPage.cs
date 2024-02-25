@@ -2,6 +2,7 @@ using Enums;
 using Firebase.Analytics;
 using Game.Player;
 using Game.Socials;
+using Game.Socials.Eagler;
 using Game.Time;
 using Models.Production;
 using UnityEngine;

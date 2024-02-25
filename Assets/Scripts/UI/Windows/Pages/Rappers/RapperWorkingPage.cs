@@ -1,6 +1,8 @@
 using Core;
 using Enums;
 using Game.Player;
+using Game.Player.Team;
+using Game.Rappers.Desc;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -73,7 +75,7 @@ namespace UI.Windows.Pages.Rappers
         /// </summary>
         protected override int GetDuration()
         {
-            return settings.RappersWorkDuration;
+            return settings.Rappers.ConversationDuration;
         }
 
         /// <summary>

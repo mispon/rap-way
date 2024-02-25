@@ -5,7 +5,7 @@ using Firebase.Analytics;
 using Game.Player;
 using Game.Production;
 using Game.Production.Analyzers;
-using Game.Socials;
+using Game.Socials.Eagler;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
@@ -69,7 +69,7 @@ namespace UI.Windows.Pages.Track
             string fansIncomePrefix = track.FansIncome > 0 ? "+" : string.Empty;
             fansIncome.text = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
-            expIncome.text = $"+{settings.TrackRewardExp}";
+            expIncome.text = $"+{settings.Track.RewardExp}";
 
             trackNameLabel.text = trackName;
             playerNameLabel.text = nickname;
@@ -119,7 +119,7 @@ namespace UI.Windows.Pages.Track
             {
                 MoneyIncome = track.MoneyIncome,
                 FansIncome = track.FansIncome,
-                Exp = settings.TrackRewardExp
+                Exp = settings.Track.RewardExp
             });
         }
         

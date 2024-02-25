@@ -5,7 +5,7 @@ using Firebase.Analytics;
 using Game.Player;
 using Game.Production;
 using Game.Production.Analyzers;
-using Game.Socials;
+using Game.Socials.Eagler;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
@@ -66,7 +66,7 @@ namespace UI.Windows.Pages.Album
             
             fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{album.MoneyIncome.GetMoney()}";
-            expIncome.text = $"+{settings.AlbumRewardExp}";
+            expIncome.text = $"+{settings.Album.RewardExp}";
 
             qualityLabel.text = $"{Convert.ToInt32(album.Quality * 100)}%";
             listenAmount.text = album.ListenAmount.GetDisplay();
@@ -102,7 +102,7 @@ namespace UI.Windows.Pages.Album
             {
                 MoneyIncome = album.MoneyIncome,
                 FansIncome = album.FansIncome,
-                Exp = settings.AlbumRewardExp
+                Exp = settings.Album.RewardExp
             });
         }
         

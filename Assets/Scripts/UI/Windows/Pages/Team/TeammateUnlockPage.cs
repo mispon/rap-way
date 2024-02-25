@@ -1,7 +1,8 @@
 using Core.Localization;
 using Extensions;
+using Game.Player.Team;
+using Game.Player.Team.Desc;
 using Game.Time;
-using Models.Player;
 using UnityEngine;
 using UnityEngine.UI;
 

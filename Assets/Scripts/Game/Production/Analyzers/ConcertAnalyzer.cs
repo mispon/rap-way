@@ -40,7 +40,7 @@ namespace Game.Production.Analyzers
         private float CalculateWorkPointsFactor(int manPoints, int marPoints)
         {
             var workPointsTotal = manPoints + marPoints;
-            var qualityPercent = (1f * workPointsTotal) / settings.ConcertWorkPointsMax;
+            var qualityPercent = (1f * workPointsTotal) / settings.Concert.WorkPointsMax;
 
             return Mathf.Min(qualityPercent, 1f);
         }
@@ -66,7 +66,7 @@ namespace Game.Production.Analyzers
             activeFansAmount = Convert.ToInt32(activeFansAmount * salesFactor);
             
             var sold = Math.Min(activeFansAmount, capacity);
-            return Math.Max(settings.MinTicketsSold, sold);
+            return Math.Max(settings.Concert.MinTicketsSold, sold);
         }
     }
 }

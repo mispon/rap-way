@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Core.PropertyAttributes;
+using Game.Rappers.Desc;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -13,20 +13,5 @@ namespace ScriptableObjects
     {
         [ArrayElementTitle(new []{"Name"})]
         public List<RapperInfo> Rappers;
-    }
-
-    [Serializable]
-    public class RapperInfo
-    {
-        public int Id;
-        public string Name;
-        public string Label;
-        public Sprite Avatar;
-        public int Fans;
-        public int Vocobulary;
-        public int Bitmaking;
-        public int Management;
-        public bool IsCustom;
-        public bool IsPlayer;
     }
 }

@@ -2,8 +2,8 @@
 using Core.Localization;
 using Extensions;
 using Game.Production;
+using Game.Rappers.Desc;
 using Models.Trends;
-using ScriptableObjects;
 
 namespace Models.Production
 {

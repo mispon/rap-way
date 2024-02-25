@@ -1,13 +1,14 @@
 using Core;
 using Enums;
-using Game.Labels;
 using Game.Player;
+using Game.Rappers.Desc;
 using ScriptableObjects;
 using UI.Windows.Pages.Battle;
 using UI.Windows.Pages.Charts;
 using UI.Windows.Pages.Feat;
 using UnityEngine;
 using UnityEngine.UI;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Rappers
 {
@@ -95,7 +96,7 @@ namespace UI.Windows.Pages.Rappers
                     break;
                 case ConversationType.Label:
                     _rapper.Label = PlayerManager.Data.Label;
-                    LabelsManager.Instance.RefreshScore(_rapper.Label);
+                    LabelsAPI.Instance.RefreshScore(_rapper.Label);
                     break;
                 default:
                     Debug.LogError($"Unexpected conv type {_convType.ToString()}");

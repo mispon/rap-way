@@ -3,6 +3,7 @@ using Enums;
 using Extensions;
 using Game;
 using Game.Player;
+using Game.Player.Team;
 using Models.Production;
 using ScriptableObjects;
 using UnityEngine;
@@ -31,11 +32,9 @@ namespace UI.Windows.Pages.Social.Tabs
         /// </summary>
         protected override SocialInfo GetInfo()
         {
-            PlayerManager.SetTeammateCooldown(TeammateType.PrMan, GameManager.Instance.Settings.PrManagerCooldown);
-            return new SocialInfo
-            {
-                Type = SocialType.Trends
-            };
+            int cooldown = GameManager.Instance.Settings.Team.PrManagerCooldown;
+            PlayerManager.SetTeammateCooldown(TeammateType.PrMan, cooldown);
+            return new SocialInfo {Type = SocialType.Trends};
         }
 
         protected override void OnOpen()

@@ -15,6 +15,7 @@ using UI.Controls.Error;
 using UI.Controls.Money;
 using UI.GameScreen;
 using UI.Windows.Pages.ProductSelection;
+using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;

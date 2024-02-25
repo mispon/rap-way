@@ -1,6 +1,10 @@
+using System;
 using Game.Time;
+using MessageBroker;
+using MessageBroker.Messages.Time;
 using UI.Controls;
 using UI.Controls.Progress;
+using UniRx;
 using UnityEngine;
 
 namespace UI.Windows.Pages
@@ -12,6 +16,8 @@ namespace UI.Windows.Pages
     {
         [SerializeField] protected ProgressBar progressBar;
 
+        private IDisposable _disposable;
+        
         /// <summary>
         /// Начинает выполнение работы 
         /// </summary>
@@ -57,8 +63,10 @@ namespace UI.Windows.Pages
         
         protected override void AfterPageOpen()
         {
-            TimeManager.Instance.onDayLeft += OnDayLeft;
             TimeManager.Instance.SetActionMode();
+            _disposable = MainMessageBroker.Instance
+                .Receive<DayLeftEvent>()
+                .Subscribe(e => OnDayLeft());
 
             progressBar.Init(GetDuration());
             progressBar.onFinish += FinishWork;
@@ -67,8 +75,8 @@ namespace UI.Windows.Pages
 
         protected override void BeforePageClose()
         {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
             TimeManager.Instance.ResetActionMode();
+            _disposable?.Dispose();
             
             progressBar.onFinish -= FinishWork;
         }

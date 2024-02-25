@@ -4,10 +4,12 @@ using Core.OrderedStarter;
 using Enums;
 using Extensions;
 using Game;
-using Game.Scenes;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.State;
+using MessageBroker.Messages.Time;
+using Scenes.MessageBroker;
+using Scenes.MessageBroker.Messages;
 using ScriptableObjects;
 using UI.Enums;
 using UI.MessageBroker;
@@ -63,18 +65,8 @@ namespace UI.GameScreen
 
             productionFoldoutButton.onClick.AddListener(OnProductionClick);
             mainMenuButton.onClick.AddListener(OnMainMenuClick);
-            TimeManager.Instance.onDayLeft += OnDayLeft;
             
             HandleStateEvents();
-        }
-
-        /// <summary>
-        /// Открывает страницу с описанием основной характеристики
-        /// </summary>
-        private void ShowDescriptionPage(StatDescItem item)
-        {
-            SoundManager.Instance.PlaySound(UIActionType.Click);
-            statsDescPage.Show(item.Icon, item.NameKey, item.DescKey);
         }
 
         /// <summary>
@@ -82,6 +74,10 @@ namespace UI.GameScreen
         /// </summary>
         private void HandleStateEvents()
         {
+            MainMessageBroker.Instance
+                .Receive<DayLeftEvent>()
+                .Subscribe(e => OnDayLeft())
+                .AddTo(_disposable);
             MainMessageBroker.Instance
                 .Receive<MoneyChangedEvent>()
                 .Subscribe(e => playerMoney.text = e.NewVal.GetMoney())
@@ -101,8 +97,19 @@ namespace UI.GameScreen
             
             MainMessageBroker.Instance.Publish(new FullStateRequest());
             
-            //First tutorial
-            UIMessageBroker.Instance.Publish(new WindowControlMessage(type: WindowType.GameScreen));
+            UIMessageBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.GameScreen
+            });
+        }
+        
+        /// <summary>
+        /// Открывает страницу с описанием основной характеристики
+        /// </summary>
+        private void ShowDescriptionPage(StatDescItem item)
+        {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
+            statsDescPage.Show(item.Icon, item.NameKey, item.DescKey);
         }
         
         /// <summary>
@@ -157,15 +164,11 @@ namespace UI.GameScreen
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             GameManager.Instance.SaveApplicationData();
-            
-            ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage {
-                    SceneType = SceneTypes.MainMenu
-                });
+            SceneMessageBroker.Instance.Publish(new SceneLoadMessage {SceneType = SceneType.MainMenu});
         }
         
         private void OnDestroy()
         {
-            TimeManager.Instance.onDayLeft -= OnDayLeft;
             _disposable.Clear();
         }
     }

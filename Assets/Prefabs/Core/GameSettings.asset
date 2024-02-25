@@ -12,53 +12,73 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f9023152ca04a4babe2d29e65d24a5d, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  MaxFans: 500000000
-  MaxMoney: 2000000000
-  BaseFans: 100
-  TrackWorkDuration: 15
-  TrackWorkPointsMax: 230
-  TrackHitChance: 0.1
-  TrackHitThreshold: 0.85
-  TrackListenCost: 0.01
-  TrackRewardExp: 100
-  TrackChartsThreshold: 0.5
-  AlbumWorkDuration: 30
-  AlbumBaseQuality: 0.15
-  AlbumWorkPointsMax: 400
-  AlbumHitChance: 0.15
-  AlbumHitThreshold: 0.8
-  AlbumListenCost: 0.017
-  AlbumRewardExp: 200
-  AlbumChartsThreshold: 0.7
-  ClipWorkDuration: 25
-  ClipWorkPointsMax: 300
-  ClipHitChance: 0.2
-  ClipHitThreshold: 0.7
-  ClipActiveViewers: 0.3
-  ClipViewCost: 0.01
-  ClipRewardExp: 150
-  MinTicketsSold: 0
-  ConcertWorkDuration: 50
-  ConcertCooldown: 60
-  ConcertWorkPointsMax: 400
-  ConcertRewardExp: 400
-  SocialsWorkDuration: 10
-  SocialsCooldown: 20
-  SocialsWorkPointsMax: 70
-  SocialsCharitySizeImpact: 0.7
-  SocialsActiveFansGroup: 0.5
-  SocialsRewardExp: 100
-  MinBalanceForCharity: 100
-  BattleWorkDuration: 20
-  BattleWinnerHype: 70
-  BattleLoserHype: 25
-  BattleRewardExp: 500
-  MinFansIncome: 10
-  MaxFansIncome: 3000000
-  MinFansForCharts: 150000
-  MinMoneyIncome: 10
-  MaxMoneyIncome: 1000000
-  RappersWorkDuration: 30
-  FeatWorkDuration: 15
-  ManagerCooldown: 60
-  PrManagerCooldown: 30
+  Player:
+    BaseFans: 300
+    MaxFans: 500000000
+    MinFansIncome: 10
+    MaxFansIncome: 3000000
+    MaxMoney: 2000000000
+    MinMoneyIncome: 10
+    MaxMoneyIncome: 1000000
+    MinFansForCharts: 150000
+  Team:
+    ManagerCooldown: 60
+    PrManagerCooldown: 30
+  Track:
+    WorkDuration: 15
+    FeatWorkDuration: 15
+    WorkPointsMax: 230
+    HitChance: 0.1
+    HitThreshold: 0.85
+    ListenCost: 0.01
+    RewardExp: 100
+    ChartsThreshold: 0.5
+  Album:
+    WorkDuration: 30
+    BaseQuality: 0.15
+    WorkPointsMax: 400
+    HitChance: 0.15
+    HitThreshold: 0.8
+    ListenCost: 0.017
+    RewardExp: 200
+    ChartsThreshold: 0.7
+  Clip:
+    WorkDuration: 25
+    WorkPointsMax: 300
+    HitChance: 0.2
+    HitThreshold: 0.7
+    ActiveViewers: 0.3
+    ViewCost: 0.01
+    RewardExp: 150
+  Concert:
+    MinTicketsSold: 100
+    WorkDuration: 50
+    Cooldown: 60
+    WorkPointsMax: 400
+    RewardExp: 400
+  Socials:
+    WorkDuration: 10
+    Cooldown: 20
+    WorkPointsMax: 70
+    CharitySizeImpact: 0.7
+    ActiveFansGroup: 0.5
+    RewardExp: 100
+    MinBalanceForCharity: 100
+  Battle:
+    WorkDuration: 20
+    WinnerHype: 70
+    LoserHype: 25
+    RewardExp: 500
+  Rappers:
+    MinFans: 1
+    MaxFans: 500000000
+    FansUpdateFrequency: 2
+    ConversationDuration: 30
+  Labels:
+    MinLevel: 0
+    MaxLevel: 5
+    ExpToLevelUp: 64000000c80000002c01000090010000f401000000000000
+    ExpChangeValue: 100
+    InvitePlayerFrequency: 3
+    InviteRapperFrequency: 1
+    RappersActionsFrequency: 1

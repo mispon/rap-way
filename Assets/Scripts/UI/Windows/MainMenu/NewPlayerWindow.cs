@@ -4,11 +4,13 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game;
-using Game.Scenes;
+using Scenes.MessageBroker;
+using Scenes.MessageBroker.Messages;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Base;
 using UI.Controls.Carousel;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,9 +41,6 @@ namespace UI.Windows.MainMenu
             _startButton.onClick.AddListener(OnStartClick);
         }
 
-        /// <summary>
-        /// Обработчик изменения пола персонажа 
-        /// </summary>
         private void OnGenderChange(bool isMale)
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
@@ -49,10 +48,7 @@ namespace UI.Windows.MainMenu
             _maleButton.image.sprite = isMale ? _maleAvatar : _maleAvatarInactive;
             _femaleButton.image.sprite = !isMale ? _femaleAvatar : _femaleAvatarInactive;
         }
-
-        /// <summary>
-        /// Обработчик кнопки создания персонажа
-        /// </summary>
+        
         private void OnStartClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
@@ -75,7 +71,7 @@ namespace UI.Windows.MainMenu
         }
         
         /// <summary>
-        /// Подсвечивает невалидное поле 
+        /// Show errors
         /// </summary>
         private static void HighlightError(Component component)
         {
@@ -84,7 +80,7 @@ namespace UI.Windows.MainMenu
         }
 
         /// <summary>
-        /// Cоздание нового персонажа
+        /// Creates new character
         /// </summary>
         private void CreatePlayer()
         {
@@ -97,9 +93,9 @@ namespace UI.Windows.MainMenu
             player.Age = Convert.ToInt32(_ageCarousel.GetLabel());
 
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
-            ScenesController.Instance.MessageBroker.Publish(new SceneLoadMessage
+            SceneMessageBroker.Instance.Publish(new SceneLoadMessage
             {
-                SceneType = SceneTypes.Game
+                SceneType = SceneType.Game
             });
         }
     }

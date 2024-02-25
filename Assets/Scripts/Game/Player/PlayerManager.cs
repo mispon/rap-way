@@ -2,7 +2,7 @@
 using Core;
 using Core.OrderedStarter;
 using Enums;
-using Models.Player;
+using Game.Player.State.Desc;
 using Models.Production;
 using Models.Trends;
 

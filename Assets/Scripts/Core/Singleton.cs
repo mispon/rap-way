@@ -2,17 +2,11 @@
 
 namespace Core
 {
-    /// <summary>
-    /// Паттерн "одиночка"
-    /// </summary>
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        /// <summary>
-        /// Единственный экземпляр класса
-        /// </summary>
         public static T Instance { get; private set; }
 
-        [SerializeField, Header("Нужно ли сохранять объект при переключении сцен")]
+        [SerializeField, Header("Keep object between scenes")]
         protected bool dontDestroy;
 
         protected virtual void Awake() 
@@ -20,13 +14,15 @@ namespace Core
             if (Instance == null) 
             {
                 Instance = GetInstance();
-                InitializeSingleton();
+                Initialize();
             }
             else if (Instance != this)
             {
                 Destroy(gameObject);
             }
         }
+        
+        protected virtual void Initialize() {}
 
         /// <summary>
         /// Returns a single object
@@ -46,7 +42,5 @@ namespace Core
             var singleton = new GameObject($"{nameof(T)} (Singleton)");
             return singleton.AddComponent<T>();
         }
-        
-        protected virtual void InitializeSingleton() { }
     } 
 }

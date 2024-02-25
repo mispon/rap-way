@@ -1,8 +1,8 @@
 ﻿using System;
-using Game.Labels;
 using Models.Production;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
@@ -22,7 +22,7 @@ namespace Game.Production.Analyzers
             album.Quality = qualityPoints;
             
             var hitDice = Random.Range(0f, 1f);
-            if (qualityPoints >= settings.AlbumHitThreshold || hitDice <= settings.AlbumHitChance) 
+            if (qualityPoints >= settings.Album.HitThreshold || hitDice <= settings.Album.HitChance) 
             {
                 album.IsHit = true;
             }
@@ -35,15 +35,15 @@ namespace Game.Production.Analyzers
                 album.IsHit
             );
 
-            if (qualityPoints >= settings.AlbumChartsThreshold)
+            if (qualityPoints >= settings.Album.ChartsThreshold)
             {
                 album.ChartPosition = CalculateChartPosition();
             }
             
             album.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
-            album.MoneyIncome = CalcMoneyIncome(album.ListenAmount, settings.AlbumListenCost);
+            album.MoneyIncome = CalcMoneyIncome(album.ListenAmount, settings.Album.ListenCost);
             
-            if (LabelsManager.Instance.IsPlayerInGameLabel())
+            if (LabelsAPI.Instance.IsPlayerInGameLabel())
             {
                 int labelsFee = album.MoneyIncome / 100 * 20;
                 album.MoneyIncome -= labelsFee;
@@ -56,7 +56,7 @@ namespace Game.Production.Analyzers
         /// <returns>Показатель качества альбома от [base] до 1.0</returns>
         private float CalculateAlbumQuality(AlbumInfo album)
         {
-            float qualityPoints = settings.AlbumBaseQuality;
+            float qualityPoints = settings.Album.BaseQuality;
 
             float workPointsFactor = CalculateWorkPointsFactor(album.TextPoints, album.BitPoints);
             qualityPoints += workPointsFactor;
@@ -73,8 +73,8 @@ namespace Game.Production.Analyzers
         /// </summary>
         private float CalculateWorkPointsFactor(int textPoints, int bitPoints)
         {
-            float workPointsImpact = 1f - settings.AlbumBaseQuality;
-            float workPointsRatio = 1f * (textPoints + bitPoints) / settings.AlbumWorkPointsMax;
+            float workPointsImpact = 1f - settings.Album.BaseQuality;
+            float workPointsRatio = 1f * (textPoints + bitPoints) / settings.Album.WorkPointsMax;
 
             float workPointsFactor = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
 
@@ -120,7 +120,7 @@ namespace Game.Production.Analyzers
 
         private int CalculateChartPosition()
         {
-            if (GetFans() < settings.MinFansForCharts)
+            if (GetFans() < settings.Player.MinFansForCharts)
             {
                 return 0;
             }

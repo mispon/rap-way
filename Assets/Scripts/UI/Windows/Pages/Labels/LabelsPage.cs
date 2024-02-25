@@ -3,19 +3,19 @@ using System.Linq;
 using Core;
 using Enums;
 using Firebase.Analytics;
-using Game.Labels;
-using Game.Player;
+using Game.Labels.Desc;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
+using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Labels
 {
     public class LabelsPage : Page
     {
-        [Space]
         [SerializeField] private AskingWindow askingWindow;
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
@@ -24,7 +24,7 @@ namespace UI.Windows.Pages.Labels
         [SerializeField] private Button addNewLabelButton;
         [SerializeField] private NewLabelPage newLabelPage;
         
-        private List<LabelRow> _listItems = new();
+        private readonly List<LabelRow> _listItems = new();
         
         private void Start()
         {
@@ -63,16 +63,16 @@ namespace UI.Windows.Pages.Labels
         /// </summary>
         private static List<LabelInfo> GetAllLabels()
         {
-            var labels = LabelsManager.Instance.GetAllLabels().ToList();
+            var labels = LabelsAPI.Instance.GetAll().ToList();
             
-            if (LabelsManager.Instance.HasPlayerLabel)
+            if (!LabelsAPI.Instance.IsPlayerLabelEmpty)
             {
-                labels.Add(LabelsManager.Instance.PlayerLabel);
+                labels.Add(LabelsAPI.Instance.PlayerLabel);
             }
 
             return labels
                 .OrderByDescending(e => e.Score)
-                .ThenByDescending(e => LabelsManager.Instance.GetLabelPrestige(e))
+                .ThenByDescending(e => LabelsAPI.Instance.GetPrestige(e))
                 .ToList();
         }
 
@@ -101,7 +101,7 @@ namespace UI.Windows.Pages.Labels
             askingWindow.Show(
                 GetLocale("delete_label_question"),
                 () => {
-                    LabelsManager.Instance.RemoveCustom(customLabel);
+                    LabelsAPI.Instance.RemoveCustom(customLabel);
                     AfterPageClose();
                     BeforePageOpen();
                 }

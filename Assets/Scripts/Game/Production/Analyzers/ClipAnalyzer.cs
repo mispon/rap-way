@@ -1,8 +1,8 @@
 using System;
-using Game.Labels;
 using Models.Production;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
@@ -22,7 +22,7 @@ namespace Game.Production.Analyzers
             clip.Quality = qualityPoints;
 
             var hitDice = Random.Range(0f, 1f);
-            if (qualityPoints >= settings.ClipHitThreshold || hitDice <= settings.ClipHitChance) 
+            if (qualityPoints >= settings.Clip.HitThreshold || hitDice <= settings.Clip.HitChance) 
             {
                 clip.IsHit = true;
             }
@@ -36,15 +36,15 @@ namespace Game.Production.Analyzers
                 clip.IsHit
             );
 
-            int activeViewers = Convert.ToInt32(clip.Views * settings.ClipActiveViewers);
+            int activeViewers = Convert.ToInt32(clip.Views * settings.Clip.ActiveViewers);
             var (likes, dislikes) = CalculateReaction(qualityPoints, activeViewers);
             clip.Likes = likes;
             clip.Dislikes = dislikes;
 
             clip.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
-            clip.MoneyIncome = CalcMoneyIncome(clip.Views, settings.ClipViewCost);
+            clip.MoneyIncome = CalcMoneyIncome(clip.Views, settings.Clip.ViewCost);
             
-            if (LabelsManager.Instance.IsPlayerInGameLabel())
+            if (LabelsAPI.Instance.IsPlayerInGameLabel())
             {
                 int labelsFee = clip.MoneyIncome / 100 * 20;
                 clip.MoneyIncome -= labelsFee;
@@ -57,7 +57,7 @@ namespace Game.Production.Analyzers
         private float CalculateWorkPointsFactor(int dirPoints, int opPoints)
         {
             var workPointsTotal = dirPoints + opPoints;
-            var qualityPercent = (1f * workPointsTotal) / settings.ClipWorkPointsMax;
+            var qualityPercent = 1f * workPointsTotal / settings.Clip.WorkPointsMax;
 
             return Mathf.Min(qualityPercent, 1f);
         }
@@ -76,7 +76,7 @@ namespace Game.Production.Analyzers
             
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
-            float activity = 1.0f + (maxFansActivity * quality);
+            float activity = 1.0f + maxFansActivity * quality;
 
             int views = Convert.ToInt32(Math.Ceiling(activeFans * activity));
             

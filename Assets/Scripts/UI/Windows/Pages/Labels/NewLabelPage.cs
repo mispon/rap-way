@@ -3,13 +3,14 @@ using System.Globalization;
 using Core;
 using Enums;
 using Firebase.Analytics;
-using Game.Labels;
+using Game.Labels.Desc;
 using Models.Game;
 using ScriptableObjects;
 using UI.Controls.Error;
 using UI.Windows.Pages.Charts;
 using UnityEngine;
 using UnityEngine.UI;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Labels
 {
@@ -130,7 +131,7 @@ namespace UI.Windows.Pages.Labels
                 return;
             }
 
-            if (LabelsManager.Instance.IsNameAlreadyTaken(labelName))
+            if (LabelsAPI.Instance.IsNameAlreadyTaken(labelName))
             {
                 var errorMsg = GetLocale("label_name_exists_err");
                 gameError.Show(errorMsg);
@@ -145,12 +146,12 @@ namespace UI.Windows.Pages.Labels
                 Name = labelName,
                 Desc = "custom_label_desc",
                 Production = new ExpValue{Value = int.Parse(productionValue.text)},
-                Prestige = LabelsManager.Instance.FloatToExp(prestige),
+                Prestige = LabelsAPI.Instance.PrestigeToExp(prestige),
                 IsCustom = true
             };
 
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelCreated);
-            LabelsManager.Instance.AddCustom(customLabel);
+            LabelsAPI.Instance.AddCustom(customLabel);
             BackButtonClick();
         }
 

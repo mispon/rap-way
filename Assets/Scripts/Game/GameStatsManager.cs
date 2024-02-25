@@ -6,8 +6,10 @@ using Enums;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.State;
+using MessageBroker.Messages.Time;
 using Models.Trends;
 using ScriptableObjects;
+using UniRx;
 using UnityEngine;
 
 // ReSharper disable CoVariantArrayConversion
@@ -24,12 +26,19 @@ namespace Game
         
         [Header("Данные сравнения")]
         [SerializeField] private TrendsCompareData trendsCompareData;
+
+        private readonly CompositeDisposable _disposable = new();
         
         public void OnStart()
         {
-            // todo: переделать на ивенты брокера
-            TimeManager.Instance.onDayLeft += OnDayLeft;
-            TimeManager.Instance.onWeekLeft += OnWeekLeft;
+            MainMessageBroker.Instance
+                .Receive<DayLeftEvent>()
+                .Subscribe(e => OnDayLeft())
+                .AddTo(_disposable);
+            MainMessageBroker.Instance
+                .Receive<WeekLeftEvent>()
+                .Subscribe(e => OnWeekLeft())
+                .AddTo(_disposable);
         }
         
         /// <summary>
@@ -47,12 +56,6 @@ namespace Game
 
             data.SocialsCooldown = Math.Max(0, data.SocialsCooldown - 1);
             data.ConcertCooldown = Math.Max(0, data.ConcertCooldown - 1);
-
-            // todo: этот ивент можно будет отправлять внутри хендлера брокера
-            if (TimeManager.Instance.Now.Day % 3 == 0)
-            {
-                MainMessageBroker.Instance.Publish(new ChangeHypeEvent {Amount = -1});
-            }
         }
 
         /// <summary>

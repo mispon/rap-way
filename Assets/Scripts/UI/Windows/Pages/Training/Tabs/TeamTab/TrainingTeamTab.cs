@@ -1,8 +1,9 @@
 using Core;
 using Game.Player;
+using Game.Player.Team;
+using Game.Player.Team.Desc;
 using MessageBroker;
 using MessageBroker.Messages.State;
-using Models.Player;
 using ScriptableObjects;
 using UnityEngine;
 

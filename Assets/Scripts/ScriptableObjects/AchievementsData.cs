@@ -5,7 +5,7 @@ using Core.PropertyAttributes;
 using Enums;
 using Game;
 using Game.Player;
-using Models.Player;
+using Game.Player.Achievements.Desc;
 using UnityEngine;
 
 namespace ScriptableObjects

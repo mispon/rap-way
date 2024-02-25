@@ -5,9 +5,9 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game.Player;
-using Models.Player;
+using Game.Player.State.Desc;
+using Game.Rappers.Desc;
 using Models.Production;
-using ScriptableObjects;
 
 namespace Game.Production
 {
@@ -16,10 +16,10 @@ namespace Game.Production
     /// </summary>
     public class ProductionManager: Singleton<ProductionManager>
     {
-        public event Action<TrackInfo> onTrackAdd = info => { }; 
-        public event Action<AlbumInfo> onAlbumAdd = info => { }; 
-        public event Action<ClipInfo> onClipAdd = info => { }; 
-        public event Action<ConcertInfo> onConcertAdd = info => { };
+        public event Action<TrackInfo> onTrackAdd = info => {}; 
+        public event Action<AlbumInfo> onAlbumAdd = info => {}; 
+        public event Action<ClipInfo> onClipAdd = info => {}; 
+        public event Action<ConcertInfo> onConcertAdd = info => {};
         
         public event Action<RapperInfo> onFeat = rapper => {};
         public event Action<RapperInfo> onBattle = rapper => {}; 

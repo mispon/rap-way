@@ -4,15 +4,18 @@ using Core;
 using Core.Localization;
 using Enums;
 using Firebase.Analytics;
-using Game.Labels;
+using Game.Labels.Desc;
 using Game.Player;
-using Game.Rappers;
+using Game.Rappers.Desc;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Pages.Labels;
+using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
+using RappersAPI =  Game.Rappers.RappersPackage;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Personal.LabelTab
 {
@@ -55,7 +58,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             labelDesc.text = LocalizationManager.Instance.Get(label.Desc);
             production.text = label.Production.Value.ToString();
 
-            float prestige = LabelsManager.Instance.GetLabelPrestige(label);
+            float prestige = LabelsAPI.Instance.GetPrestige(label);
             stars.Display(prestige);
         }
 
@@ -81,8 +84,8 @@ namespace UI.Windows.Pages.Personal.LabelTab
         /// </summary>
         private static List<RapperInfo> GetMembers(string labelName)
         {
-            var members = RappersManager.Instance
-                .GetAllRappers()
+            var members = RappersAPI.Instance
+                .GetAll()
                 .Where(e => e.Label == labelName)
                 .ToList();
             

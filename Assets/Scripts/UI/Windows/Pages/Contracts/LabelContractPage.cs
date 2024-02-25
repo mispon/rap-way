@@ -1,6 +1,7 @@
 ﻿using Core;
 using Enums;
 using Firebase.Analytics;
+using Game.Labels.Desc;
 using Game.Player;
 using ScriptableObjects;
 using UnityEngine;

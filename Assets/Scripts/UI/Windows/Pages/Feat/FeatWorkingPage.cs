@@ -109,7 +109,7 @@ namespace UI.Windows.Pages.Feat
         /// </summary>
         protected override int GetDuration()
         {
-            return settings.FeatWorkDuration;
+            return settings.Track.FeatWorkDuration;
         }
         
         protected override void BeforePageOpen()

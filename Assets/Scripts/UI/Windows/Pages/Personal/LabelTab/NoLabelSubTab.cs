@@ -3,19 +3,21 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Labels;
+using Game.Labels.Desc;
 using Game.Player;
 using Models.Game;
 using ScriptableObjects;
 using UI.Controls.Error;
+using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Personal.LabelTab
 {
     public class NoLabelSubTab : Tab
     {
-        [SerializeField] private global::UI.Windows.Pages.Personal.LabelTab.LabelTab labelTab;
+        [SerializeField] private LabelTab labelTab;
         [SerializeField] private GameError gameError;
         
         [Space]
@@ -65,7 +67,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
                 return;
             }
             
-            if (LabelsManager.Instance.IsNameAlreadyTaken(labelName))
+            if (LabelsAPI.Instance.IsNameAlreadyTaken(labelName))
             {
                 var errorMsg = LocalizationManager.Instance.Get("label_name_exists_err");
                 gameError.Show(errorMsg);
@@ -83,7 +85,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
                 Production = new ExpValue{Value = 1},
                 IsPlayer = true,
             };
-            LabelsManager.Instance.CreatePlayersLabel(label);
+            LabelsAPI.Instance.CreatePlayersLabel(label);
             
             PlayerManager.Data.Label = labelName;
             labelTab.Reload();

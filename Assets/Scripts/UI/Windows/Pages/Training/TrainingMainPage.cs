@@ -6,6 +6,7 @@ using UI.Controls.Carousel;
 using UI.MessageBroker;
 using UI.MessageBroker.Messages;
 using UI.Windows.Pages.Training.Tabs;
+using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 

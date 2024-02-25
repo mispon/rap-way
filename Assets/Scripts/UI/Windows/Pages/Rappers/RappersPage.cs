@@ -4,12 +4,14 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game.Player;
-using Game.Rappers;
+using Game.Rappers.Desc;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
+using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
+using RappersAPI =  Game.Rappers.RappersPackage;
 
 namespace UI.Windows.Pages.Rappers
 {
@@ -63,7 +65,7 @@ namespace UI.Windows.Pages.Rappers
         /// </summary>
         private static List<RapperInfo> GetAllRappers()
         {
-            var allRappers = RappersManager.Instance.GetAllRappers().ToList();
+            var allRappers = RappersAPI.Instance.GetAll().ToList();
             
             allRappers.Add(new RapperInfo
             {
@@ -104,7 +106,7 @@ namespace UI.Windows.Pages.Rappers
             askingWindow.Show(
                 GetLocale("delete_rapper_question"),
                 () => {
-                    RappersManager.Instance.RemoveCustom(customRapper);
+                    RappersAPI.Instance.RemoveCustom(customRapper);
                     AfterPageClose();
                     BeforePageOpen();
                 }

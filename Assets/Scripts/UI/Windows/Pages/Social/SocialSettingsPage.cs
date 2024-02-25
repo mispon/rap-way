@@ -6,6 +6,7 @@ using Models.Production;
 using ScriptableObjects;
 using UI.Controls.Carousel;
 using UI.Windows.Pages.Social.Tabs;
+using UI.Windows.Tutorial;
 using UnityEngine;
 
 namespace UI.Windows.Pages.Social

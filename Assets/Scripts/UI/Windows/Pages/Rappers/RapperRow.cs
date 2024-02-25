@@ -1,4 +1,5 @@
 ﻿using Core;
+using Game.Rappers.Desc;
 using ScriptableObjects;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
@@ -25,7 +26,6 @@ namespace UI.Windows.Pages.Rappers
         [SerializeField] private RapperCard card;
 
         private RapperInfo _rapperInfo;
-        
         private RectTransform _rectTransform;
 
         private int _index { get; set; }

@@ -1,10 +1,10 @@
 ﻿using Enums;
 using Game.Player;
-using Game.Rappers;
-using ScriptableObjects;
+using Game.Rappers.Desc;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
+using RappersAPI =  Game.Rappers.RappersPackage;
 
 namespace UI.Windows.Pages.Personal.LabelTab
 {
@@ -46,7 +46,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
                 info.Fans *= 1_000_000;
             }
 
-            score.text = RappersManager.GetRapperScore(info).ToString();
+            score.text = RappersAPI.GetRapperScore(info).ToString();
 
             row.color = index % 2 == 0 ? evenColor : oddColor;
         }

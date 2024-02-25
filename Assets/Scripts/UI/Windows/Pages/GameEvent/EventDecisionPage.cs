@@ -1,9 +1,9 @@
 using Extensions;
 using Game;
 using Game.Player;
+using Game.Player.State.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Production;
-using Models.Player;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,7 +57,8 @@ namespace UI.Windows.Pages.GameEvent
         /// </summary>
         private static MetricsIncome CalculateIncome(PlayerData playerData, GameEventDecision decision)
         {
-            int fansAmount = Mathf.Max(playerData.Fans, GameManager.Instance.Settings.BaseFans);
+            var settings = GameManager.Instance.Settings;
+            int fansAmount = Mathf.Max(playerData.Fans, settings.Player.BaseFans);
 
             return new MetricsIncome
             {

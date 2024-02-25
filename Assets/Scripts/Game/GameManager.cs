@@ -5,10 +5,13 @@ using Core;
 using Core.Data;
 using Core.Localization;
 using Extensions;
+using Game.Labels.Desc;
+using Game.Player.State.Desc;
+using Game.Rappers.Desc;
+using Game.Settings;
+using Game.Socials.Eagler;
 using Game.Time;
-using Models.Eagler;
 using Models.Game;
-using Models.Player;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -20,15 +23,15 @@ namespace Game
     [Serializable]
     public class GameData
     {
-        public PlayerData PlayerData;
-        public GameStats GameStats;
+        public PlayerData   PlayerData;
+        public GameStats    GameStats;
         public RapperInfo[] Rappers;
         public RapperInfo[] CustomRappers;
-        public LabelInfo[] Labels;
-        public LabelInfo[] CustomLabels;
-        public LabelInfo PlayerLabel;
-        public Eagle[] Eagles;
-        public string[] ShowedHints;
+        public LabelInfo[]  Labels;
+        public LabelInfo[]  CustomLabels;
+        public LabelInfo    PlayerLabel;
+        public Eagle[]      Eagles;
+        public string[]     ShowedHints;
     }
     
     /// <summary>
@@ -42,20 +45,20 @@ namespace Game
         [BoxGroup("Save Key")]  [SerializeField] private string gameDataKey;
         [BoxGroup("Save Key")]  [SerializeField] private string noAdsDataKey;
         [BoxGroup("Save Key")]  [SerializeField] private string donateDataKey;
+        
         [BoxGroup("Game Settings")] public GameSettings Settings;
         
-        // TODO: make full state as private
         [TabGroup("state", "Player")] public PlayerData PlayerData;
-        [TabGroup("state", "Game")] public GameStats GameStats;
+        [TabGroup("state", "Game")]   public GameStats GameStats;
         
-        [TabGroup("rappers", "Rappers")] public List<RapperInfo> Rappers;
+        [TabGroup("rappers", "Rappers")]        public List<RapperInfo> Rappers;
         [TabGroup("rappers", "Custom Rappers")] public List<RapperInfo> CustomRappers;
         
-        [TabGroup("labels", "Labels")] public List<LabelInfo> Labels; 
+        [TabGroup("labels", "Labels")]        public List<LabelInfo> Labels; 
         [TabGroup("labels", "Custom Labels")] public List<LabelInfo> CustomLabels;
-        [TabGroup("labels", "Player Label")] public LabelInfo PlayerLabel;
+        [TabGroup("labels", "Player Label")]  public LabelInfo PlayerLabel;
         
-        [BoxGroup("Eagles")] public List<Eagle> Eagles;
+        [BoxGroup("Eagles")]    public List<Eagle> Eagles;
         [BoxGroup("Tutorials")] public HashSet<string> ShowedHints;
         
         [NonSerialized] public bool IsReady;

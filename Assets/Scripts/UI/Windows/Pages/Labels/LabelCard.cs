@@ -1,10 +1,11 @@
 ﻿using System;
 using Core;
 using Core.Localization;
-using Game.Labels;
+using Game.Labels.Desc;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Labels
 {
@@ -48,7 +49,7 @@ namespace UI.Windows.Pages.Labels
             string scoreText = LocalizationManager.Instance.GetFormat("score_label", info.Score);
             score.text = scoreText.ToUpper();
 
-            float prestige = LabelsManager.Instance.GetLabelPrestige(info);
+            float prestige = LabelsAPI.Instance.GetPrestige(info);
             stars.Display(prestige);
             
             deleteButton.gameObject.SetActive(info.IsCustom);

@@ -1,5 +1,6 @@
 ﻿using Core.Localization;
 using Game;
+using Game.Settings;
 using ScriptableObjects;
 using UI.Base;
 

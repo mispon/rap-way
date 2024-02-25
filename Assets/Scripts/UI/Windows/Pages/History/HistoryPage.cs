@@ -5,6 +5,7 @@ using Firebase.Analytics;
 using Game.Player;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Pages.History.HistoryProduction;
+using UI.Windows.Tutorial;
 using UnityEngine;
 
 namespace UI.Windows.Pages.History

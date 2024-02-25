@@ -1,6 +1,6 @@
 ﻿using System;
 using Game.Player;
-using ScriptableObjects;
+using Game.Settings;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -66,8 +66,8 @@ namespace Game.Production.Analyzers
             float factor = percent * Mathf.Max(1.0f, 0.7f + quality);
             int newFans = Convert.ToInt32(fans * factor);
 
-            newFans = Math.Max(settings.MinFansIncome, newFans);
-            newFans = Math.Min(settings.MaxFansIncome, newFans);
+            newFans = Math.Max(settings.Player.MinFansIncome, newFans);
+            newFans = Math.Min(settings.Player.MaxFansIncome, newFans);
             
             return AddFuzzing(newFans);
         }
@@ -80,7 +80,7 @@ namespace Game.Production.Analyzers
             int money = Convert.ToInt32(streams * cost);
             
             money = Math.Max(10, money);
-            money = Math.Min(settings.MaxMoneyIncome, money);
+            money = Math.Min(settings.Player.MaxMoneyIncome, money);
             
             return AddFuzzing(money);
         }
@@ -107,7 +107,7 @@ namespace Game.Production.Analyzers
         /// </summary>
         protected int GetFans()
         {
-            return Mathf.Max(PlayerManager.Data.Fans, settings.BaseFans);
+            return Mathf.Max(PlayerManager.Data.Fans, settings.Player.BaseFans);
         }
         
         /// <summary>

@@ -4,9 +4,12 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Game.Player;
-using Models.Player;
+using Game.Player.Goods;
+using Game.Player.State;
+using Game.Player.State.Desc;
 using Models.Production;
 using ScriptableObjects;
+using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 

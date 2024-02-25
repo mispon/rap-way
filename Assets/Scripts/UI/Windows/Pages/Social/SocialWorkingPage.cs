@@ -1,6 +1,7 @@
 ﻿using Core;
 using Enums;
 using Game.Player;
+using Game.Player.Team;
 using Models.Production;
 using ScriptableObjects;
 using UnityEngine;
@@ -88,7 +89,7 @@ namespace UI.Windows.Pages.Social
         /// </summary>
         protected override int GetDuration()
         {
-            return settings.SocialsWorkDuration;
+            return settings.Socials.WorkDuration;
         }
         
         /// <summary>

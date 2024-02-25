@@ -1,4 +1,5 @@
 ﻿using Core;
+using Game.Labels.Desc;
 using ScriptableObjects;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
@@ -24,7 +25,6 @@ namespace UI.Windows.Pages.Labels
         [SerializeField] private LabelCard card;
 
         private LabelInfo _labelInfo;
-        
         private RectTransform _rectTransform;
 
         private int _index { get; set; }

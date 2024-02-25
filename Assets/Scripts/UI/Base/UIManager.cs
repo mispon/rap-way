@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Game.Scenes;
+using Scenes;
+using Scenes.MessageBroker;
+using Scenes.MessageBroker.Messages;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
@@ -18,7 +20,7 @@ namespace UI.Base
             foreach (var container in uiElementContainers)
                 container.Initialize();
             
-            ScenesController.Instance.MessageBroker
+            SceneMessageBroker.Instance
                 .Receive<SceneLoadMessage>()
                 .Subscribe(msg => Dispose())
                 .AddTo(_disposables);

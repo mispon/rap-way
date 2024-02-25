@@ -2,13 +2,14 @@
 using Enums;
 using Firebase.Analytics;
 using Game;
-using Game.Labels;
+using Game.Labels.Desc;
 using Game.Player;
 using Models.Production;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Clip
 {
@@ -79,7 +80,7 @@ namespace UI.Windows.Pages.Clip
         /// </summary>
         protected override int GetDuration()
         {
-            return settings.ClipWorkDuration;
+            return settings.Clip.WorkDuration;
         }
 
         /// <summary>
@@ -131,7 +132,7 @@ namespace UI.Windows.Pages.Clip
             
             if (!string.IsNullOrEmpty(PlayerManager.Data.Label))
             {
-                _label = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
+                _label = LabelsAPI.Instance.Get(PlayerManager.Data.Label);
             }
 
             if (_label != null)

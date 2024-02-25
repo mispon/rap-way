@@ -39,6 +39,12 @@ namespace ScriptableObjects
         [Tooltip("Индекс элемента соответствует значению enum Skills")]
         public Sprite[] Skills;
         
+        [Header("Rappers")]
+        public Sprite CustomRapperAvatar;
+        
+        [Header("Labels")]
+        public Sprite CustomLabelAvatar;
+        
         [Header("Houses images")]
         public Sprite[] Houses;
     }

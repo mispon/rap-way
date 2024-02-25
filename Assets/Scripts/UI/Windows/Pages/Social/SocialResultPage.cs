@@ -42,7 +42,7 @@ namespace UI.Windows.Pages.Social
             {
                 MoneyIncome = -social.CharityAmount,
                 HypeIncome = social.HypeIncome,
-                Exp = settings.SocialsRewardExp,
+                Exp = settings.Socials.RewardExp,
                 WithSocialCooldown = true
             });
         }

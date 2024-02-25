@@ -3,13 +3,15 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game;
-using Game.Labels;
 using Game.Player;
-using Game.Rappers;
+using Game.Player.Team;
+using Game.Rappers.Desc;
 using ScriptableObjects;
 using UI.Windows.Pages.Charts;
 using UnityEngine;
 using UnityEngine.UI;
+using RappersAPI =  Game.Rappers.RappersPackage;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Rappers
 {
@@ -63,6 +65,8 @@ namespace UI.Windows.Pages.Rappers
         /// </summary>
         private void StartConversation(ConversationType convType)
         {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
+            
             switch (convType)
             {
                 case ConversationType.Battle:
@@ -72,9 +76,9 @@ namespace UI.Windows.Pages.Rappers
                     FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperFeatAction);
                     break;
             }
-            
-            SoundManager.Instance.PlaySound(UIActionType.Click);
-            PlayerManager.SetTeammateCooldown(TeammateType.Manager, GameManager.Instance.Settings.ManagerCooldown);
+
+            int cooldown = GameManager.Instance.Settings.Team.ManagerCooldown;
+            PlayerManager.SetTeammateCooldown(TeammateType.Manager, cooldown);
             
             workingPage.StartWork(_rapper, convType);
             
@@ -119,8 +123,8 @@ namespace UI.Windows.Pages.Rappers
             battleButton.gameObject.SetActive(!info.IsPlayer);
 
             bool labelsButtonActive = !info.IsPlayer && 
-                                      LabelsManager.Instance.HasPlayerLabel &&
-                                      !string.Equals(_rapper.Label, LabelsManager.Instance.PlayerLabel.Name, StringComparison.InvariantCultureIgnoreCase);
+                                      !LabelsAPI.Instance.IsPlayerLabelEmpty &&
+                                      !string.Equals(_rapper.Label, LabelsAPI.Instance.PlayerLabel.Name, StringComparison.InvariantCultureIgnoreCase);
             labelButton.gameObject.SetActive(labelsButtonActive);
         }
 
@@ -158,10 +162,10 @@ namespace UI.Windows.Pages.Rappers
             
             bool canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
 
-            var labelInfo = LabelsManager.Instance.GetLabel(PlayerManager.Data.Label);
+            var labelInfo = LabelsAPI.Instance.Get(PlayerManager.Data.Label);
             if (labelInfo is {IsPlayer: true, IsFrozen: false})
             {
-                float prestige = RappersManager.GetRapperPrestige(_rapper);
+                float prestige = RappersAPI.GetRapperPrestige(_rapper);
                 canInteract &= Mathf.Abs(prestige - labelInfo.Prestige.Value) <= 1.5f;
             } else
             {

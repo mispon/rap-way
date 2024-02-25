@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
-using Game.Labels;
-using Game.Rappers;
 using MessageBroker;
 using MessageBroker.Messages.Goods;
 using Models.Production;
 using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using RappersAPI = Game.Rappers.RappersPackage;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
@@ -35,7 +35,7 @@ namespace Game.Production.Analyzers
             }
             
             var hitDice = Random.Range(0f, 1f);
-            if (qualityPoints >= settings.TrackHitThreshold || hitDice <= settings.TrackHitChance) 
+            if (qualityPoints >= settings.Track.HitThreshold || hitDice <= settings.Track.HitChance) 
             {
                 track.IsHit = true;
             }
@@ -43,7 +43,7 @@ namespace Game.Production.Analyzers
             int fansAmount = GetFans();
             if (track.Feat != null)
             {
-                fansAmount += RappersManager.GetFansCount(track.Feat);
+                fansAmount += RappersAPI.GetFansCount(track.Feat);
             }
 
             track.ListenAmount = CalculateListensAmount(
@@ -53,15 +53,15 @@ namespace Game.Production.Analyzers
                 track.IsHit
             );
 
-            if (qualityPoints >= settings.TrackChartsThreshold)
+            if (qualityPoints >= settings.Track.ChartsThreshold)
             {
                 track.ChartPosition = CalculateChartPosition();
             }
             
             track.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
-            track.MoneyIncome = CalcMoneyIncome(track.ListenAmount, settings.TrackListenCost);
+            track.MoneyIncome = CalcMoneyIncome(track.ListenAmount, settings.Track.ListenCost);
 
-            if (LabelsManager.Instance.IsPlayerInGameLabel() && track.Feat == null)
+            if (LabelsAPI.Instance.IsPlayerInGameLabel() && track.Feat == null)
             {
                 int labelsFee = track.MoneyIncome / 100 * 20;
                 track.MoneyIncome -= labelsFee;
@@ -86,7 +86,7 @@ namespace Game.Production.Analyzers
         }
 
         /// <summary>
-        /// TODO: удалить этот костыль, подумать как зарефакторить аналайзеры 
+        /// TODO: удалить этот костыль, перейти на апи
         /// </summary>
         private float GetGoodsQualityImpact()
         {
@@ -119,7 +119,7 @@ namespace Game.Production.Analyzers
         private float CalculateWorkPointsFactor(int textPoints, int bitPoints)
         {
             var workPointsTotal = textPoints + bitPoints;
-            var qualityPercent = (1f * workPointsTotal) / settings.TrackWorkPointsMax;
+            var qualityPercent = 1f * workPointsTotal / settings.Track.WorkPointsMax;
 
             qualityPercent /= 2;
             
@@ -140,7 +140,7 @@ namespace Game.Production.Analyzers
             
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
-            float activity = 1.0f + (maxFansActivity * quality);
+            float activity = 1.0f + maxFansActivity * quality;
 
             int listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
             
@@ -164,7 +164,7 @@ namespace Game.Production.Analyzers
         
         private int CalculateChartPosition()
         {
-            if (GetFans() <= settings.MinFansForCharts)
+            if (GetFans() <= settings.Player.MinFansForCharts)
             {
                 return 0;
             }

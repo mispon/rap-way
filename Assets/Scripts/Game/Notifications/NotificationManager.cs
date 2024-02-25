@@ -38,6 +38,7 @@ namespace Game.Notifications
 
         /// <summary>
         /// Добавляет новое уведомление в очередь показа по клику
+        /// TODO: change on message broker
         /// </summary>
         public void AddClickNotification(Action action)
         {
@@ -49,6 +50,7 @@ namespace Game.Notifications
 
         /// <summary>
         /// Добавляет новое уведомление в очередь независимых; отображет его, если показ разрешен
+        /// TODO: change on message broker
         /// </summary>
         public void AddIndependentNotification(Action action)
         {

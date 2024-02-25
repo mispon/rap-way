@@ -1,6 +1,6 @@
 using Core.Localization;
 using Extensions;
-using Models.Eagler;
+using Game.Socials.Eagler;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;

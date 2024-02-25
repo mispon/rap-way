@@ -2,10 +2,10 @@ using Enums;
 using Extensions;
 using Game.Player;
 using Game.Production;
-using Game.Socials;
+using Game.Rappers.Desc;
+using Game.Socials.Eagler;
 using MessageBroker;
 using MessageBroker.Messages.Production;
-using ScriptableObjects;
 using UI.Windows.Pages.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,7 +52,7 @@ namespace UI.Windows.Pages.Battle
             int fansChange = (int) (PlayerManager.Data.Fans * 0.1f);
             int fansFuzz = (int) (fansChange * 0.1f);
             
-            int hype = isWin ? settings.BattleWinnerHype : settings.BattleLoserHype;
+            int hype = isWin ? settings.Battle.WinnerHype : settings.Battle.LoserHype;
             
             return new BattleResult
             {
@@ -78,7 +78,7 @@ namespace UI.Windows.Pages.Battle
             string prefix = _result.FansIncome > 0 ? "+" : string.Empty;
             fansIncome.text = $"{prefix}{_result.FansIncome.GetDisplay()}";
             hypeIncome.text = $"+{_result.HypeIncome}";
-            expIncome.text = $"+{settings.BattleRewardExp}";
+            expIncome.text = $"+{settings.Battle.RewardExp}";
 
             playerImage.sprite = PlayerManager.Data.Info.Gender == Gender.Male
                 ? playerAvatarMale
@@ -116,7 +116,7 @@ namespace UI.Windows.Pages.Battle
             {
                 FansIncome = _result.FansIncome,
                 HypeIncome = _result.HypeIncome,
-                Exp = settings.BattleRewardExp
+                Exp = settings.Battle.RewardExp
             });
         }
 

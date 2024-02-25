@@ -5,7 +5,7 @@ using Core.Localization;
 using Enums;
 using Firebase.Analytics;
 using Game.Player;
-using Models.Player;
+using Game.Player.State.Desc;
 using ScriptableObjects;
 using UI.Controls.Progress;
 using UnityEngine;

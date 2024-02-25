@@ -5,9 +5,9 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Labels;
+using Game.Labels.Desc;
 using Game.Player;
-using Game.Rappers;
+using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.State;
 using ScriptableObjects;
@@ -15,9 +15,12 @@ using UI.Controls.Ask;
 using UI.Controls.Progress;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Pages.Labels;
+using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using RappersAPI =  Game.Rappers.RappersPackage;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.Pages.Personal.LabelTab
 {
@@ -98,7 +101,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             upProductionButton.gameObject.SetActive(label.Production.Value < maxStatValue);
             upProductionButton.interactable = PlayerManager.Data.Exp >= expStep;
             
-            float prestige = LabelsManager.GetLabelPrestige(label, expToPrestigeLevelUp);
+            float prestige = LabelsAPI.Instance.GetPrestige(label, expToPrestigeLevelUp);
             stars.Display(prestige);
             prestigeBar.SetValue(label.Prestige.Exp, expToPrestigeLevelUp[label.Prestige.Value]);
             
@@ -107,7 +110,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
             
             exp.text = PlayerManager.Data.Exp.ToString();
 
-            _income = LabelsManager.Instance.GetPlayersLabelIncome();
+            _income = LabelsAPI.Instance.GetPlayersLabelIncome();
             income.text = _income.GetMoney();
 
             _cost = GetServiceCost();
@@ -139,8 +142,8 @@ namespace UI.Windows.Pages.Personal.LabelTab
         /// </summary>
         private static List<RapperInfo> GetMembers(string labelName)
         {
-            var members = RappersManager.Instance
-                .GetAllRappers()
+            var members = RappersAPI.Instance
+                .GetAll()
                 .Where(e => e.Label == labelName)
                 .ToList();
             
@@ -157,7 +160,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
 
         private int GetServiceCost()
         {
-            float prestige = LabelsManager.GetLabelPrestige(_label, expToPrestigeLevelUp);
+            float prestige = LabelsAPI.Instance.GetPrestige(_label, expToPrestigeLevelUp);
             return Mathf.Max((int) (prestige * 1_000_000), minLabelCost);
         }
 
@@ -225,9 +228,9 @@ namespace UI.Windows.Pages.Personal.LabelTab
                 () => {
                     var members = GetMembers(_label.Name);
                     members.ForEach(e => e.Label = "");
+                    
                     PlayerManager.Data.Label = "";
-
-                    LabelsManager.Instance.DisbandPlayersLabel();
+                    LabelsAPI.Instance.DisbandPlayersLabel();
             
                     labelTab.Reload();
                 }
@@ -268,12 +271,11 @@ namespace UI.Windows.Pages.Personal.LabelTab
         public override void Close()
         {
             foreach (var row in _listItems)
-            {
                 Destroy(row.gameObject);
-            }
-            _listItems.Clear();
             
+            _listItems.Clear();
             _disposable.Clear();
+            
             base.Close();
         }
     }

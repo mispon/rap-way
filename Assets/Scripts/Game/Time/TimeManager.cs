@@ -5,6 +5,8 @@ using System.Globalization;
 using Core;
 using Core.OrderedStarter;
 using Extensions;
+using MessageBroker;
+using MessageBroker.Messages.Time;
 using UnityEngine;
 
 namespace Game.Time
@@ -21,11 +23,7 @@ namespace Game.Time
         [Header("Временные интервалы, сек")]
         [SerializeField] private int actionInterval;
         [SerializeField] private int inactionInterval;
-
-        public event Action onDayLeft = () => {};
-        public event Action onWeekLeft = () => {};
-        public event Action onMonthLeft = () => {};
-
+        
         private Coroutine _timer;
         private bool _hasAction;
         private bool _freezed;
@@ -88,9 +86,18 @@ namespace Game.Time
         {
             Now = Now.AddDays(1);
             
-            onDayLeft.Invoke();
-            if (IsWeekLeft()) onWeekLeft.Invoke();
-            if (IsMonthLeft()) onMonthLeft.Invoke();
+            MainMessageBroker.Instance.Publish(new DayLeftEvent {Day = Now.Day});
+            
+            if (IsWeekLeft())
+            {
+                int week = (Now.Day - 1) / 7 + 1;
+                MainMessageBroker.Instance.Publish(new WeekLeftEvent {Week = week});
+            }
+            
+            if (IsMonthLeft())
+            {
+                MainMessageBroker.Instance.Publish(new MonthLeftEvent {Month = Now.Month});   
+            }
         }
 
         private bool IsWeekLeft() => Now.DayOfWeek == DayOfWeek.Monday;

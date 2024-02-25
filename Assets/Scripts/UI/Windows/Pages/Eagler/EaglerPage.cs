@@ -3,7 +3,9 @@ using Enums;
 using Firebase.Analytics;
 using Game.Player;
 using Game.Socials;
+using Game.Socials.Eagler;
 using UI.Controls.ScrollViewController;
+using UI.Windows.Tutorial;
 using UnityEngine;
 
 namespace UI.Windows.Pages.Eagler

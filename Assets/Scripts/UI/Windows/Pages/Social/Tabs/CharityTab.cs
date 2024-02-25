@@ -70,8 +70,10 @@ namespace UI.Windows.Pages.Social.Tabs
         /// </summary>
         protected override bool CheckStartConditions()
         {
+            var settings = GameManager.Instance.Settings.Socials;
+            
             bool noCooldown = base.CheckStartConditions();
-            return noCooldown && PlayerManager.Data.Money >= GameManager.Instance.Settings.MinBalanceForCharity;
+            return noCooldown && PlayerManager.Data.Money >= settings.MinBalanceForCharity;
         }
 
         /// <summary>
@@ -84,7 +86,8 @@ namespace UI.Windows.Pages.Social.Tabs
             int min = 0;
             int max = 0;
 
-            if (money >= GameManager.Instance.Settings.MinBalanceForCharity)
+            var settings = GameManager.Instance.Settings.Socials;
+            if (money >= settings.MinBalanceForCharity)
             {
                 min = Mathf.Max(1, money / 100);
                 max = min * 10;
