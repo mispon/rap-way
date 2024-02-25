@@ -1,4 +1,5 @@
 using MessageBroker;
+using MessageBroker.Handlers;
 using MessageBroker.Messages.Time;
 using UniRx;
 
@@ -13,7 +14,7 @@ namespace Game.Player.Energy
 
         private void HandleDayLeft()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<DayLeftMessage>()
                 .Subscribe()
                 .AddTo(disposable);

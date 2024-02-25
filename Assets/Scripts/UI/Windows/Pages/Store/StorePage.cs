@@ -44,19 +44,19 @@ namespace UI.Windows.Pages.Store
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<MoneyChangedMessage>()
                 .Subscribe(e => UpdateGameBalance(e.NewVal))
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<DonateChangedMessage>()
                 .Subscribe(e => UpdateDonateBalance(e.NewVal))
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<FullStateResponse>()
                 .Subscribe(UpdateHUD)
                 .AddTo(_disposable);
-            MainMessageBroker.Instance.Publish(new FullStateRequest());
+            MsgBroker.Instance.Publish(new FullStateRequest());
             
             ShowCategoriesList();
         }

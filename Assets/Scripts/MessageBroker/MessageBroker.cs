@@ -1,12 +1,12 @@
 using System;
 using Core;
 
-namespace UI.MessageBroker
+namespace MessageBroker
 {
-    public class UIMessageBroker : Singleton<UIMessageBroker>
+    public class MsgBroker : Singleton<MsgBroker>
     {
         private readonly UniRx.MessageBroker _broker = new();
-
+        
         public void Publish<T>(T message)
         {
             _broker.Publish(message);

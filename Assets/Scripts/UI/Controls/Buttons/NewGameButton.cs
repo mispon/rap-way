@@ -1,16 +1,17 @@
 using Core;
 using Enums;
 using Firebase.Analytics;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
 using UI.Enums;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Controls.Buttons
 {
+    [RequireComponent(typeof(Button))]
     public class NewGameButton : MonoBehaviour
     {
         [SerializeField] private WindowType _toWindow;
@@ -24,11 +25,8 @@ namespace UI.Controls.Buttons
                 {
                     SoundManager.Instance.PlaySound(_soundType);
                     FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGamePage);
-                    
-                    UIMessageBroker.Instance.Publish(new WindowControlMessage
-                        {
-                            Type = _toWindow
-                        });
+
+                    MsgBroker.Instance.Publish(new WindowControlMessage(_toWindow));
                 });
         }
     }

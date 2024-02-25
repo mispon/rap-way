@@ -2,12 +2,12 @@ using System.Collections;
 using Enums;
 using Firebase.Analytics;
 using Game;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Sirenix.OdinInspector;
 using UI.Base;
 using UI.Controls;
 using UI.Enums;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +27,7 @@ namespace UI.Windows.MainMenu
 
             if (GameManager.Instance.NeedAskReview())
             {
-                UIMessageBroker.Instance.Publish(new WindowControlMessage {Type = WindowType.AskReview});
+                MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.AskReview));
             }
 
             StartCoroutine(SetupContinueButton());

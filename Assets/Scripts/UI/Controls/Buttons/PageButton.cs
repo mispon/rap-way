@@ -12,9 +12,6 @@ namespace UI.Controls.Buttons
         Close
     }
     
-    /// <summary>
-    /// Логика кнопок управления состоянием страницы
-    /// </summary>
     [RequireComponent(typeof(Button))]
     public class PageButton : MonoBehaviour
     {

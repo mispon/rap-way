@@ -16,7 +16,7 @@ namespace Game.Rappers
         
         private void HandleMonthLeft()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<MonthLeftMessage>()
                 .Subscribe(e =>
                 {

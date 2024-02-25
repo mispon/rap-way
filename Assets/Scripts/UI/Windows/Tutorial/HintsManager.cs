@@ -2,8 +2,8 @@ using Core;
 using Core.Localization;
 using Core.OrderedStarter;
 using Game;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using UI.Windows.Pages.Hints;
 using UnityEngine;
 
@@ -15,7 +15,7 @@ namespace UI.Windows.Tutorial
         
         public void OnStart()
         {
-            UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage());
+            MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
         }
 
         public void ShowHint(string key)

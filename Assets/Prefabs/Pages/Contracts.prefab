@@ -332,6 +332,9 @@ GameObject:
   - component: {fileID: 5537403494661411879}
   - component: {fileID: 9123923801402290982}
   - component: {fileID: 6808263240395904348}
+  - component: {fileID: 4536906670130670456}
+  - component: {fileID: 4649414356417665134}
+  - component: {fileID: 7053722111868790088}
   - component: {fileID: 7364138331655563944}
   m_Layer: 5
   m_Name: LabelContractPage
@@ -398,6 +401,58 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!223 &4536906670130670456
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693821763485092054}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!225 &4649414356417665134
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693821763485092054}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &7053722111868790088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693821763485092054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!114 &7364138331655563944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,6 +465,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 482def5027004c78a9190bca75184188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   logo: {fileID: 5451790368342286842}
   greeting: {fileID: 49703532005079818}
   contract: {fileID: 3875234620346263229}
@@ -650,15 +714,15 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Dear [Rapper''s Name],
 
-    
 
-    We hope this message finds you well.
-    We''ve been following your incredible journey in the music industry, and we are
-    genuinely impressed by your talent and unique style. At [Music Label Name], we
-    believe in fostering and promoting exceptional artists, and we see enormous potential
+
+    We hope this message finds you well. We''ve
+    been following your incredible journey in the music industry, and we are genuinely
+    impressed by your talent and unique style. At [Music Label Name], we believe
+    in fostering and promoting exceptional artists, and we see enormous potential
     in your work.
 
-    
+
 
     After thorough consideration, we are thrilled to extend
     a formal offer for an exclusive recording contract with [Music Label Name]. This

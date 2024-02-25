@@ -8,12 +8,11 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Time;
+using MessageBroker.Messages.UI;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using ScriptableObjects;
 using UI.Enums;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -74,33 +73,29 @@ namespace UI.GameScreen
         /// </summary>
         private void HandleStateEvents()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<DayLeftMessage>()
                 .Subscribe(e => OnDayLeft())
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<MoneyChangedMessage>()
                 .Subscribe(e => playerMoney.text = e.NewVal.GetMoney())
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<FansChangedMessage>()
                 .Subscribe(e => playerFans.text = e.NewVal.GetDisplay())
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<HypeChangedMessage>()
                 .Subscribe(e => playerHype.text = e.NewVal.ToString())
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<FullStateResponse>()
                 .Subscribe(UpdateHUD)
                 .AddTo(_disposable);
             
-            MainMessageBroker.Instance.Publish(new FullStateRequest());
-            
-            UIMessageBroker.Instance.Publish(new WindowControlMessage
-            {
-                Type = WindowType.GameScreen
-            });
+            MsgBroker.Instance.Publish(new FullStateRequest());
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
         }
         
         /// <summary>

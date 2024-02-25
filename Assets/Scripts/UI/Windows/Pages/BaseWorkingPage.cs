@@ -64,7 +64,7 @@ namespace UI.Windows.Pages
         protected override void AfterPageOpen()
         {
             TimeManager.Instance.SetActionMode();
-            _disposable = MainMessageBroker.Instance
+            _disposable = MsgBroker.Instance
                 .Receive<DayLeftMessage>()
                 .Subscribe(e => OnDayLeft());
 

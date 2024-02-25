@@ -17,7 +17,7 @@ namespace Game.Labels
 
         private void HandleWeekLeft()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<WeekLeftMessage>()
                 .Subscribe(e =>
                 {
@@ -28,7 +28,7 @@ namespace Game.Labels
         
         private void HandleMonthLeft()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<MonthLeftMessage>()
                 .Subscribe(e =>
                 {

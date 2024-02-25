@@ -1,5 +1,6 @@
 using Game.Settings;
 using MessageBroker;
+using MessageBroker.Handlers;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Production;
 using UniRx;
@@ -26,13 +27,13 @@ namespace Game.Player.State
 
         private void HandleFullStateRequest()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<FullStateRequest>()
                 .Subscribe(_ =>
                 {
                     var playerData = GameManager.Instance.PlayerData;
                     
-                    MainMessageBroker.Instance.Publish(new FullStateResponse
+                    MsgBroker.Instance.Publish(new FullStateResponse
                     {
                         NickName = playerData.Info.NickName,
                         Gender = playerData.Info.Gender,
@@ -48,7 +49,7 @@ namespace Game.Player.State
         
         private void HandleChangeMoney()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<ChangeMoneyMessage>()
                 .Subscribe(e => UpdateMoney(e.Amount))
                 .AddTo(disposable);
@@ -56,7 +57,7 @@ namespace Game.Player.State
         
         private void HandleSpendMoneyRequest()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<SpendMoneyRequest>()
                 .Subscribe(e =>
                 {
@@ -65,14 +66,14 @@ namespace Game.Player.State
                     if (isMoneyEnough)
                         UpdateMoney(-e.Amount);
                     
-                    MainMessageBroker.Instance.Publish(new SpendMoneyResponse {OK = isMoneyEnough});
+                    MsgBroker.Instance.Publish(new SpendMoneyResponse {OK = isMoneyEnough});
                 })
                 .AddTo(disposable);
         }
 
         private void HandleChangeFans()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<ChangeFansMessage>()
                 .Subscribe(e => UpdateFans(e.Amount))
                 .AddTo(disposable);
@@ -80,7 +81,7 @@ namespace Game.Player.State
         
         private void HandleChangeExp()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<ChangeExpMessage>()
                 .Subscribe(e => UpdateExp(e.Amount))
                 .AddTo(disposable);
@@ -88,7 +89,7 @@ namespace Game.Player.State
 
         private void HandleProductionReward()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<ProductionRewardMessage>()
                 .Subscribe(e =>
                 {
@@ -106,7 +107,7 @@ namespace Game.Player.State
 
         private void HandleConvertReward()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<ConcertRewardMessage>()
                 .Subscribe(e =>
                 {
@@ -125,7 +126,7 @@ namespace Game.Player.State
             int newVal = SafetyAdd(oldVal, value, _settings.Player.MaxMoney);
 
             playerData.Money = newVal;
-            MainMessageBroker.Instance.Publish(new MoneyChangedMessage {OldVal = oldVal, NewVal = newVal});
+            MsgBroker.Instance.Publish(new MoneyChangedMessage {OldVal = oldVal, NewVal = newVal});
         }
 
         private void UpdateFans(int value)
@@ -139,7 +140,7 @@ namespace Game.Player.State
             newVal = Mathf.Max(newVal, minFans);
                     
             playerData.Fans = newVal;
-            MainMessageBroker.Instance.Publish(new FansChangedMessage {OldVal = oldVal, NewVal = newVal});
+            MsgBroker.Instance.Publish(new FansChangedMessage {OldVal = oldVal, NewVal = newVal});
         }
 
         private static void UpdateExp(int value)
@@ -153,7 +154,7 @@ namespace Game.Player.State
             newVal = Mathf.Max(newVal, minExp);
 
             playerData.Exp = newVal;
-            MainMessageBroker.Instance.Publish(new ExpChangedMessage {OldVal = oldVal, NewVal = newVal});
+            MsgBroker.Instance.Publish(new ExpChangedMessage {OldVal = oldVal, NewVal = newVal});
         }
         
         private static int SafetyAdd(int current, int increment, int maxValue)

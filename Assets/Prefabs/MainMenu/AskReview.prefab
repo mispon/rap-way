@@ -607,12 +607,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3575498708871970472}
-  - component: {fileID: 7524754220018402087}
   - component: {fileID: 5313817679792474626}
   - component: {fileID: 3986789702241423798}
   - component: {fileID: 2756882459670841507}
   - component: {fileID: 1306073795588979434}
   - component: {fileID: 8877094798678580422}
+  - component: {fileID: 7524754220018402087}
   m_Layer: 5
   m_Name: AskReview
   m_TagString: Untagged
@@ -644,31 +644,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7524754220018402087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8036757997924435142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf33acbf2ebf493c8e5ef57b293b9729, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _canvas: {fileID: 5313817679792474626}
-  _canvasGroup: {fileID: 3986789702241423798}
-  _reviewPageURL: https://play.google.com/store/apps/details?id=com.Meepson.RapWay
-  _reviewButton: {fileID: 4750307335876727816}
 --- !u!223 &5313817679792474626
 Canvas:
   m_ObjectHideFlags: 0
@@ -676,7 +651,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8036757997924435142}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}
@@ -759,6 +734,29 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
+--- !u!114 &7524754220018402087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8036757997924435142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf33acbf2ebf493c8e5ef57b293b9729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  reviewPageURL: 
+  reviewButton: {fileID: 0}
 --- !u!1 &8805522291318892426
 GameObject:
   m_ObjectHideFlags: 0

@@ -31,7 +31,7 @@ namespace Core.Ads
             reward = Math.Max(50, reward);
             
             SoundManager.Instance.PlaySound(UIActionType.Pay);
-            MainMessageBroker.Instance.Publish(new ChangeMoneyMessage {Amount = reward});
+            MsgBroker.Instance.Publish(new ChangeMoneyMessage {Amount = reward});
         }
 
         private static IMediationManager GetAdManager()

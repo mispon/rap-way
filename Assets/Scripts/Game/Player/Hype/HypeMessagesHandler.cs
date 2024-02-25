@@ -1,5 +1,6 @@
 using System.Linq;
 using MessageBroker;
+using MessageBroker.Handlers;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Production;
 using MessageBroker.Messages.Time;
@@ -19,13 +20,13 @@ namespace Game.Player.Hype
 
         private void HandleDayLeft()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<DayLeftMessage>()
                 .Subscribe(e =>
                 {
                     if (e.Day % 3 == 0)
                     {
-                        MainMessageBroker.Instance.Publish(new ChangeHypeMessage {Amount = -1});
+                        MsgBroker.Instance.Publish(new ChangeHypeMessage {Amount = -1});
                     } 
                 })
                 .AddTo(disposable);
@@ -33,7 +34,7 @@ namespace Game.Player.Hype
         
         private void HandleChangeHype()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<ChangeHypeMessage>()
                 .Subscribe(e => UpdateHype(e.Amount))
                 .AddTo(disposable);
@@ -41,7 +42,7 @@ namespace Game.Player.Hype
         
         private void HandleProductionReward()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<ProductionRewardMessage>()
                 .Subscribe(e => UpdateHype(e.HypeIncome))
                 .AddTo(disposable);
@@ -63,7 +64,7 @@ namespace Game.Player.Hype
             newVal = Mathf.Clamp(newVal, minHype, maxHype);
 
             playerData.Hype = newVal;
-            MainMessageBroker.Instance.Publish(new HypeChangedMessage {OldVal = oldVal, NewVal = newVal});
+            MsgBroker.Instance.Publish(new HypeChangedMessage {OldVal = oldVal, NewVal = newVal});
         }
     }
 }

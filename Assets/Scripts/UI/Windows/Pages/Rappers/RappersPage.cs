@@ -26,7 +26,7 @@ namespace UI.Windows.Pages.Rappers
         [SerializeField] private Button addNewRapperButton;
         [SerializeField] private NewRapperPage newRapperPage;
         
-        private List<RapperRow> _listItems = new();
+        private readonly List<RapperRow> _listItems = new();
 
         private void Start()
         {

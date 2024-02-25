@@ -1,7 +1,7 @@
 ﻿using System;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using UI.Base;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 
@@ -26,7 +26,7 @@ namespace UI.Windows.Tutorial
         {
             tutorialWindow.Initialize();
             
-            UIMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<TutorialWindowControlMessage>()
                 .Subscribe(_ => ShowNextTutorialStage())
                 .AddTo(disposables);

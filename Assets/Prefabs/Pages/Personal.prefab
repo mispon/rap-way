@@ -7440,11 +7440,11 @@ GameObject:
   - component: {fileID: 7062612520573078870}
   - component: {fileID: 8801408933911858742}
   - component: {fileID: 6754172580288500849}
-  - component: {fileID: 1740447970292616929}
-  - component: {fileID: 258782212181881165}
   - component: {fileID: 3663825354755975588}
   - component: {fileID: 3686940714222688325}
   - component: {fileID: 432750315538125946}
+  - component: {fileID: 1740447970292616929}
+  - component: {fileID: 258782212181881165}
   m_Layer: 5
   m_Name: PersonalPage
   m_TagString: Untagged
@@ -7512,48 +7512,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1740447970292616929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3970175978349882740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e73424f16e3a408fbb8b2a013a195ca9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  personalButton: {fileID: 6919855636880774296}
-  houseButton: {fileID: 5982838530040622050}
-  labelButton: {fileID: 5911402967229980415}
-  activeTabColor: {r: 0.18039216, g: 0.18039216, b: 0.18039216, a: 1}
-  inactiveTabColor: {r: 0.10980392, g: 0.11372549, b: 0.12156863, a: 1}
-  personalTab: {fileID: 981592390895658249}
-  houseTab: {fileID: 2890728723598739682}
-  labelTab: {fileID: 573973332746485680}
-  cashButton: {fileID: 5590263221846541982}
---- !u!114 &258782212181881165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3970175978349882740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810fa092eed84479a2d1f57c3b32fd09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!223 &3663825354755975588
 Canvas:
   m_ObjectHideFlags: 0
@@ -7605,7 +7563,49 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
+--- !u!114 &1740447970292616929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3970175978349882740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e73424f16e3a408fbb8b2a013a195ca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  personalButton: {fileID: 6919855636880774296}
+  houseButton: {fileID: 5982838530040622050}
+  labelButton: {fileID: 5911402967229980415}
+  activeTabColor: {r: 0.18039216, g: 0.18039216, b: 0.18039216, a: 1}
+  inactiveTabColor: {r: 0.10980392, g: 0.11372549, b: 0.12156863, a: 1}
+  personalTab: {fileID: 981592390895658249}
+  houseTab: {fileID: 2890728723598739682}
+  labelTab: {fileID: 573973332746485680}
+  cashButton: {fileID: 5590263221846541982}
+--- !u!114 &258782212181881165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3970175978349882740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810fa092eed84479a2d1f57c3b32fd09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4098633833119060588
 GameObject:
   m_ObjectHideFlags: 0

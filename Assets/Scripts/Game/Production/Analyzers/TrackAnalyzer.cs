@@ -93,7 +93,7 @@ namespace Game.Production.Analyzers
             float impact = 0f;
             bool isDone = false;
 
-            _disposable = MainMessageBroker.Instance
+            _disposable = MsgBroker.Instance
                 .Receive<GoodsQualityImpactResponse>()
                 .Subscribe(e =>
                 {
@@ -101,7 +101,7 @@ namespace Game.Production.Analyzers
                     isDone = true;
                     _disposable?.Dispose();
                 });
-            MainMessageBroker.Instance.Publish(new GoodsQualityImpactRequest());
+            MsgBroker.Instance.Publish(new GoodsQualityImpactRequest());
             
             while (!isDone)
             {

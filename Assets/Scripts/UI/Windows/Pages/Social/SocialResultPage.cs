@@ -38,7 +38,7 @@ namespace UI.Windows.Pages.Social
         /// </summary>
         private void SaveResult(SocialInfo social)
         {
-            MainMessageBroker.Instance.Publish(new ProductionRewardMessage
+            MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = -social.CharityAmount,
                 HypeIncome = social.HypeIncome,

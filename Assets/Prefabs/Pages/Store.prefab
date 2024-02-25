@@ -2171,10 +2171,10 @@ GameObject:
   - component: {fileID: 1507495218350344881}
   - component: {fileID: 3018191690667901437}
   - component: {fileID: 5475892983002863275}
-  - component: {fileID: 1005865249471495049}
   - component: {fileID: 3365144884894275509}
   - component: {fileID: 6994890463080012557}
   - component: {fileID: 1888602157067754157}
+  - component: {fileID: 1005865249471495049}
   m_Layer: 5
   m_Name: StogePage
   m_TagString: Untagged
@@ -2243,32 +2243,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1005865249471495049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3908045696629621528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02ee7d10a29a49d2a36a9eb032147920, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  data: {fileID: 11400000, guid: f23283c513aedfa499ef460de12fb45e, type: 2}
-  gameBalance: {fileID: 3393214508231146808}
-  donateBalance: {fileID: 1331637811550250576}
-  categories: {fileID: 912073995557853369}
-  categoryItemTemplate: {fileID: 728456673787228372}
 --- !u!223 &3365144884894275509
 Canvas:
   m_ObjectHideFlags: 0
@@ -2276,7 +2250,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3908045696629621528}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}
@@ -2321,6 +2295,32 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
+--- !u!114 &1005865249471495049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3908045696629621528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ee7d10a29a49d2a36a9eb032147920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  data: {fileID: 11400000, guid: f23283c513aedfa499ef460de12fb45e, type: 2}
+  gameBalance: {fileID: 3393214508231146808}
+  donateBalance: {fileID: 1331637811550250576}
+  categories: {fileID: 912073995557853369}
+  categoryItemTemplate: {fileID: 728456673787228372}
 --- !u!1 &4058483335081331822
 GameObject:
   m_ObjectHideFlags: 0
@@ -2938,7 +2938,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4648682881462191169}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}
@@ -3951,10 +3951,10 @@ GameObject:
   - component: {fileID: 8221425414732090198}
   - component: {fileID: 3015953041364904513}
   - component: {fileID: 7570015675560828010}
-  - component: {fileID: 6363348262834796048}
   - component: {fileID: 9089198393138786053}
   - component: {fileID: 6532273861304565861}
   - component: {fileID: 8701301335079551670}
+  - component: {fileID: 6363348262834796048}
   m_Layer: 5
   m_Name: ItemCard
   m_TagString: Untagged
@@ -4021,39 +4021,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6363348262834796048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6524698623875861617}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20007393198346a38d8d949097424473, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _purchaser: {fileID: 4107617046983517874}
-  gameError: {fileID: 6242732131879122662}
-  moneySprite: {fileID: 21300000, guid: f389ac29a43eb5241b100eda69b78a0f, type: 3}
-  donateSprite: {fileID: 21300000, guid: 80f3efe4824fb224988259c53bf51ed9, type: 3}
-  realMoneySprite: {fileID: 21300042, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
-  icon: {fileID: 3079319803002719207}
-  itemName: {fileID: 8195484657506179560}
-  itemDesc: {fileID: 4973358000559587646}
-  moneyIcon: {fileID: 4840933967072502533}
-  price: {fileID: 8861444996480469262}
-  buyButton: {fileID: 327266616063654475}
-  purchasedItem: {fileID: 6641541171950856311}
 --- !u!223 &9089198393138786053
 Canvas:
   m_ObjectHideFlags: 0
@@ -4061,7 +4028,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6524698623875861617}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}
@@ -4106,6 +4073,39 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
+--- !u!114 &6363348262834796048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6524698623875861617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20007393198346a38d8d949097424473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _purchaser: {fileID: 4107617046983517874}
+  gameError: {fileID: 6242732131879122662}
+  moneySprite: {fileID: 21300000, guid: f389ac29a43eb5241b100eda69b78a0f, type: 3}
+  donateSprite: {fileID: 21300000, guid: 80f3efe4824fb224988259c53bf51ed9, type: 3}
+  realMoneySprite: {fileID: 21300042, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
+  icon: {fileID: 3079319803002719207}
+  itemName: {fileID: 8195484657506179560}
+  itemDesc: {fileID: 4973358000559587646}
+  moneyIcon: {fileID: 4840933967072502533}
+  price: {fileID: 8861444996480469262}
+  buyButton: {fileID: 327266616063654475}
+  purchasedItem: {fileID: 6641541171950856311}
 --- !u!1 &6663068888789440498
 GameObject:
   m_ObjectHideFlags: 0

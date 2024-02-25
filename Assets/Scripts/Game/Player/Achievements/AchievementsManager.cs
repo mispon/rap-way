@@ -49,15 +49,15 @@ namespace Game.Player.Achievements
         /// </summary>
         public void OnStart()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<MoneyChangedMessage>()
                 .Subscribe(e => CheckMoney(e.NewVal))
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<FansChangedMessage>()
                 .Subscribe(e => CheckFans(e.NewVal))
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<HypeChangedMessage>()
                 .Subscribe(e => CheckHype(e.NewVal))
                 .AddTo(_disposable);

@@ -66,7 +66,7 @@ namespace UI.Windows.Pages.Store.Purchase
             SoundManager.Instance.PlaySound(UIActionType.Pay);
 
             var newGoodEvent = StoreItemPurchaser.CreateNewGoodEvent(_info);
-            MainMessageBroker.Instance.Publish(newGoodEvent);
+            MsgBroker.Instance.Publish(newGoodEvent);
             
             purchasedItem.Show(_info);
             Close();
@@ -86,11 +86,11 @@ namespace UI.Windows.Pages.Store.Purchase
             switch (itemType)
             {
                 case StoreItemType.Donate:
-                    MainMessageBroker.Instance.Publish(new SpendDonateRequest{Amount = _info.Price});
+                    MsgBroker.Instance.Publish(new SpendDonateRequest{Amount = _info.Price});
                     break;
                 
                 case StoreItemType.Game:
-                    MainMessageBroker.Instance.Publish(new SpendMoneyRequest{Amount = _info.Price});    
+                    MsgBroker.Instance.Publish(new SpendMoneyRequest{Amount = _info.Price});    
                     break;
                 
                 case StoreItemType.Purchase:
@@ -121,19 +121,19 @@ namespace UI.Windows.Pages.Store.Purchase
         
         protected override void BeforePageOpen()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<SpendDonateResponse>()
                 .Subscribe(e => HandleItemPurchase(e.OK))
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<SpendMoneyResponse>()
                 .Subscribe(e => HandleItemPurchase(e.OK))
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<DonateAddedMessage>()
                 .Subscribe(_ => HandleDonatePurchase())
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<NoAdsPurchaseMessage>()
                 .Subscribe(_ => HandleDonatePurchase())
                 .AddTo(_disposable);

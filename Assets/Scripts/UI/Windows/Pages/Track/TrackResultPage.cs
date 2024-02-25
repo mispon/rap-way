@@ -9,9 +9,8 @@ using Game.Socials.Eagler;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
+using MessageBroker.Messages.UI;
 using Models.Production;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UI.Windows.Pages.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
@@ -115,7 +114,7 @@ namespace UI.Windows.Pages.Track
                 ProductionManager.AddFeat(track.Feat);
             }
             
-            MainMessageBroker.Instance.Publish(new ProductionRewardMessage
+            MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = track.MoneyIncome,
                 FansIncome = track.FansIncome,
@@ -129,8 +128,7 @@ namespace UI.Windows.Pages.Track
         protected override void AfterPageClose()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
-            
-            UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage());
+            MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
             
             SaveResult(_trackInfo);
             _trackInfo = null;

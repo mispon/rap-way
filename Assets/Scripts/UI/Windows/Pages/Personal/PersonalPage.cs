@@ -2,9 +2,9 @@ using Core;
 using Core.Ads;
 using Enums;
 using Firebase.Analytics;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -147,7 +147,7 @@ namespace UI.Windows.Pages.Personal
             _activeTab = TabsType.None;
             _isFirstOpen = true;
             
-            UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage());
+            MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
         }
     }
 }

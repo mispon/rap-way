@@ -3,9 +3,9 @@ using Core.Context;
 using Enums;
 using Firebase.Analytics;
 using Game.Player;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using UI.Controls.Carousel;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UI.Windows.Pages.Training.Tabs;
 using UI.Windows.Tutorial;
 using UnityEngine;
@@ -127,8 +127,7 @@ namespace UI.Windows.Pages.Training
 
         protected override void AfterPageClose()
         {
-            UIMessageBroker.Instance.Publish(new TutorialWindowControlMessage());
-            
+            MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
             tabsCarousel.SetIndex(0);
         }
 

@@ -220,6 +220,9 @@ GameObject:
   - component: {fileID: 7851964588628190630}
   - component: {fileID: 4593339722682863640}
   - component: {fileID: 8453505608179246486}
+  - component: {fileID: 6290217752096135170}
+  - component: {fileID: 3342417796714432071}
+  - component: {fileID: 2844848073161466283}
   - component: {fileID: 3147211338571204020}
   m_Layer: 5
   m_Name: ChartsPage
@@ -289,6 +292,58 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!223 &6290217752096135170
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5831644800351123356}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!225 &3342417796714432071
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5831644800351123356}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &2844848073161466283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5831644800351123356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!114 &3147211338571204020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,6 +356,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4af54faabc4d09b6ba4a7b5c08c160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   pageControls:
   - {fileID: 6820857982720583460}
   - {fileID: 7799261267237446932}
@@ -1040,6 +1104,12 @@ PrefabInstance:
       propertyPath: askingWindow
       value: 
       objectReference: {fileID: 2024031816832370230}
+    - target: {fileID: 1555633233816538766, guid: a37efac534def664f8964e1e6329b9f2,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 1555633233816538766, guid: a37efac534def664f8964e1e6329b9f2,
+        type: 3}
     - target: {fileID: 2950164564638047171, guid: a37efac534def664f8964e1e6329b9f2,
         type: 3}
       propertyPath: direction
@@ -1050,6 +1120,12 @@ PrefabInstance:
       propertyPath: chartsPage
       value: 
       objectReference: {fileID: 3147211338571204020}
+    - target: {fileID: 4662727509245038208, guid: a37efac534def664f8964e1e6329b9f2,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 4662727509245038208, guid: a37efac534def664f8964e1e6329b9f2,
+        type: 3}
     - target: {fileID: 7459028759250742466, guid: a37efac534def664f8964e1e6329b9f2,
         type: 3}
       propertyPath: m_Name
@@ -1091,11 +1167,23 @@ PrefabInstance:
       propertyPath: chartsPage
       value: 
       objectReference: {fileID: 3147211338571204020}
+    - target: {fileID: 985326986105281307, guid: 1ac940b6efdec124a8029d34a3575bbe,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 985326986105281307, guid: 1ac940b6efdec124a8029d34a3575bbe,
+        type: 3}
     - target: {fileID: 1021814149315078658, guid: 1ac940b6efdec124a8029d34a3575bbe,
         type: 3}
       propertyPath: chartsPage
       value: 
       objectReference: {fileID: 3147211338571204020}
+    - target: {fileID: 1021814149315078658, guid: 1ac940b6efdec124a8029d34a3575bbe,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 1021814149315078658, guid: 1ac940b6efdec124a8029d34a3575bbe,
+        type: 3}
     - target: {fileID: 1589172136667283911, guid: 1ac940b6efdec124a8029d34a3575bbe,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1131,6 +1219,18 @@ PrefabInstance:
       propertyPath: askingWindow
       value: 
       objectReference: {fileID: 2024031816832370230}
+    - target: {fileID: 1609655748070506367, guid: 1ac940b6efdec124a8029d34a3575bbe,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 1609655748070506367, guid: 1ac940b6efdec124a8029d34a3575bbe,
+        type: 3}
+    - target: {fileID: 2377430143731141375, guid: 1ac940b6efdec124a8029d34a3575bbe,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 2377430143731141375, guid: 1ac940b6efdec124a8029d34a3575bbe,
+        type: 3}
     - target: {fileID: 2579756416265532590, guid: 1ac940b6efdec124a8029d34a3575bbe,
         type: 3}
       propertyPath: m_AnchorMax.y

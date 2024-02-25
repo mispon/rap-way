@@ -495,10 +495,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5682931631748028456}
-  - component: {fileID: 5132289786239495974}
   - component: {fileID: 8676378907325346724}
   - component: {fileID: 6114013307167645686}
   - component: {fileID: 8565203137214797647}
+  - component: {fileID: 5132289786239495974}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -528,29 +528,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5132289786239495974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1749046364426508508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95d79a4b0a864e799748182bfd9b3f6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _continueGameButton: {fileID: 7821922925982123075}
-  _productionAnim: {fileID: 1250907475752288821}
 --- !u!223 &8676378907325346724
 Canvas:
   m_ObjectHideFlags: 0
@@ -603,6 +580,29 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
+--- !u!114 &5132289786239495974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749046364426508508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d79a4b0a864e799748182bfd9b3f6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _continueGameButton: {fileID: 7821922925982123075}
+  _productionAnim: {fileID: 1250907475752288821}
 --- !u!1 &1809567950324047855
 GameObject:
   m_ObjectHideFlags: 0
@@ -1176,7 +1176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 508eeb02e37e49928eca36efb7a47125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneTypes: 1
+  sceneType: 1
   _soundType: 0
 --- !u!222 &7134276336545990245
 CanvasRenderer:

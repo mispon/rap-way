@@ -80,7 +80,7 @@ namespace UI.Windows.Pages.Rappers
             }
             
             int cooldown = GameManager.Instance.Settings.Team.ManagerCooldown;
-            MainMessageBroker.Instance.Publish(new TeammateCooldownMessage
+            MsgBroker.Instance.Publish(new TeammateCooldownMessage
             {
                 Type = TeammateType.Manager,
                 Cooldown = cooldown

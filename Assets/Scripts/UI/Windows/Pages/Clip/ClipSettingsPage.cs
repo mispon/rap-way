@@ -76,7 +76,7 @@ namespace UI.Windows.Pages.Clip
         private void CreateClip()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MainMessageBroker.Instance.Publish(new SpendMoneyRequest {Amount = _clipCost});
+            MsgBroker.Instance.Publish(new SpendMoneyRequest {Amount = _clipCost});
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
@@ -158,7 +158,7 @@ namespace UI.Windows.Pages.Clip
             HintsManager.Instance.ShowHint("tutorial_clip_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
 
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<SpendMoneyResponse>()
                 .Subscribe(HandleSpendMoneyResponse)
                 .AddTo(_disposable);

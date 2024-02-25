@@ -23,7 +23,7 @@ namespace Game.Player.Goods
 
         private void HandleAddNewGood()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<AddNewGoodMessage>()
                 .Subscribe(e =>
                 {
@@ -38,14 +38,14 @@ namespace Game.Player.Goods
                     };
                     playerData.Goods.Add(good);
                     
-                    MainMessageBroker.Instance.Publish(new ChangeHypeMessage());
+                    MsgBroker.Instance.Publish(new ChangeHypeMessage());
                 })
                 .AddTo(_disposable);
         }
 
         private void HandleGoodExistsRequest()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<GoodExistsRequest>()
                 .Subscribe(e =>
                 {
@@ -55,14 +55,14 @@ namespace Game.Player.Goods
                         ? GameManager.Instance.LoadNoAds()
                         : playerData.Goods.Any(g => g.Type == e.Type && g.Level == e.Level);
                     
-                    MainMessageBroker.Instance.Publish(new GoodExistsResponse {Status = exists});
+                    MsgBroker.Instance.Publish(new GoodExistsResponse {Status = exists});
                 })
                 .AddTo(_disposable);
         }
 
         private void HandleQualityImpactRequest()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<GoodsQualityImpactRequest>()
                 .Subscribe(_ =>
                 {
@@ -82,7 +82,7 @@ namespace Game.Player.Goods
                         .ToDictionary(k => k, v => v.Max(g => g.QualityImpact));
 
                     float impactTotal = playerEquipment.Sum(p => p.Value);
-                    MainMessageBroker.Instance.Publish(new GoodsQualityImpactResponse {Value = impactTotal});
+                    MsgBroker.Instance.Publish(new GoodsQualityImpactResponse {Value = impactTotal});
                 })
                 .AddTo(_disposable);
         }

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Sirenix.OdinInspector;
 using UI.Enums;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 
@@ -24,7 +24,7 @@ namespace UI.Base
             foreach (var window in _windows.Values)
                 window.Initialize();
             
-            UIMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<WindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type, msg.Context))
                 .AddTo(disposables);

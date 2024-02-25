@@ -98,7 +98,7 @@ namespace UI.Windows.Pages.Album
             album.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddAlbum(album);
             
-            MainMessageBroker.Instance.Publish(new ProductionRewardMessage
+            MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = album.MoneyIncome,
                 FansIncome = album.FansIncome,

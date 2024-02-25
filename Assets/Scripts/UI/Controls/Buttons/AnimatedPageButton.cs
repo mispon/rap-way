@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 namespace UI.Controls.Buttons
 {
-    /// <summary>
-    /// Кнопка управления состоянием страницы с проигрыванием анимации
-    /// </summary>
     [RequireComponent(typeof(Button))]
     public class AnimatedPageButton: PageButton
     {

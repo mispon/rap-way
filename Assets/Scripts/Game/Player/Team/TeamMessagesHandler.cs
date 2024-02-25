@@ -1,10 +1,10 @@
 using Core.Events;
 using Game.Notifications;
 using MessageBroker;
+using MessageBroker.Handlers;
 using MessageBroker.Messages.Time;
+using MessageBroker.Messages.UI;
 using UI.Enums;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UniRx;
 
 namespace Game.Player.Team
@@ -19,7 +19,7 @@ namespace Game.Player.Team
 
         private void HandleDayLeft()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<DayLeftMessage>()
                 .Subscribe(e =>
                 {
@@ -31,7 +31,7 @@ namespace Game.Player.Team
 
         private void HandleMonthLeft()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<MonthLeftMessage>()
                 .Subscribe(e => OnMonthLeft(e.Month))
                 .AddTo(disposable);
@@ -63,11 +63,7 @@ namespace Game.Player.Team
             const int teamTab = 3;
             NotificationManager.Instance.AddClickNotification(() =>
             {
-                UIMessageBroker.Instance.Publish(new WindowControlMessage
-                {
-                    Type = WindowType.Training,
-                    Context = teamTab
-                });
+                MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Training, teamTab));
             });
             
             EventManager.RaiseEvent(EventType.UncleSamsParty);

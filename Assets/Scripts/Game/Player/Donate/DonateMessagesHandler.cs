@@ -1,4 +1,5 @@
 using MessageBroker;
+using MessageBroker.Handlers;
 using MessageBroker.Messages.Player;
 using UniRx;
 
@@ -15,7 +16,7 @@ namespace Game.Player.Donate
 
         private void HandleAddDonate()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<AddDonateMessage>()
                 .Subscribe(e =>
                 {
@@ -25,8 +26,8 @@ namespace Game.Player.Donate
                     int newVal = playerData.Donate + e.Amount;
 
                     playerData.Donate = newVal;
-                    MainMessageBroker.Instance.Publish(new DonateAddedMessage());
-                    MainMessageBroker.Instance.Publish(new DonateChangedMessage {OldVal = oldVal, NewVal = newVal});
+                    MsgBroker.Instance.Publish(new DonateAddedMessage());
+                    MsgBroker.Instance.Publish(new DonateChangedMessage {OldVal = oldVal, NewVal = newVal});
                     
                     GameManager.Instance.SaveDonateBalance();
                 })
@@ -35,7 +36,7 @@ namespace Game.Player.Donate
         
         private void HandleSpendDonate()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<SpendDonateRequest>()
                 .Subscribe(e =>
                 {
@@ -49,20 +50,20 @@ namespace Game.Player.Donate
                         int newVal = playerData.Donate - e.Amount;
 
                         playerData.Donate = newVal;
-                        MainMessageBroker.Instance.Publish(new DonateChangedMessage {OldVal = oldVal, NewVal = newVal});
+                        MsgBroker.Instance.Publish(new DonateChangedMessage {OldVal = oldVal, NewVal = newVal});
                         
                         GameManager.Instance.SaveDonateBalance();
                         ok = true;
                     } 
                     
-                    MainMessageBroker.Instance.Publish(new SpendDonateResponse {OK = ok});
+                    MsgBroker.Instance.Publish(new SpendDonateResponse {OK = ok});
                 })
                 .AddTo(disposable);
         }
 
         private void HandleNoAddPurchase()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<NoAdsPurchaseMessage>()
                 .Subscribe(_ =>
                 {

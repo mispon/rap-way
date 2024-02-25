@@ -78,7 +78,7 @@ namespace UI.Windows.Pages.Training.Tabs.TeamTab
         /// </summary>
         private void GivePayment(Teammate teammate, int salary)
         {
-            MainMessageBroker.Instance.Publish(new ChangeMoneyMessage {Amount = -salary});
+            MsgBroker.Instance.Publish(new ChangeMoneyMessage {Amount = -salary});
             teammate.HasPayment = true;
   
             onStartTraining.Invoke(() => 0);

@@ -1,8 +1,8 @@
 ﻿using Core;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
 using UI.Enums;
-using UI.MessageBroker;
-using UI.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +22,7 @@ namespace UI.Controls.Buttons
                 .Subscribe(_ =>
                 {
                     SoundManager.Instance.PlaySound(_soundType);
-                    UIMessageBroker.Instance.Publish(new WindowControlMessage {Type = _toWindow});
+                    MsgBroker.Instance.Publish(new WindowControlMessage(_toWindow));
                 });
         }
     }

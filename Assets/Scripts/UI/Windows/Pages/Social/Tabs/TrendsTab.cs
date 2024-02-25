@@ -35,7 +35,7 @@ namespace UI.Windows.Pages.Social.Tabs
         protected override SocialInfo GetInfo()
         {
             int cooldown = GameManager.Instance.Settings.Team.PrManagerCooldown;
-            MainMessageBroker.Instance.Publish(new TeammateCooldownMessage
+            MsgBroker.Instance.Publish(new TeammateCooldownMessage
             {
                 Type = TeammateType.PrMan,
                 Cooldown = cooldown

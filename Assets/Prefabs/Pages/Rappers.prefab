@@ -2596,7 +2596,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5534985056856062028}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.91952753
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5363,6 +5363,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2175961290723744978}
   - component: {fileID: 5912786904390363092}
+  - component: {fileID: 1096388817226726595}
+  - component: {fileID: 7102891267214812657}
+  - component: {fileID: 1666661375443219368}
   - component: {fileID: 1021814149315078658}
   m_Layer: 5
   m_Name: NewRapperPage
@@ -5402,6 +5405,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4714768275306392032}
   m_CullTransparentMesh: 1
+--- !u!223 &1096388817226726595
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4714768275306392032}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!225 &7102891267214812657
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4714768275306392032}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1666661375443219368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4714768275306392032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!114 &1021814149315078658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5414,6 +5469,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972358e5f18e427e82b4edd97eb4bb22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   rappersPage: {fileID: 1609655748070506367}
   chartsPage: {fileID: 0}
   nameInput: {fileID: 7749418875083118512}
@@ -5586,7 +5650,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 30.206055}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &4921466733801388580
@@ -6931,8 +6995,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseHeight: 200
+  baseWidth: 0
   container: {fileID: 7284946280663620664}
   spacing: 30
+  direction: 0
 --- !u!1 &6657564532317170221
 GameObject:
   m_ObjectHideFlags: 0
@@ -7127,8 +7193,11 @@ GameObject:
   m_Component:
   - component: {fileID: 893023527328373993}
   - component: {fileID: 163855924646039796}
-  - component: {fileID: 1609655748070506367}
   - component: {fileID: 7059767114229795345}
+  - component: {fileID: 1935715298614317109}
+  - component: {fileID: 9223100321094973183}
+  - component: {fileID: 5919518593134881648}
+  - component: {fileID: 1609655748070506367}
   m_Layer: 5
   m_Name: RappersPage
   m_TagString: Untagged
@@ -7166,24 +7235,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6830110768976688140}
   m_CullTransparentMesh: 0
---- !u!114 &1609655748070506367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6830110768976688140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ad7b58f5adb4a8fb717e3921b4dc153, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  askingWindow: {fileID: 0}
-  list: {fileID: 6820257728308549507}
-  template: {fileID: 502464933202654879}
-  rapperCard: {fileID: 3548681311834952548}
-  addNewRapperButton: {fileID: 972791240463448918}
-  newRapperPage: {fileID: 1021814149315078658}
 --- !u!114 &7059767114229795345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7210,6 +7261,85 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!223 &1935715298614317109
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6830110768976688140}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!225 &9223100321094973183
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6830110768976688140}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &5919518593134881648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6830110768976688140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 55
+--- !u!114 &1609655748070506367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6830110768976688140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad7b58f5adb4a8fb717e3921b4dc153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  askingWindow: {fileID: 0}
+  list: {fileID: 6820257728308549507}
+  template: {fileID: 502464933202654879}
+  rapperCard: {fileID: 3548681311834952548}
+  addNewRapperButton: {fileID: 972791240463448918}
+  newRapperPage: {fileID: 1021814149315078658}
 --- !u!1 &6869515658735259465
 GameObject:
   m_ObjectHideFlags: 0
@@ -8313,6 +8443,9 @@ GameObject:
   - component: {fileID: 227254761572309653}
   - component: {fileID: 3066968027289533344}
   - component: {fileID: 7310503817588884084}
+  - component: {fileID: 1620651410672868915}
+  - component: {fileID: 6477247167338190304}
+  - component: {fileID: 9036297838414048236}
   - component: {fileID: 985326986105281307}
   m_Layer: 5
   m_Name: RapperResultPage
@@ -8379,6 +8512,58 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!223 &1620651410672868915
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981966080264119580}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!225 &6477247167338190304
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981966080264119580}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &9036297838414048236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981966080264119580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!114 &985326986105281307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8391,6 +8576,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4bc459761e4fb4b8017e369b6d3077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   message: {fileID: 9164533381034790920}
   rapperAvatar: {fileID: 2560365729212767952}
   customRapperAvatar: {fileID: 21300000, guid: d9f48b18b8e969949933f5c6ec0210cb, type: 3}
@@ -10200,6 +10394,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4707832622729249730}
   - component: {fileID: 2726891908275374539}
+  - component: {fileID: 4511275585549795598}
+  - component: {fileID: 7899288521612588087}
+  - component: {fileID: 1069903539542260400}
   - component: {fileID: 2377430143731141375}
   m_Layer: 5
   m_Name: RapperWorkingPage
@@ -10236,6 +10433,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8999110104949230436}
   m_CullTransparentMesh: 0
+--- !u!223 &4511275585549795598
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8999110104949230436}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!225 &7899288521612588087
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8999110104949230436}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1069903539542260400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8999110104949230436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 55
 --- !u!114 &2377430143731141375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10248,6 +10497,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69526f59ac6543b6b7c7316043209c40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   progressBar: {fileID: 1158848716711110267}
   managementPointsLabel: {fileID: 876150458211920862}
   rapperPointsLabel: {fileID: 7736823650716131893}

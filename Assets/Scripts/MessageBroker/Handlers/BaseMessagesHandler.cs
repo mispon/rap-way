@@ -2,7 +2,7 @@ using Core.OrderedStarter;
 using UniRx;
 using UnityEngine;
 
-namespace MessageBroker
+namespace MessageBroker.Handlers
 {
     public abstract class BaseMessagesHandler : MonoBehaviour, IStarter
     {

@@ -43,7 +43,7 @@ namespace UI.Windows.Pages.GameEvent
         private void SaveResult()
         {
             var income = CalculateIncome(PlayerManager.Data, _eventDecision);
-            MainMessageBroker.Instance.Publish(new ProductionRewardMessage
+            MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = income.Money,
                 FansIncome = income.Fans,

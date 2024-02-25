@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace UI.Controls.Buttons
 {
+    [RequireComponent(typeof(Button))]
     public class QuitGameButton : MonoBehaviour
     {
         [SerializeField] private UIActionType _soundType = UIActionType.Click;

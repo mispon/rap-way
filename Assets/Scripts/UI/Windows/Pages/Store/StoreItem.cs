@@ -81,16 +81,16 @@ namespace UI.Windows.Pages.Store
 
         private void HandleEvents()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<AddNewGoodMessage>()
                 .Subscribe(e => OnItemPurchased(e.Type, e.Level))
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<NoAdsPurchaseMessage>()
                 .Subscribe(_ => OnNoAdsPurchased())
                 .AddTo(_disposable);
             
-            _singleDispose = MainMessageBroker.Instance
+            _singleDispose = MsgBroker.Instance
                 .Receive<GoodExistsResponse>()
                 .Subscribe(e =>
                 {
@@ -100,7 +100,7 @@ namespace UI.Windows.Pages.Store
                     _singleDispose?.Dispose();
                 });
 
-            MainMessageBroker.Instance.Publish(_info is NoAds
+            MsgBroker.Instance.Publish(_info is NoAds
                 ? new GoodExistsRequest {IsNoAds = true}
                 : new GoodExistsRequest {Type = _info.Type, Level = _info.Level});
         }

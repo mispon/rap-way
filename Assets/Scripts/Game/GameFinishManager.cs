@@ -19,7 +19,7 @@ namespace Game
         
         public void OnStart()
         {
-            _disposable = MainMessageBroker.Instance
+            _disposable = MsgBroker.Instance
                 .Receive<FansChangedMessage>()
                 .Subscribe(e => OnFansChanged(e.NewVal));
         }

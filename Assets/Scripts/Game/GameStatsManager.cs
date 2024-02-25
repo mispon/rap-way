@@ -30,11 +30,11 @@ namespace Game
         
         public void OnStart()
         {
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<DayLeftMessage>()
                 .Subscribe(e => OnDayLeft())
                 .AddTo(_disposable);
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<WeekLeftMessage>()
                 .Subscribe(e => OnWeekLeft())
                 .AddTo(_disposable);

@@ -72,7 +72,7 @@ namespace UI.Windows.Pages.Concert
         private void CreateConcert()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MainMessageBroker.Instance.Publish(new SpendMoneyRequest {Amount = _placeCost});
+            MsgBroker.Instance.Publish(new SpendMoneyRequest {Amount = _placeCost});
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
@@ -179,7 +179,7 @@ namespace UI.Windows.Pages.Concert
             HintsManager.Instance.ShowHint("tutorial_concert_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
 
-            MainMessageBroker.Instance
+            MsgBroker.Instance
                 .Receive<SpendMoneyResponse>()
                 .Subscribe(HandleSpendMoneyResponse)
                 .AddTo(_disposable);
