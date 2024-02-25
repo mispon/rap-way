@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace Game.Labels
 {
+    /// <summary>
+    /// MonoBehavior and Starter component of labels package
+    /// </summary>
     public partial class LabelsPackage : GamePackage<LabelsPackage>, IStarter
     {
         [SerializeField] private LabelContractPage contractPage;

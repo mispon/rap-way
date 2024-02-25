@@ -27,6 +27,7 @@ namespace Game.Player
 
         /// <summary>
         /// Обновляет информацию о трендах
+        /// TODO: move to more appropriate place
         /// </summary>
         public static void UpdateTrends(Styles style, Themes theme)
         {

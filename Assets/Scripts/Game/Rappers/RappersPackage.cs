@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Game.Rappers
 {
     /// <summary>
-    /// Initial logic of rappers package
+    /// MonoBehavior and Starter component of rappers package
     /// </summary>
     public partial class RappersPackage : GamePackage<RappersPackage>, IStarter
     {
