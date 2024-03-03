@@ -10,7 +10,7 @@ namespace MessageBroker.Messages.UI
             Context = ctx;
         }
         
-        public readonly WindowType Type;
-        public readonly object     Context;
+        public WindowType Type;
+        public object     Context;
     }
 }

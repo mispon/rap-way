@@ -5,7 +5,7 @@ using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Store
+namespace UI.Windows.GameScreen.Store
 {
     public class StoreCategoryItem : MonoBehaviour, IScrollViewControllerItem
     {

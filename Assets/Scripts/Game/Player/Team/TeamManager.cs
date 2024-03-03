@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Core.PropertyAttributes;
@@ -6,9 +7,9 @@ using Enums;
 using Game.Effects;
 using Game.Notifications;
 using Game.Player.Team.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using UI.Windows.Pages.Team;
-using UI.Windows.Pages.Training;
 using UnityEngine;
 
 namespace Game.Player.Team
@@ -20,10 +21,6 @@ namespace Game.Player.Team
     {
         [Header("Данные команды")] 
         [ArrayElementTitle("Type")] public TeammateInfo[] teammateInfos;
-
-        [Header("Страницы")]
-        [SerializeField] private TeammateUnlockPage unlockTeammatePage;
-        [SerializeField] private TrainingMainPage trainingPage;
 
         [Header("Эффект открытия нового тиммейта")]
         [SerializeField] private NewItemEffect newTeammateEffect;
@@ -87,7 +84,17 @@ namespace Game.Player.Team
                 SoundManager.Instance.PlaySound(UIActionType.Achieve);
                 
                 var info = GetInfo(teammate.Type);
-                newTeammateEffect.Show(info.Avatar, () => unlockTeammatePage.Show(teammate, info.Avatar));
+                newTeammateEffect.Show(info.Avatar, () =>
+                {
+                    MsgBroker.Instance.Publish(new WindowControlMessage
+                    {
+                        Context = new Dictionary<string, object>
+                        {
+                            ["teammate"] = teammate,
+                            ["sprite"]   = info.Avatar 
+                        }
+                    });
+                });
             }
             
             NotificationManager.Instance.AddClickNotification(Notification);

@@ -2,11 +2,8 @@ using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.History
+namespace UI.Windows.GameScreen.History
 {
-    /// <summary>
-    /// Объект-информация об экземляре Production
-    /// </summary>
     public class HistoryRow: MonoBehaviour, IScrollViewControllerItem
     {
         [SerializeField] private Image panel;

@@ -1,13 +1,12 @@
 using Core;
 using Game.Player;
-using Game.Player.Team;
 using Game.Player.Team.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using UnityEngine;
 
-namespace UI.Windows.Pages.Training.Tabs.TeamTab
+namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
 {
     /// <summary>
     /// Вкладка тренировки команды

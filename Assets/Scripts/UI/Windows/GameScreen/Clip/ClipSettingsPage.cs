@@ -7,25 +7,22 @@ using Firebase.Analytics;
 using Game.Player;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Controls.Money;
+using UI.Enums;
 using UI.GameScreen;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.ProductSelection;
 using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Clip
+namespace UI.Windows.GameScreen.Clip
 {
-    /// <summary>
-    /// Страница настройки клипа
-    /// </summary>
     public class ClipSettingsPage : Page
     {
         [BoxGroup("Controls"), SerializeField] private Carousel trackCarousel;
@@ -40,10 +37,7 @@ namespace UI.Windows.Pages.Clip
         
         [BoxGroup("Price"), SerializeField] private GameError noMoneyErr;
         [BoxGroup("Price"), SerializeField] private Price price;
-        
-        [BoxGroup("Pages"), SerializeField] private ClipWorkingPage workingPage;
-        [BoxGroup("Pages"), SerializeField] private ProductSelectionPage productSelectionPage;
-        
+
         [BoxGroup("Data"), SerializeField] private ClipStaffData staffData;
 
         private ClipInfo _clip;
@@ -95,10 +89,11 @@ namespace UI.Windows.Pages.Clip
             _clip.TrackId = track.Id;
             _clip.Name = track.Name;
             
-            productSelectionPage.Close();
-            workingPage.StartWork(_clip);
-            
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.ProductionClipWork,
+                Context = _clip
+            });
         }
 
         private void OnDirectorChange(int index)
@@ -127,7 +122,7 @@ namespace UI.Windows.Pages.Clip
             price.SetValue(fullPrice.ToUpper());
         }
         
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             _clip = new ClipInfo();
 
@@ -154,7 +149,7 @@ namespace UI.Windows.Pages.Clip
             GameScreenController.Instance.HideProductionGroup();
         }
         
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             HintsManager.Instance.ShowHint("tutorial_clip_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
@@ -165,7 +160,7 @@ namespace UI.Windows.Pages.Clip
                 .AddTo(_disposable);
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             _clip = null;
             _lastTracks.Clear();

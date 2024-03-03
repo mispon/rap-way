@@ -4,22 +4,20 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game.Labels.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Game;
 using ScriptableObjects;
 using UI.Controls.Error;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Charts;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Labels
+namespace UI.Windows.GameScreen.Labels
 {
     public class NewLabelPage : Page
     {
-        [SerializeField] private LabelsPage labelsPage;
-        [SerializeField] private ChartsPage chartsPage;
-        
         [Space]
         [SerializeField] private InputField nameInput;
         [SerializeField] private GameError gameError;
@@ -49,17 +47,11 @@ namespace UI.Windows.Pages.Labels
             prestigeBtnRight.onClick.AddListener(PrestigeBtnRightClick);
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
             
             nameInput.text = "";
-            chartsPage.Hide();
-        }
-
-        protected override void AfterPageClose()
-        {
-            chartsPage.ShowControls();
         }
 
         private void ProductionBntLeftClick()
@@ -156,11 +148,10 @@ namespace UI.Windows.Pages.Labels
             BackButtonClick();
         }
 
-        private void BackButtonClick()
+        private static void BackButtonClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            labelsPage.Open();
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Previous));
         }
         
         private static void HighlightError(Component component)

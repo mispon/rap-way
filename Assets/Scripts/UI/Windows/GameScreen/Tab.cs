@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UI.Windows.Pages
+namespace UI.Windows.GameScreen
 {
     public class Tab : MonoBehaviour
     {

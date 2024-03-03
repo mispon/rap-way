@@ -8,7 +8,7 @@ using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Training.Tabs.SkillsTab
+namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
 {
     /// <summary>
     /// Форма с детальной информацией о навыке

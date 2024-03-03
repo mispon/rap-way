@@ -2,6 +2,10 @@ using System;
 using System.Linq;
 using Game.Labels.Desc;
 using Game.Notifications;
+using MessageBroker;
+using MessageBroker.Messages.UI;
+using UI.Enums;
+using UI.Windows.GameScreen.Personal;
 using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace Game.Labels
@@ -70,7 +74,11 @@ namespace Game.Labels
             
             NotificationManager.Instance.AddClickNotification(() =>
             {
-                personalPage.ShowLabelMoneyReport();
+                MsgBroker.Instance.Publish(new WindowControlMessage
+                {
+                    Type = WindowType.Personal,
+                    Context = TabsType.MoneyReport
+                });
             });
         }
     }

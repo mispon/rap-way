@@ -33,7 +33,7 @@ namespace UI.Windows.MainMenu
             StartCoroutine(SetupContinueButton());
         }
 
-        public override void Show(object ctx)
+        public override void Show(object ctx = null)
         {
             base.Show(ctx);
             _productionAnim.Refresh();

@@ -1,63 +1,61 @@
+using System.Collections.Generic;
 using Core;
+using Core.Context;
 using Enums;
 using Game.Player;
 using Game.Rappers.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
+using UI.Enums;
+using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UI.Windows.Pages.Battle
+namespace UI.Windows.GameScreen.Battle
 {
     /// <summary>
     /// Рабочая страница батла
     /// </summary>
     public class BattleWorkingPage : BaseWorkingPage
     {
-        [Header("Контролы")]
-        [SerializeField] private Text playerName;
-        [SerializeField] private Text rapperName;
-        [Space]
-        [SerializeField] private Image playerAvatar;
-        [SerializeField] private Text playerPointsLabel;
-        [SerializeField] private WorkPoints playerWorkPoints;
-        [Space]
-        [SerializeField] private Image rapperAvatar;
-        [SerializeField] private Text rapperPointsLabel;
-        [SerializeField] private WorkPoints rapperWorkPoints;
-        [SerializeField] private Sprite customRapperAvatar;
-
-        [Header("Очки работы от скилов")]
-        [SerializeField] private int skillChance;
-        [SerializeField] private WorkPoints doubleTimePoint;
-        [SerializeField] private WorkPoints shoutOutPoint;
-        [SerializeField] private WorkPoints freestylePoint;
-        [SerializeField] private WorkPoints punchPoint;
-        [SerializeField] private WorkPoints flipPoint;
-
-        [Header("Данные")]
-        [SerializeField] private ImagesBank imagesBank;
-
-        [Header("Страница результата")]
-        [SerializeField] private BattleResultPage battleResult;
+        [BoxGroup("Controls"), SerializeField] private Text playerName;
+        [BoxGroup("Controls"), SerializeField] private Text rapperName;
+        [BoxGroup("Controls"), SerializeField] private Image playerAvatar;
+        [BoxGroup("Controls"), SerializeField] private Text playerPointsLabel;
+        [BoxGroup("Controls"), SerializeField] private WorkPoints playerWorkPoints;
+        [BoxGroup("Controls"), SerializeField] private Image rapperAvatar;
+        [BoxGroup("Controls"), SerializeField] private Text rapperPointsLabel;
+        [BoxGroup("Controls"), SerializeField] private WorkPoints rapperWorkPoints;
+        [BoxGroup("Controls"), SerializeField] private Sprite customRapperAvatar;
+        
+        [BoxGroup("Work Points"), SerializeField] private int skillChance;
+        [BoxGroup("Work Points"), SerializeField] private WorkPoints doubleTimePoint;
+        [BoxGroup("Work Points"), SerializeField] private WorkPoints shoutOutPoint;
+        [BoxGroup("Work Points"), SerializeField] private WorkPoints freestylePoint;
+        [BoxGroup("Work Points"), SerializeField] private WorkPoints punchPoint;
+        [BoxGroup("Work Points"), SerializeField] private WorkPoints flipPoint;
+        
+        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
 
         private RapperInfo _rapper;
         private int _playerPoints;
         private int _rapperPoints;
 
-        /// <summary>
-        /// Начинает выполнение работы
-        /// </summary>
-        public override void StartWork(params object[] args)
+        public override void Show(object ctx = null)
         {
-            _rapper = (RapperInfo) args[0];
-            Open();
-            RefreshWorkAnims();
+            StartWork(ctx);
+            base.Show(ctx);
         }
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
+        protected override void StartWork(object ctx)
+        {
+            _rapper = ctx.Value<RapperInfo>();
+            RefreshWorkAnims();
+        }
+        
         protected override void DoDayWork()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
@@ -65,26 +63,25 @@ namespace UI.Windows.Pages.Battle
             DisplayWorkPoints();
         }
 
-        /// <summary>
-        /// Обработчик завершения работы
-        /// </summary>
         protected override void FinishWork()
         {
-            battleResult.Show(_rapper, _playerPoints, _rapperPoints);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.BattleResult,
+                Context = new Dictionary<string, object>
+                {
+                    ["rapper"]       = _rapper,
+                    ["playerPoints"] = _playerPoints,
+                    ["rapperPoints"] = _rapperPoints,
+                }
+            });
         }
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected override int GetDuration()
         {
             return settings.Battle.WorkDuration;
         }
 
-        /// <summary>
-        /// Генерирует очки работы игрока и рэпера
-        /// </summary>
         private void GenerateWorkPoints()
         {
             int playerPoints = Random.Range(1, PlayerManager.Data.Stats.Vocobulary.Value + 2);
@@ -97,9 +94,6 @@ namespace UI.Windows.Pages.Battle
             _rapperPoints += rapperPoints;
         }
 
-        /// <summary>
-        /// Генерирует рабочие очки с умений
-        /// </summary>
         private int GenerateSkillsPoints()
         {
             int GeneratePoint(Skills skill, WorkPoints workPoints)
@@ -122,18 +116,12 @@ namespace UI.Windows.Pages.Battle
             return result;
         }
 
-        /// <summary>
-        /// Отображает количество очков в интерфейсе
-        /// </summary>
         private void DisplayWorkPoints()
         {
             playerPointsLabel.text = _playerPoints.ToString();
             rapperPointsLabel.text = _rapperPoints.ToString();
         }
 
-        /// <summary>
-        /// Отображает иконки активных умений
-        /// </summary>
         private void DisplayAvailableSkills()
         {
             void DisplayIfAvailable(Skills skill, WorkPoints workPoint)
@@ -149,7 +137,7 @@ namespace UI.Windows.Pages.Battle
             DisplayIfAvailable(Skills.Flip, flipPoint);
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             playerName.text = PlayerManager.Data.Info.NickName.ToUpper();
             rapperName.text = _rapper.Name;
@@ -166,9 +154,9 @@ namespace UI.Windows.Pages.Battle
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
-            base.BeforePageClose();
+            base.BeforeHide();
             _rapper = null;
         }
     }

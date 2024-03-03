@@ -5,14 +5,12 @@ using Game;
 using Game.Player;
 using Models.Production;
 using ScriptableObjects;
+using UI.Windows.Pages.Social;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Social.ResultPages
+namespace UI.Windows.GameScreen.Social.ResultPages
 {
-    /// <summary>
-    /// Страница результата исследования трендов
-    /// </summary>
     public class TrendsResultPage : SocialResultPage
     {
         [Header("Контролы")]
@@ -23,9 +21,6 @@ namespace UI.Windows.Pages.Social.ResultPages
         [Header("Картинки")]
         [SerializeField] private ImagesBank imagesBank;
 
-        /// <summary>
-        /// Отображает результаты соц. действия
-        /// </summary>
         protected override void DisplayResult(SocialInfo socialInfo)
         {
             var trends = GameManager.Instance.GameStats.Trends;

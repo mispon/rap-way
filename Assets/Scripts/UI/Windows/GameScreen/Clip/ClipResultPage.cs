@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Context;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
@@ -10,53 +11,41 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Eagler;
+using Sirenix.OdinInspector;
+using UI.Windows.GameScreen.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Clip
+namespace UI.Windows.GameScreen.Clip
 {
-    /// <summary>
-    /// Страница результатов работы над клипом
-    /// </summary>
     public class ClipResultPage : Page
     {
-        [Header("Компоменты")]
-        [SerializeField] private Text views;
-        [SerializeField] private Text likes;
-        [SerializeField] private Text dislikes;
-        [SerializeField] private Text clipNameLabel;
-        [SerializeField] private Text playerNameLabel;
-        [SerializeField] private Text qualityLabel;
-        [SerializeField] private Text fansIncome;
-        [SerializeField] private Text moneyIncome;
-        [SerializeField] private Text expIncome;
-        [SerializeField] private GameObject hitBadge;
+        [BoxGroup("Result"), SerializeField] private Text views;
+        [BoxGroup("Result"), SerializeField] private Text likes;
+        [BoxGroup("Result"), SerializeField] private Text dislikes;
+        [BoxGroup("Result"), SerializeField] private Text clipNameLabel;
+        [BoxGroup("Result"), SerializeField] private Text playerNameLabel;
+        [BoxGroup("Result"), SerializeField] private Text qualityLabel;
+        [BoxGroup("Result"), SerializeField] private Text fansIncome;
+        [BoxGroup("Result"), SerializeField] private Text moneyIncome;
+        [BoxGroup("Result"), SerializeField] private Text expIncome;
+        [BoxGroup("Result"), SerializeField] private GameObject hitBadge;
         
-        [Header("Твитты фанатов")]
-        [SerializeField] private EagleCard[] eagleCards;
+        [BoxGroup("Eagles"), SerializeField] private EagleCard[] eagleCards;
+        [BoxGroup("Analyzer"), SerializeField] private ClipAnalyzer clipAnalyzer;
 
-        [Header("Анализатор клипа")]
-        [SerializeField] private ClipAnalyzer clipAnalyzer;
-
-        private ClipInfo _clipInfo;
-        
-        /// <summary>
-        /// Показывает результат работы над клипом
-        /// </summary>
-        public void Show(ClipInfo clip)
+        private ClipInfo _clip;
+ 
+        public override void Show(object ctx = null)
         {
-            _clipInfo = clip;
+            _clip = ctx.Value<ClipInfo>();
             
-            clipAnalyzer.Analyze(clip);
-            DisplayResult(clip);
-            Open();
+            clipAnalyzer.Analyze(_clip);
+            DisplayResult(_clip);
+            
+            base.Show(ctx);
         }
 
-        /// <summary>t
-        /// Выводит результат работы 
-        /// </summary>
         private void DisplayResult(ClipInfo clip)
         {
             string fansPrefix = clip.FansIncome > 0 ? "+" : string.Empty;
@@ -73,7 +62,6 @@ namespace UI.Windows.Pages.Clip
             dislikes.text = clip.Dislikes.GetDisplay();
             
             hitBadge.SetActive(clip.IsHit);
-            
             DisplayEagles(clip.Quality);
         }
         
@@ -85,10 +73,7 @@ namespace UI.Windows.Pages.Clip
                 eagleCards[i].Initialize(i, eagles[i]);
             }
         }
-        
-        /// <summary>
-        /// Сохраняет результаты клипа
-        /// </summary>
+
         private void SaveResult(ClipInfo clip)
         {
             clip.Timestamp = TimeManager.Instance.Now.DateToString();
@@ -102,15 +87,12 @@ namespace UI.Windows.Pages.Clip
             });
         }
 
-        /// <summary>
-        /// Выполняется перед закрытием страницы
-        /// </summary>
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ClipResultShown);
             
-            SaveResult(_clipInfo);
-            _clipInfo = null;
+            SaveResult(_clip);
+            _clip = null;
         }
     }
 }

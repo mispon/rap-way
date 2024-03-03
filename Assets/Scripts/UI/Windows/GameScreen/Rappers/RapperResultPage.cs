@@ -1,37 +1,33 @@
 using Core;
+using Core.Context;
 using Enums;
 using Game.Player;
 using Game.Rappers.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Battle;
-using UI.Windows.Pages.Charts;
-using UI.Windows.Pages.Feat;
+using Sirenix.OdinInspector;
+using UI.Enums;
+using UI.Windows.GameScreen.Charts;
 using UnityEngine;
 using UnityEngine.UI;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Rappers
+namespace UI.Windows.GameScreen.Rappers
 {
-    /// <summary>
-    /// Станица результата переговоров
-    /// </summary>
     public class RapperResultPage : Page
     {
-        [Header("Контролы")]
-        [SerializeField] private Text message;
-        [SerializeField] private Image rapperAvatar;
-        [SerializeField] private Sprite customRapperAvatar;
-        [Space]
-        [SerializeField] private Button okButton;
-        [SerializeField] private Button cancelButton;
-        [SerializeField] private Button nextButton;
-
-        [Header("Страницы")]
-        [SerializeField] private ChartsPage chartsPage;
-        [SerializeField] private RappersPage rappersPage;
-        [SerializeField] private FeatSettingsPage featPage;
-        [SerializeField] private BattleWorkingPage battlePage;
+        [BoxGroup("Result"), SerializeField] private Text message;
+        [BoxGroup("Result"), SerializeField] private Image rapperAvatar;
+        [BoxGroup("Result"), SerializeField] private Sprite customRapperAvatar;
+        [BoxGroup("Result"), SerializeField] private Button okButton;
+        [BoxGroup("Result"), SerializeField] private Button cancelButton;
+        [BoxGroup("Result"), SerializeField] private Button nextButton;
+        
+        // [SerializeField] private ChartsPage chartsPage;
+        // [SerializeField] private RappersPage rappersPage;
+        // [SerializeField] private FeatSettingsPage featPage;
+        // [SerializeField] private BattleWorkingPage battlePage;
 
         private RapperInfo _rapper;
         private ConversationType _convType;
@@ -42,33 +38,27 @@ namespace UI.Windows.Pages.Rappers
             cancelButton.onClick.AddListener(OnClose);
             nextButton.onClick.AddListener(OnNext);
         }
-
-        /// <summary>
-        /// Открывает страницу с результатами переговоров
-        /// </summary>
-        public void Show(RapperInfo rapper, int playerPoints, int rapperPoints, ConversationType convType)
+        
+        public override void Show(object ctx = null)
         {
-            _rapper = rapper;
-            _convType = convType;
+            _rapper   = ctx.ValueByKey<RapperInfo>("rapper");
+            _convType = ctx.ValueByKey<ConversationType>("conv_type");
+            
+            var playerPoints = ctx.ValueByKey<int>("player_points");
+            var rapperPoints = ctx.ValueByKey<int>("rapper_points");
             
             bool result = AnalyzeConversations(playerPoints, rapperPoints);
-            DisplayResult(result, rapper.Name);
+            DisplayResult(result, _rapper.Name);
             
-            Open();
+            base.Show(ctx);
         }
 
-        /// <summary>
-        /// Анализирует успешность переговоров 
-        /// </summary>
         private static bool AnalyzeConversations(int playerPoints, int rapperPoints)
         {
             var hypeBonus = PlayerManager.Data.Hype / 5;
             return playerPoints + hypeBonus > rapperPoints;
         }
 
-        /// <summary>
-        /// Показывает результаты
-        /// </summary>
         private void DisplayResult(bool result, string rapperName)
         {
             string key = result ? "conversations_success" : "conversations_fail";
@@ -80,9 +70,6 @@ namespace UI.Windows.Pages.Rappers
             nextButton.gameObject.SetActive(result);
         }
 
-        /// <summary>
-        /// Обработчик кнопки продолжения
-        /// </summary>
         private void OnNext()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
@@ -90,40 +77,47 @@ namespace UI.Windows.Pages.Rappers
             switch (_convType)
             {
                 case ConversationType.Feat:
-                    featPage.Show(_rapper);
+                    MsgBroker.Instance.Publish(new WindowControlMessage
+                    {
+                        Type = WindowType.ProductionFeatSettings,
+                        Context = _rapper
+                    });
                     break;
+                
                 case ConversationType.Battle:
-                    battlePage.StartWork(_rapper);
+                    MsgBroker.Instance.Publish(new WindowControlMessage
+                    {
+                        Type = WindowType.BattleWork,
+                        Context = _rapper
+                    });
                     break;
+
                 case ConversationType.Label:
                     _rapper.Label = PlayerManager.Data.Label;
                     LabelsAPI.Instance.RefreshScore(_rapper.Label);
+                    MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
                     break;
+
                 default:
+                    MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
                     Debug.LogError($"Unexpected conv type {_convType.ToString()}");
                     break;
             }
-            
-            chartsPage.Close();
-            Close();
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             _rapper = null;
         }
 
-        /// <summary>
-        /// Обработчик кнопок отмены и возврата
-        /// </summary>
-        private void OnClose()
+        private static void OnClose()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            
-            rappersPage.Open();
-            chartsPage.ShowControls();
-            
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type    = WindowType.Charts,
+                Context = ChartsTabType.Rappers
+            });
         }
     }
 }

@@ -21,7 +21,7 @@ namespace UI.Windows.MainMenu
                 .Subscribe(_ => Application.OpenURL(reviewPageURL));
         }
 
-        public override void Show(object ctx)
+        public override void Show(object ctx = null)
         {
             GameManager.Instance.GameStats.AskedReview = true;
         }

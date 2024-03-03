@@ -5,7 +5,7 @@ using Models.Game;
 using ScriptableObjects;
 using UnityEngine;
 
-namespace UI.Windows.Pages.Training.Tabs.StatsTab
+namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
 {
     /// <summary>
     /// Вкладка тренировки навыков

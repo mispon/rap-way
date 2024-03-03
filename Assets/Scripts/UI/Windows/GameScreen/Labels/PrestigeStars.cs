@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Labels
+namespace UI.Windows.GameScreen.Labels
 {
     public class PrestigeStars : MonoBehaviour
     {

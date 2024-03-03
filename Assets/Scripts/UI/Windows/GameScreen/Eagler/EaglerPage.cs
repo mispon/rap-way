@@ -1,24 +1,21 @@
 using System.Collections.Generic;
 using Enums;
 using Firebase.Analytics;
-using Game.Player;
-using Game.Socials;
 using Game.Socials.Eagler;
 using UI.Controls.ScrollViewController;
-using UI.Windows.GameScreen;
 using UI.Windows.Tutorial;
 using UnityEngine;
 
-namespace UI.Windows.Pages.Eagler
+namespace UI.Windows.GameScreen.Eagler
 {
     public class EaglerPage : Page
     {
         [SerializeField] private ScrollViewController feed;
         [SerializeField] private GameObject template;
         
-        private List<EagleCard> _feedItems = new();
+        private readonly List<EagleCard> _feedItems = new();
         
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             var eagles = EaglerManager.Instance.GetEagles();
             
@@ -35,13 +32,13 @@ namespace UI.Windows.Pages.Eagler
             feed.RepositionElements(_feedItems);
         }
         
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             HintsManager.Instance.ShowHint("tutorial_eagler");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
         }
         
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             foreach (var eagle in _feedItems)
             {

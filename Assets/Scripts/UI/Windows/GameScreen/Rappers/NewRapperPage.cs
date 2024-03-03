@@ -4,48 +4,44 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game.Rappers.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Controls.Error;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Charts;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 using RappersAPI = Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Rappers
+namespace UI.Windows.GameScreen.Rappers
 {
     public class NewRapperPage : Page
     {
-        [SerializeField] private RappersPage rappersPage;
-        [SerializeField] private ChartsPage chartsPage;
+        [BoxGroup("Name Input"), SerializeField] private InputField nameInput;
+        [BoxGroup("Name Input"), SerializeField] private Carousel labelInput;
+        [BoxGroup("Name Input"), SerializeField] private GameError gameError;
+
+        [BoxGroup("Vocabulary"), SerializeField] private Button vocabularyBtnLeft;
+        [BoxGroup("Vocabulary"), SerializeField] private Button vocabularyBtnRight;
+        [BoxGroup("Vocabulary"), SerializeField] private Text vocabularyValue;
+
+        [BoxGroup("Bitmaking"), SerializeField] private Button bitmakingBtnLeft;
+        [BoxGroup("Bitmaking"), SerializeField] private Button bitmakingBtnRight;
+        [BoxGroup("Bitmaking"), SerializeField] private Text bitmakingValue;
+
+        [BoxGroup("Management"), SerializeField] private Button managementBtnLeft;
+        [BoxGroup("Management"), SerializeField] private Button managementBtnRight;
+        [BoxGroup("Management"), SerializeField] private Text managementValue;
+
+        [BoxGroup("Fans"), SerializeField] private Button fansBtnLeft;
+        [BoxGroup("Fans"), SerializeField] private Button fansBtnRight;
+        [BoxGroup("Fans"), SerializeField] private Text fansValue;
         
-        [Space]
-        [Header("Ввод имени")]
-        [SerializeField] private InputField nameInput;
-        [SerializeField] private Carousel labelInput;
-        [SerializeField] private GameError gameError;
-        [Header("Ввод словарного запаса")]
-        [SerializeField] private Button vocabularyBtnLeft;
-        [SerializeField] private Button vocabularyBtnRight;
-        [SerializeField] private Text vocabularyValue;
-        [Header("Ввод битмейкинга")]
-        [SerializeField] private Button bitmakingBtnLeft;
-        [SerializeField] private Button bitmakingBtnRight;
-        [SerializeField] private Text bitmakingValue;
-        [Header("Ввод менеджмента")]
-        [SerializeField] private Button managementBtnLeft;
-        [SerializeField] private Button managementBtnRight;
-        [SerializeField] private Text managementValue;
-        [Header("Ввод фанатов")]
-        [SerializeField] private Button fansBtnLeft;
-        [SerializeField] private Button fansBtnRight;
-        [SerializeField] private Text fansValue;
-        
-        [Space]
-        [SerializeField] private Button createButton;
-        [SerializeField] private Button backButton;
+        [BoxGroup("Buttons"), SerializeField] private Button createButton;
+        [BoxGroup("Buttons"), SerializeField] private Button backButton;
 
         private void Start()
         {
@@ -65,18 +61,12 @@ namespace UI.Windows.Pages.Rappers
             fansBtnRight.onClick.AddListener(() => OnBntRightClick(fansValue, 150));
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperPageOpened);
             
             SetupLabelsCarousel();
             nameInput.text = "";
-            chartsPage.Hide();
-        }
-
-        protected override void AfterPageClose()
-        {
-            chartsPage.ShowControls();
         }
 
         private void SetupLabelsCarousel()
@@ -164,11 +154,10 @@ namespace UI.Windows.Pages.Rappers
             BackButtonClick();
         }
 
-        private void BackButtonClick()
+        private static void BackButtonClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            rappersPage.Open();
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Previous));
         }
         
         private static void HighlightError(Component component)

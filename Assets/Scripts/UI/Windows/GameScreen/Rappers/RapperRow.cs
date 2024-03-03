@@ -5,7 +5,7 @@ using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Rappers
+namespace UI.Windows.GameScreen.Rappers
 {
     public class RapperRow : MonoBehaviour, IScrollViewControllerItem
     {

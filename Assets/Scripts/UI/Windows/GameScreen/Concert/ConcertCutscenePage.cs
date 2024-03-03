@@ -4,18 +4,17 @@ using Extensions;
 using Game.Player;
 using Models.Production;
 using Spine.Unity;
-using UI.Windows.GameScreen;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Concert
+namespace UI.Windows.GameScreen.Concert
 {
     /// <summary>
     /// Страница катсцены концерта
     /// </summary>
     public class ConcertCutscenePage : Page
     {
-        private static readonly Color FlexingGraphicStartColor = new Color(1, 1, 1, 0);
+        private static readonly Color FlexingGraphicStartColor = new(1, 1, 1, 0);
 
         [Header("Персонаж")]
         [SerializeField] private Image maleCharacter;
@@ -33,7 +32,7 @@ namespace UI.Windows.Pages.Concert
 
         private void Start()
         {
-            skipButton.onClick.AddListener(Close);
+            skipButton.onClick.AddListener(base.Hide);
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace UI.Windows.Pages.Concert
         public void Show(ConcertInfo concert)
         {
             _concert = concert;
-            Open();
+            base.Show();
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace UI.Windows.Pages.Concert
             flexingGraphic.SetUpStatesOrder(flexingStates.Take(maxFlexingAnimationIndex + 1).ToArray());
         }
 
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             var gender = PlayerManager.Data.Info.Gender;
             maleCharacter.gameObject.SetActive(gender == Gender.Male);
@@ -68,7 +67,7 @@ namespace UI.Windows.Pages.Concert
             FillDanceFloor();
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
             flexingGraphic.AnimationState.SetEmptyAnimation(0, 0);
             _concert = null;

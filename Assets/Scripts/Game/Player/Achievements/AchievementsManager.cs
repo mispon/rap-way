@@ -15,7 +15,7 @@ using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using Models.Production;
 using ScriptableObjects;
-using UI.Windows.Pages.Achievement;
+using UI.Windows.GameScreen.Achievement;
 using UniRx;
 using UnityEngine;
 

@@ -5,9 +5,6 @@ using UnityEngine;
 
 namespace UI.GameScreen
 {
-    /// <summary>
-    /// Управление канвасом
-    /// </summary>
     public class CanvasController: Singleton<CanvasController>
     {
         [Header("Настройки отображения канваса")]
@@ -26,10 +23,7 @@ namespace UI.GameScreen
         {
             SetActive(true);
         }
-
-        /// <summary>
-        /// Изменяет видимость всех UI элементов
-        /// </summary>
+        
         public static void SetActive(bool value)
         {
             Instance._canvasGroup.Set(value ? Instance.shownSettings : Instance.hiddenSettings);

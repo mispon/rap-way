@@ -5,7 +5,7 @@ using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Labels
+namespace UI.Windows.GameScreen.Labels
 {
     public class LabelRow : MonoBehaviour, IScrollViewControllerItem
     {

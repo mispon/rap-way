@@ -5,28 +5,28 @@ using Enums;
 using Firebase.Analytics;
 using Game.Player;
 using Game.Rappers.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
-using UI.Windows.GameScreen;
+using UI.Enums;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 using RappersAPI =  Game.Rappers.RappersPackage;
 
-namespace UI.Windows.Pages.Rappers
+namespace UI.Windows.GameScreen.Rappers
 {
     public class RappersPage : Page
     {
-        [Space]
         [SerializeField] private AskingWindow askingWindow;
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
         [Space]
         [SerializeField] private RapperCard rapperCard;
         [SerializeField] private Button addNewRapperButton;
-        [SerializeField] private NewRapperPage newRapperPage;
-        
+
         private readonly List<RapperRow> _listItems = new();
 
         private void Start()
@@ -34,14 +34,13 @@ namespace UI.Windows.Pages.Rappers
             addNewRapperButton.onClick.AddListener(OpenNewRapperPage);
         }
 
-        private void OpenNewRapperPage()
+        private static void OpenNewRapperPage()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            newRapperPage.Open();
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.NewRapper));
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.RappersPageOpened);
             
@@ -82,12 +81,12 @@ namespace UI.Windows.Pages.Rappers
             return allRappers.OrderByDescending(r => r.Fans).ToList();
         }
 
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             HintsManager.Instance.ShowHint("tutorial_rappers");
         }
         
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             rapperCard.onDelete -= HandleRapperDelete;
             
@@ -108,8 +107,8 @@ namespace UI.Windows.Pages.Rappers
                 GetLocale("delete_rapper_question"),
                 () => {
                     RappersAPI.Instance.RemoveCustom(customRapper);
-                    AfterPageClose();
-                    BeforePageOpen();
+                    AfterHide();
+                    BeforeShow();
                 }
             );
         }

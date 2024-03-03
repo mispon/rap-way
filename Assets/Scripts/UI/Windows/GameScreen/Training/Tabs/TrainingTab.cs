@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace UI.Windows.Pages.Training.Tabs
+namespace UI.Windows.GameScreen.Training.Tabs
 {
     /// <summary>
     /// Базовый класс вкладок страницы тренировок

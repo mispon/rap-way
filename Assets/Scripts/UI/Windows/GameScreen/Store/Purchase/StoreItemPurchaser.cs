@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
 
-namespace UI.Windows.Pages.Store.Purchase
+namespace UI.Windows.GameScreen.Store.Purchase
 {
     public enum StoreItemType
     {

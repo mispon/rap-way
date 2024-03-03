@@ -4,11 +4,10 @@ using MessageBroker;
 using MessageBroker.Messages.Time;
 using UI.Controls;
 using UI.Controls.Progress;
-using UI.Windows.GameScreen;
 using UniRx;
 using UnityEngine;
 
-namespace UI.Windows.Pages
+namespace UI.Windows.GameScreen
 {
     /// <summary>
     /// Базовая логика страниц работы
@@ -22,7 +21,7 @@ namespace UI.Windows.Pages
         /// <summary>
         /// Начинает выполнение работы 
         /// </summary>
-        public abstract void StartWork(params object[] args);
+        protected abstract void StartWork(object ctx);
 
         /// <summary>
         /// Работа, выполняемая за один день
@@ -62,7 +61,7 @@ namespace UI.Windows.Pages
             }
         }
         
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             TimeManager.Instance.SetActionMode();
             _disposable = MsgBroker.Instance
@@ -74,7 +73,7 @@ namespace UI.Windows.Pages
             progressBar.Run();
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
             TimeManager.Instance.ResetActionMode();
             _disposable?.Dispose();

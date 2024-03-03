@@ -1,41 +1,39 @@
+using Core.Context;
 using Core.Localization;
 using Extensions;
-using Game.Player.Team;
 using Game.Player.Team.Desc;
 using Game.Time;
-using UI.Windows.GameScreen;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Team
+namespace UI.Windows.GameScreen.Team
 {
-    /// <summary>
-    /// Страница открытия нового тиммейта
-    /// </summary>
     public class TeammateUnlockPage: Page
     {
         [SerializeField] private Text teammateName;
         [SerializeField] private Image avatar;
 
-        /// <summary>
-        /// Открытие страницы отображения нового члена команды
-        /// </summary>
-        public void Show(Teammate unlockedTeammate, Sprite teammateAvatar)
+        public override void Show(object ctx = null)
         {
-            var nameKey = unlockedTeammate.Type.GetDescription();
-            teammateName.text = LocalizationManager.Instance.Get(nameKey).ToUpper();
-            avatar.sprite = teammateAvatar;
+            var teammate = ctx.ValueByKey<Teammate>("teammate");
+            var sprite   = ctx.ValueByKey<Sprite>("sprite");
             
-            Open();
+            var nameKey = teammate.Type.GetDescription();
+            teammateName.text = LocalizationManager.Instance.Get(nameKey).ToUpper();
+            avatar.sprite = sprite;
+            
+            base.Show(ctx);
         }
         
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
+            // todo: send msg
             TimeManager.Instance.SetFreezed(true);
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
+            // todo: send msg
             TimeManager.Instance.SetFreezed(false);
         }
     }

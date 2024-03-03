@@ -11,7 +11,7 @@ using UI.Controls.Progress;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Training.Tabs.StatsTab
+namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
 {
     /// <summary>
     /// Кнопка отображения параметра

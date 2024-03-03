@@ -4,7 +4,8 @@ using Game.Player;
 using Game.Settings;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
-using UI.Windows.Pages.GameFinish;
+using MessageBroker.Messages.UI;
+using UI.Enums;
 using UniRx;
 using UnityEngine;
 
@@ -13,7 +14,6 @@ namespace Game
     public class GameFinishManager : MonoBehaviour, IStarter
     {
         [SerializeField] private GameSettings settings;
-        [SerializeField] private GameFinishPage page;
         
         private IDisposable _disposable;
         
@@ -27,13 +27,12 @@ namespace Game
         private void OnFansChanged(int value)
         {
             if (PlayerManager.Data.FinishPageShowed)
-            {
                 return;
-            }
+            
             
             if (value >= settings.Player.MaxFans)
             {
-                page.Open();
+                MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameFinish));
                 PlayerManager.Data.FinishPageShowed = true;
             }
         }

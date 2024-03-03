@@ -1,38 +1,30 @@
+using Core.Context;
 using Game.Player;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Models.Production;
+using Sirenix.OdinInspector;
 using UI.GameScreen;
-using UI.Windows.Pages.Track;
+using UI.Windows.GameScreen.Track;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Feat
+namespace UI.Windows.GameScreen.Feat
 {
-    /// <summary>
-    /// Страница настройки фита
-    /// </summary>
     public class FeatSettingsPage : TrackSettingsPage
     {
-        [Header("Настройки фита")]
-        [SerializeField] private Text rapperName;
-        [SerializeField] private Image rapperAvatar;
-        [SerializeField] private Sprite customRapperAvatar;
+        [BoxGroup("Settings"), SerializeField] private Text rapperName;
+        [BoxGroup("Settings"), SerializeField] private Image rapperAvatar;
+        [BoxGroup("Settings"), SerializeField] private Sprite customRapperAvatar;
 
         private RapperInfo _rapper;
-        
-        /// <summary>
-        /// Открывает страницу настроек
-        /// </summary>
-        public void Show(RapperInfo rapper)
+
+        public override void Show(object ctx = null)
         {
-            _rapper = rapper;
-            Open();
+            _rapper = ctx.Value<RapperInfo>();
+            base.Show(ctx);
         }
 
-        /// <summary>
-        /// Показывает текущий суммарный скилл команды 
-        /// </summary>
         private void DisplaySkills(PlayerData data)
         {
             int playerBitSkill = data.Stats.Bitmaking.Value;
@@ -44,7 +36,7 @@ namespace UI.Windows.Pages.Feat
             textSkill.text = $"{playerTextSkill + rapperTextSkill}";
         }
         
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             _track = new TrackInfo {Feat = _rapper};
 
@@ -57,9 +49,9 @@ namespace UI.Windows.Pages.Feat
             GameScreenController.Instance.HideProductionGroup();
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
-            base.AfterPageClose();
+            base.AfterHide();
             _rapper = null;
         }
     }

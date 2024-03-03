@@ -1,6 +1,6 @@
 ﻿namespace Enums
 {
-    public class FirebaseGameEvents
+    public static class FirebaseGameEvents
     {
         public const string GameFirstOpen = "rw_game_first_open";
         public const string NewGamePage = "rw_new_game_page";
@@ -46,6 +46,7 @@
         public const string NewRapperCreated = "rw_new_rapper_created";
         public const string RapperFeatAction = "rw_rapper_feat_action";
         public const string RapperBattleAction = "rw_rapper_battle_action";
+        public const string RapperLabelAction = "rw_rapper_label_action";
         public const string LabelsPageOpened = "rw_labels_page_opened";
         public const string NewLabelPageOpened = "rw_new_label_page_opened";
         public const string NewLabelCreated = "rw_new_label_created";

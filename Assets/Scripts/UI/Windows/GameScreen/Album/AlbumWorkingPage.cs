@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Context;
 using Enums;
 using Firebase.Analytics;
 using Game;
@@ -6,96 +7,86 @@ using Game.Labels.Desc;
 using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
+using UI.Enums;
+using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Album
+namespace UI.Windows.GameScreen.Album
 {
     /// <summary>
     /// Страница работы над альбомом
     /// </summary>
     public class AlbumWorkingPage : BaseWorkingPage
     {
-        [Header("Идентификаторы прогресса работы")] 
-        [SerializeField] private Text bitPoints;
-        [SerializeField] private Text textPoints;
-
-        [Header("Команда игрока")] 
-        [SerializeField] private WorkPoints playerBitWorkPoints;
-        [SerializeField] private WorkPoints playerTextWorkPoints;
-        [SerializeField] private WorkPoints bitmakerWorkPoints;
-        [SerializeField] private WorkPoints textwritterWorkPoints;
-        [SerializeField] private WorkPoints labelBitWorkPoints;
-        [SerializeField] private WorkPoints labelTextWorkPoints;
-        [SerializeField] private Image bitmakerAvatar;
-        [SerializeField] private Image textwritterAvatar;
-        [SerializeField] private Image labelAvatar;
-        [SerializeField] private GameObject labelFrozen;
-
-        [Header("Данные")] 
-        [SerializeField] private ImagesBank imagesBank;
-
-        [Header("Страница результата")] 
-        [SerializeField] private AlbumResultPage albumResult;
-
-        private AlbumInfo _album;
+        [BoxGroup("Progress"), SerializeField] private Text bitPoints;
+        [BoxGroup("Progress"), SerializeField] private Text textPoints;
+        
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerBitWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerTextWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints bitmakerWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints textwritterWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints labelBitWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints labelTextWorkPoints;
+        [BoxGroup("Team"), SerializeField] private Image bitmakerAvatar;
+        [BoxGroup("Team"), SerializeField] private Image textwritterAvatar;
+        [BoxGroup("Team"), SerializeField] private Image labelAvatar;
+        [BoxGroup("Team"), SerializeField] private GameObject labelFrozen;
+        
+        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
+        
         private bool _hasBitmaker;
         private bool _hasTextWriter;
+        
+        private AlbumInfo _album;
         private LabelInfo _label;
 
-        /// <summary>
-        /// Начинает выполнение работы 
-        /// </summary>
-        public override void StartWork(params object[] args)
+        public override void Show(object ctx = null)
+        {
+            StartWork(ctx);
+            base.Show(ctx);
+        }
+
+        protected override void StartWork(object ctx)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateAlbumClick);
             
-            _album = (AlbumInfo) args[0];
-            Open();
+            _album = ctx.Value<AlbumInfo>();
             RefreshWorkAnims();
         }
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
         protected override void DoDayWork()
         {
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
-
-        /// <summary>
-        /// Обработчик перехода к странице результата
-        /// </summary>
+        
         private void ShowResultPage()
         {
-            albumResult.Show(_album);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.ProductionAlbumResult,
+                Context = _album
+            });
         }
 
-        /// <summary>
-        /// Обработчик завершения работы
-        /// </summary>
         protected override void FinishWork()
         {
             GameEventsManager.Instance.CallEvent(GameEventType.Album, ShowResultPage);
         }
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected override int GetDuration()
         {
             return settings.Album.WorkDuration;
         }
 
-        /// <summary>
-        /// Генерирует очки работы над альбомом
-        /// </summary>
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
@@ -105,7 +96,7 @@ namespace UI.Windows.Pages.Album
         }
 
         /// <summary>
-        /// Создает очки работы по биту 
+        /// Creates work points in bit category
         /// </summary>
         private int CreateBitPoints(PlayerData data)
         {
@@ -130,7 +121,7 @@ namespace UI.Windows.Pages.Album
         }
 
         /// <summary>
-        /// Создает очки работы по тексту 
+        /// Creates work points in text category
         /// </summary>
         private int CreateTextPoints(PlayerData data)
         {
@@ -154,19 +145,14 @@ namespace UI.Windows.Pages.Album
             return playersTextPoints + textWriterPoints + labelPoints;
         }
 
-        /// <summary>
-        /// Обновляет значение рабочих очков в интерфейсе
-        /// </summary>
         private void DisplayWorkPoints()
         {
             bitPoints.text = _album.BitPoints.ToString();
             textPoints.text = _album.TextPoints.ToString();
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
-            base.BeforePageOpen();
-            
             _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextWriter = TeamManager.IsAvailable(TeammateType.TextWriter);
             
@@ -189,9 +175,9 @@ namespace UI.Windows.Pages.Album
             textwritterAvatar.sprite = _hasTextWriter ? imagesBank.TextwritterActive : imagesBank.TextwritterInactive;
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
-            base.BeforePageClose();
+            base.BeforeHide();
 
             bitPoints.text = textPoints.text = "0";
             _album = null;

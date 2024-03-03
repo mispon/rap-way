@@ -6,7 +6,7 @@ using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Social.Tabs
+namespace UI.Windows.GameScreen.Social.Tabs
 {
     /// <summary>
     /// Вкладка пожертвований

@@ -1,32 +1,30 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Core.Context;
 using Enums;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using UI.Windows.GameScreen;
+using Sirenix.OdinInspector;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UI.Windows.Pages.GameEvent
+namespace UI.Windows.GameScreen.GameEvent
 {
-    /// <summary>
-    /// Страница игрового события, описывающая ситуацию
-    /// </summary>
+
     public class EventMainPage: Page
     {
-        [Header("Поля")]
-        [SerializeField] private Text nameText;
-        [SerializeField] private Text descriptionText;
-
-        [Header("Кнопки выбора решения")] 
-        [SerializeField] private Button peacefullyButton;
-        [SerializeField] private Button aggressivelyButton;
-        [SerializeField] private Button neutralButton;
-        [SerializeField] private Button randomButton;
-
-        [Header("Страница результат выбора")] 
-        [SerializeField] private EventDecisionPage eventDecisionPage;
+        [BoxGroup("Card"), SerializeField] private Text nameText;
+        [BoxGroup("Card"), SerializeField] private Text descriptionText;
+        
+        [BoxGroup("Decisions"), SerializeField] private Button peacefullyButton;
+        [BoxGroup("Decisions"), SerializeField] private Button aggressivelyButton;
+        [BoxGroup("Decisions"), SerializeField] private Button neutralButton;
+        [BoxGroup("Decisions"), SerializeField] private Button randomButton;
         
         private GameEventInfo _eventInfo;
 
@@ -37,48 +35,45 @@ namespace UI.Windows.Pages.GameEvent
             neutralButton.onClick.AddListener(() => Decide(GameEventDecisionType.Neutral));
             randomButton.onClick.AddListener(DecideRandom);
         }
-
-        /// <summary>
-        /// Функция показа страницы игрового события
-        /// </summary>
-        public void Show(GameEventInfo eventInfo)
-        {
-            _eventInfo = eventInfo;
-            Open();
-        }
         
-        /// <summary>
-        /// Выбирает решение определенного типа и отображает его на странице "eventDecisionPage"
-        /// </summary>
+        public override void Show(object ctx = null)
+        {
+            _eventInfo = ctx.Value<GameEventInfo>();
+            base.Show(ctx);
+        }
+   
         private void Decide(GameEventDecisionType type)
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             
             var decisionResult = _eventInfo.DecisionResults.FirstOrDefault(e => e.DecisionType == type);
             if (decisionResult != null)
-                eventDecisionPage.Show(_eventInfo.Name, decisionResult);
+                MsgBroker.Instance.Publish(new WindowControlMessage
+                {
+                    Type = WindowType.GameEvent,
+                    Context = new Dictionary<string, object>
+                    {
+                        ["event_name"]     = _eventInfo.Name,
+                        ["event_decision"] = decisionResult
+                    }
+                });
             else
                 Debug.LogError($"Не найден результат случайного события для решения типа {type}!");
-
-            Close();
         }
 
-        /// <summary>
-        /// Выбирает случайное решение
-        /// </summary>
         private void DecideRandom()
         {
             var decisionTypes = (GameEventDecisionType[]) Enum.GetValues(typeof(GameEventDecisionType));
             Decide(decisionTypes[Random.Range(0, decisionTypes.Length)]);
         }
         
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             nameText.text = GetLocale(_eventInfo.Name);
             descriptionText.text = GetLocale(_eventInfo.Description);
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             nameText.text = string.Empty;
             descriptionText.text = string.Empty;

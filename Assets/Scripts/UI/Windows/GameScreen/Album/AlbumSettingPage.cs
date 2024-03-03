@@ -10,44 +10,37 @@ using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using Models.Trends;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
+using UI.Enums;
 using UI.GameScreen;
-using UI.Windows.GameScreen;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Core.Events.EventType;
 
-namespace UI.Windows.Pages.Album
+namespace UI.Windows.GameScreen.Album
 {
     /// <summary>
     /// Страница настройки альбома
     /// </summary>
     public class AlbumSettingPage : Page
     {
-        [Header("Контроллы")] 
-        [SerializeField] private InputField albumNameInput;
-        [SerializeField] private Carousel styleCarousel;
-        [SerializeField] private Carousel themeCarousel;
-        [SerializeField] private Button startButton;
-        [Space] 
-        [SerializeField] protected Text bitSkill;
-        [SerializeField] protected Text textSkill;
-        [SerializeField] private Image bitmakerAvatar;
-        [SerializeField] private Image textwritterAvatar;
+        [BoxGroup("Controls"), SerializeField] private InputField albumNameInput;
+        [BoxGroup("Controls"), SerializeField] private Carousel styleCarousel;
+        [BoxGroup("Controls"), SerializeField] private Carousel themeCarousel;
+        [BoxGroup("Controls"), SerializeField] private Button startButton;
+        [BoxGroup("Controls"), SerializeField] protected Text bitSkill;
+        [BoxGroup("Controls"), SerializeField] protected Text textSkill;
+        [BoxGroup("Controls"), SerializeField] private Image bitmakerAvatar;
+        [BoxGroup("Controls"), SerializeField] private Image textwritterAvatar;
         
-        [Header("Страница разработки")] 
-        [SerializeField] private BaseWorkingPage workingPage;
-
-        [Header("Страница выбора")] 
-        [SerializeField]
-        private Page productSelectionPage;
-        
-        [Header("Данные")] 
-        [SerializeField] private ImagesBank imagesBank;
+        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
 
         private AlbumInfo _album;
 
@@ -57,7 +50,7 @@ namespace UI.Windows.Pages.Album
             startButton.onClick.AddListener(CreateAlbum);
         }
         
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             HintsManager.Instance.ShowHint("tutorial_album_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewAlbumSelected);
@@ -89,10 +82,14 @@ namespace UI.Windows.Pages.Album
                 Style = styleCarousel.GetValue<Styles>(),
                 Theme = themeCarousel.GetValue<Themes>()
             };
-
-            productSelectionPage.Close();
-            workingPage.StartWork(_album);
-            Close();
+            
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.ProductionAlbumWork,
+                Context = _album
+            });
+            
+            Hide();
         }
 
         /// <summary>
@@ -163,7 +160,7 @@ namespace UI.Windows.Pages.Album
             textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
         
-        protected override void BeforePageOpen()
+        protected override void BeforeHide()
         {
             _album = new AlbumInfo();
 
@@ -176,7 +173,7 @@ namespace UI.Windows.Pages.Album
             GameScreenController.Instance.HideProductionGroup();
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             EventManager.RemoveHandler(EventType.UncleSamsParty, DropTeam);
 

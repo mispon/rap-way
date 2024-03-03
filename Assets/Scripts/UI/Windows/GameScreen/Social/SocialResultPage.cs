@@ -1,42 +1,33 @@
-﻿using Enums;
+﻿using Core.Context;
+using Enums;
 using Game.Production.Analyzers;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using UI.Windows.GameScreen;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace UI.Windows.Pages.Social
+namespace UI.Windows.GameScreen.Social
 {
-    /// <summary>
-    /// Страница результата социального действия
-    /// </summary>
     public abstract class SocialResultPage : Page
     {
-        [Header("Анализатор")] 
-        [SerializeField] protected SocialAnalyzer analyzer;
+        [BoxGroup("Analyzer"), SerializeField] protected SocialAnalyzer analyzer;
 
         private SocialInfo _social;
         
-        public void ShowPage(SocialInfo social)
+        public override void Show(object ctx = null)
         {
-            _social = social;
+            _social = ctx.Value<SocialInfo>();
 
-            if (social.Type != SocialType.Trends)
+            if (_social.Type != SocialType.Trends)
                 analyzer.Analyze(_social);
             
-            Open();
-            DisplayResult(social);
+            DisplayResult(_social);
+            base.Show(ctx);
         }
 
-        /// <summary>
-        /// Отображает результаты соц. действия
-        /// </summary>
         protected abstract void DisplayResult(SocialInfo socialInfo);
-        
-        /// <summary>
-        /// Сохраняет результат социального действия
-        /// </summary>
+
         private void SaveResult(SocialInfo social)
         {
             MsgBroker.Instance.Publish(new ProductionRewardMessage
@@ -48,7 +39,7 @@ namespace UI.Windows.Pages.Social
             });
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             SaveResult(_social);
             _social = null;

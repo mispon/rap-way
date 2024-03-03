@@ -5,7 +5,6 @@ using Enums;
 using Extensions;
 using Game.Player;
 using Game.Player.Goods;
-using Game.Player.State;
 using Game.Player.State.Desc;
 using Models.Production;
 using ScriptableObjects;
@@ -13,7 +12,7 @@ using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Personal.PersonalTab
+namespace UI.Windows.GameScreen.Personal.PersonalTab
 {
     public class PersonalTab : Tab
     {
@@ -69,19 +68,13 @@ namespace UI.Windows.Pages.Personal.PersonalTab
             
             HintsManager.Instance.ShowHint("tutorial_personal_page");
         }
-        
-        /// <summary>
-        /// Устанавливает аватар 
-        /// </summary>
+
         private void SetupCharacter(Gender gender)
         {
             maleAvatar.SetActive(gender == Gender.Male);
             femaleAvatar.SetActive(gender == Gender.Female);
         }
 
-        /// <summary>
-        /// Устанавливает имущество
-        /// </summary>
         private void SetupGoods(List<Good> playerGoods) {
             Sprite GetGoodsSprite(GoodsType type)
             {
@@ -106,10 +99,7 @@ namespace UI.Windows.Pages.Personal.PersonalTab
             chainIcon.sprite = GetGoodsSprite(GoodsType.Chain);
             grillzIcon.sprite = GetGoodsSprite(GoodsType.Grillz);
         }
-        
-        /// <summary>
-        /// Устанавливает навыки персонажа
-        /// </summary>
+
         private void SetupStats(PlayerStats playerStats)
         {
             vocobularyLevel.text = playerStats.Vocobulary.Value.ToString();
@@ -120,9 +110,6 @@ namespace UI.Windows.Pages.Personal.PersonalTab
             marketingLevel.text = playerStats.Marketing.Value.ToString();
         }
 
-        /// <summary>
-        /// Устанавливает умения персонажа
-        /// </summary>
         private void SetupSkills(List<Skills> playerSkills)
         {
             noSkills.SetActive(playerSkills.Count == 0);
@@ -137,9 +124,6 @@ namespace UI.Windows.Pages.Personal.PersonalTab
             }
         }
 
-        /// <summary>
-        /// Устанавливает самый успешный трек
-        /// </summary>
         private void SetupBestTrack(List<TrackInfo> trackList)
         {
             var bestTrack = trackList.OrderByDescending(e => e.ListenAmount).FirstOrDefault();
@@ -149,9 +133,6 @@ namespace UI.Windows.Pages.Personal.PersonalTab
             listenAmount.text = bestTrack != null ? bestTrack.ListenAmount.GetDisplay() : "0";
         }
 
-        /// <summary>
-        /// Выводит последние действия
-        /// </summary>
         private void SetupLastActions(List<ProductionBase> actions) {
             for (var i = 0; i < lastActions.Length; i++) {
                 GameObject item = lastActions[i].transform.parent.gameObject;

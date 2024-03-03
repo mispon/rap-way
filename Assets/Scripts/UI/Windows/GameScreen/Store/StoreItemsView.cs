@@ -3,7 +3,7 @@ using ScriptableObjects;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
 
-namespace UI.Windows.Pages.Store
+namespace UI.Windows.GameScreen.Store
 {
     public class StoreItemsView : MonoBehaviour
     {

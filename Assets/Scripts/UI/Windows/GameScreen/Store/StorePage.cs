@@ -8,12 +8,11 @@ using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
-using UI.Windows.GameScreen;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Store
+namespace UI.Windows.GameScreen.Store
 {
     public class StorePage: Page
     {
@@ -29,19 +28,7 @@ namespace UI.Windows.Pages.Store
 
         private readonly List<StoreCategoryItem> _categoryItems = new();
         
-        public override void Show(object ctx)
-        {
-            base.Show(ctx);
-            Open();
-        }
-
-        public override void Hide()
-        {
-            base.Hide();
-            Close();
-        }
-        
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
@@ -62,7 +49,7 @@ namespace UI.Windows.Pages.Store
             ShowCategoriesList();
         }
 
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             _categoryItems[0].ShowItems(true);
         }
@@ -100,7 +87,7 @@ namespace UI.Windows.Pages.Store
             donateBalance.text = donate.GetDisplay();
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             foreach (var item in _categoryItems)
             {

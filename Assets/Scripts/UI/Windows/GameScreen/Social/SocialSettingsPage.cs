@@ -1,28 +1,23 @@
 ﻿using Core;
 using Enums;
 using Firebase.Analytics;
-using Game.Player;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Social.Tabs;
+using UI.Enums;
+using UI.Windows.GameScreen.Social.Tabs;
 using UI.Windows.Tutorial;
 using UnityEngine;
 
-namespace UI.Windows.Pages.Social
+namespace UI.Windows.GameScreen.Social
 {
-    /// <summary>
-    /// Страница настройки социальных действий
-    /// </summary>
     public class SocialSettingsPage : Page
     {
-        [Header("Вкладки")]
-        [SerializeField] private Carousel tabsCarousel;
-        [SerializeField] private BaseSocialsTab[] tabs;
-        
-        [Header("Страница работы")]
-        [SerializeField] private SocialWorkingPage workingPage;
+        [BoxGroup("Tabs"), SerializeField] private Carousel tabsCarousel;
+        [BoxGroup("Tabs"), SerializeField] private BaseSocialsTab[] tabs;
 
         private void Start()
         {
@@ -33,15 +28,6 @@ namespace UI.Windows.Pages.Social
             }
         }
 
-        protected override void AfterPageOpen()
-        {
-            HintsManager.Instance.ShowHint("tutorial_socials");
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.SocialsPageOpened);
-        }
-
-        /// <summary>
-        /// Обработчик изменения вкладки 
-        /// </summary>
         private void OnTabChanged(int index)
         {
             for (var i = 0; i < tabs.Length; i++)
@@ -50,22 +36,28 @@ namespace UI.Windows.Pages.Social
             }
         }
  
-        /// <summary>
-        /// Запускает работу по социальному действию 
-        /// </summary>
-        private void StartSocial(SocialInfo info)
+        private static void StartSocial(SocialInfo info)
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            workingPage.StartWork(info);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.SocialsWork,
+                Context = info
+            });
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             foreach (var tab in tabs)
             {
                 tab.Refresh();
             }
+        }
+        
+        protected override void AfterShow()
+        {
+            HintsManager.Instance.ShowHint("tutorial_socials");
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.SocialsPageOpened);
         }
 
         private void OnDestroy()

@@ -1,12 +1,10 @@
 using Models.Production;
+using UI.Windows.Pages.Social;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Social.ResultPages
+namespace UI.Windows.GameScreen.Social.ResultPages
 {
-    /// <summary>
-    /// Страница результата псевдо-инсты
-    /// </summary>
     public class IeyegramResultPage: SocialResultPage
     {
         [Header("Контролы")]
@@ -19,9 +17,6 @@ namespace UI.Windows.Pages.Social.ResultPages
         [Header("Данные")]
         [SerializeField] private Sprite[] pics;
 
-        /// <summary>
-        /// Отображает результат фотографии в инсте
-        /// </summary>
         protected override void DisplayResult(SocialInfo info)
         {
             picture.sprite = pics[info.ModeIndex];

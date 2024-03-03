@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Core;
 using Enums;
 using Firebase.Analytics;
@@ -8,21 +9,19 @@ using Game.Player.Team;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Player;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using UI.Windows.Pages.Charts;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 using RappersAPI =  Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Rappers
+namespace UI.Windows.GameScreen.Rappers
 {
-    /// <summary>
-    /// Персональная карточка существующего исполнителя
-    /// </summary>
     public class RapperCard : MonoBehaviour
     {
-        [Header("Поля информации репера")]
+        [Header("Rapper Card")]
         [SerializeField] private Sprite customImage;
         [SerializeField] private Sprite playerMaleImage;
         [SerializeField] private Sprite playerFemaleImage;
@@ -41,13 +40,8 @@ namespace UI.Windows.Pages.Rappers
         [Space]
         [SerializeField] private Text fans;
         [SerializeField] private Text label;
-
-        [Header("Страницы")]
-        [SerializeField] private ChartsPage chartsPage;
-        [SerializeField] private RappersPage rappersPage;
-        [SerializeField] private RapperWorkingPage workingPage;
-
-        [Header("Банк картинок")]
+        
+        [Header("Images Bank")]
         [SerializeField] private ImagesBank imagesBank;
 
         public event Action<RapperInfo> onDelete = _ => {};
@@ -62,9 +56,6 @@ namespace UI.Windows.Pages.Rappers
             deleteButton.onClick.AddListener(DeleteRapper);
         }
 
-        /// <summary>
-        /// Обработчик кнопок
-        /// </summary>
         private void StartConversation(ConversationType convType)
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
@@ -77,6 +68,9 @@ namespace UI.Windows.Pages.Rappers
                 case ConversationType.Feat:
                     FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperFeatAction);
                     break;
+                case ConversationType.Label:
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperLabelAction);
+                    break;
             }
             
             int cooldown = GameManager.Instance.Settings.Team.ManagerCooldown;
@@ -86,10 +80,15 @@ namespace UI.Windows.Pages.Rappers
                 Cooldown = cooldown
             });
             
-            workingPage.StartWork(_rapper, convType);
-            
-            rappersPage.Close();
-            chartsPage.Hide();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.RapperConversationsWork,
+                Context = new Dictionary<string, object>
+                {
+                    ["rapper"]    = _rapper,
+                    ["conv_type"] = convType
+                }
+            });
         }
 
         private void DeleteRapper()

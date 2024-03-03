@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Context;
 using Enums;
 using Firebase.Analytics;
 using Game;
@@ -6,96 +7,85 @@ using Game.Labels.Desc;
 using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
+using UI.Enums;
+using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Track
+namespace UI.Windows.GameScreen.Track
 {
     /// <summary>
     /// Страница работы над треком
     /// </summary>
     public class TrackWorkingPage : BaseWorkingPage
     {
-        [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text bitPoints;
-        [SerializeField] private Text textPoints;
+        [BoxGroup("Work Points"), SerializeField] private Text bitPoints;
+        [BoxGroup("Work Points"), SerializeField] private Text textPoints;
 
-        [Header("Команда игрока")]
-        [SerializeField] private WorkPoints playerBitWorkPoints;
-        [SerializeField] private WorkPoints playerTextWorkPoints;
-        [SerializeField] private WorkPoints bitmakerWorkPoints;
-        [SerializeField] private WorkPoints textwritterWorkPoints;
-        [SerializeField] private WorkPoints labelBitWorkPoints;
-        [SerializeField] private WorkPoints labelTextWorkPoints;
-        [SerializeField] private Image bitmakerAvatar;
-        [SerializeField] private Image textwritterAvatar;
-        [SerializeField] private Image labelAvatar;
-        [SerializeField] private GameObject labelFrozen;
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerBitWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerTextWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints bitmakerWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints textwritterWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints labelBitWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints labelTextWorkPoints;
+        [BoxGroup("Team"), SerializeField] private Image bitmakerAvatar;
+        [BoxGroup("Team"), SerializeField] private Image textwritterAvatar;
+        [BoxGroup("Team"), SerializeField] private Image labelAvatar;
+        [BoxGroup("Team"), SerializeField] private GameObject labelFrozen;
 
-        [Header("Данные")]
-        [SerializeField] private ImagesBank imagesBank;
-
-        [Header("Страница результата")]
-        [SerializeField] private TrackResultPage trackResult;
+        [BoxGroup("Images"), SerializeField] private ImagesBank imagesBank;
 
         private TrackInfo _track;
         private bool _hasBitmaker;
         private bool _hasTextWriter;
         private LabelInfo _label;
 
-        /// <summary>
-        /// Начинает выполнение работы 
-        /// </summary>
-        public override void StartWork(params object[] args)
+        public override void Show(object ctx = null)
+        {
+            StartWork(ctx);
+            base.Show(ctx);
+        }
+
+        protected override void StartWork(object ctx)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateTrackClick);
             
-            _track = (TrackInfo) args[0];
-            Open();
+            _track = ctx.Value<TrackInfo>();
             RefreshWorkAnims();
         }
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
         protected override void DoDayWork()
         {
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
 
-        /// <summary>
-        /// Обработчик перехода к странице результата
-        /// </summary>
         private void ShowResultPage()
         {
-            trackResult.Show(_track);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.ProductionTrackResult,
+                Context = _track
+            });
         }
 
-        /// <summary>
-        /// Обработчик завершения работы
-        /// </summary>
         protected override void FinishWork()
         {
             GameEventsManager.Instance.CallEvent(GameEventType.Track, ShowResultPage);
         }
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected override int GetDuration()
         {
             return settings.Track.WorkDuration;
         }
 
-        /// <summary>
-        /// Генерирует очки работы над треком
-        /// </summary>
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
@@ -104,9 +94,6 @@ namespace UI.Windows.Pages.Track
             _track.TextPoints += CreateTextPoints(PlayerManager.Data);
         }
 
-        /// <summary>
-        /// Создает очки работы по биту
-        /// </summary>
         private int CreateBitPoints(PlayerData data)
         {
             var playersBitPoints = Random.Range(1, data.Stats.Bitmaking.Value + 2);
@@ -128,10 +115,7 @@ namespace UI.Windows.Pages.Track
 
             return playersBitPoints + bitmakerPoints + labelPoints;
         }
-        
-        /// <summary>
-        /// Создает очки работы по тексту 
-        /// </summary>
+
         private int CreateTextPoints(PlayerData data)
         {
             var playersTextPoints = Random.Range(1, data.Stats.Vocobulary.Value + 2);
@@ -154,18 +138,15 @@ namespace UI.Windows.Pages.Track
             return playersTextPoints + textWriterPoints + labelPoints;
         }
 
-        /// <summary>
-        /// Обновляет значение рабочих очков в интерфейсе
-        /// </summary>
         private void DisplayWorkPoints()
         {
             bitPoints.text = _track.BitPoints.ToString();
             textPoints.text = _track.TextPoints.ToString();
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
-            base.BeforePageOpen();
+            base.BeforeShow();
             
             _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextWriter = TeamManager.IsAvailable(TeammateType.TextWriter);
@@ -189,9 +170,9 @@ namespace UI.Windows.Pages.Track
             textwritterAvatar.sprite = _hasTextWriter ? imagesBank.TextwritterActive : imagesBank.TextwritterInactive;
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
-            base.BeforePageClose();
+            base.BeforeHide();
             
             bitPoints.text = textPoints.text = "0";
             _track = null;

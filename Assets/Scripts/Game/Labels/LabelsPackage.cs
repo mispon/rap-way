@@ -4,8 +4,6 @@ using Core.OrderedStarter;
 using Game.Labels.Desc;
 using Game.Settings;
 using ScriptableObjects;
-using UI.Windows.Pages.Contracts;
-using UI.Windows.Pages.Personal;
 using UnityEngine;
 
 namespace Game.Labels
@@ -15,9 +13,6 @@ namespace Game.Labels
     /// </summary>
     public partial class LabelsPackage : GamePackage<LabelsPackage>, IStarter
     {
-        [SerializeField] private LabelContractPage contractPage;
-        [SerializeField] private PersonalPage personalPage;
-        [Space]
         [SerializeField] private LabelsData data;
         [SerializeField] private ImagesBank imagesBank;
         

@@ -39,8 +39,10 @@ namespace UI.Base
         }
         
         private bool _isActive;
+
+        public bool IsActive() { return _isActive; }
         
-        public virtual void Show(object context)
+        public virtual void Show(object ctx = null)
         {
             if (_isActive) return;
             

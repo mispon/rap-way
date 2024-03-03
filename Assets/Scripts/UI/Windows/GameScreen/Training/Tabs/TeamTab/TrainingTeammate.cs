@@ -10,7 +10,7 @@ using UI.Controls.Progress;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Training.Tabs.TeamTab
+namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
 {
     /// <summary>
     /// Карточка тренируемого тиммейта

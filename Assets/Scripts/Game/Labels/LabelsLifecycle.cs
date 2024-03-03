@@ -3,6 +3,9 @@ using Game.Labels.Desc;
 using Game.Notifications;
 using Game.Player;
 using Game.Rappers.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
+using UI.Enums;
 using UnityEngine;
 using RappersAPI = Game.Rappers.RappersPackage;
 
@@ -200,7 +203,11 @@ namespace Game.Labels
             
             NotificationManager.Instance.AddClickNotification(() =>
             {
-                contractPage.Show(label);
+                MsgBroker.Instance.Publish(new WindowControlMessage
+                {
+                    Type = WindowType.LabelContract,
+                    Context = label
+                });
             });
         }
     }

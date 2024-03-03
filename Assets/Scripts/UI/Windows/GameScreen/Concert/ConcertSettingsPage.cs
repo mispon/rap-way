@@ -11,25 +11,23 @@ using Game.Player.Team;
 using Game.Production;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Controls.Money;
+using UI.Enums;
 using UI.GameScreen;
-using UI.Windows.GameScreen;
 using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Core.Events.EventType;
 
-namespace UI.Windows.Pages.Concert
+namespace UI.Windows.GameScreen.Concert
 {
-    /// <summary>
-    /// Страница настроек концерта
-    /// </summary>
     public class ConcertSettingsPage : Page
     {
         [BoxGroup("Controls"), SerializeField] private Carousel placeCarousel;
@@ -47,10 +45,7 @@ namespace UI.Windows.Pages.Concert
         
         [BoxGroup("Price"), SerializeField] private Price concertPrice;
         [BoxGroup("Price"), SerializeField] private GameError noMoneyErr;
-        
-        [BoxGroup("Pages"), SerializeField] private ConcertWorkingPage workingPage;
-        [BoxGroup("Pages"), SerializeField] private Page productSelectionPage;
-        
+
         [BoxGroup("Data"), SerializeField] private ConcertPlacesData placeData;
         [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
         
@@ -92,10 +87,11 @@ namespace UI.Windows.Pages.Concert
             _concert.Id = ProductionManager.GetNextProductionId<ConcertInfo>();
             _concert.TicketCost = Mathf.RoundToInt(ticketCostSlider.value);
 
-            productSelectionPage.Close();
-            workingPage.StartWork(_concert);
-            
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.ProductionConcertWork,
+                Context = _concert
+            });
         }
         
         private void SetupPlaceCarousel()
@@ -149,7 +145,7 @@ namespace UI.Windows.Pages.Concert
             ticketCost.text = $"{cost.GetMoney()}";
         }
         
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             _concert = new ConcertInfo();
             CacheLastAlbums();
@@ -175,7 +171,7 @@ namespace UI.Windows.Pages.Concert
             GameScreenController.Instance.HideProductionGroup();
         }
         
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             HintsManager.Instance.ShowHint("tutorial_concert_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
@@ -186,7 +182,7 @@ namespace UI.Windows.Pages.Concert
                 .AddTo(_disposable);
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             EventManager.RemoveHandler(EventType.UncleSamsParty, ResetTeam);
             

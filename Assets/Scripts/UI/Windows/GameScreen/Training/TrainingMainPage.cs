@@ -1,22 +1,16 @@
 using System;
 using Core.Context;
-using Enums;
-using Firebase.Analytics;
 using Game.Player;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Controls.Carousel;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Training.Tabs;
+using UI.Windows.GameScreen.Training.Tabs;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Training
+namespace UI.Windows.GameScreen.Training
 {
-    /// <summary>
-    /// Главная страница тренировок персонажа
-    /// </summary>
     public class TrainingMainPage : Page
     {
         [Header("Контролы")]
@@ -37,44 +31,19 @@ namespace UI.Windows.Pages.Training
             }
         }
         
-        public override void Show(object ctx)
+        public override void Show(object ctx = null)
         {
-            base.Show(ctx);
-
             _tabIndex = ctx.Value<int>();
-            Open();
+            
+            base.Show(ctx);
             OpenTab(_tabIndex);
         }
-
-        public override void Hide()
-        {
-            base.Hide();
-            Close();
-        }
-
-        /// <summary>
-        /// Открывает страницу и указанную вкладку
-        /// </summary>
-        public void OpenPage(int tabIndex)
-        {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerTrainingPage);
-            
-            _tabIndex = tabIndex;
-            Open();
-            OpenTab(tabIndex);
-        }
-
-        /// <summary>
-        /// Обработчик изменения индекса вкладки 
-        /// </summary>
+        
         private void OnTabChanged(int index)
         {
             OpenTab(index);
         }
 
-        /// <summary>
-        /// Запускает тренировку 
-        /// </summary>
         private void ApplyTraining(Func<int> training)
         {
             int cost = training.Invoke();
@@ -84,9 +53,6 @@ namespace UI.Windows.Pages.Training
             RefreshTab();
         }
 
-        /// <summary>
-        /// Открывает вкладку по индексу 
-        /// </summary>
         private void OpenTab(int index)
         {
             _tabIndex = index;
@@ -99,34 +65,25 @@ namespace UI.Windows.Pages.Training
             }
         }
 
-        /// <summary>
-        /// Обновляет текущую вкладку методом её переоткрытия
-        /// </summary>
         private void RefreshTab()
         {
             OpenTab(_tabIndex);
         }
         
-        /// <summary>
-        /// Отображает текущее количество очков опыта
-        /// </summary>
         private void DisplayExp() => expLabel.text =  PlayerManager.Data.Exp.ToString();
 
-        /// <summary>
-        /// Вызывается перед открытием страницы
-        /// </summary>
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             DisplayExp();
         }
 
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             tabsCarousel.SetIndex(_tabIndex);
             HintsManager.Instance.ShowHint($"tutorial_training_{_tabIndex}");
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
             tabsCarousel.SetIndex(0);

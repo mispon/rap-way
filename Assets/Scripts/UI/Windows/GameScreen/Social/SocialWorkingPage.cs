@@ -1,17 +1,20 @@
 ﻿using Core;
+using Core.Context;
 using Enums;
 using Game.Player;
 using Game.Player.Team;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
+using UI.Enums;
+using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
-namespace UI.Windows.Pages.Social
+namespace UI.Windows.GameScreen.Social
 {
-    /// <summary>
-    /// Страница работы социального действия
-    /// </summary>
     public class SocialWorkingPage : BaseWorkingPage
     {
         [Header("Идентификаторы прогресса работы")]
@@ -20,28 +23,24 @@ namespace UI.Windows.Pages.Social
         [SerializeField] private WorkPoints prManWorkPoints;
         [SerializeField] private Image prManAvatar;
 
-        [Header("Страницы результата")]
-        [SerializeField] private SocialResultPage[] socialResults;
-
         [Header("Данные")]
         [SerializeField] private ImagesBank imagesBank;
         
         private SocialInfo _social;
         private bool _hasPrMan;
 
-        /// <summary>
-        /// Начинает выполнение работы 
-        /// </summary>
-        public override void StartWork(params object[] args)
+        public override void Show(object ctx = null)
         {
-            _social = (SocialInfo) args[0];
-            Open();
+            StartWork(ctx);
+            base.Show(ctx);
+        }
+
+        protected override void StartWork(object ctx)
+        {
+            _social = ctx.Value<SocialInfo>();
             RefreshWorkAnims();
         }
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
         protected override void DoDayWork()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
@@ -49,9 +48,6 @@ namespace UI.Windows.Pages.Social
             DisplayWorkPoints();
         }
 
-        /// <summary>
-        /// Генерирует очки работы
-        /// </summary>
         private void GenerateWorkPoints()
         {
             var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 2);
@@ -67,55 +63,51 @@ namespace UI.Windows.Pages.Social
             _social.WorkPoints += playerPointsValue + prManPointsValue;
         }
 
-        /// <summary>
-        /// Отображает количество сгенерированных очков работы
-        /// </summary>
         private void DisplayWorkPoints()
         {
             workPoints.text = _social.WorkPoints.ToString();
         }
-        
-        /// <summary>
-        /// Обработчик завершения работы
-        /// </summary>
+
         protected override void FinishWork()
         {
-            GetPage(_social.Type).ShowPage(_social);
-            Close();
+            var windowType = _social.Type switch
+            {
+                SocialType.Charity   => WindowType.SocialsResult_Charity,
+                SocialType.Trends    => WindowType.SocialsResult_Trends,
+                SocialType.Eagler    => WindowType.SocialsResult_Eagler,
+                SocialType.Ieyegram  => WindowType.SocialsResult_Ieyegram,
+                SocialType.TackTack  => WindowType.SocialsResult_TackTack,
+                SocialType.Telescope => WindowType.SocialsResult_Telescope,
+                SocialType.Switch    => WindowType.SocialsResult_Switch,
+                _ => throw new RapWayException($"Unknown socials type {_social.Type.ToString()}")
+            };
+            
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = windowType,
+                Context = _social
+            });
         }
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected override int GetDuration()
         {
             return settings.Socials.WorkDuration;
         }
-        
-        /// <summary>
-        /// Возвращает страницу для указанного типа соц. события 
-        /// </summary>
-        private SocialResultPage GetPage(SocialType type) => socialResults[(int) type];
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
-            base.BeforePageOpen();
+            base.BeforeShow();
             
             _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
             prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
-            base.BeforePageClose();
+            base.BeforeHide();
 
             workPoints.text = "0";
             _social = null;
-        }
-
-        protected override void AfterPageClose()
-        {
-            // do nothing, override for prevent banner close
         }
     }
 }

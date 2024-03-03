@@ -1,12 +1,12 @@
+using Core.Context;
 using UI.Windows.GameScreen;
-using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.GameScreen
 {
     /// <summary>
-    /// Страница описания основных характеристик
+    /// Describe main characteristic page
     /// </summary>
     public class StatsDescriptionPage : Page
     {
@@ -14,16 +14,18 @@ namespace UI.GameScreen
         [SerializeField] private Text statName;
         [SerializeField] private Text statDesc;
 
-        /// <summary>
-        /// Показываент описание основной характеристики
-        /// </summary>
-        public void Show(Sprite sprite, string nameKey, string descKey)
+        public override void Show(object ctx = null)
         {
+            var sprite  = ctx.ValueByKey<Sprite>("icon");
+            var nameKey = ctx.ValueByKey<string>("nameKey");
+            var descKey = ctx.ValueByKey<string>("descKey");
+            
+            
             icon.sprite = sprite;
             statName.text = GetLocale(nameKey).ToUpper();
             statDesc.text = GetLocale(descKey);
 
-            Open();
+            base.Show(ctx);
         }
     }
 }

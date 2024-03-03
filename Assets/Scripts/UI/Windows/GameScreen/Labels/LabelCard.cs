@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Labels
+namespace UI.Windows.GameScreen.Labels
 {
     public class LabelCard : MonoBehaviour
     {

@@ -1,23 +1,23 @@
 using System;
 using Core;
+using Core.Context;
 using Extensions;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.Error;
-using UI.Windows.GameScreen;
+using UI.Enums;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Store.Purchase
+namespace UI.Windows.GameScreen.Store.Purchase
 {
     public class StoreItemPurchaseCard : Page
     {
-        private readonly CompositeDisposable _disposable = new();
-        
         [BoxGroup("Purchaser")] [SerializeField] private StoreItemPurchaser _purchaser;
         [BoxGroup("Error")] [SerializeField] private GameError gameError;
         [Space]
@@ -31,29 +31,28 @@ namespace UI.Windows.Pages.Store.Purchase
         [BoxGroup("Card")] [SerializeField] private Image moneyIcon;
         [BoxGroup("Card")] [SerializeField] private Text price;
         [BoxGroup("Card")] [SerializeField] private Button buyButton;
-        [Space]
-        [SerializeField] private StoreItemPurchased purchasedItem;
-        
+
         private GoodInfo _info;
+        private readonly CompositeDisposable _disposable = new();
         
         private void Start()
         {
             buyButton.onClick.AddListener(BuyItemClick);
         }
 
-        public void Show(GoodInfo info)
+        public override void Show(object ctx = null)
         {
-            _info = info;
+            _info = ctx.Value<GoodInfo>();
             
-            icon.sprite = info.SquareImage;
-            itemName.text = info.Name;
-            itemDesc.text = !string.IsNullOrEmpty(info.Desc) ? GetLocale(info.Desc) : "";
+            icon.sprite = _info.SquareImage;
+            itemName.text = _info.Name;
+            itemDesc.text = !string.IsNullOrEmpty(_info.Desc) ? GetLocale(_info.Desc) : "";
 
-            moneyIcon.sprite = GetMoneyIcon(info);
-            price.text = info.Price.GetDisplay();
+            moneyIcon.sprite = GetMoneyIcon(_info);
+            price.text = _info.Price.GetDisplay();
             
             gameError.ForceHide();
-            Open();
+            base.Show(ctx);
         }
 
         private void HandleItemPurchase(bool ok)
@@ -68,15 +67,17 @@ namespace UI.Windows.Pages.Store.Purchase
 
             var newGoodEvent = StoreItemPurchaser.CreateNewGoodEvent(_info);
             MsgBroker.Instance.Publish(newGoodEvent);
-            
-            purchasedItem.Show(_info);
-            Close();
+
+            ShowPurchasedItem();
         }
 
-        private void HandleDonatePurchase()
+        private void ShowPurchasedItem()
         {
-            purchasedItem.Show(_info);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.Shop_PurchasedItem,
+                Context = _info
+            });
         }
 
         private void BuyItemClick()
@@ -120,7 +121,7 @@ namespace UI.Windows.Pages.Store.Purchase
             };
         }
         
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             MsgBroker.Instance
                 .Receive<SpendDonateResponse>()
@@ -132,15 +133,15 @@ namespace UI.Windows.Pages.Store.Purchase
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<DonateAddedMessage>()
-                .Subscribe(_ => HandleDonatePurchase())
+                .Subscribe(_ => ShowPurchasedItem())
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<NoAdsPurchaseMessage>()
-                .Subscribe(_ => HandleDonatePurchase())
+                .Subscribe(_ => ShowPurchasedItem())
                 .AddTo(_disposable);
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             _disposable.Clear();
         }

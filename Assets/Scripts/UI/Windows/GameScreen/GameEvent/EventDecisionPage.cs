@@ -1,3 +1,4 @@
+using Core.Context;
 using Extensions;
 using Game;
 using Game.Player;
@@ -5,42 +6,35 @@ using Game.Player.State.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using ScriptableObjects;
-using UI.Windows.GameScreen;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.GameEvent
+namespace UI.Windows.GameScreen.GameEvent
 {
-    /// <summary>
-    /// Страница, описывающая принятое решение по игровому событию
-    /// </summary>
     public class EventDecisionPage: Page
     {
-        [Header("Поля")]
-        [SerializeField] private Text nameText;
-        [SerializeField] private Text descriptionText;
-
-        [Header("Индикаторы изменения параметров")] 
-        [SerializeField] private Text moneyText;
-        [SerializeField] private Text fansText;
-        [SerializeField] private Text hypeText;
-        [SerializeField] private Text expText;
+        [BoxGroup("Card"), SerializeField] private Text nameText;
+        [BoxGroup("Card"), SerializeField] private Text descriptionText;
+        
+        [BoxGroup("Incomes"), SerializeField] private Text moneyText;
+        [BoxGroup("Incomes"), SerializeField] private Text fansText;
+        [BoxGroup("Incomes"), SerializeField] private Text hypeText;
+        [BoxGroup("Incomes"), SerializeField] private Text expText;
 
         private GameEventDecision _eventDecision;
         
-        /// <summary>
-        /// Функция показа страницы решения по игровому событию
-        /// </summary>
-        public void Show(string eventName, GameEventDecision eventDecision)
+        public override void Show(object ctx = null)
         {
+            var eventName = ctx.ValueByKey<string>("event_name");
+            var eventDecision = ctx.ValueByKey<GameEventDecision>("event_decision");
+            
             nameText.text = GetLocale(eventName);
             _eventDecision = eventDecision;
-            Open();
+           
+            base.Show(ctx);
         }
 
-        /// <summary>
-        /// Применение изменений метрик
-        /// </summary>
         private void SaveResult()
         {
             var income = CalculateIncome(PlayerManager.Data, _eventDecision);
@@ -53,9 +47,6 @@ namespace UI.Windows.Pages.GameEvent
             });
         }
 
-        /// <summary>
-        /// Считает доход игрока
-        /// </summary>
         private static MetricsIncome CalculateIncome(PlayerData playerData, GameEventDecision decision)
         {
             var settings = GameManager.Instance.Settings;
@@ -71,7 +62,7 @@ namespace UI.Windows.Pages.GameEvent
             };
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             descriptionText.text = GetLocale(_eventDecision.Description);
 
@@ -83,7 +74,7 @@ namespace UI.Windows.Pages.GameEvent
             expText.text = income.Exp.ToString();
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             moneyText.text = string.Empty;
             fansText.text = string.Empty;

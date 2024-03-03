@@ -1,9 +1,6 @@
-using UI.Windows.Pages.Track;
+using UI.Windows.GameScreen.Track;
 
-namespace UI.Windows.Pages.Feat
+namespace UI.Windows.GameScreen.Feat
 {
-    /// <summary>
-    /// Страница результатов фита
-    /// </summary>
     public class FeatResultPage : TrackResultPage {}
 }

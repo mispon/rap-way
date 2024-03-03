@@ -8,7 +8,7 @@ using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Training.Tabs.ToneTab
+namespace UI.Windows.GameScreen.Training.Tabs.ToneTab
 {
     /// <summary>
     /// Вкладка изучения новых тематик и стилей

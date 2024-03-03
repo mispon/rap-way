@@ -10,14 +10,14 @@ using Game.Rappers.Desc;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
-using UI.Windows.Pages.Labels;
+using UI.Windows.GameScreen.Labels;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 using RappersAPI =  Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Personal.LabelTab
+namespace UI.Windows.GameScreen.Personal.LabelTab
 {
     public class GameLabelSubTab : Tab
     {
@@ -34,7 +34,7 @@ namespace UI.Windows.Pages.Personal.LabelTab
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
         
-        private List<LabelMemberRow> _listItems = new();
+        private readonly List<LabelMemberRow> _listItems = new();
 
         private void Start()
         {

@@ -1,58 +1,52 @@
 using Core;
+using Core.Context;
 using Game.Player;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
+using UI.Enums;
+using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UI.Windows.Pages.Feat
+namespace UI.Windows.GameScreen.Feat
 {
-    /// <summary>
-    /// Страница работы над фитом
-    /// </summary>
     public class FeatWorkingPage : BaseWorkingPage
     {
-        [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text bitPoints;
-        [SerializeField] private Text textPoints;
+        [BoxGroup("Work Points"), SerializeField] private Text bitPoints;
+        [BoxGroup("Work Points"), SerializeField] private Text textPoints;
 
-        [Header("Команда игрока")]
-        [SerializeField] private WorkPoints playerBitWorkPoints;
-        [SerializeField] private WorkPoints playerTextWorkPoints;
-        [SerializeField] private WorkPoints rapperBitWorkPoints;
-        [SerializeField] private WorkPoints rapperTextWorkPoints;
-        [SerializeField] private Image rapperAvatar;
-        [SerializeField] private Sprite customRapperAvatar;
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerBitWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerTextWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints rapperBitWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints rapperTextWorkPoints;
+        [BoxGroup("Team"), SerializeField] private Image rapperAvatar;
+        [BoxGroup("Team"), SerializeField] private Sprite customRapperAvatar;
 
-        [Header("Страница результата")]
-        [SerializeField] private FeatResultPage featResult;
-        
         private TrackInfo _track;
-        
-        /// <summary>
-        /// Начинает выполнение работы 
-        /// </summary>
-        public override void StartWork(params object[] args)
+
+        public override void Show(object ctx = null)
         {
-            _track = (TrackInfo) args[0];
-            Open();
+            StartWork(ctx);
+            base.Show(ctx);
+        }
+
+        protected override void StartWork(object ctx)
+        {
+            _track = ctx.Value<TrackInfo>();
             RefreshWorkAnims();
         }
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
         protected override void DoDayWork()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
-        
-        /// <summary>
-        /// Генерирует очки работы над треком
-        /// </summary>
+
         private void GenerateWorkPoints()
         {
             var stats = PlayerManager.Data.Stats;
@@ -70,9 +64,6 @@ namespace UI.Windows.Pages.Feat
             _track.TextPoints += textWorkPoints;
         }
 
-        /// <summary>
-        /// Создает рандомное количество очков работы в зависимости от скилла персонажа и тиммейта
-        /// </summary>
         private static int CreateWorkPoints(
             int playerSkill, WorkPoints playerPoints,
             int rapperSkill, WorkPoints rapperPoints
@@ -85,44 +76,38 @@ namespace UI.Windows.Pages.Feat
 
             return playerValue + rapperValue;
         }
-        
-        /// <summary>
-        /// Обновляет значение рабочих очков в интерфейсе
-        /// </summary>
+
         private void DisplayWorkPoints()
         {
             bitPoints.text = _track.BitPoints.ToString();
             textPoints.text = _track.TextPoints.ToString();
         }
 
-        /// <summary>
-        /// Обработчик завершения работы
-        /// </summary>
         protected override void FinishWork()
         {
-            featResult.Show(_track);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.ProductionFeatResult,
+                Context = _track
+            });
         }
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected override int GetDuration()
         {
             return settings.Track.FeatWorkDuration;
         }
         
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
-            base.BeforePageOpen();
+            base.BeforeShow();
             
             bitPoints.text = textPoints.text = "0";
             rapperAvatar.sprite = _track.Feat.IsCustom ? customRapperAvatar : _track.Feat.Avatar;
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
-            base.BeforePageClose();
+            base.BeforeHide();
             _track = null;
         }
     }

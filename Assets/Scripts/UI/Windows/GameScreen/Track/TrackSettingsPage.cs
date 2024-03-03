@@ -10,46 +10,35 @@ using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using Models.Trends;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
+using UI.Enums;
 using UI.GameScreen;
-using UI.Windows.GameScreen;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Core.Events.EventType;
 
-namespace UI.Windows.Pages.Track
+namespace UI.Windows.GameScreen.Track
 {
-    /// <summary>
-    /// Страница настройки трека
-    /// </summary>
     public class TrackSettingsPage : Page
     {
-        [Header("Контроллы")] 
-        [SerializeField] private InputField trackNameInput;
-        [SerializeField] private Carousel styleCarousel;
-        [SerializeField] private Carousel themeCarousel;
-        [SerializeField] private Button startButton;
-        [Space] 
-        [SerializeField] protected Text bitSkill;
-        [SerializeField] protected Text textSkill;
-        [SerializeField] private Image bitmakerAvatar;
-        [SerializeField] private Image textwritterAvatar;
+        [BoxGroup("Controls"), SerializeField] private InputField trackNameInput;
+        [BoxGroup("Controls"), SerializeField] private Carousel styleCarousel;
+        [BoxGroup("Controls"), SerializeField] private Carousel themeCarousel;
+        [BoxGroup("Controls"), SerializeField] private Button startButton;
+        [BoxGroup("Controls"), SerializeField] protected Text bitSkill;
+        [BoxGroup("Controls"), SerializeField] protected Text textSkill;
+        [BoxGroup("Controls"), SerializeField] private Image bitmakerAvatar;
+        [BoxGroup("Controls"), SerializeField] private Image textwritterAvatar;
 
-        [Header("Данные")] 
-        [SerializeField] private ImagesBank imagesBank;
-
-        [Header("Страница разработки")] 
-        [SerializeField]
-        private BaseWorkingPage workingPage;
+        [BoxGroup("Images"), SerializeField] private ImagesBank imagesBank;
         
-        [Header("Страница выбора")] 
-        [SerializeField]
-        private Page productSelectionPage;
-
         protected TrackInfo _track;
 
         private void Start()
@@ -58,35 +47,17 @@ namespace UI.Windows.Pages.Track
             startButton.onClick.AddListener(CreateTrack);
         }
 
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             HintsManager.Instance.ShowHint("tutorial_track_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewTrackSelected);
         }
 
-        public override void Show(object ctx)
-        {
-            base.Show(ctx);
-            Open();
-        }
-
-        public override void Hide()
-        {
-            base.Hide();
-            Close();
-        }
-
-        /// <summary>
-        /// Обработчик ввода названия трека 
-        /// </summary>
         private void OnTrackNameInput(string value)
         {
             _track.Name = value;
         }
 
-        /// <summary>
-        /// Обработчик запуска работы над треком
-        /// </summary>
         private void CreateTrack()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
@@ -102,19 +73,16 @@ namespace UI.Windows.Pages.Track
                 Style = styleCarousel.GetValue<Styles>(),
                 Theme = themeCarousel.GetValue<Themes>()
             };
-
-            if (productSelectionPage != null)
-            {
-                productSelectionPage.Close();
-            }
             
-            workingPage.StartWork(_track);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = _track.Feat == null 
+                    ? WindowType.ProductionTrackWork 
+                    : WindowType.ProductionFeatWork,
+                Context = _track
+            });
         }
 
-        /// <summary>
-        /// Инициализирует карусели актуальными значениями 
-        /// </summary>
         protected void SetupCarousel(PlayerData data)
         {
             var styleProps = data.Styles.Select(ConvertToCarouselProps).ToArray();
@@ -123,9 +91,6 @@ namespace UI.Windows.Pages.Track
             themeCarousel.Init(themeProps);
         }
 
-        /// <summary>
-        /// Отображает состояние членов команды
-        /// </summary>
         private void SetupTeam()
         {
             bitmakerAvatar.sprite = TeamManager.IsAvailable(TeammateType.BitMaker)
@@ -136,9 +101,6 @@ namespace UI.Windows.Pages.Track
                 : imagesBank.TextwritterInactive;
         }
 
-        /// <summary>
-        /// Показывает текущий суммарный скилл команды 
-        /// </summary>
         private void DisplaySkills(PlayerData data)
         {
             int playerBitSkill = data.Stats.Bitmaking.Value;
@@ -154,9 +116,6 @@ namespace UI.Windows.Pages.Track
             textSkill.text = $"{playerTextSkill + textwritterSkill}";
         }
 
-        /// <summary>
-        /// Сбрасывает состояние членов команды и суммарный скилл команды
-        /// </summary>
         private void ResetTeam(object[] args)
         {
             bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
@@ -167,9 +126,6 @@ namespace UI.Windows.Pages.Track
             textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
 
-        /// <summary>
-        /// Конвертирует элемент перечисление в свойство карусели 
-        /// </summary>
         private CarouselProps ConvertToCarouselProps<T>(T value) where T : Enum
         {
             string text = LocalizationManager.Instance.Get(value.GetDescription());
@@ -180,7 +136,7 @@ namespace UI.Windows.Pages.Track
             return new CarouselProps {Text = text, Sprite = icon, Value = value};
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             _track = new TrackInfo();
 
@@ -193,7 +149,7 @@ namespace UI.Windows.Pages.Track
             GameScreenController.Instance.HideProductionGroup();
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             EventManager.RemoveHandler(EventType.UncleSamsParty, ResetTeam);
 

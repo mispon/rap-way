@@ -1,12 +1,11 @@
 using Core;
 using ScriptableObjects;
-using UI.Windows.GameScreen;
 
-namespace UI.Windows.Pages.GameFinish
+namespace UI.Windows.GameScreen.GameFinish
 {
     public class GameFinishPage : Page
     {
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             SoundManager.Instance.PlaySound(UIActionType.GameEnd);
         }

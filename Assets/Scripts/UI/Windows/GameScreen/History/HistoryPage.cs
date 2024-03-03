@@ -2,42 +2,25 @@ using System;
 using System.Linq;
 using Enums;
 using Firebase.Analytics;
-using Game.Player;
+using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.History.HistoryProduction;
+using UI.Windows.GameScreen.History.HistoryProduction;
 using UI.Windows.Tutorial;
 using UnityEngine;
 
-namespace UI.Windows.Pages.History
+namespace UI.Windows.GameScreen.History
 {
-    /// <summary>
-    /// Страница Истории
-    /// </summary>
     public class HistoryPage: Page
     {
-        /// <summary>
-        /// Событие переключения на другой Production
-        /// </summary>
         public event Action<HistoryProductionController> onFoldoutInfoShow = delegate { };
         
-        [Header("Контролы управления Production")] 
-        [SerializeField] private HistoryTrackController trackHistoryController;
-        [SerializeField] private HistoryAlbumController albumHistoryController;
-        [SerializeField] private HistoryClipController clipHistoryController;
-        [SerializeField] private HistoryConcertController concertHistoryController;
-
-        [Header("Контроллер ScrollView")]
-        [SerializeField] private ScrollViewController scrollViewController;
+        [BoxGroup("Controllers"), SerializeField] private HistoryTrackController trackHistoryController;
+        [BoxGroup("Controllers"), SerializeField] private HistoryAlbumController albumHistoryController;
+        [BoxGroup("Controllers"), SerializeField] private HistoryClipController clipHistoryController;
+        [BoxGroup("Controllers"), SerializeField] private HistoryConcertController concertHistoryController;
         
-        protected override void AfterPageOpen()
-        {
-            HintsManager.Instance.ShowHint("tutorial_history");
-        }
+        [BoxGroup("Scroll View"), SerializeField] private ScrollViewController scrollViewController;
         
-        /// <summary>
-        /// Перечисление всех контроллеров UI-элементов определенного типа Production
-        /// </summary>
         private HistoryProductionController[] historyControllers => new HistoryProductionController[]
         {
             trackHistoryController,
@@ -46,18 +29,12 @@ namespace UI.Windows.Pages.History
             concertHistoryController
         };
         
-        /// <summary>
-        /// Вызывает событие переключения на другой Production
-        /// </summary>
         public void ShowInfo(HistoryProductionController productionController)
         {
             onFoldoutInfoShow(productionController);
             RequestDisableElements(productionController);
         }
 
-        /// <summary>
-        /// Деактивация объектов-информации об экземлярах Production
-        /// </summary>
         private void RequestDisableElements(HistoryProductionController requestController)
         {
             foreach (var productionController in historyControllers.Where(hc => hc != requestController))
@@ -66,7 +43,7 @@ namespace UI.Windows.Pages.History
             }
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.HistoryPageOpened);
             
@@ -76,6 +53,11 @@ namespace UI.Windows.Pages.History
             }
             
             trackHistoryController.Show(silent: true);
+        }
+        
+        protected override void AfterShow()
+        {
+            HintsManager.Instance.ShowHint("tutorial_history");
         }
     }
 }

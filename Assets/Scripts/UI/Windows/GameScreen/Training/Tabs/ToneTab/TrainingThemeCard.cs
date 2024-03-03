@@ -3,7 +3,7 @@ using Enums;
 using Game.Player;
 using ScriptableObjects;
 
-namespace UI.Windows.Pages.Training.Tabs.ToneTab
+namespace UI.Windows.GameScreen.Training.Tabs.ToneTab
 {
     /// <summary>
     /// Тренировочная карточка тематики

@@ -14,7 +14,8 @@ using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.Progress;
 using UI.Controls.ScrollViewController;
-using UI.Windows.Pages.Labels;
+using UI.Windows.GameScreen.Labels;
+using UI.Windows.Pages;
 using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
@@ -22,7 +23,7 @@ using UnityEngine.UI;
 using RappersAPI =  Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Personal.LabelTab
+namespace UI.Windows.GameScreen.Personal.LabelTab
 {
     public class PlayersLabelSubTab : Tab
     {

@@ -4,16 +4,18 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game.Labels.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
-using UI.Windows.GameScreen;
+using UI.Enums;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Labels
+namespace UI.Windows.GameScreen.Labels
 {
     public class LabelsPage : Page
     {
@@ -23,8 +25,7 @@ namespace UI.Windows.Pages.Labels
         [Space]
         [SerializeField] private LabelCard labelCard;
         [SerializeField] private Button addNewLabelButton;
-        [SerializeField] private NewLabelPage newLabelPage;
-        
+
         private readonly List<LabelRow> _listItems = new();
         
         private void Start()
@@ -32,14 +33,13 @@ namespace UI.Windows.Pages.Labels
             addNewLabelButton.onClick.AddListener(OpenNewLabelPage);
         }
 
-        private void OpenNewLabelPage()
+        private static void OpenNewLabelPage()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            newLabelPage.Open();
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.NewLabel));
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelsPageOpened);
             
@@ -59,9 +59,6 @@ namespace UI.Windows.Pages.Labels
             list.RepositionElements(_listItems);
         }
 
-        /// <summary>
-        /// Returns all labels (internal and custom) sorted desc by score and prestige
-        /// </summary>
         private static List<LabelInfo> GetAllLabels()
         {
             var labels = LabelsAPI.Instance.GetAll().ToList();
@@ -77,12 +74,12 @@ namespace UI.Windows.Pages.Labels
                 .ToList();
         }
 
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
             HintsManager.Instance.ShowHint("tutorial_labels");
         }
         
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             labelCard.onDelete -= HandleLabelDelete;
             
@@ -93,18 +90,15 @@ namespace UI.Windows.Pages.Labels
             
             _listItems.Clear();
         }
-
-        /// <summary>
-        /// Process custom rapper remove
-        /// </summary>
+        
         private void HandleLabelDelete(LabelInfo customLabel)
         {
             askingWindow.Show(
                 GetLocale("delete_label_question"),
                 () => {
                     LabelsAPI.Instance.RemoveCustom(customLabel);
-                    AfterPageClose();
-                    BeforePageOpen();
+                    AfterHide();
+                    BeforeShow();
                 }
             );
         }

@@ -5,7 +5,7 @@ using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Eagler
+namespace UI.Windows.GameScreen.Eagler
 {
     public class EagleCard: MonoBehaviour, IScrollViewControllerItem
     {

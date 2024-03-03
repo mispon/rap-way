@@ -8,11 +8,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.History.HistoryProduction
+namespace UI.Windows.GameScreen.History.HistoryProduction
 {
-    /// <summary>
-    /// Контроллер UI-элементов. Обрабатывает команду на отображение информации по конкретному Production
-    /// </summary>
     [Serializable]
     public class HistoryProductionController
     {

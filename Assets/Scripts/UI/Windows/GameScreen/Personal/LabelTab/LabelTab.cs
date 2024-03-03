@@ -1,8 +1,9 @@
 ﻿using Game.Player;
+using UI.Windows.Pages;
 using UnityEngine;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Personal.LabelTab
+namespace UI.Windows.GameScreen.Personal.LabelTab
 {
     public class LabelTab : Tab
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using RappersAPI =  Game.Rappers.RappersPackage;
 
-namespace UI.Windows.Pages.Personal.LabelTab
+namespace UI.Windows.GameScreen.Personal.LabelTab
 {
     public class LabelMemberRow : MonoBehaviour, IScrollViewControllerItem
     {

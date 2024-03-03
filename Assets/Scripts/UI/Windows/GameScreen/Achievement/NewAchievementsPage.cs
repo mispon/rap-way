@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Game.Notifications;
-using UI.Windows.GameScreen;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Achievement
+namespace UI.Windows.GameScreen.Achievement
 {
     /// <summary>
     /// Страница получения новой ачивки
@@ -16,7 +15,7 @@ namespace UI.Windows.Pages.Achievement
         /// <summary>
         /// Список пар строк: наименование ачивки и ее описание
         /// </summary>
-        private readonly Queue<string> _achievements = new Queue<string>();
+        private readonly Queue<string> _achievements = new();
 
         /// <summary>
         /// Добавляет новую ачивку в очередь и запускает ее отображение, если страница закрыта
@@ -29,28 +28,28 @@ namespace UI.Windows.Pages.Achievement
             {
                 if (!gameObject.activeSelf)
                 {
-                    Open();
+                    Show();
                 }    
             } catch(MissingReferenceException) {}
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             achievementText.text = _achievements.Dequeue();
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
             NotificationManager.Instance.UnlockIndependentQueue();
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             achievementText.text = string.Empty;
 
             if (_achievements.Count > 0)
             {
-                Open();
+                Show();
             }
         }
     }

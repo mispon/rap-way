@@ -1,16 +1,13 @@
 using Enums;
 using Firebase.Analytics;
-using UI.Windows.GameScreen;
 
-namespace UI.Windows.Pages.ProductSelection {
-    /// <summary>
-    /// Страница выбора активности
-    /// </summary>
+namespace UI.Windows.GameScreen.ProductSelection 
+{
     public class ProductSelectionPage : Page
     {
-        protected override void AfterPageOpen()
+        protected override void AfterShow()
         {
-            base.AfterPageOpen();
+            base.AfterShow();
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ProductionsClick);
         }
     }

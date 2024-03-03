@@ -1,13 +1,11 @@
 using Game.Player;
 using Models.Production;
+using UI.Windows.Pages.Social;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Social.ResultPages
+namespace UI.Windows.GameScreen.Social.ResultPages
 {
-    /// <summary>
-    /// Страница результатов псевдо-твича
-    /// </summary>
     public class SwitchResultPage : SocialResultPage
     {
         [Header("Контролы")]
@@ -16,9 +14,6 @@ namespace UI.Windows.Pages.Social.ResultPages
         [SerializeField] protected Text likes;
         [SerializeField] protected Text hype;
 
-        /// <summary>
-        /// Отображает результаты игрового стрима
-        /// </summary>
         protected override void DisplayResult(SocialInfo info)
         {
             string nickName = PlayerManager.Data.Info.NickName;

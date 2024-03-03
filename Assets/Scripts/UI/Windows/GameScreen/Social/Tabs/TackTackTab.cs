@@ -1,6 +1,7 @@
 using Enums;
 using Game.Player;
 using Models.Production;
+using UI.Windows.GameScreen.Social.Tabs;
 using UnityEngine;
 using UnityEngine.UI;
 

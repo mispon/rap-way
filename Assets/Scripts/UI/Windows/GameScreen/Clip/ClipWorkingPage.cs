@@ -1,56 +1,53 @@
 ﻿using Core;
+using Core.Context;
 using Enums;
 using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
 using Game.Player;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
+using UI.Enums;
+using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Clip
+namespace UI.Windows.GameScreen.Clip
 {
-    /// <summary>
-    /// Страница работы над клипом
-    /// </summary>
     public class ClipWorkingPage : BaseWorkingPage
     {
-        [SerializeField] private Text directorPoints;
-        [SerializeField] private Text operatorPoints;
-
-        [Header("Команда игрока")] 
-        [SerializeField] private WorkPoints playerWorkPoints;
-        [SerializeField] private WorkPoints labelWorkPoints;
-        [SerializeField] private WorkPoints directorWorkPoints;
-        [SerializeField] private WorkPoints operatorWorkPoints;
-        [Space]
-        [SerializeField] private Image labelAvatar;
-        [SerializeField] private GameObject labelFrozen;
+        [BoxGroup("Work Points"), SerializeField] private Text directorPoints;
+        [BoxGroup("Work Points"), SerializeField] private Text operatorPoints;
         
-        [Header("Страница результата")] 
-        [SerializeField] private ClipResultPage clipResult;
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints labelWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints directorWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints operatorWorkPoints;
+        [BoxGroup("Team"), SerializeField] private Image labelAvatar;
+        [BoxGroup("Team"), SerializeField] private GameObject labelFrozen;
 
         private ClipInfo _clip;
         private LabelInfo _label;
 
-        /// <summary>
-        /// Начинает выполнение работы 
-        /// </summary>
-        public override void StartWork(params object[] args)
+        public override void Show(object ctx = null)
+        {
+            StartWork(ctx);
+            base.Show(ctx);
+        }
+
+        protected override void StartWork(object ctx)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateClipClick);
             
-            _clip = (ClipInfo) args[0];
-            Open();
+            _clip = ctx.Value<ClipInfo>();
             RefreshWorkAnims();
         }
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
         protected override void DoDayWork()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
@@ -58,34 +55,25 @@ namespace UI.Windows.Pages.Clip
             DisplayWorkPoints();
         }
 
-        /// <summary>
-        /// Обработчик перехода к странице результата
-        /// </summary>
         private void ShowResultPage()
         {
-            clipResult.Show(_clip);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.ProductionClipResult,
+                Context = _clip
+            });
         }
 
-        /// <summary>
-        /// Обработчик завершения работы
-        /// </summary>
         protected override void FinishWork()
         {
             GameEventsManager.Instance.CallEvent(GameEventType.Clip, ShowResultPage);
         }
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected override int GetDuration()
         {
             return settings.Clip.WorkDuration;
         }
 
-        /// <summary>
-        /// Генерирует очки работы
-        /// </summary>
         private void GenerateWorkPoints()
         {
             var directorPointsValue = Random.Range(1, _clip.DirectorSkill + 2);
@@ -117,18 +105,15 @@ namespace UI.Windows.Pages.Clip
                 _clip.OperatorPoints += labelPoints;
         }
 
-        /// <summary>
-        /// Отображает количество сгенерированных очков работы
-        /// </summary>
         private void DisplayWorkPoints()
         {
             directorPoints.text = _clip.DirectorPoints.ToString();
             operatorPoints.text = _clip.OperatorPoints.ToString();
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
-            base.BeforePageOpen();
+            base.BeforeShow();
             
             if (!string.IsNullOrEmpty(PlayerManager.Data.Label))
             {
@@ -146,9 +131,9 @@ namespace UI.Windows.Pages.Clip
             }
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
-            base.BeforePageClose();
+            base.BeforeHide();
             
             directorPoints.text = "0";
             operatorPoints.text = "0";

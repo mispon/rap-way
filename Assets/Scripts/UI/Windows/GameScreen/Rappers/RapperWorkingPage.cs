@@ -1,37 +1,35 @@
+using System.Collections.Generic;
 using Core;
+using Core.Context;
 using Enums;
 using Game.Player;
 using Game.Player.Team;
 using Game.Rappers.Desc;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
+using UI.Enums;
+using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Rappers
+namespace UI.Windows.GameScreen.Rappers
 {
-    /// <summary>
-    /// Страница переговоров с реальным исполнителем по поводу фита или баттла
-    /// </summary>
     public class RapperWorkingPage : BaseWorkingPage
     {
-        [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text managementPointsLabel;
-        [SerializeField] private Text rapperPointsLabel;
+        [BoxGroup("Work Points"), SerializeField] private Text managementPointsLabel;
+        [BoxGroup("Work Points"), SerializeField] private Text rapperPointsLabel;
 
-        [Header("Персонажи")]
-        [SerializeField] private Image managerAvatar;
-        [SerializeField] private Image rapperAvatar;
-        [SerializeField] private WorkPoints playerWorkPoints;
-        [SerializeField] private WorkPoints managerWorkPoints;
-        [SerializeField] private WorkPoints rapperWorkPoints;
-        [SerializeField] private Sprite customRapperAvatar;
-        [SerializeField] private Text playerHypeBonus;
+        [BoxGroup("Characters"), SerializeField] private Image managerAvatar;
+        [BoxGroup("Characters"), SerializeField] private Image rapperAvatar;
+        [BoxGroup("Characters"), SerializeField] private WorkPoints playerWorkPoints;
+        [BoxGroup("Characters"), SerializeField] private WorkPoints managerWorkPoints;
+        [BoxGroup("Characters"), SerializeField] private WorkPoints rapperWorkPoints;
+        [BoxGroup("Characters"), SerializeField] private Sprite customRapperAvatar;
+        [BoxGroup("Characters"), SerializeField] private Text playerHypeBonus;
 
-        [Header("Страница результата")]
-        [SerializeField] private RapperResultPage rapperResult;
-
-        [Header("Данные")]
-        [SerializeField] private ImagesBank imagesBank;
+        [BoxGroup("Images"), SerializeField] private ImagesBank imagesBank;
 
         private RapperInfo _rapper;
         private ConversationType _convType;
@@ -39,48 +37,48 @@ namespace UI.Windows.Pages.Rappers
         private int _rapperPoints;
         private bool _hasManager;
 
-        /// <summary>
-        /// Начинает выполнение работы 
-        /// </summary>
-        public override void StartWork(params object[] args)
+
+        public override void Show(object ctx = null)
         {
-            _rapper = (RapperInfo) args[0]; 
-            _convType = (ConversationType) args[1];
+            StartWork(ctx);
+            base.Show(ctx);
+        }
+
+        protected override void StartWork(object ctx)
+        {
+            _rapper   = ctx.ValueByKey<RapperInfo>("rapper"); 
+            _convType = ctx.ValueByKey<ConversationType>("conv_type");
             
-            Open();
             RefreshWorkAnims();
         }
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
         protected override void DoDayWork()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             GeneratePlayerWorkPoints();
             GenerateRapperWorkPoints();
         }
-        
-        /// <summary>
-        /// Вызывается при завершении переговоров
-        /// </summary>
+
         protected override void FinishWork()
         {
-            rapperResult.Show(_rapper, _playerPoints, _rapperPoints, _convType);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.RapperConversationsResult,
+                Context = new Dictionary<string, object>
+                {
+                    ["rapper"]        = _rapper,
+                    ["player_points"] = _playerPoints,
+                    ["rapper_points"] = _rapperPoints,
+                    ["conv_type"]     = _convType
+                }
+            });
         }
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected override int GetDuration()
         {
             return settings.Rappers.ConversationDuration;
         }
 
-        /// <summary>
-        /// Генерирует очки работы игрока
-        /// </summary>
         private void GeneratePlayerWorkPoints()
         {
             int playerPoints = Random.Range(1, PlayerManager.Data.Stats.Management.Value + 1);
@@ -97,9 +95,6 @@ namespace UI.Windows.Pages.Rappers
             managementPointsLabel.text = $"{_playerPoints}";
         }
 
-        /// <summary>
-        /// Генерирует очки работы игрока
-        /// </summary>
         private void GenerateRapperWorkPoints()
         {
             int rapperPoints =  Random.Range(1, _rapper.Management + 1);
@@ -108,9 +103,9 @@ namespace UI.Windows.Pages.Rappers
             rapperPointsLabel.text = $"{_rapperPoints}";
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
-            base.BeforePageOpen();
+            base.BeforeShow();
             
             _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
@@ -123,9 +118,9 @@ namespace UI.Windows.Pages.Rappers
             _rapperPoints = 0;
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
-            base.BeforePageClose();
+            base.BeforeHide();
             _rapper = null;
         }
     }

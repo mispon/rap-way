@@ -4,7 +4,7 @@ using Core.OrderedStarter;
 using Enums;
 using Game.Player;
 using ScriptableObjects;
-using UI.Windows.Pages.GameEvent;
+using UI.Windows.GameScreen.GameEvent;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

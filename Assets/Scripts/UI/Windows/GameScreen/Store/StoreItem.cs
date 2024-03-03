@@ -4,23 +4,22 @@ using Enums;
 using Extensions;
 using MessageBroker;
 using MessageBroker.Messages.Player;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
-using UI.Windows.Pages.Store.Purchase;
+using UI.Enums;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Store
+namespace UI.Windows.GameScreen.Store
 {
     public class StoreItem : MonoBehaviour, IScrollViewControllerItem
     {
         private IDisposable _singleDispose;
         private readonly CompositeDisposable _disposable = new();
         
-        [BoxGroup("Card")] [SerializeField] private StoreItemPurchaseCard itemCard;
-        [Space]
         [BoxGroup("Money Icon")] [SerializeField] private Sprite moneySprite;
         [BoxGroup("Money Icon")] [SerializeField] private Sprite donateSprite;
         [BoxGroup("Money Icon")] [SerializeField] private Sprite realMoneySprite;
@@ -47,7 +46,11 @@ namespace UI.Windows.Pages.Store
         private void ShowItemCard()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            itemCard.Show(_info);
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.Shop_ItemCard,
+                Context = _info
+            });
         }
 
         public void Initialize(int i, GoodInfo info)

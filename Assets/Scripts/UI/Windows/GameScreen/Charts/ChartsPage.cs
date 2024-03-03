@@ -1,11 +1,17 @@
 ﻿using Core;
+using Core.Context;
 using ScriptableObjects;
-using UI.Windows.GameScreen;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Charts
+namespace UI.Windows.GameScreen.Charts
 {
+    public enum ChartsTabType 
+    {
+        Rappers,
+        Labels
+    }
+    
     public class ChartsPage : Page
     {
         [SerializeField] private GameObject[] pageControls;
@@ -28,6 +34,24 @@ namespace UI.Windows.Pages.Charts
             labelsTabButton.onClick.AddListener(OpenLabelsTab);
         }
 
+        public override void Show(object ctx = null)
+        {
+            var tab = ctx.Value<ChartsTabType>();
+            switch (tab)
+            {
+                case ChartsTabType.Labels:
+                    OpenLabelsTab();
+                    break;
+                
+                case ChartsTabType.Rappers:
+                default:
+                    OpenRappersTab();
+                    break;
+            }
+            
+            base.Show(ctx);
+        }
+
         public void ShowControls()
         {
             foreach (var go in pageControls)
@@ -44,56 +68,52 @@ namespace UI.Windows.Pages.Charts
             }
         }
 
-        protected override void AfterPageOpen()
-        {
-            ShowControls();
-            base.AfterPageOpen();
-            OpenRappersTab();
-
-            _isFirstOpen = false;
-        }
-
-        protected override void AfterPageClose()
-        {
-            _isFirstOpen = true;
-        }
-
         private void OpenRappersTab()
         {
-            if (rappersTab.IsOpen())
-            {
+            if (rappersTab.IsActive())
                 return;
-            }
-            
             
             UpdateTabsButtons(rappersTabButton, labelsTabButton);
             if (!_isFirstOpen) 
                 SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
-            newRappersPage.Close();
-            labelsTab.Close();
-            rappersTab.Open();
+            newRappersPage.Hide();
+            labelsTab.Hide();
+            rappersTab.Show();
         }
 
         private void OpenLabelsTab()
         {
-            if (labelsTab.IsOpen())
-            {
+            if (labelsTab.IsActive())
                 return;
-            }
             
             UpdateTabsButtons(labelsTabButton, rappersTabButton);
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
      
-            newRappersPage.Close();
-            rappersTab.Close();
-            labelsTab.Open();
+            newRappersPage.Hide();
+            rappersTab.Hide();
+            labelsTab.Show();
         }
 
         private void UpdateTabsButtons(Button active, Button inactive)
         {
             active.image.color = activeTabColor;
             inactive.image.color = inactiveTabColor;
+        }
+        
+        protected override void AfterShow()
+        {
+            ShowControls();
+            
+            base.AfterShow();
+            OpenRappersTab();
+
+            _isFirstOpen = false;
+        }
+
+        protected override void AfterHide()
+        {
+            _isFirstOpen = true;
         }
     }
 }

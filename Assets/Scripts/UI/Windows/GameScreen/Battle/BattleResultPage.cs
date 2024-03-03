@@ -1,3 +1,4 @@
+using Core.Context;
 using Enums;
 using Extensions;
 using Game.Player;
@@ -6,41 +7,43 @@ using Game.Rappers.Desc;
 using Game.Socials.Eagler;
 using MessageBroker;
 using MessageBroker.Messages.Production;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Eagler;
+using Sirenix.OdinInspector;
+using UI.Windows.GameScreen.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Battle
+namespace UI.Windows.GameScreen.Battle
 {
     public class BattleResultPage : Page
     {
-        [SerializeField] private Text resultMessage;
-        [SerializeField] private Text fansIncome;
-        [SerializeField] private Text hypeIncome;
-        [SerializeField] private Text expIncome;
-        [Header("Images")]
-        [SerializeField] private Image playerImage;
-        [SerializeField] private GameObject playerLoseMask;
-        [SerializeField] private Image rapperImage;
-        [SerializeField] private GameObject rapperLoseMask;
-        [Header("Sprites")]
-        [SerializeField] private Sprite playerAvatarMale;
-        [SerializeField] private Sprite playerAvatarFemale;
-        [SerializeField] private Sprite customAvatar;
-        [Space]
-        [SerializeField] private EagleCard[] eagleCards;
+        [BoxGroup("Result"), SerializeField] private Text resultMessage;
+        [BoxGroup("Result"), SerializeField] private Text fansIncome;
+        [BoxGroup("Result"), SerializeField] private Text hypeIncome;
+        [BoxGroup("Result"), SerializeField] private Text expIncome;
+        
+        [BoxGroup("Images"), SerializeField] private Image playerImage;
+        [BoxGroup("Images"), SerializeField] private GameObject playerLoseMask;
+        [BoxGroup("Images"), SerializeField] private Image rapperImage;
+        [BoxGroup("Images"), SerializeField] private GameObject rapperLoseMask;
+        
+        [BoxGroup("Sprites"), SerializeField] private Sprite playerAvatarMale;
+        [BoxGroup("Sprites"), SerializeField] private Sprite playerAvatarFemale;
+        [BoxGroup("Sprites"), SerializeField] private Sprite customAvatar;
+        
+        [BoxGroup("Eagles"), SerializeField] private EagleCard[] eagleCards;
         
         private BattleResult _result;
         
-        /// <summary>
-        /// Открывает страницу результатов
-        /// </summary>
-        public void Show(RapperInfo rapper, int playerPoints, int rapperPoints)
+        public override void Show(object ctx = null)
         {
+            var rapper       = ctx.ValueByKey<RapperInfo>("rapper");
+            var playerPoints = ctx.ValueByKey<int>("playerPoints");
+            var rapperPoints = ctx.ValueByKey<int>("rapperPoints");
+            
             _result = AnalyzeResult(rapper, playerPoints, rapperPoints);
             DisplayResult();
-            Open();
+            
+            base.Show(ctx);
         }
         
         /// <summary>
@@ -121,7 +124,7 @@ namespace UI.Windows.Pages.Battle
             });
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             SaveResult();
             _result = BattleResult.Empty;

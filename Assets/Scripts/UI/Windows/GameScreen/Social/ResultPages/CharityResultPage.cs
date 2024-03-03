@@ -3,20 +3,14 @@ using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Social.ResultPages
+namespace UI.Windows.GameScreen.Social.ResultPages
 {
-    /// <summary>
-    /// Страница результатов пожертвования
-    /// </summary>
     public class CharityResultPage: SocialResultPage
     {
         [Header("Контролы")]
         [SerializeField] private Text message;
         [SerializeField] protected Text hype;
 
-        /// <summary>
-        /// Отображает результаты пожествования
-        /// </summary>
         protected override void DisplayResult(SocialInfo info)
         {
             bool noFondName = string.IsNullOrEmpty(info.AdditionalText);

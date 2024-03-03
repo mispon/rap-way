@@ -3,11 +3,8 @@ using System.Linq;
 using Game.Player;
 using Models.Production;
 
-namespace UI.Windows.Pages.History.HistoryProduction
+namespace UI.Windows.GameScreen.History.HistoryProduction
 {
-    /// <summary>
-    /// Контроллер UI-элементов. Обрабатывает команду на отображение информации по Концертам
-    /// </summary>
     [Serializable]
     public class HistoryConcertController: HistoryProductionController
     {

@@ -1,4 +1,5 @@
-﻿using Enums;
+﻿using Core.Context;
+using Enums;
 using Extensions;
 using Firebase.Analytics;
 using Game.Player;
@@ -8,49 +9,37 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using UI.Windows.GameScreen;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Concert
+namespace UI.Windows.GameScreen.Concert
 {
-    /// <summary>
-    /// Страница результатов концерта
-    /// </summary>
     public class ConcertResultPage : Page
     {
-        [Header("Компоменты")]
-        [SerializeField] private Text placeName;
-        [SerializeField] private Text playerName;
-        [SerializeField] private Text ticketsSold;
-        [SerializeField] private Text ticketCost;
-        [SerializeField] private Text moneyIncome;
-        [SerializeField] private Text expIncome;
-        [SerializeField] private GameObject soldOutBadge;
-
-        [Header("Анализатор концерта")]
-        [SerializeField] private ConcertAnalyzer concertAnalyzer;
-
-        [Header("Катсцена")] 
-        [SerializeField] private ConcertCutscenePage cutscenePage;
+        [BoxGroup("Result"), SerializeField] private Text placeName;
+        [BoxGroup("Result"), SerializeField] private Text playerName;
+        [BoxGroup("Result"), SerializeField] private Text ticketsSold;
+        [BoxGroup("Result"), SerializeField] private Text ticketCost;
+        [BoxGroup("Result"), SerializeField] private Text moneyIncome;
+        [BoxGroup("Result"), SerializeField] private Text expIncome;
+        [BoxGroup("Result"), SerializeField] private GameObject soldOutBadge;
+        
+        [BoxGroup("Cutscene"), SerializeField] private ConcertCutscenePage cutscenePage;
+        [BoxGroup("Analyzer"), SerializeField] private ConcertAnalyzer concertAnalyzer;
         
         private ConcertInfo _concert;
         
-        /// <summary>
-        /// Показывает результаты концерта
-        /// </summary>
-        public void Show(ConcertInfo concert)
+        public override void Show(object ctx = null)
         {
-            _concert = concert;
+            _concert = ctx.Value<ConcertInfo>();
             
-            concertAnalyzer.Analyze(concert);
-            DisplayResult(concert);
-            Open();
+            concertAnalyzer.Analyze(_concert);
+            DisplayResult(_concert);
+            
+            base.Show(ctx);
         }
 
-        /// <summary>
-        /// Отображает результаты концерта 
-        /// </summary>
         private void DisplayResult(ConcertInfo concert)
         {
             placeName.text = concert.LocationName.ToUpper();
@@ -65,10 +54,7 @@ namespace UI.Windows.Pages.Concert
             soldOutBadge.SetActive(concert.TicketsSold >= concert.LocationCapacity);
         }
 
-        /// <summary>
-        /// Сохраняет результаты концерта 
-        /// </summary>
-        private void SaveResult(ConcertInfo concert)
+        private static void SaveResult(ConcertInfo concert)
         {
             concert.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddConcert(concert);
@@ -76,12 +62,12 @@ namespace UI.Windows.Pages.Concert
             MsgBroker.Instance.Publish(new ConcertRewardMessage {MoneyIncome = concert.Income});
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
             cutscenePage.Show(_concert);
         }
 
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ConcertResultShown);
             

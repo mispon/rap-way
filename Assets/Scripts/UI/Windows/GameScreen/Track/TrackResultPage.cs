@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Context;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
@@ -11,51 +12,42 @@ using MessageBroker;
 using MessageBroker.Messages.Production;
 using MessageBroker.Messages.UI;
 using Models.Production;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Eagler;
+using Sirenix.OdinInspector;
+using UI.Windows.GameScreen.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UI.Windows.Pages.Track
+namespace UI.Windows.GameScreen.Track
 {
     public class TrackResultPage : Page
     {
-        [Header("Components")]
-        [SerializeField] private Text listenAmount;
-        [SerializeField] private Text duration;
-        [SerializeField] private Text trackNameLabel;
-        [SerializeField] private Text playerNameLabel;
-        [SerializeField] private Text qualityLabel;
-        [SerializeField] private Text chartInfo;
-        [SerializeField] private Text fansIncome;
-        [SerializeField] private Text moneyIncome;
-        [SerializeField] private Text expIncome;
-        [SerializeField] private GameObject hitBadge;
+        [BoxGroup("Result"), SerializeField] private Text listenAmount;
+        [BoxGroup("Result"), SerializeField] private Text duration;
+        [BoxGroup("Result"), SerializeField] private Text trackNameLabel;
+        [BoxGroup("Result"), SerializeField] private Text playerNameLabel;
+        [BoxGroup("Result"), SerializeField] private Text qualityLabel;
+        [BoxGroup("Result"), SerializeField] private Text chartInfo;
+        [BoxGroup("Result"), SerializeField] private Text fansIncome;
+        [BoxGroup("Result"), SerializeField] private Text moneyIncome;
+        [BoxGroup("Result"), SerializeField] private Text expIncome;
+        [BoxGroup("Result"), SerializeField] private GameObject hitBadge;
 
-        [Header("Fans tweets")]
-        [SerializeField] private EagleCard[] eagleCards;
+        [BoxGroup("Eagles"), SerializeField] private EagleCard[] eagleCards;
+        [BoxGroup("Analyzer"), SerializeField] private TrackAnalyzer trackAnalyzer;
 
-        [Header("Track analyzer")]
-        [SerializeField] private TrackAnalyzer trackAnalyzer;
-
-        private TrackInfo _trackInfo;
+        private TrackInfo _track;
         
-        /// <summary>
-        /// Показывает результат работы над треком
-        /// </summary>
-        public void Show(TrackInfo track)
+        public override void Show(object ctx = null)
         {
-            _trackInfo = track;
+            _track = ctx.Value<TrackInfo>();
             
-            trackAnalyzer.Analyze(track);
-            DisplayResult(track);
-            Open();
+            trackAnalyzer.Analyze(_track);
+            DisplayResult(_track);
+            
+            base.Show(ctx);
         }
 
-        /// <summary>
-        /// Выводит результат работы 
-        /// </summary>
         private void DisplayResult(TrackInfo track)
         {
             var nickname = PlayerManager.Data.Info.NickName;
@@ -95,16 +87,13 @@ namespace UI.Windows.Pages.Track
             }
         }
 
-        private string GetDuration()
+        private static string GetDuration()
         {
             int minutes = Random.Range(1, 6);
             int seconds = Random.Range(10, 60);
             return $"0{minutes}:{seconds}";
         }
 
-        /// <summary>
-        /// Сохраняет результаты трека
-        /// </summary>
         private void SaveResult(TrackInfo track)
         {
             track.Timestamp = TimeManager.Instance.Now.DateToString();
@@ -122,17 +111,14 @@ namespace UI.Windows.Pages.Track
                 Exp = settings.Track.RewardExp
             });
         }
-        
-        /// <summary>
-        /// Выполняется перед закрытием страницы
-        /// </summary>
-        protected override void AfterPageClose()
+
+        protected override void AfterHide()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
             
-            SaveResult(_trackInfo);
-            _trackInfo = null;
+            SaveResult(_track);
+            _track = null;
         }
     }
 }

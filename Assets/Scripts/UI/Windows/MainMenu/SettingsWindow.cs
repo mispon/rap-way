@@ -18,7 +18,7 @@ namespace UI.Windows.MainMenu
 
         private readonly CompositeDisposable _disposable = new();
         
-        public override void Show(object ctx)
+        public override void Show(object ctx = null)
         {
             var settings = GameManager.Instance.GameStats;
             

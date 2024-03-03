@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Context;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
@@ -10,49 +11,43 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using UI.Windows.GameScreen;
-using UI.Windows.Pages.Eagler;
+using Sirenix.OdinInspector;
+using UI.Windows.GameScreen.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UI.Windows.Pages.Album
+namespace UI.Windows.GameScreen.Album
 {
     /// <summary>
     /// Страница результатов альбома
     /// </summary>
     public class AlbumResultPage : Page
     {
-        [Header("Компоменты")]
-        [SerializeField] private Text listenAmount;
-        [SerializeField] private Text songs;
-        [SerializeField] private Text albumNameLabel;
-        [SerializeField] private Text playerNameLabel;
-        [SerializeField] private Text qualityLabel;
-        [SerializeField] private Text chartInfo;
-        [SerializeField] private Text fansIncome;
-        [SerializeField] private Text moneyIncome;
-        [SerializeField] private Text expIncome;
-        [SerializeField] private GameObject hitBadge;
-
-        [Header("Твитты фанатов")]
-        [SerializeField] private EagleCard[] eagleCards;
-
-        [Header("Анализатор альбома")]
-        [SerializeField] private AlbumAnalyzer albumAnalyzer;
-
-        private AlbumInfo _albumInfo;
+        [BoxGroup("Result"), SerializeField] private Text listenAmount;
+        [BoxGroup("Result"), SerializeField] private Text songs;
+        [BoxGroup("Result"), SerializeField] private Text albumNameLabel;
+        [BoxGroup("Result"), SerializeField] private Text playerNameLabel;
+        [BoxGroup("Result"), SerializeField] private Text qualityLabel;
+        [BoxGroup("Result"), SerializeField] private Text chartInfo;
+        [BoxGroup("Result"), SerializeField] private Text fansIncome;
+        [BoxGroup("Result"), SerializeField] private Text moneyIncome;
+        [BoxGroup("Result"), SerializeField] private Text expIncome;
+        [BoxGroup("Result"), SerializeField] private GameObject hitBadge;
         
-        /// <summary>
-        /// Показывает результат 
-        /// </summary>
-        public void Show(AlbumInfo album)
+        [BoxGroup("Eagler"), SerializeField] private EagleCard[] eagleCards;
+        [BoxGroup("Analyzer"), SerializeField] private AlbumAnalyzer albumAnalyzer;
+
+        private AlbumInfo _album;
+        
+        public override void Show(object ctx = null)
         {
-            _albumInfo = album;
+            _album = ctx.Value<AlbumInfo>();
             
-            albumAnalyzer.Analyze(album);
-            DisplayResult(album);
-            Open();
+            albumAnalyzer.Analyze(_album);
+            DisplayResult(_album);
+            
+            base.Show(ctx);
         }
         
         /// <summary>
@@ -107,12 +102,12 @@ namespace UI.Windows.Pages.Album
             });
         }
         
-        protected override void AfterPageClose()
+        protected override void AfterHide()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.AlbumResultShown);
             
-            SaveResult(_albumInfo);
-            _albumInfo = null;
+            SaveResult(_album);
+            _album = null;
         }
     }
 }

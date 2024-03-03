@@ -6,7 +6,7 @@ using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Training.Tabs.SkillsTab
+namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
 {
     /// <summary>
     /// Карточка умения в гриде умений персонажа

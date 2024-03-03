@@ -47,7 +47,7 @@ namespace UI.Windows.Tutorial
                 gameButtons[i].interactable = stageSettings.ButtonsActivity[i];
             }
             
-            Show(new object());
+            Show();
         }
 
         protected override void AfterHide()

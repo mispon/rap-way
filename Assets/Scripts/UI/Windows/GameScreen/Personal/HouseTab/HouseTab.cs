@@ -2,12 +2,11 @@
 using System.Linq;
 using Enums;
 using Game.Player;
-using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Personal.HouseTab
+namespace UI.Windows.GameScreen.Personal.HouseTab
 {
     [Serializable]
     public class HouseSettings

@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Context;
 using Enums;
 using Firebase.Analytics;
 using Game;
@@ -6,96 +7,82 @@ using Game.Labels.Desc;
 using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
+using UI.Enums;
+using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
-namespace UI.Windows.Pages.Concert
+namespace UI.Windows.GameScreen.Concert
 {
-    /// <summary>
-    /// Страница подготовки концерта
-    /// </summary>
     public class ConcertWorkingPage : BaseWorkingPage
     {
-        [Header("Идентификаторы прогресса работы")]
-        [SerializeField] private Text managementPointsLabel;
-        [SerializeField] private Text marketingPointsLabel;
+        [BoxGroup("Work Points"), SerializeField] private Text managementPointsLabel;
+        [BoxGroup("Work Points"), SerializeField] private Text marketingPointsLabel;
 
-        [Header("Команда игрока")] 
-        [SerializeField] private WorkPoints playerManagementWorkPoints;
-        [SerializeField] private WorkPoints playerPrWorkPoints;
-        [SerializeField] private WorkPoints managerWorkPoints;
-        [SerializeField] private WorkPoints prmanWorkPoints;
-        [SerializeField] private WorkPoints labelManagementWorkPoints;
-        [SerializeField] private WorkPoints labelPrWorkPoints;
-        [SerializeField] private Image managerAvatar;
-        [SerializeField] private Image prManAvatar;
-        [SerializeField] private Image labelAvatar;
-        [SerializeField] private GameObject labelFrozen;
-        
-        [Header("Данные")]
-        [SerializeField] private ImagesBank imagesBank;        
-        
-        [Header("Страница результата")] 
-        [SerializeField] private ConcertResultPage concertResult;
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerManagementWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints playerPrWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints managerWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints prmanWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints labelManagementWorkPoints;
+        [BoxGroup("Team"), SerializeField] private WorkPoints labelPrWorkPoints;
+        [BoxGroup("Team"), SerializeField] private Image managerAvatar;
+        [BoxGroup("Team"), SerializeField] private Image prManAvatar;
+        [BoxGroup("Team"), SerializeField] private Image labelAvatar;
+        [BoxGroup("Team"), SerializeField] private GameObject labelFrozen;
+
+        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;        
 
         private ConcertInfo _concert;
         private bool _hasManager;
         private bool _hasPrMan;
         private LabelInfo _label;
 
-        /// <summary>
-        /// Начинает выполнение работы 
-        /// </summary>
-        public override void StartWork(params object[] args)
+        public override void Show(object ctx = null)
+        {
+            StartWork(ctx);
+            base.Show(ctx);
+        }
+
+        protected override void StartWork(object ctx)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateConcertClick);
             
-            _concert = (ConcertInfo) args[0];
-            Open();
+            _concert = ctx.Value<ConcertInfo>();
             RefreshWorkAnims();
         }
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
         protected override void DoDayWork()
         {
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
 
-        /// <summary>
-        /// Обработчик перехода к странице результата
-        /// </summary>
         private void ShowResultPage()
         {
-            concertResult.Show(_concert);
-            Close();
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.ProductionConcertResult,
+                Context = _concert
+            });
         }
 
-        /// <summary>
-        /// Обработчик завершения работы
-        /// </summary>
         protected override void FinishWork()
         {
             GameEventsManager.Instance.CallEvent(GameEventType.Concert, ShowResultPage);
         }
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected override int GetDuration()
         {
             return settings.Concert.WorkDuration;
         }
 
-        /// <summary>
-        /// Генерирует очки работы по организации концерта
-        /// </summary>
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
@@ -107,9 +94,6 @@ namespace UI.Windows.Pages.Concert
             _concert.MarketingPoints += prPoints;
         }
 
-        /// <summary>
-        /// Создает очки работы менеджмента
-        /// </summary>
         private int CreateManagementPoints(PlayerData data)
         {
             var playersManagementPoints = Random.Range(1, data.Stats.Management.Value + 2);
@@ -132,9 +116,6 @@ namespace UI.Windows.Pages.Concert
             return playersManagementPoints + managerPoints + labelPoints;
         }
 
-        /// <summary>
-        /// Создает очки работы маркетинга
-        /// </summary>
         private int CreatePrPoints(PlayerData data)
         {
             var playersMarketingPoints = Random.Range(1, data.Stats.Marketing.Value + 2);
@@ -157,18 +138,15 @@ namespace UI.Windows.Pages.Concert
             return playersMarketingPoints + prManPoints + labelPoints;
         }
 
-        /// <summary>
-        /// Отображает очки работы по организации концерта
-        /// </summary>
         private void DisplayWorkPoints()
         {
             managementPointsLabel.text = _concert.ManagementPoints.ToString();
             marketingPointsLabel.text = _concert.MarketingPoints.ToString();
         }
 
-        protected override void BeforePageOpen()
+        protected override void BeforeShow()
         {
-            base.BeforePageOpen();
+            base.BeforeShow();
             
             _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
             _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
@@ -192,9 +170,9 @@ namespace UI.Windows.Pages.Concert
             }
         }
 
-        protected override void BeforePageClose()
+        protected override void BeforeHide()
         {
-            base.BeforePageClose();
+            base.BeforeHide();
 
             managementPointsLabel.text = "0";
             marketingPointsLabel.text = "0";

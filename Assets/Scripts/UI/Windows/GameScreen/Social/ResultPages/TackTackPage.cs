@@ -1,12 +1,10 @@
 using Models.Production;
+using UI.Windows.Pages.Social;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Social.ResultPages
+namespace UI.Windows.GameScreen.Social.ResultPages
 {
-    /// <summary>
-    /// Страница результатов псевдо-тиктока
-    /// </summary>
     public class TackTackPage: SocialResultPage
     {
         private static readonly int Type = Animator.StringToHash("Type");
@@ -17,10 +15,7 @@ namespace UI.Windows.Pages.Social.ResultPages
         [Space]
         [SerializeField] protected Text likes;
         [SerializeField] protected Text hype;
-        
-        /// <summary>
-        /// Отображает результаты тик-тока
-        /// </summary>
+
         protected override void DisplayResult(SocialInfo info)
         {
             animator.SetInteger(Type, info.ModeIndex);

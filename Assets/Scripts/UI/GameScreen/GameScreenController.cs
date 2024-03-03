@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core;
 using Core.OrderedStarter;
 using Enums;
@@ -12,6 +13,7 @@ using MessageBroker.Messages.UI;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
 using UI.Enums;
 using UniRx;
 using UnityEngine;
@@ -20,41 +22,31 @@ using UnityEngine.UI;
 namespace UI.GameScreen
 {
     /// <summary>
-    /// Контроллер главного окна игры
+    /// Main game screen controller
     /// </summary>
     public class GameScreenController: Singleton<GameScreenController>, IStarter
     {
-        private readonly CompositeDisposable _disposable = new();
+        [BoxGroup("HUD"), SerializeField] private Image playerAvatar;
+        [BoxGroup("HUD"), SerializeField] private Text playerNickname;
+        [BoxGroup("HUD"), SerializeField] private Text playerFans;
+        [BoxGroup("HUD"), SerializeField] private Text playerMoney;
+        [BoxGroup("HUD"), SerializeField] private Text playerHype;
+        [BoxGroup("HUD"), SerializeField] private Text currentDate;
+        [BoxGroup("HUD"), SerializeField] private Button moneyButton;
+        [BoxGroup("HUD"), SerializeField] private Button fansButton;
+        [BoxGroup("HUD"), SerializeField] private Button hypeButton;
+        [BoxGroup("HUD"), SerializeField] private StatDescItem[] statDescItems;
         
-        [Header("HUD контроллы")]
-        [SerializeField] private Image playerAvatar;
-        [SerializeField] private Text playerNickname;
-        [SerializeField] private Text playerFans;
-        [SerializeField] private Text playerMoney;
-        [SerializeField] private Text playerHype;
-        [SerializeField] private Text currentDate;
-        [Space]
-        [SerializeField] private Button moneyButton;
-        [SerializeField] private Button fansButton;
-        [SerializeField] private Button hypeButton;
-        [Space]
-        [SerializeField] private StatDescItem[] statDescItems;
-        [SerializeField] private StatsDescriptionPage statsDescPage;
+        [BoxGroup("Actions"), SerializeField] private Button productionFoldoutButton;
+        [BoxGroup("Actions"), SerializeField] private Animation foldoutAnimation;
+        [BoxGroup("Actions"), SerializeField] private string foldoutShowAnim;
+        [BoxGroup("Actions"), SerializeField] private string foldoutHideAnim;
 
-        [Header("Иконки аватара")]
-        [SerializeField] private Sprite maleIcon;
-        [SerializeField] private Sprite femaleIcon;
+        [BoxGroup("Other"), SerializeField] private ImagesBank imagesBank;
+        [BoxGroup("Other"), SerializeField] private Button mainMenuButton;
         
-        [Header("Группа основных действий")]
-        [SerializeField] private Button productionFoldoutButton;
-        [SerializeField] private Animation foldoutAnimation;
-        [SerializeField] private string foldoutShowAnim;
-        [SerializeField] private string foldoutHideAnim;
-
-        [Space]
-        [SerializeField] private Button mainMenuButton;
-
         private bool _productionShown;
+        private readonly CompositeDisposable _disposable = new();
         
         public void OnStart()
         {
@@ -101,10 +93,19 @@ namespace UI.GameScreen
         /// <summary>
         /// Открывает страницу с описанием основной характеристики
         /// </summary>
-        private void ShowDescriptionPage(StatDescItem item)
+        private static void ShowDescriptionPage(StatDescItem item)
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            statsDescPage.Show(item.Icon, item.NameKey, item.DescKey);
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.StatsDesc,
+                Context = new Dictionary<string, object>
+                {
+                    ["icon"] = item.Icon,
+                    ["nameKey"] = item.NameKey,
+                    ["descKey"] = item.DescKey,
+                }
+            });
         }
         
         /// <summary>
@@ -113,7 +114,7 @@ namespace UI.GameScreen
         private void UpdateHUD(FullStateResponse resp)
         {
             playerNickname.text = resp.NickName.ToUpper();
-            playerAvatar.sprite = resp.Gender == Gender.Male ? maleIcon : femaleIcon;
+            playerAvatar.sprite = resp.Gender == Gender.Male ? imagesBank.MaleAvatar : imagesBank.FemaleAvatar;
             playerMoney.text = resp.Money.GetMoney();
             playerFans.text = resp.Fans.GetDisplay();
             playerHype.text = resp.Hype.ToString();

@@ -1,18 +1,15 @@
 using Enums;
 using Firebase.Analytics;
 using Game.Player;
-using Game.Socials;
 using Game.Socials.Eagler;
 using Game.Time;
 using Models.Production;
+using UI.Windows.Pages.Social;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Windows.Pages.Social.ResultPages
+namespace UI.Windows.GameScreen.Social.ResultPages
 {
-    /// <summary>
-    /// Страница результата псевдо-твиттера
-    /// </summary>
     public class EaglerResultPage: SocialResultPage
     {
         [Header("Контролы")]
@@ -22,10 +19,7 @@ namespace UI.Windows.Pages.Social.ResultPages
         [Space]
         [SerializeField] protected Text likes;
         [SerializeField] protected Text hype;
-
-        /// <summary>
-        /// Отображает результат твита
-        /// </summary>
+   
         protected override void DisplayResult(SocialInfo info)
         {
             var nn = PlayerManager.Data.Info.NickName;

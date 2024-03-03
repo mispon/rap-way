@@ -1,18 +1,18 @@
+using System.Collections.Generic;
 using Core;
 using Core.Localization;
 using Core.OrderedStarter;
 using Game;
 using MessageBroker;
 using MessageBroker.Messages.UI;
-using UI.Windows.Pages.Hints;
+using UI.Enums;
+using UI.Windows.GameScreen.Hints;
 using UnityEngine;
 
 namespace UI.Windows.Tutorial
 {
     public class HintsManager : Singleton<HintsManager>, IStarter
     {
-        [SerializeField] private HintsPage page;
-        
         public void OnStart()
         {
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
@@ -25,7 +25,16 @@ namespace UI.Windows.Tutorial
                 return;
 
             var info = LocalizationManager.Instance.Get(key);
-            page.Show(key, info);
+            
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.Hints,
+                Context = new Dictionary<string, object>
+                {
+                    ["hint_key"]  = key, 
+                    ["hint_text"] = info 
+                }
+            });
         }
     }
 }
