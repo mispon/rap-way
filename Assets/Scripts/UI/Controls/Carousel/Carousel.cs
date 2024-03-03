@@ -28,7 +28,7 @@ namespace UI.Controls.Carousel
         private CarouselItem[] _items;
         private IDisposable _disposable;
         
-        private void Awake()
+        private void Start()
         {
             leftArrow.onClick.AddListener(() => OnArrowClicked(-1));
             rightArrow.onClick.AddListener(() => OnArrowClicked(1));

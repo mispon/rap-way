@@ -1,3 +1,4 @@
+using System;
 using Core.Context;
 using Enums;
 using Firebase.Analytics;
@@ -9,7 +10,13 @@ namespace UI.Windows.GameScreen.Hints
     public class HintsPage : Page
     {
         [SerializeField] private Text info;
-        
+        [SerializeField] private Button okBtn;
+
+        private void Start()
+        {
+            okBtn.onClick.AddListener(() => base.Hide());
+        }
+
         public override void Show(object ctx = null)
         {
             var key      = ctx.ValueByKey<string>("hint_key");
