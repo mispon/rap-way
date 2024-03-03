@@ -19,7 +19,6 @@ using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Controls.Money;
 using UI.Enums;
-using UI.GameScreen;
 using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
@@ -168,7 +167,6 @@ namespace UI.Windows.GameScreen.Concert
             OnPlaceChanged(0);
 
             EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
-            GameScreenController.Instance.HideProductionGroup();
         }
         
         protected override void AfterShow()

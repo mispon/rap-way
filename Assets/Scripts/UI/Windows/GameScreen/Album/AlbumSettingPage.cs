@@ -170,7 +170,6 @@ namespace UI.Windows.GameScreen.Album
             DisplaySkills(data);
 
             EventManager.AddHandler(EventType.UncleSamsParty, DropTeam);
-            GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterHide()

@@ -11,6 +11,8 @@ using Game.Rappers.Desc;
 using Game.Settings;
 using Game.Socials.Eagler;
 using Game.Time;
+using MessageBroker;
+using MessageBroker.Messages.Game;
 using Models.Game;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
@@ -71,6 +73,7 @@ namespace Game
             await GetComponent<UnityServicesInitializer>().Initialize();
             
             IsReady = true;
+            MsgBroker.Instance.Publish(new GameReadyMessage());
         }
 
         public string GetStoreURL()

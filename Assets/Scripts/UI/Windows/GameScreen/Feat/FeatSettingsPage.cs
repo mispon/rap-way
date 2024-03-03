@@ -4,7 +4,6 @@ using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Models.Production;
 using Sirenix.OdinInspector;
-using UI.GameScreen;
 using UI.Windows.GameScreen.Track;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,8 +44,6 @@ namespace UI.Windows.GameScreen.Feat
             
             SetupCarousel(PlayerManager.Data);
             DisplaySkills(PlayerManager.Data);
-            
-            GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterHide()

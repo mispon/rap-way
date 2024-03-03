@@ -8,9 +8,6 @@ using UnityEngine.EventSystems;
 
 namespace Game.Effects
 {
-    /// <summary>
-    /// Эффект открытия нового тиммейта
-    /// </summary>
     public class NewItemEffect : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private SpriteRenderer itemAvatar;
@@ -20,10 +17,7 @@ namespace Game.Effects
         [SerializeField] private GameObject haloLight;
         
         private event Action onClose = () => {};
-        
-        /// <summary>
-        /// Показывает эффект 
-        /// </summary>
+
         public void Show(Sprite avatar, [CanBeNull] Action callback)
         {
             CanvasController.SetActive(false);
@@ -36,9 +30,6 @@ namespace Game.Effects
             effect.Play();
         }
 
-        /// <summary>
-        /// Обработчик клика 
-        /// </summary>
         public void OnPointerClick(PointerEventData eventData)
         {
             CanvasController.SetActive(true);

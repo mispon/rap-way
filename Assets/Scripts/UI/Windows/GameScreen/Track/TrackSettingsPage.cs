@@ -18,7 +18,6 @@ using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Enums;
-using UI.GameScreen;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
@@ -146,7 +145,6 @@ namespace UI.Windows.GameScreen.Track
             DisplaySkills(data);
 
             EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
-            GameScreenController.Instance.HideProductionGroup();
         }
 
         protected override void AfterHide()

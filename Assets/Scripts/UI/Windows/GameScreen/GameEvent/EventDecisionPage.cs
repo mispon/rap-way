@@ -21,9 +21,16 @@ namespace UI.Windows.GameScreen.GameEvent
         [BoxGroup("Incomes"), SerializeField] private Text fansText;
         [BoxGroup("Incomes"), SerializeField] private Text hypeText;
         [BoxGroup("Incomes"), SerializeField] private Text expText;
+        
+        [BoxGroup("Buttons"), SerializeField] private Button continueBtn;
 
         private GameEventDecision _eventDecision;
-        
+
+        private void Start()
+        {
+            continueBtn.onClick.AddListener(() => base.Hide());
+        }
+
         public override void Show(object ctx = null)
         {
             var eventName = ctx.ValueByKey<string>("event_name");

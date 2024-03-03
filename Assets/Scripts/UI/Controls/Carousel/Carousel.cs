@@ -1,21 +1,21 @@
 ﻿using System;
 using Core;
+using MessageBroker;
+using MessageBroker.Messages.Game;
 using ScriptableObjects;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Controls.Carousel
 {
-    /// <summary>
-    /// Слайдер карусель 
-    /// </summary>
     public class Carousel : MonoBehaviour
     {
-        [Header("Стрелочки переключения элементов")]
+        [Header("Arrows")]
         [SerializeField] private Button leftArrow;
         [SerializeField] private Button rightArrow;
 
-        [Header("Настройки карусели")]
+        [Header("Settings")]
         [SerializeField] private Transform itemsContainer;
         [SerializeField] private CarouselItem itemPrefab;
         [SerializeField] private CarouselProps[] props;
@@ -26,23 +26,21 @@ namespace UI.Controls.Carousel
 
         private int _index;
         private CarouselItem[] _items;
-
+        private IDisposable _disposable;
+        
         private void Awake()
         {
             leftArrow.onClick.AddListener(() => OnArrowClicked(-1));
             rightArrow.onClick.AddListener(() => OnArrowClicked(1));
-            
-            if (onAwake) Init();
-        }
 
-        /// <summary>
-        /// Инициализация карусели
-        /// </summary>
+            if (onAwake) 
+                _disposable = MsgBroker.Instance
+                    .Receive<GameReadyMessage>()
+                    .Subscribe(_ => Init());
+        }
+        
         private void Init() => Init(props);
 
-        /// <summary>
-        /// Инициализация карусели
-        /// </summary>
         public void Init(CarouselProps[] itemProps)
         {
             Clear();
@@ -62,33 +60,16 @@ namespace UI.Controls.Carousel
             UpdateItems();
         }
 
-        /// <summary>
-        /// Возвращает текущий индекс
-        /// </summary>
-        public int Index => _index;
-
-        /// <summary>
-        /// Возвращает значение активного элемента 
-        /// </summary>
         public T GetValue<T>() => _items[_index].GetValue<T>();
 
-        /// <summary>
-        /// Возвращает текстовое значение элемента 
-        /// </summary>
         public string GetLabel() => _items[_index].GetLabel();
 
-        /// <summary>
-        /// Напрямую устанавливает новый индекс
-        /// </summary>
         public void SetIndex(int index)
         {
             _index = index;
             OnArrowClicked(0, silent: true);
         }
-        
-        /// <summary>
-        /// Напрямую устанавливает новый индекс по текстовому значению
-        /// </summary>
+
         public void SetIndex(string label)
         {
             int index = 0;
@@ -104,9 +85,6 @@ namespace UI.Controls.Carousel
             }
         }
 
-        /// <summary>
-        /// Очищает карусель
-        /// </summary>
         private void Clear()
         {
             if (_items == null)
@@ -116,32 +94,25 @@ namespace UI.Controls.Carousel
                 Destroy(item.gameObject);
         }
 
-        /// <summary>
-        /// Обработчик нажатия по элементу
-        /// </summary>
         private void onElementClicked()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             onClick.Invoke(_index);
         }
 
-        /// <summary>
-        /// Обработчик переключения элемента 
-        /// </summary>
         private void OnArrowClicked(int direction, bool silent = false)
         {
             if (!silent)
                 SoundManager.Instance.PlaySound(UIActionType.Switcher);
             
             _index += direction;
+            
             ClampIndex();
             UpdateItems();
+            
             onChange.Invoke(_index);
         }
 
-        /// <summary>
-        /// Обрабатывает граничные значения индекса
-        /// </summary>
         private void ClampIndex()
         {
             if (_index < 0)
@@ -151,15 +122,17 @@ namespace UI.Controls.Carousel
                 _index = 0;
         }
 
-        /// <summary>
-        /// Обновляет состояние элементов
-        /// </summary>
         private void UpdateItems()
         {
             for (var i = 0; i < _items.Length; i++)
             {
                 _items[i].gameObject.SetActive(i == _index);
             }
+        }
+
+        private void OnDestroy()
+        {
+            _disposable?.Dispose();
         }
     }
 } 

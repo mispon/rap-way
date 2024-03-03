@@ -145,8 +145,6 @@ namespace UI.Windows.GameScreen.Clip
 
             OnDirectorChange(0);
             OnOperatorChange(0);
-
-            GameScreenController.Instance.HideProductionGroup();
         }
         
         protected override void AfterShow()
