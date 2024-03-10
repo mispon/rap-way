@@ -6,7 +6,6 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
@@ -22,6 +21,7 @@ using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Core.Events.EventType;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Track
 {
@@ -46,7 +46,7 @@ namespace UI.Windows.GameScreen.Track
             startButton.onClick.AddListener(CreateTrack);
         }
 
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_track_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewTrackSelected);
@@ -120,7 +120,7 @@ namespace UI.Windows.GameScreen.Track
             bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = imagesBank.TextwritterInactive;
 
-            var playerStats = PlayerManager.Data.Stats;
+            var playerStats = PlayerAPI.Data.Stats;
             bitSkill.text = $"{playerStats.Bitmaking.Value}";
             textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
@@ -135,14 +135,13 @@ namespace UI.Windows.GameScreen.Track
             return new CarouselProps {Text = text, Sprite = icon, Value = value};
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             _track = new TrackInfo();
-
-            var data = PlayerManager.Data;
-            SetupCarousel(data);
+            
+            SetupCarousel(PlayerAPI.Data);
             SetupTeam();
-            DisplaySkills(data);
+            DisplaySkills(PlayerAPI.Data);
 
             EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
         }

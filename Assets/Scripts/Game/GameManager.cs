@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Core;
 using Core.Data;
 using Core.Localization;
@@ -14,7 +15,6 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Game;
 using Models.Game;
-using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -62,8 +62,6 @@ namespace Game
         
         [BoxGroup("Eagles")]    public List<Eagle> Eagles;
         [BoxGroup("Tutorials")] public HashSet<string> ShowedHints;
-        
-        [NonSerialized] public bool IsReady;
 
         private async void Start()
         {
@@ -72,7 +70,7 @@ namespace Game
             
             await GetComponent<UnityServicesInitializer>().Initialize();
             
-            IsReady = true;
+            await Task.Delay(500);
             MsgBroker.Instance.Publish(new GameReadyMessage());
         }
 

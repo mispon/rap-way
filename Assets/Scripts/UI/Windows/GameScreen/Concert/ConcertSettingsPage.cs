@@ -6,7 +6,6 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using Game;
-using Game.Player;
 using Game.Player.Team;
 using Game.Production;
 using MessageBroker;
@@ -24,6 +23,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Core.Events.EventType;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Concert
 {
@@ -126,7 +126,7 @@ namespace UI.Windows.GameScreen.Concert
         
         private void CheckConcertConditions(int fansRequirement)
         {
-            bool canStart = PlayerManager.Data.Fans >= fansRequirement;
+            bool canStart = PlayerAPI.Data.Fans >= fansRequirement;
             canStart &= _lastAlbums.Any();
             
             bool hasCooldown = GameManager.Instance.GameStats.ConcertCooldown > 0;
@@ -144,7 +144,7 @@ namespace UI.Windows.GameScreen.Concert
             ticketCost.text = $"{cost.GetMoney()}";
         }
         
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             _concert = new ConcertInfo();
             CacheLastAlbums();
@@ -169,7 +169,7 @@ namespace UI.Windows.GameScreen.Concert
             EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
         }
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_concert_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
@@ -193,7 +193,7 @@ namespace UI.Windows.GameScreen.Concert
         
         private void CacheLastAlbums()
         {
-            var albums = PlayerManager.Data.History.AlbumList
+            var albums = PlayerAPI.Data.History.AlbumList
                 .Where(e => e.ConcertAmounts < 3)
                 .OrderByDescending(e => e.Id)
                 .Take(MAX_ALBUMS_COUNT);

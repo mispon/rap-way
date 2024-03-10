@@ -10,6 +10,7 @@ using Models.Game;
 using ScriptableObjects;
 using UI.Controls.Error;
 using UI.Enums;
+using UI.Windows.GameScreen.Charts;
 using UnityEngine;
 using UnityEngine.UI;
 using LabelsAPI = Game.Labels.LabelsPackage;
@@ -47,7 +48,7 @@ namespace UI.Windows.GameScreen.Labels
             prestigeBtnRight.onClick.AddListener(PrestigeBtnRightClick);
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
             
@@ -151,7 +152,7 @@ namespace UI.Windows.GameScreen.Labels
         private static void BackButtonClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Previous));
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Charts, ChartsTabType.Labels));
         }
         
         private static void HighlightError(Component component)

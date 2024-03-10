@@ -28,7 +28,7 @@ namespace UI.Windows.GameScreen.Store
 
         private readonly List<StoreCategoryItem> _categoryItems = new();
         
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
@@ -49,7 +49,7 @@ namespace UI.Windows.GameScreen.Store
             ShowCategoriesList();
         }
 
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             _categoryItems[0].ShowItems(true);
         }

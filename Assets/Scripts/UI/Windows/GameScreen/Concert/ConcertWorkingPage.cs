@@ -4,7 +4,6 @@ using Enums;
 using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
-using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using MessageBroker;
@@ -17,6 +16,7 @@ using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Concert
@@ -87,8 +87,8 @@ namespace UI.Windows.GameScreen.Concert
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
             
-            int managerPoints = CreateManagementPoints(PlayerManager.Data);
-            int prPoints = CreatePrPoints(PlayerManager.Data);
+            int managerPoints = CreateManagementPoints(PlayerAPI.Data);
+            int prPoints = CreatePrPoints(PlayerAPI.Data);
 
             _concert.ManagementPoints += managerPoints;
             _concert.MarketingPoints += prPoints;
@@ -144,9 +144,9 @@ namespace UI.Windows.GameScreen.Concert
             marketingPointsLabel.text = _concert.MarketingPoints.ToString();
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
-            base.BeforeShow();
+            base.BeforeShow(ctx);
             
             _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
             _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
@@ -154,9 +154,9 @@ namespace UI.Windows.GameScreen.Concert
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
             prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
             
-            if (!string.IsNullOrEmpty(PlayerManager.Data.Label))
+            if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
             {
-                _label = LabelsAPI.Instance.Get(PlayerManager.Data.Label);
+                _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
             }
 
             if (_label != null)

@@ -1,16 +1,13 @@
 using Enums;
 using Extensions;
 using Game;
-using Game.Player;
 using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Social.Tabs
 {
-    /// <summary>
-    /// Вкладка пожертвований
-    /// </summary>
     public class CharityTab : BaseSocialsTab
     {
         [SerializeField] private InputField messageInput;
@@ -26,19 +23,13 @@ namespace UI.Windows.GameScreen.Social.Tabs
         {
             amountSlider.onValueChanged.AddListener(SetAmount);
         }
-
-        /// <summary>
-        /// Обработчик изменения величины пожертвования 
-        /// </summary>
+        
         private void SetAmount(float value)
         {
             _amount = (int) value;
             amountLabel.text = _amount.GetMoney();
         }
-
-        /// <summary>
-        /// Возвращает информацию соц. действия 
-        /// </summary>
+        
         protected override SocialInfo GetInfo()
         {
             return new SocialInfo
@@ -49,39 +40,30 @@ namespace UI.Windows.GameScreen.Social.Tabs
                 CharityAmount = _amount
             };
         }
-
-        /// <summary>
-        /// Вызывается при открытии вкладки
-        /// </summary>
+        
         protected override void OnOpen()
         {
             SetSliderBorders();
 
             SetAmount(amountSlider.minValue);
-            balance.text = $"{PlayerManager.Data.Money.GetMoney()}";
+            balance.text = $"{PlayerAPI.Data.Money.GetMoney()}";
             fondInput.text = string.Empty;
             messageInput.text = string.Empty;
             
             base.OnOpen();
         }
 
-        /// <summary>
-        /// Проверяет условия запуска соц. действия
-        /// </summary>
         protected override bool CheckStartConditions()
         {
             var settings = GameManager.Instance.Settings.Socials;
             
             bool noCooldown = base.CheckStartConditions();
-            return noCooldown && PlayerManager.Data.Money >= settings.MinBalanceForCharity;
+            return noCooldown && PlayerAPI.Data.Money >= settings.MinBalanceForCharity;
         }
 
-        /// <summary>
-        /// Устанавливает предельные границы пожертвования
-        /// </summary>
         private void SetSliderBorders()
         {
-            int money = PlayerManager.Data.Money;
+            int money = PlayerAPI.Data.Money;
 
             int min = 0;
             int max = 0;

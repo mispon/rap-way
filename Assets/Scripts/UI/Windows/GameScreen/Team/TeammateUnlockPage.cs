@@ -2,7 +2,8 @@ using Core.Context;
 using Core.Localization;
 using Extensions;
 using Game.Player.Team.Desc;
-using Game.Time;
+using MessageBroker;
+using MessageBroker.Messages.Time;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,16 +26,14 @@ namespace UI.Windows.GameScreen.Team
             base.Show(ctx);
         }
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
-            // todo: send msg
-            TimeManager.Instance.SetFreezed(true);
+            MsgBroker.Instance.Publish(new TimeFreezeMessage {IsFreezed = true});
         }
 
         protected override void BeforeHide()
         {
-            // todo: send msg
-            TimeManager.Instance.SetFreezed(false);
+            MsgBroker.Instance.Publish(new TimeFreezeMessage {IsFreezed = false});
         }
     }
 }

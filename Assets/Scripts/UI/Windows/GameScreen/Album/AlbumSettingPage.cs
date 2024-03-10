@@ -6,7 +6,6 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
@@ -18,11 +17,11 @@ using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Enums;
-using UI.GameScreen;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 using EventType = Core.Events.EventType;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Album
 {
@@ -50,23 +49,17 @@ namespace UI.Windows.GameScreen.Album
             startButton.onClick.AddListener(CreateAlbum);
         }
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_album_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewAlbumSelected);
         }
 
-        /// <summary>
-        /// Обработчик ввода названия альбома 
-        /// </summary>
         private void OnAlbumNameInput(string value)
         {
             _album.Name = value;
         }
 
-        /// <summary>
-        /// Обработчик запуска работы над треком
-        /// </summary>
         private void CreateAlbum()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
@@ -92,9 +85,6 @@ namespace UI.Windows.GameScreen.Album
             Hide();
         }
 
-        /// <summary>
-        /// Инициализирует карусели актуальными значениями 
-        /// </summary>
         private void SetupCarousel(PlayerData data)
         {
             var styleProps = data.Styles.Select(ConvertToCarouselProps).ToArray();
@@ -103,9 +93,6 @@ namespace UI.Windows.GameScreen.Album
             themeCarousel.Init(themeProps);
         }
 
-        /// <summary>
-        /// Конвертирует элемент перечисление в свойство карусели 
-        /// </summary>
         private CarouselProps ConvertToCarouselProps<T>(T value) where T : Enum
         {
             string text = LocalizationManager.Instance.Get(value.GetDescription());
@@ -116,9 +103,6 @@ namespace UI.Windows.GameScreen.Album
             return new CarouselProps {Text = text, Sprite = icon, Value = value};
         }
 
-        /// <summary>
-        /// Отображает состояние членов команды
-        /// </summary>
         private void SetupTeam()
         {
             bitmakerAvatar.sprite = TeamManager.IsAvailable(TeammateType.BitMaker)
@@ -129,9 +113,6 @@ namespace UI.Windows.GameScreen.Album
                 : imagesBank.TextwritterInactive;
         }
 
-        /// <summary>
-        /// Показывает текущий суммарный скилл команды 
-        /// </summary>
         private void DisplaySkills(PlayerData data)
         {
             int playerBitSkill = data.Stats.Bitmaking.Value;
@@ -147,27 +128,23 @@ namespace UI.Windows.GameScreen.Album
             textSkill.text = $"{playerTextSkill + textwritterSkill}";
         }
 
-        /// <summary>
-        /// Сбрасывает состояние членов команды и суммарный скилл команды
-        /// </summary>
         private void DropTeam(object[] args)
         {
             bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = imagesBank.TextwritterInactive;
 
-            var playerStats = PlayerManager.Data.Stats;
+            var playerStats = PlayerAPI.Data.Stats;
             bitSkill.text = $"{playerStats.Bitmaking.Value}";
             textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
         
-        protected override void BeforeHide()
+        protected override void BeforeShow(object ctx = null)
         {
             _album = new AlbumInfo();
-
-            var data = PlayerManager.Data;
-            SetupCarousel(data);
+            
+            SetupCarousel(PlayerAPI.Data);
             SetupTeam();
-            DisplaySkills(data);
+            DisplaySkills(PlayerAPI.Data);
 
             EventManager.AddHandler(EventType.UncleSamsParty, DropTeam);
         }

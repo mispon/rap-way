@@ -14,7 +14,7 @@ namespace UI.Windows.MainMenu
 
         private IDisposable _disposable;
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             _disposable = reviewButton
                 .OnClickAsObservable()

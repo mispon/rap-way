@@ -5,9 +5,8 @@ namespace UI.Windows.GameScreen.ProductSelection
 {
     public class ProductSelectionPage : Page
     {
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
-            base.AfterShow();
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.ProductionsClick);
         }
     }

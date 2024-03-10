@@ -1,7 +1,7 @@
 using System;
-using Game.Player;
 using Models.Production;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Production.Analyzers
 {
@@ -30,7 +30,7 @@ namespace Game.Production.Analyzers
         /// </summary>
         private float CalculateCharityQuality(int workPoints, int charityAmount)
         {
-            float maxCharity = PlayerManager.Data.Money / 10f;
+            float maxCharity = PlayerAPI.Data.Money / 10f;
             float charityImpact = settings.Socials.CharitySizeImpact * (charityAmount / maxCharity);
 
             float workPointsImpact = 1f - settings.Socials.CharitySizeImpact;

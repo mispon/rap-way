@@ -4,14 +4,13 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using Game.Labels.Desc;
-using Game.Player;
 using Models.Game;
 using ScriptableObjects;
 using UI.Controls.Error;
-using UI.Windows.Pages;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Personal.LabelTab
@@ -39,7 +38,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         {
             labelNameInput.text = "";
             
-            int fans = PlayerManager.Data.Fans;
+            int fans = PlayerAPI.Data.Fans;
             bool canCreateLabel = fans >= fansRequirement;
 
             createLabelGroup.SetActive(canCreateLabel);
@@ -88,7 +87,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             };
             LabelsAPI.Instance.CreatePlayersLabel(label);
             
-            PlayerManager.Data.Label = labelName;
+            PlayerAPI.Data.Label = labelName;
             labelTab.Reload();
         }
         

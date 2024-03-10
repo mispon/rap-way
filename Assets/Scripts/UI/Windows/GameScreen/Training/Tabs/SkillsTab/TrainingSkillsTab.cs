@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Enums;
-using Game.Player;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
 {    
@@ -27,9 +27,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
 
         private List<TrainingSkillCard> _skillCards;
 
-        /// <summary>
-        /// Инициализация вкладки
-        /// </summary>
         public override void Init()
         {
             var skills = (Skills[]) Enum.GetValues(typeof(Skills));
@@ -47,12 +44,9 @@ namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
             }
         }
 
-        /// <summary>
-        /// Вызывается при открытии
-        /// </summary>
         protected override void OnOpen()
         {
-            bool expEnough = PlayerManager.Data.Exp >= skillCost;
+            bool expEnough = PlayerAPI.Data.Exp >= skillCost;
                 
             foreach (var card in _skillCards)
             {
@@ -60,13 +54,10 @@ namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
             }
         }
 
-        /// <summary>
-        /// Обработчик изучения нового умения
-        /// </summary>
         private void OnLearnSkill(Skills skill)
         {
             SoundManager.Instance.PlaySound(UIActionType.Unlock);
-            PlayerManager.Data.Skills.Add(skill);
+            PlayerAPI.Data.Skills.Add(skill);
             onStartTraining.Invoke(() => skillCost);
         }
 

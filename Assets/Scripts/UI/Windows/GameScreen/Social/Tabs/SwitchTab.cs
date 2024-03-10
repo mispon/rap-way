@@ -5,16 +5,10 @@ using UnityEngine.UI;
 
 namespace UI.Windows.GameScreen.Social.Tabs
 {
-    /// <summary>
-    /// Вкладка псевдо-твича
-    /// </summary>
     public class SwitchTab : BaseSocialsTab
     {
         [SerializeField] private InputField input;
 
-        /// <summary>
-        /// Возвращает информацию соц. действия 
-        /// </summary>
         protected override SocialInfo GetInfo()
         {
             return new SocialInfo

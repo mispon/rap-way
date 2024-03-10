@@ -1,10 +1,10 @@
 using Core;
-using Game.Player;
 using Game.Player.Team.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
 {
@@ -23,9 +23,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
         [Tooltip("Требуемый опыт для увеличения уровня")]
         [SerializeField] private int[] expToLevelUp;
 
-        /// <summary>
-        /// Инициализация вкладки
-        /// </summary>
         public override void Init()
         {
             foreach (var teammateCard in teammatesCards)
@@ -35,25 +32,19 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             }
         }
 
-        /// <summary>
-        /// Вызывается при открытии
-        /// </summary>
         protected override void OnOpen()
         {
-            var teammates = PlayerManager.Data.Team.TeammatesArray;
+            var teammates = PlayerAPI.Data.Team.TeammatesArray;
 
             for (int i = 0; i < teammatesCards.Length; i++)
             {
                 var member = teammates[i];
-                bool expEnough = PlayerManager.Data.Exp >= trainingCost;
+                bool expEnough = PlayerAPI.Data.Exp >= trainingCost;
                 
                 teammatesCards[i].Setup(member, expEnough, expToLevelUp[member.Skill.Value]);
             }
         }
-
-        /// <summary>
-        /// Добавляет очки опыта 
-        /// </summary>
+        
         private void AddExp(Teammate teammate)
         {
             bool isLevelUp = false;
@@ -72,9 +63,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             onStartTraining.Invoke(() => trainingCost);
         }
         
-        /// <summary>
-        /// Выдает зарплату указанному тиммейту 
-        /// </summary>
         private void GivePayment(Teammate teammate, int salary)
         {
             MsgBroker.Instance.Publish(new ChangeMoneyMessage {Amount = -salary});

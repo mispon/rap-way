@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Core;
 using Core.Context;
 using Enums;
-using Game.Player;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -13,6 +12,7 @@ using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Battle
 {
@@ -84,7 +84,7 @@ namespace UI.Windows.GameScreen.Battle
 
         private void GenerateWorkPoints()
         {
-            int playerPoints = Random.Range(1, PlayerManager.Data.Stats.Vocobulary.Value + 2);
+            int playerPoints = Random.Range(1, PlayerAPI.Data.Stats.Vocobulary.Value + 2);
             playerWorkPoints.Show(playerPoints);
             playerPoints += GenerateSkillsPoints();
             _playerPoints += playerPoints;
@@ -98,7 +98,7 @@ namespace UI.Windows.GameScreen.Battle
         {
             int GeneratePoint(Skills skill, WorkPoints workPoints)
             {
-                if (!PlayerManager.Data.Skills.Contains(skill) || Random.Range(0, 100) > skillChance)
+                if (!PlayerAPI.Data.Skills.Contains(skill) || Random.Range(0, 100) > skillChance)
                     return 0;
 
                 var value = Random.Range(1, 6);
@@ -127,7 +127,7 @@ namespace UI.Windows.GameScreen.Battle
             void DisplayIfAvailable(Skills skill, WorkPoints workPoint)
             {
                 var icon = workPoint.transform.parent.GetComponent<Image>();
-                icon.enabled = PlayerManager.Data.Skills.Contains(skill);
+                icon.enabled = PlayerAPI.Data.Skills.Contains(skill);
             }
 
             DisplayIfAvailable(Skills.DoubleTime, doubleTimePoint);
@@ -137,9 +137,11 @@ namespace UI.Windows.GameScreen.Battle
             DisplayIfAvailable(Skills.Flip, flipPoint);
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
-            playerName.text = PlayerManager.Data.Info.NickName.ToUpper();
+            base.BeforeShow(ctx);
+            
+            playerName.text = PlayerAPI.Data.Info.NickName.ToUpper();
             rapperName.text = _rapper.Name;
 
             _playerPoints = _rapperPoints = 0;
@@ -148,7 +150,7 @@ namespace UI.Windows.GameScreen.Battle
 
             DisplayAvailableSkills();
 
-            playerAvatar.sprite = PlayerManager.Data.Info.Gender == Gender.Male
+            playerAvatar.sprite = PlayerAPI.Data.Info.Gender == Gender.Male
                 ? imagesBank.MaleAvatar
                 : imagesBank.FemaleAvatar;
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;

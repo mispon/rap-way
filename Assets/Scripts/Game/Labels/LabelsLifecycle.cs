@@ -1,13 +1,13 @@
 using System.Linq;
 using Game.Labels.Desc;
 using Game.Notifications;
-using Game.Player;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Enums;
 using UnityEngine;
 using RappersAPI = Game.Rappers.RappersPackage;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Labels
 {
@@ -178,17 +178,17 @@ namespace Game.Labels
         /// </summary>
         private void InvitePlayerToLabel()
         {
-            if (PlayerManager.Data.Label != "")
+            if (PlayerAPI.Data.Label != "")
                 // already in label
                 return;
 
-            if (PlayerManager.Data.Fans < 50_000)
+            if (PlayerAPI.Data.Fans < 50_000)
             {
                 // too low count of fans
                 return;
             }
 
-            var rapper = new RapperInfo {Fans = PlayerManager.Data.Fans, IsPlayer = true}; 
+            var rapper = new RapperInfo {Fans = PlayerAPI.Data.Fans, IsPlayer = true}; 
             float prestige = RappersAPI.GetRapperPrestige(rapper);
             
             var labels = GetAll()

@@ -1,8 +1,7 @@
-using Game.Player;
 using Models.Production;
-using UI.Windows.Pages.Social;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Social.ResultPages
 {
@@ -16,7 +15,7 @@ namespace UI.Windows.GameScreen.Social.ResultPages
 
         protected override void DisplayResult(SocialInfo info)
         {
-            string nickName = PlayerManager.Data.Info.NickName;
+            string nickName = PlayerAPI.Data.Info.NickName;
             streamName.text = $"\"{info.MainText}\" by {nickName}";
 
             likes.text = info.Likes.ToString();

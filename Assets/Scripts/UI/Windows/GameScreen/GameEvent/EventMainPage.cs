@@ -67,7 +67,7 @@ namespace UI.Windows.GameScreen.GameEvent
             Decide(decisionTypes[Random.Range(0, decisionTypes.Length)]);
         }
         
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             nameText.text = GetLocale(_eventInfo.Name);
             descriptionText.text = GetLocale(_eventInfo.Description);

@@ -3,7 +3,6 @@ using Core.Context;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Socials.Eagler;
@@ -15,6 +14,7 @@ using Sirenix.OdinInspector;
 using UI.Windows.GameScreen.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Clip
 {
@@ -54,7 +54,7 @@ namespace UI.Windows.GameScreen.Clip
             expIncome.text = $"+{settings.Clip.RewardExp}";
 
             clipNameLabel.text = ProductionManager.GetTrackName(clip.TrackId);
-            playerNameLabel.text = PlayerManager.Data.Info.NickName;
+            playerNameLabel.text = PlayerAPI.Data.Info.NickName;
             qualityLabel.text = $"{Convert.ToInt32(clip.Quality * 100)}%";
             
             views.text = clip.Views.GetDisplay();

@@ -1,6 +1,5 @@
 using System;
 using Core.OrderedStarter;
-using Game.Player;
 using Game.Settings;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
@@ -26,14 +25,14 @@ namespace Game
 
         private void OnFansChanged(int value)
         {
-            if (PlayerManager.Data.FinishPageShowed)
+            if (GameManager.Instance.PlayerData.FinishPageShowed)
                 return;
             
             
             if (value >= settings.Player.MaxFans)
             {
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameFinish));
-                PlayerManager.Data.FinishPageShowed = true;
+                GameManager.Instance.PlayerData.FinishPageShowed = true;
             }
         }
 

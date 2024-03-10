@@ -4,7 +4,6 @@ using Core;
 using Enums;
 using Firebase.Analytics;
 using Game;
-using Game.Player;
 using Game.Player.Team;
 using Game.Rappers.Desc;
 using MessageBroker;
@@ -14,8 +13,9 @@ using ScriptableObjects;
 using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
-using RappersAPI =  Game.Rappers.RappersPackage;
-using LabelsAPI = Game.Labels.LabelsPackage;
+using PlayerAPI  = Game.Player.PlayerPackage;
+using RappersAPI = Game.Rappers.RappersPackage;
+using LabelsAPI  = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Rappers
 {
@@ -137,7 +137,7 @@ namespace UI.Windows.GameScreen.Rappers
         {
             if (info.IsPlayer)
             {
-                return PlayerManager.Data.Info.Gender == Gender.Male
+                return PlayerAPI.Data.Info.Gender == Gender.Male
                     ? playerMaleImage
                     : playerFemaleImage;
             }
@@ -150,7 +150,7 @@ namespace UI.Windows.GameScreen.Rappers
         /// </summary>
         private void CheckPlayerManager()
         {
-            var manager = PlayerManager.Data.Team.Manager;
+            var manager = PlayerAPI.Data.Team.Manager;
 
             bool canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
             battleButton.interactable = canInteract;
@@ -163,11 +163,11 @@ namespace UI.Windows.GameScreen.Rappers
 
         private void CheckPlayersLabel()
         {
-            var manager = PlayerManager.Data.Team.Manager;
+            var manager = PlayerAPI.Data.Team.Manager;
             
             bool canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
 
-            var labelInfo = LabelsAPI.Instance.Get(PlayerManager.Data.Label);
+            var labelInfo = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
             if (labelInfo is {IsPlayer: true, IsFrozen: false})
             {
                 float prestige = RappersAPI.GetRapperPrestige(_rapper);

@@ -1,15 +1,11 @@
 using Enums;
-using Game.Player;
 using Models.Production;
-using UI.Windows.GameScreen.Social.Tabs;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
-namespace UI.Windows.Pages.Social.Tabs
+namespace UI.Windows.GameScreen.Social.Tabs
 {
-    /// <summary>
-    /// Вкладка псевдо-тиктока
-    /// </summary>
     public class TackTackTab : BaseSocialsTab
     {
         [SerializeField] private InputField input;
@@ -28,18 +24,12 @@ namespace UI.Windows.Pages.Social.Tabs
             memeButton.onClick.AddListener(() => ChangeMode(2));
         }
 
-        /// <summary>
-        /// Обработчик изменения мода 
-        /// </summary>
         private void ChangeMode(int index)
         {
             _modeIndex = index;
             SetButtonSelected(index);
         }
 
-        /// <summary>
-        /// Устанавливает цвет выделенной кнопки 
-        /// </summary>
         private void SetButtonSelected(int index)
         {
             challengeButton.interactable = index != 0;
@@ -47,9 +37,6 @@ namespace UI.Windows.Pages.Social.Tabs
             memeButton.interactable = index != 2;
         }
         
-        /// <summary>
-        /// Возвращает информацию соц. действия 
-        /// </summary>
         protected override SocialInfo GetInfo()
         {
             return new SocialInfo
@@ -60,14 +47,11 @@ namespace UI.Windows.Pages.Social.Tabs
             };
         }
         
-        /// <summary>
-        /// Вызывается при открытии вкладки
-        /// </summary>
         protected override void OnOpen()
         {
             base.OnOpen();
             ChangeMode(0);
-            hashtag.text = $"#{PlayerManager.Data.Info.NickName}";
+            hashtag.text = $"#{PlayerAPI.Data.Info.NickName}";
             input.text = string.Empty;
         }
     }

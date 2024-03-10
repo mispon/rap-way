@@ -1,11 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Enums;
 using Game;
 using MessageBroker;
+using MessageBroker.Messages.Game;
 using MessageBroker.Messages.Player;
 using ScriptableObjects;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
@@ -27,11 +28,12 @@ namespace UI.Windows.GameScreen.Store.Purchase
         [SerializeField] private GoodsData data;
         
         private IStoreController _controller;
+        private IDisposable _disposable;
 
         private readonly Dictionary<string, DonateCoins> _coinItemsMap = new();
         private NoAds _noAdsItem;
         
-        private IEnumerator Start()
+        private void Start()
         {
             var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
@@ -53,8 +55,12 @@ namespace UI.Windows.GameScreen.Store.Purchase
                 }
             }
 
-            yield return new WaitUntil(() => GameManager.Instance.IsReady);
-            UnityPurchasing.Initialize(this, builder);
+            _disposable = MsgBroker.Instance
+                .Receive<GameReadyMessage>()
+                .Subscribe(_ =>
+                {
+                    UnityPurchasing.Initialize(this, builder);        
+                });
         }
 
         public static StoreItemType GetStoreItemType(GoodInfo item)
@@ -174,5 +180,10 @@ namespace UI.Windows.GameScreen.Store.Purchase
         }
 
         #endregion
+
+        private void OnDestroy()
+        {
+            _disposable?.Dispose();
+        }
     }
 }

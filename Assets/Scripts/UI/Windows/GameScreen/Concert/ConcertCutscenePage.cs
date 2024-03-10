@@ -1,11 +1,11 @@
 using System.Linq;
 using Enums;
 using Extensions;
-using Game.Player;
 using Models.Production;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Concert
 {
@@ -35,18 +35,12 @@ namespace UI.Windows.GameScreen.Concert
             skipButton.onClick.AddListener(base.Hide);
         }
 
-        /// <summary>
-        /// Открытие страницы с передачей информации о проведенном концерте
-        /// </summary>
         public void Show(ConcertInfo concert)
         {
             _concert = concert;
             base.Show();
         }
 
-        /// <summary>
-        /// Влючаем нужную анимацию в зависимости от заполненности зала 
-        /// </summary>
         private void FillDanceFloor()
         {
             var occupancyRatio = _concert.TicketsSold / (float) _concert.LocationCapacity;
@@ -57,9 +51,9 @@ namespace UI.Windows.GameScreen.Concert
             flexingGraphic.SetUpStatesOrder(flexingStates.Take(maxFlexingAnimationIndex + 1).ToArray());
         }
 
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
-            var gender = PlayerManager.Data.Info.Gender;
+            var gender = PlayerAPI.Data.Info.Gender;
             maleCharacter.gameObject.SetActive(gender == Gender.Male);
             femaleCharacter.gameObject.SetActive(gender == Gender.Female);
             

@@ -1,5 +1,6 @@
 using System;
-using System.Collections.Generic;
+using MessageBroker;
+using MessageBroker.Messages.Game;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using Sirenix.OdinInspector;
@@ -12,22 +13,28 @@ namespace UI.Base
     {
         [SerializeField] private UIElementContainer[] containers;
 
-        private readonly CompositeDisposable _disposables = new();
+        private readonly CompositeDisposable _disposable = new();
 
         private void Start()
         {
-            foreach (var container in containers)
-                container.Initialize();
+            MsgBroker.Instance
+                .Receive<GameReadyMessage>()
+                .Subscribe(_ =>
+                {
+                    foreach (var container in containers)
+                        container.Initialize();
+                })
+                .AddTo(_disposable);
             
             SceneMessageBroker.Instance
                 .Receive<SceneLoadMessage>()
                 .Subscribe(msg => Dispose())
-                .AddTo(_disposables);
+                .AddTo(_disposable);
         }
 
         public void Dispose()
         {
-            _disposables?.Dispose();
+            _disposable?.Dispose();
             
             foreach (var container in containers)
                 container.Dispose();

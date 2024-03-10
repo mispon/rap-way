@@ -7,6 +7,7 @@ using Core.OrderedStarter;
 using Extensions;
 using MessageBroker;
 using MessageBroker.Messages.Time;
+using UniRx;
 using UnityEngine;
 
 namespace Game.Time
@@ -31,6 +32,8 @@ namespace Game.Time
         private WaitForSeconds _waitForSecondsActive;
         private WaitForSeconds _waitForSecondsInactive;
 
+        private readonly CompositeDisposable _disposable;
+        
         public void OnStart()
         {
             _waitForSecondsActive = new WaitForSeconds(actionInterval);
@@ -38,37 +41,21 @@ namespace Game.Time
 
             Now = GameManager.Instance.GameStats.Now.StringToDate();
             _timer = StartCoroutine(TickCoroutine());
+
+            MsgBroker.Instance
+                .Receive<TimeFreezeMessage>()
+                .Subscribe(e => _freezed = e.IsFreezed)
+                .AddTo(_disposable);
+            MsgBroker.Instance
+                .Receive<TimeActionModeMessage>()
+                .Subscribe(e =>
+                {
+                    _hasAction = e.HasAction;
+                    RestartTimer();
+                })
+                .AddTo(_disposable);
         }
 
-        /// <summary>
-        /// Устанавливает режим работы игрока
-        /// </summary>
-        public void SetActionMode()
-        {
-            _hasAction = true;
-            RestartTimer();
-        }
-
-        /// <summary>
-        /// Устанавливает режим бездействия игрока
-        /// </summary>
-        public void ResetActionMode()
-        {
-            _hasAction = false;
-            RestartTimer();
-        }
-
-        /// <summary>
-        /// Устанавливает состояние заморозки времени 
-        /// </summary>
-        public void SetFreezed(bool state)
-        {
-            _freezed = state;
-        }
-        
-        /// <summary>
-        /// Корутина игрового течения времени
-        /// </summary>
         private IEnumerator TickCoroutine()
         {
             while (true)
@@ -78,10 +65,7 @@ namespace Game.Time
                 Tick();
             }
         }
-
-        /// <summary>
-        /// Обработчик завершения одного игрового дня 
-        /// </summary>
+        
         private void Tick()
         {
             Now = Now.AddDays(1);
@@ -102,10 +86,7 @@ namespace Game.Time
 
         private bool IsWeekLeft() => Now.DayOfWeek == DayOfWeek.Monday;
         private bool IsMonthLeft() => Now.Day == 1;
-
-        /// <summary>
-        /// Перезапускает корутину таймера
-        /// </summary>
+        
         private void RestartTimer()
         {
             StopCoroutine(_timer);
@@ -114,7 +95,10 @@ namespace Game.Time
         
         private void OnDestroy()
         {
-            StopCoroutine(_timer);
+            if (_timer != null)
+                StopCoroutine(_timer);   
+            
+            _disposable?.Clear();
         }
     }
 }

@@ -11,6 +11,7 @@ using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Player.Team
 {
@@ -34,7 +35,7 @@ namespace Game.Player.Team
             if (lockedTeammates.Length == 0)
                 return;
 
-            int fans = PlayerManager.Data.Fans;
+            int fans = PlayerPackage.Data.Fans;
             var lockedTeammate = lockedTeammates.FirstOrDefault(e => GetInfo(e.Type).FansToUnlock <= fans);
 
             if (lockedTeammate != null)
@@ -46,7 +47,7 @@ namespace Game.Player.Team
         /// </summary>
         public Teammate[] GetTeammates(Func<Teammate, bool> predicate)
         {
-            return PlayerManager.Data.Team.TeammatesArray
+            return PlayerAPI.Data.Team.TeammatesArray
                 .Where(predicate)
                 .ToArray();
         }
@@ -56,7 +57,7 @@ namespace Game.Player.Team
         /// </summary>
         public static bool IsAvailable(TeammateType type)
         {
-            var teammate = PlayerManager.Data.Team.TeammatesArray
+            var teammate = PlayerAPI.Data.Team.TeammatesArray
                 .First(e => e.Type == type);
             
             return teammate.IsEmpty == false && teammate.HasPayment;

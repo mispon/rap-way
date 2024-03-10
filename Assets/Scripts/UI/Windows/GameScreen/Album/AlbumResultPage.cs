@@ -3,7 +3,6 @@ using Core.Context;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Socials.Eagler;
@@ -16,6 +15,7 @@ using UI.Windows.GameScreen.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Album
 {
@@ -55,7 +55,7 @@ namespace UI.Windows.GameScreen.Album
         /// </summary>
         private void DisplayResult(AlbumInfo album)
         {
-            var nickname = PlayerManager.Data.Info.NickName;
+            var nickname = PlayerAPI.Data.Info.NickName;
 
             albumNameLabel.text = album.Name;
             playerNameLabel.text = nickname;

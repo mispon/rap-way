@@ -4,7 +4,6 @@ using Core;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Player;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
@@ -15,11 +14,11 @@ using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Controls.Money;
 using UI.Enums;
-using UI.GameScreen;
 using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Clip
 {
@@ -122,7 +121,7 @@ namespace UI.Windows.GameScreen.Clip
             price.SetValue(fullPrice.ToUpper());
         }
         
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             _clip = new ClipInfo();
 
@@ -147,7 +146,7 @@ namespace UI.Windows.GameScreen.Clip
             OnOperatorChange(0);
         }
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_clip_page");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
@@ -167,7 +166,7 @@ namespace UI.Windows.GameScreen.Clip
         
         private void CacheLastTracks()
         {
-            var tracks = PlayerManager.Data.History.TrackList
+            var tracks = PlayerAPI.Data.History.TrackList
                 .OrderByDescending(e => e.Id)
                 .Where(e => !e.HasClip)
                 .Take(TRACKS_CACHE);

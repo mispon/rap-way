@@ -1,12 +1,12 @@
 using Core.Localization;
 using Enums;
-using Game.Player;
 using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UI.Base;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.Tutorial
 {
@@ -22,7 +22,7 @@ namespace UI.Windows.Tutorial
 
         private readonly CompositeDisposable _disposable = new();
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             foreach (var gameBtn in gameButtons)
             {
@@ -34,7 +34,7 @@ namespace UI.Windows.Tutorial
 
         public void ShowTutorial(TutorialStageSettings stageSettings)
         {
-            var playerInfo = PlayerManager.Data.Info;
+            var playerInfo = PlayerAPI.Data.Info;
             
             nickname.text = playerInfo.NickName;
             playerIcon.sprite = playerInfo.Gender == Gender.Male

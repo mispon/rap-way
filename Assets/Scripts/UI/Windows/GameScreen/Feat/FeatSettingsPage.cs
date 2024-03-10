@@ -1,5 +1,4 @@
 using Core.Context;
-using Game.Player;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Models.Production;
@@ -7,6 +6,7 @@ using Sirenix.OdinInspector;
 using UI.Windows.GameScreen.Track;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Feat
 {
@@ -35,15 +35,15 @@ namespace UI.Windows.GameScreen.Feat
             textSkill.text = $"{playerTextSkill + rapperTextSkill}";
         }
         
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             _track = new TrackInfo {Feat = _rapper};
 
             rapperName.text = _rapper.Name;
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
             
-            SetupCarousel(PlayerManager.Data);
-            DisplaySkills(PlayerManager.Data);
+            SetupCarousel(PlayerAPI.Data);
+            DisplaySkills(PlayerAPI.Data);
         }
 
         protected override void AfterHide()

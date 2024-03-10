@@ -3,10 +3,10 @@ using Core.Context;
 using Enums;
 using Firebase.Analytics;
 using Game.Labels.Desc;
-using Game.Player;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Contracts
 {
@@ -29,12 +29,12 @@ namespace UI.Windows.GameScreen.Contracts
 
         public override void Show(object ctx = null)
         {
-            if (PlayerManager.Data.Label != "")
+            if (PlayerAPI.Data.Label != "")
                 return;
 
             var label = ctx.Value<LabelInfo>();
             
-            string playerNickname = PlayerManager.Data.Info.NickName;
+            string playerNickname = PlayerAPI.Data.Info.NickName;
             _labelName = label.Name;
             
             logo.sprite = label.Logo;
@@ -55,7 +55,7 @@ namespace UI.Windows.GameScreen.Contracts
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
-            PlayerManager.Data.Label = _labelName;
+            PlayerAPI.Data.Label = _labelName;
             base.Hide();
         }
 

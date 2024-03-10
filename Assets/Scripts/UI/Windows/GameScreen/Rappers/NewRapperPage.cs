@@ -11,6 +11,7 @@ using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Enums;
+using UI.Windows.GameScreen.Charts;
 using UnityEngine;
 using UnityEngine.UI;
 using RappersAPI = Game.Rappers.RappersPackage;
@@ -61,7 +62,7 @@ namespace UI.Windows.GameScreen.Rappers
             fansBtnRight.onClick.AddListener(() => OnBntRightClick(fansValue, 150));
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperPageOpened);
             
@@ -157,7 +158,7 @@ namespace UI.Windows.GameScreen.Rappers
         private static void BackButtonClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Previous));
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Charts, ChartsTabType.Rappers));
         }
         
         private static void HighlightError(Component component)

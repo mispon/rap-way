@@ -1,12 +1,11 @@
 using Enums;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Socials.Eagler;
 using Game.Time;
 using Models.Production;
-using UI.Windows.Pages.Social;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Social.ResultPages
 {
@@ -22,16 +21,16 @@ namespace UI.Windows.GameScreen.Social.ResultPages
    
         protected override void DisplayResult(SocialInfo info)
         {
-            var nn = PlayerManager.Data.Info.NickName;
+            var nickName = PlayerAPI.Data.Info.NickName;
 
-            nickname.text = nn;
+            nickname.text = nickName;
             date.text = TimeManager.Instance.DisplayNow;
             message.text = info.MainText;
 
             likes.text = info.Likes.ToString();
             hype.text = $"+{info.HypeIncome}";
 
-            EaglerManager.Instance.CreateUserEagle(nn, info.MainText, info.Likes);
+            EaglerManager.Instance.CreateUserEagle(nickName, info.MainText, info.Likes);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitPublished);
         }
     }

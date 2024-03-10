@@ -2,7 +2,6 @@ using System;
 using Core;
 using Core.OrderedStarter;
 using Enums;
-using Game.Player;
 using ScriptableObjects;
 using UI.Windows.GameScreen.GameEvent;
 using UnityEngine;
@@ -37,7 +36,7 @@ namespace Game
         {
             if (chance >= Random.Range(0f, 1f))
             {
-                int fans = PlayerManager.Data.Fans;
+                int fans = GameManager.Instance.PlayerData.Fans;
                 GameEventInfo eventInfo = data.GetRandomInfo(type, fans);
                 if (eventInfo != null)
                 {

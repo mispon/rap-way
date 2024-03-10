@@ -46,13 +46,13 @@ namespace UI.Base
         {
             if (_isActive) return;
             
-            BeforeShow();
+            BeforeShow(ctx);
             
             _isActive = true;
             canvasGroup.interactable = true;
             canvas.enabled = true;
             
-            AfterShow();
+            AfterShow(ctx);
         }
         
         public virtual void Hide()
@@ -75,8 +75,8 @@ namespace UI.Base
         }
         
         public    virtual void Initialize() {}
-        protected virtual void BeforeShow() {}
-        protected virtual void AfterShow() {}
+        protected virtual void BeforeShow(object ctx = null) {}
+        protected virtual void AfterShow(object ctx = null) {}
         protected virtual void BeforeHide() {}
         protected virtual void AfterHide() {}
     }

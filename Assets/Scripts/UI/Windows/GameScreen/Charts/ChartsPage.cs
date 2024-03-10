@@ -14,13 +14,10 @@ namespace UI.Windows.GameScreen.Charts
     
     public class ChartsPage : Page
     {
-        [SerializeField] private GameObject[] pageControls;
-        [Space]
         [SerializeField] private Button rappersTabButton;
         [SerializeField] private Button labelsTabButton;
         [Space]
         [SerializeField] private Page rappersTab;
-        [SerializeField] private Page newRappersPage;
         [SerializeField] private Page labelsTab;
         [Space]
         [SerializeField] private Color activeTabColor;
@@ -34,7 +31,38 @@ namespace UI.Windows.GameScreen.Charts
             labelsTabButton.onClick.AddListener(OpenLabelsTab);
         }
 
-        public override void Show(object ctx = null)
+        private void OpenRappersTab()
+        {
+            if (rappersTab.IsActive())
+                return;
+            
+            UpdateTabsButtons(rappersTabButton, labelsTabButton);
+            if (!_isFirstOpen) 
+                SoundManager.Instance.PlaySound(UIActionType.Switcher);
+            
+            labelsTab.Hide();
+            rappersTab.Show();
+        }
+
+        private void OpenLabelsTab()
+        {
+            if (labelsTab.IsActive())
+                return;
+            
+            UpdateTabsButtons(labelsTabButton, rappersTabButton);
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
+     
+            rappersTab.Hide();
+            labelsTab.Show();
+        }
+
+        private void UpdateTabsButtons(Button active, Button inactive)
+        {
+            active.image.color = activeTabColor;
+            inactive.image.color = inactiveTabColor;
+        }
+        
+        protected override void AfterShow(object ctx = null)
         {
             var tab = ctx.Value<ChartsTabType>();
             switch (tab)
@@ -48,65 +76,6 @@ namespace UI.Windows.GameScreen.Charts
                     OpenRappersTab();
                     break;
             }
-            
-            base.Show(ctx);
-        }
-
-        public void ShowControls()
-        {
-            foreach (var go in pageControls)
-            {
-                go.SetActive(true);
-            }
-        }
-        
-        public void HideControls()
-        {
-            foreach (var go in pageControls)
-            {
-                go.SetActive(false);
-            }
-        }
-
-        private void OpenRappersTab()
-        {
-            if (rappersTab.IsActive())
-                return;
-            
-            UpdateTabsButtons(rappersTabButton, labelsTabButton);
-            if (!_isFirstOpen) 
-                SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            
-            newRappersPage.Hide();
-            labelsTab.Hide();
-            rappersTab.Show();
-        }
-
-        private void OpenLabelsTab()
-        {
-            if (labelsTab.IsActive())
-                return;
-            
-            UpdateTabsButtons(labelsTabButton, rappersTabButton);
-            SoundManager.Instance.PlaySound(UIActionType.Switcher);
-     
-            newRappersPage.Hide();
-            rappersTab.Hide();
-            labelsTab.Show();
-        }
-
-        private void UpdateTabsButtons(Button active, Button inactive)
-        {
-            active.image.color = activeTabColor;
-            inactive.image.color = inactiveTabColor;
-        }
-        
-        protected override void AfterShow()
-        {
-            ShowControls();
-            
-            base.AfterShow();
-            OpenRappersTab();
 
             _isFirstOpen = false;
         }

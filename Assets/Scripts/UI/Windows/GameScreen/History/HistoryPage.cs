@@ -43,7 +43,7 @@ namespace UI.Windows.GameScreen.History
             }
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.HistoryPageOpened);
             
@@ -55,7 +55,7 @@ namespace UI.Windows.GameScreen.History
             trackHistoryController.Show(silent: true);
         }
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_history");
         }

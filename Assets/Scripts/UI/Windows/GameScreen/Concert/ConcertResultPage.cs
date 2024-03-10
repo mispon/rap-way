@@ -2,7 +2,6 @@
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Time;
@@ -12,6 +11,7 @@ using Models.Production;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Concert
 {
@@ -43,7 +43,7 @@ namespace UI.Windows.GameScreen.Concert
         private void DisplayResult(ConcertInfo concert)
         {
             placeName.text = concert.LocationName.ToUpper();
-            playerName.text = PlayerManager.Data.Info.NickName;
+            playerName.text = PlayerAPI.Data.Info.NickName;
             
             moneyIncome.text = $"+{concert.Income.GetMoney()}";
             expIncome.text = $"+{settings.Concert.RewardExp}";
@@ -62,7 +62,7 @@ namespace UI.Windows.GameScreen.Concert
             MsgBroker.Instance.Publish(new ConcertRewardMessage {MoneyIncome = concert.Income});
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             cutscenePage.Show(_concert);
         }

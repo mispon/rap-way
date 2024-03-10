@@ -6,7 +6,6 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using Game.Labels.Desc;
-using Game.Player;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
@@ -15,13 +14,13 @@ using UI.Controls.Ask;
 using UI.Controls.Progress;
 using UI.Controls.ScrollViewController;
 using UI.Windows.GameScreen.Labels;
-using UI.Windows.Pages;
 using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using RappersAPI =  Game.Rappers.RappersPackage;
-using LabelsAPI = Game.Labels.LabelsPackage;
+using PlayerAPI  = Game.Player.PlayerPackage;
+using RappersAPI = Game.Rappers.RappersPackage;
+using LabelsAPI  = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Personal.LabelTab
 {
@@ -100,16 +99,16 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             productionBar.SetValue(label.Production.Exp, expToProductionLevelUp[label.Production.Value]);
             
             upProductionButton.gameObject.SetActive(label.Production.Value < maxStatValue);
-            upProductionButton.interactable = PlayerManager.Data.Exp >= expStep;
+            upProductionButton.interactable = PlayerAPI.Data.Exp >= expStep;
             
             float prestige = LabelsAPI.Instance.GetPrestige(label, expToPrestigeLevelUp);
             stars.Display(prestige);
             prestigeBar.SetValue(label.Prestige.Exp, expToPrestigeLevelUp[label.Prestige.Value]);
             
             upPrestigeButton.gameObject.SetActive(label.Prestige.Value < maxStatValue);
-            upPrestigeButton.interactable = PlayerManager.Data.Exp >= expStep;
+            upPrestigeButton.interactable = PlayerAPI.Data.Exp >= expStep;
             
-            exp.text = PlayerManager.Data.Exp.ToString();
+            exp.text = PlayerAPI.Data.Exp.ToString();
 
             _income = LabelsAPI.Instance.GetPlayersLabelIncome();
             income.text = _income.GetMoney();
@@ -118,7 +117,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             service.text = _cost.GetMoney();
             
             payServiceButton.gameObject.SetActive(label.IsFrozen);
-            payServiceButton.interactable = PlayerManager.Data.Money >= _cost;
+            payServiceButton.interactable = PlayerAPI.Data.Money >= _cost;
         }
 
         private void DisplayMembers(LabelInfo label)
@@ -150,9 +149,9 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             
             members.Add(new RapperInfo
             {
-                Name = PlayerManager.Data.Info.NickName,
-                Fans = PlayerManager.Data.Fans / 1_000_000,
-                Label = PlayerManager.Data.Label,
+                Name = PlayerAPI.Data.Info.NickName,
+                Fans = PlayerAPI.Data.Fans / 1_000_000,
+                Label = PlayerAPI.Data.Label,
                 IsPlayer = true
             });
 
@@ -230,7 +229,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
                     var members = GetMembers(_label.Name);
                     members.ForEach(e => e.Label = "");
                     
-                    PlayerManager.Data.Label = "";
+                    PlayerAPI.Data.Label = "";
                     LabelsAPI.Instance.DisbandPlayersLabel();
             
                     labelTab.Reload();

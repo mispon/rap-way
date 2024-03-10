@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.PropertyAttributes;
 using Enums;
-using Game;
-using Game.Player;
 using Game.Player.Achievements.Desc;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace ScriptableObjects
 {
@@ -26,7 +25,7 @@ namespace ScriptableObjects
         {
             foreach (var info in Infos)
             {
-                info.Achievement.Unlocked = PlayerManager.Data.Achievements.Any(ach => ach == info.Achievement);
+                info.Achievement.Unlocked = PlayerAPI.Data.Achievements.Any(ach => ach == info.Achievement);
             }
 
             var lockedInfos = LockedInfos.ToList();

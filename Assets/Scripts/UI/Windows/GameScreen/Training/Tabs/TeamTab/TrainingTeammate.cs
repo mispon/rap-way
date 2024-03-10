@@ -2,13 +2,13 @@ using System;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Player.Team.Desc;
 using UI.Controls.Progress;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
 {
@@ -40,9 +40,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             payButton.onClick.AddListener(OnPay);
         }
 
-        /// <summary>
-        /// Инициализирует поля
-        /// </summary>
         public void Setup(Teammate teammate, bool expEnough, int expToUp)
         {
             _teammate = teammate;
@@ -67,7 +64,7 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             expBar.SetValue(exp, expToUp);
 
             upButton.interactable = noLimit && expEnough;
-            payButton.interactable = !teammate.HasPayment && salaryAmount <= PlayerManager.Data.Money;
+            payButton.interactable = !teammate.HasPayment && salaryAmount <= PlayerAPI.Data.Money;
         }
 
         /// <summary>
@@ -85,9 +82,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             payButton.interactable = false;
         }
 
-        /// <summary>
-        /// Обработчик повышения уровня
-        /// </summary>
         private void OnUp()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateUpgraded);
@@ -95,9 +89,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             onUp.Invoke(_teammate);
         }
 
-        /// <summary>
-        /// Обработчик выдачи зарплаты
-        /// </summary>
         private void OnPay()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateSalaryPayed);

@@ -18,6 +18,7 @@ using ScriptableObjects;
 using UI.Windows.GameScreen.Achievement;
 using UniRx;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Player.Achievements
 {
@@ -227,7 +228,7 @@ namespace Game.Player.Achievements
                 return;
             
             achievement.Unlocked = true;
-            PlayerManager.Data.Achievements.Add(achievement);
+            PlayerAPI.Data.Achievements.Add(achievement);
 
             if (!showUi)
                 return;
@@ -247,7 +248,7 @@ namespace Game.Player.Achievements
 
         private bool AlreadyExists(Achievement achievement)
         {
-            return PlayerManager.Data.Achievements.Any(a =>
+            return PlayerAPI.Data.Achievements.Any(a =>
                 a.Type == achievement.Type &&
                 a.CompareValue == achievement.CompareValue
             );

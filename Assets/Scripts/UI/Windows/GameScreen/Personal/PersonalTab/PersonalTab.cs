@@ -3,7 +3,6 @@ using System.Linq;
 using Core.Localization;
 using Enums;
 using Extensions;
-using Game.Player;
 using Game.Player.Goods;
 using Game.Player.State.Desc;
 using Models.Production;
@@ -11,6 +10,7 @@ using ScriptableObjects;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Personal.PersonalTab
 {
@@ -55,7 +55,7 @@ namespace UI.Windows.GameScreen.Personal.PersonalTab
         
         public override void Open()
         {
-            PlayerData data = PlayerManager.Data;
+            PlayerData data = PlayerAPI.Data;
 
             SetupCharacter(data.Info.Gender);
             SetupGoods(data.Goods);

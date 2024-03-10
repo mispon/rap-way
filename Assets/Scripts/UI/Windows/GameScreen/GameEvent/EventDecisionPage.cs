@@ -1,7 +1,6 @@
 using Core.Context;
 using Extensions;
 using Game;
-using Game.Player;
 using Game.Player.State.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Production;
@@ -9,6 +8,7 @@ using ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.GameEvent
 {
@@ -44,7 +44,7 @@ namespace UI.Windows.GameScreen.GameEvent
 
         private void SaveResult()
         {
-            var income = CalculateIncome(PlayerManager.Data, _eventDecision);
+            var income = CalculateIncome(PlayerAPI.Data, _eventDecision);
             MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = income.Money,
@@ -69,11 +69,11 @@ namespace UI.Windows.GameScreen.GameEvent
             };
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             descriptionText.text = GetLocale(_eventDecision.Description);
 
-            var income = CalculateIncome(PlayerManager.Data, _eventDecision);
+            var income = CalculateIncome(PlayerAPI.Data, _eventDecision);
             
             moneyText.text = income.Money.GetMoney();
             fansText.text = income.Fans.GetDisplay();

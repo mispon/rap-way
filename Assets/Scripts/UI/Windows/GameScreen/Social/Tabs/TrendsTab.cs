@@ -2,36 +2,29 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Game;
-using Game.Player;
 using Game.Player.Team;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using Models.Production;
 using ScriptableObjects;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Social.Tabs
 {
-    /// <summary>
-    /// Вкладка трендов
-    /// </summary>
     public class TrendsTab : BaseSocialsTab
     {
-        [Header("Поля")]
-        [SerializeField] private GameObject trends;
-        [SerializeField] private Image themeIcon;
-        [SerializeField] private Text themeTrend;
-        [SerializeField] private Text styleTrend;
+        [BoxGroup("Controls"), SerializeField] private GameObject trends;
+        [BoxGroup("Controls"), SerializeField] private Image themeIcon;
+        [BoxGroup("Controls"), SerializeField] private Text themeTrend;
+        [BoxGroup("Controls"), SerializeField] private Text styleTrend;
         [Space]
-        [SerializeField] private GameObject noInfo;
+        [BoxGroup("Controls"), SerializeField] private GameObject noInfo;
+        
+        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
 
-        [Header("Иконки")]
-        [SerializeField] private ImagesBank imagesBank;
-
-        /// <summary>
-        /// Возвращает информацию соц. действия
-        /// </summary>
         protected override SocialInfo GetInfo()
         {
             int cooldown = GameManager.Instance.Settings.Team.PrManagerCooldown;
@@ -48,7 +41,7 @@ namespace UI.Windows.GameScreen.Social.Tabs
         {
             base.OnOpen();
 
-            var lastTrends = PlayerManager.Data.LastKnownTrends;
+            var lastTrends = PlayerAPI.Data.LastKnownTrends;
             if (lastTrends != null)
             {
                 themeIcon.sprite = imagesBank.ThemesActive[(int) lastTrends.Theme];
@@ -65,12 +58,9 @@ namespace UI.Windows.GameScreen.Social.Tabs
             noInfo.SetActive(!hasTrendInfo);
         }
 
-        /// <summary>
-        /// Проверяет условия запуска соц. действия
-        /// </summary>
         protected override bool CheckStartConditions()
         {
-            var prManager = PlayerManager.Data.Team.PrMan;
+            var prManager = PlayerAPI.Data.Team.PrMan;
             return TeamManager.IsAvailable(TeammateType.PrMan) && prManager.Cooldown == 0;
         }
     }

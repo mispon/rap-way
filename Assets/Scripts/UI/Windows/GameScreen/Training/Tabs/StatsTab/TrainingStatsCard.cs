@@ -4,12 +4,12 @@ using Core;
 using Core.Localization;
 using Enums;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Player.State.Desc;
 using ScriptableObjects;
 using UI.Controls.Progress;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
 {
@@ -46,21 +46,15 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
             expBar.gameObject.SetActive(false);
         }
 
-        /// <summary>
-        /// Устанавливает индекс элемента 
-        /// </summary>
         public void SetIndex(int index)
         {
             _index = index;
             DisplayLevel();
         }
 
-        /// <summary>
-        /// Раскрывает карточку навыка 
-        /// </summary>
         public void Show(PlayerStatsInfo info, bool expEnough, int expToUp)
         {
-            var stat = PlayerManager.Data.Stats.Values[_index];
+            var stat = PlayerAPI.Data.Stats.Values[_index];
             
             header.text = LocalizationManager.Instance.Get(info.NameKey);
             desc.text = LocalizationManager.Instance.Get(info.DescriptionKey);
@@ -77,9 +71,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
             cardImage.sprite = darkSprite;
         }
 
-        /// <summary>
-        /// Скрывает карточку навыка
-        /// </summary>
         public void Hide()
         {
             header.text = string.Empty;
@@ -93,27 +84,18 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
             cardImage.sprite = normalSprite;
         }
 
-        /// <summary>
-        /// Отображает текущий уровень навыка
-        /// </summary>
         private void DisplayLevel()
         {
-            int value = PlayerManager.Data.Stats.Values[_index].Value;
+            int value = PlayerAPI.Data.Stats.Values[_index].Value;
             level.text = value.ToString();
         }
 
-        /// <summary>
-        /// Обработчик клика по карточке навыка
-        /// </summary>
         private void HandleClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             onClick.Invoke(_index);
         }
 
-        /// <summary>
-        /// Обработчик клика по апгрейду навыка
-        /// </summary>
         private void HandleLevelUpClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);

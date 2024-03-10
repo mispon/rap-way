@@ -2,24 +2,22 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using Game;
-using Game.Player;
 using Models.Production;
 using ScriptableObjects;
-using UI.Windows.Pages.Social;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Social.ResultPages
 {
     public class TrendsResultPage : SocialResultPage
     {
-        [Header("Контролы")]
-        [SerializeField] private Image themeIcon;
-        [SerializeField] private Text themeName;
-        [SerializeField] private Text styleName;
+        [BoxGroup("controls"), SerializeField] private Image themeIcon;
+        [BoxGroup("controls"), SerializeField] private Text themeName;
+        [BoxGroup("controls"), SerializeField] private Text styleName;
 
-        [Header("Картинки")]
-        [SerializeField] private ImagesBank imagesBank;
+        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
 
         protected override void DisplayResult(SocialInfo socialInfo)
         {
@@ -29,7 +27,7 @@ namespace UI.Windows.GameScreen.Social.ResultPages
             themeName.text = GetLocale(trends.Theme.GetDescription()).ToUpper();
             styleName.text = GetLocale(trends.Style.GetDescription()).ToUpper();
 
-            PlayerManager.UpdateTrends(trends.Style, trends.Theme);
+            PlayerAPI.UpdateTrends(trends.Style, trends.Theme);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
         }
     }

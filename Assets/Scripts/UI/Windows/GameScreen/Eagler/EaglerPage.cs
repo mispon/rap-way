@@ -15,7 +15,7 @@ namespace UI.Windows.GameScreen.Eagler
         
         private readonly List<EagleCard> _feedItems = new();
         
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             var eagles = EaglerManager.Instance.GetEagles();
             
@@ -32,7 +32,7 @@ namespace UI.Windows.GameScreen.Eagler
             feed.RepositionElements(_feedItems);
         }
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_eagler");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);

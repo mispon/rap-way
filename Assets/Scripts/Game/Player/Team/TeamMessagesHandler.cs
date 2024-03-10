@@ -6,6 +6,7 @@ using MessageBroker.Messages.Time;
 using MessageBroker.Messages.UI;
 using UI.Enums;
 using UniRx;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Player.Team
 {
@@ -39,11 +40,11 @@ namespace Game.Player.Team
         
         private static void DecreaseManagersCooldown()
         {
-            var manager = PlayerManager.Data.Team.Manager;
+            var manager = PlayerAPI.Data.Team.Manager;
             if (manager.Cooldown > 0)
                 manager.Cooldown -= 1;
             
-            var prManager = PlayerManager.Data.Team.PrMan;
+            var prManager = PlayerAPI.Data.Team.PrMan;
             if (prManager.Cooldown > 0)
                 prManager.Cooldown -= 1;
         }

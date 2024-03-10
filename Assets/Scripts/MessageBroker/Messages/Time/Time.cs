@@ -14,4 +14,14 @@ namespace MessageBroker.Messages.Time
     {
         public int Month;
     }
+
+    public struct TimeFreezeMessage
+    {
+        public bool IsFreezed;
+    }
+
+    public struct TimeActionModeMessage
+    {
+        public bool HasAction;
+    }
 }

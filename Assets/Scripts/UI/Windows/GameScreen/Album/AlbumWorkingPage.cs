@@ -4,7 +4,6 @@ using Enums;
 using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
-using Game.Player;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using MessageBroker;
@@ -17,6 +16,7 @@ using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Album
@@ -91,8 +91,8 @@ namespace UI.Windows.GameScreen.Album
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
 
-            _album.BitPoints += CreateBitPoints(PlayerManager.Data);
-            _album.TextPoints += CreateTextPoints(PlayerManager.Data);
+            _album.BitPoints += CreateBitPoints(PlayerAPI.Data);
+            _album.TextPoints += CreateTextPoints(PlayerAPI.Data);
         }
 
         /// <summary>
@@ -151,14 +151,16 @@ namespace UI.Windows.GameScreen.Album
             textPoints.text = _album.TextPoints.ToString();
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
-            _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
+            base.BeforeShow(ctx);
+            
+            _hasBitmaker   = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextWriter = TeamManager.IsAvailable(TeammateType.TextWriter);
             
-            if (!string.IsNullOrEmpty(PlayerManager.Data.Label))
+            if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
             {
-                _label = LabelsAPI.Instance.Get(PlayerManager.Data.Label);
+                _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
             }
 
             if (_label != null)

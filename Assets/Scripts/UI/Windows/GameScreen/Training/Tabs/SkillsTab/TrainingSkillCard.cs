@@ -1,10 +1,10 @@
 using System;
 using Core;
 using Enums;
-using Game.Player;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
 {
@@ -27,9 +27,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
             button.onClick.AddListener(ShowInfo);
         }
 
-        /// <summary>
-        /// Устанавливает данные карточки
-        /// </summary>
         public void Setup(int index, PlayerSkillInfo info)
         {
             _info = info;
@@ -38,13 +35,10 @@ namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
             gameObject.SetActive(true);
         }
         
-        /// <summary>
-        /// Обновляет состояние карточки
-        /// </summary>
         public void Refresh(bool expEnough)
         {
             _expEnough = expEnough;
-            _locked = !PlayerManager.Data.Skills.Contains(_info.Type);
+            _locked = !PlayerAPI.Data.Skills.Contains(_info.Type);
             
             button.image.sprite = _locked ? _info.Locked : _info.Normal;
         }

@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Enums;
-using Game.Player;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.ToneTab
 {
-    /// <summary>
-    /// Вкладка изучения новых тематик и стилей
-    /// </summary>
     public class TrainingToneTab : TrainingTab
     {
         [Header("Элементы вкладки")]
@@ -27,18 +24,12 @@ namespace UI.Windows.GameScreen.Training.Tabs.ToneTab
         private List<TrainingStyleCard> _stylesCards;
         private List<TrainingThemeCard> _themesCards;
 
-        /// <summary>
-        /// Инициализация вкладки
-        /// </summary>
         public override void Init()
         {
             CreateStylesCards();
             CreateThemesCards();
         }
 
-        /// <summary>
-        /// Создает карточки тренировки стилистик
-        /// </summary>
         private void CreateStylesCards()
         {
             var styles = (Styles[]) Enum.GetValues(typeof(Styles));
@@ -54,9 +45,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.ToneTab
             }
         }
         
-        /// <summary>
-        /// Создает карточки тренировки тематик
-        /// </summary>
         private void CreateThemesCards()
         {
             var themes = (Themes[]) Enum.GetValues(typeof(Themes));
@@ -72,35 +60,31 @@ namespace UI.Windows.GameScreen.Training.Tabs.ToneTab
             }
         }
 
-        /// <summary>
-        /// Вызывается при открытии
-        /// </summary>
         protected override void OnOpen()
         {
             RefreshCards(_stylesCards);
             RefreshCards(_themesCards);
         }
 
-        /// <summary>
-        /// Обновляет состояние карточек 
-        /// </summary>
         private static void RefreshCards(IEnumerable<TrainingToneCard> cards)
         {
             foreach (var card in cards)
                 card.Refresh();
         }
 
-        /// <summary>
-        /// Запускает изучение выбранной стилистики
-        /// </summary>
         private void OnLearnTone(Enum tone, int cost)
         {
             SoundManager.Instance.PlaySound(UIActionType.Unlock);
             
-            if (tone is Themes theme)
-                PlayerManager.Data.Themes.Add(theme);
-            else if (tone is Styles style)
-                PlayerManager.Data.Styles.Add(style);
+            switch (tone)
+            {
+                case Themes theme:
+                    PlayerAPI.Data.Themes.Add(theme);
+                    break;
+                case Styles style:
+                    PlayerAPI.Data.Styles.Add(style);
+                    break;
+            }
             
             onStartTraining.Invoke(() => cost);
         }
@@ -111,9 +95,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.ToneTab
             DisposeCards(_themesCards);
         }
 
-        /// <summary>
-        /// Очищает кэш карточек 
-        /// </summary>
         private void DisposeCards<T>(ICollection<T> cards) where T : TrainingToneCard
         {
             foreach (var card in cards)

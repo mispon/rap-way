@@ -4,7 +4,6 @@ using Enums;
 using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
-using Game.Player;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
@@ -15,6 +14,7 @@ using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Clip
@@ -84,7 +84,7 @@ namespace UI.Windows.GameScreen.Clip
             _clip.OperatorPoints += operatorPointsValue;
             operatorWorkPoints.Show(operatorPointsValue);
 
-            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 2);
+            var playerPointsValue = Random.Range(1, PlayerAPI.Data.Stats.Charisma.Value + 2);
             playerWorkPoints.Show(playerPointsValue);
 
             if (Random.Range(0, 2) > 0)
@@ -111,13 +111,13 @@ namespace UI.Windows.GameScreen.Clip
             operatorPoints.text = _clip.OperatorPoints.ToString();
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
-            base.BeforeShow();
+            base.BeforeShow(ctx);
             
-            if (!string.IsNullOrEmpty(PlayerManager.Data.Label))
+            if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
             {
-                _label = LabelsAPI.Instance.Get(PlayerManager.Data.Label);
+                _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
             }
 
             if (_label != null)

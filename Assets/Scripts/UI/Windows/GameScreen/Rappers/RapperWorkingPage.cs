@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Core;
 using Core.Context;
 using Enums;
-using Game.Player;
 using Game.Player.Team;
 using Game.Rappers.Desc;
 using MessageBroker;
@@ -13,6 +12,7 @@ using UI.Enums;
 using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Rappers
 {
@@ -81,13 +81,13 @@ namespace UI.Windows.GameScreen.Rappers
 
         private void GeneratePlayerWorkPoints()
         {
-            int playerPoints = Random.Range(1, PlayerManager.Data.Stats.Management.Value + 1);
+            int playerPoints = Random.Range(1, PlayerAPI.Data.Stats.Management.Value + 1);
             playerWorkPoints.Show(playerPoints);
 
             int managerPoints = 0;
             if (_hasManager)
             {
-                managerPoints = Random.Range(1, PlayerManager.Data.Team.Manager.Skill.Value + 1);
+                managerPoints = Random.Range(1, PlayerAPI.Data.Team.Manager.Skill.Value + 1);
                 managerWorkPoints.Show(managerPoints);
             }
 
@@ -103,9 +103,9 @@ namespace UI.Windows.GameScreen.Rappers
             rapperPointsLabel.text = $"{_rapperPoints}";
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
-            base.BeforeShow();
+            base.BeforeShow(ctx);
             
             _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
@@ -113,7 +113,7 @@ namespace UI.Windows.GameScreen.Rappers
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
             managementPointsLabel.text = "0";
             rapperPointsLabel.text = "0";
-            playerHypeBonus.text = $"+{PlayerManager.Data.Hype / 5}";
+            playerHypeBonus.text = $"+{PlayerAPI.Data.Hype / 5}";
             _playerPoints = 0;
             _rapperPoints = 0;
         }

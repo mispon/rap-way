@@ -1,7 +1,6 @@
 using Core.Context;
 using Enums;
 using Extensions;
-using Game.Player;
 using Game.Production;
 using Game.Rappers.Desc;
 using Game.Socials.Eagler;
@@ -11,6 +10,7 @@ using Sirenix.OdinInspector;
 using UI.Windows.GameScreen.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Battle
 {
@@ -53,7 +53,7 @@ namespace UI.Windows.GameScreen.Battle
         {
             bool isWin = playerPoints >= rapperPoints;
             
-            int fansChange = (int) (PlayerManager.Data.Fans * 0.1f);
+            int fansChange = (int) (PlayerAPI.Data.Fans * 0.1f);
             int fansFuzz = (int) (fansChange * 0.1f);
             
             int hype = isWin ? settings.Battle.WinnerHype : settings.Battle.LoserHype;
@@ -72,7 +72,7 @@ namespace UI.Windows.GameScreen.Battle
         /// </summary>
         private void DisplayResult()
         {
-            string playerName = PlayerManager.Data.Info.NickName.ToUpper();
+            string playerName = PlayerAPI.Data.Info.NickName.ToUpper();
             string rapperName = _result.RapperInfo.Name;
 
             resultMessage.text = _result.IsWin
@@ -84,7 +84,7 @@ namespace UI.Windows.GameScreen.Battle
             hypeIncome.text = $"+{_result.HypeIncome}";
             expIncome.text = $"+{settings.Battle.RewardExp}";
 
-            playerImage.sprite = PlayerManager.Data.Info.Gender == Gender.Male
+            playerImage.sprite = PlayerAPI.Data.Info.Gender == Gender.Male
                 ? playerAvatarMale
                 : playerAvatarFemale;
             playerLoseMask.SetActive(!_result.IsWin);

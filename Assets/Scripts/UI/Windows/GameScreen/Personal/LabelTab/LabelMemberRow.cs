@@ -1,10 +1,10 @@
 ﻿using Enums;
-using Game.Player;
 using Game.Rappers.Desc;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
-using RappersAPI =  Game.Rappers.RappersPackage;
+using PlayerAPI  = Game.Player.PlayerPackage;
+using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace UI.Windows.GameScreen.Personal.LabelTab
 {
@@ -33,7 +33,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             _index = index;
 
             avatar.sprite = info.IsPlayer 
-                ? PlayerManager.Data.Info.Gender == Gender.Male
+                ? PlayerAPI.Data.Info.Gender == Gender.Male
                     ? playerMaleAvatar
                     : playerFemaleAvatar
                 : info.Avatar;

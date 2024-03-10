@@ -1,7 +1,6 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-using Game.Player;
 using Game.Player.Team;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -12,6 +11,7 @@ using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Social
 {
@@ -50,13 +50,13 @@ namespace UI.Windows.GameScreen.Social
 
         private void GenerateWorkPoints()
         {
-            var playerPointsValue = Random.Range(1, PlayerManager.Data.Stats.Charisma.Value + 2);
+            var playerPointsValue = Random.Range(1, PlayerAPI.Data.Stats.Charisma.Value + 2);
             playerWorkPoints.Show(playerPointsValue);
 
             var prManPointsValue = 0;
             if (_hasPrMan)
             {
-                prManPointsValue = Random.Range(1, PlayerManager.Data.Team.PrMan.Skill.Value + 2);
+                prManPointsValue = Random.Range(1, PlayerAPI.Data.Team.PrMan.Skill.Value + 2);
                 prManWorkPoints.Show(prManPointsValue);
             }
             
@@ -94,9 +94,9 @@ namespace UI.Windows.GameScreen.Social
             return settings.Socials.WorkDuration;
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
-            base.BeforeShow();
+            base.BeforeShow(ctx);
             
             _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
             prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;

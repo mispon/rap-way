@@ -5,7 +5,6 @@ using Core.Localization;
 using Enums;
 using Firebase.Analytics;
 using Game.Labels.Desc;
-using Game.Player;
 using Game.Rappers.Desc;
 using ScriptableObjects;
 using UI.Controls.Ask;
@@ -16,6 +15,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using RappersAPI =  Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Personal.LabelTab
 {
@@ -91,9 +91,9 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             
             members.Add(new RapperInfo
             {
-                Name = PlayerManager.Data.Info.NickName,
-                Fans = PlayerManager.Data.Fans / 1_000_000,
-                Label = PlayerManager.Data.Label,
+                Name = PlayerAPI.Data.Info.NickName,
+                Fans = PlayerAPI.Data.Fans / 1_000_000,
+                Label = PlayerAPI.Data.Label,
                 IsPlayer = true
             });
 
@@ -108,7 +108,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             askingWindow.Show(
                 LocalizationManager.Instance.Get("leave_label_question").ToUpper(),
                 () => {
-                    PlayerManager.Data.Label = "";
+                    PlayerAPI.Data.Label = "";
                     labelTab.Reload();
                 }
             );

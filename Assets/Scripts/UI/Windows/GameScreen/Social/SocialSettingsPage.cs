@@ -46,7 +46,7 @@ namespace UI.Windows.GameScreen.Social
             });
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             foreach (var tab in tabs)
             {
@@ -54,7 +54,7 @@ namespace UI.Windows.GameScreen.Social
             }
         }
         
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_socials");
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.SocialsPageOpened);

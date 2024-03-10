@@ -1,26 +1,26 @@
 using System;
 using Core.Context;
-using Game.Player;
 using MessageBroker;
 using MessageBroker.Messages.UI;
+using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Windows.GameScreen.Training.Tabs;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training
 {
     public class TrainingMainPage : Page
     {
-        [Header("Контролы")]
-        [SerializeField] private Carousel tabsCarousel;
-        [SerializeField] private TrainingTab[] tabs;
-        [SerializeField] private Text expLabel;
+        [BoxGroup("Controls"), SerializeField] private Carousel tabsCarousel;
+        [BoxGroup("Controls"), SerializeField] private TrainingTab[] tabs;
+        [BoxGroup("Controls"), SerializeField] private Text expLabel;
 
         private int _tabIndex;
 
-        private void Start()
+        public override void Initialize()
         {
             tabsCarousel.onChange += OnTabChanged;
 
@@ -47,7 +47,7 @@ namespace UI.Windows.GameScreen.Training
         private void ApplyTraining(Func<int> training)
         {
             int cost = training.Invoke();
-            PlayerManager.Data.Exp -= cost;
+            PlayerAPI.Data.Exp -= cost;
             
             DisplayExp();
             RefreshTab();
@@ -70,14 +70,14 @@ namespace UI.Windows.GameScreen.Training
             OpenTab(_tabIndex);
         }
         
-        private void DisplayExp() => expLabel.text =  PlayerManager.Data.Exp.ToString();
+        private void DisplayExp() => expLabel.text =  PlayerAPI.Data.Exp.ToString();
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             DisplayExp();
         }
 
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             tabsCarousel.SetIndex(_tabIndex);
             HintsManager.Instance.ShowHint($"tutorial_training_{_tabIndex}");

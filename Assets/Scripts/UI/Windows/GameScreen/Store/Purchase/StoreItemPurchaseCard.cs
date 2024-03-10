@@ -121,7 +121,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
             };
         }
         
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             MsgBroker.Instance
                 .Receive<SpendDonateResponse>()

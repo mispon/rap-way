@@ -33,13 +33,14 @@ namespace UI.Windows.GameScreen.Labels
             addNewLabelButton.onClick.AddListener(OpenNewLabelPage);
         }
 
-        private static void OpenNewLabelPage()
+        private void OpenNewLabelPage()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.NewLabel));
+            base.Hide();
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelsPageOpened);
             
@@ -74,7 +75,7 @@ namespace UI.Windows.GameScreen.Labels
                 .ToList();
         }
 
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_labels");
         }

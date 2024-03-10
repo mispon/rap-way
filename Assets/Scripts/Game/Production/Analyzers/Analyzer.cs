@@ -1,8 +1,8 @@
 ﻿using System;
-using Game.Player;
 using Game.Settings;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Production.Analyzers
 {
@@ -107,7 +107,7 @@ namespace Game.Production.Analyzers
         /// </summary>
         protected int GetFans()
         {
-            return Mathf.Max(PlayerManager.Data.Fans, settings.Player.BaseFans);
+            return Mathf.Max(PlayerAPI.Data.Fans, settings.Player.BaseFans);
         }
         
         /// <summary>
@@ -115,7 +115,7 @@ namespace Game.Production.Analyzers
         /// </summary>
         protected float GetHypeFactor()
         {
-            return Mathf.Max(0.1f, PlayerManager.Data.Hype / 100f);
+            return Mathf.Max(0.1f, PlayerAPI.Data.Hype / 100f);
         }
     }
 }

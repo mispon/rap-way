@@ -54,7 +54,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 519599808141213891}
-  - component: {fileID: 648930149335625758}
+  - component: {fileID: 6960064089717965363}
   m_Layer: 0
   m_Name: LabelsManager
   m_TagString: Untagged
@@ -77,7 +77,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1929117383248465391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &648930149335625758
+--- !u!114 &6960064089717965363
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,18 +86,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1331892336460129474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac4d6b540a734b43a218aa28d1f30dc6, type: 3}
+  m_Script: {fileID: 11500000, guid: d667b32b2dc44fe3ad34bc162d5c93af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
-  rappersActionsFrequency: 1
-  invitePlayerFrequency: 3
-  expToLabelsLevelUp: 64000000c80000002c01000090010000f401000000000000
-  expChangeValue: 50
   data: {fileID: 11400000, guid: 62fb4f48d496d7a498a5a72438747799, type: 2}
-  customLabelsLogo: {fileID: 21300000, guid: 4acf7167b403dfb4392637d16a77eb37, type: 3}
-  contractPage: {fileID: 0}
-  personalPage: {fileID: 0}
+  imagesBank: {fileID: 11400000, guid: f8f914cf7b3817041beb854fc3baf0ea, type: 2}
 --- !u!1 &1516309476709118602
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +137,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: cc05ca9a524ec1743a742736398c4313, type: 2}
-  page: {fileID: 0}
 --- !u!1 &1929117383248465389
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,7 +285,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 979845882146328084}
-  - component: {fileID: 3118183140048857978}
+  - component: {fileID: 1832400995342651397}
+  - component: {fileID: 6610659673460167370}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -315,7 +309,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1929117383248465391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3118183140048857978
+--- !u!114 &1832400995342651397
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -324,7 +318,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 3187588212368941331}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be23ae18d3d94d779eea03efb82b6a42, type: 3}
+  m_Script: {fileID: 11500000, guid: adb56ff67b9644c880cff7ff22ed6572, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0
+--- !u!114 &6610659673460167370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3187588212368941331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adb56ff67b9644c880cff7ff22ed6572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
@@ -436,8 +443,6 @@ MonoBehaviour:
     Avatar: {fileID: 21300000, guid: a7037060194b9524bbc3baffad14c681, type: 3}
     FansToUnlock: 10000
     Salary: c8000000900100005802000020030000e8030000b0040000780500004006000008070000d0070000
-  unlockTeammatePage: {fileID: 0}
-  trainingPage: {fileID: 0}
   newTeammateEffect: {fileID: 0}
 --- !u!1 &6246084751456593472
 GameObject:
@@ -494,7 +499,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5014948586328903758}
-  - component: {fileID: 8468719038176704519}
+  - component: {fileID: 4655962773293941368}
   m_Layer: 0
   m_Name: RappersManager
   m_TagString: Untagged
@@ -517,7 +522,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1929117383248465391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8468719038176704519
+--- !u!114 &4655962773293941368
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -526,15 +531,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6485806368264999836}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bc907a12c624ca7a4a229325261ba93, type: 3}
+  m_Script: {fileID: 11500000, guid: 361200fb80414c8094990e91f2ef86b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
-  customRapperAvatar: {fileID: 21300000, guid: d9f48b18b8e969949933f5c6ec0210cb, type: 3}
-  fanUpdateFrequency: 2
-  minRapperFans: 1
-  maxRapperFans: 500000000
   data: {fileID: 11400000, guid: 4827d9250d9d42f499978cab5f09b8fd, type: 2}
+  imagesBank: {fileID: 11400000, guid: f8f914cf7b3817041beb854fc3baf0ea, type: 2}
 --- !u!1 &7170994580708335421
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,7 +548,7 @@ GameObject:
   - component: {fileID: 2442274176063737926}
   - component: {fileID: 2615203507800130815}
   m_Layer: 0
-  m_Name: TutorialManager
+  m_Name: HintsManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -580,7 +582,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
-  page: {fileID: 0}
 --- !u!1 &8301132532118962818
 GameObject:
   m_ObjectHideFlags: 0

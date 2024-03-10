@@ -3,7 +3,6 @@ using System.Linq;
 using Core;
 using Enums;
 using Firebase.Analytics;
-using Game.Player;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -14,7 +13,8 @@ using UI.Enums;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
-using RappersAPI =  Game.Rappers.RappersPackage;
+using PlayerAPI  = Game.Player.PlayerPackage;
+using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace UI.Windows.GameScreen.Rappers
 {
@@ -34,13 +34,14 @@ namespace UI.Windows.GameScreen.Rappers
             addNewRapperButton.onClick.AddListener(OpenNewRapperPage);
         }
 
-        private static void OpenNewRapperPage()
+        private void OpenNewRapperPage()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.NewRapper));
+            base.Hide();
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.RappersPageOpened);
             
@@ -69,19 +70,19 @@ namespace UI.Windows.GameScreen.Rappers
             
             allRappers.Add(new RapperInfo
             {
-                Name = PlayerManager.Data.Info.NickName,
-                Fans = PlayerManager.Data.Fans / 1_000_000,
-                Vocobulary = PlayerManager.Data.Stats.Vocobulary.Value,
-                Bitmaking = PlayerManager.Data.Stats.Bitmaking.Value,
-                Management = PlayerManager.Data.Stats.Management.Value,
-                Label = PlayerManager.Data.Label,
+                Name = PlayerAPI.Data.Info.NickName,
+                Fans = PlayerAPI.Data.Fans / 1_000_000,
+                Vocobulary = PlayerAPI.Data.Stats.Vocobulary.Value,
+                Bitmaking = PlayerAPI.Data.Stats.Bitmaking.Value,
+                Management = PlayerAPI.Data.Stats.Management.Value,
+                Label = PlayerAPI.Data.Label,
                 IsPlayer = true
             });
 
             return allRappers.OrderByDescending(r => r.Fans).ToList();
         }
 
-        protected override void AfterShow()
+        protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_rappers");
         }

@@ -1,9 +1,9 @@
 using System;
 using Core;
-using Game.Player;
 using Models.Game;
 using ScriptableObjects;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
 {
@@ -27,7 +27,7 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
         private int _statIndex;
         private Func<int>[] _trainingActions => new Func<int>[]
         {
-            UpgradeVocobulary,
+            UpgradeVocabulary,
             UpgradeBitmaking,
             UpgradeFlow,
             UpgradeCharisma,
@@ -35,9 +35,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
             UpgradeMarketing
         };
         
-        /// <summary>
-        /// Инициализация вкладки
-        /// </summary>
         public override void Init()
         {
             for (int i = 0; i < statsCards.Length; i++)
@@ -49,17 +46,11 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
             }
         }
 
-        /// <summary>
-        /// Вызывается при открытии
-        /// </summary>
         protected override void OnOpen()
         {
             OnStatsSelected(_statIndex);
         }
 
-        /// <summary>
-        /// Обработчик выбора навыка 
-        /// </summary>
         private void OnStatsSelected(int index)
         {
             _statIndex = index;
@@ -69,8 +60,8 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
                 if (i == index)
                 {
                     var info = data.StatsInfo[index];
-                    var stat = PlayerManager.Data.Stats.Values[index];
-                    bool expEnough = PlayerManager.Data.Exp >= trainingCost;
+                    var stat = PlayerAPI.Data.Stats.Values[index];
+                    bool expEnough = PlayerAPI.Data.Exp >= trainingCost;
 
                     statsCards[i].Show(info, expEnough, expToLevelUp[stat.Value]);
                 }
@@ -79,9 +70,6 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
             }
         }
         
-        /// <summary>
-        /// Обработчик запуска улучшения навыка
-        /// </summary>
         private void OnUpgradeStats(int index)
         {
             SoundManager.Instance.PlaySound(UIActionType.Train);
@@ -92,16 +80,13 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
         /// <summary>
         /// Группа методов прокачки каждого из статов персонажа 
         /// </summary>
-        private int UpgradeVocobulary()  =>  AddExp(ref PlayerManager.Data.Stats.Vocobulary);
-        private int UpgradeBitmaking()   =>  AddExp(ref PlayerManager.Data.Stats.Bitmaking);
-        private int UpgradeFlow()        =>  AddExp(ref PlayerManager.Data.Stats.Flow);
-        private int UpgradeCharisma()    =>  AddExp(ref PlayerManager.Data.Stats.Charisma);
-        private int UpgradeManagement()  =>  AddExp(ref PlayerManager.Data.Stats.Management);
-        private int UpgradeMarketing()   =>  AddExp(ref PlayerManager.Data.Stats.Marketing);
-
-        /// <summary>
-        /// Добавляет опыт к переданному стату 
-        /// </summary>
+        private int UpgradeVocabulary() => AddExp(ref PlayerAPI.Data.Stats.Vocobulary);
+        private int UpgradeBitmaking()  => AddExp(ref PlayerAPI.Data.Stats.Bitmaking);
+        private int UpgradeFlow()       => AddExp(ref PlayerAPI.Data.Stats.Flow);
+        private int UpgradeCharisma()   => AddExp(ref PlayerAPI.Data.Stats.Charisma);
+        private int UpgradeManagement() => AddExp(ref PlayerAPI.Data.Stats.Management);
+        private int UpgradeMarketing()  => AddExp(ref PlayerAPI.Data.Stats.Marketing);
+        
         private int AddExp(ref ExpValue stat)
         {
             int expToUp = expToLevelUp[stat.Value];

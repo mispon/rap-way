@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Game.Player;
 using Game.Time;
 using ScriptableObjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Socials.Eagler
 {
@@ -45,7 +45,7 @@ namespace Game.Socials.Eagler
         {
             var eagles = new List<Eagle>(3);
 
-            var fans = PlayerManager.Data.Fans;
+            var fans = PlayerAPI.Data.Fans;
             for (int i = 0; i < 3; i++)
             {
                 var eagle = GenerateRandomEagle(quality, fans);
@@ -66,7 +66,7 @@ namespace Game.Socials.Eagler
                 : $"{data.PositivePostKey}_{Random.Range(0, data.PositivePostsCount)}";
             
             var nickname = data.Nicknames[Random.Range(0, data.Nicknames.Length)];
-            var playerName = PlayerManager.Data.Info.NickName;
+            var playerName = PlayerAPI.Data.Info.NickName;
             var randomTag = data.Hashtags[Random.Range(0,  data.Hashtags.Length)];
             
             return new Eagle

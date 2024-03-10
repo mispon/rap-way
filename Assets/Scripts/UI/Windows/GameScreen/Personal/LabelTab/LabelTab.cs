@@ -1,7 +1,6 @@
-﻿using Game.Player;
-using UI.Windows.Pages;
-using UnityEngine;
+﻿using UnityEngine;
 using LabelsAPI = Game.Labels.LabelsPackage;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Personal.LabelTab
 {
@@ -15,7 +14,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         {
             base.Open();
             
-            string labelName = PlayerManager.Data.Label;
+            string labelName = PlayerAPI.Data.Label;
             if (string.IsNullOrEmpty(labelName))
             {
                 noLabelTab.Open();
@@ -25,7 +24,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             var label = LabelsAPI.Instance.Get(labelName);
             if (label == null)
             {
-                PlayerManager.Data.Label = "";
+                PlayerAPI.Data.Label = "";
                 noLabelTab.Open();
                 return;
             }

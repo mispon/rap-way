@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Labels.Desc;
-using Game.Player;
 using Models.Game;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Labels
 {
@@ -150,7 +150,7 @@ namespace Game.Labels
         /// </summary>
         public bool IsPlayerInGameLabel()
         {
-            string labelName = PlayerManager.Data.Label;
+            string labelName = PlayerAPI.Data.Label;
             return labelName != "" && PlayerLabel != null && labelName != PlayerLabel.Name;
         }
     }

@@ -33,7 +33,7 @@ namespace UI.Windows.GameScreen.Achievement
             } catch(MissingReferenceException) {}
         }
 
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
             achievementText.text = _achievements.Dequeue();
         }

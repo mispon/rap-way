@@ -1,6 +1,5 @@
 using Core;
 using Core.Context;
-using Game.Player;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
@@ -11,6 +10,7 @@ using UI.Windows.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Feat
 {
@@ -49,7 +49,7 @@ namespace UI.Windows.GameScreen.Feat
 
         private void GenerateWorkPoints()
         {
-            var stats = PlayerManager.Data.Stats;
+            var stats = PlayerAPI.Data.Stats;
             
             var bitWorkPoints = CreateWorkPoints(
                 stats.Bitmaking.Value, playerBitWorkPoints,
@@ -97,9 +97,9 @@ namespace UI.Windows.GameScreen.Feat
             return settings.Track.FeatWorkDuration;
         }
         
-        protected override void BeforeShow()
+        protected override void BeforeShow(object ctx = null)
         {
-            base.BeforeShow();
+            base.BeforeShow(ctx);
             
             bitPoints.text = textPoints.text = "0";
             rapperAvatar.sprite = _track.Feat.IsCustom ? customRapperAvatar : _track.Feat.Avatar;

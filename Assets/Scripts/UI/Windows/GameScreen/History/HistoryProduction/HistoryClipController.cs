@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using Game.Player;
 using Models.Production;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.History.HistoryProduction
 {
@@ -9,7 +9,7 @@ namespace UI.Windows.GameScreen.History.HistoryProduction
     public class HistoryClipController: HistoryProductionController
     {
         protected override ProductionBase[] PlayerProductionInfos()
-            => PlayerManager.Data.History.ClipList
+            => PlayerAPI.Data.History.ClipList
                 .OrderByDescending(clip => clip.Id)
                 .ToArray();
     }

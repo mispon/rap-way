@@ -17,30 +17,15 @@ namespace UI.Windows.GameScreen
         [SerializeField] protected ProgressBar progressBar;
 
         private IDisposable _disposable;
-        
-        /// <summary>
-        /// Начинает выполнение работы 
-        /// </summary>
+
         protected abstract void StartWork(object ctx);
 
-        /// <summary>
-        /// Работа, выполняемая за один день
-        /// </summary>
         protected abstract void DoDayWork();
 
-        /// <summary>
-        /// Обработчик завершения работы
-        /// </summary>
         protected abstract void FinishWork();
 
-        /// <summary>
-        /// Возвращает длительность действия
-        /// </summary>
         protected abstract int GetDuration();
 
-        /// <summary>
-        /// Вызывается по истечении игрового дня
-        /// </summary>
         private void OnDayLeft()
         {
             if (progressBar.IsFinish)
@@ -49,9 +34,6 @@ namespace UI.Windows.GameScreen
             DoDayWork();
         }
 
-        /// <summary>
-        /// Обновляет состояние аницаций работы
-        /// </summary>
         protected void RefreshWorkAnims()
         {
             var anims = GetComponentsInChildren<ProductionAnim>();
@@ -61,9 +43,10 @@ namespace UI.Windows.GameScreen
             }
         }
         
-        protected override void AfterShow()
+        protected override void BeforeShow(object ctx = null)
         {
-            TimeManager.Instance.SetActionMode();
+            MsgBroker.Instance.Publish(new TimeActionModeMessage{ HasAction = true });
+            
             _disposable = MsgBroker.Instance
                 .Receive<DayLeftMessage>()
                 .Subscribe(e => OnDayLeft());
@@ -75,7 +58,8 @@ namespace UI.Windows.GameScreen
 
         protected override void BeforeHide()
         {
-            TimeManager.Instance.ResetActionMode();
+            MsgBroker.Instance.Publish(new TimeActionModeMessage{ HasAction = false });
+            
             _disposable?.Dispose();
             
             progressBar.onFinish -= FinishWork;

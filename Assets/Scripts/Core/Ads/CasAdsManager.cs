@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using CAS;
 using Game;
-using Game.Player;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Core.Ads
 {
@@ -27,7 +27,7 @@ namespace Core.Ads
 
         private static void OnRewardedAdCompleted()
         {
-            int reward = Convert.ToInt32(PlayerManager.Data.Money * 0.1f);
+            int reward = Convert.ToInt32(PlayerAPI.Data.Money * 0.1f);
             reward = Math.Max(50, reward);
             
             SoundManager.Instance.PlaySound(UIActionType.Pay);
@@ -75,6 +75,7 @@ namespace Core.Ads
                     yield return new WaitForSeconds(10);
                 }
             }
+            // ReSharper disable once IteratorNeverReturns
         }
     }
 }

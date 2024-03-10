@@ -1,7 +1,6 @@
 using Core;
 using Core.Context;
 using Enums;
-using Game.Player;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -12,6 +11,7 @@ using UI.Windows.GameScreen.Charts;
 using UnityEngine;
 using UnityEngine.UI;
 using LabelsAPI = Game.Labels.LabelsPackage;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Rappers
 {
@@ -23,11 +23,6 @@ namespace UI.Windows.GameScreen.Rappers
         [BoxGroup("Result"), SerializeField] private Button okButton;
         [BoxGroup("Result"), SerializeField] private Button cancelButton;
         [BoxGroup("Result"), SerializeField] private Button nextButton;
-        
-        // [SerializeField] private ChartsPage chartsPage;
-        // [SerializeField] private RappersPage rappersPage;
-        // [SerializeField] private FeatSettingsPage featPage;
-        // [SerializeField] private BattleWorkingPage battlePage;
 
         private RapperInfo _rapper;
         private ConversationType _convType;
@@ -55,7 +50,7 @@ namespace UI.Windows.GameScreen.Rappers
 
         private static bool AnalyzeConversations(int playerPoints, int rapperPoints)
         {
-            var hypeBonus = PlayerManager.Data.Hype / 5;
+            var hypeBonus = PlayerAPI.Data.Hype / 5;
             return playerPoints + hypeBonus > rapperPoints;
         }
 
@@ -93,7 +88,7 @@ namespace UI.Windows.GameScreen.Rappers
                     break;
 
                 case ConversationType.Label:
-                    _rapper.Label = PlayerManager.Data.Label;
+                    _rapper.Label = PlayerAPI.Data.Label;
                     LabelsAPI.Instance.RefreshScore(_rapper.Label);
                     MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
                     break;

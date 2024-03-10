@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Enums;
-using Game.Player;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Personal.HouseTab
 {
@@ -27,7 +27,7 @@ namespace UI.Windows.GameScreen.Personal.HouseTab
         
         public override void Open()
         {
-            var house = PlayerManager.Data.Goods
+            var house = PlayerAPI.Data.Goods
                 .OrderByDescending(e => e.Level)
                 .FirstOrDefault(e => e.Type == GoodsType.Apartments);
             
