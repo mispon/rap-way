@@ -56,7 +56,7 @@ namespace UI.Windows.GameScreen.Training
         private void OpenTab(int index)
         {
             _tabIndex = index;
-            HintsManager.Instance.ShowHint($"tutorial_training_{index}");
+            HintsManager.Instance.ShowHint($"tutorial_training_{index}", index);
 
             for (var i = 0; i < tabs.Length; i++)
             {

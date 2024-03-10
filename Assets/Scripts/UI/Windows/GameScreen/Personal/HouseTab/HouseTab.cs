@@ -44,6 +44,8 @@ namespace UI.Windows.GameScreen.Personal.HouseTab
             }
             
             base.Open();
+            
+            // HintsManager.Instance.ShowHint("tutorial_house_page", PersonalTabType.House);
         }
 
         private void SetState(bool isHouseExists)

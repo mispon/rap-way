@@ -15,7 +15,6 @@ using Random = UnityEngine.Random;
 
 namespace UI.Windows.GameScreen.GameEvent
 {
-
     public class EventMainPage: Page
     {
         [BoxGroup("Card"), SerializeField] private Text nameText;

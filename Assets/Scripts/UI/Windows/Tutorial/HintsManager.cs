@@ -6,8 +6,6 @@ using Game;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Enums;
-using UI.Windows.GameScreen.Hints;
-using UnityEngine;
 
 namespace UI.Windows.Tutorial
 {
@@ -18,7 +16,7 @@ namespace UI.Windows.Tutorial
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
         }
 
-        public void ShowHint(string key)
+        public void ShowHint(string key, object pageCtx = null)
         {
             bool ok = GameManager.Instance.ShowedHints.Add(key);
             if (!ok)
@@ -31,8 +29,9 @@ namespace UI.Windows.Tutorial
                 Type = WindowType.Hints,
                 Context = new Dictionary<string, object>
                 {
-                    ["hint_key"]  = key, 
-                    ["hint_text"] = info 
+                    ["hint_key"]  = key,
+                    ["hint_text"] = info,
+                    ["page_ctx"]  = pageCtx
                 }
             });
         }

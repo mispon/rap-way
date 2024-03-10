@@ -1,5 +1,6 @@
 using System.Threading;
 using Core;
+using MessageBroker;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using UI.Enums;
@@ -66,6 +67,8 @@ namespace Scenes
                 .Last()
                 .Subscribe(_ => loadingScreen.EndLoading(settings.FadeTimeEnd))
                 .AddTo(this);
+            
+            SceneMessageBroker.Instance.Publish(new SceneLoadedMessage());
         }
     }
 }

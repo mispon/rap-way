@@ -2,10 +2,12 @@ using System;
 using Core;
 using Core.OrderedStarter;
 using Enums;
+using MessageBroker;
 using ScriptableObjects;
 using UI.Windows.GameScreen.GameEvent;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game
 {
@@ -36,12 +38,9 @@ namespace Game
         {
             if (chance >= Random.Range(0f, 1f))
             {
-                int fans = GameManager.Instance.PlayerData.Fans;
-                GameEventInfo eventInfo = data.GetRandomInfo(type, fans);
+                var eventInfo = data.GetRandomInfo(type, PlayerAPI.Data.Fans);
                 if (eventInfo != null)
-                {
                     eventMainPage.Show(eventInfo);
-                }
             }
 
             onEventShownAction.Invoke();

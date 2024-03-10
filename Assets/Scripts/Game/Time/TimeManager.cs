@@ -32,7 +32,7 @@ namespace Game.Time
         private WaitForSeconds _waitForSecondsActive;
         private WaitForSeconds _waitForSecondsInactive;
 
-        private readonly CompositeDisposable _disposable;
+        private readonly CompositeDisposable _disposable = new();
         
         public void OnStart()
         {

@@ -11,8 +11,8 @@ namespace UI.Base
     public class WindowContainer : UIElementContainer
     {
         [DictionaryDrawerSettings(KeyLabel = "Window type", ValueLabel = "Window settings")]
-        [SerializeField] private Dictionary<WindowType, CanvasUIElement> _windows;
-        [SerializeField] private WindowType _startWindow;
+        [SerializeField] private Dictionary<WindowType, CanvasUIElement> windows;
+        [SerializeField] private WindowType startWindow;
 
         private WindowType _activeWindow;
         private readonly Stack<WindowType> _windowsHistory = new();
@@ -21,7 +21,7 @@ namespace UI.Base
         {
             base.Initialize();
             
-            foreach (var window in _windows.Values)
+            foreach (var window in windows.Values)
                 window.Initialize();
             
             MsgBroker.Instance
@@ -30,7 +30,7 @@ namespace UI.Base
                 .AddTo(disposables);
             
             HideAnyWindow();
-            ManageWindowControl(_startWindow, new object());
+            ManageWindowControl(startWindow, new object());
         }
 
         private void ManageWindowControl(WindowType windowType, object ctx)
@@ -64,15 +64,16 @@ namespace UI.Base
                 return;
             
             HideCurrentWindow();
-            window.Show(ctx);
             
             _windowsHistory.Push(_activeWindow);
             _activeWindow = windowType;
+            
+            window.Show(ctx);
         }
 
         private CanvasUIElement GetWindow(WindowType windowType)
         {
-            return _windows.GetValueOrDefault(windowType);
+            return windows.GetValueOrDefault(windowType);
         }
 
         private void HideCurrentWindow()

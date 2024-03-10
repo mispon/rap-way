@@ -6,4 +6,6 @@ namespace Scenes.MessageBroker.Messages
     {
         public SceneType SceneType;
     }
+
+    public struct SceneLoadedMessage {}
 }

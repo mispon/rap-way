@@ -49,7 +49,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             
             base.Open();
             
-            HintsManager.Instance.ShowHint("tutorial_no_labels");
+            HintsManager.Instance.ShowHint("tutorial_no_labels", PersonalTabType.Label);
         }
 
         private void CreateLabel()

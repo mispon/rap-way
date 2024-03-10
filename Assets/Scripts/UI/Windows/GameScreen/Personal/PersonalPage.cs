@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace UI.Windows.GameScreen.Personal
 {
-    internal enum TabsType
+    internal enum PersonalTabType
     {
         None,
         Personal,
@@ -38,7 +38,7 @@ namespace UI.Windows.GameScreen.Personal
         [Header("Реклама")]
         [SerializeField] private Button cashButton;
 
-        private TabsType _activeTab = TabsType.None;
+        private PersonalTabType _activeTab = PersonalTabType.None;
         private bool _isFirstOpen = true;
         
         private void Start()
@@ -56,23 +56,23 @@ namespace UI.Windows.GameScreen.Personal
         
         public override void Show(object ctx = null)
         {
-            var tab = ctx.Value<TabsType>();
+            var tab = ctx.Value<PersonalTabType>();
             switch (tab)
             {
-                case TabsType.House:
+                case PersonalTabType.House:
                     OpenHouseTab();
                     break;
                 
-                case TabsType.Label:
+                case PersonalTabType.Label:
                     OpenLabelTab();
                     break;
                 
-                case TabsType.MoneyReport:
+                case PersonalTabType.MoneyReport:
                     ShowLabelMoneyReport();
                     break;
                 
-                case TabsType.Personal:
-                case TabsType.None:
+                case PersonalTabType.Personal:
+                case PersonalTabType.None:
                 default:
                     OpenPersonalTab();
                     break;
@@ -91,9 +91,9 @@ namespace UI.Windows.GameScreen.Personal
 
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.PersonalPageOpened);
             
-            if (_activeTab != TabsType.Personal)
+            if (_activeTab != PersonalTabType.Personal)
             {
-                _activeTab = TabsType.Personal;
+                _activeTab = PersonalTabType.Personal;
                 UpdateTabs(personalTab, houseTab, labelTab);
                 UpdateTabButtons(personalButton, houseButton, labelButton);
             }
@@ -104,9 +104,9 @@ namespace UI.Windows.GameScreen.Personal
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.HousePageOpened);
 
-            if (_activeTab != TabsType.House)
+            if (_activeTab != PersonalTabType.House)
             {
-                _activeTab = TabsType.House;
+                _activeTab = PersonalTabType.House;
                 UpdateTabs(houseTab, personalTab, labelTab);
                 UpdateTabButtons(houseButton, personalButton, labelButton);
             }
@@ -117,9 +117,9 @@ namespace UI.Windows.GameScreen.Personal
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelInfoPageOpened);
 
-            if (_activeTab != TabsType.Label)
+            if (_activeTab != PersonalTabType.Label)
             {
-                _activeTab = TabsType.Label;
+                _activeTab = PersonalTabType.Label;
                 UpdateTabs(labelTab, personalTab, houseTab);
                 UpdateTabButtons(labelButton, personalButton, houseButton);
             }
@@ -129,7 +129,7 @@ namespace UI.Windows.GameScreen.Personal
         {
             labelTab.Close();
             
-            _activeTab = TabsType.Label;
+            _activeTab = PersonalTabType.Label;
             UpdateTabs(labelTab, personalTab, houseTab);
             UpdateTabButtons(labelButton, personalButton, houseButton);
 
@@ -152,7 +152,7 @@ namespace UI.Windows.GameScreen.Personal
 
         protected override void AfterHide()
         {
-            _activeTab = TabsType.None;
+            _activeTab = PersonalTabType.None;
             _isFirstOpen = true;
             
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());

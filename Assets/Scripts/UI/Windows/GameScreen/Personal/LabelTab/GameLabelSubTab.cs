@@ -48,7 +48,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             
             base.Open();
             
-            HintsManager.Instance.ShowHint("tutorial_game_label");
+            HintsManager.Instance.ShowHint("tutorial_game_label", PersonalTabType.Label);
         }
 
         private void DisplayInfo(LabelInfo label)

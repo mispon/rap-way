@@ -66,7 +66,7 @@ namespace UI.Windows.GameScreen.Personal.PersonalTab
             
             base.Open();
             
-            HintsManager.Instance.ShowHint("tutorial_personal_page");
+            HintsManager.Instance.ShowHint("tutorial_personal_page", PersonalTabType.Personal);
         }
 
         private void SetupCharacter(Gender gender)

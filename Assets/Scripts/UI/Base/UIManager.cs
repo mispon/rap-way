@@ -19,17 +19,24 @@ namespace UI.Base
         {
             MsgBroker.Instance
                 .Receive<GameReadyMessage>()
-                .Subscribe(_ =>
-                {
-                    foreach (var container in containers)
-                        container.Initialize();
-                })
+                .Subscribe(msg => InitContainers())
                 .AddTo(_disposable);
-            
+            MsgBroker.Instance
+                .Receive<SceneLoadedMessage>()
+                .Subscribe(msg => InitContainers())
+                .AddTo(_disposable);
             SceneMessageBroker.Instance
                 .Receive<SceneLoadMessage>()
                 .Subscribe(msg => Dispose())
                 .AddTo(_disposable);
+        }
+
+        private void InitContainers()
+        {
+            foreach (var container in containers)
+            {
+                container.Initialize();
+            }
         }
 
         public void Dispose()

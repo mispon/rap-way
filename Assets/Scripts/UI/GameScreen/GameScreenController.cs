@@ -45,6 +45,9 @@ namespace UI.GameScreen
             hypeButton.onClick.AddListener(() => ShowDescriptionPage(statDescItems[2]));
 
             HandleStateEvents();
+            
+            MsgBroker.Instance.Publish(new FullStateRequest());
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
         }
 
         private void HandleStateEvents()
@@ -69,9 +72,6 @@ namespace UI.GameScreen
                 .Receive<FullStateResponse>()
                 .Subscribe(UpdateHUD)
                 .AddTo(_disposable);
-            
-            MsgBroker.Instance.Publish(new FullStateRequest());
-            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
         }
 
         private static void ShowDescriptionPage(StatDescItem item)

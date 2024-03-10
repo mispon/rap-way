@@ -76,8 +76,8 @@ namespace Game.Labels
             {
                 MsgBroker.Instance.Publish(new WindowControlMessage
                 {
-                    Type = WindowType.Personal,
-                    Context = TabsType.MoneyReport
+                    Type    = WindowType.Personal,
+                    Context = PersonalTabType.MoneyReport
                 });
             });
         }

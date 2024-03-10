@@ -67,7 +67,7 @@ namespace UI.Enums
         
         Eagler  = 48,
         History = 49,
-        
+
         Previous     = 998,
         None         = 999
     }

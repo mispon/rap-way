@@ -10,6 +10,7 @@ using ScriptableObjects;
 using UI.Controls.Ask;
 using UI.Controls.ScrollViewController;
 using UI.Enums;
+using UI.Windows.GameScreen.Charts;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
@@ -77,7 +78,7 @@ namespace UI.Windows.GameScreen.Labels
 
         protected override void AfterShow(object ctx = null)
         {
-            HintsManager.Instance.ShowHint("tutorial_labels");
+            HintsManager.Instance.ShowHint("tutorial_labels", ChartsTabType.Labels);
         }
         
         protected override void AfterHide()
