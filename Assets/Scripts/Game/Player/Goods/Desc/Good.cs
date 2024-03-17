@@ -1,7 +1,7 @@
 ﻿using System;
 using Enums;
 
-namespace Game.Player.Goods
+namespace Game.Player.Goods.Desc
 {
     [Serializable]
     public class Good

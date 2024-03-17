@@ -19,7 +19,7 @@ namespace UI.Windows.Tutorial
         [SerializeField] private TutorialWindow tutorialWindow;
         [SerializeField] private TutorialStageSettings[] tutorialStages;
         
-        private const int NO_STAGES = -1;
+        private const int NO_STAGES = -2;
         private const string TUTORIAL_STAGE_INDEX_KEY = "RapWay_TutorialStage";
         
         public override void Initialize()
@@ -46,15 +46,15 @@ namespace UI.Windows.Tutorial
         
         private int GetNextTutorialStageIndex()
         {
-            int index = PlayerPrefs.HasKey(TUTORIAL_STAGE_INDEX_KEY) 
+            int index = PlayerPrefs.HasKey(TUTORIAL_STAGE_INDEX_KEY)
                 ? PlayerPrefs.GetInt(TUTORIAL_STAGE_INDEX_KEY)
                 : -1;
-            
-            if (index >= tutorialStages.Length-1)
+
+            if (index >= tutorialStages.Length - 1)
             {
                 return NO_STAGES;
             }
-
+            
             index++;
             PlayerPrefs.SetInt(TUTORIAL_STAGE_INDEX_KEY, index);
             

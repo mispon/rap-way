@@ -2,7 +2,6 @@ using System;
 using Core;
 using Core.OrderedStarter;
 using Enums;
-using MessageBroker;
 using ScriptableObjects;
 using UI.Windows.GameScreen.GameEvent;
 using UnityEngine;
@@ -38,7 +37,7 @@ namespace Game
         {
             if (chance >= Random.Range(0f, 1f))
             {
-                var eventInfo = data.GetRandomInfo(type, PlayerAPI.Data.Fans);
+                var eventInfo = data.GetRandomInfo(type, PlayerAPI.State.GetFans());
                 if (eventInfo != null)
                     eventMainPage.Show(eventInfo);
             }

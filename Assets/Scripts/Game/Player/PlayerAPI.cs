@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Game.Player.State;
 using Game.Player.State.Desc;
 using Models.Trends;
 
@@ -8,11 +9,10 @@ namespace Game.Player
     {
         public static PlayerData Data => GameManager.Instance.PlayerData;
 
-        /// <summary>
-        /// Обновляет информацию о трендах
-        /// TODO: move to more appropriate place
-        /// </summary>
-        public static void UpdateTrends(Styles style, Themes theme)
+        // TODO: add more different API categories
+        public static readonly StateAPI State = new();
+        
+        public static void UpdateKnownTrends(Styles style, Themes theme)
         {
             Data.LastKnownTrends ??= Trends.New;
 

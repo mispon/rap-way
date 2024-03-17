@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Enums;
 using Game.Player.Achievements.Desc;
 using Game.Player.Goods;
+using Game.Player.Goods.Desc;
 using TrendsData = Models.Trends.Trends;
 
 namespace Game.Player.State.Desc

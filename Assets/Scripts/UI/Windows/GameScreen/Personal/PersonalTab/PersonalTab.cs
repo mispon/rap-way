@@ -4,6 +4,7 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Game.Player.Goods;
+using Game.Player.Goods.Desc;
 using Game.Player.State.Desc;
 using Models.Production;
 using ScriptableObjects;

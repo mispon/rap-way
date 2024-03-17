@@ -35,6 +35,7 @@ namespace UI.Windows.GameScreen.Track
         [BoxGroup("Controls"), SerializeField] protected Text textSkill;
         [BoxGroup("Controls"), SerializeField] private Image bitmakerAvatar;
         [BoxGroup("Controls"), SerializeField] private Image textwritterAvatar;
+        [BoxGroup("Controls"), SerializeField] private GameObject backButton;
 
         [BoxGroup("Images"), SerializeField] private ImagesBank imagesBank;
         
@@ -142,7 +143,10 @@ namespace UI.Windows.GameScreen.Track
             SetupCarousel(PlayerAPI.Data);
             SetupTeam();
             DisplaySkills(PlayerAPI.Data);
-
+            
+            bool hasAnyTracks = PlayerAPI.Data.History.TrackList.Count > 0;
+            backButton.SetActive(hasAnyTracks);
+            
             EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
         }
 

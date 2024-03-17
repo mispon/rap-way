@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.OrderedStarter;
 using Enums;
+using Game.Player.Goods.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;

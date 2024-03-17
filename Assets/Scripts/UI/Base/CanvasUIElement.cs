@@ -68,11 +68,7 @@ namespace UI.Base
             AfterHide();
         }
         
-        public void Dispose()
-        {
-            BeforeHide();
-            AfterHide();
-        }
+        public void Dispose() {}
         
         public    virtual void Initialize() {}
         protected virtual void BeforeShow(object ctx = null) {}

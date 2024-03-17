@@ -27,7 +27,7 @@ namespace UI.Windows.GameScreen.Social.ResultPages
             themeName.text = GetLocale(trends.Theme.GetDescription()).ToUpper();
             styleName.text = GetLocale(trends.Style.GetDescription()).ToUpper();
 
-            PlayerAPI.UpdateTrends(trends.Style, trends.Theme);
+            PlayerAPI.UpdateKnownTrends(trends.Style, trends.Theme);
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
         }
     }

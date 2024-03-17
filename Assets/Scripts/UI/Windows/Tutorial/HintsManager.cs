@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Core;
 using Core.Localization;
@@ -6,6 +7,7 @@ using Game;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Enums;
+using UnityEngine;
 
 namespace UI.Windows.Tutorial
 {
@@ -13,6 +15,12 @@ namespace UI.Windows.Tutorial
     {
         public void OnStart()
         {
+            StartCoroutine(StartTutorial());
+        }
+
+        private static IEnumerator StartTutorial()
+        {
+            yield return new WaitForSeconds(1);
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
         }
 

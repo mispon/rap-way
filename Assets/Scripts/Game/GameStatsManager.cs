@@ -70,9 +70,6 @@ namespace Game
             ChangeTrends(now);
         }
 
-        /// <summary>
-        /// Изменяем тренды
-        /// </summary>
         private static void ChangeTrends(DateTime now)
         {
             GameManager.Instance.GameStats.Trends = new Trends
@@ -83,9 +80,6 @@ namespace Game
             };
         }
 
-        /// <summary>
-        /// Анализирует совпадения выбранных стилей и темы с трендовыми
-        /// </summary>
         public static void Analyze(TrendInfo info)
         {
             var currentTrend = GameManager.Instance.GameStats.Trends;
@@ -100,9 +94,6 @@ namespace Game
     
     public static class Extension
     {
-        /// <summary>
-        /// Получение оценки совпдаения выбранного и текущего значения
-        /// </summary>
         public static float AnalyzeEquality<T>(this BaseCompareInfo<T>[] array, T currentValue, T selectedValue)
         {
             if (currentValue.Equals(selectedValue))
