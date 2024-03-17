@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Core;
 using Core.Context;
 using Extensions;
@@ -31,18 +32,22 @@ namespace UI.Windows.GameScreen.Store.Purchase
         [BoxGroup("Card")] [SerializeField] private Image moneyIcon;
         [BoxGroup("Card")] [SerializeField] private Text price;
         [BoxGroup("Card")] [SerializeField] private Button buyButton;
+        [BoxGroup("Card")] [SerializeField] private Button cancelButton;
 
         private GoodInfo _info;
+        private int _category;
         private readonly CompositeDisposable _disposable = new();
         
         private void Start()
         {
             buyButton.onClick.AddListener(BuyItemClick);
+            cancelButton.onClick.AddListener(CloseCard);
         }
-
+        
         public override void Show(object ctx = null)
         {
-            _info = ctx.Value<GoodInfo>();
+            _info     = ctx.ValueByKey<GoodInfo>("item_info");
+            _category = ctx.ValueByKey<int>("category");
             
             icon.sprite = _info.SquareImage;
             itemName.text = _info.Name;
@@ -76,7 +81,11 @@ namespace UI.Windows.GameScreen.Store.Purchase
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
                 Type = WindowType.Shop_PurchasedItem,
-                Context = _info
+                Context = new Dictionary<string, object>
+                {
+                    ["item_info"] = _info,
+                    ["category"]  = _category
+                }
             });
         }
 
@@ -119,6 +128,11 @@ namespace UI.Windows.GameScreen.Store.Purchase
                 
                 _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
             };
+        }
+        
+        private void CloseCard()
+        {
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Shop, _category));
         }
         
         protected override void BeforeShow(object ctx = null)

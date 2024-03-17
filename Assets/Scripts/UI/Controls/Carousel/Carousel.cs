@@ -2,6 +2,7 @@
 using Core;
 using MessageBroker;
 using MessageBroker.Messages.Game;
+using Scenes.MessageBroker.Messages;
 using ScriptableObjects;
 using UniRx;
 using UnityEngine;
@@ -26,17 +27,25 @@ namespace UI.Controls.Carousel
 
         private int _index;
         private CarouselItem[] _items;
-        private IDisposable _disposable;
+        
+        private readonly CompositeDisposable _disposable = new();
         
         private void Start()
         {
             leftArrow.onClick.AddListener(() => OnArrowClicked(-1));
             rightArrow.onClick.AddListener(() => OnArrowClicked(1));
 
-            if (onAwake) 
-                _disposable = MsgBroker.Instance
+            if (onAwake)
+            {
+                MsgBroker.Instance
                     .Receive<GameReadyMessage>()
-                    .Subscribe(_ => Init());
+                    .Subscribe(_ => Init())
+                    .AddTo(_disposable);
+                MsgBroker.Instance
+                    .Receive<SceneLoadedMessage>()
+                    .Subscribe(_ => Init())
+                    .AddTo(_disposable);
+            }
         }
         
         private void Init() => Init(props);
@@ -132,7 +141,7 @@ namespace UI.Controls.Carousel
 
         private void OnDestroy()
         {
-            _disposable?.Dispose();
+            _disposable.Clear();
         }
     }
 } 

@@ -68,7 +68,7 @@ namespace Scenes
                 .Subscribe(_ => loadingScreen.EndLoading(settings.FadeTimeEnd))
                 .AddTo(this);
             
-            SceneMessageBroker.Instance.Publish(new SceneLoadedMessage());
+            MsgBroker.Instance.Publish(new SceneLoadedMessage());
         }
     }
 }

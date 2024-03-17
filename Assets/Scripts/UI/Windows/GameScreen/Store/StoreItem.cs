@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Core;
 using Enums;
 using Extensions;
@@ -36,6 +37,7 @@ namespace UI.Windows.GameScreen.Store
         private float _height { get; set; }
         private float _width { get; set; }
         
+        private int _category;
         private GoodInfo _info;
         
         private void Start()
@@ -49,14 +51,19 @@ namespace UI.Windows.GameScreen.Store
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
                 Type = WindowType.Shop_ItemCard,
-                Context = _info
+                Context = new Dictionary<string, object>
+                {
+                    ["item_info"] = _info,
+                    ["category"]  = _category
+                }
             });
         }
 
-        public void Initialize(int i, GoodInfo info)
+        public void Initialize(int idx, int category, GoodInfo info)
         {
-            _index = i;
-            _info = info;
+            _index    = idx;
+            _category = category;
+            _info     = info;
             
             icon.sprite = info.SquareImage;
             price.text = info.Price.GetDisplay();

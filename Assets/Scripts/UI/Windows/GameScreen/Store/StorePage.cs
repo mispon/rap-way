@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Context;
 using Enums;
 using Extensions;
 using Firebase.Analytics;
@@ -51,7 +52,8 @@ namespace UI.Windows.GameScreen.Store
 
         protected override void AfterShow(object ctx = null)
         {
-            _categoryItems[0].ShowItems(true);
+            int idx = ctx.Value<int>(); 
+            _categoryItems[idx].ShowItems(true);
         }
 
         private void ShowCategoriesList()

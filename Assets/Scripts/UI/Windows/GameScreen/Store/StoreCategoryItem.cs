@@ -32,8 +32,9 @@ namespace UI.Windows.GameScreen.Store
         {
             if (!silent)
                 SoundManager.Instance.PlaySound(UIActionType.Click);
-            
-            itemsView.Show(_itemsInfo);
+
+            int category = _index - 1; 
+            itemsView.Show(category, _itemsInfo);
         }
 
         public void Initialize(int i, Sprite cIcon, string cName, GoodInfo[] itemsInfo)

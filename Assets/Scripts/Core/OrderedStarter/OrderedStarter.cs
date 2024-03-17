@@ -1,6 +1,6 @@
-﻿using System;
-using MessageBroker;
+﻿using MessageBroker;
 using MessageBroker.Messages.Game;
+using Scenes.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 
@@ -11,24 +11,31 @@ namespace Core.OrderedStarter
         [Header("Init order")]
         [SerializeField] private MonoBehaviour[] starters;
 
-        private IDisposable _disposable;
+        private readonly CompositeDisposable _disposable = new();
         
         private void Start()
         {
-            _disposable = MsgBroker.Instance
+            MsgBroker.Instance
                 .Receive<GameReadyMessage>()
-                .Subscribe(e =>
-                {
-                    foreach (var starter in starters)
-                    {
-                        (starter as IStarter)?.OnStart();
-                    }
-                });
+                .Subscribe(_ => Run())
+                .AddTo(_disposable);
+            MsgBroker.Instance
+                .Receive<SceneLoadedMessage>()
+                .Subscribe(_ => Run())
+                .AddTo(_disposable);
+        }
+
+        private void Run()
+        {
+            foreach (var starter in starters)
+            {
+                (starter as IStarter)?.OnStart();
+            }
         }
 
         private void OnDestroy()
         {
-            _disposable?.Dispose();
+            _disposable.Clear();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace UI.Windows.GameScreen.Store
         
         private readonly List<StoreItem> _storeItems = new();
         
-        public void Show(GoodInfo[] itemsInfo)
+        public void Show(int category, GoodInfo[] itemsInfo)
         {
             Clear();
             
@@ -22,7 +22,7 @@ namespace UI.Windows.GameScreen.Store
             {
                 var item = items.InstantiatedElement<StoreItem>(itemTemplate);
                 
-                item.Initialize(i, itemInfo);
+                item.Initialize(i, category, itemInfo);
                 i++;
                 
                 _storeItems.Add(item);
