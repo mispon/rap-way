@@ -1,18 +1,18 @@
 using MessageBroker;
-using MessageBroker.Handlers;
+using MessageBroker.Interfaces;
 using MessageBroker.Messages.Time;
 using UniRx;
 
 namespace Game.Player.Energy
 {
-    public class EnergyMessagesHandler : BaseMessagesHandler
+    public class EnergyMessagesHandler : IMessagesHandler
     {
-        protected override void RegisterHandlers()
+        public void RegisterHandlers(CompositeDisposable disposable)
         {
-            HandleDayLeft();
+            HandleDayLeft(disposable);
         }
 
-        private void HandleDayLeft()
+        private static void HandleDayLeft(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<DayLeftMessage>()

@@ -34,6 +34,8 @@ namespace UI.Windows.Tutorial
 
         private void ShowNextTutorialStage()
         {
+            Debug.Log("Tick");
+            
             int stageIndex = GetNextTutorialStageIndex();
             
             // player passed all tutorial stages

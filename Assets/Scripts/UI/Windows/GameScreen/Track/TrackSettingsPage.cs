@@ -118,12 +118,12 @@ namespace UI.Windows.GameScreen.Track
 
         private void ResetTeam(object[] args)
         {
-            bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
+            bitmakerAvatar.sprite    = imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = imagesBank.TextwritterInactive;
 
             var playerStats = PlayerAPI.Data.Stats;
-            bitSkill.text = $"{playerStats.Bitmaking.Value}";
-            textSkill.text = $"{playerStats.Vocobulary.Value}";
+            bitSkill.text   = $"{playerStats.Bitmaking.Value}";
+            textSkill.text  = $"{playerStats.Vocobulary.Value}";
         }
 
         private CarouselProps ConvertToCarouselProps<T>(T value) where T : Enum

@@ -1,6 +1,6 @@
 using System.Linq;
 using MessageBroker;
-using MessageBroker.Handlers;
+using MessageBroker.Interfaces;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Production;
 using MessageBroker.Messages.Time;
@@ -9,16 +9,16 @@ using UnityEngine;
 
 namespace Game.Player.Hype
 {
-    public class HypeMessagesHandler : BaseMessagesHandler
+    public class HypeMessagesHandler : IMessagesHandler
     {
-        protected override void RegisterHandlers()
+        public void RegisterHandlers(CompositeDisposable disposable)
         {
-            HandleDayLeft();
-            HandleChangeHype();
-            HandleProductionReward();
+            HandleDayLeft(disposable);
+            HandleChangeHype(disposable);
+            HandleProductionReward(disposable);
         }
 
-        private void HandleDayLeft()
+        private static void HandleDayLeft(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<DayLeftMessage>()
@@ -32,7 +32,7 @@ namespace Game.Player.Hype
                 .AddTo(disposable);
         }
         
-        private void HandleChangeHype()
+        private static void HandleChangeHype(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<ChangeHypeMessage>()
@@ -40,7 +40,7 @@ namespace Game.Player.Hype
                 .AddTo(disposable);
         }
         
-        private void HandleProductionReward()
+        private static void HandleProductionReward(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<ProductionRewardMessage>()

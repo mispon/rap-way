@@ -1,7 +1,7 @@
 ﻿namespace Core.OrderedStarter
 {
     /// <summary>
-    /// Интерфейс для реализации упорядоченного старта объектов
+    /// Interface for ordered startup
     /// </summary>
     public interface IStarter
     {

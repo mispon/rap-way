@@ -1,6 +1,6 @@
 using Game.Settings;
 using MessageBroker;
-using MessageBroker.Handlers;
+using MessageBroker.Interfaces;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Production;
 using UniRx;
@@ -8,24 +8,24 @@ using UnityEngine;
 
 namespace Game.Player.State
 {
-    public class StateMessagesHandler : BaseMessagesHandler
+    public class StateMessagesHandler : IMessagesHandler
     {
         private GameSettings _settings;
 
-        protected override void RegisterHandlers()
+        public void RegisterHandlers(CompositeDisposable disposable)
         {
             _settings = GameManager.Instance.Settings;
 
-            HandleFullStateRequest();
-            HandleSpendMoneyRequest();
-            HandleChangeMoney();
-            HandleChangeFans();
-            HandleChangeExp();
-            HandleProductionReward();
-            HandleConvertReward();
+            HandleFullStateRequest(disposable);
+            HandleSpendMoneyRequest(disposable);
+            HandleChangeMoney(disposable);
+            HandleChangeFans(disposable);
+            HandleChangeExp(disposable);
+            HandleProductionReward(disposable);
+            HandleConvertReward(disposable);
         }
 
-        private void HandleFullStateRequest()
+        private static void HandleFullStateRequest(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<FullStateRequest>()
@@ -47,7 +47,7 @@ namespace Game.Player.State
                 .AddTo(disposable);
         }
         
-        private void HandleChangeMoney()
+        private void HandleChangeMoney(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<ChangeMoneyMessage>()
@@ -55,7 +55,7 @@ namespace Game.Player.State
                 .AddTo(disposable);
         }
         
-        private void HandleSpendMoneyRequest()
+        private void HandleSpendMoneyRequest(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<SpendMoneyRequest>()
@@ -71,7 +71,7 @@ namespace Game.Player.State
                 .AddTo(disposable);
         }
 
-        private void HandleChangeFans()
+        private void HandleChangeFans(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<ChangeFansMessage>()
@@ -79,7 +79,7 @@ namespace Game.Player.State
                 .AddTo(disposable);
         }
         
-        private void HandleChangeExp()
+        private static void HandleChangeExp(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<ChangeExpMessage>()
@@ -87,7 +87,7 @@ namespace Game.Player.State
                 .AddTo(disposable);
         }
 
-        private void HandleProductionReward()
+        private void HandleProductionReward(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<ProductionRewardMessage>()
@@ -105,7 +105,7 @@ namespace Game.Player.State
                 .AddTo(disposable);
         }
 
-        private void HandleConvertReward()
+        private void HandleConvertReward(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<ConcertRewardMessage>()

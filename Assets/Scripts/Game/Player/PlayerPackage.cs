@@ -4,6 +4,9 @@ namespace Game.Player
 {
     public partial class PlayerPackage : GamePackage<PlayerPackage>, IStarter
     {
-        public void OnStart() { }
+        public void OnStart()
+        {
+            RegisterHandlers();
+        }
     }
 }

@@ -1,7 +1,7 @@
 using Core.Events;
 using Game.Notifications;
 using MessageBroker;
-using MessageBroker.Handlers;
+using MessageBroker.Interfaces;
 using MessageBroker.Messages.Time;
 using MessageBroker.Messages.UI;
 using UI.Enums;
@@ -10,15 +10,15 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Player.Team
 {
-    public class TeamMessagesHandler : BaseMessagesHandler
+    public class TeamMessagesHandler : IMessagesHandler
     {
-        protected override void RegisterHandlers()
+        public void RegisterHandlers(CompositeDisposable disposable)
         {
-            HandleDayLeft();
-            HandleMonthLeft();
+            HandleDayLeft(disposable);
+            HandleMonthLeft(disposable);
         }
 
-        private void HandleDayLeft()
+        private static void HandleDayLeft(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<DayLeftMessage>()
@@ -30,7 +30,7 @@ namespace Game.Player.Team
                 .AddTo(disposable);
         }
 
-        private void HandleMonthLeft()
+        private static void HandleMonthLeft(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<MonthLeftMessage>()

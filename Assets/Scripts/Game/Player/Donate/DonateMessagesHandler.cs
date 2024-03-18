@@ -1,20 +1,20 @@
 using MessageBroker;
-using MessageBroker.Handlers;
+using MessageBroker.Interfaces;
 using MessageBroker.Messages.Player;
 using UniRx;
 
 namespace Game.Player.Donate
 {
-    public class DonateMessagesHandler : BaseMessagesHandler
+    public class DonateMessagesHandler : IMessagesHandler
     {
-        protected override void RegisterHandlers()
+        public void RegisterHandlers(CompositeDisposable disposable)
         {
-            HandleAddDonate();
-            HandleSpendDonate();
-            HandleNoAddPurchase();
+            HandleAddDonate(disposable);
+            HandleSpendDonate(disposable);
+            HandleNoAddPurchase(disposable);
         }
 
-        private void HandleAddDonate()
+        private static void HandleAddDonate(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<AddDonateMessage>()
@@ -34,7 +34,7 @@ namespace Game.Player.Donate
                 .AddTo(disposable);
         }
         
-        private void HandleSpendDonate()
+        private static void HandleSpendDonate(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<SpendDonateRequest>()
@@ -61,7 +61,7 @@ namespace Game.Player.Donate
                 .AddTo(disposable);
         }
 
-        private void HandleNoAddPurchase()
+        private static void HandleNoAddPurchase(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<NoAdsPurchaseMessage>()

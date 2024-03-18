@@ -34,12 +34,6 @@ namespace UI.Windows.GameScreen.GameEvent
             neutralButton.onClick.AddListener(() => Decide(GameEventDecisionType.Neutral));
             randomButton.onClick.AddListener(DecideRandom);
         }
-        
-        public override void Show(object ctx = null)
-        {
-            _eventInfo = ctx.Value<GameEventInfo>();
-            base.Show(ctx);
-        }
    
         private void Decide(GameEventDecisionType type)
         {
@@ -68,14 +62,17 @@ namespace UI.Windows.GameScreen.GameEvent
         
         protected override void BeforeShow(object ctx = null)
         {
-            nameText.text = GetLocale(_eventInfo.Name);
+            _eventInfo = ctx.Value<GameEventInfo>();
+            
+            nameText.text        = GetLocale(_eventInfo.Name);
             descriptionText.text = GetLocale(_eventInfo.Description);
         }
 
         protected override void AfterHide()
         {
-            nameText.text = string.Empty;
+            nameText.text        = string.Empty;
             descriptionText.text = string.Empty;
+            
             _eventInfo = null;
         }
     }

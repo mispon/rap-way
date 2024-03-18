@@ -18,7 +18,7 @@ namespace UI.Controls.Progress
         
         private int _duration;
         
-        private readonly WaitForSeconds _beforeFinishDelay = new WaitForSeconds(2f);
+        private readonly WaitForSeconds _beforeFinishDelay = new(2f);
         
         /// <summary>
         /// Инициализация прогресс бара
