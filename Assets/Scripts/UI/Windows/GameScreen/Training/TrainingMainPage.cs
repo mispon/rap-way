@@ -17,13 +17,19 @@ namespace UI.Windows.GameScreen.Training
         [BoxGroup("Controls"), SerializeField] private Carousel tabsCarousel;
         [BoxGroup("Controls"), SerializeField] private TrainingTab[] tabs;
         [BoxGroup("Controls"), SerializeField] private Text expLabel;
+        [BoxGroup("Controls"), SerializeField] private Button closeButton;
 
         private int _tabIndex;
 
         public override void Initialize()
         {
             tabsCarousel.onChange += OnTabChanged;
-
+            closeButton.onClick.AddListener(() =>
+            {
+                MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
+                base.Hide();
+            });
+            
             foreach (var tab in tabs)
             {
                 tab.Init();
@@ -85,10 +91,9 @@ namespace UI.Windows.GameScreen.Training
 
         protected override void AfterHide()
         {
-            MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
             tabsCarousel.SetIndex(0);
         }
-
+        
         private void OnDestroy()
         {
             tabsCarousel.onChange -= OnTabChanged;
