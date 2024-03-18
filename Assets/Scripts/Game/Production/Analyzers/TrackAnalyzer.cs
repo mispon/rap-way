@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Threading;
-using MessageBroker;
-using MessageBroker.Messages.Player;
 using Models.Production;
-using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using PlayerAPI  = Game.Player.PlayerPackage;
 using RappersAPI = Game.Rappers.RappersPackage;
-using LabelsAPI = Game.Labels.LabelsPackage;
+using LabelsAPI  = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
@@ -79,36 +76,10 @@ namespace Game.Production.Analyzers
             float workPointsFactor = CalculateWorkPointsFactor(track.TextPoints, track.BitPoints);
             qualityPoints += workPointsFactor;
 
-            float goodsPointsFactor = GetGoodsQualityImpact();
+            float goodsPointsFactor = PlayerAPI.Goods.GetQualityImpact();
             qualityPoints += goodsPointsFactor;
             
             return Mathf.Min(qualityPoints, 1f);
-        }
-
-        /// <summary>
-        /// TODO: удалить этот костыль, перейти на апи
-        /// </summary>
-        private float GetGoodsQualityImpact()
-        {
-            float impact = 0f;
-            bool isDone = false;
-
-            _disposable = MsgBroker.Instance
-                .Receive<GoodsQualityImpactResponse>()
-                .Subscribe(e =>
-                {
-                    impact = e.Value;
-                    isDone = true;
-                    _disposable?.Dispose();
-                });
-            MsgBroker.Instance.Publish(new GoodsQualityImpactRequest());
-            
-            while (!isDone)
-            {
-                Thread.Sleep(100);
-            }
-
-            return impact;
         }
 
         /// <summary>

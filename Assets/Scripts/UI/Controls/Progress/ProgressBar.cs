@@ -73,7 +73,7 @@ namespace UI.Controls.Progress
         private IEnumerator DelayAndFinishCoroutine()
         {
             yield return _beforeFinishDelay;
-            onFinish.Invoke();
+            onFinish.Invoke();   
         }
     }
 }

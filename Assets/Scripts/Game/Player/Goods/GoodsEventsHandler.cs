@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
 using Core.OrderedStarter;
-using Enums;
 using Game.Player.Goods.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Player;
@@ -19,7 +17,6 @@ namespace Game.Player.Goods
         {
             HandleAddNewGood();
             HandleGoodExistsRequest();
-            HandleQualityImpactRequest();
         }
 
         private void HandleAddNewGood()
@@ -57,33 +54,6 @@ namespace Game.Player.Goods
                         : playerData.Goods.Any(g => g.Type == e.Type && g.Level == e.Level);
                     
                     MsgBroker.Instance.Publish(new GoodExistsResponse {Status = exists});
-                })
-                .AddTo(_disposable);
-        }
-
-        private void HandleQualityImpactRequest()
-        {
-            MsgBroker.Instance
-                .Receive<GoodsQualityImpactRequest>()
-                .Subscribe(_ =>
-                {
-                    var playerData = GameManager.Instance.PlayerData;
-                    
-                    var equipTypes = new HashSet<GoodsType>
-                    {
-                        GoodsType.Micro,
-                        GoodsType.AudioCard,
-                        GoodsType.FxMixer,
-                        GoodsType.Acoustic
-                    };
-
-                    var playerEquipment = playerData.Goods
-                        .Where(g => equipTypes.Contains(g.Type))
-                        .GroupBy(g => g.Type)
-                        .ToDictionary(k => k, v => v.Max(g => g.QualityImpact));
-
-                    float impactTotal = playerEquipment.Sum(p => p.Value);
-                    MsgBroker.Instance.Publish(new GoodsQualityImpactResponse {Value = impactTotal});
                 })
                 .AddTo(_disposable);
         }

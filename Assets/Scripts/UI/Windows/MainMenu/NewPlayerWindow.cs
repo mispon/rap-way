@@ -91,6 +91,8 @@ namespace UI.Windows.MainMenu
             player.NickName  = _inputFields[2].text.Trim();
             player.Age = Convert.ToInt32(_ageCarousel.GetLabel());
 
+            GameManager.Instance.SaveApplicationData();
+            
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
             SceneMessageBroker.Instance.Publish(new SceneLoadMessage
             {
