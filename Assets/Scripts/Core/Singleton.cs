@@ -29,8 +29,11 @@ namespace Core
         /// </summary>
         private T GetInstance() 
         {
-            var instance = FindObjectOfType<T>() ?? CreateInstance();
-            if (dontDestroy) DontDestroyOnLoad(instance);
+            var instance = FindAnyObjectByType<T>() ?? CreateInstance();
+
+            if (dontDestroy)
+                DontDestroyOnLoad(instance);
+
             return instance;
         }
 

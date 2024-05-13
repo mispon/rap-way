@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -44,7 +44,6 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 12
-  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -291,6 +287,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1157,34 +1156,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModifications.Array.data[0]
+      propertyPath: 'serializationData.PrefabModifications.Array.data[0]'
       value: '"path":"windows","value":{"$id":0,"$type":"System.Collections.Generic.Dictionary`2[[UI.Enums.WindowType,
         Assembly-CSharp],[UI.Base.CanvasUIElement, Assembly-CSharp]], mscorlib","comparer":{"$id":1,"$type":"System.Collections.Generic.EnumEqualityComparer`1[[UI.Enums.WindowType,
         Assembly-CSharp]], mscorlib","$rlength":0,"$rcontent":[]},"$rlength":5,"$rcontent":[{"$k":0,"$v":$eref:0},{"$k":1,"$v":$eref:1},{"$k":2,"$v":$eref:2},{"$k":3,"$v":$eref:3},{"$k":4,"$v":$eref:4}]}'
       objectReference: {fileID: 0}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModifications.Array.data[1]
+      propertyPath: 'serializationData.PrefabModifications.Array.data[1]'
       value: '"path":"windows.{0es}","value":$eref:0'
       objectReference: {fileID: 0}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModifications.Array.data[2]
+      propertyPath: 'serializationData.PrefabModifications.Array.data[2]'
       value: '"path":"windows.{1es}","value":$eref:1'
       objectReference: {fileID: 0}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModifications.Array.data[3]
+      propertyPath: 'serializationData.PrefabModifications.Array.data[3]'
       value: '"path":"windows.{2es}","value":$eref:2'
       objectReference: {fileID: 0}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModifications.Array.data[4]
+      propertyPath: 'serializationData.PrefabModifications.Array.data[4]'
       value: '"path":"windows.{3es}","value":$eref:3'
       objectReference: {fileID: 0}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModifications.Array.data[5]
+      propertyPath: 'serializationData.PrefabModifications.Array.data[5]'
       value: '"path":"windows.{4es}","value":$eref:4'
       objectReference: {fileID: 0}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
@@ -1194,27 +1193,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
+      propertyPath: 'serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]'
       value: 
       objectReference: {fileID: 2048526185}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]
+      propertyPath: 'serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]'
       value: 
       objectReference: {fileID: 1322797668}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[2]
+      propertyPath: 'serializationData.PrefabModificationsReferencedUnityObjects.Array.data[2]'
       value: 
       objectReference: {fileID: 333392602}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[3]
+      propertyPath: 'serializationData.PrefabModificationsReferencedUnityObjects.Array.data[3]'
       value: 
       objectReference: {fileID: 1044072962}
     - target: {fileID: 7458378252696006524, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[4]
+      propertyPath: 'serializationData.PrefabModificationsReferencedUnityObjects.Array.data[4]'
       value: 
       objectReference: {fileID: 1061977189}
     - target: {fileID: 8372527005534623512, guid: 2f0a19bda30a443528567920f1f09c93,
