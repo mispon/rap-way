@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-// using CAS;
+using CAS;
 using Game;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
@@ -12,15 +12,15 @@ namespace Core.Ads
 {
     public class CasAdsManager : Singleton<CasAdsManager>
     {
-        // private IMediationManager _manager;
+        private IMediationManager _manager;
         
         public void Start()
         {
-            // MobileAds.ValidateIntegration();
-            // MobileAds.settings.allowInterstitialAdsWhenVideoCostAreLower = true;
+            MobileAds.ValidateIntegration();
+            MobileAds.settings.allowInterstitialAdsWhenVideoCostAreLower = true;
             
-            // _manager = GetAdManager();
-            // _manager.OnRewardedAdCompleted += OnRewardedAdCompleted;
+            _manager = GetAdManager();
+            _manager.OnRewardedAdCompleted += OnRewardedAdCompleted;
             
             StartCoroutine(ShowInterstitialLoop());
         }
@@ -34,18 +34,18 @@ namespace Core.Ads
             MsgBroker.Instance.Publish(new ChangeMoneyMessage {Amount = reward});
         }
 
-        /* private static IMediationManager GetAdManager()
+        private static IMediationManager GetAdManager()
         {
             // Configure MobileAds.settings before initialize
             return MobileAds.BuildManager()
                 // Optional initialize listener
                 .WithCompletionListener(config => { })
                 .Build();
-        } */
+        }
 
         private void ShowInterstitial()
         {
-            /* if (GameManager.Instance.LoadNoAds())
+            if (GameManager.Instance.LoadNoAds())
                 return;
             
             bool adLoaded = _manager.IsReadyAd(AdType.Interstitial);
@@ -54,12 +54,12 @@ namespace Core.Ads
                 _manager.LoadAd(AdType.Interstitial);
             }
             
-            _manager.ShowAd(AdType.Interstitial); */
+            _manager.ShowAd(AdType.Interstitial);
         }
         
         public void ShowRewarded()
         {
-            // _manager.ShowAd(AdType.Rewarded);
+            _manager.ShowAd(AdType.Rewarded);
         }
 
         private IEnumerator ShowInterstitialLoop()
