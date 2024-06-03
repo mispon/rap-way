@@ -1,5 +1,5 @@
 // using Enums;
-// // using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -19,10 +19,10 @@ namespace UI.Windows.MainMenu
  
         public override void Initialize()
         {
-            /* if (!GameManager.Instance.HasAnySaves())
+            if (!GameManager.Instance.HasAnySaves())
             {
                 // FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
-            } */
+            }
 
             if (GameManager.Instance.NeedAskReview())
             {
