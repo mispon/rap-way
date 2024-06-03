@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Socials.Eagler;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Tutorial;
@@ -35,7 +35,7 @@ namespace UI.Windows.GameScreen.Eagler
         protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_eagler");
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
         }
         
         protected override void AfterHide()

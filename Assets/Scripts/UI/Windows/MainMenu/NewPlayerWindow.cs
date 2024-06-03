@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Core;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
@@ -93,7 +93,7 @@ namespace UI.Windows.MainMenu
 
             GameManager.Instance.SaveApplicationData();
             
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
             SceneMessageBroker.Instance.Publish(new SceneLoadMessage
             {
                 SceneType = SceneType.Game

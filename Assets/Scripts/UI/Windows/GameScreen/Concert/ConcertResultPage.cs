@@ -1,7 +1,7 @@
 ﻿using Core.Context;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Time;
@@ -69,7 +69,7 @@ namespace UI.Windows.GameScreen.Concert
 
         protected override void AfterHide()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ConcertResultShown);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.ConcertResultShown);
             
             SaveResult(_concert);
             _concert = null;

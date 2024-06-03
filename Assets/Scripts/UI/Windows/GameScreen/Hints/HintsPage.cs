@@ -1,6 +1,6 @@
 using Core.Context;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Enums;
@@ -33,7 +33,7 @@ namespace UI.Windows.GameScreen.Hints
             
             if (key == "tutorial_on_start")
             {
-                FirebaseAnalytics.LogEvent(FirebaseGameEvents.FirstHintOK);
+                // FirebaseAnalytics.LogEvent(FirebaseGameEvents.FirstHintOK);
             }
             
             info.text = infoText;

@@ -1,5 +1,5 @@
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 
 namespace UI.Windows.GameScreen.ProductSelection 
 {
@@ -7,7 +7,7 @@ namespace UI.Windows.GameScreen.ProductSelection
     {
         protected override void AfterShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ProductionsClick);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.ProductionsClick);
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using Core;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -50,7 +50,7 @@ namespace UI.Windows.GameScreen.Labels
 
         protected override void BeforeShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
             
             nameInput.text = "";
         }
@@ -144,7 +144,7 @@ namespace UI.Windows.GameScreen.Labels
                 IsCustom = true
             };
 
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelCreated);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelCreated);
             LabelsAPI.Instance.AddCustom(customLabel);
             BackButtonClick();
         }

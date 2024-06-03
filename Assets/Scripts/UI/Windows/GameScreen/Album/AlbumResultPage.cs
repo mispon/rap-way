@@ -2,7 +2,7 @@
 using Core.Context;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Socials.Eagler;
@@ -104,7 +104,7 @@ namespace UI.Windows.GameScreen.Album
         
         protected override void AfterHide()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.AlbumResultShown);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.AlbumResultShown);
             
             SaveResult(_album);
             _album = null;

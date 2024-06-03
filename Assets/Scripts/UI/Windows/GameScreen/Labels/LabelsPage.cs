@@ -2,7 +2,7 @@
 using System.Linq;
 using Core;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -43,7 +43,7 @@ namespace UI.Windows.GameScreen.Labels
 
         protected override void BeforeShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelsPageOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelsPageOpened);
             
             labelCard.onDelete += HandleLabelDelete;
             

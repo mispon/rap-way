@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Core.Context;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
@@ -31,7 +31,7 @@ namespace UI.Windows.GameScreen.Store
         
         protected override void BeforeShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
             MsgBroker.Instance
                 .Receive<MoneyChangedMessage>()

@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using UI.Enums;
@@ -22,7 +22,7 @@ namespace Scenes
 
         private static void InitFirebase()
         {
-            Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+            /* Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
                 var dependencyStatus = task.Result;
                 if (dependencyStatus == Firebase.DependencyStatus.Available) 
                 {
@@ -33,7 +33,7 @@ namespace Scenes
                 {
                     Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
                 }
-            });
+            }); */
         }
     }
 }

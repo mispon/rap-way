@@ -1,7 +1,7 @@
 using System;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Player.Team.Desc;
@@ -84,14 +84,14 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
 
         private void OnUp()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateUpgraded);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateUpgraded);
             
             onUp.Invoke(_teammate);
         }
 
         private void OnPay()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateSalaryPayed);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateSalaryPayed);
             
             var salary = TeamManager.Instance.GetSalary(_teammate);
             onPay.Invoke(_teammate, salary);

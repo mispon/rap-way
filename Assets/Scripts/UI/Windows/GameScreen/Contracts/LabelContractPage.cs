@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Labels.Desc;
 using ScriptableObjects;
 using UnityEngine;
@@ -47,14 +47,14 @@ namespace UI.Windows.GameScreen.Contracts
         private void OnReject()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractDeclined);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractDeclined);
             base.Hide();
         }
         
         private void OnSign()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
             PlayerAPI.Data.Label = _labelName;
             base.Hide();
         }

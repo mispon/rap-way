@@ -4,7 +4,7 @@ using Core;
 using Core.Localization;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Labels.Desc;
 using Game.Rappers.Desc;
 using MessageBroker;
@@ -221,7 +221,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         private void DisbandLabel()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.DisbandedOwnLabel);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.DisbandedOwnLabel);
             
             askingWindow.Show(
                 LocalizationManager.Instance.Get("disband_label_question").ToUpper(),

@@ -1,6 +1,6 @@
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game;
 using Models.Production;
 using ScriptableObjects;
@@ -28,7 +28,7 @@ namespace UI.Windows.GameScreen.Social.ResultPages
             styleName.text = GetLocale(trends.Style.GetDescription()).ToUpper();
 
             PlayerAPI.UpdateKnownTrends(trends.Style, trends.Theme);
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game;
 using Game.Player.Team;
 using Game.Rappers.Desc;
@@ -63,13 +63,13 @@ namespace UI.Windows.GameScreen.Rappers
             switch (convType)
             {
                 case ConversationType.Battle:
-                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperBattleAction);
+                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperBattleAction);
                     break;
                 case ConversationType.Feat:
-                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperFeatAction);
+                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperFeatAction);
                     break;
                 case ConversationType.Label:
-                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperLabelAction);
+                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperLabelAction);
                     break;
             }
             

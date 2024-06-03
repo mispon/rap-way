@@ -1,5 +1,5 @@
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Socials.Eagler;
 using Game.Time;
 using Models.Production;
@@ -31,7 +31,7 @@ namespace UI.Windows.GameScreen.Social.ResultPages
             hype.text = $"+{info.HypeIncome}";
 
             EaglerManager.Instance.CreateUserEagle(nickName, info.MainText, info.Likes);
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitPublished);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitPublished);
         }
     }
 }

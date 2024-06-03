@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
 using MessageBroker;
@@ -42,7 +42,7 @@ namespace UI.Windows.GameScreen.Clip
 
         protected override void StartWork(object ctx)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateClipClick);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateClipClick);
             
             _clip = ctx.Value<ClipInfo>();
             RefreshWorkAnims();

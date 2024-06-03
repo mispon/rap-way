@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Models.Production;
@@ -31,15 +31,15 @@ namespace Game.Production
         /// </summary>
         public static void AddTrack(TrackInfo info)
         {
-            switch (playerHistory.TrackList.Count)
+            /* switch (playerHistory.TrackList.Count)
             {
                 case 0:
-                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerCreateFirstTrack);
+                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerCreateFirstTrack);
                     break;
                 case 1:
-                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerCreateSecondTrack);
+                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerCreateSecondTrack);
                     break;
-            }
+            } */
 
             playerHistory.TrackList.AddProduction(info, Instance.onTrackAdd);
         }

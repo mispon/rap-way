@@ -4,7 +4,7 @@ using Core;
 using Core.Events;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game;
 using Game.Player.Team;
 using Game.Production;
@@ -172,7 +172,7 @@ namespace UI.Windows.GameScreen.Concert
         protected override void AfterShow(object ctx = null)
         {
             HintsManager.Instance.ShowHint("tutorial_concert_page");
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
 
             MsgBroker.Instance
                 .Receive<SpendMoneyResponse>()

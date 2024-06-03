@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -64,7 +64,7 @@ namespace UI.Windows.GameScreen.Rappers
 
         protected override void BeforeShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperPageOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperPageOpened);
             
             SetupLabelsCarousel();
             nameInput.text = "";
@@ -150,7 +150,7 @@ namespace UI.Windows.GameScreen.Rappers
                 IsCustom = true
             };
 
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperCreated);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperCreated);
             RappersAPI.Instance.AddCustom(customRapper);
             BackButtonClick();
         }

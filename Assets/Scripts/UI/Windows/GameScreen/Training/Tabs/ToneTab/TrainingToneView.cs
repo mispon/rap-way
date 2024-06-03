@@ -3,7 +3,7 @@ using Core;
 using Core.Localization;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,7 +59,7 @@ namespace UI.Windows.GameScreen.Training.Tabs.ToneTab
         /// </summary>
         private void UnlockTone()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingOpenTone);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingOpenTone);
             
             _context.onClick.Invoke(_context.Tone, _context.Cost);
             Hide();

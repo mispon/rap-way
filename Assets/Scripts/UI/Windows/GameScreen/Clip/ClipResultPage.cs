@@ -2,7 +2,7 @@
 using Core.Context;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Socials.Eagler;
@@ -89,7 +89,7 @@ namespace UI.Windows.GameScreen.Clip
 
         protected override void AfterHide()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ClipResultShown);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.ClipResultShown);
             
             SaveResult(_clip);
             _clip = null;

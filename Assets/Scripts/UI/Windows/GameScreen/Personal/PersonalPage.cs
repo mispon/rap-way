@@ -2,7 +2,7 @@ using Core;
 using Core.Ads;
 using Core.Context;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -89,7 +89,7 @@ namespace UI.Windows.GameScreen.Personal
             }
             _isFirstOpen = false;
 
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.PersonalPageOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.PersonalPageOpened);
             
             if (_activeTab != PersonalTabType.Personal)
             {
@@ -102,7 +102,7 @@ namespace UI.Windows.GameScreen.Personal
         private void OpenHouseTab()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.HousePageOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.HousePageOpened);
 
             if (_activeTab != PersonalTabType.House)
             {
@@ -115,7 +115,7 @@ namespace UI.Windows.GameScreen.Personal
         private void OpenLabelTab()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelInfoPageOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelInfoPageOpened);
 
             if (_activeTab != PersonalTabType.Label)
             {

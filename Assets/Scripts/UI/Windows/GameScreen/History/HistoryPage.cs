@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
 using UI.Windows.GameScreen.History.HistoryProduction;
@@ -45,7 +45,7 @@ namespace UI.Windows.GameScreen.History
 
         protected override void BeforeShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.HistoryPageOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.HistoryPageOpened);
             
             foreach (var historyController in historyControllers)
             {

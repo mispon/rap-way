@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Core;
 using Core.Localization;
 using Enums;
-using Firebase.Analytics;
+// using Firebase.Analytics;
 using Game.Player.State.Desc;
 using ScriptableObjects;
 using UI.Controls.Progress;
@@ -116,7 +116,7 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
                 [5] = FirebaseGameEvents.TrainingMarketingUpgrade
             };
             
-            FirebaseAnalytics.LogEvent(eventsMap[_index]);
+            // FirebaseAnalytics.LogEvent(eventsMap[_index]);
         }
     }
 }
