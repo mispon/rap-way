@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Core.Events;
 using Enums;
 using Extensions;
 // using Firebase.Analytics;
@@ -9,6 +8,7 @@ using Game;
 using Game.Player.Team;
 using Game.Production;
 using MessageBroker;
+using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
 using Models.Production;
@@ -22,7 +22,6 @@ using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using EventType = Core.Events.EventType;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Concert
@@ -166,7 +165,10 @@ namespace UI.Windows.GameScreen.Concert
             SetupTeam();
             OnPlaceChanged(0);
 
-            EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
+            MsgBroker.Instance
+                .Receive<TeamSalaryMessage>()
+                .Subscribe(e => ResetTeam())
+                .AddTo(_disposable);
         }
         
         protected override void AfterShow(object ctx = null)
@@ -182,8 +184,6 @@ namespace UI.Windows.GameScreen.Concert
 
         protected override void AfterHide()
         {
-            EventManager.RemoveHandler(EventType.UncleSamsParty, ResetTeam);
-            
             _concert = null;
             _lastAlbums.Clear();
             ResetTicketCost();
@@ -212,7 +212,7 @@ namespace UI.Windows.GameScreen.Concert
                 : imagesBank.PrManInactive;
         }
         
-        private void ResetTeam(object[] args)
+        private void ResetTeam()
         {
             managerAvatar.sprite = imagesBank.ProducerInactive;
             prAvatar.sprite = imagesBank.PrManInactive;

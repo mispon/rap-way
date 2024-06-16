@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Core;
-using Core.Events;
 using Core.Localization;
 using Enums;
 using Extensions;
@@ -10,6 +9,7 @@ using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
 using MessageBroker;
+using MessageBroker.Messages.Player;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using Models.Trends;
@@ -18,9 +18,9 @@ using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Enums;
 using UI.Windows.Tutorial;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using EventType = Core.Events.EventType;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Album
@@ -42,6 +42,7 @@ namespace UI.Windows.GameScreen.Album
         [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
 
         private AlbumInfo _album;
+        private IDisposable _disposable;
 
         private void Start()
         {
@@ -128,7 +129,7 @@ namespace UI.Windows.GameScreen.Album
             textSkill.text = $"{playerTextSkill + textwritterSkill}";
         }
 
-        private void DropTeam(object[] args)
+        private void ResetTeam()
         {
             bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = imagesBank.TextwritterInactive;
@@ -146,12 +147,14 @@ namespace UI.Windows.GameScreen.Album
             SetupTeam();
             DisplaySkills(PlayerAPI.Data);
 
-            EventManager.AddHandler(EventType.UncleSamsParty, DropTeam);
+            _disposable = MsgBroker.Instance
+                .Receive<TeamSalaryMessage>()
+                .Subscribe(e => ResetTeam());
         }
 
         protected override void AfterHide()
         {
-            EventManager.RemoveHandler(EventType.UncleSamsParty, DropTeam);
+            _disposable?.Dispose();
 
             _album = null;
             albumNameInput.SetTextWithoutNotify(string.Empty);

@@ -18,6 +18,8 @@ namespace Game
         [Header("Настройки")] 
         [SerializeField, Tooltip("Шанс выпадания события"), Range(0.001f, 1f)] 
         private float chance;
+        [SerializeField, Tooltip("Min tracks count to unlock")] 
+        private int minTracksCount = 10;
 
         [Header("Страница события")] 
         [SerializeField] private EventMainPage eventMainPage;
@@ -35,6 +37,10 @@ namespace Game
         /// </summary>
         public void CallEvent(GameEventType type, Action onEventShownAction)
         {
+            if (PlayerAPI.Data.History.TrackList.Count < minTracksCount) {
+                return;
+            }
+
             if (chance >= Random.Range(0f, 1f))
             {
                 var eventInfo = data.GetRandomInfo(type, PlayerAPI.State.GetFans());

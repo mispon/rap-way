@@ -50,7 +50,7 @@ namespace Core
         {
             if (!PlayerPrefs.HasKey(volumeKey))
             {
-                PlayerPrefs.SetFloat(volumeKey, maxVolume);
+                PlayerPrefs.SetFloat(volumeKey, minVolume / 2);
             }
             
             var volume = PlayerPrefs.GetFloat(volumeKey);

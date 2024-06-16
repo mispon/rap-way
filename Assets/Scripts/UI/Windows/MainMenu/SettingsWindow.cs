@@ -56,9 +56,6 @@ namespace UI.Windows.MainMenu
         /// </summary>
         private void SaveSettings()
         {
-            var settings = GameManager.Instance.GameStats;
-            settings.Lang = StringToLang(langCarousel.GetLabel());
-
             foreach (var group in soundGroup)
             {
                 SaveVolume(group.Value, group.Key.value);

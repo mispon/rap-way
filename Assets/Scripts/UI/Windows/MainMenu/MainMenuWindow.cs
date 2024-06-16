@@ -17,14 +17,13 @@ namespace UI.Windows.MainMenu
         [BoxGroup("Buttons"), SerializeField]    private Button _continueGameButton;
         [BoxGroup("Animations"), SerializeField] private ProductionAnim _productionAnim;
  
-        public override void Initialize()
+        protected override void BeforeShow(object ctx = null)
         {
             if (!GameManager.Instance.HasAnySaves())
             {
                 // FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
-            }
-
-            if (GameManager.Instance.NeedAskReview())
+                MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.LangSelection));
+            } else if (GameManager.Instance.NeedAskReview())
             {
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.AskReview));
             }

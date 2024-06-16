@@ -1,7 +1,7 @@
-using Core.Events;
 using Game.Notifications;
 using MessageBroker;
 using MessageBroker.Interfaces;
+using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Time;
 using MessageBroker.Messages.UI;
 using UI.Enums;
@@ -67,7 +67,7 @@ namespace Game.Player.Team
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Training, teamTab));
             });
             
-            EventManager.RaiseEvent(EventType.UncleSamsParty);
+            MsgBroker.Instance.Publish(new TeamSalaryMessage());
         }
     }
 }

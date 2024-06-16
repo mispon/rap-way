@@ -1,7 +1,5 @@
-using System;
 using Game;
 using UI.Base;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,23 +10,14 @@ namespace UI.Windows.MainMenu
         [SerializeField] private string reviewPageURL;
         [SerializeField] private Button reviewButton;
 
-        private IDisposable _disposable;
-        
         protected override void AfterShow(object ctx = null)
         {
-            _disposable = reviewButton
-                .OnClickAsObservable()
-                .Subscribe(_ => Application.OpenURL(reviewPageURL));
+            reviewButton.onClick.AddListener(() => Application.OpenURL(reviewPageURL));
         }
 
         public override void Show(object ctx = null)
         {
             GameManager.Instance.GameStats.AskedReview = true;
-        }
-
-        protected override void AfterHide()
-        {
-            _disposable?.Dispose();
         }
     }
 }

@@ -7,4 +7,6 @@ namespace MessageBroker.Messages.Player
         public TeammateType Type;
         public int Cooldown;
     }
+
+    public struct TeamSalaryMessage {}
 }

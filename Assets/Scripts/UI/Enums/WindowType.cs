@@ -68,6 +68,8 @@ namespace UI.Enums
         Eagler  = 48,
         History = 49,
 
+        LangSelection = 50,
+
         Previous     = 998,
         None         = 999
     }

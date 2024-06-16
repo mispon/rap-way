@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Core;
-using Core.Events;
 using Core.Localization;
 using Enums;
 using Extensions;
@@ -10,6 +9,7 @@ using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
 using MessageBroker;
+using MessageBroker.Messages.Player;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using Models.Trends;
@@ -18,9 +18,9 @@ using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Enums;
 using UI.Windows.Tutorial;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using EventType = Core.Events.EventType;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Track
@@ -40,6 +40,7 @@ namespace UI.Windows.GameScreen.Track
         [BoxGroup("Images"), SerializeField] private ImagesBank imagesBank;
         
         protected TrackInfo _track;
+        private IDisposable _disposable;
 
         private void Start()
         {
@@ -116,7 +117,7 @@ namespace UI.Windows.GameScreen.Track
             textSkill.text = $"{playerTextSkill + textwritterSkill}";
         }
 
-        private void ResetTeam(object[] args)
+        private void ResetTeam()
         {
             bitmakerAvatar.sprite    = imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = imagesBank.TextwritterInactive;
@@ -147,12 +148,14 @@ namespace UI.Windows.GameScreen.Track
             bool hasAnyTracks = PlayerAPI.Data.History.TrackList.Count > 0;
             backButton.SetActive(hasAnyTracks);
             
-            EventManager.AddHandler(EventType.UncleSamsParty, ResetTeam);
+            _disposable = MsgBroker.Instance
+                .Receive<TeamSalaryMessage>()
+                .Subscribe(e => ResetTeam());
         }
 
         protected override void AfterHide()
         {
-            EventManager.RemoveHandler(EventType.UncleSamsParty, ResetTeam);
+            _disposable?.Dispose();
 
             _track = null;
             trackNameInput.SetTextWithoutNotify(string.Empty);

@@ -1,8 +1,10 @@
-﻿using System.Collections;
-using Core.Events;
+﻿using System;
+using System.Collections;
+using MessageBroker;
+using MessageBroker.Messages.Game;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using EventType = Core.Events.EventType;
 
 namespace Core.Localization
 {
@@ -23,11 +25,15 @@ namespace Core.Localization
         [SerializeField] private string key;
         
         private Text value;
-        
+        private IDisposable _disposable;
+
         private void Awake()
         {
             value = GetComponent<Text>();
-            EventManager.AddHandler(EventType.LangChanged, OnLangChanged);
+
+            _disposable = MsgBroker.Instance
+                .Receive<LangChangedMessage>()
+                .Subscribe(e => OnLangChanged());
         }
 
         private IEnumerator Start()
@@ -41,7 +47,7 @@ namespace Core.Localization
         /// <summary>
         /// Обработчик изменения языка
         /// </summary>
-        private void OnLangChanged(object[] args)
+        private void OnLangChanged()
         {
             ApplyText();
         }
@@ -63,7 +69,7 @@ namespace Core.Localization
 
         private void OnDestroy()
         {
-            EventManager.RemoveHandler(EventType.LangChanged, OnLangChanged);
+            _disposable?.Dispose();
         }
     }
 }

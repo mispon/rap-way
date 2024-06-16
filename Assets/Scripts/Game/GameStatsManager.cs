@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using Core;
+using Core.Localization;
 using Core.OrderedStarter;
 using Enums;
 using Game.Time;
 using MessageBroker;
+using MessageBroker.Messages.Game;
 using MessageBroker.Messages.Time;
 using Models.Trends;
 using ScriptableObjects;
@@ -89,6 +91,10 @@ namespace Game
             var themeEquality = compareData.ThemesCompareInfos.AnalyzeEquality(currentTrend.Theme, info.Theme);
 
             info.EqualityValue = styleEquality + themeEquality;
+        }
+
+        private void OnDestroy() {
+            _disposable.Clear();
         }
     }
     

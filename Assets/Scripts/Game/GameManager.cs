@@ -16,6 +16,7 @@ using MessageBroker;
 using MessageBroker.Messages.Game;
 using Models.Game;
 using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 
 #pragma warning disable CS0414 // Field is assigned but its value is never used
@@ -63,15 +64,30 @@ namespace Game
         [BoxGroup("Eagles")]    public List<Eagle> Eagles;
         [BoxGroup("Tutorials")] public HashSet<string> ShowedHints;
 
+        private readonly CompositeDisposable _disposables = new();
+
         private async void Start()
         {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
             
+            RegisterHandlers();
+
             await GetComponent<UnityServicesInitializer>().Initialize();
-            
             await Task.Delay(500);
+
             MsgBroker.Instance.Publish(new GameReadyMessage());
+        }
+
+        private void RegisterHandlers()
+        {
+            MsgBroker.Instance
+                .Receive<LangChangedMessage>()
+                .Subscribe(e => {
+                    GameStats.Lang = e.Lang;
+                    SaveApplicationData();
+                })
+                .AddTo(_disposables);
         }
 
         public string GetStoreURL()
@@ -220,6 +236,9 @@ namespace Game
             return PlayerPrefs.HasKey(gameDataKey);
         }
 
+        /// <summary>
+        /// Checks if game available to show review asking page
+        /// </summary>
         public bool NeedAskReview()
         {
             return !GameStats.AskedReview && PlayerData.Fans > 0;
@@ -236,6 +255,11 @@ namespace Game
             {
                 SaveApplicationData();    
             }
+        }
+
+        private void OnDestroy()
+        {
+            _disposables.Clear();
         }
     }
 }

@@ -2,10 +2,10 @@
 using System.Collections;
 using System.IO;
 using System.Linq;
-using Core.Events;
+using MessageBroker;
+using MessageBroker.Messages.Game;
 using UnityEngine;
 using UnityEngine.Networking;
-using EventType = Core.Events.EventType;
 
 namespace Core.Localization
 {
@@ -87,15 +87,20 @@ namespace Core.Localization
             IsReady = false;
 
             string jsonData = "";
-            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
 #if UNITY_ANDROID
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
-            yield return LoadAndroidLocalization(path, data => jsonData = data);
+            // todo
 #else
+            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
             jsonData = File.ReadAllText(path);
 #endif
-            ParseLocalizationData(jsonData, sendEvent);
+            
+            ParseLocalizationData(jsonData);
+            if (sendEvent)
+            {
+                MsgBroker.Instance.Publish(new LangChangedMessage{Lang = lang});
+            }
 
             IsReady = true;
             yield return null;
@@ -104,15 +109,15 @@ namespace Core.Localization
         private IEnumerator LoadBackupLocalizationAsync()
         {
             string jsonData = "";
-            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(GameLang.EN));
 #if UNITY_ANDROID
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
-            yield return LoadAndroidLocalization(path, data => jsonData = data);
+            // todo:
 #else
+            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(GameLang.EN));
             jsonData = File.ReadAllText(path);
 #endif
-            ParseBackupLocalizationData(jsonData);
+            ParseBackupLocalizationData(jsonData);    
 
             yield return null;
         }
@@ -133,17 +138,12 @@ namespace Core.Localization
         /// <summary>
         /// Выполняет парсинг файла с локализацией
         /// </summary>
-        private void ParseLocalizationData(string jsonData, bool sendEvent)
+        private void ParseLocalizationData(string jsonData)
         {
             if (string.IsNullOrEmpty(jsonData))
                 throw new RapWayException("Не найден файл локализации!");
 
             _data = JsonUtility.FromJson<LocalizationData>(jsonData);
-
-            if (sendEvent)
-                EventManager.RaiseEvent(EventType.LangChanged);
-
-            IsReady = true;
         }
         
         /// <summary>

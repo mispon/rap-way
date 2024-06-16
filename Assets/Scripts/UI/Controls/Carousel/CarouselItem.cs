@@ -1,9 +1,10 @@
 using System;
-using Core.Events;
 using Core.Localization;
+using MessageBroker;
+using MessageBroker.Messages.Game;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using EventType = Core.Events.EventType;
 
 namespace UI.Controls.Carousel
 {
@@ -28,10 +29,13 @@ namespace UI.Controls.Carousel
         private object _value;
         private string _text;
         private bool _localized;
+        private IDisposable _disposable;
 
         private void Start()
         {
-            EventManager.AddHandler(EventType.LangChanged, OnLandChanged);
+            _disposable = MsgBroker.Instance
+                .Receive<LangChangedMessage>()
+                .Subscribe(e => OnLandChanged());
         }
 
         /// <summary>
@@ -86,14 +90,14 @@ namespace UI.Controls.Carousel
         /// <summary>
         /// Обрабатывает смену языка 
         /// </summary>
-        private void OnLandChanged(object[] args)
+        private void OnLandChanged()
         {
             DisplayLabel();
         }
 
         private void OnDestroy()
         {
-            EventManager.RemoveHandler(EventType.LangChanged, OnLandChanged);
+            _disposable?.Dispose();
         }
     }
 
