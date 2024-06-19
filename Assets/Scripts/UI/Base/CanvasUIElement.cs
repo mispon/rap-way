@@ -1,5 +1,4 @@
-﻿using Sirenix.OdinInspector;
-using UI.Base.Interfaces;
+﻿using UI.Base.Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +9,7 @@ namespace UI.Base
         typeof(CanvasGroup), 
         typeof(GraphicRaycaster)
     )]
-    public abstract class CanvasUIElement : SerializedMonoBehaviour, IUIElement
+    public abstract class CanvasUIElement : MonoBehaviour, IUIElement
     {
         private Canvas _canvas;
         private Canvas canvas
@@ -70,7 +69,7 @@ namespace UI.Base
         
         public void Dispose() {}
         
-        public    virtual void Initialize() {}
+        public virtual void Initialize() {}
         protected virtual void BeforeShow(object ctx = null) {}
         protected virtual void AfterShow(object ctx = null) {}
         protected virtual void BeforeHide() {}

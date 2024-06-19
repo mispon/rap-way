@@ -1,7 +1,6 @@
 using Core.Localization;
 using Enums;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Base;
 using UniRx;
 using UnityEngine;
@@ -14,11 +13,13 @@ namespace UI.Windows.Tutorial
     {
         [SerializeField] private ImagesBank imagesBank;
         
-        [BoxGroup("Player"), SerializeField] private Text nickname;
-        [BoxGroup("Player"), SerializeField] private Image playerIcon;
+        [Header("Player")]
+        [SerializeField] private Text nickname;
+        [SerializeField] private Image playerIcon;
         
-        [BoxGroup("Controls"), SerializeField] private Text info;
-        [BoxGroup("Controls"), SerializeField] private Button[] gameButtons;
+        [Header("Controls")]
+        [SerializeField] private Text info;
+        [SerializeField] private Button[] gameButtons;
 
         private readonly CompositeDisposable _disposable = new();
         

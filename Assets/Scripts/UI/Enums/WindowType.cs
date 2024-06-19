@@ -34,7 +34,7 @@ namespace UI.Enums
         ProductionFeatWork     = 22,
         ProductionFeatResult   = 23,
         
-        Socials                 = 24,
+        SocialsActions          = 24,
         SocialsWork             = 25,
         SocialsResult_Charity   = 26,
         SocialsResult_Eagler    = 27,
@@ -65,7 +65,7 @@ namespace UI.Enums
         Shop_ItemCard      = 46,
         Shop_PurchasedItem = 47,
         
-        Eagler  = 48,
+        SocialNetworks = 48,
         History = 49,
 
         LangSelection = 50,

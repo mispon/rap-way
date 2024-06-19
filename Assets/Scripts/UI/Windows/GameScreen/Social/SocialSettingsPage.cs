@@ -1,11 +1,9 @@
 ﻿using Core;
-using Enums;
 // using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Enums;
 using UI.Windows.GameScreen.Social.Tabs;
@@ -16,8 +14,8 @@ namespace UI.Windows.GameScreen.Social
 {
     public class SocialSettingsPage : Page
     {
-        [BoxGroup("Tabs"), SerializeField] private Carousel tabsCarousel;
-        [BoxGroup("Tabs"), SerializeField] private BaseSocialsTab[] tabs;
+        [SerializeField] private Carousel tabsCarousel;
+        [SerializeField] private BaseSocialsTab[] tabs;
 
         private void Start()
         {

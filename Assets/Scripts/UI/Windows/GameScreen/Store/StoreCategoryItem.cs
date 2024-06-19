@@ -1,6 +1,5 @@
 using Core;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,11 +8,12 @@ namespace UI.Windows.GameScreen.Store
 {
     public class StoreCategoryItem : MonoBehaviour, IScrollViewControllerItem
     {
-        [BoxGroup("View")] [SerializeField] private StoreItemsView itemsView;
+        [Header("View")] [SerializeField] private StoreItemsView itemsView;
         
-        [BoxGroup("Category")] [SerializeField] private Image categoryIcon;
-        [BoxGroup("Category")] [SerializeField] private Text categoryName;
-        [BoxGroup("Category")] [SerializeField] private Button itemsViewButton;
+        [Header("Category")]
+        [SerializeField] private Image categoryIcon;
+        [SerializeField] private Text categoryName;
+        [SerializeField] private Button itemsViewButton;
         
         private RectTransform _rectTransform;
         

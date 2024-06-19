@@ -1,18 +1,16 @@
 ﻿using System;
 using Core.Context;
-using Enums;
 using Extensions;
 // using Firebase.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
-using Game.Socials.Eagler;
+using Game.Socials.Twitter;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using MessageBroker.Messages.UI;
 using Models.Production;
-using Sirenix.OdinInspector;
-using UI.Windows.GameScreen.Eagler;
+using UI.Windows.GameScreen.Twitter;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -22,19 +20,20 @@ namespace UI.Windows.GameScreen.Track
 {
     public class TrackResultPage : Page
     {
-        [BoxGroup("Result"), SerializeField] private Text listenAmount;
-        [BoxGroup("Result"), SerializeField] private Text duration;
-        [BoxGroup("Result"), SerializeField] private Text trackNameLabel;
-        [BoxGroup("Result"), SerializeField] private Text playerNameLabel;
-        [BoxGroup("Result"), SerializeField] private Text qualityLabel;
-        [BoxGroup("Result"), SerializeField] private Text chartInfo;
-        [BoxGroup("Result"), SerializeField] private Text fansIncome;
-        [BoxGroup("Result"), SerializeField] private Text moneyIncome;
-        [BoxGroup("Result"), SerializeField] private Text expIncome;
-        [BoxGroup("Result"), SerializeField] private GameObject hitBadge;
+        [Header("Result")]
+        [SerializeField] private Text listenAmount;
+        [SerializeField] private Text duration;
+        [SerializeField] private Text trackNameLabel;
+        [SerializeField] private Text playerNameLabel;
+        [SerializeField] private Text qualityLabel;
+        [SerializeField] private Text chartInfo;
+        [SerializeField] private Text fansIncome;
+        [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
+        [SerializeField] private GameObject hitBadge;
 
-        [BoxGroup("Eagles"), SerializeField] private EagleCard[] eagleCards;
-        [BoxGroup("Analyzer"), SerializeField] private TrackAnalyzer trackAnalyzer;
+        [Header("Eagles"), SerializeField] private TwitterCard[] eagleCards;
+        [Header("Analyzer"), SerializeField] private TrackAnalyzer trackAnalyzer;
 
         private TrackInfo _track;
         
@@ -80,7 +79,7 @@ namespace UI.Windows.GameScreen.Track
 
         private void DisplayEagles(float quality)
         {
-            var eagles = EaglerManager.Instance.GenerateEagles(quality);
+            var eagles = TwitterManager.Instance.GenerateTwits(quality);
             for (var i = 0; i < eagles.Count; i++)
             {
                 eagleCards[i].Initialize(i, eagles[i]);

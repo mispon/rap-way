@@ -7,7 +7,6 @@ using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UI.Windows.Pages;
 using UnityEngine;
@@ -18,25 +17,26 @@ namespace UI.Windows.GameScreen.Rappers
 {
     public class RapperWorkingPage : BaseWorkingPage
     {
-        [BoxGroup("Work Points"), SerializeField] private Text managementPointsLabel;
-        [BoxGroup("Work Points"), SerializeField] private Text rapperPointsLabel;
+        [Header("Work Points")]
+        [SerializeField] private Text managementPointsLabel;
+        [SerializeField] private Text rapperPointsLabel;
 
-        [BoxGroup("Characters"), SerializeField] private Image managerAvatar;
-        [BoxGroup("Characters"), SerializeField] private Image rapperAvatar;
-        [BoxGroup("Characters"), SerializeField] private WorkPoints playerWorkPoints;
-        [BoxGroup("Characters"), SerializeField] private WorkPoints managerWorkPoints;
-        [BoxGroup("Characters"), SerializeField] private WorkPoints rapperWorkPoints;
-        [BoxGroup("Characters"), SerializeField] private Sprite customRapperAvatar;
-        [BoxGroup("Characters"), SerializeField] private Text playerHypeBonus;
+        [Header("Characters")]
+        [SerializeField] private Image managerAvatar;
+        [SerializeField] private Image rapperAvatar;
+        [SerializeField] private WorkPoints playerWorkPoints;
+        [SerializeField] private WorkPoints managerWorkPoints;
+        [SerializeField] private WorkPoints rapperWorkPoints;
+        [SerializeField] private Sprite customRapperAvatar;
+        [SerializeField] private Text playerHypeBonus;
 
-        [BoxGroup("Images"), SerializeField] private ImagesBank imagesBank;
+        [Header("Images"), SerializeField] private ImagesBank imagesBank;
 
         private RapperInfo _rapper;
         private ConversationType _convType;
         private int _playerPoints;
         private int _rapperPoints;
         private bool _hasManager;
-
 
         public override void Show(object ctx = null)
         {

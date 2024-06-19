@@ -8,7 +8,6 @@ using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.Error;
 using UI.Enums;
 using UniRx;
@@ -19,20 +18,22 @@ namespace UI.Windows.GameScreen.Store.Purchase
 {
     public class StoreItemPurchaseCard : Page
     {
-        [BoxGroup("Purchaser")] [SerializeField] private StoreItemPurchaser _purchaser;
-        [BoxGroup("Error")] [SerializeField] private GameError gameError;
-        [Space]
-        [BoxGroup("Money Icon")] [SerializeField] private Sprite moneySprite;
-        [BoxGroup("Money Icon")] [SerializeField] private Sprite donateSprite;
-        [BoxGroup("Money Icon")] [SerializeField] private Sprite realMoneySprite;
-        [Space]
-        [BoxGroup("Card")] [SerializeField] private Image icon;
-        [BoxGroup("Card")] [SerializeField] private Text itemName;
-        [BoxGroup("Card")] [SerializeField] private Text itemDesc;
-        [BoxGroup("Card")] [SerializeField] private Image moneyIcon;
-        [BoxGroup("Card")] [SerializeField] private Text price;
-        [BoxGroup("Card")] [SerializeField] private Button buyButton;
-        [BoxGroup("Card")] [SerializeField] private Button cancelButton;
+        [Header("Purchaser"), SerializeField] private StoreItemPurchaser _purchaser;
+        [Header("Error"), SerializeField] private GameError gameError;
+
+        [Space, Header("Money Icon")] 
+        [SerializeField] private Sprite moneySprite;
+        [SerializeField] private Sprite donateSprite;
+        [SerializeField] private Sprite realMoneySprite;
+
+        [Space, Header("Card")]
+        [SerializeField] private Image icon;
+        [SerializeField] private Text itemName;
+        [SerializeField] private Text itemDesc;
+        [SerializeField] private Image moneyIcon;
+        [SerializeField] private Text price;
+        [SerializeField] private Button buyButton;
+        [SerializeField] private Button cancelButton;
 
         private GoodInfo _info;
         private int _category;

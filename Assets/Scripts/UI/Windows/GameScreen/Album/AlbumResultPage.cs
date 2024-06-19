@@ -1,17 +1,15 @@
 ﻿using System;
 using Core.Context;
-using Enums;
 using Extensions;
 // using Firebase.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
-using Game.Socials.Eagler;
+using Game.Socials.Twitter;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using Sirenix.OdinInspector;
-using UI.Windows.GameScreen.Eagler;
+using UI.Windows.GameScreen.Twitter;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -19,24 +17,22 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Album
 {
-    /// <summary>
-    /// Страница результатов альбома
-    /// </summary>
     public class AlbumResultPage : Page
     {
-        [BoxGroup("Result"), SerializeField] private Text listenAmount;
-        [BoxGroup("Result"), SerializeField] private Text songs;
-        [BoxGroup("Result"), SerializeField] private Text albumNameLabel;
-        [BoxGroup("Result"), SerializeField] private Text playerNameLabel;
-        [BoxGroup("Result"), SerializeField] private Text qualityLabel;
-        [BoxGroup("Result"), SerializeField] private Text chartInfo;
-        [BoxGroup("Result"), SerializeField] private Text fansIncome;
-        [BoxGroup("Result"), SerializeField] private Text moneyIncome;
-        [BoxGroup("Result"), SerializeField] private Text expIncome;
-        [BoxGroup("Result"), SerializeField] private GameObject hitBadge;
+        [Header("Result")]
+        [SerializeField] private Text listenAmount;
+        [SerializeField] private Text songs;
+        [SerializeField] private Text albumNameLabel;
+        [SerializeField] private Text playerNameLabel;
+        [SerializeField] private Text qualityLabel;
+        [SerializeField] private Text chartInfo;
+        [SerializeField] private Text fansIncome;
+        [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
+        [SerializeField] private GameObject hitBadge;
         
-        [BoxGroup("Eagler"), SerializeField] private EagleCard[] eagleCards;
-        [BoxGroup("Analyzer"), SerializeField] private AlbumAnalyzer albumAnalyzer;
+        [Header("Eagler"), SerializeField] private TwitterCard[] eagleCards;
+        [Header("Analyzer"), SerializeField] private AlbumAnalyzer albumAnalyzer;
 
         private AlbumInfo _album;
         
@@ -79,7 +75,7 @@ namespace UI.Windows.GameScreen.Album
         
         private void DisplayEagles(float quality)
         {
-            var eagles = EaglerManager.Instance.GenerateEagles(quality);
+            var eagles = TwitterManager.Instance.GenerateTwits(quality);
             for (var i = 0; i < eagles.Count; i++)
             {
                 eagleCards[i].Initialize(i, eagles[i]);

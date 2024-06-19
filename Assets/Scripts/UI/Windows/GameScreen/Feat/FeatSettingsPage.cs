@@ -2,7 +2,6 @@ using Core.Context;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Models.Production;
-using Sirenix.OdinInspector;
 using UI.Windows.GameScreen.Track;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,9 +11,10 @@ namespace UI.Windows.GameScreen.Feat
 {
     public class FeatSettingsPage : TrackSettingsPage
     {
-        [BoxGroup("Settings"), SerializeField] private Text rapperName;
-        [BoxGroup("Settings"), SerializeField] private Image rapperAvatar;
-        [BoxGroup("Settings"), SerializeField] private Sprite customRapperAvatar;
+        [Header("Settings")]
+        [SerializeField] private Text rapperName;
+        [SerializeField] private Image rapperAvatar;
+        [SerializeField] private Sprite customRapperAvatar;
 
         private RapperInfo _rapper;
 

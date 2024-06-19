@@ -10,12 +10,11 @@ using Game.Labels.Desc;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Game.Settings;
-using Game.Socials.Eagler;
+using Game.Socials.Twitter;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Game;
 using Models.Game;
-using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 
@@ -33,7 +32,7 @@ namespace Game
         public LabelInfo[]  Labels;
         public LabelInfo[]  CustomLabels;
         public LabelInfo    PlayerLabel;
-        public Eagle[]      Eagles;
+        public Twit[]      Eagles;
         public string[]     ShowedHints;
     }
     
@@ -42,27 +41,26 @@ namespace Game
     /// </summary>
     public class GameManager : Singleton<GameManager>
     {
-        [BoxGroup("Stores URLs"), SerializeField] private string appStoreURL;
-        [BoxGroup("Stores URLs"), SerializeField] private string googlePlayURL;
-        
-        [BoxGroup("Save Key")]  [SerializeField] private string gameDataKey;
-        [BoxGroup("Save Key")]  [SerializeField] private string noAdsDataKey;
-        [BoxGroup("Save Key")]  [SerializeField] private string donateDataKey;
-        
-        [BoxGroup("Game Settings")] public GameSettings Settings;
-        
-        [TabGroup("state", "Player")] public PlayerData PlayerData;
-        [TabGroup("state", "Game")]   public GameStats GameStats;
-        
-        [TabGroup("rappers", "Rappers")]        public List<RapperInfo> Rappers;
-        [TabGroup("rappers", "Custom Rappers")] public List<RapperInfo> CustomRappers;
-        
-        [TabGroup("labels", "Labels")]        public List<LabelInfo> Labels; 
-        [TabGroup("labels", "Custom Labels")] public List<LabelInfo> CustomLabels;
-        [TabGroup("labels", "Player Label")]  public LabelInfo PlayerLabel;
-        
-        [BoxGroup("Eagles")]    public List<Eagle> Eagles;
-        [BoxGroup("Tutorials")] public HashSet<string> ShowedHints;
+        [Header("Stores URLs"), SerializeField] private string appStoreURL;
+        [Header("Stores URLs"), SerializeField] private string googlePlayURL;
+        [Space]
+        [Header("Save Key")]  [SerializeField] private string gameDataKey;
+        [Header("Save Key")]  [SerializeField] private string noAdsDataKey;
+        [Header("Save Key")]  [SerializeField] private string donateDataKey;
+        [Space]
+        [Header("Game Settings")] public GameSettings Settings;
+        [Header("Player")] public PlayerData PlayerData;
+        [Header("Game")]   public GameStats GameStats;
+        [Space]
+        [Header("Rappers")]        public List<RapperInfo> Rappers;
+        [Header("Custom Rappers")] public List<RapperInfo> CustomRappers;
+        [Space]
+        [Header("Labels")]        public List<LabelInfo> Labels; 
+        [Header("Custom Labels")] public List<LabelInfo> CustomLabels;
+        [Header("Player Label")]  public LabelInfo PlayerLabel;
+        [Space]
+        [Header("Twits")]    public List<Twit> Twits;
+        [Header("Tutorials")] public HashSet<string> ShowedHints;
 
         private readonly CompositeDisposable _disposables = new();
 
@@ -107,7 +105,7 @@ namespace Game
         public PlayerData CreateNewPlayer()
         {
             PlayerData = PlayerData.New;
-            Eagles = new List<Eagle>(0);
+            Twits = new List<Twit>(0);
             
             Rappers = new List<RapperInfo>(0);
             CustomRappers = new List<RapperInfo>(0);
@@ -169,7 +167,7 @@ namespace Game
                 CustomLabels = Array.Empty<LabelInfo>(),
                 PlayerLabel = null,
                 
-                Eagles = Array.Empty<Eagle>(),
+                Eagles = Array.Empty<Twit>(),
                 ShowedHints = Array.Empty<string>(),
             };
             
@@ -183,7 +181,7 @@ namespace Game
             CustomLabels = gameData.CustomLabels?.ToList() ?? new List<LabelInfo>(0);
             PlayerLabel = gameData.PlayerLabel;
             
-            Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
+            Twits = gameData.Eagles?.ToList() ?? new List<Twit>(0);
             ShowedHints = gameData.ShowedHints?.ToHashSet() ?? new HashSet<string>(0);
             
             LoadDonateBalance();
@@ -213,7 +211,7 @@ namespace Game
                 CustomLabels = CustomLabels?.ToArray(),
                 PlayerLabel = PlayerLabel,
                 
-                Eagles = Eagles.Take(20).ToArray(),
+                Eagles = Twits.Take(20).ToArray(),
                 ShowedHints = ShowedHints.ToArray()
             };
             

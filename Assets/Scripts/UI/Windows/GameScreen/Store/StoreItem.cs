@@ -7,7 +7,6 @@ using MessageBroker;
 using MessageBroker.Messages.Player;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
 using UI.Enums;
 using UniRx;
@@ -21,15 +20,17 @@ namespace UI.Windows.GameScreen.Store
         private IDisposable _singleDispose;
         private readonly CompositeDisposable _disposable = new();
         
-        [BoxGroup("Money Icon")] [SerializeField] private Sprite moneySprite;
-        [BoxGroup("Money Icon")] [SerializeField] private Sprite donateSprite;
-        [BoxGroup("Money Icon")] [SerializeField] private Sprite realMoneySprite;
-        [Space]
-        [BoxGroup("Item")] [SerializeField] private Image icon;
-        [BoxGroup("Item")] [SerializeField] private Text price;
-        [BoxGroup("Item")] [SerializeField] private Image priceIcon;
-        [BoxGroup("Item")] [SerializeField] private Button itemButton;
-        [BoxGroup("Item")] [SerializeField] private GameObject purchased;
+        [Header("Money Icon")] 
+        [SerializeField] private Sprite moneySprite;
+        [SerializeField] private Sprite donateSprite;
+        [SerializeField] private Sprite realMoneySprite;
+        
+        [Space, Header("Item")]
+        [SerializeField] private Image icon;
+        [SerializeField] private Text price;
+        [SerializeField] private Image priceIcon;
+        [SerializeField] private Button itemButton;
+        [SerializeField] private GameObject purchased;
         
         private RectTransform _rectTransform;
         

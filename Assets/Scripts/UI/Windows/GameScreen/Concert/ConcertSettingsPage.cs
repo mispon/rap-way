@@ -13,7 +13,6 @@ using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Controls.Money;
@@ -28,24 +27,29 @@ namespace UI.Windows.GameScreen.Concert
 {
     public class ConcertSettingsPage : Page
     {
-        [BoxGroup("Controls"), SerializeField] private Carousel placeCarousel;
-        [BoxGroup("Controls"), SerializeField] private Carousel albumsCarousel;
-        [BoxGroup("Controls"), SerializeField] private Slider ticketCostSlider;
-        [BoxGroup("Controls"), SerializeField] private Button startButton;
+        [Header("Controls")]
+        [SerializeField] private Carousel placeCarousel;
+        [SerializeField] private Carousel albumsCarousel;
+        [SerializeField] private Slider ticketCostSlider;
+        [SerializeField] private Button startButton;
         
-        [BoxGroup("Labels"), SerializeField] private Text placeCapacityLabel;
-        [BoxGroup("Labels"), SerializeField] private Text fansRequirementLabel;
-        [BoxGroup("Labels"), SerializeField] private Text ticketCost;
-        [BoxGroup("Labels"), SerializeField] private GameObject cooldownIcon;
+        [Header("Labels")]
+        [SerializeField] private Text placeCapacityLabel;
+        [SerializeField] private Text fansRequirementLabel;
+        [SerializeField] private Text ticketCost;
+        [SerializeField] private GameObject cooldownIcon;
         
-        [BoxGroup("Avatars"), SerializeField] private Image managerAvatar;
-        [BoxGroup("Avatars"), SerializeField] private Image prAvatar;
+        [Header("Avatars")]
+        [SerializeField] private Image managerAvatar;
+        [SerializeField] private Image prAvatar;
         
-        [BoxGroup("Price"), SerializeField] private Price concertPrice;
-        [BoxGroup("Price"), SerializeField] private GameError noMoneyErr;
+        [Header("Price")]
+        [SerializeField] private Price concertPrice;
+        [SerializeField] private GameError noMoneyErr;
 
-        [BoxGroup("Data"), SerializeField] private ConcertPlacesData placeData;
-        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
+        [Header("Data")]
+        [SerializeField] private ConcertPlacesData placeData;
+        [SerializeField] private ImagesBank imagesBank;
         
         private ConcertInfo _concert;
         private int _placeCost;

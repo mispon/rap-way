@@ -1,10 +1,10 @@
-﻿using Sirenix.OdinInspector;
-using UI.Base.Interfaces;
+﻿using UI.Base.Interfaces;
 using UniRx;
+using UnityEngine;
 
 namespace UI.Base
 {
-    public abstract class UIElementContainer : SerializedMonoBehaviour, IUIElementContainer
+    public abstract class UIElementContainer : MonoBehaviour, IUIElementContainer
     {
         protected readonly CompositeDisposable disposables = new();
         

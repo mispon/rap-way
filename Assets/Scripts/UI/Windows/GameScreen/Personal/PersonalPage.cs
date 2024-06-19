@@ -1,7 +1,6 @@
 using Core;
 using Core.Ads;
 using Core.Context;
-using Enums;
 // using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -33,7 +32,7 @@ namespace UI.Windows.GameScreen.Personal
         [Header("Tabs")]
         [SerializeField] private PersonalTab.PersonalTab personalTab;
         [SerializeField] private HouseTab.HouseTab houseTab;
-        [SerializeField] private global::UI.Windows.GameScreen.Personal.LabelTab.LabelTab labelTab;
+        [SerializeField] private LabelTab.LabelTab labelTab;
 
         [Header("Реклама")]
         [SerializeField] private Button cashButton;

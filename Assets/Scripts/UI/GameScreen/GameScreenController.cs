@@ -10,7 +10,7 @@ using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.Time;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
+using TMPro;
 using UI.Enums;
 using UniRx;
 using UnityEngine;
@@ -23,18 +23,20 @@ namespace UI.GameScreen
     /// </summary>
     public class GameScreenController: Singleton<GameScreenController>, IStarter
     {
-        [BoxGroup("HUD"), SerializeField] private Image playerAvatar;
-        [BoxGroup("HUD"), SerializeField] private Text playerNickname;
-        [BoxGroup("HUD"), SerializeField] private Text playerFans;
-        [BoxGroup("HUD"), SerializeField] private Text playerMoney;
-        [BoxGroup("HUD"), SerializeField] private Text playerHype;
-        [BoxGroup("HUD"), SerializeField] private Text currentDate;
-        [BoxGroup("HUD"), SerializeField] private Button moneyButton;
-        [BoxGroup("HUD"), SerializeField] private Button fansButton;
-        [BoxGroup("HUD"), SerializeField] private Button hypeButton;
-        [BoxGroup("HUD"), SerializeField] private StatDescItem[] statDescItems;
-
-        [BoxGroup("Other"), SerializeField] private ImagesBank imagesBank;
+        [Header("HUD")]
+        [SerializeField] private Image playerAvatar;
+        [SerializeField] private TextMeshProUGUI playerNickname;
+        [SerializeField] private TextMeshProUGUI playerLevel;
+        [SerializeField] private Text playerFans;
+        [SerializeField] private Text playerMoney;
+        [SerializeField] private Text playerHype;
+        [SerializeField] private Text currentDate;
+        [SerializeField] private Button moneyButton;
+        [SerializeField] private Button fansButton;
+        [SerializeField] private Button hypeButton;
+        [SerializeField] private StatDescItem[] statDescItems;
+        [Header("Other")]
+        [SerializeField] private ImagesBank imagesBank;
         
         private readonly CompositeDisposable _disposable = new();
         

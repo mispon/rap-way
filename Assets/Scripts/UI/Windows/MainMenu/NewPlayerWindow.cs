@@ -7,7 +7,6 @@ using Game;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Base;
 using UI.Controls.Carousel;
 using UI.Enums;
@@ -18,17 +17,20 @@ namespace UI.Windows.MainMenu
 {
     public class NewPlayerWindow : CanvasUIElement
     {
-        [BoxGroup("Sprites")] [SerializeField] private Sprite _maleAvatar;
-        [BoxGroup("Sprites")] [SerializeField] private Sprite _femaleAvatar;
-        [BoxGroup("Sprites")] [SerializeField] private Sprite _maleAvatarInactive;
-        [BoxGroup("Sprites")] [SerializeField] private Sprite _femaleAvatarInactive;
+        [Header("Sprites")]
+        [SerializeField] private Sprite _maleAvatar;
+        [SerializeField] private Sprite _femaleAvatar;
+        [SerializeField] private Sprite _maleAvatarInactive;
+        [SerializeField] private Sprite _femaleAvatarInactive;
         
-        [BoxGroup("Data fields")] [SerializeField] private Button _maleButton;
-        [BoxGroup("Data fields")] [SerializeField] private Button _femaleButton;
-        [BoxGroup("Data fields")] [SerializeField] private InputField[] _inputFields;
-        [BoxGroup("Data fields")] [SerializeField] private Carousel _ageCarousel;
+        [Header("Data fields")]
+        [SerializeField] private Button _maleButton;
+        [SerializeField] private Button _femaleButton;
+        [SerializeField] private InputField[] _inputFields;
+        [SerializeField] private Carousel _ageCarousel;
 
-        [BoxGroup("Buttons")] [SerializeField] private Button _startButton;
+        [Header("Buttons")]
+        [SerializeField] private Button _startButton;
 
         private bool _maleSelected = true;
 

@@ -1,5 +1,4 @@
 using Game.Settings.Sub;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Game.Settings
@@ -7,15 +6,15 @@ namespace Game.Settings
     [CreateAssetMenu(fileName = "GameSettings", menuName = "Game/Settings")]
     public class GameSettings : ScriptableObject
     {
-        [BoxGroup("Player Settings")]  public PlayerSettings  Player;
-        [BoxGroup("Team Settings")]    public TeamSettings    Team;
-        [BoxGroup("Track Settings")]   public TrackSettings   Track;
-        [BoxGroup("Album Settings")]   public AlbumSettings   Album;
-        [BoxGroup("Clip Settings")]    public ClipSettings    Clip;
-        [BoxGroup("Concert Settings")] public ConcertSettings Concert;
-        [BoxGroup("Socials Settings")] public SocialsSettings Socials;
-        [BoxGroup("Battle Settings")]  public BattleSettings  Battle;
-        [BoxGroup("Rappers Settings")] public RappersSettings Rappers;
-        [BoxGroup("Labels Settings")]  public LabelsSettings  Labels;
+        [Header("Player Settings")]  public PlayerSettings  Player;
+        [Header("Team Settings")]    public TeamSettings    Team;
+        [Header("Track Settings")]   public TrackSettings   Track;
+        [Header("Album Settings")]   public AlbumSettings   Album;
+        [Header("Clip Settings")]    public ClipSettings    Clip;
+        [Header("Concert Settings")] public ConcertSettings Concert;
+        [Header("Socials Settings")] public SocialsSettings Socials;
+        [Header("Battle Settings")]  public BattleSettings  Battle;
+        [Header("Rappers Settings")] public RappersSettings Rappers;
+        [Header("Labels Settings")]  public LabelsSettings  Labels;
     }
 }

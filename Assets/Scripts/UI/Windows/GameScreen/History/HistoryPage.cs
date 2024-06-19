@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
-using Enums;
 // using Firebase.Analytics;
-using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
 using UI.Windows.GameScreen.History.HistoryProduction;
 using UI.Windows.Tutorial;
@@ -14,12 +12,13 @@ namespace UI.Windows.GameScreen.History
     {
         public event Action<HistoryProductionController> onFoldoutInfoShow = delegate { };
         
-        [BoxGroup("Controllers"), SerializeField] private HistoryTrackController trackHistoryController;
-        [BoxGroup("Controllers"), SerializeField] private HistoryAlbumController albumHistoryController;
-        [BoxGroup("Controllers"), SerializeField] private HistoryClipController clipHistoryController;
-        [BoxGroup("Controllers"), SerializeField] private HistoryConcertController concertHistoryController;
+        [Header("Controllers")]
+        [SerializeField] private HistoryTrackController trackHistoryController;
+        [SerializeField] private HistoryAlbumController albumHistoryController;
+        [SerializeField] private HistoryClipController clipHistoryController;
+        [SerializeField] private HistoryConcertController concertHistoryController;
         
-        [BoxGroup("Scroll View"), SerializeField] private ScrollViewController scrollViewController;
+        [Header("Scroll View"), SerializeField] private ScrollViewController scrollViewController;
         
         private HistoryProductionController[] historyControllers => new HistoryProductionController[]
         {

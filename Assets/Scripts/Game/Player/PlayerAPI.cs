@@ -1,6 +1,5 @@
 ﻿using Enums;
 using Game.Player.Goods;
-using Game.Player.History;
 using Game.Player.State;
 using Game.Player.State.Desc;
 using Models.Trends;

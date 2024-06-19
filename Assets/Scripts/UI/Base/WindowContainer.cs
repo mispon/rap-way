@@ -1,17 +1,26 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Core.PropertyAttributes;
 using MessageBroker;
 using MessageBroker.Messages.UI;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UniRx;
 using UnityEngine;
 
 namespace UI.Base
 {
+    [Serializable]
+    public class WindowTuple
+    {
+        public WindowType Type;
+        public CanvasUIElement Value;
+    }
+    
     public class WindowContainer : UIElementContainer
     {
-        [DictionaryDrawerSettings(KeyLabel = "Window type", ValueLabel = "Window settings")]
-        [SerializeField] private Dictionary<WindowType, CanvasUIElement> windows;
+        [ArrayElementTitle(new []{"Type"})]
+        [SerializeField] private WindowTuple[] windows;
         [SerializeField] private WindowType startWindow;
 
         private WindowType _activeWindow;
@@ -21,8 +30,8 @@ namespace UI.Base
         {
             base.Initialize();
             
-            foreach (var window in windows.Values)
-                window.Initialize();
+            foreach (var window in windows)
+                window.Value.Initialize();
             
             MsgBroker.Instance
                 .Receive<WindowControlMessage>()
@@ -73,7 +82,7 @@ namespace UI.Base
 
         private CanvasUIElement GetWindow(WindowType windowType)
         {
-            return windows.GetValueOrDefault(windowType);
+            return windows.FirstOrDefault(e => e.Type == windowType)?.Value;
         }
 
         private void HideCurrentWindow()

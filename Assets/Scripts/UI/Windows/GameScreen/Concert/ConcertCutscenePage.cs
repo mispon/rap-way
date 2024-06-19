@@ -9,9 +9,6 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Concert
 {
-    /// <summary>
-    /// Страница катсцены концерта
-    /// </summary>
     public class ConcertCutscenePage : Page
     {
         private static readonly Color FlexingGraphicStartColor = new(1, 1, 1, 0);

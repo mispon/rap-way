@@ -4,7 +4,6 @@ using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UI.Windows.Pages;
 using UnityEngine;
@@ -16,15 +15,17 @@ namespace UI.Windows.GameScreen.Feat
 {
     public class FeatWorkingPage : BaseWorkingPage
     {
-        [BoxGroup("Work Points"), SerializeField] private Text bitPoints;
-        [BoxGroup("Work Points"), SerializeField] private Text textPoints;
+        [Header("Work Points")]
+        [SerializeField] private Text bitPoints;
+        [SerializeField] private Text textPoints;
 
-        [BoxGroup("Team"), SerializeField] private WorkPoints playerBitWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints playerTextWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints rapperBitWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints rapperTextWorkPoints;
-        [BoxGroup("Team"), SerializeField] private Image rapperAvatar;
-        [BoxGroup("Team"), SerializeField] private Sprite customRapperAvatar;
+        [Header("Team")]
+        [SerializeField] private WorkPoints playerBitWorkPoints;
+        [SerializeField] private WorkPoints playerTextWorkPoints;
+        [SerializeField] private WorkPoints rapperBitWorkPoints;
+        [SerializeField] private WorkPoints rapperTextWorkPoints;
+        [SerializeField] private Image rapperAvatar;
+        [SerializeField] private Sprite customRapperAvatar;
 
         private TrackInfo _track;
 

@@ -10,7 +10,6 @@ using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UI.Windows.Pages;
 using UnityEngine;
@@ -23,21 +22,23 @@ namespace UI.Windows.GameScreen.Concert
 {
     public class ConcertWorkingPage : BaseWorkingPage
     {
-        [BoxGroup("Work Points"), SerializeField] private Text managementPointsLabel;
-        [BoxGroup("Work Points"), SerializeField] private Text marketingPointsLabel;
+        [Header("Work Points")]
+        [SerializeField] private Text managementPointsLabel;
+        [SerializeField] private Text marketingPointsLabel;
 
-        [BoxGroup("Team"), SerializeField] private WorkPoints playerManagementWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints playerPrWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints managerWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints prmanWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints labelManagementWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints labelPrWorkPoints;
-        [BoxGroup("Team"), SerializeField] private Image managerAvatar;
-        [BoxGroup("Team"), SerializeField] private Image prManAvatar;
-        [BoxGroup("Team"), SerializeField] private Image labelAvatar;
-        [BoxGroup("Team"), SerializeField] private GameObject labelFrozen;
+        [Header("Team")]
+        [SerializeField] private WorkPoints playerManagementWorkPoints;
+        [SerializeField] private WorkPoints playerPrWorkPoints;
+        [SerializeField] private WorkPoints managerWorkPoints;
+        [SerializeField] private WorkPoints prmanWorkPoints;
+        [SerializeField] private WorkPoints labelManagementWorkPoints;
+        [SerializeField] private WorkPoints labelPrWorkPoints;
+        [SerializeField] private Image managerAvatar;
+        [SerializeField] private Image prManAvatar;
+        [SerializeField] private Image labelAvatar;
+        [SerializeField] private GameObject labelFrozen;
 
-        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;        
+        [Header("Data"), SerializeField] private ImagesBank imagesBank;        
 
         private ConcertInfo _concert;
         private bool _hasManager;

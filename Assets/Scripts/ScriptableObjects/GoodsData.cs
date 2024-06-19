@@ -1,19 +1,17 @@
 using System;
-using System.Collections.Generic;
 using Enums;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ScriptableObjects
 {
     [CreateAssetMenu(fileName = "Goods", menuName = "Data/Goods")]
-    public class GoodsData: SerializedScriptableObject
+    public class GoodsData: ScriptableObject
     {
-        [TabGroup("Categories")] 
+        [Header("Categories")] 
         public CategoryInfo[] Categories;
         
-        [TabGroup("Items")]
-        public Dictionary<GoodsType, GoodInfo[]> Items;
+        [Header("Goods Items")]
+        public GoodsGroup[] Goods;
     }
 
     [Serializable]
@@ -21,6 +19,13 @@ namespace ScriptableObjects
     {
         public GoodsType Type;
         public Sprite Icon;
+    }
+
+    [Serializable]
+    public class GoodsGroup
+    {
+        public GoodsType Type;
+        public GoodInfo[] Items;
     }
     
     [Serializable]
@@ -52,13 +57,13 @@ namespace ScriptableObjects
     [Serializable]
     public class EquipGood : GoodInfo
     {
-        [PropertyRange(0.0, 0.21)] public float QualityImpact;
+        [Range(0.0f, 0.21f)] public float QualityImpact;
     }
     
     [Serializable]
     public class DonateEquipGood : GoodInfo
     {
-        [PropertyRange(0.0, 0.41)] public float QualityImpact;
+        [Range(0.0f, 0.41f)] public float QualityImpact;
     }
 
     [Serializable]

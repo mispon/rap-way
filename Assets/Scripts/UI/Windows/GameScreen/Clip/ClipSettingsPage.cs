@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Enums;
 using Extensions;
 // using Firebase.Analytics;
 using MessageBroker;
@@ -9,7 +8,6 @@ using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Controls.Money;
@@ -24,20 +22,23 @@ namespace UI.Windows.GameScreen.Clip
 {
     public class ClipSettingsPage : Page
     {
-        [BoxGroup("Controls"), SerializeField] private Carousel trackCarousel;
-        [BoxGroup("Controls"), SerializeField] private Carousel directorCarousel;
-        [BoxGroup("Controls"), SerializeField] private Carousel operatorCarousel;
-        [BoxGroup("Controls"), SerializeField] private Button startButton;
+        [Header("Controls")]
+        [SerializeField] private Carousel trackCarousel;
+        [SerializeField] private Carousel directorCarousel;
+        [SerializeField] private Carousel operatorCarousel;
+        [SerializeField] private Button startButton;
         
-        [BoxGroup("Labels"), SerializeField] private Text directorSkill;
-        [BoxGroup("Labels"), SerializeField] private Text directorPrice;
-        [BoxGroup("Labels"), SerializeField] private Text operatorSkill;
-        [BoxGroup("Labels"), SerializeField] private Text operatorPrice;
+        [Header("Labels")]
+        [SerializeField] private Text directorSkill;
+        [SerializeField] private Text directorPrice;
+        [SerializeField] private Text operatorSkill;
+        [SerializeField] private Text operatorPrice;
         
-        [BoxGroup("Price"), SerializeField] private GameError noMoneyErr;
-        [BoxGroup("Price"), SerializeField] private Price price;
+        [Header("Price")]
+        [SerializeField] private GameError noMoneyErr;
+        [SerializeField] private Price price;
 
-        [BoxGroup("Data"), SerializeField] private ClipStaffData staffData;
+        [Header("Data"), SerializeField] private ClipStaffData staffData;
 
         private ClipInfo _clip;
         private int _directorPrice;

@@ -10,7 +10,6 @@ using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UI.Windows.Pages;
 using UnityEngine;
@@ -21,26 +20,25 @@ using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Album
 {
-    /// <summary>
-    /// Страница работы над альбомом
-    /// </summary>
     public class AlbumWorkingPage : BaseWorkingPage
     {
-        [BoxGroup("Progress"), SerializeField] private Text bitPoints;
-        [BoxGroup("Progress"), SerializeField] private Text textPoints;
+        [Header("Progress")]
+        [SerializeField] private Text bitPoints;
+        [SerializeField] private Text textPoints;
         
-        [BoxGroup("Team"), SerializeField] private WorkPoints playerBitWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints playerTextWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints bitmakerWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints textwritterWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints labelBitWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints labelTextWorkPoints;
-        [BoxGroup("Team"), SerializeField] private Image bitmakerAvatar;
-        [BoxGroup("Team"), SerializeField] private Image textwritterAvatar;
-        [BoxGroup("Team"), SerializeField] private Image labelAvatar;
-        [BoxGroup("Team"), SerializeField] private GameObject labelFrozen;
+        [Header("Team")]
+        [SerializeField] private WorkPoints playerBitWorkPoints;
+        [SerializeField] private WorkPoints playerTextWorkPoints;
+        [SerializeField] private WorkPoints bitmakerWorkPoints;
+        [SerializeField] private WorkPoints textwritterWorkPoints;
+        [SerializeField] private WorkPoints labelBitWorkPoints;
+        [SerializeField] private WorkPoints labelTextWorkPoints;
+        [SerializeField] private Image bitmakerAvatar;
+        [SerializeField] private Image textwritterAvatar;
+        [SerializeField] private Image labelAvatar;
+        [SerializeField] private GameObject labelFrozen;
         
-        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
+        [Header("Data"), SerializeField] private ImagesBank imagesBank;
         
         private bool _hasBitmaker;
         private bool _hasTextWriter;

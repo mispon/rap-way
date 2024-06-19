@@ -8,7 +8,6 @@ using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UI.Windows.Pages;
 using UnityEngine;
@@ -21,15 +20,17 @@ namespace UI.Windows.GameScreen.Clip
 {
     public class ClipWorkingPage : BaseWorkingPage
     {
-        [BoxGroup("Work Points"), SerializeField] private Text directorPoints;
-        [BoxGroup("Work Points"), SerializeField] private Text operatorPoints;
+        [Header("Work Points")]
+        [SerializeField] private Text directorPoints;
+        [SerializeField] private Text operatorPoints;
         
-        [BoxGroup("Team"), SerializeField] private WorkPoints playerWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints labelWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints directorWorkPoints;
-        [BoxGroup("Team"), SerializeField] private WorkPoints operatorWorkPoints;
-        [BoxGroup("Team"), SerializeField] private Image labelAvatar;
-        [BoxGroup("Team"), SerializeField] private GameObject labelFrozen;
+        [Header("Team")]
+        [SerializeField] private WorkPoints playerWorkPoints;
+        [SerializeField] private WorkPoints labelWorkPoints;
+        [SerializeField] private WorkPoints directorWorkPoints;
+        [SerializeField] private WorkPoints operatorWorkPoints;
+        [SerializeField] private Image labelAvatar;
+        [SerializeField] private GameObject labelFrozen;
 
         private ClipInfo _clip;
         private LabelInfo _label;

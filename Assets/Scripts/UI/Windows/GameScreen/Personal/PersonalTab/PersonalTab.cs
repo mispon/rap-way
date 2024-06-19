@@ -3,7 +3,6 @@ using System.Linq;
 using Core.Localization;
 using Enums;
 using Extensions;
-using Game.Player.Goods;
 using Game.Player.Goods.Desc;
 using Game.Player.State.Desc;
 using Models.Production;
@@ -51,7 +50,7 @@ namespace UI.Windows.GameScreen.Personal.PersonalTab
         [SerializeField] private Text[] lastActions;
 
         [Header("Данные")]
-        [SerializeField] private GoodsData goods;
+        [SerializeField] private GoodsData goodsBank;
         [SerializeField] private ImagesBank imageBank;
         
         public override void Open()
@@ -86,7 +85,9 @@ namespace UI.Windows.GameScreen.Personal.PersonalTab
                 if (good == null)
                     return imageBank.Empty;
 
-                return goods.Items[type]
+                var goodsGroup = goodsBank.Goods.First(e => e.Type == good.Type);
+                
+                return goodsGroup.Items
                     .First(e => e.Level == good.Level)
                     .PersonalPageImage;
             }

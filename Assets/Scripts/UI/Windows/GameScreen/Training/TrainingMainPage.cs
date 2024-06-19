@@ -2,7 +2,6 @@ using System;
 using Core.Context;
 using MessageBroker;
 using MessageBroker.Messages.UI;
-using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Windows.GameScreen.Training.Tabs;
 using UI.Windows.Tutorial;
@@ -14,10 +13,11 @@ namespace UI.Windows.GameScreen.Training
 {
     public class TrainingMainPage : Page
     {
-        [BoxGroup("Controls"), SerializeField] private Carousel tabsCarousel;
-        [BoxGroup("Controls"), SerializeField] private TrainingTab[] tabs;
-        [BoxGroup("Controls"), SerializeField] private Text expLabel;
-        [BoxGroup("Controls"), SerializeField] private Button closeButton;
+        [Header("Controls")]
+        [SerializeField] private Carousel tabsCarousel;
+        [SerializeField] private TrainingTab[] tabs;
+        [SerializeField] private Text expLabel;
+        [SerializeField] private Button closeButton;
 
         private int _tabIndex;
 

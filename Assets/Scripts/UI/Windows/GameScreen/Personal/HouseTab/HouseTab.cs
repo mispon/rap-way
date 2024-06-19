@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Enums;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -18,12 +17,12 @@ namespace UI.Windows.GameScreen.Personal.HouseTab
     public class HouseTab : Tab
     {
         [SerializeField] private GameObject noHouseLabel;
-        [Space]
-        [BoxGroup("House"), SerializeField] private HouseSettings[] settingsByLevel;
-        [BoxGroup("House"), SerializeField] private GameObject houseGroup;
-        [BoxGroup("House"), SerializeField] private Image houseImage;
-        [Space]
-        [BoxGroup("Rooms"), SerializeField] private GameObject[] houseRooms;
+        [Space, Header("House")]
+        [SerializeField] private HouseSettings[] settingsByLevel;
+        [SerializeField] private GameObject houseGroup;
+        [SerializeField] private Image houseImage;
+        [Space, Header("Rooms")]
+        [SerializeField] private GameObject[] houseRooms;
         
         public override void Open()
         {

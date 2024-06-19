@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Enums;
 // using Firebase.Analytics;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Controls.Error;
 using UI.Enums;
@@ -21,28 +19,34 @@ namespace UI.Windows.GameScreen.Rappers
 {
     public class NewRapperPage : Page
     {
-        [BoxGroup("Name Input"), SerializeField] private InputField nameInput;
-        [BoxGroup("Name Input"), SerializeField] private Carousel labelInput;
-        [BoxGroup("Name Input"), SerializeField] private GameError gameError;
+        [Header("Name Input")]
+        [SerializeField] private InputField nameInput;
+        [SerializeField] private Carousel labelInput;
+        [SerializeField] private GameError gameError;
 
-        [BoxGroup("Vocabulary"), SerializeField] private Button vocabularyBtnLeft;
-        [BoxGroup("Vocabulary"), SerializeField] private Button vocabularyBtnRight;
-        [BoxGroup("Vocabulary"), SerializeField] private Text vocabularyValue;
+        [Header("Vocabulary")]
+        [SerializeField] private Button vocabularyBtnLeft;
+        [SerializeField] private Button vocabularyBtnRight;
+        [SerializeField] private Text vocabularyValue;
 
-        [BoxGroup("Bitmaking"), SerializeField] private Button bitmakingBtnLeft;
-        [BoxGroup("Bitmaking"), SerializeField] private Button bitmakingBtnRight;
-        [BoxGroup("Bitmaking"), SerializeField] private Text bitmakingValue;
+        [Header("Bitmaking")]
+        [SerializeField] private Button bitmakingBtnLeft;
+        [SerializeField] private Button bitmakingBtnRight;
+        [SerializeField] private Text bitmakingValue;
 
-        [BoxGroup("Management"), SerializeField] private Button managementBtnLeft;
-        [BoxGroup("Management"), SerializeField] private Button managementBtnRight;
-        [BoxGroup("Management"), SerializeField] private Text managementValue;
+        [Header("Management")]
+        [SerializeField] private Button managementBtnLeft;
+        [SerializeField] private Button managementBtnRight;
+        [SerializeField] private Text managementValue;
 
-        [BoxGroup("Fans"), SerializeField] private Button fansBtnLeft;
-        [BoxGroup("Fans"), SerializeField] private Button fansBtnRight;
-        [BoxGroup("Fans"), SerializeField] private Text fansValue;
+        [Header("Fans")]
+        [SerializeField] private Button fansBtnLeft;
+        [SerializeField] private Button fansBtnRight;
+        [SerializeField] private Text fansValue;
         
-        [BoxGroup("Buttons"), SerializeField] private Button createButton;
-        [BoxGroup("Buttons"), SerializeField] private Button backButton;
+        [Header("Buttons")]
+        [SerializeField] private Button createButton;
+        [SerializeField] private Button backButton;
 
         private void Start()
         {

@@ -1,5 +1,4 @@
 ﻿using Core.Context;
-using Enums;
 using Extensions;
 // using Firebase.Analytics;
 using Game.Production;
@@ -8,7 +7,6 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -17,16 +15,17 @@ namespace UI.Windows.GameScreen.Concert
 {
     public class ConcertResultPage : Page
     {
-        [BoxGroup("Result"), SerializeField] private Text placeName;
-        [BoxGroup("Result"), SerializeField] private Text playerName;
-        [BoxGroup("Result"), SerializeField] private Text ticketsSold;
-        [BoxGroup("Result"), SerializeField] private Text ticketCost;
-        [BoxGroup("Result"), SerializeField] private Text moneyIncome;
-        [BoxGroup("Result"), SerializeField] private Text expIncome;
-        [BoxGroup("Result"), SerializeField] private GameObject soldOutBadge;
+        [Header("Result")]
+        [SerializeField] private Text placeName;
+        [SerializeField] private Text playerName;
+        [SerializeField] private Text ticketsSold;
+        [SerializeField] private Text ticketCost;
+        [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
+        [SerializeField] private GameObject soldOutBadge;
         
-        [BoxGroup("Cutscene"), SerializeField] private ConcertCutscenePage cutscenePage;
-        [BoxGroup("Analyzer"), SerializeField] private ConcertAnalyzer concertAnalyzer;
+        [Header("Cutscene"), SerializeField] private ConcertCutscenePage cutscenePage;
+        [Header("Analyzer"), SerializeField] private ConcertAnalyzer concertAnalyzer;
         
         private ConcertInfo _concert;
         

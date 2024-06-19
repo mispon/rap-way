@@ -1,17 +1,15 @@
 ﻿using System;
 using Core.Context;
-using Enums;
 using Extensions;
 // using Firebase.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
-using Game.Socials.Eagler;
+using Game.Socials.Twitter;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using Sirenix.OdinInspector;
-using UI.Windows.GameScreen.Eagler;
+using UI.Windows.GameScreen.Twitter;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -20,19 +18,20 @@ namespace UI.Windows.GameScreen.Clip
 {
     public class ClipResultPage : Page
     {
-        [BoxGroup("Result"), SerializeField] private Text views;
-        [BoxGroup("Result"), SerializeField] private Text likes;
-        [BoxGroup("Result"), SerializeField] private Text dislikes;
-        [BoxGroup("Result"), SerializeField] private Text clipNameLabel;
-        [BoxGroup("Result"), SerializeField] private Text playerNameLabel;
-        [BoxGroup("Result"), SerializeField] private Text qualityLabel;
-        [BoxGroup("Result"), SerializeField] private Text fansIncome;
-        [BoxGroup("Result"), SerializeField] private Text moneyIncome;
-        [BoxGroup("Result"), SerializeField] private Text expIncome;
-        [BoxGroup("Result"), SerializeField] private GameObject hitBadge;
+        [Header("Result")]
+        [SerializeField] private Text views;
+        [SerializeField] private Text likes;
+        [SerializeField] private Text dislikes;
+        [SerializeField] private Text clipNameLabel;
+        [SerializeField] private Text playerNameLabel;
+        [SerializeField] private Text qualityLabel;
+        [SerializeField] private Text fansIncome;
+        [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
+        [SerializeField] private GameObject hitBadge;
         
-        [BoxGroup("Eagles"), SerializeField] private EagleCard[] eagleCards;
-        [BoxGroup("Analyzer"), SerializeField] private ClipAnalyzer clipAnalyzer;
+        [Header("Eagles"), SerializeField] private TwitterCard[] eagleCards;
+        [Header("Analyzer"), SerializeField] private ClipAnalyzer clipAnalyzer;
 
         private ClipInfo _clip;
  
@@ -67,7 +66,7 @@ namespace UI.Windows.GameScreen.Clip
         
         private void DisplayEagles(float quality)
         {
-            var eagles = EaglerManager.Instance.GenerateEagles(quality);
+            var eagles = TwitterManager.Instance.GenerateTwits(quality);
             for (var i = 0; i < eagles.Count; i++)
             {
                 eagleCards[i].Initialize(i, eagles[i]);

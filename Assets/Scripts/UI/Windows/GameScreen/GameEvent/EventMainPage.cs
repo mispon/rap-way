@@ -7,7 +7,6 @@ using Enums;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,13 +16,15 @@ namespace UI.Windows.GameScreen.GameEvent
 {
     public class EventMainPage: Page
     {
-        [BoxGroup("Card"), SerializeField] private Text nameText;
-        [BoxGroup("Card"), SerializeField] private Text descriptionText;
+        [Header("Card")]
+        [SerializeField] private Text nameText;
+        [SerializeField] private Text descriptionText;
         
-        [BoxGroup("Decisions"), SerializeField] private Button peacefullyButton;
-        [BoxGroup("Decisions"), SerializeField] private Button aggressivelyButton;
-        [BoxGroup("Decisions"), SerializeField] private Button neutralButton;
-        [BoxGroup("Decisions"), SerializeField] private Button randomButton;
+        [Header("Decisions")]
+        [SerializeField] private Button peacefullyButton;
+        [SerializeField] private Button aggressivelyButton;
+        [SerializeField] private Button neutralButton;
+        [SerializeField] private Button randomButton;
         
         private GameEventInfo _eventInfo;
 

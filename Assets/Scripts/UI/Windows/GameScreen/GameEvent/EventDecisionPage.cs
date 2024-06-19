@@ -5,7 +5,6 @@ using Game.Player.State.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -14,15 +13,17 @@ namespace UI.Windows.GameScreen.GameEvent
 {
     public class EventDecisionPage: Page
     {
-        [BoxGroup("Card"), SerializeField] private Text nameText;
-        [BoxGroup("Card"), SerializeField] private Text descriptionText;
+        [Header("Card")]
+        [SerializeField] private Text nameText;
+        [SerializeField] private Text descriptionText;
         
-        [BoxGroup("Incomes"), SerializeField] private Text moneyText;
-        [BoxGroup("Incomes"), SerializeField] private Text fansText;
-        [BoxGroup("Incomes"), SerializeField] private Text hypeText;
-        [BoxGroup("Incomes"), SerializeField] private Text expText;
+        [Header("Incomes")]
+        [SerializeField] private Text moneyText;
+        [SerializeField] private Text fansText;
+        [SerializeField] private Text hypeText;
+        [SerializeField] private Text expText;
         
-        [BoxGroup("Buttons"), SerializeField] private Button continueBtn;
+        [Header("Buttons"), SerializeField] private Button continueBtn;
 
         private GameEventDecision _eventDecision;
 

@@ -3,13 +3,12 @@ using MessageBroker;
 using MessageBroker.Messages.Game;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
-using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 
 namespace UI.Base
 {
-    public class UIManager : SerializedMonoBehaviour, IDisposable
+    public class UIManager : MonoBehaviour, IDisposable
     {
         [SerializeField] private UIElementContainer[] containers;
 

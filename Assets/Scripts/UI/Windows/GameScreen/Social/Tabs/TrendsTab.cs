@@ -7,7 +7,6 @@ using MessageBroker;
 using MessageBroker.Messages.Player;
 using Models.Production;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -16,14 +15,14 @@ namespace UI.Windows.GameScreen.Social.Tabs
 {
     public class TrendsTab : BaseSocialsTab
     {
-        [BoxGroup("Controls"), SerializeField] private GameObject trends;
-        [BoxGroup("Controls"), SerializeField] private Image themeIcon;
-        [BoxGroup("Controls"), SerializeField] private Text themeTrend;
-        [BoxGroup("Controls"), SerializeField] private Text styleTrend;
-        [Space]
-        [BoxGroup("Controls"), SerializeField] private GameObject noInfo;
+        [Header("Controls")]
+        [SerializeField] private GameObject trends;
+        [SerializeField] private Image themeIcon;
+        [SerializeField] private Text themeTrend;
+        [SerializeField] private Text styleTrend;
+        [SerializeField] private GameObject noInfo;
         
-        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
+        [Header("Data"), SerializeField] private ImagesBank imagesBank;
 
         protected override SocialInfo GetInfo()
         {

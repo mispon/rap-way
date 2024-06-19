@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UnityEngine;
 
@@ -9,11 +8,11 @@ namespace Scenes
     [CreateAssetMenu(
         fileName = "New ScenesControllerSettings",
         menuName = "Scenes/ScenesControllerSettings")]
-    public class ScenesControllerSettings : SerializedScriptableObject
+    public class ScenesControllerSettings : ScriptableObject
     {
         [SerializeField] private float loadingDelay;
-        [BoxGroup("Fade times")] [SerializeField] private float fadeTimeStart;
-        [BoxGroup("Fade times")] [SerializeField] private float fadeTimeEnd;
+        [Header("Fade times")] [SerializeField] private float fadeTimeStart;
+        [Header("Fade times")] [SerializeField] private float fadeTimeEnd;
         
         [SerializeField] private Dictionary<SceneType, string> _sceneNames;
 

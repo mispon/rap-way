@@ -6,7 +6,6 @@ using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UI.Windows.Pages;
 using UnityEngine;
@@ -16,29 +15,29 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Battle
 {
-    /// <summary>
-    /// Рабочая страница батла
-    /// </summary>
     public class BattleWorkingPage : BaseWorkingPage
     {
-        [BoxGroup("Controls"), SerializeField] private Text playerName;
-        [BoxGroup("Controls"), SerializeField] private Text rapperName;
-        [BoxGroup("Controls"), SerializeField] private Image playerAvatar;
-        [BoxGroup("Controls"), SerializeField] private Text playerPointsLabel;
-        [BoxGroup("Controls"), SerializeField] private WorkPoints playerWorkPoints;
-        [BoxGroup("Controls"), SerializeField] private Image rapperAvatar;
-        [BoxGroup("Controls"), SerializeField] private Text rapperPointsLabel;
-        [BoxGroup("Controls"), SerializeField] private WorkPoints rapperWorkPoints;
-        [BoxGroup("Controls"), SerializeField] private Sprite customRapperAvatar;
+        [Header("Controls")]
+        [SerializeField] private Text playerName;
+        [SerializeField] private Text rapperName;
+        [SerializeField] private Image playerAvatar;
+        [SerializeField] private Text playerPointsLabel;
+        [SerializeField] private WorkPoints playerWorkPoints;
+        [SerializeField] private Image rapperAvatar;
+        [SerializeField] private Text rapperPointsLabel;
+        [SerializeField] private WorkPoints rapperWorkPoints;
+        [SerializeField] private Sprite customRapperAvatar;
         
-        [BoxGroup("Work Points"), SerializeField] private int skillChance;
-        [BoxGroup("Work Points"), SerializeField] private WorkPoints doubleTimePoint;
-        [BoxGroup("Work Points"), SerializeField] private WorkPoints shoutOutPoint;
-        [BoxGroup("Work Points"), SerializeField] private WorkPoints freestylePoint;
-        [BoxGroup("Work Points"), SerializeField] private WorkPoints punchPoint;
-        [BoxGroup("Work Points"), SerializeField] private WorkPoints flipPoint;
+        [Header("Controls")]
+        [SerializeField] private int skillChance;
+        [SerializeField] private WorkPoints doubleTimePoint;
+        [SerializeField] private WorkPoints shoutOutPoint;
+        [SerializeField] private WorkPoints freestylePoint;
+        [SerializeField] private WorkPoints punchPoint;
+        [SerializeField] private WorkPoints flipPoint;
         
-        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
+        [Header("Date")]
+        [SerializeField] private ImagesBank imagesBank;
 
         private RapperInfo _rapper;
         private int _playerPoints;

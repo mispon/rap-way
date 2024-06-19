@@ -5,7 +5,6 @@ using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Enums;
 using UI.Windows.GameScreen.Charts;
 using UnityEngine;
@@ -17,12 +16,12 @@ namespace UI.Windows.GameScreen.Rappers
 {
     public class RapperResultPage : Page
     {
-        [BoxGroup("Result"), SerializeField] private Text message;
-        [BoxGroup("Result"), SerializeField] private Image rapperAvatar;
-        [BoxGroup("Result"), SerializeField] private Sprite customRapperAvatar;
-        [BoxGroup("Result"), SerializeField] private Button okButton;
-        [BoxGroup("Result"), SerializeField] private Button cancelButton;
-        [BoxGroup("Result"), SerializeField] private Button nextButton;
+        [SerializeField] private Text message;
+        [SerializeField] private Image rapperAvatar;
+        [SerializeField] private Sprite customRapperAvatar;
+        [SerializeField] private Button okButton;
+        [SerializeField] private Button cancelButton;
+        [SerializeField] private Button nextButton;
 
         private RapperInfo _rapper;
         private ConversationType _convType;

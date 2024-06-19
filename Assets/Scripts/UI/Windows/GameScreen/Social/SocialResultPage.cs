@@ -4,14 +4,13 @@ using Game.Production.Analyzers;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UI.Windows.GameScreen.Social
 {
     public abstract class SocialResultPage : Page
     {
-        [BoxGroup("Analyzer"), SerializeField] protected SocialAnalyzer analyzer;
+        [SerializeField] protected SocialAnalyzer analyzer;
 
         private SocialInfo _social;
         

@@ -3,11 +3,10 @@ using Enums;
 using Extensions;
 using Game.Production;
 using Game.Rappers.Desc;
-using Game.Socials.Eagler;
+using Game.Socials.Twitter;
 using MessageBroker;
 using MessageBroker.Messages.Production;
-using Sirenix.OdinInspector;
-using UI.Windows.GameScreen.Eagler;
+using UI.Windows.GameScreen.Twitter;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -16,21 +15,24 @@ namespace UI.Windows.GameScreen.Battle
 {
     public class BattleResultPage : Page
     {
-        [BoxGroup("Result"), SerializeField] private Text resultMessage;
-        [BoxGroup("Result"), SerializeField] private Text fansIncome;
-        [BoxGroup("Result"), SerializeField] private Text hypeIncome;
-        [BoxGroup("Result"), SerializeField] private Text expIncome;
+        [Header("Result")]
+        [SerializeField] private Text resultMessage;
+        [SerializeField] private Text fansIncome;
+        [SerializeField] private Text hypeIncome;
+        [SerializeField] private Text expIncome;
         
-        [BoxGroup("Images"), SerializeField] private Image playerImage;
-        [BoxGroup("Images"), SerializeField] private GameObject playerLoseMask;
-        [BoxGroup("Images"), SerializeField] private Image rapperImage;
-        [BoxGroup("Images"), SerializeField] private GameObject rapperLoseMask;
+        [Header("Images")]
+        [SerializeField] private Image playerImage;
+        [SerializeField] private GameObject playerLoseMask;
+        [SerializeField] private Image rapperImage;
+        [SerializeField] private GameObject rapperLoseMask;
         
-        [BoxGroup("Sprites"), SerializeField] private Sprite playerAvatarMale;
-        [BoxGroup("Sprites"), SerializeField] private Sprite playerAvatarFemale;
-        [BoxGroup("Sprites"), SerializeField] private Sprite customAvatar;
+        [Header("Sprites")]
+        [SerializeField] private Sprite playerAvatarMale;
+        [SerializeField] private Sprite playerAvatarFemale;
+        [SerializeField] private Sprite customAvatar;
         
-        [BoxGroup("Eagles"), SerializeField] private EagleCard[] eagleCards;
+        [Header("Eagles"), SerializeField] private TwitterCard[] eagleCards;
         
         private BattleResult _result;
         
@@ -99,7 +101,7 @@ namespace UI.Windows.GameScreen.Battle
 
         private void DisplayEagles(float quality)
         {
-            var eagles = EaglerManager.Instance.GenerateEagles(quality);
+            var eagles = TwitterManager.Instance.GenerateTwits(quality);
             for (var i = 0; i < eagles.Count; i++)
             {
                 eagleCards[i].Initialize(i, eagles[i]);

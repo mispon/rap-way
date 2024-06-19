@@ -14,7 +14,6 @@ using MessageBroker.Messages.UI;
 using Models.Production;
 using Models.Trends;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.Carousel;
 using UI.Enums;
 using UI.Windows.Tutorial;
@@ -25,21 +24,19 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Album
 {
-    /// <summary>
-    /// Страница настройки альбома
-    /// </summary>
     public class AlbumSettingPage : Page
     {
-        [BoxGroup("Controls"), SerializeField] private InputField albumNameInput;
-        [BoxGroup("Controls"), SerializeField] private Carousel styleCarousel;
-        [BoxGroup("Controls"), SerializeField] private Carousel themeCarousel;
-        [BoxGroup("Controls"), SerializeField] private Button startButton;
-        [BoxGroup("Controls"), SerializeField] protected Text bitSkill;
-        [BoxGroup("Controls"), SerializeField] protected Text textSkill;
-        [BoxGroup("Controls"), SerializeField] private Image bitmakerAvatar;
-        [BoxGroup("Controls"), SerializeField] private Image textwritterAvatar;
+        [Header("Controls")]
+        [SerializeField] private InputField albumNameInput;
+        [SerializeField] private Carousel styleCarousel;
+        [SerializeField] private Carousel themeCarousel;
+        [SerializeField] private Button startButton;
+        [SerializeField] protected Text bitSkill;
+        [SerializeField] protected Text textSkill;
+        [SerializeField] private Image bitmakerAvatar;
+        [SerializeField] private Image textwritterAvatar;
         
-        [BoxGroup("Data"), SerializeField] private ImagesBank imagesBank;
+        [Header("Data"), SerializeField] private ImagesBank imagesBank;
 
         private AlbumInfo _album;
         private IDisposable _disposable;

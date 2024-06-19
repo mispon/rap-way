@@ -1,13 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using Core.Context;
-using Enums;
 using Extensions;
 // using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
-using Sirenix.OdinInspector;
 using UI.Controls.ScrollViewController;
 using UniRx;
 using UnityEngine;
@@ -19,13 +18,15 @@ namespace UI.Windows.GameScreen.Store
     {
         private readonly CompositeDisposable _disposable = new();
         
-        [BoxGroup("Data")] [SerializeField] private GoodsData data;
+        [Header("Data")] [SerializeField] private GoodsData data;
         
-        [BoxGroup("Header")] [SerializeField] private Text gameBalance;
-        [BoxGroup("Header")] [SerializeField] private Text donateBalance;
+        [Header("Header")] 
+        [SerializeField] private Text gameBalance;
+        [SerializeField] private Text donateBalance;
         
-        [BoxGroup("Categories")] [SerializeField] private ScrollViewController categories;
-        [BoxGroup("Categories")] [SerializeField] private GameObject categoryItemTemplate;
+        [Header("Categories")] 
+        [SerializeField] private ScrollViewController categories;
+        [SerializeField] private GameObject categoryItemTemplate;
 
         private readonly List<StoreCategoryItem> _categoryItems = new();
         
@@ -63,8 +64,8 @@ namespace UI.Windows.GameScreen.Store
             {
                 var row = categories.InstantiatedElement<StoreCategoryItem>(categoryItemTemplate);
 
-                var itemsInfo = data.Items[category.Type];
-                row.Initialize(i, category.Icon, GetLocale(category.Type.GetDescription()), itemsInfo);
+                var group = data.Goods.First(e => e.Type == category.Type);
+                row.Initialize(i, category.Icon, GetLocale(category.Type.GetDescription()), group.Items);
                 i++;
                 
                 _categoryItems.Add(row);
