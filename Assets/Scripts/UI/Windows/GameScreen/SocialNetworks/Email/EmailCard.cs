@@ -13,7 +13,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
     {
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private TextMeshProUGUI preview;
-        [SerializeField] private TextMeshProUGUI timestamp;
+        [SerializeField] private TextMeshProUGUI date;
         [SerializeField] private Image           border;
 
         [Space] [SerializeField] private Color selectedColor;
@@ -67,9 +67,11 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
         public void Initialize(int i, EmailInfo email, Action<EmailCard, EmailInfo> onClick)
         {
-            _index       = i;
+            _index = i;
+
             title.text   = email.Title;
             preview.text = email.Content;
+            date.text    = email.Date;
 
             title.color  = email.IsNew ? newColor : oldColor;
             border.color = email.IsNew ? newColor : oldColor;

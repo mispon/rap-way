@@ -48,7 +48,7 @@ namespace Game.Labels
         }
 
         /// <summary>
-        ///     Returns label income from it's members
+        ///     Returns label income from its members
         /// </summary>
         public int GetPlayersLabelIncome()
         {
@@ -75,7 +75,6 @@ namespace Game.Labels
             {
                 return;
             }
-
 
             MsgBroker.Instance.Publish(new EmailMessage
             {

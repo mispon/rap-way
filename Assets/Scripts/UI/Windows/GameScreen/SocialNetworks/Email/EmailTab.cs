@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game.SocialNetworks.Email;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
@@ -19,9 +20,9 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
         protected override void BeforeOpen()
         {
-            var emails = EmailManager.Instance.GetEmails();
+            var emails = EmailManager.Instance.GetEmails().ToArray();
 
-            for (var i = 0; i < emails.Count; i++)
+            for (var i = 0; i < emails.Length; i++)
             {
                 var data = emails[i];
 
@@ -48,7 +49,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
             _lastSelected = card;
 
-            if (string.IsNullOrEmpty(email.SpriteName))
+            if (email.Sprite == null)
             {
                 textTemplate.ShowText(email);
                 imageTemplate.Hide();

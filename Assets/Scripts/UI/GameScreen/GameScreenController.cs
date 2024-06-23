@@ -61,9 +61,10 @@ namespace UI.GameScreen
             {
                 MsgBroker.Instance.Publish(new EmailMessage
                 {
-                    Title       = "CASINO 0NLINE!",
+                    Title       = "CASINO ONLINE!",
                     Content     = "PLAY CASINO PLEASE PLAY CASINO PLAY OUR AWESOME CASINO",
                     Sender      = "stupid-casino777@gmail.com",
+                    Sprite      = imagesBank.MaleAvatar,
                     mainAction  = () => Debug.Log("main action"),
                     quickAction = () => Debug.Log("quick action")
                 });

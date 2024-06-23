@@ -5,21 +5,6 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "ImagesBank", menuName = "Data/ImagesBank")]
     public class ImagesBank : ScriptableObject
     {
-        public Sprite[] Index;
-
-        public Sprite GetImageByName(string spriteName)
-        {
-            foreach (var sprite in Index)
-            {
-                if (sprite.name == spriteName)
-                {
-                    return sprite;
-                }
-            }
-
-            return Empty;
-        }
-        
         // @formatter:off
         
         public Sprite Empty;
@@ -64,7 +49,6 @@ namespace ScriptableObjects
 
         [Header("Houses images")]
         public Sprite[] Houses;
-        
         // @formatter:on
     }
 }

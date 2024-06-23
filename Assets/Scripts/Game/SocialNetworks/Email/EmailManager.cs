@@ -1,19 +1,14 @@
 using System.Collections.Generic;
-using System.Linq;
 using Core;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
-using ScriptableObjects;
 using UniRx;
-using UnityEngine;
 
 namespace Game.SocialNetworks.Email
 {
-    public class EmailManager : Singleton<EmailManager>
+    public partial class EmailManager : Singleton<EmailManager>
     {
-        [SerializeField] private ImagesBank imagesBank;
-
         private readonly CompositeDisposable _disposables = new();
 
         private void Start()
@@ -29,9 +24,17 @@ namespace Game.SocialNetworks.Email
             _disposables.Clear();
         }
 
-        public List<Email> GetEmails()
+        public IEnumerable<Email> GetEmails()
         {
-            return GameManager.Instance.Emails.ToList();
+            foreach (var email in GameManager.Instance.Emails)
+            {
+                if (imagesMap.TryGetValue(email.SpriteName, out var sprite))
+                {
+                    email.Sprite = sprite;
+                }
+
+                yield return email;
+            }
         }
 
         public void MarkRead(Email email)
@@ -47,7 +50,8 @@ namespace Game.SocialNetworks.Email
                 Title      = msg.Title,
                 Content    = msg.Content,
                 Sender     = msg.Sender,
-                SpriteName = msg.SpriteName,
+                Sprite     = msg.Sprite,
+                SpriteName = msg.Sprite.name,
                 Date       = TimeManager.Instance.DisplayNow,
                 IsNew      = true,
 

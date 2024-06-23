@@ -1,4 +1,3 @@
-using ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,10 +9,11 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
     {
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private TextMeshProUGUI content;
+        [SerializeField] private TextMeshProUGUI sender;
+        [SerializeField] private TextMeshProUGUI date;
         [SerializeField] private Image           image;
         [SerializeField] private Button          mainActionBtn;
         [SerializeField] private Button          quickActionBtn;
-        [SerializeField] private ImagesBank      imageBank;
 
         private EmailInfo _email;
 
@@ -29,6 +29,8 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
             title.text   = email.Title;
             content.text = email.Content;
+            sender.text  = email.Sender;
+            date.text    = email.Date;
 
             mainActionBtn.gameObject.SetActive(email.IsNew && email.MainAction != null);
             quickActionBtn.gameObject.SetActive(email.IsNew && email.QuickAction != null);
@@ -38,8 +40,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
         public void ShowImage(EmailInfo email)
         {
-            image.sprite = imageBank.GetImageByName(email.SpriteName);
-
+            image.sprite = email.Sprite;
             ShowText(email);
         }
 

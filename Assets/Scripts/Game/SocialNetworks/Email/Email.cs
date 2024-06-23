@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Game.SocialNetworks.Email
 {
@@ -8,11 +9,12 @@ namespace Game.SocialNetworks.Email
         public string Title;
         public string Content;
         public string Sender;
-        public string SpriteName;
         public string Date;
+        public string SpriteName;
         public bool   IsNew;
 
         [NonSerialized] public Action MainAction;
         [NonSerialized] public Action QuickAction;
+        [NonSerialized] public Sprite Sprite;
     }
 }

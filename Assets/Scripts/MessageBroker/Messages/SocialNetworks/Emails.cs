@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace MessageBroker.Messages.SocialNetworks
 {
@@ -7,7 +8,7 @@ namespace MessageBroker.Messages.SocialNetworks
         public string Title;
         public string Content;
         public string Sender;
-        public string SpriteName;
+        public Sprite Sprite;
         public Action mainAction;
         public Action quickAction;
     }
