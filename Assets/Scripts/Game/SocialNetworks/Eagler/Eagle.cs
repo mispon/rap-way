@@ -1,9 +1,9 @@
 using System;
 
-namespace Game.Socials.Twitter
+namespace Game.SocialNetworks.Eagler
 {
     [Serializable]
-    public class Twit
+    public class Eagle
     {
         public string Nickname;
         public string Date;

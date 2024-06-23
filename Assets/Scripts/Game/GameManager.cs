@@ -10,13 +10,15 @@ using Game.Labels.Desc;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Game.Settings;
-using Game.Socials.Twitter;
+using Game.SocialNetworks.Eagler;
+using Game.SocialNetworks.Email;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Game;
 using Models.Game;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 #pragma warning disable CS0414 // Field is assigned but its value is never used
 
@@ -32,7 +34,8 @@ namespace Game
         public LabelInfo[]  Labels;
         public LabelInfo[]  CustomLabels;
         public LabelInfo    PlayerLabel;
-        public Twit[]      Eagles;
+        public Eagle[]      Eagles;
+        public Email[]      Emails;
         public string[]     ShowedHints;
     }
     
@@ -58,8 +61,10 @@ namespace Game
         [Header("Labels")]        public List<LabelInfo> Labels; 
         [Header("Custom Labels")] public List<LabelInfo> CustomLabels;
         [Header("Player Label")]  public LabelInfo PlayerLabel;
+        [FormerlySerializedAs("Twits")]
         [Space]
-        [Header("Twits")]    public List<Twit> Twits;
+        [Header("Eagles")]    public List<Eagle> Eagles;
+        [Header("Emails")]    public List<Email> Emails;
         [Header("Tutorials")] public HashSet<string> ShowedHints;
 
         private readonly CompositeDisposable _disposables = new();
@@ -105,7 +110,8 @@ namespace Game
         public PlayerData CreateNewPlayer()
         {
             PlayerData = PlayerData.New;
-            Twits = new List<Twit>(0);
+            Eagles = new List<Eagle>(0);
+            Emails = new List<Email>(0);
             
             Rappers = new List<RapperInfo>(0);
             CustomRappers = new List<RapperInfo>(0);
@@ -167,7 +173,9 @@ namespace Game
                 CustomLabels = Array.Empty<LabelInfo>(),
                 PlayerLabel = null,
                 
-                Eagles = Array.Empty<Twit>(),
+                Eagles = Array.Empty<Eagle>(),
+                Emails = Array.Empty<Email>(),
+                
                 ShowedHints = Array.Empty<string>(),
             };
             
@@ -181,7 +189,9 @@ namespace Game
             CustomLabels = gameData.CustomLabels?.ToList() ?? new List<LabelInfo>(0);
             PlayerLabel = gameData.PlayerLabel;
             
-            Twits = gameData.Eagles?.ToList() ?? new List<Twit>(0);
+            Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
+            Emails = gameData.Emails?.ToList() ?? new List<Email>(0);
+            
             ShowedHints = gameData.ShowedHints?.ToHashSet() ?? new HashSet<string>(0);
             
             LoadDonateBalance();
@@ -211,7 +221,8 @@ namespace Game
                 CustomLabels = CustomLabels?.ToArray(),
                 PlayerLabel = PlayerLabel,
                 
-                Eagles = Twits.Take(20).ToArray(),
+                Eagles = Eagles.Take(20).ToArray(),
+                Emails = Emails.Take(50).ToArray(),
                 ShowedHints = ShowedHints.ToArray()
             };
             

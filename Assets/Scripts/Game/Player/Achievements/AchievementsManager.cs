@@ -6,7 +6,6 @@ using Core.Localization;
 using Core.OrderedStarter;
 using Enums;
 using Extensions;
-using Game.Notifications;
 using Game.Player.Achievements.Desc;
 using Game.Production;
 using Game.Rappers.Desc;
@@ -63,7 +62,7 @@ namespace Game.Player.Achievements
                 .Subscribe(e => CheckHype(e.NewVal))
                 .AddTo(_disposable);
             
-            // todo: change to events
+            // todo: change to msg.broker messages
             ProductionManager.Instance.onTrackAdd += CheckTrackChartPosition;
             ProductionManager.Instance.onAlbumAdd += CheckAlbumChartPosition;
             ProductionManager.Instance.onClipAdd += CheckClipLoser;
@@ -233,17 +232,12 @@ namespace Game.Player.Achievements
             if (!showUi)
                 return;
 
-            void Notification()
-            {
-                string achivementTemplate = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
-                string achivementValue = $"<color=#01C6B8>{GetCompareValueString(achievement)}</color>";
-                string achievementInfo = string.Format(achivementTemplate, achivementValue);
+            string achivementTemplate = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
+            string achivementValue = $"<color=#01C6B8>{GetCompareValueString(achievement)}</color>";
+            string achievementInfo = string.Format(achivementTemplate, achivementValue);
             
-                newAchievementsPage.ShowNewAchievement(achievementInfo);
-                SoundManager.Instance.PlaySound(UIActionType.Achieve);
-            }
-            
-            NotificationManager.Instance.AddIndependentNotification(Notification);
+            SoundManager.Instance.PlaySound(UIActionType.Achieve);
+            newAchievementsPage.ShowNewAchievement(achievementInfo);
         }
 
         private bool AlreadyExists(Achievement achievement)

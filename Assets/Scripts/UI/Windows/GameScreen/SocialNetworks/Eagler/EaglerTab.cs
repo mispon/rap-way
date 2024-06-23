@@ -1,48 +1,50 @@
 using System.Collections.Generic;
-using Game.Socials.Twitter;
+using Game.SocialNetworks.Eagler;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Tutorial;
 using UnityEngine;
+
 // using Firebase.Analytics;
 
-namespace UI.Windows.GameScreen.Twitter
+namespace UI.Windows.GameScreen.SocialNetworks.Eagler
 {
-    public class TwitterTab : Tab
+    public class EaglerTab : Tab
     {
         [SerializeField] private ScrollViewController feed;
-        [SerializeField] private GameObject template;
-        
-        private readonly List<TwitterCard> _feedItems = new();
-        
+        [SerializeField] private GameObject           template;
+
+        private readonly List<EaglerCard> _feedItems = new();
+
         protected override void BeforeOpen()
         {
-            var eagles = TwitterManager.Instance.GetTwits();
-            
+            var eagles = EaglerManager.Instance.GetEagles();
+
             for (var i = 0; i < eagles.Count; i++)
             {
                 var data = eagles[i];
-                
-                var eagle = feed.InstantiatedElement<TwitterCard>(template);
-                eagle.Initialize(i+1, data);
-                
+
+                var eagle = feed.InstantiatedElement<EaglerCard>(template);
+                eagle.Initialize(i + 1, data);
+
                 _feedItems.Add(eagle);
             }
 
             feed.RepositionElements(_feedItems);
         }
-        
+
         protected override void AfterOpen()
         {
             HintsManager.Instance.ShowHint("tutorial_eagler");
             // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
         }
-        
+
         protected override void AfterClose()
         {
             foreach (var eagle in _feedItems)
             {
                 Destroy(eagle.gameObject);
             }
+
             _feedItems.Clear();
         }
     }

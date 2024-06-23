@@ -18,27 +18,35 @@ namespace UI.Windows.GameScreen.Store.Purchase
     {
         // purchase for the game currency
         Game,
+
         // purchase for the donate currency
         Donate,
+
         // purchase donate currency for real money
         Purchase
     }
-    
+
     public class StoreItemPurchaser : MonoBehaviour, IDetailedStoreListener
     {
         [SerializeField] private GoodsData data;
-        
+
         private IStoreController _controller;
-        private IDisposable _disposable;
+        private IDisposable      _disposable;
 
         private readonly Dictionary<string, DonateCoins> _coinItemsMap = new();
-        private NoAds _noAdsItem;
-        
+        private          NoAds                           _noAdsItem;
+
         private void Start()
         {
             var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
-            var group = data.Goods.First(e => e.Type == GoodsType.Donate);
+            var group = data.Goods.FirstOrDefault(e => e.Type == GoodsType.Donate);
+            if (group == null)
+            {
+                Debug.LogWarning("GoodsType.Donate not found in goods data bank");
+                return;
+            }
+
             foreach (var storeItem in group.Items)
             {
                 switch (storeItem)
@@ -58,25 +66,22 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
             _disposable = MsgBroker.Instance
                 .Receive<GameReadyMessage>()
-                .Subscribe(_ =>
-                {
-                    UnityPurchasing.Initialize(this, builder);        
-                });
+                .Subscribe(_ => { UnityPurchasing.Initialize(this, builder); });
         }
 
         public static StoreItemType GetStoreItemType(GoodInfo item)
         {
             return item switch
             {
-                SwagGood => StoreItemType.Game,
+                SwagGood  => StoreItemType.Game,
                 EquipGood => StoreItemType.Game,
-                
-                DonateSwagGood => StoreItemType.Donate,
+
+                DonateSwagGood  => StoreItemType.Donate,
                 DonateEquipGood => StoreItemType.Donate,
-                
+
                 DonateCoins => StoreItemType.Purchase,
-                NoAds => StoreItemType.Purchase,
-                
+                NoAds       => StoreItemType.Purchase,
+
                 _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
             };
         }
@@ -85,8 +90,8 @@ namespace UI.Windows.GameScreen.Store.Purchase
         {
             var goodEvent = new AddNewGoodMessage
             {
-                Type = item.Type,
-                Level = item.Level,
+                Type  = item.Type,
+                Level = item.Level
             };
 
             switch (item)
@@ -110,7 +115,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
         public void PurchaseStoreItem(GoodInfo item)
         {
-            string productId = item switch
+            var productId = item switch
             {
                 DonateCoins dc => dc.ProductId,
                 NoAds na       => na.ProductId,
@@ -118,8 +123,10 @@ namespace UI.Windows.GameScreen.Store.Purchase
             };
 
             if (string.IsNullOrEmpty(productId))
+            {
                 return;
-            
+            }
+
             _controller?.InitiatePurchase(productId);
         }
 
@@ -130,15 +137,14 @@ namespace UI.Windows.GameScreen.Store.Purchase
             if (_coinItemsMap.TryGetValue(productId, out var item))
             {
                 MsgBroker.Instance.Publish(new AddDonateMessage {Amount = item.Amount});
-            } 
-            else if (productId == _noAdsItem.ProductId)
+            } else if (productId == _noAdsItem.ProductId)
             {
                 MsgBroker.Instance.Publish(new NoAdsPurchaseMessage());
-            } 
-            
+            }
+
             return PurchaseProcessingResult.Complete;
         }
-        
+
         public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
         {
             _controller = controller;
@@ -149,8 +155,10 @@ namespace UI.Windows.GameScreen.Store.Purchase
         {
             if (GameManager.Instance.LoadNoAds())
                 // already exists
+            {
                 return;
-            
+            }
+
             var product = _controller.products.WithID(_noAdsItem.ProductId);
             if (product is {hasReceipt: true})
             {
@@ -164,10 +172,11 @@ namespace UI.Windows.GameScreen.Store.Purchase
         {
             Debug.LogError($"{product.definition.id} purchase failed, reason: {failureReason}");
         }
-        
+
         public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
         {
-            Debug.LogError($"{product.definition.id} purchase failed, reason: {failureDescription.reason}, message: {failureDescription.message}");
+            Debug.LogError(
+                $"{product.definition.id} purchase failed, reason: {failureDescription.reason}, message: {failureDescription.message}");
         }
 
         public void OnInitializeFailed(InitializationFailureReason error)

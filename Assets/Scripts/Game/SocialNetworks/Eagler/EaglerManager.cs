@@ -8,23 +8,23 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
 
-namespace Game.Socials.Twitter
+namespace Game.SocialNetworks.Eagler
 {
     /// <summary>
     /// TODO: replace with message broker
     /// </summary>
-    public class TwitterManager : Singleton<TwitterManager>
+    public class EaglerManager : Singleton<EaglerManager>
     {
-        [SerializeField] private TwitData data;
+        [SerializeField] private EaglerData data;
 
-        public List<Twit> GetTwits() => GameManager.Instance.Twits.Take(20).ToList();
+        public List<Eagle> GetEagles() => GameManager.Instance.Eagles.Take(20).ToList();
         
         /// <summary>
         /// Добавляет новый пост от игрока
         /// </summary>
-        public void CreateUserTwit(string nickname, string message, int likes)
+        public void CreateUserEagle(string nickname, string message, int likes)
         {
-            var eagle = new Twit
+            var eagle = new Eagle
             {
                 Date = TimeManager.Instance.DisplayNow,
                 Nickname = nickname,
@@ -35,25 +35,25 @@ namespace Game.Socials.Twitter
                 IsUser = true
             };
             
-            AddTwit(eagle);
+            AddEagle(eagle);
         }
         
-        public List<Twit> GenerateTwits(float quality)
+        public List<Eagle> GenerateEagles(float quality)
         {
-            var twits = new List<Twit>(3);
+            var twits = new List<Eagle>(3);
 
             var fans = PlayerAPI.Data.Fans;
             for (int i = 0; i < 3; i++)
             {
-                var twit = GenerateRandomTwit(quality, fans);
-                AddTwit(twit);
+                var twit = GenerateRandomEagle(quality, fans);
+                AddEagle(twit);
                 twits.Add(twit);
             }
             
             return twits;
         }
 
-        private Twit GenerateRandomTwit(float quality, int fans)
+        private Eagle GenerateRandomEagle(float quality, int fans)
         {
             var likes = CalcLikes(fans);
             
@@ -66,7 +66,7 @@ namespace Game.Socials.Twitter
             var playerName = PlayerAPI.Data.Info.NickName;
             var randomTag = data.Hashtags[Random.Range(0,  data.Hashtags.Length)];
             
-            return new Twit
+            return new Eagle
             {
                 Date = TimeManager.Instance.DisplayNow,
                 Nickname = nickname,
@@ -78,9 +78,9 @@ namespace Game.Socials.Twitter
             };
         }
 
-        private static void AddTwit(Twit eagle)
+        private static void AddEagle(Eagle eagle)
         {
-            GameManager.Instance.Twits.Insert(0, eagle);
+            GameManager.Instance.Eagles.Insert(0, eagle);
         }
 
         private static int CalcViews(int likes)

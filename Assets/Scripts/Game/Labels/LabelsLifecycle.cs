@@ -1,8 +1,8 @@
 using System.Linq;
 using Game.Labels.Desc;
-using Game.Notifications;
 using Game.Rappers.Desc;
 using MessageBroker;
+using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.UI;
 using UI.Enums;
 using UnityEngine;
@@ -12,21 +12,21 @@ using PlayerAPI = Game.Player.PlayerPackage;
 namespace Game.Labels
 {
     /// <summary>
-    /// Game labels life cycle
+    ///     Game labels life cycle
     /// </summary>
     public partial class LabelsPackage
     {
         /// <summary>
-        /// Update and recalculate labels stats
+        ///     Update and recalculate labels stats
         /// </summary>
         private void UpdateLabelsStats()
         {
             var labels = GetAll();
             foreach (var label in labels)
             {
-                int dice = Random.Range(-1, 2); // [-1, 0, 1]
+                var dice = Random.Range(-1, 2); // [-1, 0, 1]
                 UpdatePrestige(label, dice);
-                RefreshScore(label); 
+                RefreshScore(label);
             }
 
             var playerLabel = GameManager.Instance.PlayerLabel;
@@ -35,99 +35,105 @@ namespace Game.Labels
                 RefreshScore(playerLabel);
             }
         }
-        
+
         /// <summary>
-        /// Updates labels prestige
+        ///     Updates labels prestige
         /// </summary>
         private void UpdatePrestige(LabelInfo label, int dice)
         {
             if (dice == 0)
+            {
                 return;
-            
-            int level = label.Prestige.Value;
-            int newExp = label.Prestige.Exp + _settings.Labels.ExpChangeValue * dice;
-            
+            }
+
+            var level  = label.Prestige.Value;
+            var newExp = label.Prestige.Exp + _settings.Labels.ExpChangeValue * dice;
+
             if (newExp > 0)
             {
                 if (level != _settings.Labels.MaxLevel)
                 {
-                    int expToUp = _settings.Labels.ExpToLevelUp[level];
+                    var expToUp = _settings.Labels.ExpToLevelUp[level];
                     if (newExp >= expToUp)
                     {
-                        level += 1;
+                        level  += 1;
                         newExp -= expToUp;
                     }
                 }
             } else
             {
-                if (level == _settings.Labels.MinLevel) 
+                if (level == _settings.Labels.MinLevel)
+                {
                     return;
-                
-                int expToUp = _settings.Labels.ExpToLevelUp[level-1];
-                level -= 1;
-                newExp = expToUp + newExp;
+                }
+
+                var expToUp = _settings.Labels.ExpToLevelUp[level - 1];
+                level  -= 1;
+                newExp =  expToUp + newExp;
             }
 
             label.Prestige.Value = level;
-            label.Prestige.Exp = newExp;
-            
+            label.Prestige.Exp   = newExp;
+
             // labels production depends on prestige 
             label.Production.Value = Mathf.Max(1, level);
         }
-        
+
         /// <summary>
-        /// Refresh labels score 
+        ///     Refresh labels score
         /// </summary>
         private static void RefreshScore(LabelInfo label)
         {
-            var rappers = RappersAPI.Instance.GetFromLabel(label.Name);
-            int newScore = rappers.Sum(RappersAPI.GetRapperScore);
+            var rappers  = RappersAPI.Instance.GetFromLabel(label.Name);
+            var newScore = rappers.Sum(RappersAPI.GetRapperScore);
             label.Score = newScore;
         }
-        
+
         /// <summary>
-        /// Random rapper tries to change label
+        ///     Random rapper tries to change label
         /// </summary>
         private void RandomRapperLabelAction()
         {
             var rapper = RappersAPI.Instance.GetRandomRapper();
-            
+
             if (rapper.Label == "")
             {
                 RapperJoinLabelAction(rapper);
                 return;
-            } 
-            
+            }
+
             RapperChangeOrLeaveLabelAction(rapper);
         }
-        
+
         /// <summary>
-        /// Handle rapper's join action to one of labels
+        ///     Handle rapper's join action to one of labels
         /// </summary>
         private void RapperJoinLabelAction(RapperInfo rapper)
         {
-            float prestige = RappersAPI.GetRapperPrestige(rapper);
+            var prestige = RappersAPI.GetRapperPrestige(rapper);
 
             // get all labels and cache prestige values
             var labels = GetAll().ToArray();
             var prestigeMap = labels.ToDictionary(
-                k => k.Name, 
+                k => k.Name,
                 GetPrestige
             );
 
             // filter and sort labels by prestige value
             labels = labels
-                .Where(e => prestige >= prestigeMap[e.Name] && (prestige - prestigeMap[e.Name]) <= 1f)
+                .Where(e => prestige >= prestigeMap[e.Name] && prestige - prestigeMap[e.Name] <= 1f)
                 .OrderBy(e => prestigeMap[e.Name])
                 .ToArray();
-            
+
             if (labels.Length == 0)
+            {
                 return;
-            
+            }
+
             // pick label by weighted random algorithm
             // the more prestige labels has a higher chance
-            float weightTotal = labels.Sum(e => prestigeMap[e.Name]);
-            float dice = Random.Range(0, weightTotal);
+            var weightTotal = labels.Sum(e => prestigeMap[e.Name]);
+            var dice        = Random.Range(0, weightTotal);
 
             foreach (var label in labels)
             {
@@ -136,7 +142,7 @@ namespace Game.Labels
                 {
                     continue;
                 }
-                
+
                 rapper.Label = label.Name;
                 RefreshScore(label);
                 break;
@@ -144,7 +150,7 @@ namespace Game.Labels
         }
 
         /// <summary>
-        /// Handle rapper's leave or change action from current label
+        ///     Handle rapper's leave or change action from current label
         /// </summary>
         private void RapperChangeOrLeaveLabelAction(RapperInfo rapper)
         {
@@ -154,15 +160,17 @@ namespace Game.Labels
                 rapper.Label = "";
                 return;
             }
-            
-            int decisionThreshold = label.IsPlayer ? 20 : 50;
-            int decisionDice = Random.Range(0, 100);
-            
+
+            var decisionThreshold = label.IsPlayer ? 20 : 50;
+            var decisionDice      = Random.Range(0, 100);
+
             if (decisionDice >= decisionThreshold)
                 // negative decision, do nothing
+            {
                 return;
-            
-            int actionDice = Random.Range(0, 2); // 0 - leave, 1 - change
+            }
+
+            var actionDice = Random.Range(0, 2); // 0 - leave, 1 - change
             if (actionDice == 0)
             {
                 rapper.Label = "";
@@ -172,15 +180,17 @@ namespace Game.Labels
 
             RapperJoinLabelAction(rapper);
         }
-        
+
         /// <summary>
-        /// Invites player to random available label
+        ///     Invites player to random available label
         /// </summary>
         private void InvitePlayerToLabel()
         {
             if (PlayerAPI.Data.Label != "")
+            {
                 // already in label
                 return;
+            }
 
             if (PlayerAPI.Data.Fans < 50_000)
             {
@@ -188,27 +198,36 @@ namespace Game.Labels
                 return;
             }
 
-            var rapper = new RapperInfo {Fans = PlayerAPI.Data.Fans, IsPlayer = true}; 
-            float prestige = RappersAPI.GetRapperPrestige(rapper);
-            
+            var rapper   = new RapperInfo {Fans = PlayerAPI.Data.Fans, IsPlayer = true};
+            var prestige = RappersAPI.GetRapperPrestige(rapper);
+
             var labels = GetAll()
                 .Where(e => prestige >= GetPrestige(e))
                 .ToArray();
 
             if (labels.Length == 0)
-                return;
-            
-            var randomIdx = Random.Range(0, labels.Length);
-            var label = labels[randomIdx];
-            
-            NotificationManager.Instance.AddClickNotification(() =>
             {
-                MsgBroker.Instance.Publish(new WindowControlMessage
+                return;
+            }
+
+            var randomIdx = Random.Range(0, labels.Length);
+            var label     = labels[randomIdx];
+
+            MsgBroker.Instance.Publish(new EmailMessage
                 {
-                    Type = WindowType.LabelContract,
-                    Context = label
-                });
-            });
+                    Title   = "Label Contract!",
+                    Content = "Hi! We happy to introduce you our offer",
+                    Sender  = $"{label.Name.ToLower()}.mail.com",
+                    mainAction = () =>
+                    {
+                        MsgBroker.Instance.Publish(new WindowControlMessage
+                        {
+                            Type    = WindowType.LabelContract,
+                            Context = label
+                        });
+                    }
+                }
+            );
         }
     }
 }

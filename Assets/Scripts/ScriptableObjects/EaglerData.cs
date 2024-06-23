@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ScriptableObjects
 {
     [CreateAssetMenu(fileName = "EaglerData", menuName = "Data/Eagler")]
-    public class TwitData : ScriptableObject
+    public class EaglerData : ScriptableObject
     {
         public string[] Nicknames;
         public string[] Hashtags;

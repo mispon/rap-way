@@ -14,62 +14,57 @@ namespace Core.Localization
         Lower,
         Upper
     }
-    
-    /// <summary>
-    /// Локализируемый текстовый элемент сцены
-    /// </summary>
+
     [RequireComponent(typeof(Text))]
     public class LocalizedText : MonoBehaviour
     {
         [SerializeField] private TextCase textCase = TextCase.Normal;
-        [SerializeField] private string key;
-        
-        private Text value;
+        [SerializeField] private string   key;
+
         private IDisposable _disposable;
-
-        private void Awake()
-        {
-            value = GetComponent<Text>();
-
-            _disposable = MsgBroker.Instance
-                .Receive<LangChangedMessage>()
-                .Subscribe(e => OnLangChanged());
-        }
+        private Text        _value;
 
         private IEnumerator Start()
         {
             while (!LocalizationManager.Instance.IsReady)
+            {
                 yield return null;
-            
+            }
+
+            _value = GetComponent<Text>();
+
+            _disposable = MsgBroker.Instance
+                .Receive<LangChangedMessage>()
+                .Subscribe(e => OnLangChanged());
+
             ApplyText();
-        }
-
-        /// <summary>
-        /// Обработчик изменения языка
-        /// </summary>
-        private void OnLangChanged()
-        {
-            ApplyText();
-        }
-
-        /// <summary>
-        /// Устанавливает текст 
-        /// </summary>
-        private void ApplyText()
-        {
-            string text = LocalizationManager.Instance.Get(key);
-            
-            if (textCase == TextCase.Lower)
-                text = text.ToLowerInvariant();
-            else if (textCase == TextCase.Upper)
-                text = text.ToUpperInvariant();
-
-            value.text = text;
         }
 
         private void OnDestroy()
         {
             _disposable?.Dispose();
+        }
+
+        private void OnLangChanged()
+        {
+            ApplyText();
+        }
+
+        private void ApplyText()
+        {
+            var text = LocalizationManager.Instance.Get(key);
+
+            switch (textCase)
+            {
+                case TextCase.Lower:
+                    text = text.ToLowerInvariant();
+                    break;
+                case TextCase.Upper:
+                    text = text.ToUpperInvariant();
+                    break;
+            }
+
+            _value.text = text;
         }
     }
 }

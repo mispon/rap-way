@@ -16,27 +16,25 @@ namespace UI.Windows.GameScreen.SocialNetworks
 
     public class SocialNetworksPage : Page
     {
-        [Header("Tab buttons")]
-        [SerializeField] private Button emailButton;
-        [SerializeField] private Button newsButton;
-        [SerializeField] private Button twitterButton;
-        [Space]
-        [SerializeField] private Color activeTabColor;
-        [SerializeField] private Color inactiveTabColor;
-        
-        [Header("Tabs")]
-        [SerializeField] private Tab emailTab;
-        [SerializeField] private Tab newsTab;
-        [SerializeField] private Tab twitterTab;
-        
-        private SocialNetworksTabType _activeTab = SocialNetworksTabType.None;
-        private bool _isFirstOpen = true;
+        [Header("Buttons")] [SerializeField] private Button emailButton;
+        [SerializeField]                     private Button newsButton;
+        [SerializeField]                     private Button eaglerButton;
+
+        [Space] [SerializeField] private Color activeTabColor;
+        [SerializeField]         private Color inactiveTabColor;
+
+        [Header("Tabs")] [SerializeField] private Tab emailTab;
+        [SerializeField]                  private Tab newsTab;
+        [SerializeField]                  private Tab eaglerTab;
+
+        private SocialNetworksTabType _activeTab   = SocialNetworksTabType.None;
+        private bool                  _isFirstOpen = true;
 
         private void Start()
         {
             emailButton.onClick.AddListener(OpenEmailTab);
             newsButton.onClick.AddListener(OpenNewsTab);
-            twitterButton.onClick.AddListener(OpenTwitterTab);
+            eaglerButton.onClick.AddListener(OpenTwitterTab);
         }
 
         public override void Show(object ctx = null)
@@ -68,47 +66,48 @@ namespace UI.Windows.GameScreen.SocialNetworks
             {
                 SoundManager.Instance.PlaySound(UIActionType.Switcher);
             }
+
             _isFirstOpen = false;
 
             if (_activeTab != SocialNetworksTabType.Email)
             {
                 _activeTab = SocialNetworksTabType.Email;
-                UpdateTabs(emailTab, newsTab, twitterTab);
-                UpdateTabButtons(emailButton, newsButton, twitterButton);
+                UpdateTabs(emailTab, newsTab, eaglerTab);
+                UpdateTabButtons(emailButton, newsButton, eaglerButton);
             }
         }
-        
+
         private void OpenNewsTab()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-    
+
             if (_activeTab != SocialNetworksTabType.News)
             {
                 _activeTab = SocialNetworksTabType.News;
-                UpdateTabs(newsTab, emailTab, twitterTab);
-                UpdateTabButtons(newsButton, emailButton, twitterButton);
+                UpdateTabs(newsTab, emailTab, eaglerTab);
+                UpdateTabButtons(newsButton, emailButton, eaglerButton);
             }
         }
-        
+
         private void OpenTwitterTab()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-    
+
             if (_activeTab != SocialNetworksTabType.Twitter)
             {
                 _activeTab = SocialNetworksTabType.Twitter;
-                UpdateTabs(twitterTab, emailTab, newsTab);
-                UpdateTabButtons(twitterButton, emailButton, newsButton);
+                UpdateTabs(eaglerTab, emailTab, newsTab);
+                UpdateTabButtons(eaglerButton, emailButton, newsButton);
             }
         }
-        
+
         private static void UpdateTabs(params Tab[] tabs)
         {
             tabs[0].Open();
             tabs[1].Close();
             tabs[2].Close();
         }
-        
+
         private void UpdateTabButtons(params Button[] buttons)
         {
             buttons[0].image.color = activeTabColor;
@@ -118,8 +117,12 @@ namespace UI.Windows.GameScreen.SocialNetworks
 
         protected override void AfterHide()
         {
-            _activeTab = SocialNetworksTabType.None;
+            _activeTab   = SocialNetworksTabType.None;
             _isFirstOpen = true;
+
+            emailTab.Close();
+            newsTab.Close();
+            eaglerTab.Close();
         }
     }
 }

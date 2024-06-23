@@ -1,18 +1,18 @@
 ﻿using System;
 using Core.Context;
 using Extensions;
-// using Firebase.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
-using Game.Socials.Twitter;
+using Game.SocialNetworks.Eagler;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using MessageBroker.Messages.UI;
 using Models.Production;
-using UI.Windows.GameScreen.Twitter;
+using UI.Windows.GameScreen.SocialNetworks.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
+// using Firebase.Analytics;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
 
@@ -20,66 +20,66 @@ namespace UI.Windows.GameScreen.Track
 {
     public class TrackResultPage : Page
     {
-        [Header("Result")]
-        [SerializeField] private Text listenAmount;
-        [SerializeField] private Text duration;
-        [SerializeField] private Text trackNameLabel;
-        [SerializeField] private Text playerNameLabel;
-        [SerializeField] private Text qualityLabel;
-        [SerializeField] private Text chartInfo;
-        [SerializeField] private Text fansIncome;
-        [SerializeField] private Text moneyIncome;
-        [SerializeField] private Text expIncome;
+        [Header("Result")] [SerializeField] private Text listenAmount;
+
+        [SerializeField] private Text       duration;
+        [SerializeField] private Text       trackNameLabel;
+        [SerializeField] private Text       playerNameLabel;
+        [SerializeField] private Text       qualityLabel;
+        [SerializeField] private Text       chartInfo;
+        [SerializeField] private Text       fansIncome;
+        [SerializeField] private Text       moneyIncome;
+        [SerializeField] private Text       expIncome;
         [SerializeField] private GameObject hitBadge;
 
-        [Header("Eagles"), SerializeField] private TwitterCard[] eagleCards;
-        [Header("Analyzer"), SerializeField] private TrackAnalyzer trackAnalyzer;
+        [Header("Eagles")] [SerializeField]   private EaglerCard[]  eagleCards;
+        [Header("Analyzer")] [SerializeField] private TrackAnalyzer trackAnalyzer;
 
         private TrackInfo _track;
-        
+
         public override void Show(object ctx = null)
         {
             _track = ctx.Value<TrackInfo>();
-            
+
             trackAnalyzer.Analyze(_track);
             DisplayResult(_track);
-            
+
             base.Show(ctx);
         }
 
         private void DisplayResult(TrackInfo track)
         {
             var nickname = PlayerAPI.Data.Info.NickName;
-        
-            string trackName = track.Name;
+
+            var trackName = track.Name;
             if (track.Feat != null)
             {
                 trackName += $" feat. {track.Feat.Name}";
             }
-            
-            string fansIncomePrefix = track.FansIncome > 0 ? "+" : string.Empty;
-            fansIncome.text = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
-            moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
-            expIncome.text = $"+{settings.Track.RewardExp}";
 
-            trackNameLabel.text = trackName;
+            var fansIncomePrefix = track.FansIncome > 0 ? "+" : string.Empty;
+            fansIncome.text  = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
+            moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
+            expIncome.text   = $"+{settings.Track.RewardExp}";
+
+            trackNameLabel.text  = trackName;
             playerNameLabel.text = nickname;
-            qualityLabel.text = $"{Convert.ToInt32(track.Quality * 100)}%";
-            listenAmount.text = track.ListenAmount.GetDisplay();
-            duration.text = GetDuration();
-            
+            qualityLabel.text    = $"{Convert.ToInt32(track.Quality * 100)}%";
+            listenAmount.text    = track.ListenAmount.GetDisplay();
+            duration.text        = GetDuration();
+
             hitBadge.SetActive(track.IsHit);
-            
+
             chartInfo.text = track.ChartPosition > 0
                 ? $"{track.ChartPosition}. {nickname} - {track.Name}"
                 : GetLocale("track_result_no_chart");
-            
+
             DisplayEagles(track.Quality);
         }
 
         private void DisplayEagles(float quality)
         {
-            var eagles = TwitterManager.Instance.GenerateTwits(quality);
+            var eagles = EaglerManager.Instance.GenerateEagles(quality);
             for (var i = 0; i < eagles.Count; i++)
             {
                 eagleCards[i].Initialize(i, eagles[i]);
@@ -88,8 +88,8 @@ namespace UI.Windows.GameScreen.Track
 
         private static string GetDuration()
         {
-            int minutes = Random.Range(1, 6);
-            int seconds = Random.Range(10, 60);
+            var minutes = Random.Range(1, 6);
+            var seconds = Random.Range(10, 60);
             return $"0{minutes}:{seconds}";
         }
 
@@ -102,12 +102,12 @@ namespace UI.Windows.GameScreen.Track
             {
                 ProductionManager.AddFeat(track.Feat);
             }
-            
+
             MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = track.MoneyIncome,
-                FansIncome = track.FansIncome,
-                Exp = settings.Track.RewardExp
+                FansIncome  = track.FansIncome,
+                Exp         = settings.Track.RewardExp
             });
         }
 
@@ -115,7 +115,7 @@ namespace UI.Windows.GameScreen.Track
         {
             // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
-            
+
             SaveResult(_track);
             _track = null;
         }

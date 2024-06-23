@@ -1,5 +1,5 @@
 using Enums;
-using Game.Socials.Twitter;
+using Game.SocialNetworks.Eagler;
 // using Firebase.Analytics;
 using Game.Time;
 using Models.Production;
@@ -30,7 +30,7 @@ namespace UI.Windows.GameScreen.Social.ResultPages
             likes.text = info.Likes.ToString();
             hype.text = $"+{info.HypeIncome}";
 
-            TwitterManager.Instance.CreateUserTwit(nickName, info.MainText, info.Likes);
+            EaglerManager.Instance.CreateUserEagle(nickName, info.MainText, info.Likes);
             // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitPublished);
         }
     }

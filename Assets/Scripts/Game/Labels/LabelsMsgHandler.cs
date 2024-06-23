@@ -38,7 +38,7 @@ namespace Game.Labels
                     if (e.Month % _settings.Labels.InvitePlayerFrequency == 0)
                         InvitePlayerToLabel();
                     
-                    SendPlayersLabelIncomeNotification();
+                    SendPlayersLabelIncomeEmail();
                 })
                 .AddTo(disposable);
         }

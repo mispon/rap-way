@@ -27,18 +27,21 @@ namespace Game.Effects
             
             gameObject.SetActive(true);
             haloLight.SetActive(true);
+            
             effect.Play();
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            CanvasController.SetActive(true);
             SoundManager.Instance.PlaySound(UIActionType.Click);
+            
+            CanvasController.SetActive(true);
             GameScreenController.Instance.SetVisibility(true);
-            onClose.Invoke();
             
             haloLight.SetActive(false);
             gameObject.SetActive(false);
+            
+            onClose.Invoke();
         }
     }
 }

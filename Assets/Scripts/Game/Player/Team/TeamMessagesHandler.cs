@@ -1,7 +1,7 @@
-using Game.Notifications;
 using MessageBroker;
 using MessageBroker.Interfaces;
 using MessageBroker.Messages.Player;
+using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.Time;
 using MessageBroker.Messages.UI;
 using UI.Enums;
@@ -37,36 +37,53 @@ namespace Game.Player.Team
                 .Subscribe(e => OnMonthLeft(e.Month))
                 .AddTo(disposable);
         }
-        
+
         private static void DecreaseManagersCooldown()
         {
             var manager = PlayerAPI.Data.Team.Manager;
             if (manager.Cooldown > 0)
+            {
                 manager.Cooldown -= 1;
-            
+            }
+
             var prManager = PlayerAPI.Data.Team.PrMan;
             if (prManager.Cooldown > 0)
+            {
                 prManager.Cooldown -= 1;
+            }
         }
-        
+
         private static void OnMonthLeft(int month)
         {
             if (month % 3 != 0)
+            {
                 return;
-            
+            }
+
             var teammates = TeamManager.Instance.GetTeammates(e => !e.IsEmpty);
             if (teammates.Length == 0)
+            {
                 return;
+            }
 
             foreach (var teammate in teammates)
-                teammate.HasPayment = false;
-
-            const int teamTab = 3;
-            NotificationManager.Instance.AddClickNotification(() =>
             {
-                MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Training, teamTab));
+                teammate.HasPayment = false;
+            }
+
+            // TODO: remove this message and send single month finance report 
+            const int teamTab = 3;
+            MsgBroker.Instance.Publish(new EmailMessage
+            {
+                Title   = "Team Salary day!",
+                Content = "Plaki plaki",
+                Sender  = "pupa.gmail.com",
+                mainAction = () =>
+                {
+                    MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Training, teamTab));
+                }
             });
-            
+
             MsgBroker.Instance.Publish(new TeamSalaryMessage());
         }
     }

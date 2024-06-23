@@ -227,6 +227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroy: 0
   chance: 0.15
+  minTracksCount: 10
   eventMainPage: {fileID: 0}
   data: {fileID: 11400000, guid: 974a9531e92eb33448c26e19d9138621, type: 2}
 --- !u!1 &3036844871196652973
@@ -625,8 +626,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1476646601508027867}
   - component: {fileID: 6995100066008485330}
+  - component: {fileID: 8973353189961212769}
   m_Layer: 0
-  m_Name: NotificationManager
+  m_Name: SocialNetworksManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -661,3 +663,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroy: 0
   notificationButton: {fileID: 0}
+--- !u!114 &8973353189961212769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616449362574666434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c1020b752d14cbcaebc36e35ef0adbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0
+  imagesBank: {fileID: 11400000, guid: f8f914cf7b3817041beb854fc3baf0ea, type: 2}

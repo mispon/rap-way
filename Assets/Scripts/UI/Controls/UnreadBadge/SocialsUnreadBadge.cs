@@ -1,6 +1,7 @@
+using System.Linq;
+using Game;
 using MessageBroker;
-using MessageBroker.Messages.UI;
-using UI.Enums;
+using MessageBroker.Messages.SocialNetworks;
 using UniRx;
 
 namespace UI.Controls.UnreadBadge
@@ -10,19 +11,23 @@ namespace UI.Controls.UnreadBadge
         protected override void RegisterHandlers()
         {
             MsgBroker.Instance
-                .Receive<WindowControlMessage>()
-                .Subscribe(e => HandlePageOpen(e.Type))
+                .Receive<EmailMessage>()
+                .Subscribe(e => IncCounter())
                 .AddTo(disposables);
-
-            // todo: 
+            MsgBroker.Instance
+                .Receive<ReadEmailMessage>()
+                .Subscribe(e => DecCounter())
+                .AddTo(disposables);
         }
 
-        private void HandlePageOpen(WindowType type)
+        protected override void Init()
         {
-            if (type != WindowType.SocialNetworks)
-                return;
+            var total = 0;
 
-            HideBadge();
+            total += GameManager.Instance.Emails.Count(e => e.IsNew);
+            // todo: add other counters
+
+            UpdateCounter(total);
         }
     }
 }
