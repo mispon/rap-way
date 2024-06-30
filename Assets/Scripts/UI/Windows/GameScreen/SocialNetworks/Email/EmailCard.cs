@@ -1,5 +1,6 @@
 using System;
 using Core;
+using Core.Localization;
 using ScriptableObjects;
 using TMPro;
 using UI.Controls.ScrollViewController;
@@ -15,6 +16,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         [SerializeField] private TextMeshProUGUI preview;
         [SerializeField] private TextMeshProUGUI date;
         [SerializeField] private Image           border;
+        [SerializeField] private Image           card;
 
         [Space] [SerializeField] private Color selectedColor;
         [SerializeField]         private Color newColor;
@@ -61,20 +63,20 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
         public void Unselect()
         {
-            title.color  = oldColor;
             border.color = oldColor;
+            card.color   = oldColor;
         }
 
         public void Initialize(int i, EmailInfo email, Action<EmailCard, EmailInfo> onClick)
         {
             _index = i;
 
-            title.text   = email.Title;
-            preview.text = email.Content;
+            title.text   = LocalizationManager.Instance.GetFormat(email.Title, email.TitleArgs).ToUpper();
+            preview.text = LocalizationManager.Instance.GetFormat(email.Content, email.ContentArgs);
             date.text    = email.Date;
 
-            title.color  = email.IsNew ? newColor : oldColor;
             border.color = email.IsNew ? newColor : oldColor;
+            card.color   = email.IsNew ? newColor : oldColor;
 
             _email   = email;
             _onClick = onClick;
@@ -82,11 +84,18 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             GetComponent<Button>().onClick.AddListener(HandleClick);
         }
 
+        public void Open()
+        {
+            HandleClick();
+        }
+
         private void HandleClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             border.color = selectedColor;
+            card.color   = selectedColor;
+
             _onClick?.Invoke(this, _email);
         }
     }

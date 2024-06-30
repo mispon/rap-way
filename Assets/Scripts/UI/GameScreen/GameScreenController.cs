@@ -7,7 +7,6 @@ using Extensions;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
-using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.Time;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -36,8 +35,8 @@ namespace UI.GameScreen
         [SerializeField] private Button          hypeButton;
         [SerializeField] private StatDescItem[]  statDescItems;
 
-        [Space] [SerializeField] private ImagesBank imagesBank;
-        [SerializeField]         private Button     testButton;
+        [Space]
+        [SerializeField] private ImagesBank imagesBank;
 
         private readonly CompositeDisposable _disposable = new();
 
@@ -56,19 +55,6 @@ namespace UI.GameScreen
 
             MsgBroker.Instance.Publish(new FullStateRequest());
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
-
-            testButton.onClick.AddListener(() =>
-            {
-                MsgBroker.Instance.Publish(new EmailMessage
-                {
-                    Title       = "CASINO ONLINE!",
-                    Content     = "PLAY CASINO PLEASE PLAY CASINO PLAY OUR AWESOME CASINO",
-                    Sender      = "stupid-casino777@gmail.com",
-                    Sprite      = imagesBank.MaleAvatar,
-                    mainAction  = () => Debug.Log("main action"),
-                    quickAction = () => Debug.Log("quick action")
-                });
-            });
         }
 
         private void HandleStateEvents()

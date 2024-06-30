@@ -66,11 +66,12 @@ namespace Game.Player.Team
             teammate.Skill.Value = 1;
             teammate.HasPayment  = true;
 
+            var info = GetInfo(teammate.Type);
+
             void Notification()
             {
                 SoundManager.Instance.PlaySound(UIActionType.Achieve);
 
-                var info = GetInfo(teammate.Type);
                 newTeammateEffect.Show(info.Avatar, () =>
                 {
                     MsgBroker.Instance.Publish(new WindowControlMessage
@@ -86,9 +87,10 @@ namespace Game.Player.Team
 
             MsgBroker.Instance.Publish(new EmailMessage
             {
-                Title      = "New teammate",
-                Content    = "Congratz",
-                Sender     = "pupa.gmail.com",
+                Title      = "new_teammate_header",
+                Content    = "new_teammate_header",
+                Sprite     = info.Avatar,
+                Sender     = "team.assistant@mail.com",
                 mainAction = Notification
             });
         }

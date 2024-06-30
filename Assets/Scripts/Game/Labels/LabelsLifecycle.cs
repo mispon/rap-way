@@ -215,9 +215,16 @@ namespace Game.Labels
 
             MsgBroker.Instance.Publish(new EmailMessage
                 {
-                    Title   = "Label Contract!",
-                    Content = "Hi! We happy to introduce you our offer",
-                    Sender  = $"{label.Name.ToLower()}.mail.com",
+                    Title     = "label_contract_greeting",
+                    TitleArgs = new[] {label.Name},
+                    Content   = "label_contract_text",
+                    ContentArgs = new[]
+                    {
+                        PlayerAPI.Data.Info.NickName,
+                        label.Name,
+                        label.Name
+                    },
+                    Sender = $"{label.Name.ToLower()}@label.com",
                     mainAction = () =>
                     {
                         MsgBroker.Instance.Publish(new WindowControlMessage

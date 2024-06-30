@@ -35,6 +35,14 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             feed.RepositionElements(_emailCards);
         }
 
+        protected override void AfterOpen()
+        {
+            // HintsManager.Instance.ShowHint("tutorial_email");
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
+
+            _emailCards.FirstOrDefault()?.Open();
+        }
+
         private void HandleClick(EmailCard card, EmailInfo email)
         {
             if (card == _lastSelected)
@@ -63,12 +71,6 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             {
                 EmailManager.Instance.MarkRead(email);
             }
-        }
-
-        protected override void AfterOpen()
-        {
-            // HintsManager.Instance.ShowHint("tutorial_email");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
         }
 
         protected override void AfterClose()

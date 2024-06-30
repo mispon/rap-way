@@ -5,7 +5,7 @@ using UniRx;
 namespace Game.Labels
 {
     /// <summary>
-    /// Music labels events handler
+    ///     Music labels events handler
     /// </summary>
     public partial class LabelsPackage
     {
@@ -19,13 +19,10 @@ namespace Game.Labels
         {
             MsgBroker.Instance
                 .Receive<WeekLeftMessage>()
-                .Subscribe(e =>
-                {
-                    UpdateLabelsStats();
-                })
+                .Subscribe(e => { UpdateLabelsStats(); })
                 .AddTo(disposable);
         }
-        
+
         private void HandleMonthLeft()
         {
             MsgBroker.Instance
@@ -33,11 +30,15 @@ namespace Game.Labels
                 .Subscribe(e =>
                 {
                     if (e.Month % _settings.Labels.RappersActionsFrequency == 0)
+                    {
                         RandomRapperLabelAction();
-            
+                    }
+
                     if (e.Month % _settings.Labels.InvitePlayerFrequency == 0)
+                    {
                         InvitePlayerToLabel();
-                    
+                    }
+
                     SendPlayersLabelIncomeEmail();
                 })
                 .AddTo(disposable);

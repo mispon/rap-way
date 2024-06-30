@@ -75,9 +75,10 @@ namespace Game.Player.Team
             const int teamTab = 3;
             MsgBroker.Instance.Publish(new EmailMessage
             {
-                Title   = "Team Salary day!",
-                Content = "Plaki plaki",
-                Sender  = "pupa.gmail.com",
+                Title       = "email_team_salary_title",
+                Content     = "email_team_salary_content",
+                ContentArgs = new[] {PlayerAPI.Data.Info.NickName},
+                Sender      = "team.assistant@mail.com",
                 mainAction = () =>
                 {
                     MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Training, teamTab));

@@ -1,3 +1,4 @@
+using Core.Localization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,8 +28,8 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         {
             _email = email;
 
-            title.text   = email.Title;
-            content.text = email.Content;
+            title.text   = LocalizationManager.Instance.GetFormat(email.Title, email.TitleArgs).ToUpper();
+            content.text = LocalizationManager.Instance.GetFormat(email.Content, email.ContentArgs);
             sender.text  = email.Sender;
             date.text    = email.Date;
 

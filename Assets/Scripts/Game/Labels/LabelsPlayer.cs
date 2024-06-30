@@ -7,6 +7,7 @@ using MessageBroker.Messages.UI;
 using UI.Enums;
 using UI.Windows.GameScreen.Personal;
 using RappersAPI = Game.Rappers.RappersPackage;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Labels
 {
@@ -76,10 +77,13 @@ namespace Game.Labels
                 return;
             }
 
+            // TODO: remove this message and send single month finance report 
             MsgBroker.Instance.Publish(new EmailMessage
             {
-                Title   = "Label money report",
-                Content = "Bla bla bla",
+                Title       = "email_label_money_report_title",
+                Content     = "email_label_money_report_content",
+                ContentArgs = new[] {PlayerAPI.Data.Info.NickName},
+                Sender      = "fin.assistant@mail.com",
                 mainAction = () =>
                 {
                     MsgBroker.Instance.Publish(new WindowControlMessage

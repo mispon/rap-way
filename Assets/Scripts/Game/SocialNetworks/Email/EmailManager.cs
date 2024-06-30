@@ -47,13 +47,15 @@ namespace Game.SocialNetworks.Email
         {
             var email = new Email
             {
-                Title      = msg.Title,
-                Content    = msg.Content,
-                Sender     = msg.Sender,
-                Sprite     = msg.Sprite,
-                SpriteName = msg.Sprite.name,
-                Date       = TimeManager.Instance.DisplayNow,
-                IsNew      = true,
+                Title       = msg.Title,
+                TitleArgs   = msg.TitleArgs,
+                Content     = msg.Content,
+                ContentArgs = msg.ContentArgs,
+                Sender      = msg.Sender,
+                Sprite      = msg.Sprite,
+                SpriteName  = msg.Sprite.name,
+                Date        = TimeManager.Instance.DisplayNow,
+                IsNew       = true,
 
                 MainAction  = msg.mainAction,
                 QuickAction = msg.quickAction
