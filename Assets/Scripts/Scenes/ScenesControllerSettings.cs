@@ -1,31 +1,42 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
+using Core;
 using UI.Enums;
 using UnityEngine;
 
 namespace Scenes
 {
+    [Serializable]
+    public class SceneTuple
+    {
+        public SceneType Type;
+        public string    Value;
+    }
+
     [CreateAssetMenu(
         fileName = "New ScenesControllerSettings",
         menuName = "Scenes/ScenesControllerSettings")]
     public class ScenesControllerSettings : ScriptableObject
     {
         [SerializeField] private float loadingDelay;
-        [Header("Fade times")] [SerializeField] private float fadeTimeStart;
-        [Header("Fade times")] [SerializeField] private float fadeTimeEnd;
-        
-        [SerializeField] private Dictionary<SceneType, string> _sceneNames;
+        [SerializeField] private float fadeTimeStart;
+        [SerializeField] private float fadeTimeEnd;
+
+        [SerializeField] private SceneTuple[] sceneNames;
 
         public string GetSceneName(SceneType sceneType)
         {
-            if (_sceneNames.TryGetValue(sceneType, out var sceneName)) 
-                return sceneName;
-            
-            throw new NotImplementedException($"ScenesControllerSettings dont have settings to {sceneType}!");
+            var sn = sceneNames.FirstOrDefault(e => e.Type == sceneType);
+            if (sn != null)
+            {
+                return sn.Value;
+            }
+
+            throw new RapWayException($"Unexpected scene type: {sceneType}");
         }
-        
-        public float LoadingDelay => loadingDelay;
+
+        public float LoadingDelay  => loadingDelay;
         public float FadeTimeStart => fadeTimeStart;
-        public float FadeTimeEnd => fadeTimeEnd;
+        public float FadeTimeEnd   => fadeTimeEnd;
     }
 }

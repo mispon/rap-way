@@ -1,21 +1,86 @@
 using System.Collections.Generic;
+using Core;
+using Enums;
+using Extensions;
 using Game.SocialNetworks.Eagler;
+using ScriptableObjects;
+using TMPro;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Tutorial;
 using UnityEngine;
-
-// using Firebase.Analytics;
+using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
+using Random = UnityEngine.Random;
 
 namespace UI.Windows.GameScreen.SocialNetworks.Eagler
 {
     public class EaglerTab : Tab
     {
+        // @formatter:off
+        [Header("Personal")]
+        [SerializeField] private Image avatar;
+        [SerializeField] private TextMeshProUGUI realName;
+        [SerializeField] private TextMeshProUGUI nickName;
+        [SerializeField] private TextMeshProUGUI fans;
+        [SerializeField] private ImagesBank imagesBank;
+
+        [Header("Feed")]
+        [SerializeField] private TMP_InputField input;
+        [SerializeField] private Button sendButton;
+        [Space]
         [SerializeField] private ScrollViewController feed;
-        [SerializeField] private GameObject           template;
+        [SerializeField] private GameObject template;
+        
+        [Header("Trends")]
+        [SerializeField] private TextMeshProUGUI[] trends;
+        // @formatter:on
 
         private readonly List<EaglerCard> _feedItems = new();
 
+        private void Start()
+        {
+            sendButton.onClick.AddListener(PostEagle);
+        }
+
         protected override void BeforeOpen()
+        {
+            UpdateDesc();
+            UpdateTrends();
+            CreateFeed();
+        }
+
+        protected override void AfterOpen()
+        {
+            HintsManager.Instance.ShowHint("tutorial_eagler");
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
+        }
+
+        protected override void AfterClose()
+        {
+            ClearFeed();
+        }
+
+        private void UpdateDesc()
+        {
+            var info = PlayerAPI.Data.Info;
+
+            avatar.sprite = info.Gender == Gender.Male ? imagesBank.MaleAvatar : imagesBank.FemaleAvatar;
+            realName.text = $"{info.FirstName} {info.LastName}";
+            nickName.text = $"@{info.NickName}";
+            fans.text     = PlayerAPI.Data.Fans.GetShort();
+        }
+
+        private void UpdateTrends()
+        {
+            var trendsList = EaglerManager.Instance.GetTrends();
+
+            for (var i = 0; i < trendsList.Count; i++)
+            {
+                trends[i].text = $"#{trendsList[i]}";
+            }
+        }
+
+        private void CreateFeed()
         {
             var eagles = EaglerManager.Instance.GetEagles();
 
@@ -32,13 +97,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
             feed.RepositionElements(_feedItems);
         }
 
-        protected override void AfterOpen()
-        {
-            HintsManager.Instance.ShowHint("tutorial_eagler");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
-        }
-
-        protected override void AfterClose()
+        private void ClearFeed()
         {
             foreach (var eagle in _feedItems)
             {
@@ -46,6 +105,30 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
             }
 
             _feedItems.Clear();
+        }
+
+        private void PostEagle()
+        {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
+
+            if (string.IsNullOrWhiteSpace(input.text))
+            {
+                return;
+            }
+
+            var nick  = PlayerAPI.Data.Info.NickName;
+            var likes = PlayerAPI.Data.Fans.GetPercent(10);
+
+            var jitter = likes.GetPercent(10);
+            likes = Random.Range(likes - jitter, likes + jitter);
+            likes = Mathf.Max(likes, 0);
+
+            EaglerManager.Instance.CreateUserEagle(nick, input.text, likes);
+
+            ClearFeed();
+            CreateFeed();
+
+            input.text = string.Empty;
         }
     }
 }
