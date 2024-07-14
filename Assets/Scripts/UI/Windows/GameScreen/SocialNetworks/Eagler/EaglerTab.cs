@@ -116,19 +116,35 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
                 return;
             }
 
-            var nick  = PlayerAPI.Data.Info.NickName;
-            var likes = PlayerAPI.Data.Fans.GetPercent(10);
+            var nick      = PlayerAPI.Data.Info.NickName;
+            var fansCount = PlayerAPI.Data.Fans;
 
-            var jitter = likes.GetPercent(10);
-            likes = Random.Range(likes - jitter, likes + jitter);
-            likes = Mathf.Max(likes, 0);
-
-            EaglerManager.Instance.CreateUserEagle(nick, input.text, likes);
+            EaglerManager.Instance.CreateUserEagle(nick, input.text, GetLikes(fansCount));
 
             ClearFeed();
             CreateFeed();
 
             input.text = string.Empty;
+        }
+
+        private static int GetLikes(int fans)
+        {
+            var percent = fans switch
+            {
+                >= 10_000_000 => 1,
+                >= 1_000_000  => 5,
+                >= 100_000    => 10,
+                >= 10_000     => 20,
+                _             => 50
+            };
+
+            var likes  = fans.GetPercent(percent);
+            var jitter = likes.GetPercent(20);
+
+            likes = Random.Range(likes - jitter, likes + jitter);
+            likes = Mathf.Max(likes, 0);
+
+            return likes;
         }
     }
 }
