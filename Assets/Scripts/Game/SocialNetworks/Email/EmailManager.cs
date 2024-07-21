@@ -7,7 +7,7 @@ using UniRx;
 
 namespace Game.SocialNetworks.Email
 {
-    public partial class EmailManager : Singleton<EmailManager>
+    public class EmailManager : Singleton<EmailManager>
     {
         private readonly CompositeDisposable _disposables = new();
 
@@ -28,7 +28,7 @@ namespace Game.SocialNetworks.Email
         {
             foreach (var email in GameManager.Instance.Emails)
             {
-                if (imagesMap.TryGetValue(email.SpriteName, out var sprite))
+                if (SpritesManager.Instance.TryGetByName(email.SpriteName, out var sprite))
                 {
                     email.Sprite = sprite;
                 }
@@ -47,17 +47,17 @@ namespace Game.SocialNetworks.Email
         {
             var email = new Email
             {
-                Title       = msg.Title,
-                TitleArgs   = msg.TitleArgs,
-                Content     = msg.Content,
+                Title = msg.Title,
+                TitleArgs = msg.TitleArgs,
+                Content = msg.Content,
                 ContentArgs = msg.ContentArgs,
-                Sender      = msg.Sender,
-                Sprite      = msg.Sprite,
-                SpriteName  = msg.Sprite.name,
-                Date        = TimeManager.Instance.DisplayNow,
-                IsNew       = true,
+                Sender = msg.Sender,
+                Sprite = msg.Sprite,
+                SpriteName = msg.Sprite.name,
+                Date = TimeManager.Instance.DisplayNow,
+                IsNew = true,
 
-                MainAction  = msg.mainAction,
+                MainAction = msg.mainAction,
                 QuickAction = msg.quickAction
             };
 

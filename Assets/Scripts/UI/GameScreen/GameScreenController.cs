@@ -7,6 +7,7 @@ using Extensions;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
+using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.Time;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -15,35 +16,27 @@ using UI.Enums;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI.GameScreen
 {
-    /// <summary>
-    ///     Main game screen controller
-    /// </summary>
     public class GameScreenController : Singleton<GameScreenController>, IStarter
     {
-        [SerializeField] private Image           playerAvatar;
+        [SerializeField] private Image playerAvatar;
         [SerializeField] private TextMeshProUGUI playerNickname;
         [SerializeField] private TextMeshProUGUI playerLevel;
-        [SerializeField] private Text            playerFans;
-        [SerializeField] private Text            playerMoney;
-        [SerializeField] private Text            playerHype;
-        [SerializeField] private Text            currentDate;
-        [SerializeField] private Button          moneyButton;
-        [SerializeField] private Button          fansButton;
-        [SerializeField] private Button          hypeButton;
-        [SerializeField] private StatDescItem[]  statDescItems;
-
-        [Space]
-        [SerializeField] private ImagesBank imagesBank;
+        [SerializeField] private Text playerFans;
+        [SerializeField] private Text playerMoney;
+        [SerializeField] private Text playerHype;
+        [SerializeField] private Text currentDate;
+        [SerializeField] private Button moneyButton;
+        [SerializeField] private Button fansButton;
+        [SerializeField] private Button hypeButton;
+        [SerializeField] private Button testButton;
+        [SerializeField] private StatDescItem[] statDescItems;
+        [Space, SerializeField] private ImagesBank imagesBank;
 
         private readonly CompositeDisposable _disposable = new();
-
-        private void OnDestroy()
-        {
-            _disposable.Clear();
-        }
 
         public void OnStart()
         {
@@ -55,6 +48,13 @@ namespace UI.GameScreen
 
             MsgBroker.Instance.Publish(new FullStateRequest());
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
+
+            testButton.onClick.AddListener(() => MsgBroker.Instance.Publish(new NewsMessage
+            {
+                Text = "Test test Test test Test test Test test Test test Test test",
+                Popularity = Random.Range(100, 1000),
+                Sprite = SpritesManager.Instance.GetRandom()
+            }));
         }
 
         private void HandleStateEvents()
@@ -89,7 +89,7 @@ namespace UI.GameScreen
                 Type = WindowType.StatsDesc,
                 Context = new Dictionary<string, object>
                 {
-                    ["icon"]    = item.Icon,
+                    ["icon"] = item.Icon,
                     ["nameKey"] = item.NameKey,
                     ["descKey"] = item.DescKey
                 }
@@ -100,10 +100,10 @@ namespace UI.GameScreen
         {
             playerNickname.text = resp.NickName.ToUpper();
             playerAvatar.sprite = resp.Gender == Gender.Male ? imagesBank.MaleAvatar : imagesBank.FemaleAvatar;
-            playerMoney.text    = resp.Money.GetMoney();
-            playerFans.text     = resp.Fans.GetDisplay();
-            playerHype.text     = resp.Hype.ToString();
-            currentDate.text    = TimeManager.Instance.DisplayNow;
+            playerMoney.text = resp.Money.GetMoney();
+            playerFans.text = resp.Fans.GetDisplay();
+            playerHype.text = resp.Hype.ToString();
+            currentDate.text = TimeManager.Instance.DisplayNow;
         }
 
         public void SetVisibility(bool state)
@@ -114,6 +114,11 @@ namespace UI.GameScreen
         private void OnDayLeft()
         {
             currentDate.text = TimeManager.Instance.DisplayNow;
+        }
+
+        private void OnDestroy()
+        {
+            _disposable.Clear();
         }
     }
 

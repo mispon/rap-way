@@ -5,9 +5,8 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "ImagesBank", menuName = "Data/ImagesBank")]
     public class ImagesBank : ScriptableObject
     {
-        // @formatter:off
-        
         public Sprite Empty;
+        public Sprite NoImage;
 
         [Header("Персонаж")]
         public Sprite MaleAvatar;
@@ -49,6 +48,5 @@ namespace ScriptableObjects
 
         [Header("Houses images")]
         public Sprite[] Houses;
-        // @formatter:on
     }
 }

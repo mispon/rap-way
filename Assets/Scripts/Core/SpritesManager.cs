@@ -1,25 +1,42 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace Game.SocialNetworks.Email
+namespace Core
 {
-    public partial class EmailManager
+    public class SpritesManager : Singleton<SpritesManager>
     {
         [SerializeField]
         private Sprite[] images = Array.Empty<Sprite>();
 
-        private Dictionary<string, Sprite> imagesMap = new();
+        private Dictionary<string, Sprite> _imagesMap = new();
+
+        public bool TryGetByName(string spriteName, out Sprite sprite)
+        {
+            if (_imagesMap.TryGetValue(spriteName, out var s))
+            {
+                sprite = s;
+                return true;
+            }
+
+            sprite = null;
+            return false;
+        }
+
+        public Sprite GetRandom()
+        {
+            var index = Random.Range(0, _imagesMap.Count);
+            return _imagesMap.ElementAt(index).Value;
+        }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
             images = LoadAllImages();
-            imagesMap = images
+            _imagesMap = images
                 .Where(e => e != null)
                 .GroupBy(e => e.name)
                 .ToDictionary(k => k.Key, v => v.First());
@@ -27,7 +44,7 @@ namespace Game.SocialNetworks.Email
 
         private static Sprite[] LoadAllImages()
         {
-            var files = AssetDatabase.FindAssets("*", new[] {"Assets/Images"});
+            var files = AssetDatabase.FindAssets("*", new[] { "Assets/Images" });
             var count = files.Length;
 
             var res = new Sprite[count];

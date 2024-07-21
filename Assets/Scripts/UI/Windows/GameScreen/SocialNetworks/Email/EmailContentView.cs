@@ -12,9 +12,9 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         [SerializeField] private TextMeshProUGUI content;
         [SerializeField] private TextMeshProUGUI sender;
         [SerializeField] private TextMeshProUGUI date;
-        [SerializeField] private Image           image;
-        [SerializeField] private Button          mainActionBtn;
-        [SerializeField] private Button          quickActionBtn;
+        [SerializeField] private Image image;
+        [SerializeField] private Button mainActionBtn;
+        [SerializeField] private Button quickActionBtn;
 
         private EmailInfo _email;
 
@@ -28,10 +28,10 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         {
             _email = email;
 
-            title.text   = LocalizationManager.Instance.GetFormat(email.Title, email.TitleArgs).ToUpper();
+            title.text = LocalizationManager.Instance.GetFormat(email.Title, email.TitleArgs).ToUpper();
             content.text = LocalizationManager.Instance.GetFormat(email.Content, email.ContentArgs);
-            sender.text  = email.Sender;
-            date.text    = email.Date;
+            sender.text = email.Sender;
+            date.text = email.Date;
 
             mainActionBtn.gameObject.SetActive(email.IsNew && email.MainAction != null);
             quickActionBtn.gameObject.SetActive(email.IsNew && email.QuickAction != null);

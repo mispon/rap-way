@@ -12,6 +12,7 @@ using Game.Rappers.Desc;
 using Game.Settings;
 using Game.SocialNetworks.Eagler;
 using Game.SocialNetworks.Email;
+using Game.SocialNetworks.News;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Game;
@@ -27,18 +28,19 @@ namespace Game
     [Serializable]
     public class GameData
     {
-        public PlayerData   PlayerData;
-        public GameStats    GameStats;
+        public PlayerData PlayerData;
+        public GameStats GameStats;
         public RapperInfo[] Rappers;
         public RapperInfo[] CustomRappers;
-        public LabelInfo[]  Labels;
-        public LabelInfo[]  CustomLabels;
-        public LabelInfo    PlayerLabel;
-        public Eagle[]      Eagles;
-        public Email[]      Emails;
-        public string[]     ShowedHints;
+        public LabelInfo[] Labels;
+        public LabelInfo[] CustomLabels;
+        public LabelInfo PlayerLabel;
+        public Eagle[] Eagles;
+        public Email[] Emails;
+        public News[] News;
+        public string[] ShowedHints;
     }
-    
+
     /// <summary>
     /// Логика управления состоянием игры
     /// </summary>
@@ -47,24 +49,25 @@ namespace Game
         [Header("Stores URLs"), SerializeField] private string appStoreURL;
         [Header("Stores URLs"), SerializeField] private string googlePlayURL;
         [Space]
-        [Header("Save Key")]  [SerializeField] private string gameDataKey;
-        [Header("Save Key")]  [SerializeField] private string noAdsDataKey;
-        [Header("Save Key")]  [SerializeField] private string donateDataKey;
+        [Header("Save Key")][SerializeField] private string gameDataKey;
+        [Header("Save Key")][SerializeField] private string noAdsDataKey;
+        [Header("Save Key")][SerializeField] private string donateDataKey;
         [Space]
         [Header("Game Settings")] public GameSettings Settings;
         [Header("Player")] public PlayerData PlayerData;
-        [Header("Game")]   public GameStats GameStats;
+        [Header("Game")] public GameStats GameStats;
         [Space]
-        [Header("Rappers")]        public List<RapperInfo> Rappers;
+        [Header("Rappers")] public List<RapperInfo> Rappers;
         [Header("Custom Rappers")] public List<RapperInfo> CustomRappers;
         [Space]
-        [Header("Labels")]        public List<LabelInfo> Labels; 
+        [Header("Labels")] public List<LabelInfo> Labels;
         [Header("Custom Labels")] public List<LabelInfo> CustomLabels;
-        [Header("Player Label")]  public LabelInfo PlayerLabel;
+        [Header("Player Label")] public LabelInfo PlayerLabel;
         [FormerlySerializedAs("Twits")]
         [Space]
-        [Header("Eagles")]    public List<Eagle> Eagles;
-        [Header("Emails")]    public List<Email> Emails;
+        [Header("Eagles")] public List<Eagle> Eagles;
+        [Header("Emails")] public List<Email> Emails;
+        [Header("News")] public List<News> News;
         [Header("Tutorials")] public HashSet<string> ShowedHints;
 
         private readonly CompositeDisposable _disposables = new();
@@ -73,7 +76,7 @@ namespace Game
         {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
-            
+
             RegisterHandlers();
 
             await GetComponent<UnityServicesInitializer>().Initialize();
@@ -86,7 +89,8 @@ namespace Game
         {
             MsgBroker.Instance
                 .Receive<LangChangedMessage>()
-                .Subscribe(e => {
+                .Subscribe(e =>
+                {
                     GameStats.Lang = e.Lang;
                     SaveApplicationData();
                 })
@@ -105,22 +109,23 @@ namespace Game
         }
 
         /// <summary>
-        /// Creates new players Save
+        /// Creates new players save
         /// </summary>
         public PlayerData CreateNewPlayer()
         {
             PlayerData = PlayerData.New;
             Eagles = new List<Eagle>(0);
             Emails = new List<Email>(0);
-            
+            News = new List<News>(0);
+
             Rappers = new List<RapperInfo>(0);
             CustomRappers = new List<RapperInfo>(0);
 
             Labels = new List<LabelInfo>(0);
             CustomLabels = new List<LabelInfo>(0);
-            
+
             LoadDonateBalance();
-            
+
             return PlayerData;
         }
 
@@ -131,7 +136,7 @@ namespace Game
         {
             PlayerPrefs.SetInt(noAdsDataKey, 1);
         }
-        
+
         /// <summary>
         /// Loads no ads setting 
         /// </summary>
@@ -139,7 +144,7 @@ namespace Game
         {
             return PlayerPrefs.GetInt(noAdsDataKey) == 1;
         }
-        
+
         /// <summary>
         /// Saves donate balance
         /// </summary>
@@ -147,7 +152,7 @@ namespace Game
         {
             PlayerPrefs.SetInt(donateDataKey, PlayerData.Donate);
         }
-        
+
         /// <summary>
         /// Loads donate balance
         /// </summary>
@@ -156,54 +161,50 @@ namespace Game
             PlayerData.Donate = PlayerPrefs.GetInt(donateDataKey);
         }
 
-        /// <summary>
-        /// Загрузка данных приложения
-        /// </summary>
         private void LoadApplicationData()
         {
             var gameData = DataManager.Load<GameData>(gameDataKey) ?? new GameData
             {
                 PlayerData = PlayerData.New,
                 GameStats = GameStats.New,
-                
+
                 Rappers = Array.Empty<RapperInfo>(),
                 CustomRappers = Array.Empty<RapperInfo>(),
-                
+
                 Labels = Array.Empty<LabelInfo>(),
                 CustomLabels = Array.Empty<LabelInfo>(),
                 PlayerLabel = null,
-                
+
                 Eagles = Array.Empty<Eagle>(),
                 Emails = Array.Empty<Email>(),
-                
+                News = Array.Empty<News>(),
+
                 ShowedHints = Array.Empty<string>(),
             };
-            
+
             PlayerData = gameData.PlayerData;
             GameStats = gameData.GameStats;
-            
+
             Rappers = gameData.Rappers?.ToList() ?? new List<RapperInfo>(0);
             CustomRappers = gameData.CustomRappers?.ToList() ?? new List<RapperInfo>(0);
-            
+
             Labels = gameData.Labels?.ToList() ?? new List<LabelInfo>(0);
             CustomLabels = gameData.CustomLabels?.ToList() ?? new List<LabelInfo>(0);
             PlayerLabel = gameData.PlayerLabel;
-            
+
             Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
             Emails = gameData.Emails?.ToList() ?? new List<Email>(0);
-            
+            News = gameData.News?.ToList() ?? new List<News>(0);
+
             ShowedHints = gameData.ShowedHints?.ToHashSet() ?? new HashSet<string>(0);
-            
+
             LoadDonateBalance();
         }
 
-        /// <summary>
-        /// Сохранение данных приложения
-        /// </summary>
         public void SaveApplicationData()
         {
             SaveDonateBalance();
-            
+
             if (TimeManager.Instance != null)
             {
                 GameStats.Now = TimeManager.Instance.Now.DateToString();
@@ -213,24 +214,26 @@ namespace Game
             {
                 PlayerData = PlayerData,
                 GameStats = GameStats,
-                
+
                 Rappers = Rappers?.ToArray() ?? Array.Empty<RapperInfo>(),
                 CustomRappers = CustomRappers.ToArray(),
-                
+
                 Labels = Labels?.ToArray() ?? Array.Empty<LabelInfo>(),
                 CustomLabels = CustomLabels?.ToArray(),
                 PlayerLabel = PlayerLabel,
-                
+
                 Eagles = Eagles.Take(20).ToArray(),
                 Emails = Emails.Take(50).ToArray(),
+                News = News.Take(50).ToArray(),
+
                 ShowedHints = ShowedHints.ToArray()
             };
-            
+
             DataManager.Save(gameDataKey, gameData);
         }
 
         /// <summary>
-        /// Checks has been created character or not
+        /// Checks if character has been created or not
         /// </summary>
         public bool HasCharacter()
         {
@@ -238,7 +241,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Checks any save exists or not
+        /// Checks if any save exist or not
         /// </summary>
         public bool HasAnySaves()
         {
@@ -262,7 +265,7 @@ namespace Game
         {
             if (pauseStatus)
             {
-                SaveApplicationData();    
+                SaveApplicationData();
             }
         }
 

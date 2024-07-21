@@ -15,20 +15,20 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private TextMeshProUGUI preview;
         [SerializeField] private TextMeshProUGUI date;
-        [SerializeField] private Image           border;
-        [SerializeField] private Image           card;
+        [SerializeField] private Image border;
+        [SerializeField] private Image card;
 
-        [Space] [SerializeField] private Color selectedColor;
-        [SerializeField]         private Color newColor;
-        [SerializeField]         private Color oldColor;
+        [Space][SerializeField] private Color selectedColor;
+        [SerializeField] private Color newColor;
+        [SerializeField] private Color oldColor;
 
-        private EmailInfo                    _email;
+        private EmailInfo _email;
         private Action<EmailCard, EmailInfo> _onClick;
-        private RectTransform                _rectTransform;
+        private RectTransform _rectTransform;
 
-        private int   _index  { get; set; }
+        private int _index { get; set; }
         private float _height { get; set; }
-        private float _width  { get; set; }
+        private float _width { get; set; }
 
         public void SetPosition(float spacing)
         {
@@ -64,21 +64,21 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         public void Unselect()
         {
             border.color = oldColor;
-            card.color   = oldColor;
+            card.color = oldColor;
         }
 
         public void Initialize(int i, EmailInfo email, Action<EmailCard, EmailInfo> onClick)
         {
             _index = i;
 
-            title.text   = LocalizationManager.Instance.GetFormat(email.Title, email.TitleArgs).ToUpper();
+            title.text = LocalizationManager.Instance.GetFormat(email.Title, email.TitleArgs).ToUpper();
             preview.text = LocalizationManager.Instance.GetFormat(email.Content, email.ContentArgs);
-            date.text    = email.Date;
+            date.text = email.Date;
 
             border.color = email.IsNew ? newColor : oldColor;
-            card.color   = email.IsNew ? newColor : oldColor;
+            card.color = email.IsNew ? newColor : oldColor;
 
-            _email   = email;
+            _email = email;
             _onClick = onClick;
 
             GetComponent<Button>().onClick.AddListener(HandleClick);
@@ -94,7 +94,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             border.color = selectedColor;
-            card.color   = selectedColor;
+            card.color = selectedColor;
 
             _onClick?.Invoke(this, _email);
         }

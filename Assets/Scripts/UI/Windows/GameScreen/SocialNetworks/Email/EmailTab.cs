@@ -10,9 +10,9 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
     public class EmailTab : Tab
     {
         [SerializeField] private ScrollViewController feed;
-        [SerializeField] private GameObject           template;
-        [SerializeField] private EmailContentView     textTemplate;
-        [SerializeField] private EmailContentView     imageTemplate;
+        [SerializeField] private GameObject template;
+        [SerializeField] private EmailContentView textTemplate;
+        [SerializeField] private EmailContentView imageTemplate;
 
         private readonly List<EmailCard> _emailCards = new();
 
@@ -61,7 +61,8 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             {
                 textTemplate.ShowText(email);
                 imageTemplate.Hide();
-            } else
+            }
+            else
             {
                 imageTemplate.ShowImage(email);
                 textTemplate.Hide();
