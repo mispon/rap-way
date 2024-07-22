@@ -49,7 +49,7 @@ namespace Core.Localization
             item = _enBackup.items.FirstOrDefault(e => e.key == key);
             if (item != null)
                 return item.value;
-            
+
             throw new RapWayException($"Not found localization by key [{key}]!");
         }
 
@@ -67,7 +67,9 @@ namespace Core.Localization
         /// </summary>
         public string GetFormat(string key, params object[] args)
         {
-            return string.Format(Get(key), args);
+            return args != null && args.Length > 0
+                ? string.Format(Get(key), args)
+                : Get(key);
         }
 
         /// <summary>
@@ -95,17 +97,17 @@ namespace Core.Localization
             string path = Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
             jsonData = File.ReadAllText(path);
 #endif
-            
+
             ParseLocalizationData(jsonData);
             if (sendEvent)
             {
-                MsgBroker.Instance.Publish(new LangChangedMessage{Lang = lang});
+                MsgBroker.Instance.Publish(new LangChangedMessage { Lang = lang });
             }
 
             IsReady = true;
             yield return null;
         }
-        
+
         private IEnumerator LoadBackupLocalizationAsync()
         {
             string jsonData = "";
@@ -117,7 +119,7 @@ namespace Core.Localization
             string path = Path.Combine(Application.streamingAssetsPath, GetFileName(GameLang.EN));
             jsonData = File.ReadAllText(path);
 #endif
-            ParseBackupLocalizationData(jsonData);    
+            ParseBackupLocalizationData(jsonData);
 
             yield return null;
         }
@@ -145,7 +147,7 @@ namespace Core.Localization
 
             _data = JsonUtility.FromJson<LocalizationData>(jsonData);
         }
-        
+
         /// <summary>
         /// Выполняет парсинг файла с локализацией
         /// </summary>

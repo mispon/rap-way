@@ -81,17 +81,20 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             _email = email;
             _onClick = onClick;
 
-            GetComponent<Button>().onClick.AddListener(HandleClick);
+            GetComponent<Button>().onClick.AddListener(() => HandleClick(silent: false));
         }
 
         public void Open()
         {
-            HandleClick();
+            HandleClick(silent: true);
         }
 
-        private void HandleClick()
+        private void HandleClick(bool silent)
         {
-            SoundManager.Instance.PlaySound(UIActionType.Click);
+            if (!silent)
+            {
+                SoundManager.Instance.PlaySound(UIActionType.Click);
+            }
 
             border.color = selectedColor;
             card.color = selectedColor;

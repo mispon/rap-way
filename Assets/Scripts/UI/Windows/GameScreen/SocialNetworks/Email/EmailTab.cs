@@ -13,6 +13,8 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         [SerializeField] private GameObject template;
         [SerializeField] private EmailContentView textTemplate;
         [SerializeField] private EmailContentView imageTemplate;
+        [SerializeField] private GameObject emptyListIcon;
+        [SerializeField] private GameObject emptyEmailsIcon;
 
         private readonly List<EmailCard> _emailCards = new();
 
@@ -37,10 +39,18 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
         protected override void AfterOpen()
         {
+            // TODO:
             // HintsManager.Instance.ShowHint("tutorial_email");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.EmailOpened);
 
-            _emailCards.FirstOrDefault()?.Open();
+            var hasEmails = _emailCards.Any();
+            if (hasEmails)
+            {
+                _emailCards[0].Open();
+            }
+
+            emptyListIcon.SetActive(!hasEmails);
+            emptyEmailsIcon.SetActive(!hasEmails);
         }
 
         private void HandleClick(EmailCard card, EmailInfo email)

@@ -7,7 +7,6 @@ using Extensions;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
-using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.Time;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -16,7 +15,6 @@ using UI.Enums;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace UI.GameScreen
 {
@@ -32,7 +30,6 @@ namespace UI.GameScreen
         [SerializeField] private Button moneyButton;
         [SerializeField] private Button fansButton;
         [SerializeField] private Button hypeButton;
-        [SerializeField] private Button testButton;
         [SerializeField] private StatDescItem[] statDescItems;
         [Space, SerializeField] private ImagesBank imagesBank;
 
@@ -48,13 +45,6 @@ namespace UI.GameScreen
 
             MsgBroker.Instance.Publish(new FullStateRequest());
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
-
-            testButton.onClick.AddListener(() => MsgBroker.Instance.Publish(new NewsMessage
-            {
-                Text = "Test test Test test Test test Test test Test test Test test",
-                Popularity = Random.Range(100, 1000),
-                Sprite = SpritesManager.Instance.GetRandom()
-            }));
         }
 
         private void HandleStateEvents()

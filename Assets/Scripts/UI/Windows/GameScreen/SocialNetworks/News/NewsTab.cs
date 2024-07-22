@@ -11,10 +11,12 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
         [Header("News")]
         [SerializeField] private ScrollViewController newsFeed;
         [SerializeField] private GameObject newsTemplate;
+        [SerializeField] private GameObject newsEmpty;
 
         [Header("Hot News")]
         [SerializeField] private ScrollViewController hotNewsFeed;
         [SerializeField] private GameObject hotNewsTemplate;
+        [SerializeField] private GameObject hotNewsEmpty;
 
         private readonly List<NewsCard> _newsCards = new();
         private readonly List<HotNewsCard> _hotNewsCards = new();
@@ -50,6 +52,14 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
                 _hotNewsCards.Add(card);
             }
             hotNewsFeed.RepositionElements(_hotNewsCards);
+        }
+
+        protected override void AfterOpen()
+        {
+            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewsOpened);
+
+            newsEmpty.SetActive(_newsCards.Count() == 0);
+            hotNewsEmpty.SetActive(_hotNewsCards.Count() == 0);
         }
 
         protected override void AfterClose()

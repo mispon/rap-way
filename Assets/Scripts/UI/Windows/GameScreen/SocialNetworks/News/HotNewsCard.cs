@@ -1,4 +1,4 @@
-using Extensions;
+using Core.Localization;
 using ScriptableObjects;
 using TMPro;
 using UI.Controls.ScrollViewController;
@@ -57,7 +57,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
             _index = i;
 
             image.sprite = news.Sprite != null ? news.Sprite : imagesBank.NoImage;
-            content.text = news.Text;
+            content.text = LocalizationManager.Instance.Get(news.Text);
             date.text = news.Date;
         }
     }

@@ -1,3 +1,4 @@
+using Core.Localization;
 using TMPro;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
@@ -49,7 +50,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
         public void Initialize(int i, NewsInfo news)
         {
             _index = i;
-            content.text = news.Text;
+            content.text = LocalizationManager.Instance.Get(news.Text);
         }
     }
 }
