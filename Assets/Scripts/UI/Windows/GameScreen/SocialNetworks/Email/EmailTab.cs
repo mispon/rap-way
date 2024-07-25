@@ -56,9 +56,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         private void HandleClick(EmailCard card, EmailInfo email)
         {
             if (card == _lastSelected)
-            {
                 return;
-            }
 
             if (_lastSelected != null)
             {

@@ -1,4 +1,6 @@
+using Core;
 using Core.Localization;
+using ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,8 +35,8 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             sender.text = email.Sender;
             date.text = email.Date;
 
-            mainActionBtn.gameObject.SetActive(email.IsNew && email.MainAction != null);
-            quickActionBtn.gameObject.SetActive(email.IsNew && email.QuickAction != null);
+            mainActionBtn.gameObject.SetActive(email.MainAction != null);
+            quickActionBtn.gameObject.SetActive(email.QuickAction != null);
 
             gameObject.SetActive(true);
         }
@@ -52,11 +54,13 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
         private void HandleMainAction()
         {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             _email.MainAction?.Invoke();
         }
 
         private void HandleQuickAction()
         {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             _email.QuickAction?.Invoke();
         }
     }

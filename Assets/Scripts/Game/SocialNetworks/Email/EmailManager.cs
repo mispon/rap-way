@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Core;
 using Game.Time;
 using MessageBroker;
+using MessageBroker.Messages.Labels;
 using MessageBroker.Messages.SocialNetworks;
 using UniRx;
 
@@ -16,6 +17,10 @@ namespace Game.SocialNetworks.Email
             MsgBroker.Instance
                 .Receive<EmailMessage>()
                 .Subscribe(AddEmail)
+                .AddTo(_disposables);
+            MsgBroker.Instance
+                .Receive<PlayerSignLabelsContractMessage>()
+                .Subscribe(UpdateLabelsContractEmails)
                 .AddTo(_disposables);
         }
 
@@ -47,13 +52,14 @@ namespace Game.SocialNetworks.Email
         {
             var email = new Email
             {
+                Type = msg.Type,
                 Title = msg.Title,
                 TitleArgs = msg.TitleArgs,
                 Content = msg.Content,
                 ContentArgs = msg.ContentArgs,
                 Sender = msg.Sender,
                 Sprite = msg.Sprite,
-                SpriteName = msg.Sprite.name,
+                SpriteName = msg.Sprite != null ? msg.Sprite.name : "",
                 Date = TimeManager.Instance.DisplayNow,
                 IsNew = true,
 
@@ -62,6 +68,18 @@ namespace Game.SocialNetworks.Email
             };
 
             GameManager.Instance.Emails.Insert(0, email);
+        }
+
+        private void UpdateLabelsContractEmails(PlayerSignLabelsContractMessage _)
+        {
+            foreach (var email in GameManager.Instance.Emails)
+            {
+                if (email.Type == Enums.EmailsType.LabelsContract)
+                {
+                    email.MainAction = null;
+                    email.QuickAction = null;
+                }
+            }
         }
     }
 }

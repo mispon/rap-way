@@ -178,7 +178,6 @@ Transform:
   - {fileID: 519599808141213891}
   - {fileID: 2442274176063737926}
   - {fileID: 631926535046156863}
-  - {fileID: 4995534946953568776}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2227853986022448634
@@ -368,51 +367,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroy: 0
   trendsCompareData: {fileID: 11400000, guid: fe99e2841a85c1d498adb1e70e2bc83e, type: 2}
---- !u!1 &3653161272360059514
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4995534946953568776}
-  - component: {fileID: 3470200234966020583}
-  m_Layer: 0
-  m_Name: NewsManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4995534946953568776
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3653161272360059514}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1929117383248465391}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3470200234966020583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3653161272360059514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae15e2749a744635b995f6a45502f10c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroy: 0
 --- !u!1 &4223472995139525727
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,6 +580,7 @@ GameObject:
   - component: {fileID: 1476646601508027867}
   - component: {fileID: 8973353189961212769}
   - component: {fileID: 2718138549031009748}
+  - component: {fileID: 7221595763587668258}
   m_Layer: 0
   m_Name: SocialNetworksManager
   m_TagString: Untagged
@@ -675,3 +630,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroy: 0
   data: {fileID: 11400000, guid: 1137433b7a773d34b93410050ff4d688, type: 2}
+--- !u!114 &7221595763587668258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616449362574666434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae15e2749a744635b995f6a45502f10c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroy: 0

@@ -86,7 +86,7 @@ csharp_style_var_when_type_is_apparent = false:silent
 csharp_style_expression_bodied_accessors = true:silent
 csharp_style_expression_bodied_constructors = false:silent
 csharp_style_expression_bodied_indexers = true:silent
-csharp_style_expression_bodied_lambdas = true:suggestion
+csharp_style_expression_bodied_lambdas = true:none
 csharp_style_expression_bodied_local_functions = false:silent
 csharp_style_expression_bodied_methods = false:silent
 csharp_style_expression_bodied_operators = false:silent
@@ -179,6 +179,9 @@ dotnet_diagnostic.IDE1006.severity = error
 
 # IDE1006: Naming Styles
 dotnet_diagnostic.IDE1006.severity = none
+
+# IDE0053: Use expression body for lambda expression
+dotnet_diagnostic.IDE0053.severity = none
 
 [*.{cs,vb}]
 

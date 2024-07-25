@@ -1,9 +1,14 @@
 using Core;
+using Enums;
 using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
+using MessageBroker.Messages.UI;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.GameScreen
 {
@@ -21,13 +26,21 @@ namespace UI.GameScreen
                 Sprite = SpritesManager.Instance.GetRandom()
             }));
 
-            emailsButton.onClick.AddListener(() => MsgBroker.Instance.Publish(new EmailMessage
+            emailsButton.onClick.AddListener(() =>
             {
-                Title = "concert_event_name_10",
-                Content = "concert_event_desc_10",
-                Sender = "plaki-plaki@mail.kz",
-                Sprite = SpritesManager.Instance.GetRandom()
-            }));
+                MsgBroker.Instance.Publish(new EmailMessage
+                {
+                    Type = EmailsType.TeamSalary,
+                    Title = "email_team_salary_title",
+                    Content = "email_team_salary_content",
+                    ContentArgs = new[] { PlayerAPI.Data.Info.NickName },
+                    Sender = "team.assistant@mail.com",
+                    mainAction = () =>
+                    {
+                        MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Training, 3));
+                    }
+                });
+            });
         }
     }
 }
