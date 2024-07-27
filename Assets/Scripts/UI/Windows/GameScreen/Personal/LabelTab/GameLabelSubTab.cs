@@ -13,9 +13,11 @@ using UI.Windows.GameScreen.Labels;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
-using RappersAPI =  Game.Rappers.RappersPackage;
+using RappersAPI = Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 using PlayerAPI = Game.Player.PlayerPackage;
+using MessageBroker.Messages.SocialNetworks;
+using MessageBroker;
 
 namespace UI.Windows.GameScreen.Personal.LabelTab
 {
@@ -23,6 +25,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
     {
         [SerializeField] private LabelTab labelTab;
         [SerializeField] private AskingWindow askingWindow;
+
         [Space]
         [SerializeField] private Image logo;
         [SerializeField] private Text labelName;
@@ -33,7 +36,8 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         [Space]
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
-        
+        [SerializeField] private ImagesBank imagesBank;
+
         private readonly List<LabelMemberRow> _listItems = new();
 
         private void Start()
@@ -45,9 +49,9 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         {
             DisplayInfo(label);
             DisplayMembers(label);
-            
+
             base.Open();
-            
+
             HintsManager.Instance.ShowHint("tutorial_game_label", PersonalTabType.Label);
         }
 
@@ -65,20 +69,20 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         private void DisplayMembers(LabelInfo label)
         {
             var members = GetMembers(label.Name);
-            
+
             for (var i = 0; i < members.Count; i++)
             {
                 var info = members[i];
-                
+
                 var row = list.InstantiatedElement<LabelMemberRow>(template);
-                row.Initialize(i+1, info);
-                
+                row.Initialize(i + 1, info);
+
                 _listItems.Add(row);
             }
 
             list.RepositionElements(_listItems);
         }
-        
+
         /// <summary>
         /// Returns all label members sorted desc by fans count
         /// </summary>
@@ -88,7 +92,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
                 .GetAll()
                 .Where(e => e.Label == labelName)
                 .ToList();
-            
+
             members.Add(new RapperInfo
             {
                 Name = PlayerAPI.Data.Info.NickName,
@@ -104,10 +108,24 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelLeaveAction);
-            
+
             askingWindow.Show(
                 LocalizationManager.Instance.Get("leave_label_question").ToUpper(),
-                () => {
+                () =>
+                {
+                    MsgBroker.Instance.Publish(new NewsMessage
+                    {
+                        Text = "news_player_leave_label",
+                        TextArgs = new[] {
+                            PlayerAPI.Data.Info.NickName,
+                            PlayerAPI.Data.Label
+                        },
+                        Sprite = PlayerAPI.Data.Info.Gender == Gender.Male
+                            ? imagesBank.MaleAvatar
+                            : imagesBank.FemaleAvatar,
+                        Popularity = PlayerAPI.Data.Fans
+                    });
+
                     PlayerAPI.Data.Label = "";
                     labelTab.Reload();
                 }
@@ -121,7 +139,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
                 Destroy(row.gameObject);
             }
             _listItems.Clear();
-            
+
             base.Close();
         }
     }

@@ -5,6 +5,7 @@ using Enums;
 using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Labels;
+using MessageBroker.Messages.SocialNetworks;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,9 @@ namespace UI.Windows.GameScreen.Contracts
         [Space]
         [SerializeField] private Button rejectButton;
         [SerializeField] private Button signButton;
+
+        [Space]
+        [SerializeField] private ImagesBank imagesBank;
 
         private string _labelName;
 
@@ -51,12 +55,39 @@ namespace UI.Windows.GameScreen.Contracts
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractDeclined);
+
+            MsgBroker.Instance.Publish(new NewsMessage
+            {
+                Text = "news_player_reject_label",
+                TextArgs = new[] {
+                        PlayerAPI.Data.Info.NickName,
+                        _labelName
+                    },
+                Sprite = PlayerAPI.Data.Info.Gender == Gender.Male
+                    ? imagesBank.MaleAvatar
+                    : imagesBank.FemaleAvatar,
+                Popularity = PlayerAPI.Data.Fans
+            });
+
             base.Hide();
         }
 
         private void OnSign()
         {
             MsgBroker.Instance.Publish(new PlayerSignLabelsContractMessage { });
+
+            MsgBroker.Instance.Publish(new NewsMessage
+            {
+                Text = "news_player_join_label",
+                TextArgs = new[] {
+                        PlayerAPI.Data.Info.NickName,
+                        _labelName
+                    },
+                Sprite = PlayerAPI.Data.Info.Gender == Gender.Male
+                    ? imagesBank.MaleAvatar
+                    : imagesBank.FemaleAvatar,
+                Popularity = PlayerAPI.Data.Fans
+            });
 
             SoundManager.Instance.PlaySound(UIActionType.Click);
             // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);

@@ -28,16 +28,29 @@ namespace UI.GameScreen
 
             emailsButton.onClick.AddListener(() =>
             {
+                var label = LabelsAPI.Instance.GetRandom();
+
                 MsgBroker.Instance.Publish(new EmailMessage
                 {
-                    Type = EmailsType.TeamSalary,
-                    Title = "email_team_salary_title",
-                    Content = "email_team_salary_content",
-                    ContentArgs = new[] { PlayerAPI.Data.Info.NickName },
-                    Sender = "team.assistant@mail.com",
+                    Type = EmailsType.LabelsContract,
+                    Title = "label_contract_greeting",
+                    TitleArgs = new[] { label.Name },
+                    Content = "label_contract_text",
+                    ContentArgs = new[]
+                    {
+                        PlayerAPI.Data.Info.NickName,
+                        label.Name,
+                        label.Name
+                    },
+                    Sender = $"{label.Name.ToLower()}@label.com",
+                    Sprite = label.Logo,
                     mainAction = () =>
                     {
-                        MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Training, 3));
+                        MsgBroker.Instance.Publish(new WindowControlMessage
+                        {
+                            Type = WindowType.LabelContract,
+                            Context = label
+                        });
                     }
                 });
             });

@@ -14,25 +14,33 @@ using UnityEngine.UI;
 // using Firebase.Analytics;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
+using MessageBroker.Messages.SocialNetworks;
+using ScriptableObjects;
 
 namespace UI.Windows.GameScreen.Album
 {
     public class AlbumResultPage : Page
     {
-        [Header("Result")] [SerializeField] private Text listenAmount;
-
-        [SerializeField] private Text       songs;
-        [SerializeField] private Text       albumNameLabel;
-        [SerializeField] private Text       playerNameLabel;
-        [SerializeField] private Text       qualityLabel;
-        [SerializeField] private Text       chartInfo;
-        [SerializeField] private Text       fansIncome;
-        [SerializeField] private Text       moneyIncome;
-        [SerializeField] private Text       expIncome;
+        [Header("Result")]
+        [SerializeField] private Text listenAmount;
+        [SerializeField] private Text songs;
+        [SerializeField] private Text albumNameLabel;
+        [SerializeField] private Text playerNameLabel;
+        [SerializeField] private Text qualityLabel;
+        [SerializeField] private Text chartInfo;
+        [SerializeField] private Text fansIncome;
+        [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
         [SerializeField] private GameObject hitBadge;
 
-        [Header("Eagler")] [SerializeField]   private EaglerCard[]  eagleCards;
-        [Header("Analyzer")] [SerializeField] private AlbumAnalyzer albumAnalyzer;
+        [Header("Eagler")]
+        [SerializeField] private EaglerCard[] eagleCards;
+
+        [Header("Analyzer")]
+        [SerializeField] private AlbumAnalyzer albumAnalyzer;
+
+        [Header("Images")]
+        [SerializeField] private ImagesBank imagesBank;
 
         private AlbumInfo _album;
 
@@ -53,16 +61,16 @@ namespace UI.Windows.GameScreen.Album
         {
             var nickname = PlayerAPI.Data.Info.NickName;
 
-            albumNameLabel.text  = album.Name;
+            albumNameLabel.text = album.Name;
             playerNameLabel.text = nickname;
 
-            fansIncome.text  = $"+{album.FansIncome.GetDisplay()}";
+            fansIncome.text = $"+{album.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{album.MoneyIncome.GetMoney()}";
-            expIncome.text   = $"+{settings.Album.RewardExp}";
+            expIncome.text = $"+{settings.Album.RewardExp}";
 
             qualityLabel.text = $"{Convert.ToInt32(album.Quality * 100)}%";
             listenAmount.text = album.ListenAmount.GetDisplay();
-            songs.text        = $"{Random.Range(8, 31)}";
+            songs.text = $"{Random.Range(8, 31)}";
 
             hitBadge.SetActive(album.IsHit);
 
@@ -93,14 +101,25 @@ namespace UI.Windows.GameScreen.Album
             MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = album.MoneyIncome,
-                FansIncome  = album.FansIncome,
-                Exp         = settings.Album.RewardExp
+                FansIncome = album.FansIncome,
+                Exp = settings.Album.RewardExp
             });
         }
 
         protected override void AfterHide()
         {
             // FirebaseAnalytics.LogEvent(FirebaseGameEvents.AlbumResultShown);
+
+            MsgBroker.Instance.Publish(new NewsMessage
+            {
+                Text = "news_player_create_album",
+                TextArgs = new[] {
+                    PlayerAPI.Data.Info.NickName,
+                    _album.Name
+                },
+                Sprite = imagesBank.NewsAlbum,
+                Popularity = PlayerAPI.Data.Fans
+            });
 
             SaveResult(_album);
             _album = null;

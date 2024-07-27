@@ -38,6 +38,7 @@ namespace Game.SocialNetworks.News
             var news = new News
             {
                 Text = msg.Text,
+                TextArgs = msg.TextArgs,
                 Popularity = msg.Popularity,
                 Sprite = msg.Sprite,
                 SpriteName = msg.Sprite.name,

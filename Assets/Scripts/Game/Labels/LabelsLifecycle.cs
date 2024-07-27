@@ -123,6 +123,18 @@ namespace Game.Labels
                 if (dice >= 0)
                     continue;
 
+
+                MsgBroker.Instance.Publish(new NewsMessage
+                {
+                    Text = "news_rapper_join_label",
+                    TextArgs = new[] {
+                        rapper.Name,
+                        label.Name
+                    },
+                    Sprite = rapper.Avatar,
+                    Popularity = PlayerAPI.Data.Fans
+                });
+
                 rapper.Label = label.Name;
                 RefreshScore(label);
                 break;
@@ -150,6 +162,17 @@ namespace Game.Labels
             var actionDice = Random.Range(0, 2); // 0 - leave, 1 - change
             if (actionDice == 0)
             {
+                MsgBroker.Instance.Publish(new NewsMessage
+                {
+                    Text = "news_rapper_leave_label",
+                    TextArgs = new[] {
+                        rapper.Name,
+                        label.Name
+                    },
+                    Sprite = rapper.Avatar,
+                    Popularity = PlayerAPI.Data.Fans
+                });
+
                 rapper.Label = "";
                 RefreshScore(label);
                 return;

@@ -15,25 +15,33 @@ using UnityEngine.UI;
 // using Firebase.Analytics;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
+using MessageBroker.Messages.SocialNetworks;
+using ScriptableObjects;
 
 namespace UI.Windows.GameScreen.Track
 {
     public class TrackResultPage : Page
     {
-        [Header("Result")] [SerializeField] private Text listenAmount;
-
-        [SerializeField] private Text       duration;
-        [SerializeField] private Text       trackNameLabel;
-        [SerializeField] private Text       playerNameLabel;
-        [SerializeField] private Text       qualityLabel;
-        [SerializeField] private Text       chartInfo;
-        [SerializeField] private Text       fansIncome;
-        [SerializeField] private Text       moneyIncome;
-        [SerializeField] private Text       expIncome;
+        [Header("Result")]
+        [SerializeField] private Text listenAmount;
+        [SerializeField] private Text duration;
+        [SerializeField] private Text trackNameLabel;
+        [SerializeField] private Text playerNameLabel;
+        [SerializeField] private Text qualityLabel;
+        [SerializeField] private Text chartInfo;
+        [SerializeField] private Text fansIncome;
+        [SerializeField] private Text moneyIncome;
+        [SerializeField] private Text expIncome;
         [SerializeField] private GameObject hitBadge;
 
-        [Header("Eagles")] [SerializeField]   private EaglerCard[]  eagleCards;
-        [Header("Analyzer")] [SerializeField] private TrackAnalyzer trackAnalyzer;
+        [Header("Eagles")]
+        [SerializeField] private EaglerCard[] eagleCards;
+
+        [Header("Analyzer")]
+        [SerializeField] private TrackAnalyzer trackAnalyzer;
+
+        [Header("Images")]
+        [SerializeField] private ImagesBank imagesBank;
 
         private TrackInfo _track;
 
@@ -58,15 +66,15 @@ namespace UI.Windows.GameScreen.Track
             }
 
             var fansIncomePrefix = track.FansIncome > 0 ? "+" : string.Empty;
-            fansIncome.text  = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
+            fansIncome.text = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
-            expIncome.text   = $"+{settings.Track.RewardExp}";
+            expIncome.text = $"+{settings.Track.RewardExp}";
 
-            trackNameLabel.text  = trackName;
+            trackNameLabel.text = trackName;
             playerNameLabel.text = nickname;
-            qualityLabel.text    = $"{Convert.ToInt32(track.Quality * 100)}%";
-            listenAmount.text    = track.ListenAmount.GetDisplay();
-            duration.text        = GetDuration();
+            qualityLabel.text = $"{Convert.ToInt32(track.Quality * 100)}%";
+            listenAmount.text = track.ListenAmount.GetDisplay();
+            duration.text = GetDuration();
 
             hitBadge.SetActive(track.IsHit);
 
@@ -106,15 +114,26 @@ namespace UI.Windows.GameScreen.Track
             MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = track.MoneyIncome,
-                FansIncome  = track.FansIncome,
-                Exp         = settings.Track.RewardExp
+                FansIncome = track.FansIncome,
+                Exp = settings.Track.RewardExp
             });
         }
 
         protected override void AfterHide()
         {
             // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
+
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
+            MsgBroker.Instance.Publish(new NewsMessage
+            {
+                Text = "news_player_create_track",
+                TextArgs = new[] {
+                    PlayerAPI.Data.Info.NickName,
+                    _track.Name
+                },
+                Sprite = imagesBank.NewsTrack,
+                Popularity = PlayerAPI.Data.Fans
+            });
 
             SaveResult(_track);
             _track = null;

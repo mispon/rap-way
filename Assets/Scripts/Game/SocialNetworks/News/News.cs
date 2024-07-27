@@ -7,6 +7,7 @@ namespace Game.SocialNetworks.News
     public class News
     {
         public string Text;
+        public string[] TextArgs;
         public string Date;
         public string SpriteName;
         public int Popularity;

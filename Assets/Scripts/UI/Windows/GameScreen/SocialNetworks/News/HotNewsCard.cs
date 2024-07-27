@@ -57,7 +57,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
             _index = i;
 
             image.sprite = news.Sprite != null ? news.Sprite : imagesBank.NoImage;
-            content.text = LocalizationManager.Instance.Get(news.Text);
+            content.text = LocalizationManager.Instance.GetFormat(news.Text, news.TextArgs);
             date.text = news.Date;
         }
     }

@@ -6,6 +6,8 @@ using Game.Rappers.Desc;
 using Game.SocialNetworks.Eagler;
 using MessageBroker;
 using MessageBroker.Messages.Production;
+using MessageBroker.Messages.SocialNetworks;
+using ScriptableObjects;
 using UI.Windows.GameScreen.SocialNetworks.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,30 +17,34 @@ namespace UI.Windows.GameScreen.Battle
 {
     public class BattleResultPage : Page
     {
-        [Header("Result")] [SerializeField] private Text resultMessage;
-
+        [Header("Result")]
+        [SerializeField] private Text resultMessage;
         [SerializeField] private Text fansIncome;
         [SerializeField] private Text hypeIncome;
         [SerializeField] private Text expIncome;
 
-        [Header("Images")] [SerializeField] private Image playerImage;
-
+        [Header("Images")]
+        [SerializeField] private Image playerImage;
         [SerializeField] private GameObject playerLoseMask;
-        [SerializeField] private Image      rapperImage;
+        [SerializeField] private Image rapperImage;
         [SerializeField] private GameObject rapperLoseMask;
 
-        [Header("Sprites")] [SerializeField] private Sprite playerAvatarMale;
-
+        [Header("Sprites")]
+        [SerializeField] private Sprite playerAvatarMale;
         [SerializeField] private Sprite playerAvatarFemale;
         [SerializeField] private Sprite customAvatar;
 
-        [Header("Eagles")] [SerializeField] private EaglerCard[] eagleCards;
+        [Header("Eagles")]
+        [SerializeField] private EaglerCard[] eagleCards;
+
+        [Header("Images")]
+        [SerializeField] private ImagesBank imagesBank;
 
         private BattleResult _result;
 
         public override void Show(object ctx = null)
         {
-            var rapper       = ctx.ValueByKey<RapperInfo>("rapper");
+            var rapper = ctx.ValueByKey<RapperInfo>("rapper");
             var playerPoints = ctx.ValueByKey<int>("playerPoints");
             var rapperPoints = ctx.ValueByKey<int>("rapperPoints");
 
@@ -55,8 +61,8 @@ namespace UI.Windows.GameScreen.Battle
         {
             var isWin = playerPoints >= rapperPoints;
 
-            var fansChange = (int) (PlayerAPI.Data.Fans * 0.1f);
-            var fansFuzz   = (int) (fansChange * 0.1f);
+            var fansChange = (int)(PlayerAPI.Data.Fans * 0.1f);
+            var fansFuzz = (int)(fansChange * 0.1f);
 
             var hype = isWin ? settings.Battle.WinnerHype : settings.Battle.LoserHype;
 
@@ -65,7 +71,7 @@ namespace UI.Windows.GameScreen.Battle
                 RapperInfo = rapper,
                 FansIncome = Random.Range(fansChange - fansFuzz, fansChange + fansFuzz) * (isWin ? 1 : -1),
                 HypeIncome = hype,
-                IsWin      = isWin
+                IsWin = isWin
             };
         }
 
@@ -84,7 +90,7 @@ namespace UI.Windows.GameScreen.Battle
             var prefix = _result.FansIncome > 0 ? "+" : string.Empty;
             fansIncome.text = $"{prefix}{_result.FansIncome.GetDisplay()}";
             hypeIncome.text = $"+{_result.HypeIncome}";
-            expIncome.text  = $"+{settings.Battle.RewardExp}";
+            expIncome.text = $"+{settings.Battle.RewardExp}";
 
             playerImage.sprite = PlayerAPI.Data.Info.Gender == Gender.Male
                 ? playerAvatarMale
@@ -122,13 +128,27 @@ namespace UI.Windows.GameScreen.Battle
             {
                 FansIncome = _result.FansIncome,
                 HypeIncome = _result.HypeIncome,
-                Exp        = settings.Battle.RewardExp
+                Exp = settings.Battle.RewardExp
             });
         }
 
         protected override void AfterHide()
         {
             SaveResult();
+
+            var playerName = PlayerAPI.Data.Info.NickName.ToUpper();
+            var rapperName = _result.RapperInfo.Name;
+
+            MsgBroker.Instance.Publish(new NewsMessage
+            {
+                Text = "news_battle_finished",
+                TextArgs = _result.IsWin
+                    ? new[] { playerName, rapperName }
+                    : new[] { rapperName, playerName },
+                Sprite = imagesBank.NewsBattle,
+                Popularity = PlayerAPI.Data.Fans
+            });
+
             _result = BattleResult.Empty;
         }
     }
@@ -136,16 +156,16 @@ namespace UI.Windows.GameScreen.Battle
     public struct BattleResult
     {
         public RapperInfo RapperInfo;
-        public int        FansIncome;
-        public int        HypeIncome;
-        public bool       IsWin;
+        public int FansIncome;
+        public int HypeIncome;
+        public bool IsWin;
 
         public static BattleResult Empty => new()
         {
             RapperInfo = null,
             FansIncome = 0,
             HypeIncome = 0,
-            IsWin      = false
+            IsWin = false
         };
     }
 }

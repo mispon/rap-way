@@ -50,7 +50,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
         public void Initialize(int i, NewsInfo news)
         {
             _index = i;
-            content.text = LocalizationManager.Instance.Get(news.Text);
+            content.text = LocalizationManager.Instance.GetFormat(news.Text, news.TextArgs);
         }
     }
 }

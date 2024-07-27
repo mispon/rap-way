@@ -48,5 +48,12 @@ namespace ScriptableObjects
 
         [Header("Houses images")]
         public Sprite[] Houses;
+
+        [Header("News")]
+        public Sprite NewsTrack;
+        public Sprite NewsAlbum;
+        public Sprite NewsClip;
+        public Sprite NewsConcert;
+        public Sprite NewsBattle;
     }
 }
