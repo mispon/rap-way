@@ -21,10 +21,10 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Player.Achievements
 {
-    public class AchievementsManager: Singleton<AchievementsManager>, IStarter
+    public class AchievementsManager : Singleton<AchievementsManager>, IStarter
     {
         private readonly CompositeDisposable _disposable = new();
-        
+
         [Header("Страница новых достижений")]
         [SerializeField] private NewAchievementsPage newAchievementsPage;
 
@@ -35,12 +35,12 @@ namespace Game.Player.Achievements
         /// Место проведения последнего концерта
         /// </summary>
         private string _lastConcertPlaceName;
-        
+
         /// <summary>
         /// Имя последнего реального репера, с кем было действие
         /// </summary>
         private string _lastRapperName;
-        
+
         /// <summary>
         /// На каждое событие изменения одной из сущностей вешается листенер,
         /// который выбирает все НЕРАЗБЛОКИРОВАННЫЕ AchievementInfo конкретного AchievementsType.
@@ -61,19 +61,19 @@ namespace Game.Player.Achievements
                 .Receive<HypeChangedMessage>()
                 .Subscribe(e => CheckHype(e.NewVal))
                 .AddTo(_disposable);
-            
-            // todo: change to msg.broker messages
+
+            // TODO: change to msg.broker messages
             ProductionManager.Instance.onTrackAdd += CheckTrackChartPosition;
             ProductionManager.Instance.onAlbumAdd += CheckAlbumChartPosition;
             ProductionManager.Instance.onClipAdd += CheckClipLoser;
             ProductionManager.Instance.onConcertAdd += CheckConcertPlace;
-            
+
             ProductionManager.Instance.onFeat += CheckFeat;
             ProductionManager.Instance.onBattle += CheckBattle;
-            
+
             achievementsData.Initialize();
         }
-        
+
         /// <summary>
         /// Листенер события изменения денег
         /// </summary>
@@ -105,7 +105,7 @@ namespace Game.Player.Achievements
         {
             if (trackInfo.ChartPosition == 0)
                 return;
-            
+
             MultipleCheckValue(AchievementsType.TrackChartPosition, trackInfo.ChartPosition, info => info.Achievement.CompareValue);
         }
 
@@ -116,7 +116,7 @@ namespace Game.Player.Achievements
         {
             if (albumInfo.ChartPosition == 0)
                 return;
-            
+
             MultipleCheckValue(AchievementsType.AlbumChartPosition, albumInfo.ChartPosition, info => info.Achievement.CompareValue);
         }
 
@@ -154,7 +154,7 @@ namespace Game.Player.Achievements
             _lastRapperName = rapperInfo.Name;
             EqualCheckValue(AchievementsType.Battle, rapperInfo.Id, null);
         }
-        
+
         /// <summary>
         /// Базовая функция проверки выполнения условия достижения.
         /// Не рассматривает возможность получения сразу нескольких достижений одного типа
@@ -163,7 +163,7 @@ namespace Game.Player.Achievements
         {
             if (!TryGetInfo(type, out var lockedInfos))
                 return;
-            
+
             var achievementInfo = lockedInfos.OrderBy(info => info.Achievement.CompareValue).First();
             if (achievementInfo.CheckCondition(value, achievementInfo.Achievement.CompareValue))
                 AddAchievement(achievementInfo.Achievement);
@@ -190,7 +190,7 @@ namespace Game.Player.Achievements
                     AddAchievement(newUnlockedInfos[i].Achievement, i == 0);
             }
         }
-        
+
         /// <summary>
         /// Базовая функция проверки выполнения условия достижения на точное совпадение
         /// </summary>
@@ -205,7 +205,7 @@ namespace Game.Player.Achievements
             {
                 AddAchievement(achievementInfo.Achievement);
             }
-            
+
             clearBufferVariable?.Invoke();
         }
 
@@ -217,7 +217,7 @@ namespace Game.Player.Achievements
             lockedInfos = achievementsData.LockedInfos.Where(info => info.Achievement.Type == type);
             return lockedInfos.Any();
         }
-        
+
         /// <summary>
         /// Функция добавления ачивки в список заработанных и вывода в UI
         /// </summary>
@@ -225,7 +225,7 @@ namespace Game.Player.Achievements
         {
             if (AlreadyExists(achievement))
                 return;
-            
+
             achievement.Unlocked = true;
             PlayerAPI.Data.Achievements.Add(achievement);
 
@@ -235,7 +235,7 @@ namespace Game.Player.Achievements
             string achivementTemplate = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
             string achivementValue = $"<color=#01C6B8>{GetCompareValueString(achievement)}</color>";
             string achievementInfo = string.Format(achivementTemplate, achivementValue);
-            
+
             SoundManager.Instance.PlaySound(UIActionType.Achieve);
             newAchievementsPage.ShowNewAchievement(achievementInfo);
         }

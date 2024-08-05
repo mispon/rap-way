@@ -92,7 +92,7 @@ namespace Core.Localization
 #if UNITY_ANDROID
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
-            // todo
+            // TODO
 #else
             string path = Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
             jsonData = File.ReadAllText(path);
@@ -114,7 +114,7 @@ namespace Core.Localization
 #if UNITY_ANDROID
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
-            // todo:
+            // TODO
 #else
             string path = Path.Combine(Application.streamingAssetsPath, GetFileName(GameLang.EN));
             jsonData = File.ReadAllText(path);

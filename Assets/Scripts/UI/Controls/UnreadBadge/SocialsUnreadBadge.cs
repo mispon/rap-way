@@ -25,7 +25,7 @@ namespace UI.Controls.UnreadBadge
             var total = 0;
 
             total += GameManager.Instance.Emails.Count(e => e.IsNew);
-            // todo: add twitter mentions from other rappers
+            // TODO: add twitter mentions from other rappers
 
             UpdateCounter(total);
         }
