@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game;
 using Game.Player.Team;
 using Game.Rappers.Desc;
@@ -13,9 +13,9 @@ using ScriptableObjects;
 using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
-using PlayerAPI  = Game.Player.PlayerPackage;
+using PlayerAPI = Game.Player.PlayerPackage;
 using RappersAPI = Game.Rappers.RappersPackage;
-using LabelsAPI  = Game.Labels.LabelsPackage;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Rappers
 {
@@ -40,12 +40,12 @@ namespace UI.Windows.GameScreen.Rappers
         [Space]
         [SerializeField] private Text fans;
         [SerializeField] private Text label;
-        
+
         [Header("Images Bank")]
         [SerializeField] private ImagesBank imagesBank;
 
-        public event Action<RapperInfo> onDelete = _ => {};
-        
+        public event Action<RapperInfo> onDelete = _ => { };
+
         private RapperInfo _rapper;
 
         private void Start()
@@ -59,33 +59,33 @@ namespace UI.Windows.GameScreen.Rappers
         private void StartConversation(ConversationType convType)
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            
+
             switch (convType)
             {
                 case ConversationType.Battle:
-                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperBattleAction);
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperBattleAction);
                     break;
                 case ConversationType.Feat:
-                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperFeatAction);
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperFeatAction);
                     break;
                 case ConversationType.Label:
-                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperLabelAction);
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.RapperLabelAction);
                     break;
             }
-            
+
             int cooldown = GameManager.Instance.Settings.Team.ManagerCooldown;
             MsgBroker.Instance.Publish(new TeammateCooldownMessage
             {
                 Type = TeammateType.Manager,
                 Cooldown = cooldown
             });
-            
+
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
                 Type = WindowType.RapperConversationsWork,
                 Context = new Dictionary<string, object>
                 {
-                    ["rapper"]    = _rapper,
+                    ["rapper"] = _rapper,
                     ["conv_type"] = convType
                 }
             });
@@ -96,16 +96,16 @@ namespace UI.Windows.GameScreen.Rappers
             SoundManager.Instance.PlaySound(UIActionType.Click);
             onDelete.Invoke(_rapper);
         }
-        
+
         /// <summary>
         /// Открывает персональную карточку репера
         /// </summary>
         public void Show(RapperInfo rapperInfo)
         {
             _rapper = rapperInfo;
-            
+
             deleteButton.gameObject.SetActive(_rapper.IsCustom);
-            
+
             DisplayInfo(rapperInfo);
             CheckPlayerManager();
             CheckPlayersLabel();
@@ -123,11 +123,11 @@ namespace UI.Windows.GameScreen.Rappers
             management.text = info.Management.ToString();
             fans.text = $"{info.Fans}M";
             label.text = info.Label != "" ? info.Label : "-";
-            
+
             featButton.gameObject.SetActive(!info.IsPlayer);
             battleButton.gameObject.SetActive(!info.IsPlayer);
 
-            bool labelsButtonActive = !info.IsPlayer && 
+            bool labelsButtonActive = !info.IsPlayer &&
                                       !LabelsAPI.Instance.IsPlayerLabelEmpty &&
                                       !string.Equals(_rapper.Label, LabelsAPI.Instance.PlayerLabel.Name, StringComparison.InvariantCultureIgnoreCase);
             labelButton.gameObject.SetActive(labelsButtonActive);
@@ -141,7 +141,7 @@ namespace UI.Windows.GameScreen.Rappers
                     ? playerMaleImage
                     : playerFemaleImage;
             }
-            
+
             return info.IsCustom || info.Avatar == null ? customImage : info.Avatar;
         }
 
@@ -164,19 +164,20 @@ namespace UI.Windows.GameScreen.Rappers
         private void CheckPlayersLabel()
         {
             var manager = PlayerAPI.Data.Team.Manager;
-            
+
             bool canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
 
             var labelInfo = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
-            if (labelInfo is {IsPlayer: true, IsFrozen: false})
+            if (labelInfo is { IsPlayer: true, IsFrozen: false })
             {
                 float prestige = RappersAPI.GetRapperPrestige(_rapper);
                 canInteract &= Mathf.Abs(prestige - labelInfo.Prestige.Value) <= 1.5f;
-            } else
+            }
+            else
             {
                 canInteract = false;
             }
-            
+
             labelButton.interactable = canInteract;
         }
     }

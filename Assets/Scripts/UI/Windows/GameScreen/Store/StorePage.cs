@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Context;
+using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
@@ -14,25 +15,26 @@ using UnityEngine.UI;
 
 namespace UI.Windows.GameScreen.Store
 {
-    public class StorePage: Page
+    public class StorePage : Page
     {
         private readonly CompositeDisposable _disposable = new();
-        
-        [Header("Data")] [SerializeField] private GoodsData data;
-        
-        [Header("Header")] 
+
+        [Header("Data")]
+        [SerializeField] private GoodsData data;
+
+        [Header("Header")]
         [SerializeField] private Text gameBalance;
         [SerializeField] private Text donateBalance;
-        
-        [Header("Categories")] 
+
+        [Header("Categories")]
         [SerializeField] private ScrollViewController categories;
         [SerializeField] private GameObject categoryItemTemplate;
 
         private readonly List<StoreCategoryItem> _categoryItems = new();
-        
+
         protected override void BeforeShow(object ctx = null)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ShopOpened);
 
             MsgBroker.Instance
                 .Receive<MoneyChangedMessage>()
@@ -47,13 +49,13 @@ namespace UI.Windows.GameScreen.Store
                 .Subscribe(UpdateHUD)
                 .AddTo(_disposable);
             MsgBroker.Instance.Publish(new FullStateRequest());
-            
+
             ShowCategoriesList();
         }
 
         protected override void AfterShow(object ctx = null)
         {
-            int idx = ctx.Value<int>(); 
+            int idx = ctx.Value<int>();
             _categoryItems[idx].ShowItems(true);
         }
 
@@ -67,10 +69,10 @@ namespace UI.Windows.GameScreen.Store
                 var group = data.Goods.First(e => e.Type == category.Type);
                 row.Initialize(i, category.Icon, GetLocale(category.Type.GetDescription()), group.Items);
                 i++;
-                
+
                 _categoryItems.Add(row);
             }
-            
+
             categories.RepositionElements(_categoryItems);
         }
 
@@ -79,12 +81,12 @@ namespace UI.Windows.GameScreen.Store
             UpdateGameBalance(resp.Money);
             UpdateDonateBalance(resp.Donate);
         }
-        
+
         private void UpdateGameBalance(int money)
         {
             gameBalance.text = money.GetDisplay();
         }
-        
+
         private void UpdateDonateBalance(int donate)
         {
             donateBalance.text = donate.GetDisplay();
@@ -96,7 +98,7 @@ namespace UI.Windows.GameScreen.Store
             {
                 Destroy(item.gameObject);
             }
-            
+
             _categoryItems.Clear();
             _disposable.Clear();
         }

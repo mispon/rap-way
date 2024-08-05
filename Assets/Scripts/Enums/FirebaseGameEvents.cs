@@ -56,5 +56,7 @@
         public const string CreatedOwnLabel = "rw_created_own_label";
         public const string DisbandedOwnLabel = "rw_disbanded_own_label";
         public const string HistoryPageOpened = "rw_history_page_opened";
+        public const string EmailOpened = "rw_email_opened";
+        public const string NewsOpened = "rw_news_opened";
     }
 }

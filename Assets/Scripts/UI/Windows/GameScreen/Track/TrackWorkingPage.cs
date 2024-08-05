@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
 using Game.Player.State.Desc;
@@ -53,8 +53,8 @@ namespace UI.Windows.GameScreen.Track
 
         protected override void StartWork(object ctx)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateTrackClick);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateTrackClick);
+
             _track = ctx.Value<TrackInfo>();
             RefreshWorkAnims();
         }
@@ -87,8 +87,8 @@ namespace UI.Windows.GameScreen.Track
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
-            
-            _track.BitPoints +=  CreateBitPoints(PlayerAPI.Data);
+
+            _track.BitPoints += CreateBitPoints(PlayerAPI.Data);
             _track.TextPoints += CreateTextPoints(PlayerAPI.Data);
         }
 
@@ -103,9 +103,9 @@ namespace UI.Windows.GameScreen.Track
                 bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill.Value + 2);
                 bitmakerWorkPoints.Show(bitmakerPoints);
             }
-            
+
             var labelPoints = 0;
-            if (_label is {IsFrozen: false})
+            if (_label is { IsFrozen: false })
             {
                 labelPoints = Random.Range(1, _label.Production.Value + 1);
                 labelBitWorkPoints.Show(labelPoints);
@@ -125,9 +125,9 @@ namespace UI.Windows.GameScreen.Track
                 textWriterPoints = Random.Range(1, data.Team.TextWriter.Skill.Value + 2);
                 textwritterWorkPoints.Show(textWriterPoints);
             }
-            
+
             var labelPoints = 0;
-            if (_label is {IsFrozen: false})
+            if (_label is { IsFrozen: false })
             {
                 labelPoints = Random.Range(1, _label.Production.Value + 1);
                 labelTextWorkPoints.Show(labelPoints);
@@ -145,10 +145,10 @@ namespace UI.Windows.GameScreen.Track
         protected override void BeforeShow(object ctx = null)
         {
             base.BeforeShow(ctx);
-            
+
             _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextWriter = TeamManager.IsAvailable(TeammateType.TextWriter);
-            
+
             if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
             {
                 _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
@@ -159,11 +159,12 @@ namespace UI.Windows.GameScreen.Track
                 labelAvatar.gameObject.SetActive(true);
                 labelAvatar.sprite = _label.Logo;
                 labelFrozen.SetActive(_label.IsFrozen);
-            } else
+            }
+            else
             {
                 labelAvatar.gameObject.SetActive(false);
             }
-            
+
             bitmakerAvatar.sprite = _hasBitmaker ? imagesBank.BitmakerActive : imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = _hasTextWriter ? imagesBank.TextwritterActive : imagesBank.TextwritterInactive;
         }
@@ -171,7 +172,7 @@ namespace UI.Windows.GameScreen.Track
         protected override void BeforeHide()
         {
             base.BeforeHide();
-            
+
             bitPoints.text = textPoints.text = "0";
             _track = null;
         }

@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Labels;
@@ -53,8 +53,8 @@ namespace UI.Windows.GameScreen.Contracts
 
         private void OnReject()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractDeclined);
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractDeclined);
 
             MsgBroker.Instance.Publish(new NewsMessage
             {
@@ -74,8 +74,10 @@ namespace UI.Windows.GameScreen.Contracts
 
         private void OnSign()
         {
-            MsgBroker.Instance.Publish(new PlayerSignLabelsContractMessage { });
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
+            SoundManager.Instance.PlaySound(UIActionType.Click);
 
+            MsgBroker.Instance.Publish(new PlayerSignLabelsContractMessage { });
             MsgBroker.Instance.Publish(new NewsMessage
             {
                 Text = "news_player_join_label",
@@ -89,8 +91,6 @@ namespace UI.Windows.GameScreen.Contracts
                 Popularity = PlayerAPI.Data.Fans
             });
 
-            SoundManager.Instance.PlaySound(UIActionType.Click);
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
             PlayerAPI.Data.Label = _labelName;
             base.Hide();
         }

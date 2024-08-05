@@ -1,7 +1,7 @@
 using Enums;
 using Game.SocialNetworks.Eagler;
-// using Firebase.Analytics;
 using Game.Time;
+using Firebase.Analytics;
 using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +9,7 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Social.ResultPages
 {
-    public class EaglerResultPage: SocialResultPage
+    public class EaglerResultPage : SocialResultPage
     {
         [Header("Контролы")]
         [SerializeField] private Text nickname;
@@ -18,9 +18,11 @@ namespace UI.Windows.GameScreen.Social.ResultPages
         [Space]
         [SerializeField] protected Text likes;
         [SerializeField] protected Text hype;
-   
+
         protected override void DisplayResult(SocialInfo info)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitPublished);
+
             var nickName = PlayerAPI.Data.Info.NickName;
 
             nickname.text = nickName;
@@ -31,7 +33,6 @@ namespace UI.Windows.GameScreen.Social.ResultPages
             hype.text = $"+{info.HypeIncome}";
 
             EaglerManager.Instance.CreateUserEagle(nickName, info.MainText, info.Likes);
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitPublished);
         }
     }
 }

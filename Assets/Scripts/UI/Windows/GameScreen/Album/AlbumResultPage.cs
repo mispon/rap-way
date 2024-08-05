@@ -1,21 +1,22 @@
-﻿using System;
-using Core.Context;
+﻿using Core.Context;
+using Enums;
 using Extensions;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.SocialNetworks.Eagler;
 using Game.Time;
+using ScriptableObjects;
+using System;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
 using UI.Windows.GameScreen.SocialNetworks.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
-// using Firebase.Analytics;
+using Firebase.Analytics;
+using MessageBroker.Messages.SocialNetworks;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
-using MessageBroker.Messages.SocialNetworks;
-using ScriptableObjects;
 
 namespace UI.Windows.GameScreen.Album
 {
@@ -54,9 +55,6 @@ namespace UI.Windows.GameScreen.Album
             base.Show(ctx);
         }
 
-        /// <summary>
-        ///     Выводит результат работы
-        /// </summary>
         private void DisplayResult(AlbumInfo album)
         {
             var nickname = PlayerAPI.Data.Info.NickName;
@@ -90,9 +88,6 @@ namespace UI.Windows.GameScreen.Album
             }
         }
 
-        /// <summary>
-        ///     Сохраняет результаты альбома
-        /// </summary>
         private void SaveResult(AlbumInfo album)
         {
             album.Timestamp = TimeManager.Instance.Now.DateToString();
@@ -108,7 +103,7 @@ namespace UI.Windows.GameScreen.Album
 
         protected override void AfterHide()
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.AlbumResultShown);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.AlbumResultShown);
 
             MsgBroker.Instance.Publish(new NewsMessage
             {

@@ -4,7 +4,7 @@ using Core;
 using Core.Localization;
 using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
@@ -38,7 +38,7 @@ namespace UI.Windows.GameScreen.Track
         [SerializeField] private GameObject backButton;
 
         [Header("Images"), SerializeField] private ImagesBank imagesBank;
-        
+
         protected TrackInfo _track;
         private IDisposable _disposable;
 
@@ -50,8 +50,8 @@ namespace UI.Windows.GameScreen.Track
 
         protected override void AfterShow(object ctx = null)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewTrackSelected);
             HintsManager.Instance.ShowHint("tutorial_track_page");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewTrackSelected);
         }
 
         private void OnTrackNameInput(string value)
@@ -74,11 +74,11 @@ namespace UI.Windows.GameScreen.Track
                 Style = styleCarousel.GetValue<Styles>(),
                 Theme = themeCarousel.GetValue<Themes>()
             };
-            
+
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
-                Type = _track.Feat == null 
-                    ? WindowType.ProductionTrackWork 
+                Type = _track.Feat == null
+                    ? WindowType.ProductionTrackWork
                     : WindowType.ProductionFeatWork,
                 Context = _track
             });
@@ -119,12 +119,12 @@ namespace UI.Windows.GameScreen.Track
 
         private void ResetTeam()
         {
-            bitmakerAvatar.sprite    = imagesBank.BitmakerInactive;
+            bitmakerAvatar.sprite = imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = imagesBank.TextwritterInactive;
 
             var playerStats = PlayerAPI.Data.Stats;
-            bitSkill.text   = $"{playerStats.Bitmaking.Value}";
-            textSkill.text  = $"{playerStats.Vocobulary.Value}";
+            bitSkill.text = $"{playerStats.Bitmaking.Value}";
+            textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
 
         private CarouselProps ConvertToCarouselProps<T>(T value) where T : Enum
@@ -134,20 +134,20 @@ namespace UI.Windows.GameScreen.Track
                 ? imagesBank.ThemesActive[Convert.ToInt32(value)]
                 : imagesBank.StyleActive;
 
-            return new CarouselProps {Text = text, Sprite = icon, Value = value};
+            return new CarouselProps { Text = text, Sprite = icon, Value = value };
         }
 
         protected override void BeforeShow(object ctx = null)
         {
             _track = new TrackInfo();
-            
+
             SetupCarousel(PlayerAPI.Data);
             SetupTeam();
             DisplaySkills(PlayerAPI.Data);
-            
+
             bool hasAnyTracks = PlayerAPI.Data.History.TrackList.Count > 0;
             backButton.SetActive(hasAnyTracks);
-            
+
             _disposable = MsgBroker.Instance
                 .Receive<TeamSalaryMessage>()
                 .Subscribe(e => ResetTeam());

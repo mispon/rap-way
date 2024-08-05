@@ -1,7 +1,8 @@
 using Core;
 using Core.Ads;
 using Core.Context;
-// using Firebase.Analytics;
+using Enums;
+using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -28,7 +29,7 @@ namespace UI.Windows.GameScreen.Personal
         [Space]
         [SerializeField] private Color activeTabColor;
         [SerializeField] private Color inactiveTabColor;
-        
+
         [Header("Tabs")]
         [SerializeField] private PersonalTab.PersonalTab personalTab;
         [SerializeField] private HouseTab.HouseTab houseTab;
@@ -39,7 +40,7 @@ namespace UI.Windows.GameScreen.Personal
 
         private PersonalTabType _activeTab = PersonalTabType.None;
         private bool _isFirstOpen = true;
-        
+
         private void Start()
         {
             cashButton.onClick.AddListener(() =>
@@ -47,12 +48,12 @@ namespace UI.Windows.GameScreen.Personal
                 SoundManager.Instance.PlaySound(UIActionType.Click);
                 CasAdsManager.Instance.ShowRewarded();
             });
-            
+
             personalButton.onClick.AddListener(OpenPersonalTab);
             houseButton.onClick.AddListener(OpenHouseTab);
             labelButton.onClick.AddListener(OpenLabelTab);
         }
-        
+
         public override void Show(object ctx = null)
         {
             var tab = ctx.Value<PersonalTabType>();
@@ -61,35 +62,35 @@ namespace UI.Windows.GameScreen.Personal
                 case PersonalTabType.House:
                     OpenHouseTab();
                     break;
-                
+
                 case PersonalTabType.Label:
                     OpenLabelTab();
                     break;
-                
+
                 case PersonalTabType.MoneyReport:
                     ShowLabelMoneyReport();
                     break;
-                
+
                 case PersonalTabType.Personal:
                 case PersonalTabType.None:
                 default:
                     OpenPersonalTab();
                     break;
             }
-            
+
             base.Show(ctx);
         }
 
         private void OpenPersonalTab()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.PersonalPageOpened);
+
             if (!_isFirstOpen)
             {
                 SoundManager.Instance.PlaySound(UIActionType.Switcher);
             }
             _isFirstOpen = false;
 
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.PersonalPageOpened);
-            
             if (_activeTab != PersonalTabType.Personal)
             {
                 _activeTab = PersonalTabType.Personal;
@@ -97,11 +98,11 @@ namespace UI.Windows.GameScreen.Personal
                 UpdateTabButtons(personalButton, houseButton, labelButton);
             }
         }
-        
+
         private void OpenHouseTab()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.HousePageOpened);
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.HousePageOpened);
 
             if (_activeTab != PersonalTabType.House)
             {
@@ -110,11 +111,11 @@ namespace UI.Windows.GameScreen.Personal
                 UpdateTabButtons(houseButton, personalButton, labelButton);
             }
         }
-        
+
         private void OpenLabelTab()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelInfoPageOpened);
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelInfoPageOpened);
 
             if (_activeTab != PersonalTabType.Label)
             {
@@ -127,7 +128,7 @@ namespace UI.Windows.GameScreen.Personal
         private void ShowLabelMoneyReport()
         {
             labelTab.Close();
-            
+
             _activeTab = PersonalTabType.Label;
             UpdateTabs(labelTab, personalTab, houseTab);
             UpdateTabButtons(labelButton, personalButton, houseButton);
@@ -141,7 +142,7 @@ namespace UI.Windows.GameScreen.Personal
             tabs[1].Close();
             tabs[2].Close();
         }
-        
+
         private void UpdateTabButtons(params Button[] buttons)
         {
             buttons[0].image.color = activeTabColor;
@@ -153,7 +154,7 @@ namespace UI.Windows.GameScreen.Personal
         {
             _activeTab = PersonalTabType.None;
             _isFirstOpen = true;
-            
+
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
         }
     }

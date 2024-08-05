@@ -2,7 +2,7 @@
 using Core.Localization;
 using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Labels.Desc;
 using Models.Game;
 using ScriptableObjects;
@@ -19,7 +19,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
     {
         [SerializeField] private LabelTab labelTab;
         [SerializeField] private GameError gameError;
-        
+
         [Space]
         [SerializeField] private int fansRequirement = 10_000_000;
         [SerializeField] private Text noFansMessage;
@@ -37,7 +37,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         public override void Open()
         {
             labelNameInput.text = "";
-            
+
             int fans = PlayerAPI.Data.Fans;
             bool canCreateLabel = fans >= fansRequirement;
 
@@ -46,16 +46,16 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             noFansMessage.text = LocalizationManager.Instance
                 .GetFormat("label_fans_req_message", fansRequirement.GetDisplay())
                 .ToUpper();
-            
+
             base.Open();
-            
+
             HintsManager.Instance.ShowHint("tutorial_no_labels", PersonalTabType.Label);
         }
 
         private void CreateLabel()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            
+
             string labelName = labelNameInput.text;
 
             if (labelName.Length is < 3 or > 25)
@@ -63,34 +63,34 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
                 var errorMsg = LocalizationManager.Instance.Get("invalid_label_name_err");
                 gameError.Show(errorMsg);
                 HighlightError(labelNameInput);
-                
+
                 return;
             }
-            
+
             if (LabelsAPI.Instance.IsNameAlreadyTaken(labelName))
             {
                 var errorMsg = LocalizationManager.Instance.Get("label_name_exists_err");
                 gameError.Show(errorMsg);
                 HighlightError(labelNameInput);
-                
+
                 return;
             }
 
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreatedOwnLabel);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreatedOwnLabel);
+
             var label = new LabelInfo
             {
                 Name = labelName,
                 Prestige = new ExpValue(),
-                Production = new ExpValue{Value = 1},
+                Production = new ExpValue { Value = 1 },
                 IsPlayer = true,
             };
             LabelsAPI.Instance.CreatePlayersLabel(label);
-            
+
             PlayerAPI.Data.Label = labelName;
             labelTab.Reload();
         }
-        
+
         private static void HighlightError(Component component)
         {
             var errorAnim = component.GetComponentInChildren<Animation>();

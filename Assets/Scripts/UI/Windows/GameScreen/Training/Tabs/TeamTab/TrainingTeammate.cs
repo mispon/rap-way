@@ -1,7 +1,7 @@
 using System;
 using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Player.Team.Desc;
@@ -12,9 +12,6 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
 {
-    /// <summary>
-    /// Карточка тренируемого тиммейта
-    /// </summary>
     public class TrainingTeammate : MonoBehaviour
     {
         [SerializeField] private Image avatar;
@@ -29,8 +26,8 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
         [SerializeField] private Sprite activeSprite;
         [SerializeField] private Sprite inactiveSprite;
 
-        public Action<Teammate> onUp = teammate => {};
-        public Action<Teammate, int> onPay = (teammate, salary) => {};
+        public Action<Teammate> onUp = teammate => { };
+        public Action<Teammate, int> onPay = (teammate, salary) => { };
 
         private Teammate _teammate;
 
@@ -43,7 +40,7 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
         public void Setup(Teammate teammate, bool expEnough, int expToUp)
         {
             _teammate = teammate;
-            
+
             if (teammate.IsEmpty)
             {
                 SetLocked();
@@ -57,9 +54,9 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             avatar.sprite = teammate.HasPayment ? activeSprite : inactiveSprite;
             inactiveLabel.SetActive(false);
             level.text = teammate.Skill.Value.ToString();
-            
+
             bool noLimit = teammate.Skill.Value < PlayerData.MAX_SKILL;
-            
+
             int exp = noLimit ? teammate.Skill.Exp : expToUp;
             expBar.SetValue(exp, expToUp);
 
@@ -67,32 +64,29 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             payButton.interactable = !teammate.HasPayment && salaryAmount <= PlayerAPI.Data.Money;
         }
 
-        /// <summary>
-        /// Устанавливает в закрытое состояние
-        /// </summary>
         private void SetLocked()
         {
             avatar.sprite = inactiveSprite;
             inactiveLabel.SetActive(true);
             level.text = "0";
-            
+
             expBar.SetValue(0, 1);
-                
+
             upButton.interactable = false;
             payButton.interactable = false;
         }
 
         private void OnUp()
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateUpgraded);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateUpgraded);
+
             onUp.Invoke(_teammate);
         }
 
         private void OnPay()
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateSalaryPayed);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingTeammateSalaryPayed);
+
             var salary = TeamManager.Instance.GetSalary(_teammate);
             onPay.Invoke(_teammate, salary);
         }

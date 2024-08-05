@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-// using Firebase.Analytics;
+using Enums;
+using Firebase.Analytics;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -43,7 +44,7 @@ namespace UI.Windows.GameScreen.Rappers
         [SerializeField] private Button fansBtnLeft;
         [SerializeField] private Button fansBtnRight;
         [SerializeField] private Text fansValue;
-        
+
         [Header("Buttons")]
         [SerializeField] private Button createButton;
         [SerializeField] private Button backButton;
@@ -52,24 +53,24 @@ namespace UI.Windows.GameScreen.Rappers
         {
             createButton.onClick.AddListener(CreateButtonClick);
             backButton.onClick.AddListener(BackButtonClick);
-            
+
             vocabularyBtnLeft.onClick.AddListener(() => OnBntLeftClick(vocabularyValue));
             vocabularyBtnRight.onClick.AddListener(() => OnBntRightClick(vocabularyValue, 10));
-            
+
             bitmakingBtnLeft.onClick.AddListener(() => OnBntLeftClick(bitmakingValue));
             bitmakingBtnRight.onClick.AddListener(() => OnBntRightClick(bitmakingValue, 10));
-            
+
             managementBtnLeft.onClick.AddListener(() => OnBntLeftClick(managementValue));
             managementBtnRight.onClick.AddListener(() => OnBntRightClick(managementValue, 10));
-            
+
             fansBtnLeft.onClick.AddListener(() => OnBntLeftClick(fansValue));
             fansBtnRight.onClick.AddListener(() => OnBntRightClick(fansValue, 150));
         }
 
         protected override void BeforeShow(object ctx = null)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperPageOpened);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperPageOpened);
+
             SetupLabelsCarousel();
             nameInput.text = "";
         }
@@ -85,9 +86,9 @@ namespace UI.Windows.GameScreen.Rappers
 
             foreach (var label in labels)
             {
-                props.Add(new CarouselProps {Text = label.Name});
+                props.Add(new CarouselProps { Text = label.Name });
             }
-            
+
             labelInput.Init(props.ToArray());
             labelInput.SetIndex(0);
         }
@@ -95,7 +96,7 @@ namespace UI.Windows.GameScreen.Rappers
         private static void OnBntLeftClick(Text value)
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            
+
             var current = int.Parse(value.text);
             if (current == 1)
             {
@@ -105,11 +106,11 @@ namespace UI.Windows.GameScreen.Rappers
             current -= 1;
             value.text = current.ToString();
         }
-        
+
         private static void OnBntRightClick(Text value, int maxValue)
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            
+
             var current = int.Parse(value.text);
             if (current == maxValue)
             {
@@ -119,7 +120,7 @@ namespace UI.Windows.GameScreen.Rappers
             current += 1;
             value.text = current.ToString();
         }
-        
+
         private void CreateButtonClick()
         {
             var nickname = nameInput.text;
@@ -130,7 +131,7 @@ namespace UI.Windows.GameScreen.Rappers
                 HighlightError(nameInput);
                 return;
             }
-            
+
             if (RappersAPI.Instance.IsNameAlreadyTaken(nickname))
             {
                 var errorMsg = GetLocale("rapper_name_exists_err");
@@ -141,7 +142,7 @@ namespace UI.Windows.GameScreen.Rappers
 
             int lastId = RappersAPI.Instance.MaxCustomRapperID();
             string label = labelInput.GetLabel();
-            
+
             var customRapper = new RapperInfo
             {
                 Id = lastId + 1,
@@ -154,7 +155,7 @@ namespace UI.Windows.GameScreen.Rappers
                 IsCustom = true
             };
 
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperCreated);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewRapperCreated);
             RappersAPI.Instance.AddCustom(customRapper);
             BackButtonClick();
         }
@@ -164,7 +165,7 @@ namespace UI.Windows.GameScreen.Rappers
             SoundManager.Instance.PlaySound(UIActionType.Click);
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Charts, ChartsTabType.Rappers));
         }
-        
+
         private static void HighlightError(Component component)
         {
             var errorAnim = component.GetComponentInChildren<Animation>();

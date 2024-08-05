@@ -1,5 +1,6 @@
 ﻿using Core;
-// using Firebase.Analytics;
+using Enums;
+using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
@@ -33,7 +34,7 @@ namespace UI.Windows.GameScreen.Social
                 tabs[i].SetVisible(i == index);
             }
         }
- 
+
         private static void StartSocial(SocialInfo info)
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
@@ -51,11 +52,11 @@ namespace UI.Windows.GameScreen.Social
                 tab.Refresh();
             }
         }
-        
+
         protected override void AfterShow(object ctx = null)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.SocialsPageOpened);
             HintsManager.Instance.ShowHint("tutorial_socials");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.SocialsPageOpened);
         }
 
         private void OnDestroy()

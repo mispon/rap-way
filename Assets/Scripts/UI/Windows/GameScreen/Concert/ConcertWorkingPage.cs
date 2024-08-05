@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
 using Game.Player.State.Desc;
@@ -38,7 +38,7 @@ namespace UI.Windows.GameScreen.Concert
         [SerializeField] private Image labelAvatar;
         [SerializeField] private GameObject labelFrozen;
 
-        [Header("Data"), SerializeField] private ImagesBank imagesBank;        
+        [Header("Data"), SerializeField] private ImagesBank imagesBank;
 
         private ConcertInfo _concert;
         private bool _hasManager;
@@ -53,8 +53,8 @@ namespace UI.Windows.GameScreen.Concert
 
         protected override void StartWork(object ctx)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateConcertClick);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateConcertClick);
+
             _concert = ctx.Value<ConcertInfo>();
             RefreshWorkAnims();
         }
@@ -87,7 +87,7 @@ namespace UI.Windows.GameScreen.Concert
         private void GenerateWorkPoints()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
-            
+
             int managerPoints = CreateManagementPoints(PlayerAPI.Data);
             int prPoints = CreatePrPoints(PlayerAPI.Data);
 
@@ -106,9 +106,9 @@ namespace UI.Windows.GameScreen.Concert
                 managerPoints = Random.Range(1, data.Team.Manager.Skill.Value + 2);
                 managerWorkPoints.Show(managerPoints);
             }
-            
+
             var labelPoints = 0;
-            if (_label is {IsFrozen: false})
+            if (_label is { IsFrozen: false })
             {
                 labelPoints = Random.Range(1, _label.Production.Value + 1);
                 labelManagementWorkPoints.Show(labelPoints);
@@ -128,9 +128,9 @@ namespace UI.Windows.GameScreen.Concert
                 prManPoints = Random.Range(1, data.Team.PrMan.Skill.Value + 2);
                 prmanWorkPoints.Show(prManPoints);
             }
-            
+
             var labelPoints = 0;
-            if (_label is {IsFrozen: false})
+            if (_label is { IsFrozen: false })
             {
                 labelPoints = Random.Range(1, _label.Production.Value + 1);
                 labelPrWorkPoints.Show(labelPoints);
@@ -148,13 +148,13 @@ namespace UI.Windows.GameScreen.Concert
         protected override void BeforeShow(object ctx = null)
         {
             base.BeforeShow(ctx);
-            
+
             _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
             _hasPrMan = TeamManager.IsAvailable(TeammateType.PrMan);
 
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
             prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
-            
+
             if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
             {
                 _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
@@ -165,7 +165,8 @@ namespace UI.Windows.GameScreen.Concert
                 labelAvatar.gameObject.SetActive(true);
                 labelAvatar.sprite = _label.Logo;
                 labelFrozen.SetActive(_label.IsFrozen);
-            } else
+            }
+            else
             {
                 labelAvatar.gameObject.SetActive(false);
             }

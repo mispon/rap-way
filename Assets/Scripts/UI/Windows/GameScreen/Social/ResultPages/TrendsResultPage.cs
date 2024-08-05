@@ -1,5 +1,6 @@
+using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game;
 using Models.Production;
 using ScriptableObjects;
@@ -16,18 +17,20 @@ namespace UI.Windows.GameScreen.Social.ResultPages
         [SerializeField] private Text themeName;
         [SerializeField] private Text styleName;
 
-        [Header("Data"), SerializeField] private ImagesBank imagesBank;
+        [Header("Data")]
+        [SerializeField] private ImagesBank imagesBank;
 
         protected override void DisplayResult(SocialInfo socialInfo)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
+
             var trends = GameManager.Instance.GameStats.Trends;
 
-            themeIcon.sprite = imagesBank.ThemesActive[(int) trends.Theme];
+            themeIcon.sprite = imagesBank.ThemesActive[(int)trends.Theme];
             themeName.text = GetLocale(trends.Theme.GetDescription()).ToUpper();
             styleName.text = GetLocale(trends.Style.GetDescription()).ToUpper();
 
             PlayerAPI.UpdateKnownTrends(trends.Style, trends.Theme);
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
         }
     }
 }

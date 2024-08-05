@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
 using Game.Player.State.Desc;
@@ -25,7 +25,7 @@ namespace UI.Windows.GameScreen.Album
         [Header("Progress")]
         [SerializeField] private Text bitPoints;
         [SerializeField] private Text textPoints;
-        
+
         [Header("Team")]
         [SerializeField] private WorkPoints playerBitWorkPoints;
         [SerializeField] private WorkPoints playerTextWorkPoints;
@@ -37,12 +37,12 @@ namespace UI.Windows.GameScreen.Album
         [SerializeField] private Image textwritterAvatar;
         [SerializeField] private Image labelAvatar;
         [SerializeField] private GameObject labelFrozen;
-        
+
         [Header("Data"), SerializeField] private ImagesBank imagesBank;
-        
+
         private bool _hasBitmaker;
         private bool _hasTextWriter;
-        
+
         private AlbumInfo _album;
         private LabelInfo _label;
 
@@ -54,8 +54,8 @@ namespace UI.Windows.GameScreen.Album
 
         protected override void StartWork(object ctx)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateAlbumClick);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateAlbumClick);
+
             _album = ctx.Value<AlbumInfo>();
             RefreshWorkAnims();
         }
@@ -65,7 +65,7 @@ namespace UI.Windows.GameScreen.Album
             GenerateWorkPoints();
             DisplayWorkPoints();
         }
-        
+
         private void ShowResultPage()
         {
             MsgBroker.Instance.Publish(new WindowControlMessage
@@ -107,9 +107,9 @@ namespace UI.Windows.GameScreen.Album
                 bitmakerPoints = Random.Range(1, data.Team.BitMaker.Skill.Value + 2);
                 bitmakerWorkPoints.Show(bitmakerPoints);
             }
-            
+
             var labelPoints = 0;
-            if (_label is {IsFrozen: false})
+            if (_label is { IsFrozen: false })
             {
                 labelPoints = Random.Range(1, _label.Production.Value + 1);
                 labelBitWorkPoints.Show(labelPoints);
@@ -132,9 +132,9 @@ namespace UI.Windows.GameScreen.Album
                 textWriterPoints = Random.Range(1, data.Team.TextWriter.Skill.Value + 2);
                 textwritterWorkPoints.Show(textWriterPoints);
             }
-            
+
             var labelPoints = 0;
-            if (_label is {IsFrozen: false})
+            if (_label is { IsFrozen: false })
             {
                 labelPoints = Random.Range(1, _label.Production.Value + 1);
                 labelTextWorkPoints.Show(labelPoints);
@@ -152,10 +152,10 @@ namespace UI.Windows.GameScreen.Album
         protected override void BeforeShow(object ctx = null)
         {
             base.BeforeShow(ctx);
-            
-            _hasBitmaker   = TeamManager.IsAvailable(TeammateType.BitMaker);
+
+            _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextWriter = TeamManager.IsAvailable(TeammateType.TextWriter);
-            
+
             if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
             {
                 _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
@@ -166,11 +166,12 @@ namespace UI.Windows.GameScreen.Album
                 labelAvatar.gameObject.SetActive(true);
                 labelAvatar.sprite = _label.Logo;
                 labelFrozen.SetActive(_label.IsFrozen);
-            } else
+            }
+            else
             {
                 labelAvatar.gameObject.SetActive(false);
             }
-            
+
             bitmakerAvatar.sprite = _hasBitmaker ? imagesBank.BitmakerActive : imagesBank.BitmakerInactive;
             textwritterAvatar.sprite = _hasTextWriter ? imagesBank.TextwritterActive : imagesBank.TextwritterInactive;
         }

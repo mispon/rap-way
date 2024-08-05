@@ -1,6 +1,6 @@
 using Core;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -18,13 +18,13 @@ namespace UI.Controls.Buttons
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
-        {   
+        {
             var button = GetComponent<Button>();
             button.OnClickAsObservable()
                 .Subscribe(_ =>
                 {
                     SoundManager.Instance.PlaySound(_soundType);
-                    // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGamePage);
+                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGamePage);
 
                     MsgBroker.Instance.Publish(new WindowControlMessage(_toWindow));
                 });

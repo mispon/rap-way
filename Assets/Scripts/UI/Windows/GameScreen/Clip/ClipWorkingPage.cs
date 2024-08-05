@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
 using MessageBroker;
@@ -23,7 +23,7 @@ namespace UI.Windows.GameScreen.Clip
         [Header("Work Points")]
         [SerializeField] private Text directorPoints;
         [SerializeField] private Text operatorPoints;
-        
+
         [Header("Team")]
         [SerializeField] private WorkPoints playerWorkPoints;
         [SerializeField] private WorkPoints labelWorkPoints;
@@ -43,8 +43,8 @@ namespace UI.Windows.GameScreen.Clip
 
         protected override void StartWork(object ctx)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateClipClick);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateClipClick);
+
             _clip = ctx.Value<ClipInfo>();
             RefreshWorkAnims();
         }
@@ -92,14 +92,14 @@ namespace UI.Windows.GameScreen.Clip
                 _clip.DirectorPoints += playerPointsValue;
             else
                 _clip.OperatorPoints += playerPointsValue;
-            
+
             var labelPoints = 0;
-            if (_label is {IsFrozen: false})
+            if (_label is { IsFrozen: false })
             {
                 labelPoints = Random.Range(1, _label.Production.Value + 1);
                 labelWorkPoints.Show(labelPoints);
             }
-            
+
             if (Random.Range(0, 2) > 0)
                 _clip.DirectorPoints += labelPoints;
             else
@@ -115,7 +115,7 @@ namespace UI.Windows.GameScreen.Clip
         protected override void BeforeShow(object ctx = null)
         {
             base.BeforeShow(ctx);
-            
+
             if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
             {
                 _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
@@ -126,7 +126,8 @@ namespace UI.Windows.GameScreen.Clip
                 labelAvatar.gameObject.SetActive(true);
                 labelAvatar.sprite = _label.Logo;
                 labelFrozen.SetActive(_label.IsFrozen);
-            } else
+            }
+            else
             {
                 labelAvatar.gameObject.SetActive(false);
             }
@@ -135,7 +136,7 @@ namespace UI.Windows.GameScreen.Clip
         protected override void BeforeHide()
         {
             base.BeforeHide();
-            
+
             directorPoints.text = "0";
             operatorPoints.text = "0";
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.Context;
 using Extensions;
+using Firebase.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.SocialNetworks.Eagler;
@@ -12,11 +13,11 @@ using Models.Production;
 using UI.Windows.GameScreen.SocialNetworks.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
-// using Firebase.Analytics;
-using Random = UnityEngine.Random;
-using PlayerAPI = Game.Player.PlayerPackage;
 using MessageBroker.Messages.SocialNetworks;
 using ScriptableObjects;
+using Enums;
+using Random = UnityEngine.Random;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Track
 {
@@ -121,7 +122,7 @@ namespace UI.Windows.GameScreen.Track
 
         protected override void AfterHide()
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
 
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
             MsgBroker.Instance.Publish(new NewsMessage

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
@@ -27,13 +28,13 @@ namespace UI.Windows.GameScreen.Clip
         [SerializeField] private Carousel directorCarousel;
         [SerializeField] private Carousel operatorCarousel;
         [SerializeField] private Button startButton;
-        
+
         [Header("Labels")]
         [SerializeField] private Text directorSkill;
         [SerializeField] private Text directorPrice;
         [SerializeField] private Text operatorSkill;
         [SerializeField] private Text operatorPrice;
-        
+
         [Header("Price")]
         [SerializeField] private GameError noMoneyErr;
         [SerializeField] private Price price;
@@ -43,7 +44,7 @@ namespace UI.Windows.GameScreen.Clip
         private ClipInfo _clip;
         private int _directorPrice;
         private int _operatorPrice;
-        
+
         private const int TRACKS_CACHE = 10;
         private readonly List<TrackInfo> _lastTracks = new(TRACKS_CACHE);
 
@@ -71,7 +72,7 @@ namespace UI.Windows.GameScreen.Clip
         private void CreateClip()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest {Amount = _clipCost});
+            MsgBroker.Instance.Publish(new SpendMoneyRequest { Amount = _clipCost });
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
@@ -82,13 +83,13 @@ namespace UI.Windows.GameScreen.Clip
                 price.ShowNoMoney();
                 return;
             }
-            
+
             var track = trackCarousel.GetValue<TrackInfo>();
             track.HasClip = true;
 
             _clip.TrackId = track.Id;
             _clip.Name = track.Name;
-            
+
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
                 Type = WindowType.ProductionClipWork,
@@ -115,13 +116,13 @@ namespace UI.Windows.GameScreen.Clip
             _operatorPrice = clipOperator.Salary;
             DisplayFullPrice();
         }
-        
+
         private void DisplayFullPrice()
         {
             string fullPrice = GetLocale("cost_value", _clipCost.GetMoney());
             price.SetValue(fullPrice.ToUpper());
         }
-        
+
         protected override void BeforeShow(object ctx = null)
         {
             _clip = new ClipInfo();
@@ -131,7 +132,7 @@ namespace UI.Windows.GameScreen.Clip
             bool anyTracks = _lastTracks.Any();
             var trackProps = anyTracks
                 ? _lastTracks
-                    .Select(e => new CarouselProps {Text = e.Name, Value = e})
+                    .Select(e => new CarouselProps { Text = e.Name, Value = e })
                     .ToArray()
                 : new[] {
                     new CarouselProps
@@ -146,11 +147,11 @@ namespace UI.Windows.GameScreen.Clip
             OnDirectorChange(0);
             OnOperatorChange(0);
         }
-        
+
         protected override void AfterShow(object ctx = null)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
             HintsManager.Instance.ShowHint("tutorial_clip_page");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
 
             MsgBroker.Instance
                 .Receive<SpendMoneyResponse>()
@@ -164,14 +165,14 @@ namespace UI.Windows.GameScreen.Clip
             _lastTracks.Clear();
             _disposable.Clear();
         }
-        
+
         private void CacheLastTracks()
         {
             var tracks = PlayerAPI.Data.History.TrackList
                 .OrderByDescending(e => e.Id)
                 .Where(e => !e.HasClip)
                 .Take(TRACKS_CACHE);
-            
+
             _lastTracks.AddRange(tracks);
         }
     }

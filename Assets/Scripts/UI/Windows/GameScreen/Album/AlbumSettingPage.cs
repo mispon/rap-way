@@ -4,7 +4,7 @@ using Core;
 using Core.Localization;
 using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
@@ -35,8 +35,9 @@ namespace UI.Windows.GameScreen.Album
         [SerializeField] protected Text textSkill;
         [SerializeField] private Image bitmakerAvatar;
         [SerializeField] private Image textwritterAvatar;
-        
-        [Header("Data"), SerializeField] private ImagesBank imagesBank;
+
+        [Header("Data")]
+        [SerializeField] private ImagesBank imagesBank;
 
         private AlbumInfo _album;
         private IDisposable _disposable;
@@ -46,11 +47,11 @@ namespace UI.Windows.GameScreen.Album
             albumNameInput.onValueChanged.AddListener(OnAlbumNameInput);
             startButton.onClick.AddListener(CreateAlbum);
         }
-        
+
         protected override void AfterShow(object ctx = null)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewAlbumSelected);
             HintsManager.Instance.ShowHint("tutorial_album_page");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewAlbumSelected);
         }
 
         private void OnAlbumNameInput(string value)
@@ -73,13 +74,13 @@ namespace UI.Windows.GameScreen.Album
                 Style = styleCarousel.GetValue<Styles>(),
                 Theme = themeCarousel.GetValue<Themes>()
             };
-            
+
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
                 Type = WindowType.ProductionAlbumWork,
                 Context = _album
             });
-            
+
             Hide();
         }
 
@@ -87,6 +88,7 @@ namespace UI.Windows.GameScreen.Album
         {
             var styleProps = data.Styles.Select(ConvertToCarouselProps).ToArray();
             styleCarousel.Init(styleProps);
+
             var themeProps = data.Themes.Select(ConvertToCarouselProps).ToArray();
             themeCarousel.Init(themeProps);
         }
@@ -98,7 +100,7 @@ namespace UI.Windows.GameScreen.Album
                 ? imagesBank.ThemesActive[Convert.ToInt32(value)]
                 : imagesBank.StyleActive;
 
-            return new CarouselProps {Text = text, Sprite = icon, Value = value};
+            return new CarouselProps { Text = text, Sprite = icon, Value = value };
         }
 
         private void SetupTeam()
@@ -135,11 +137,11 @@ namespace UI.Windows.GameScreen.Album
             bitSkill.text = $"{playerStats.Bitmaking.Value}";
             textSkill.text = $"{playerStats.Vocobulary.Value}";
         }
-        
+
         protected override void BeforeShow(object ctx = null)
         {
             _album = new AlbumInfo();
-            
+
             SetupCarousel(PlayerAPI.Data);
             SetupTeam();
             DisplaySkills(PlayerAPI.Data);

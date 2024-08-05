@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Core;
+using Enums;
 using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -11,29 +12,30 @@ using UI.Enums;
 using UI.Windows.GameScreen.Charts;
 using UnityEngine;
 using UnityEngine.UI;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Labels
 {
     public class NewLabelPage : Page
     {
-        // @formatter:off
-        [Space]
         [SerializeField] private InputField nameInput;
         [SerializeField] private GameError gameError;
+
         [Header("Production inputs")]
         [SerializeField] private Button productionBtnLeft;
         [SerializeField] private Button productionBtnRight;
-        [SerializeField] private Text   productionValue;
-        [Header("Prestige input")] [SerializeField] private Button prestigeBtnLeft;
-        [SerializeField] private Button        prestigeBtnRight;
-        [SerializeField] private Text          prestigeValue;
+        [SerializeField] private Text productionValue;
+
+        [Header("Prestige input")]
+        [SerializeField] private Button prestigeBtnLeft;
+        [SerializeField] private Button prestigeBtnRight;
+        [SerializeField] private Text prestigeValue;
         [SerializeField] private PrestigeStars stars;
+
         [Space]
         [SerializeField] private Button createButton;
         [SerializeField] private Button backButton;
-        // @formatter:on
 
         private void Start()
         {
@@ -49,7 +51,7 @@ namespace UI.Windows.GameScreen.Labels
 
         protected override void BeforeShow(object ctx = null)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
             nameInput.text = "";
         }
 
@@ -97,8 +99,8 @@ namespace UI.Windows.GameScreen.Labels
                 return;
             }
 
-            current            -= 0.5f;
-            prestigeValue.text =  current.ToString(CultureInfo.InvariantCulture);
+            current -= 0.5f;
+            prestigeValue.text = current.ToString(CultureInfo.InvariantCulture);
 
             stars.Display(current);
         }
@@ -115,8 +117,8 @@ namespace UI.Windows.GameScreen.Labels
                 return;
             }
 
-            current            += 0.5f;
-            prestigeValue.text =  current.ToString(CultureInfo.InvariantCulture);
+            current += 0.5f;
+            prestigeValue.text = current.ToString(CultureInfo.InvariantCulture);
 
             stars.Display(current);
         }
@@ -144,14 +146,14 @@ namespace UI.Windows.GameScreen.Labels
 
             var customLabel = new LabelInfo
             {
-                Name       = labelName,
-                Desc       = "custom_label_desc",
-                Production = new ExpValue {Value = int.Parse(productionValue.text)},
-                Prestige   = LabelsAPI.Instance.PrestigeToExp(prestige),
-                IsCustom   = true
+                Name = labelName,
+                Desc = "custom_label_desc",
+                Production = new ExpValue { Value = int.Parse(productionValue.text) },
+                Prestige = LabelsAPI.Instance.PrestigeToExp(prestige),
+                IsCustom = true
             };
 
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelCreated);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelCreated);
             LabelsAPI.Instance.AddCustom(customLabel);
             BackButtonClick();
         }

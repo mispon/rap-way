@@ -1,18 +1,15 @@
-using System;
 using Core;
 using Core.Localization;
 using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using ScriptableObjects;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
 {
-    /// <summary>
-    /// Форма с детальной информацией о навыке
-    /// </summary>
     public class TrainingSkillView : MonoBehaviour
     {
         [SerializeField] private Text header;
@@ -30,13 +27,10 @@ namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
             unlockButton.onClick.AddListener(UnlockSkill);
         }
 
-        /// <summary>
-        /// Показывает форму с информацией об умении
-        /// </summary>
         public void Show(PlayerSkillInfo info, bool expEnough, bool isLocked, Action<Skills> onUnlock)
         {
             var locale = LocalizationManager.Instance;
-            
+
             header.text = locale.Get(info.Type.GetDescription()).ToUpper();
             desc.text = locale.Get(info.DescriptionKey);
 
@@ -50,22 +44,16 @@ namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
             gameObject.SetActive(true);
         }
 
-        /// <summary>
-        /// Скрывает форму
-        /// </summary>
         private void Hide()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             gameObject.SetActive(false);
         }
-        
-        /// <summary>
-        /// Обработчик кнопки разблокировки умения
-        /// </summary>
+
         private void UnlockSkill()
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingOpenSkill);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingOpenSkill);
+
             _onUnlock.Invoke(_skill);
             Hide();
         }

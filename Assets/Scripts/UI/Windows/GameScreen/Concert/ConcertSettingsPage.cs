@@ -3,7 +3,7 @@ using System.Linq;
 using Core;
 using Enums;
 using Extensions;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game;
 using Game.Player.Team;
 using Game.Production;
@@ -32,17 +32,17 @@ namespace UI.Windows.GameScreen.Concert
         [SerializeField] private Carousel albumsCarousel;
         [SerializeField] private Slider ticketCostSlider;
         [SerializeField] private Button startButton;
-        
+
         [Header("Labels")]
         [SerializeField] private Text placeCapacityLabel;
         [SerializeField] private Text fansRequirementLabel;
         [SerializeField] private Text ticketCost;
         [SerializeField] private GameObject cooldownIcon;
-        
+
         [Header("Avatars")]
         [SerializeField] private Image managerAvatar;
         [SerializeField] private Image prAvatar;
-        
+
         [Header("Price")]
         [SerializeField] private Price concertPrice;
         [SerializeField] private GameError noMoneyErr;
@@ -50,10 +50,10 @@ namespace UI.Windows.GameScreen.Concert
         [Header("Data")]
         [SerializeField] private ConcertPlacesData placeData;
         [SerializeField] private ImagesBank imagesBank;
-        
+
         private ConcertInfo _concert;
         private int _placeCost;
-        
+
         private const int MAX_ALBUMS_COUNT = 5;
         private readonly List<AlbumInfo> _lastAlbums = new(MAX_ALBUMS_COUNT);
 
@@ -66,11 +66,11 @@ namespace UI.Windows.GameScreen.Concert
 
             SetupPlaceCarousel();
         }
-        
+
         private void CreateConcert()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest {Amount = _placeCost});
+            MsgBroker.Instance.Publish(new SpendMoneyRequest { Amount = _placeCost });
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
@@ -81,7 +81,7 @@ namespace UI.Windows.GameScreen.Concert
                 concertPrice.ShowNoMoney();
                 return;
             }
-            
+
             var album = albumsCarousel.GetValue<AlbumInfo>();
             album.ConcertAmounts += 1;
 
@@ -95,17 +95,17 @@ namespace UI.Windows.GameScreen.Concert
                 Context = _concert
             });
         }
-        
+
         private void SetupPlaceCarousel()
         {
             var placeProps = placeData.Places
-                .Select(e => new CarouselProps {Text = e.NameKey, Value = e})
+                .Select(e => new CarouselProps { Text = e.NameKey, Value = e })
                 .ToArray();
-            
+
             placeCarousel.Init(placeProps);
             placeCarousel.onChange += OnPlaceChanged;
         }
-        
+
         private void OnPlaceChanged(int index)
         {
             var place = placeData.Places[index];
@@ -126,27 +126,27 @@ namespace UI.Windows.GameScreen.Concert
             fansRequirementLabel.text = GetLocale("concert_fans_requirement", place.FansRequirement.GetDisplay());
             CheckConcertConditions(place.FansRequirement);
         }
-        
+
         private void CheckConcertConditions(int fansRequirement)
         {
             bool canStart = PlayerAPI.Data.Fans >= fansRequirement;
             canStart &= _lastAlbums.Any();
-            
+
             bool hasCooldown = GameManager.Instance.GameStats.ConcertCooldown > 0;
             cooldownIcon.SetActive(hasCooldown);
-            
+
             canStart &= !hasCooldown;
 
             startButton.interactable = canStart;
         }
-        
+
         private void OnTicketPriceChanged(float value)
         {
             int cost = Mathf.RoundToInt(value);
             _concert.TicketCost = cost;
             ticketCost.text = $"{cost.GetMoney()}";
         }
-        
+
         protected override void BeforeShow(object ctx = null)
         {
             _concert = new ConcertInfo();
@@ -155,7 +155,7 @@ namespace UI.Windows.GameScreen.Concert
             var anyAlbums = _lastAlbums.Any();
             var albumProps = anyAlbums
                 ? _lastAlbums
-                    .Select(e => new CarouselProps {Text = e.Name, Value = e})
+                    .Select(e => new CarouselProps { Text = e.Name, Value = e })
                     .ToArray()
                 : new[] {
                     new CarouselProps
@@ -174,11 +174,11 @@ namespace UI.Windows.GameScreen.Concert
                 .Subscribe(e => ResetTeam())
                 .AddTo(_disposable);
         }
-        
+
         protected override void AfterShow(object ctx = null)
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
             HintsManager.Instance.ShowHint("tutorial_concert_page");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
 
             MsgBroker.Instance
                 .Receive<SpendMoneyResponse>()
@@ -191,37 +191,37 @@ namespace UI.Windows.GameScreen.Concert
             _concert = null;
             _lastAlbums.Clear();
             ResetTicketCost();
-            
+
             _disposable.Clear();
         }
-        
+
         private void CacheLastAlbums()
         {
             var albums = PlayerAPI.Data.History.AlbumList
                 .Where(e => e.ConcertAmounts < 3)
                 .OrderByDescending(e => e.Id)
                 .Take(MAX_ALBUMS_COUNT);
-            
+
             _lastAlbums.AddRange(albums);
         }
-        
+
         private void SetupTeam()
         {
             managerAvatar.sprite = TeamManager.IsAvailable(TeammateType.Manager)
                 ? imagesBank.ProducerActive
                 : imagesBank.ProducerInactive;
-            
+
             prAvatar.sprite = TeamManager.IsAvailable(TeammateType.PrMan)
                 ? imagesBank.PrManActive
                 : imagesBank.PrManInactive;
         }
-        
+
         private void ResetTeam()
         {
             managerAvatar.sprite = imagesBank.ProducerInactive;
             prAvatar.sprite = imagesBank.PrManInactive;
         }
-        
+
         private void ResetTicketCost()
         {
             int minValue = Mathf.RoundToInt(ticketCostSlider.minValue);

@@ -1,6 +1,6 @@
 using Core.Context;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Enums;
@@ -15,7 +15,7 @@ namespace UI.Windows.GameScreen.Hints
         [SerializeField] private Button okBtn;
 
         private object _pageCtx;
-        
+
         private void Start()
         {
             okBtn.onClick.AddListener(() =>
@@ -26,16 +26,16 @@ namespace UI.Windows.GameScreen.Hints
 
         public override void Show(object ctx = null)
         {
-            _pageCtx  = ctx.ValueByKey<object>("page_ctx");
-            
-            var key      = ctx.ValueByKey<string>("hint_key");
+            _pageCtx = ctx.ValueByKey<object>("page_ctx");
+
+            var key = ctx.ValueByKey<string>("hint_key");
             var infoText = ctx.ValueByKey<string>("hint_text");
-            
+
             if (key == "tutorial_on_start")
             {
-                // FirebaseAnalytics.LogEvent(FirebaseGameEvents.FirstHintOK);
+                FirebaseAnalytics.LogEvent(FirebaseGameEvents.FirstHintOK);
             }
-            
+
             info.text = infoText;
             base.Show(ctx);
         }

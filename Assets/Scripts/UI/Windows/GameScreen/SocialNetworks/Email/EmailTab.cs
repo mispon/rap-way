@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using Enums;
+using Firebase.Analytics;
 using Game.SocialNetworks.Email;
 using UI.Controls.ScrollViewController;
+using UI.Windows.Tutorial;
 using UnityEngine;
 using EmailInfo = Game.SocialNetworks.Email.Email;
 
@@ -39,9 +42,8 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
         protected override void AfterOpen()
         {
-            // TODO:
-            // HintsManager.Instance.ShowHint("tutorial_email");
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.EmailOpened);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.EmailOpened);
+            HintsManager.Instance.ShowHint("tutorial_email");
 
             var hasEmails = _emailCards.Any();
             if (hasEmails)

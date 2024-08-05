@@ -2,7 +2,7 @@
 using System.Linq;
 using Core;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -28,7 +28,7 @@ namespace UI.Windows.GameScreen.Labels
         [SerializeField] private Button addNewLabelButton;
 
         private readonly List<LabelRow> _listItems = new();
-        
+
         private void Start()
         {
             addNewLabelButton.onClick.AddListener(OpenNewLabelPage);
@@ -43,18 +43,18 @@ namespace UI.Windows.GameScreen.Labels
 
         protected override void BeforeShow(object ctx = null)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelsPageOpened);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelsPageOpened);
+
             labelCard.onDelete += HandleLabelDelete;
-            
+
             var labels = GetAllLabels();
             for (var i = 0; i < labels.Count; i++)
             {
                 var info = labels[i];
-                
+
                 var row = list.InstantiatedElement<LabelRow>(template);
-                row.Initialize(i+1, info);
-                
+                row.Initialize(i + 1, info);
+
                 _listItems.Add(row);
             }
 
@@ -64,7 +64,7 @@ namespace UI.Windows.GameScreen.Labels
         private static List<LabelInfo> GetAllLabels()
         {
             var labels = LabelsAPI.Instance.GetAll().ToList();
-            
+
             if (!LabelsAPI.Instance.IsPlayerLabelEmpty)
             {
                 labels.Add(LabelsAPI.Instance.PlayerLabel);
@@ -80,24 +80,25 @@ namespace UI.Windows.GameScreen.Labels
         {
             HintsManager.Instance.ShowHint("tutorial_labels", ChartsTabType.Labels);
         }
-        
+
         protected override void AfterHide()
         {
             labelCard.onDelete -= HandleLabelDelete;
-            
+
             foreach (var row in _listItems)
             {
                 Destroy(row.gameObject);
             }
-            
+
             _listItems.Clear();
         }
-        
+
         private void HandleLabelDelete(LabelInfo customLabel)
         {
             askingWindow.Show(
                 GetLocale("delete_label_question"),
-                () => {
+                () =>
+                {
                     LabelsAPI.Instance.RemoveCustom(customLabel);
                     AfterHide();
                     BeforeShow();

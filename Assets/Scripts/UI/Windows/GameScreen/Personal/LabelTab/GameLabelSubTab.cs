@@ -3,7 +3,7 @@ using System.Linq;
 using Core;
 using Core.Localization;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Labels.Desc;
 using Game.Rappers.Desc;
 using ScriptableObjects;
@@ -13,11 +13,11 @@ using UI.Windows.GameScreen.Labels;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
+using MessageBroker.Messages.SocialNetworks;
+using MessageBroker;
 using RappersAPI = Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 using PlayerAPI = Game.Player.PlayerPackage;
-using MessageBroker.Messages.SocialNetworks;
-using MessageBroker;
 
 namespace UI.Windows.GameScreen.Personal.LabelTab
 {
@@ -106,8 +106,8 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 
         private void LeaveLabel()
         {
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelLeaveAction);
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelLeaveAction);
 
             askingWindow.Show(
                 LocalizationManager.Instance.Get("leave_label_question").ToUpper(),

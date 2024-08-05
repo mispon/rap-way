@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Core;
 using Core.Localization;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Player.State.Desc;
+using System;
+using System.Collections.Generic;
 using ScriptableObjects;
 using UI.Controls.Progress;
 using UnityEngine;
@@ -13,9 +13,6 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
 {
-    /// <summary>
-    /// Кнопка отображения параметра
-    /// </summary>
     [RequireComponent(typeof(Button))]
     public class TrainingStatsCard : MonoBehaviour
     {
@@ -29,11 +26,11 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
         [SerializeField] private Image cardImage;
         [SerializeField] private Sprite normalSprite;
         [SerializeField] private Sprite darkSprite;
-        
+
         private int _index;
 
-        public Action<int> onClick = index => {};
-        public Action<int> onLevelUpClick = index => {};
+        public Action<int> onClick = index => { };
+        public Action<int> onLevelUpClick = index => { };
 
         private void Start()
         {
@@ -55,16 +52,16 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
         public void Show(PlayerStatsInfo info, bool expEnough, int expToUp)
         {
             var stat = PlayerAPI.Data.Stats.Values[_index];
-            
+
             header.text = LocalizationManager.Instance.Get(info.NameKey);
             desc.text = LocalizationManager.Instance.Get(info.DescriptionKey);
-            
+
             DisplayLevel();
 
             bool noLimit = stat.Value < PlayerData.MAX_SKILL;
             upButton.interactable = expEnough;
             upButton.gameObject.SetActive(noLimit);
-            
+
             expBar.gameObject.SetActive(noLimit);
             expBar.SetValue(stat.Exp, expToUp);
 
@@ -100,7 +97,7 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
             SendFirebaseEvent();
-            
+
             onLevelUpClick.Invoke(_index);
         }
 
@@ -115,8 +112,8 @@ namespace UI.Windows.GameScreen.Training.Tabs.StatsTab
                 [4] = FirebaseGameEvents.TrainingManagementUpgrade,
                 [5] = FirebaseGameEvents.TrainingMarketingUpgrade
             };
-            
-            // FirebaseAnalytics.LogEvent(eventsMap[_index]);
+
+            FirebaseAnalytics.LogEvent(eventsMap[_index]);
         }
     }
 }

@@ -1,4 +1,5 @@
-// using Firebase.Analytics;
+using Enums;
+using Firebase.Analytics;
 using Game;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -14,18 +15,18 @@ namespace UI.Windows.MainMenu
     {
         [SerializeField] private Button _continueGameButton;
         [SerializeField] private ProductionAnim _productionAnim;
- 
+
         protected override void BeforeShow(object ctx = null)
         {
             _continueGameButton.interactable = GameManager.Instance.HasCharacter();
-            
+
             if (!GameManager.Instance.HasAnySaves())
             {
-                // FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
+                FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.LangSelection));
                 return;
-            } 
-            
+            }
+
             if (GameManager.Instance.NeedAskReview())
             {
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.AskReview));

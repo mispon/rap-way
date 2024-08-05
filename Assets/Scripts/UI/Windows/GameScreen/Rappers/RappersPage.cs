@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Enums;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -14,7 +14,7 @@ using UI.Windows.GameScreen.Charts;
 using UI.Windows.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
-using PlayerAPI  = Game.Player.PlayerPackage;
+using PlayerAPI = Game.Player.PlayerPackage;
 using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace UI.Windows.GameScreen.Rappers
@@ -44,18 +44,18 @@ namespace UI.Windows.GameScreen.Rappers
 
         protected override void BeforeShow(object ctx = null)
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.RappersPageOpened);
-            
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.RappersPageOpened);
+
             rapperCard.onDelete += HandleRapperDelete;
-            
+
             var rappers = GetAllRappers();
             for (var i = 0; i < rappers.Count; i++)
             {
                 var info = rappers[i];
-                
+
                 var row = list.InstantiatedElement<RapperRow>(template);
-                row.Initialize(i+1, info);
-                
+                row.Initialize(i + 1, info);
+
                 _listItems.Add(row);
             }
 
@@ -68,7 +68,7 @@ namespace UI.Windows.GameScreen.Rappers
         private static List<RapperInfo> GetAllRappers()
         {
             var allRappers = RappersAPI.Instance.GetAll().ToList();
-            
+
             allRappers.Add(new RapperInfo
             {
                 Name = PlayerAPI.Data.Info.NickName,
@@ -87,16 +87,16 @@ namespace UI.Windows.GameScreen.Rappers
         {
             HintsManager.Instance.ShowHint("tutorial_rappers", ChartsTabType.Rappers);
         }
-        
+
         protected override void AfterHide()
         {
             rapperCard.onDelete -= HandleRapperDelete;
-            
+
             foreach (var row in _listItems)
             {
                 Destroy(row.gameObject);
             }
-            
+
             _listItems.Clear();
         }
 
@@ -107,7 +107,8 @@ namespace UI.Windows.GameScreen.Rappers
         {
             askingWindow.Show(
                 GetLocale("delete_rapper_question"),
-                () => {
+                () =>
+                {
                     RappersAPI.Instance.RemoveCustom(customRapper);
                     AfterHide();
                     BeforeShow();

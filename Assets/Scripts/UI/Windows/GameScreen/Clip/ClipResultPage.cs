@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Context;
+using Enums;
 using Extensions;
 using Game.Production;
 using Game.Production.Analyzers;
@@ -13,7 +14,7 @@ using ScriptableObjects;
 using UI.Windows.GameScreen.SocialNetworks.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
-// using Firebase.Analytics;
+using Firebase.Analytics;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Clip
@@ -96,7 +97,7 @@ namespace UI.Windows.GameScreen.Clip
 
         protected override void AfterHide()
         {
-            // FirebaseAnalytics.LogEvent(FirebaseGameEvents.ClipResultShown);
+            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ClipResultShown);
 
             MsgBroker.Instance.Publish(new NewsMessage
             {
