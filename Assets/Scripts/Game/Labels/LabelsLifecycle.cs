@@ -205,9 +205,11 @@ namespace Game.Labels
             if (labels.Length == 0)
                 return;
 
+            // select random label 
             var randomIdx = Random.Range(0, labels.Length);
             var label = labels[randomIdx];
 
+            // and send invite message
             MsgBroker.Instance.Publish(new EmailMessage
             {
                 Type = EmailsType.LabelsContract,
