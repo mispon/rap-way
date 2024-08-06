@@ -88,13 +88,14 @@ namespace Core.Localization
         {
             IsReady = false;
 
+            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
+
             string jsonData = "";
 #if UNITY_ANDROID
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
             // TODO
 #else
-            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
             jsonData = File.ReadAllText(path);
 #endif
 
@@ -110,13 +111,14 @@ namespace Core.Localization
 
         private IEnumerator LoadBackupLocalizationAsync()
         {
+            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(GameLang.EN));
+
             string jsonData = "";
 #if UNITY_ANDROID
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
             // TODO
 #else
-            string path = Path.Combine(Application.streamingAssetsPath, GetFileName(GameLang.EN));
             jsonData = File.ReadAllText(path);
 #endif
             ParseBackupLocalizationData(jsonData);
