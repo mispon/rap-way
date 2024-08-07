@@ -41,10 +41,6 @@ namespace UI.Windows.GameScreen.Store
                 .Subscribe(e => UpdateGameBalance(e.NewVal))
                 .AddTo(_disposable);
             MsgBroker.Instance
-                .Receive<DonateChangedMessage>()
-                .Subscribe(e => UpdateDonateBalance(e.NewVal))
-                .AddTo(_disposable);
-            MsgBroker.Instance
                 .Receive<FullStateResponse>()
                 .Subscribe(UpdateHUD)
                 .AddTo(_disposable);
@@ -79,17 +75,11 @@ namespace UI.Windows.GameScreen.Store
         private void UpdateHUD(FullStateResponse resp)
         {
             UpdateGameBalance(resp.Money);
-            UpdateDonateBalance(resp.Donate);
         }
 
         private void UpdateGameBalance(int money)
         {
             gameBalance.text = money.GetDisplay();
-        }
-
-        private void UpdateDonateBalance(int donate)
-        {
-            donateBalance.text = donate.GetDisplay();
         }
 
         protected override void AfterHide()

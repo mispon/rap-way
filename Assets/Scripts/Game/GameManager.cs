@@ -79,9 +79,7 @@ namespace Game
 
             RegisterHandlers();
 
-            await GetComponent<UnityServicesInitializer>().Initialize();
             await Task.Delay(500);
-
             MsgBroker.Instance.Publish(new GameReadyMessage());
         }
 

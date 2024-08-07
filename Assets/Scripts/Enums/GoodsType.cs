@@ -5,24 +5,36 @@ namespace Enums
     public enum GoodsType
     {
         [Description("GoodsType_Micro")]
-        Micro, 
+        Micro,
+
         [Description("GoodsType_AudioCard")]
-        AudioCard, 
+        AudioCard,
+
         [Description("GoodsType_FxMixer")]
-        FxMixer, 
+        FxMixer,
+
         [Description("GoodsType_Acoustic")]
         Acoustic,
+
         [Description("GoodsType_Car")]
-        Car, 
+        Car,
+
         [Description("GoodsType_Apartments")]
-        Apartments, 
+        Apartments,
+
         [Description("GoodsType_Swatches")]
-        Swatches, 
+        Swatches,
+
         [Description("GoodsType_Chain")]
-        Chain, 
+        Chain,
+
         [Description("GoodsType_Grillz")]
         Grillz,
-        [Description("GoodsType_Donate")]
-        Donate
+
+        [Description("GoodsType_DonateCoins")]
+        DonateCoins,
+
+        [Description("GoodsType_NoAds")]
+        NoAds
     }
 }

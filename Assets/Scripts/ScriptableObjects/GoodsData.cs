@@ -5,11 +5,11 @@ using UnityEngine;
 namespace ScriptableObjects
 {
     [CreateAssetMenu(fileName = "Goods", menuName = "Data/Goods")]
-    public class GoodsData: ScriptableObject
+    public class GoodsData : ScriptableObject
     {
-        [Header("Categories")] 
+        [Header("Categories")]
         public CategoryInfo[] Categories;
-        
+
         [Header("Goods Items")]
         public GoodsGroup[] Goods;
     }
@@ -27,7 +27,7 @@ namespace ScriptableObjects
         public GoodsType Type;
         public GoodInfo[] Items;
     }
-    
+
     [Serializable]
     public class GoodInfo
     {
@@ -38,44 +38,15 @@ namespace ScriptableObjects
         public int Price;
         public Sprite SquareImage;
         public Sprite RectImage;
-        
+        public bool IsDonate;
+
         public Sprite PersonalPageImage => RectImage == null ? SquareImage : RectImage;
-    }
 
-    [Serializable]
-    public class SwagGood : GoodInfo
-    {
-        public int Hype;
-    }
-    
-    [Serializable]
-    public class DonateSwagGood : GoodInfo
-    {
-        public int Hype;
-    }
+        // one_of:
+        [Range(0.0f, 0.21f)]
+        public float QualityImpact; // for equip items
 
-    [Serializable]
-    public class EquipGood : GoodInfo
-    {
-        [Range(0.0f, 0.21f)] public float QualityImpact;
-    }
-    
-    [Serializable]
-    public class DonateEquipGood : GoodInfo
-    {
-        [Range(0.0f, 0.41f)] public float QualityImpact;
-    }
-
-    [Serializable]
-    public class DonateCoins : GoodInfo
-    {
-        public string ProductId;
-        public int Amount;
-    }
-    
-    [Serializable]
-    public class NoAds : GoodInfo
-    {
-        public string ProductId;
+        [Range(0, 21)]
+        public int Hype; // for swag items
     }
 }

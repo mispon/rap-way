@@ -1,199 +1,38 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Enums;
-using Game;
-using MessageBroker;
-using MessageBroker.Messages.Game;
 using MessageBroker.Messages.Player;
 using ScriptableObjects;
-using UniRx;
 using UnityEngine;
-using UnityEngine.Purchasing;
-using UnityEngine.Purchasing.Extension;
 
 namespace UI.Windows.GameScreen.Store.Purchase
 {
-    public enum StoreItemType
+    public class StoreItemPurchaser : MonoBehaviour
     {
-        // purchase for the game currency
-        Game,
-
-        // purchase for the donate currency
-        Donate,
-
-        // purchase donate currency for real money
-        Purchase
-    }
-
-    public class StoreItemPurchaser : MonoBehaviour, IDetailedStoreListener
-    {
-        [SerializeField] private GoodsData data;
-
-        private IStoreController _controller;
-        private IDisposable      _disposable;
-
-        private readonly Dictionary<string, DonateCoins> _coinItemsMap = new();
-        private          NoAds                           _noAdsItem;
-
-        private void Start()
-        {
-            var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
-
-            var group = data.Goods.FirstOrDefault(e => e.Type == GoodsType.Donate);
-            if (group == null)
-            {
-                Debug.LogWarning("GoodsType.Donate not found in goods data bank");
-                return;
-            }
-
-            foreach (var storeItem in group.Items)
-            {
-                switch (storeItem)
-                {
-                    case DonateCoins dc:
-                        _coinItemsMap.Add(dc.ProductId, dc);
-                        builder.AddProduct(dc.ProductId, ProductType.Consumable);
-                        break;
-                    case NoAds na:
-                        _noAdsItem = na;
-                        builder.AddProduct(na.ProductId, ProductType.Consumable);
-                        break;
-                    default:
-                        continue;
-                }
-            }
-
-            _disposable = MsgBroker.Instance
-                .Receive<GameReadyMessage>()
-                .Subscribe(_ => { UnityPurchasing.Initialize(this, builder); });
-        }
-
-        public static StoreItemType GetStoreItemType(GoodInfo item)
-        {
-            return item switch
-            {
-                SwagGood  => StoreItemType.Game,
-                EquipGood => StoreItemType.Game,
-
-                DonateSwagGood  => StoreItemType.Donate,
-                DonateEquipGood => StoreItemType.Donate,
-
-                DonateCoins => StoreItemType.Purchase,
-                NoAds       => StoreItemType.Purchase,
-
-                _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
-            };
-        }
-
         public static AddNewGoodMessage CreateNewGoodEvent(GoodInfo item)
         {
             var goodEvent = new AddNewGoodMessage
             {
-                Type  = item.Type,
+                Type = item.Type,
                 Level = item.Level
             };
 
-            switch (item)
+            switch (item.Type)
             {
-                case SwagGood sg:
-                    goodEvent.Hype = sg.Hype;
+                case GoodsType.Micro:
+                case GoodsType.Acoustic:
+                case GoodsType.AudioCard:
+                case GoodsType.FxMixer:
+                    goodEvent.QualityImpact = item.QualityImpact;
                     break;
-                case DonateSwagGood dsg:
-                    goodEvent.Hype = dsg.Hype;
-                    break;
-                case EquipGood eg:
-                    goodEvent.QualityImpact = eg.QualityImpact;
-                    break;
-                case DonateEquipGood deg:
-                    goodEvent.QualityImpact = deg.QualityImpact;
+
+                case GoodsType.Car:
+                case GoodsType.Chain:
+                case GoodsType.Swatches:
+                case GoodsType.Grillz:
+                    goodEvent.Hype = item.Hype;
                     break;
             }
 
             return goodEvent;
-        }
-
-        public void PurchaseStoreItem(GoodInfo item)
-        {
-            var productId = item switch
-            {
-                DonateCoins dc => dc.ProductId,
-                NoAds na       => na.ProductId,
-                _              => ""
-            };
-
-            if (string.IsNullOrEmpty(productId))
-            {
-                return;
-            }
-
-            _controller?.InitiatePurchase(productId);
-        }
-
-        public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs purchaseEvent)
-        {
-            var productId = purchaseEvent.purchasedProduct.definition.id;
-
-            if (_coinItemsMap.TryGetValue(productId, out var item))
-            {
-                MsgBroker.Instance.Publish(new AddDonateMessage {Amount = item.Amount});
-            } else if (productId == _noAdsItem.ProductId)
-            {
-                MsgBroker.Instance.Publish(new NoAdsPurchaseMessage());
-            }
-
-            return PurchaseProcessingResult.Complete;
-        }
-
-        public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
-        {
-            _controller = controller;
-            CheckNoAdsPurchase();
-        }
-
-        private void CheckNoAdsPurchase()
-        {
-            if (GameManager.Instance.LoadNoAds())
-                // already exists
-            {
-                return;
-            }
-
-            var product = _controller.products.WithID(_noAdsItem.ProductId);
-            if (product is {hasReceipt: true})
-            {
-                MsgBroker.Instance.Publish(new NoAdsPurchaseMessage());
-            }
-        }
-
-        #region StoreCallbacks
-
-        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
-        {
-            Debug.LogError($"{product.definition.id} purchase failed, reason: {failureReason}");
-        }
-
-        public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
-        {
-            Debug.LogError(
-                $"{product.definition.id} purchase failed, reason: {failureDescription.reason}, message: {failureDescription.message}");
-        }
-
-        public void OnInitializeFailed(InitializationFailureReason error)
-        {
-            Debug.LogError($"Failed to initialize store, reason: {error}");
-        }
-
-        public void OnInitializeFailed(InitializationFailureReason error, string message)
-        {
-            Debug.LogError($"Failed to initialize store, reason: {error}, message: {message}");
-        }
-
-        #endregion
-
-        private void OnDestroy()
-        {
-            _disposable?.Dispose();
         }
     }
 }

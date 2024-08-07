@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Core;
 using Core.Context;
 using Extensions;
 using MessageBroker;
-using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -21,7 +19,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
         [Header("Purchaser"), SerializeField] private StoreItemPurchaser _purchaser;
         [Header("Error"), SerializeField] private GameError gameError;
 
-        [Space, Header("Money Icon")] 
+        [Space, Header("Money Icon")]
         [SerializeField] private Sprite moneySprite;
         [SerializeField] private Sprite donateSprite;
         [SerializeField] private Sprite realMoneySprite;
@@ -38,25 +36,25 @@ namespace UI.Windows.GameScreen.Store.Purchase
         private GoodInfo _info;
         private int _category;
         private readonly CompositeDisposable _disposable = new();
-        
+
         private void Start()
         {
             buyButton.onClick.AddListener(BuyItemClick);
             cancelButton.onClick.AddListener(CloseCard);
         }
-        
+
         public override void Show(object ctx = null)
         {
-            _info     = ctx.ValueByKey<GoodInfo>("item_info");
+            _info = ctx.ValueByKey<GoodInfo>("item_info");
             _category = ctx.ValueByKey<int>("category");
-            
+
             icon.sprite = _info.SquareImage;
             itemName.text = _info.Name;
             itemDesc.text = !string.IsNullOrEmpty(_info.Desc) ? GetLocale(_info.Desc) : "";
 
-            moneyIcon.sprite = GetMoneyIcon(_info);
+            moneyIcon.sprite = moneySprite;
             price.text = _info.Price.GetDisplay();
-            
+
             gameError.ForceHide();
             base.Show(ctx);
         }
@@ -68,7 +66,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
                 gameError.Show(GetLocale("not_enough_money"));
                 return;
             }
-            
+
             SoundManager.Instance.PlaySound(UIActionType.Pay);
 
             var newGoodEvent = StoreItemPurchaser.CreateNewGoodEvent(_info);
@@ -85,7 +83,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
                 Context = new Dictionary<string, object>
                 {
                     ["item_info"] = _info,
-                    ["category"]  = _category
+                    ["category"] = _category
                 }
             });
         }
@@ -93,66 +91,19 @@ namespace UI.Windows.GameScreen.Store.Purchase
         private void BuyItemClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            
-            var itemType = StoreItemPurchaser.GetStoreItemType(_info);
-            switch (itemType)
-            {
-                case StoreItemType.Donate:
-                    MsgBroker.Instance.Publish(new SpendDonateRequest{Amount = _info.Price});
-                    break;
-                
-                case StoreItemType.Game:
-                    MsgBroker.Instance.Publish(new SpendMoneyRequest{Amount = _info.Price});    
-                    break;
-                
-                case StoreItemType.Purchase:
-                    _purchaser.PurchaseStoreItem(_info);
-                    break;
-                
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            MsgBroker.Instance.Publish(new SpendMoneyRequest { Amount = _info.Price });
         }
 
-        private Sprite GetMoneyIcon(GoodInfo item)
-        {
-            return item switch
-            {
-                SwagGood  => moneySprite,
-                EquipGood => moneySprite,
-                
-                DonateSwagGood  => donateSprite,
-                DonateEquipGood => donateSprite,
-                
-                DonateCoins => realMoneySprite,
-                NoAds       => realMoneySprite,
-                
-                _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
-            };
-        }
-        
         private void CloseCard()
         {
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Shop, _category));
         }
-        
+
         protected override void BeforeShow(object ctx = null)
         {
             MsgBroker.Instance
-                .Receive<SpendDonateResponse>()
-                .Subscribe(e => HandleItemPurchase(e.OK))
-                .AddTo(_disposable);
-            MsgBroker.Instance
                 .Receive<SpendMoneyResponse>()
                 .Subscribe(e => HandleItemPurchase(e.OK))
-                .AddTo(_disposable);
-            MsgBroker.Instance
-                .Receive<DonateAddedMessage>()
-                .Subscribe(_ => ShowPurchasedItem())
-                .AddTo(_disposable);
-            MsgBroker.Instance
-                .Receive<NoAdsPurchaseMessage>()
-                .Subscribe(_ => ShowPurchasedItem())
                 .AddTo(_disposable);
         }
 

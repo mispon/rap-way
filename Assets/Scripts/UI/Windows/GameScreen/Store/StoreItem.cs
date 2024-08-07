@@ -19,28 +19,28 @@ namespace UI.Windows.GameScreen.Store
     {
         private IDisposable _singleDispose;
         private readonly CompositeDisposable _disposable = new();
-        
-        [Header("Money Icon")] 
+
+        [Header("Money Icon")]
         [SerializeField] private Sprite moneySprite;
         [SerializeField] private Sprite donateSprite;
         [SerializeField] private Sprite realMoneySprite;
-        
+
         [Space, Header("Item")]
         [SerializeField] private Image icon;
         [SerializeField] private Text price;
         [SerializeField] private Image priceIcon;
         [SerializeField] private Button itemButton;
         [SerializeField] private GameObject purchased;
-        
+
         private RectTransform _rectTransform;
-        
+
         private int _index { get; set; }
         private float _height { get; set; }
         private float _width { get; set; }
-        
+
         private int _category;
         private GoodInfo _info;
-        
+
         private void Start()
         {
             itemButton.onClick.AddListener(ShowItemCard);
@@ -55,38 +55,32 @@ namespace UI.Windows.GameScreen.Store
                 Context = new Dictionary<string, object>
                 {
                     ["item_info"] = _info,
-                    ["category"]  = _category
+                    ["category"] = _category
                 }
             });
         }
 
         public void Initialize(int idx, int category, GoodInfo info)
         {
-            _index    = idx;
+            _index = idx;
             _category = category;
-            _info     = info;
-            
+            _info = info;
+
             icon.sprite = info.SquareImage;
             price.text = info.Price.GetDisplay();
             priceIcon.sprite = GetMoneyIcon(info);
-            
+
             HandleEvents();
         }
-        
+
         private Sprite GetMoneyIcon(GoodInfo item)
         {
-            return item switch
+            return item.Type switch
             {
-                SwagGood  => moneySprite,
-                EquipGood => moneySprite,
-                
-                DonateSwagGood  => donateSprite,
-                DonateEquipGood => donateSprite,
-                
-                DonateCoins => realMoneySprite,
-                NoAds       => realMoneySprite,
-                
-                _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
+                GoodsType.DonateCoins => realMoneySprite,
+                GoodsType.NoAds => realMoneySprite,
+
+                _ => item.IsDonate ? donateSprite : moneySprite,
             };
         }
 
@@ -96,24 +90,20 @@ namespace UI.Windows.GameScreen.Store
                 .Receive<AddNewGoodMessage>()
                 .Subscribe(e => OnItemPurchased(e.Type, e.Level))
                 .AddTo(_disposable);
-            MsgBroker.Instance
-                .Receive<NoAdsPurchaseMessage>()
-                .Subscribe(_ => OnNoAdsPurchased())
-                .AddTo(_disposable);
-            
+
             _singleDispose = MsgBroker.Instance
                 .Receive<GoodExistsResponse>()
                 .Subscribe(e =>
                 {
-                    if (e.Status) 
+                    if (e.Status)
                         SetPurchased();
-                    
+
                     _singleDispose?.Dispose();
                 });
 
-            MsgBroker.Instance.Publish(_info is NoAds
-                ? new GoodExistsRequest {IsNoAds = true}
-                : new GoodExistsRequest {Type = _info.Type, Level = _info.Level});
+            MsgBroker.Instance.Publish(_info.Type == GoodsType.NoAds
+                ? new GoodExistsRequest { IsNoAds = true }
+                : new GoodExistsRequest { Type = _info.Type, Level = _info.Level });
         }
 
         private void OnItemPurchased(GoodsType type, int level)
@@ -124,31 +114,23 @@ namespace UI.Windows.GameScreen.Store
             }
         }
 
-        private void OnNoAdsPurchased()
-        {
-            if (_info is NoAds)
-            {
-                SetPurchased();
-            }
-        }
-
         private void SetPurchased()
         {
             itemButton.gameObject.SetActive(false);
             purchased.SetActive(true);
         }
-        
+
         public void SetPosition(float spacing)
         {
             if (_rectTransform == null)
                 _rectTransform = GetComponent<RectTransform>();
-             
+
             if (_height == 0)
                 _height = _rectTransform.rect.height;
             if (_width == 0)
                 _width = _rectTransform.rect.width;
-            
-            var pos = Vector2.right * ((spacing * (_index-1)) + (_width * (_index-1)));
+
+            var pos = Vector2.right * ((spacing * (_index - 1)) + (_width * (_index - 1)));
             _rectTransform.anchoredPosition = pos;
         }
 
@@ -161,7 +143,7 @@ namespace UI.Windows.GameScreen.Store
         {
             return _width;
         }
-        
+
         private void OnDestroy()
         {
             _disposable.Clear();
