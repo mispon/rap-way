@@ -60,7 +60,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
         protected override void AfterOpen()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewsOpened);
-            HintsManager.Instance.ShowHint("tutorial_news");
+            HintsManager.Instance.ShowHint("tutorial_news", SocialNetworksTabType.News);
 
             newsEmpty.SetActive(_newsCards.Count() == 0);
             hotNewsEmpty.SetActive(_hotNewsCards.Count() == 0);

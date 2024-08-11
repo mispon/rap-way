@@ -43,7 +43,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         protected override void AfterOpen()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.EmailOpened);
-            HintsManager.Instance.ShowHint("tutorial_email");
+            HintsManager.Instance.ShowHint("tutorial_email", SocialNetworksTabType.Email);
 
             var hasEmails = _emailCards.Any();
             if (hasEmails)

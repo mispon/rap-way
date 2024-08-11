@@ -51,7 +51,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
         protected override void AfterOpen()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
-            HintsManager.Instance.ShowHint("tutorial_eagler");
+            HintsManager.Instance.ShowHint("tutorial_eagler", SocialNetworksTabType.Eagler);
         }
 
         protected override void AfterClose()

@@ -11,24 +11,24 @@ namespace UI.Windows.GameScreen.SocialNetworks
         None,
         Email,
         News,
-        Twitter
+        Eagler
     }
 
     public class SocialNetworksPage : Page
     {
-        [Header("Buttons")] [SerializeField] private Button emailButton;
-        [SerializeField]                     private Button newsButton;
-        [SerializeField]                     private Button eaglerButton;
+        [Header("Buttons")][SerializeField] private Button emailButton;
+        [SerializeField] private Button newsButton;
+        [SerializeField] private Button eaglerButton;
 
-        [Space] [SerializeField] private Color activeTabColor;
-        [SerializeField]         private Color inactiveTabColor;
+        [Space][SerializeField] private Color activeTabColor;
+        [SerializeField] private Color inactiveTabColor;
 
-        [Header("Tabs")] [SerializeField] private Tab emailTab;
-        [SerializeField]                  private Tab newsTab;
-        [SerializeField]                  private Tab eaglerTab;
+        [Header("Tabs")][SerializeField] private Tab emailTab;
+        [SerializeField] private Tab newsTab;
+        [SerializeField] private Tab eaglerTab;
 
-        private SocialNetworksTabType _activeTab   = SocialNetworksTabType.None;
-        private bool                  _isFirstOpen = true;
+        private SocialNetworksTabType _activeTab = SocialNetworksTabType.None;
+        private bool _isFirstOpen = true;
 
         private void Start()
         {
@@ -46,7 +46,7 @@ namespace UI.Windows.GameScreen.SocialNetworks
                     OpenNewsTab();
                     break;
 
-                case SocialNetworksTabType.Twitter:
+                case SocialNetworksTabType.Eagler:
                     OpenTwitterTab();
                     break;
 
@@ -93,9 +93,9 @@ namespace UI.Windows.GameScreen.SocialNetworks
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
 
-            if (_activeTab != SocialNetworksTabType.Twitter)
+            if (_activeTab != SocialNetworksTabType.Eagler)
             {
-                _activeTab = SocialNetworksTabType.Twitter;
+                _activeTab = SocialNetworksTabType.Eagler;
                 UpdateTabs(eaglerTab, emailTab, newsTab);
                 UpdateTabButtons(eaglerButton, emailButton, newsButton);
             }
@@ -117,7 +117,7 @@ namespace UI.Windows.GameScreen.SocialNetworks
 
         protected override void AfterHide()
         {
-            _activeTab   = SocialNetworksTabType.None;
+            _activeTab = SocialNetworksTabType.None;
             _isFirstOpen = true;
 
             emailTab.Close();

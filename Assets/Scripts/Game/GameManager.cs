@@ -48,22 +48,26 @@ namespace Game
     {
         [Header("Stores URLs"), SerializeField] private string appStoreURL;
         [Header("Stores URLs"), SerializeField] private string googlePlayURL;
+
         [Space]
         [Header("Save Key")][SerializeField] private string gameDataKey;
         [Header("Save Key")][SerializeField] private string noAdsDataKey;
         [Header("Save Key")][SerializeField] private string donateDataKey;
+
         [Space]
         [Header("Game Settings")] public GameSettings Settings;
         [Header("Player")] public PlayerData PlayerData;
         [Header("Game")] public GameStats GameStats;
+
         [Space]
         [Header("Rappers")] public List<RapperInfo> Rappers;
         [Header("Custom Rappers")] public List<RapperInfo> CustomRappers;
+
         [Space]
         [Header("Labels")] public List<LabelInfo> Labels;
         [Header("Custom Labels")] public List<LabelInfo> CustomLabels;
         [Header("Player Label")] public LabelInfo PlayerLabel;
-        [FormerlySerializedAs("Twits")]
+
         [Space]
         [Header("Eagles")] public List<Eagle> Eagles;
         [Header("Emails")] public List<Email> Emails;

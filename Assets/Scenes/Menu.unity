@@ -719,6 +719,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1753222052664003196, guid: 2f0a19bda30a443528567920f1f09c93,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 1795211047700670884, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1280,10 +1285,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6524351502302864149, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
+      propertyPath: soundGroup.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6524351502302864149, guid: 2f0a19bda30a443528567920f1f09c93,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 6524351502302864149, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
+    - target: {fileID: 6524351502302864149, guid: 2f0a19bda30a443528567920f1f09c93,
+        type: 3}
+      propertyPath: soundGroup.Array.data[0].Name
+      value: MasterVolume
+      objectReference: {fileID: 0}
+    - target: {fileID: 6524351502302864149, guid: 2f0a19bda30a443528567920f1f09c93,
+        type: 3}
+      propertyPath: soundGroup.Array.data[1].Name
+      value: MusicVolume
+      objectReference: {fileID: 0}
+    - target: {fileID: 6524351502302864149, guid: 2f0a19bda30a443528567920f1f09c93,
+        type: 3}
+      propertyPath: soundGroup.Array.data[0].Slider
+      value: 
+      objectReference: {fileID: 1448571228}
+    - target: {fileID: 6524351502302864149, guid: 2f0a19bda30a443528567920f1f09c93,
+        type: 3}
+      propertyPath: soundGroup.Array.data[1].Slider
+      value: 
+      objectReference: {fileID: 1448571227}
     - target: {fileID: 6966485979335464641, guid: 2f0a19bda30a443528567920f1f09c93,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1587,6 +1617,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb6ab6847c1a842febbcaf571dc0f458, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1448571227 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4940426945065575903, guid: 2f0a19bda30a443528567920f1f09c93,
+    type: 3}
+  m_PrefabInstance: {fileID: 1448571225}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1448571228 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1995687839109920141, guid: 2f0a19bda30a443528567920f1f09c93,
+    type: 3}
+  m_PrefabInstance: {fileID: 1448571225}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1850077426

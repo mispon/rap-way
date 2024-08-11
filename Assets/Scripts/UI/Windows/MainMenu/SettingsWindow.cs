@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Core;
 using Core.Localization;
@@ -10,27 +11,34 @@ using UnityEngine.UI;
 
 namespace UI.Windows.MainMenu
 {
+    [Serializable]
+    public struct SoundGroupTuple
+    {
+        public Slider Slider;
+        public string Name;
+    }
+
     public class SettingsWindow : CanvasUIElement
     {
         [SerializeField] private Carousel langCarousel;
-        [SerializeField] private Dictionary<Slider, string> soundGroup;
+        [SerializeField] private SoundGroupTuple[] soundGroup;
         [SerializeField] private Button saveButton;
 
         private readonly CompositeDisposable _disposable = new();
-        
+
         public override void Show(object ctx = null)
         {
             var settings = GameManager.Instance.GameStats;
-            
+
             langCarousel.SetIndex(settings.Lang.ToString());
             langCarousel.onChange += OnLangChanged;
 
             foreach (var group in soundGroup)
             {
-                group.Key.value = LoadVolume(group.Value);
-                group.Key
+                group.Slider.value = LoadVolume(group.Name);
+                group.Slider
                     .OnValueChangedAsObservable()
-                    .Subscribe(value => OnChangeVolume(group.Value, value))
+                    .Subscribe(value => OnChangeVolume(group.Name, value))
                     .AddTo(_disposable);
             }
 
@@ -38,8 +46,7 @@ namespace UI.Windows.MainMenu
                 .AsObservable()
                 .Subscribe(_ => SaveSettings())
                 .AddTo(_disposable);
-                
-            
+
             base.Show(ctx);
         }
 
@@ -47,20 +54,17 @@ namespace UI.Windows.MainMenu
         {
             langCarousel.onChange -= OnLangChanged;
             _disposable.Clear();
-            
+
             base.Hide();
         }
-        
-        /// <summary>
-        /// Сохраняет выбранные настройки
-        /// </summary>
+
         private void SaveSettings()
         {
             foreach (var group in soundGroup)
             {
-                SaveVolume(group.Value, group.Key.value);
+                SaveVolume(group.Name, group.Slider.value);
             }
-            
+
             GameManager.Instance.SaveApplicationData();
         }
 
@@ -68,29 +72,23 @@ namespace UI.Windows.MainMenu
         {
             SoundManager.Instance.SetVolume(groupName, volume);
         }
-        
+
         private static void SaveVolume(string groupName, float volume)
         {
             PlayerPrefs.SetFloat(groupName, volume);
         }
-        
+
         private static float LoadVolume(string groupName)
         {
             return PlayerPrefs.GetFloat(groupName);
         }
 
-        /// <summary>
-        /// Обрабатчик смены языка
-        /// </summary>
         private void OnLangChanged(int index)
         {
             var lang = StringToLang(langCarousel.GetLabel());
             LocalizationManager.Instance.LoadLocalization(lang, true);
         }
-        
-        /// <summary>
-        /// Маппит строковое представление на перечисление языков
-        /// </summary>
+
         private static GameLang StringToLang(string value)
         {
             return value switch
@@ -102,6 +100,7 @@ namespace UI.Windows.MainMenu
                 "IT" => GameLang.IT,
                 "ES" => GameLang.ES,
                 "PT" => GameLang.PT,
+
                 _ => throw new RapWayException($"StringToLang: Не найден матчинг для {value}!")
             };
         }
