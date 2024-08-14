@@ -16,45 +16,39 @@ namespace Game.Rappers
         [SerializeField] private RappersData data;
         [SerializeField] private ImagesBank imagesBank;
 
-        private List<RapperInfo> _rappers;
-        private List<RapperInfo> _customRappers;
-        private GameSettings     _settings;
-        
+        private List<RapperInfo> _rappers => GameManager.Instance.Rappers;
+        private List<RapperInfo> _customRappers => GameManager.Instance.CustomRappers;
+        private GameSettings _settings => GameManager.Instance.Settings;
+
         public void OnStart()
         {
-            _rappers       = GameManager.Instance.Rappers;
-            _customRappers = GameManager.Instance.CustomRappers;
-            _settings      = GameManager.Instance.Settings;
-
-            AppendNewRappers();
+            UpdateInGameRappers();
             UpdateCustomRappersIDs();
         }
-        
-        /// <summary>
-        /// Adds new rappers to saved data from static config
-        /// </summary>
-        private void AppendNewRappers()
+
+        private void UpdateInGameRappers()
         {
-            var rappersIds = _rappers
-                .Select(e => e.Id)
-                .ToHashSet();
-            var newRappers = data.Rappers
-                .Where(e => !rappersIds.Contains(e.Id))
-                .ToArray();
-            
-            foreach (var rapperInfo in newRappers)
+            var rapperSet = _rappers.ToDictionary(e => e.Id);
+
+            foreach (var dr in data.Rappers)
             {
-                _rappers.Add(rapperInfo);
+                if (rapperSet.TryGetValue(dr.Id, out var rapper))
+                {
+                    // update avatar for existing
+                    rapper.AvatarName = dr.AvatarName;
+                }
+                else
+                {
+                    // or append new in-game rapper
+                    _rappers.Add(dr);
+                }
             }
         }
-        
-        /// <summary>
-        /// Apply real rappers IDs updates
-        /// </summary>
+
         private void UpdateCustomRappersIDs()
         {
             int id = _rappers.Max(e => e.Id);
-            
+
             foreach (var rapperInfo in _customRappers)
             {
                 id++;

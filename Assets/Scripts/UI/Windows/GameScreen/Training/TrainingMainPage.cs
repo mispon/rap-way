@@ -1,8 +1,11 @@
 using System;
+using Core;
 using Core.Context;
 using MessageBroker;
 using MessageBroker.Messages.UI;
+using ScriptableObjects;
 using UI.Controls.Carousel;
+using UI.Enums;
 using UI.Windows.GameScreen.Training.Tabs;
 using UI.Windows.Tutorial;
 using UnityEngine;
@@ -21,30 +24,34 @@ namespace UI.Windows.GameScreen.Training
 
         private int _tabIndex;
 
-        public override void Initialize()
+        private void Start()
         {
             tabsCarousel.onChange += OnTabChanged;
             closeButton.onClick.AddListener(() =>
             {
+                SoundManager.Instance.PlaySound(UIActionType.Click);
                 MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
-                base.Hide();
+                MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
             });
-            
+        }
+
+        public override void Initialize()
+        {
             foreach (var tab in tabs)
             {
                 tab.Init();
                 tab.onStartTraining += ApplyTraining;
             }
         }
-        
+
         public override void Show(object ctx = null)
         {
             _tabIndex = ctx.Value<int>();
-            
+
             base.Show(ctx);
             OpenTab(_tabIndex);
         }
-        
+
         private void OnTabChanged(int index)
         {
             OpenTab(index);
@@ -54,7 +61,7 @@ namespace UI.Windows.GameScreen.Training
         {
             int cost = training.Invoke();
             PlayerAPI.Data.Exp -= cost;
-            
+
             DisplayExp();
             RefreshTab();
         }
@@ -75,8 +82,8 @@ namespace UI.Windows.GameScreen.Training
         {
             OpenTab(_tabIndex);
         }
-        
-        private void DisplayExp() => expLabel.text =  PlayerAPI.Data.Exp.ToString();
+
+        private void DisplayExp() => expLabel.text = PlayerAPI.Data.Exp.ToString();
 
         protected override void BeforeShow(object ctx = null)
         {
@@ -93,7 +100,7 @@ namespace UI.Windows.GameScreen.Training
         {
             tabsCarousel.SetIndex(0);
         }
-        
+
         private void OnDestroy()
         {
             tabsCarousel.onChange -= OnTabChanged;

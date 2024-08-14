@@ -24,6 +24,7 @@ namespace UI.Windows.GameScreen.Rappers
         [SerializeField] private AskingWindow askingWindow;
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
+
         [Space]
         [SerializeField] private RapperCard rapperCard;
         [SerializeField] private Button addNewRapperButton;

@@ -9,38 +9,37 @@ using UnityEngine;
 
 namespace Game.Labels
 {
-    /// <summary>
-    /// MonoBehavior and Starter component of labels package
-    /// </summary>
     public partial class LabelsPackage : GamePackage<LabelsPackage>, IStarter
     {
         [SerializeField] private LabelsData data;
         [SerializeField] private ImagesBank imagesBank;
 
-        private List<LabelInfo> _labels;
-        private List<LabelInfo> _customLabels;
-        private GameSettings _settings;
+        private List<LabelInfo> _labels => GameManager.Instance.Labels;
+        private List<LabelInfo> _customLabels => GameManager.Instance.CustomLabels;
+        private GameSettings _settings => GameManager.Instance.Settings;
 
         public void OnStart()
         {
-            _labels = GameManager.Instance.Labels;
-            _customLabels = GameManager.Instance.CustomLabels;
-            _settings = GameManager.Instance.Settings;
-
-            AppendNewLabels();
+            UpdateInGameLabels();
             UpdateLogoNames();
             RegisterHandlers();
         }
 
-        private void AppendNewLabels()
+        private void UpdateInGameLabels()
         {
-            var labelsNames = _labels.Select(e => e.Name).ToHashSet();
+            var labelsSet = _labels.ToDictionary(e => e.Name);
 
-            foreach (var labelInfo in data.Labels)
+            foreach (var dl in data.Labels)
             {
-                if (!labelsNames.Contains(labelInfo.Name))
+                if (labelsSet.TryGetValue(dl.Name, out var label))
                 {
-                    _labels.Add(labelInfo);
+                    // update logo for existing
+                    label.LogoName = dl.LogoName;
+                }
+                else
+                {
+                    // or add new label
+                    _labels.Add(dl);
                 }
             }
         }
