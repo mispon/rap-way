@@ -5,7 +5,6 @@ using Enums;
 using Extensions;
 using Firebase.Analytics;
 using MessageBroker;
-using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using UI.Controls.ScrollViewController;
@@ -75,11 +74,17 @@ namespace UI.Windows.GameScreen.Store
         private void UpdateHUD(FullStateResponse resp)
         {
             UpdateGameBalance(resp.Money);
+            UpdateDonateBalance(resp.Donate);
         }
 
         private void UpdateGameBalance(int money)
         {
             gameBalance.text = money.GetDisplay();
+        }
+
+        private void UpdateDonateBalance(int donate)
+        {
+            donateBalance.text = donate.GetDisplay();
         }
 
         protected override void AfterHide()

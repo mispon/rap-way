@@ -96,6 +96,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
         private void CloseCard()
         {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Shop, _category));
         }
 

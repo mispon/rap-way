@@ -1,8 +1,10 @@
+using Core;
 using Core.Context;
 using Enums;
 using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
+using ScriptableObjects;
 using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +22,7 @@ namespace UI.Windows.GameScreen.Hints
         {
             okBtn.onClick.AddListener(() =>
             {
+                SoundManager.Instance.PlaySound(UIActionType.Click);
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Previous, _pageCtx));
             });
         }
