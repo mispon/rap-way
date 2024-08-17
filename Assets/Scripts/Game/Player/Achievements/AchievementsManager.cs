@@ -12,8 +12,11 @@ using Game.Rappers.Desc;
 using JetBrains.Annotations;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
+using MessageBroker.Messages.SocialNetworks;
+using MessageBroker.Messages.UI;
 using Models.Production;
 using ScriptableObjects;
+using UI.Enums;
 using UI.Windows.GameScreen.Achievement;
 using UniRx;
 using UnityEngine;
@@ -24,9 +27,6 @@ namespace Game.Player.Achievements
     public class AchievementsManager : Singleton<AchievementsManager>, IStarter
     {
         private readonly CompositeDisposable _disposable = new();
-
-        [Header("Страница новых достижений")]
-        [SerializeField] private NewAchievementsPage newAchievementsPage;
 
         [Header("Данные")]
         [SerializeField] private AchievementsData achievementsData;
@@ -106,7 +106,11 @@ namespace Game.Player.Achievements
             if (trackInfo.ChartPosition == 0)
                 return;
 
-            MultipleCheckValue(AchievementsType.TrackChartPosition, trackInfo.ChartPosition, info => info.Achievement.CompareValue);
+            MultipleCheckValue(
+                AchievementsType.TrackChartPosition,
+                trackInfo.ChartPosition,
+                info => info.Achievement.CompareValue
+            );
         }
 
         /// <summary>
@@ -117,7 +121,11 @@ namespace Game.Player.Achievements
             if (albumInfo.ChartPosition == 0)
                 return;
 
-            MultipleCheckValue(AchievementsType.AlbumChartPosition, albumInfo.ChartPosition, info => info.Achievement.CompareValue);
+            MultipleCheckValue(
+                AchievementsType.AlbumChartPosition,
+                albumInfo.ChartPosition,
+                info => info.Achievement.CompareValue
+            );
         }
 
         /// <summary>
@@ -134,7 +142,12 @@ namespace Game.Player.Achievements
         private void CheckConcertPlace(ConcertInfo concertInfo)
         {
             _lastConcertPlaceName = concertInfo.LocationName;
-            EqualCheckValue(AchievementsType.ConcertPlace, concertInfo.LocationId, () => _lastConcertPlaceName = "");
+
+            EqualCheckValue(
+                AchievementsType.ConcertPlace,
+                concertInfo.LocationId,
+                () => _lastConcertPlaceName = ""
+            );
         }
 
         /// <summary>
@@ -164,9 +177,14 @@ namespace Game.Player.Achievements
             if (!TryGetInfo(type, out var lockedInfos))
                 return;
 
-            var achievementInfo = lockedInfos.OrderBy(info => info.Achievement.CompareValue).First();
+            var achievementInfo = lockedInfos
+                .OrderBy(info => info.Achievement.CompareValue)
+                .First();
+
             if (achievementInfo.CheckCondition(value, achievementInfo.Achievement.CompareValue))
+            {
                 AddAchievement(achievementInfo.Achievement);
+            }
         }
 
         /// <summary>
@@ -221,7 +239,7 @@ namespace Game.Player.Achievements
         /// <summary>
         /// Функция добавления ачивки в список заработанных и вывода в UI
         /// </summary>
-        private void AddAchievement(Achievement achievement, bool showUi = true)
+        private void AddAchievement(Achievement achievement, bool showUI = true)
         {
             if (AlreadyExists(achievement))
                 return;
@@ -229,15 +247,27 @@ namespace Game.Player.Achievements
             achievement.Unlocked = true;
             PlayerAPI.Data.Achievements.Add(achievement);
 
-            if (!showUi)
+            if (!showUI)
                 return;
 
             string achivementTemplate = LocalizationManager.Instance.Get(achievement.Type.GetDescription());
             string achivementValue = $"<color=#01C6B8>{GetCompareValueString(achievement)}</color>";
             string achievementInfo = string.Format(achivementTemplate, achivementValue);
 
-            SoundManager.Instance.PlaySound(UIActionType.Achieve);
-            newAchievementsPage.ShowNewAchievement(achievementInfo);
+            MsgBroker.Instance.Publish(new EmailMessage
+            {
+                Title = "new_achiemement_header",
+                Content = "new_achiemement_content",
+                Sender = "game.rewards@mail.com",
+                mainAction = () =>
+                {
+                    MsgBroker.Instance.Publish(new WindowControlMessage
+                    {
+                        Type = WindowType.AchievementUnlocked,
+                        Context = achievementInfo
+                    });
+                }
+            });
         }
 
         private bool AlreadyExists(Achievement achievement)

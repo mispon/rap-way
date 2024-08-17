@@ -48,7 +48,7 @@ namespace Game.SocialNetworks.Email
             MsgBroker.Instance.Publish(new ReadEmailMessage());
         }
 
-        private static void AddEmail(EmailMessage msg)
+        public Email ConvertMessage(EmailMessage msg)
         {
             var email = new Email
             {
@@ -67,6 +67,12 @@ namespace Game.SocialNetworks.Email
                 QuickAction = msg.quickAction
             };
 
+            return email;
+        }
+
+        private void AddEmail(EmailMessage msg)
+        {
+            var email = ConvertMessage(msg);
             GameManager.Instance.Emails.Insert(0, email);
         }
 

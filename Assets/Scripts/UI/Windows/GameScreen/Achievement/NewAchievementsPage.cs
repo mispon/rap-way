@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Core;
+using Core.Context;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,36 +8,24 @@ namespace UI.Windows.GameScreen.Achievement
 {
     public class NewAchievementsPage : Page
     {
-        [SerializeField] private Text achievementText;
+        [SerializeField] private Text achievement;
 
-        private readonly Queue<string> _achievements = new();
-
-        public void ShowNewAchievement(string achievement)
+        public override void Show(object ctx = null)
         {
-            _achievements.Enqueue(achievement);
+            var value = ctx.Value<string>();
+            achievement.text = value;
 
-            try
-            {
-                if (!gameObject.activeSelf)
-                {
-                    Show();
-                }
-            } catch (MissingReferenceException) { }
+            base.Show(ctx);
         }
 
-        protected override void BeforeShow(object ctx = null)
+        protected override void AfterShow(object ctx = null)
         {
-            achievementText.text = _achievements.Dequeue();
+            SoundManager.Instance.PlaySound(UIActionType.Achieve);
         }
 
         protected override void AfterHide()
         {
-            achievementText.text = string.Empty;
-
-            if (_achievements.Count > 0)
-            {
-                Show();
-            }
+            achievement.text = "";
         }
     }
 }

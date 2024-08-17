@@ -6,12 +6,9 @@ namespace Core.Context
     {
         public static T Value<T>(this object ctx)
         {
-            if (ctx is T val)
-            {
-                return val;
-            }
-            
-            return default;
+            return ctx is T val
+                ? val
+                : default;
         }
 
         public static T ValueByKey<T>(this object ctx, string key)

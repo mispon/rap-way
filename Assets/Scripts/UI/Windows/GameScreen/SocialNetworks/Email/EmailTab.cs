@@ -3,8 +3,11 @@ using System.Linq;
 using Enums;
 using Firebase.Analytics;
 using Game.SocialNetworks.Email;
+using MessageBroker;
+using MessageBroker.Messages.SocialNetworks;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Tutorial;
+using UniRx;
 using UnityEngine;
 using EmailInfo = Game.SocialNetworks.Email.Email;
 
@@ -19,8 +22,8 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
         [SerializeField] private GameObject emptyListIcon;
         [SerializeField] private GameObject emptyEmailsIcon;
 
+        private readonly CompositeDisposable _disposables = new();
         private readonly List<EmailCard> _emailCards = new();
-
         private EmailCard _lastSelected;
 
         protected override void BeforeOpen()
@@ -38,6 +41,11 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             }
 
             feed.RepositionElements(_emailCards);
+
+            MsgBroker.Instance
+                .Receive<EmailMessage>()
+                .Subscribe(AppendEmail)
+                .AddTo(_disposables);
         }
 
         protected override void AfterOpen()
@@ -64,7 +72,6 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             {
                 _lastSelected.Unselect();
             }
-
             _lastSelected = card;
 
             if (email.Sprite == null)
@@ -84,6 +91,17 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
             }
         }
 
+        private void AppendEmail(EmailMessage msg)
+        {
+            var email = EmailManager.Instance.ConvertMessage(msg);
+
+            var card = feed.InstantiatedElement<EmailCard>(template);
+            card.Initialize(_emailCards.Count + 1, email, HandleClick);
+
+            _emailCards.Add(card);
+            feed.RepositionElements(_emailCards);
+        }
+
         protected override void AfterClose()
         {
             foreach (var email in _emailCards)
@@ -91,6 +109,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
                 Destroy(email.gameObject);
             }
 
+            _disposables.Clear();
             _emailCards.Clear();
 
             textTemplate.Hide();

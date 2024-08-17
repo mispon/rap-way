@@ -10,6 +10,7 @@ using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
+using UI.Enums;
 using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
 
@@ -17,11 +18,9 @@ namespace Game.Player.Team
 {
     public class TeamManager : Singleton<TeamManager>
     {
-        [Header("Data")] [ArrayElementTitle("Type")]
+        [Header("Data")]
+        [ArrayElementTitle("Type")]
         public TeammateInfo[] teammateInfos;
-
-        [Header("New teammate effect")] [SerializeField]
-        private NewItemEffect newTeammateEffect;
 
         public void TryUnlockTeammates()
         {
@@ -31,7 +30,7 @@ namespace Game.Player.Team
                 return;
             }
 
-            var fans           = PlayerAPI.Data.Fans;
+            var fans = PlayerAPI.Data.Fans;
             var lockedTeammate = lockedTeammates.FirstOrDefault(e => GetInfo(e.Type).FansToUnlock <= fans);
 
             if (lockedTeammate != null)
@@ -64,33 +63,30 @@ namespace Game.Player.Team
         private void UnlockTeammate(Teammate teammate)
         {
             teammate.Skill.Value = 1;
-            teammate.HasPayment  = true;
+            teammate.HasPayment = true;
 
             var info = GetInfo(teammate.Type);
 
             void Notification()
             {
                 SoundManager.Instance.PlaySound(UIActionType.Achieve);
-
-                newTeammateEffect.Show(info.Avatar, () =>
+                MsgBroker.Instance.Publish(new WindowControlMessage
                 {
-                    MsgBroker.Instance.Publish(new WindowControlMessage
+                    Type = WindowType.TeammateUnlocked,
+                    Context = new Dictionary<string, object>
                     {
-                        Context = new Dictionary<string, object>
-                        {
-                            ["teammate"] = teammate,
-                            ["sprite"]   = info.Avatar
-                        }
-                    });
+                        ["teammate"] = teammate,
+                        ["sprite"] = info.Avatar
+                    }
                 });
             }
 
             MsgBroker.Instance.Publish(new EmailMessage
             {
-                Title      = "new_teammate_header",
-                Content    = "new_teammate_header",
-                Sprite     = info.Avatar,
-                Sender     = "team.assistant@mail.com",
+                Title = "new_teammate_header",
+                Content = "new_teammate_header",
+                Sprite = info.Avatar,
+                Sender = "team.assistant@mail.com",
                 mainAction = Notification
             });
         }

@@ -1,5 +1,6 @@
 using MessageBroker;
 using MessageBroker.Messages.Game;
+using Scenes.MessageBroker.Messages;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace UI.Controls.UnreadBadge
 {
     public abstract class BaseUnreadBadge : MonoBehaviour
     {
-        [SerializeField] private Image           image;
+        [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI value;
 
         protected readonly CompositeDisposable disposables = new();
@@ -20,6 +21,10 @@ namespace UI.Controls.UnreadBadge
         {
             MsgBroker.Instance
                 .Receive<GameReadyMessage>()
+                .Subscribe(e => OnGameReady())
+                .AddTo(disposables);
+            MsgBroker.Instance
+                .Receive<SceneLoadedMessage>()
                 .Subscribe(e => OnGameReady())
                 .AddTo(disposables);
         }
@@ -52,13 +57,14 @@ namespace UI.Controls.UnreadBadge
 
         protected void UpdateCounter(int val)
         {
-            _counter   = val;
+            _counter = val;
             value.text = $"{_counter}";
 
             if (_counter > 0)
             {
                 Show();
-            } else
+            }
+            else
             {
                 Hide();
             }
