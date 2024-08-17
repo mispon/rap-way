@@ -20,10 +20,10 @@
 
             return value switch
             {
-                > b => $"{value / b}B",
-                > m => $"{value / m}M",
-                > t => $"{value / t}T",
-                _   => value.ToString()
+                > b => $"{(double)value / b:F1}B",
+                > m => $"{(double)value / m:F1}M",
+                > t => $"{(double)value / t:F1}T",
+                _ => value.ToString()
             };
         }
 

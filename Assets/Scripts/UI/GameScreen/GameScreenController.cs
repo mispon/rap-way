@@ -23,13 +23,16 @@ namespace UI.GameScreen
         [SerializeField] private Image playerAvatar;
         [SerializeField] private TextMeshProUGUI playerNickname;
         [SerializeField] private TextMeshProUGUI playerLevel;
-        [SerializeField] private Text playerFans;
-        [SerializeField] private Text playerMoney;
-        [SerializeField] private Text playerHype;
+
+        [SerializeField] private TextMeshProUGUI playerMoney;
+        [SerializeField] private TextMeshProUGUI playerFans;
+        [SerializeField] private TextMeshProUGUI playerHype;
+
         [SerializeField] private Text currentDate;
         [SerializeField] private Button moneyButton;
         [SerializeField] private Button fansButton;
         [SerializeField] private Button hypeButton;
+
         [SerializeField] private StatDescItem[] statDescItems;
         [Space, SerializeField] private ImagesBank imagesBank;
 
@@ -55,11 +58,11 @@ namespace UI.GameScreen
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<MoneyChangedMessage>()
-                .Subscribe(e => playerMoney.text = e.NewVal.GetMoney())
+                .Subscribe(e => playerMoney.text = e.NewVal.GetShort())
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<FansChangedMessage>()
-                .Subscribe(e => playerFans.text = e.NewVal.GetDisplay())
+                .Subscribe(e => playerFans.text = e.NewVal.GetShort())
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<HypeChangedMessage>()
@@ -90,8 +93,8 @@ namespace UI.GameScreen
         {
             playerNickname.text = resp.NickName.ToUpper();
             playerAvatar.sprite = resp.Gender == Gender.Male ? imagesBank.MaleAvatar : imagesBank.FemaleAvatar;
-            playerMoney.text = resp.Money.GetMoney();
-            playerFans.text = resp.Fans.GetDisplay();
+            playerMoney.text = resp.Money.GetShort();
+            playerFans.text = resp.Fans.GetShort();
             playerHype.text = resp.Hype.ToString();
             currentDate.text = TimeManager.Instance.DisplayNow;
         }

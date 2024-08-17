@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
+using MessageBroker.Messages.Player.State;
 
 namespace UI.GameScreen
 {
@@ -16,6 +17,7 @@ namespace UI.GameScreen
     {
         [SerializeField] private Button newsButton;
         [SerializeField] private Button emailsButton;
+        [SerializeField] private Button moneyButton;
 
         private void Start()
         {
@@ -53,6 +55,11 @@ namespace UI.GameScreen
                         });
                     }
                 });
+            });
+
+            moneyButton.onClick.AddListener(() =>
+            {
+                MsgBroker.Instance.Publish(new ChangeMoneyMessage { Amount = 100 });
             });
         }
     }
