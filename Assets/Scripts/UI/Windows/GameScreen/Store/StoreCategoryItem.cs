@@ -8,15 +8,16 @@ namespace UI.Windows.GameScreen.Store
 {
     public class StoreCategoryItem : MonoBehaviour, IScrollViewControllerItem
     {
-        [Header("View")] [SerializeField] private StoreItemsView itemsView;
-        
+        [Header("View")]
+        [SerializeField] private StoreItemsView itemsView;
+
         [Header("Category")]
         [SerializeField] private Image categoryIcon;
         [SerializeField] private Text categoryName;
         [SerializeField] private Button itemsViewButton;
-        
+
         private RectTransform _rectTransform;
-        
+
         private int _index { get; set; }
         private float _height { get; set; }
         private float _width { get; set; }
@@ -31,9 +32,11 @@ namespace UI.Windows.GameScreen.Store
         public void ShowItems(bool silent = false)
         {
             if (!silent)
+            {
                 SoundManager.Instance.PlaySound(UIActionType.Click);
+            }
 
-            int category = _index - 1; 
+            int category = _index - 1;
             itemsView.Show(category, _itemsInfo);
         }
 
@@ -45,18 +48,18 @@ namespace UI.Windows.GameScreen.Store
             categoryIcon.sprite = cIcon;
             categoryName.text = cName;
         }
-        
+
         public void SetPosition(float spacing)
         {
             if (_rectTransform == null)
                 _rectTransform = GetComponent<RectTransform>();
-             
+
             if (_height == 0)
                 _height = _rectTransform.rect.height;
             if (_width == 0)
                 _width = _rectTransform.rect.width;
-            
-            var pos = Vector2.down * ((spacing * (_index-1)) + (_height * (_index-1)));
+
+            var pos = Vector2.down * ((spacing * (_index - 1)) + (_height * (_index - 1)));
             _rectTransform.anchoredPosition = pos;
         }
 

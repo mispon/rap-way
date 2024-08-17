@@ -41,9 +41,13 @@ namespace Game.SocialNetworks.News
                 TextArgs = msg.TextArgs,
                 Popularity = msg.Popularity,
                 Sprite = msg.Sprite,
-                SpriteName = msg.Sprite.name,
                 Date = TimeManager.Instance.DisplayNow
             };
+
+            if (msg.Sprite != null)
+            {
+                news.SpriteName = msg.Sprite.name;
+            }
 
             GameManager.Instance.News.Insert(0, news);
         }

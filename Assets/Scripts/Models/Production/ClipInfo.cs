@@ -9,13 +9,13 @@ namespace Models.Production
     /// Информация о выпущенном клипе
     /// </summary>
     [Serializable]
-    public class ClipInfo: ProductionBase
+    public class ClipInfo : ProductionBase
     {
         public int TrackId;
 
         public int DirectorSkill;
         public int OperatorSkill;
-        
+
         public int DirectorPoints;
         public int OperatorPoints;
 
@@ -31,7 +31,8 @@ namespace Models.Production
             $"+{Likes.GetDisplay()} / -{Dislikes.GetDisplay()}"
         };
 
-        public override string GetLog() {
+        public override string GetLog()
+        {
             string trackName = ProductionManager.GetTrackName(TrackId);
             return $"{Timestamp}: {LocalizationManager.Instance.Get("log_clip")} {trackName}";
         }

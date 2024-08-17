@@ -6,7 +6,9 @@ using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Labels;
 using MessageBroker.Messages.SocialNetworks;
+using MessageBroker.Messages.UI;
 using ScriptableObjects;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -69,13 +71,15 @@ namespace UI.Windows.GameScreen.Contracts
                 Popularity = PlayerAPI.Data.Fans
             });
 
-            base.Hide();
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Previous));
         }
 
         private void OnSign()
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
             SoundManager.Instance.PlaySound(UIActionType.Click);
+
+            PlayerAPI.Data.Label = _labelName;
 
             MsgBroker.Instance.Publish(new PlayerSignLabelsContractMessage { });
             MsgBroker.Instance.Publish(new NewsMessage
@@ -91,8 +95,7 @@ namespace UI.Windows.GameScreen.Contracts
                 Popularity = PlayerAPI.Data.Fans
             });
 
-            PlayerAPI.Data.Label = _labelName;
-            base.Hide();
+            MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Previous));
         }
 
         protected override void AfterHide()

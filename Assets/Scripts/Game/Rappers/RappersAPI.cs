@@ -20,18 +20,11 @@ namespace Game.Rappers
             _customRappers.Remove(info);
         }
 
-        public RapperInfo GetRandomRapper()
+        public RapperInfo GetRandom()
         {
-            int rappersTotal = _rappers.Count + _customRappers.Count;
-            int dice = Random.Range(0, rappersTotal);
-
-            if (dice < _rappers.Count)
-            {
-                return _rappers[dice];
-            }
-
-            dice -= _rappers.Count;
-            return _customRappers[dice];
+            var rappers = GetAll().ToArray();
+            int dice = Random.Range(0, rappers.Length);
+            return rappers[dice];
         }
 
         public IEnumerable<RapperInfo> GetAll()
@@ -47,13 +40,11 @@ namespace Game.Rappers
 
             foreach (var rapperInfo in _customRappers)
             {
+                rapperInfo.Avatar = imagesBank.CustomRapperAvatar;
                 yield return rapperInfo;
             }
         }
 
-        /// <summary>
-        /// Returns all rappers from label
-        /// </summary>
         public IEnumerable<RapperInfo> GetFromLabel(string label)
         {
             var rSource = _rappers.Where(rapperInfo => rapperInfo.Label == label);

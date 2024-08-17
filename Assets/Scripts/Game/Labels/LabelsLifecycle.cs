@@ -79,7 +79,7 @@ namespace Game.Labels
 
         private void RandomRapperLabelAction()
         {
-            var rapper = RappersAPI.Instance.GetRandomRapper();
+            var rapper = RappersAPI.Instance.GetRandom();
 
             if (rapper.Label == "")
             {

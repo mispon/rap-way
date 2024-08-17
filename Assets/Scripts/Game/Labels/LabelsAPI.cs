@@ -43,8 +43,8 @@ namespace Game.Labels
         public LabelInfo GetRandom()
         {
             var labels = GetAll().ToArray();
-            var idx = Random.Range(0, labels.Length);
-            return labels[idx];
+            var dice = Random.Range(0, labels.Length);
+            return labels[dice];
         }
 
         public IEnumerable<LabelInfo> GetAll()
