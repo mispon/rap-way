@@ -41,6 +41,8 @@ namespace Game.Rappers
             foreach (var rapperInfo in _customRappers)
             {
                 rapperInfo.Avatar = imagesBank.CustomRapperAvatar;
+                rapperInfo.AvatarName = imagesBank.CustomRapperAvatar.name;
+
                 yield return rapperInfo;
             }
         }

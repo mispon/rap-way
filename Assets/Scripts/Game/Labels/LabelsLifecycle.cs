@@ -123,7 +123,6 @@ namespace Game.Labels
                 if (dice >= 0)
                     continue;
 
-
                 MsgBroker.Instance.Publish(new NewsMessage
                 {
                     Text = "news_rapper_join_label",

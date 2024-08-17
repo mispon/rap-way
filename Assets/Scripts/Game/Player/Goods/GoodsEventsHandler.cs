@@ -1,32 +1,29 @@
 using System.Linq;
-using Core.OrderedStarter;
 using Game.Player.Goods.Desc;
 using MessageBroker;
+using MessageBroker.Interfaces;
 using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
 using UniRx;
-using UnityEngine;
 
 namespace Game.Player.Goods
 {
-    public class GoodsEventsHandler : MonoBehaviour, IStarter
+    public class GoodsEventsHandler : IMessagesHandler
     {
-        private readonly CompositeDisposable _disposable = new(); 
-        
-        public void OnStart()
+        public void RegisterHandlers(CompositeDisposable disposable)
         {
-            HandleAddNewGood();
-            HandleGoodExistsRequest();
+            HandleAddNewGood(disposable);
+            HandleGoodExistsRequest(disposable);
         }
 
-        private void HandleAddNewGood()
+        private void HandleAddNewGood(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<AddNewGoodMessage>()
                 .Subscribe(e =>
                 {
                     var playerData = GameManager.Instance.PlayerData;
-                    
+
                     var good = new Good
                     {
                         Type = e.Type,
@@ -35,32 +32,27 @@ namespace Game.Player.Goods
                         QualityImpact = e.QualityImpact
                     };
                     playerData.Goods.Add(good);
-                    
+
                     MsgBroker.Instance.Publish(new ChangeHypeMessage());
                 })
-                .AddTo(_disposable);
+                .AddTo(disposable);
         }
 
-        private void HandleGoodExistsRequest()
+        private void HandleGoodExistsRequest(CompositeDisposable disposable)
         {
             MsgBroker.Instance
                 .Receive<GoodExistsRequest>()
                 .Subscribe(e =>
                 {
                     var playerData = GameManager.Instance.PlayerData;
-                    
+
                     bool exists = e.IsNoAds
                         ? GameManager.Instance.LoadNoAds()
                         : playerData.Goods.Any(g => g.Type == e.Type && g.Level == e.Level);
-                    
-                    MsgBroker.Instance.Publish(new GoodExistsResponse {Status = exists});
-                })
-                .AddTo(_disposable);
-        }
 
-        private void OnDestroy()
-        {
-            _disposable.Clear();
+                    MsgBroker.Instance.Publish(new GoodExistsResponse { Status = exists });
+                })
+                .AddTo(disposable);
         }
     }
 }
