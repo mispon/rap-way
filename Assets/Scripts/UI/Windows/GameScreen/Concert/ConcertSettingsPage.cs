@@ -70,11 +70,14 @@ namespace UI.Windows.GameScreen.Concert
         private void CreateConcert()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest { Amount = _placeCost });
+            MsgBroker.Instance.Publish(new SpendMoneyRequest { Id = "concert", Amount = _placeCost });
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
         {
+            if (resp.Id != "concert")
+                return;
+
             if (!resp.OK)
             {
                 noMoneyErr.Show(GetLocale("not_enough_money"));
@@ -178,12 +181,14 @@ namespace UI.Windows.GameScreen.Concert
         protected override void AfterShow(object ctx = null)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
-            HintsManager.Instance.ShowHint("tutorial_concert_page");
 
-            MsgBroker.Instance
-                .Receive<SpendMoneyResponse>()
-                .Subscribe(HandleSpendMoneyResponse)
-                .AddTo(_disposable);
+            if (!HintsManager.Instance.ShowHint("tutorial_concert_page"))
+            {
+                MsgBroker.Instance
+                    .Receive<SpendMoneyResponse>()
+                    .Subscribe(HandleSpendMoneyResponse)
+                    .AddTo(_disposable);
+            }
         }
 
         protected override void AfterHide()

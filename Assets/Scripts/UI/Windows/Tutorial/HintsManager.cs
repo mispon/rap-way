@@ -24,24 +24,26 @@ namespace UI.Windows.Tutorial
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
         }
 
-        public void ShowHint(string key, object pageCtx = null)
+        public bool ShowHint(string key, object pageCtx = null)
         {
             bool ok = GameManager.Instance.ShowedHints.Add(key);
             if (!ok)
-                return;
+                return false;
 
             var info = LocalizationManager.Instance.Get(key);
-            
+
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
                 Type = WindowType.Hints,
                 Context = new Dictionary<string, object>
                 {
-                    ["hint_key"]  = key,
+                    ["hint_key"] = key,
                     ["hint_text"] = info,
-                    ["page_ctx"]  = pageCtx
+                    ["page_ctx"] = pageCtx
                 }
             });
+
+            return true;
         }
     }
 }

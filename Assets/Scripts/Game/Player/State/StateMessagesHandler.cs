@@ -32,7 +32,7 @@ namespace Game.Player.State
                 .Subscribe(_ =>
                 {
                     var playerData = GameManager.Instance.PlayerData;
-                    
+
                     MsgBroker.Instance.Publish(new FullStateResponse
                     {
                         NickName = playerData.Info.NickName,
@@ -46,7 +46,7 @@ namespace Game.Player.State
                 })
                 .AddTo(disposable);
         }
-        
+
         private void HandleChangeMoney(CompositeDisposable disposable)
         {
             MsgBroker.Instance
@@ -54,7 +54,7 @@ namespace Game.Player.State
                 .Subscribe(e => UpdateMoney(e.Amount))
                 .AddTo(disposable);
         }
-        
+
         private void HandleSpendMoneyRequest(CompositeDisposable disposable)
         {
             MsgBroker.Instance
@@ -62,11 +62,11 @@ namespace Game.Player.State
                 .Subscribe(e =>
                 {
                     bool isMoneyEnough = GameManager.Instance.PlayerData.Money >= e.Amount;
-                    
+
                     if (isMoneyEnough)
                         UpdateMoney(-e.Amount);
-                    
-                    MsgBroker.Instance.Publish(new SpendMoneyResponse {OK = isMoneyEnough});
+
+                    MsgBroker.Instance.Publish(new SpendMoneyResponse { Id = e.Id, OK = isMoneyEnough });
                 })
                 .AddTo(disposable);
         }
@@ -78,7 +78,7 @@ namespace Game.Player.State
                 .Subscribe(e => UpdateFans(e.Amount))
                 .AddTo(disposable);
         }
-        
+
         private static void HandleChangeExp(CompositeDisposable disposable)
         {
             MsgBroker.Instance
@@ -96,10 +96,10 @@ namespace Game.Player.State
                     UpdateMoney(e.MoneyIncome);
                     UpdateFans(e.FansIncome);
                     UpdateExp(e.Exp);
-                    
+
                     if (e.WithSocialCooldown)
                         GameManager.Instance.GameStats.SocialsCooldown = _settings.Socials.Cooldown;
-                    
+
                     GameManager.Instance.SaveApplicationData();
                 })
                 .AddTo(disposable);
@@ -121,42 +121,42 @@ namespace Game.Player.State
         private void UpdateMoney(int value)
         {
             var playerData = GameManager.Instance.PlayerData;
-                    
+
             int oldVal = playerData.Money;
             int newVal = SafetyAdd(oldVal, value, _settings.Player.MaxMoney);
 
             playerData.Money = newVal;
-            MsgBroker.Instance.Publish(new MoneyChangedMessage {OldVal = oldVal, NewVal = newVal});
+            MsgBroker.Instance.Publish(new MoneyChangedMessage { OldVal = oldVal, NewVal = newVal });
         }
 
         private void UpdateFans(int value)
         {
             var playerData = GameManager.Instance.PlayerData;
-                    
+
             int oldVal = playerData.Fans;
             int newVal = SafetyAdd(oldVal, value, _settings.Player.MaxFans);
-                    
+
             const int minFans = 0;
             newVal = Mathf.Max(newVal, minFans);
-                    
+
             playerData.Fans = newVal;
-            MsgBroker.Instance.Publish(new FansChangedMessage {OldVal = oldVal, NewVal = newVal});
+            MsgBroker.Instance.Publish(new FansChangedMessage { OldVal = oldVal, NewVal = newVal });
         }
 
         private static void UpdateExp(int value)
         {
             var playerData = GameManager.Instance.PlayerData;
-                    
+
             int oldVal = playerData.Exp;
             int newVal = playerData.Exp + value;
-                    
+
             const int minExp = 0;
             newVal = Mathf.Max(newVal, minExp);
 
             playerData.Exp = newVal;
-            MsgBroker.Instance.Publish(new ExpChangedMessage {OldVal = oldVal, NewVal = newVal});
+            MsgBroker.Instance.Publish(new ExpChangedMessage { OldVal = oldVal, NewVal = newVal });
         }
-        
+
         private static int SafetyAdd(int current, int increment, int maxValue)
         {
             return maxValue - current > increment

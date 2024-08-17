@@ -65,9 +65,12 @@ namespace UI.Windows.GameScreen.Store.Purchase
             base.Show(ctx);
         }
 
-        private void HandleItemPurchase(bool ok)
+        private void HandleItemPurchase(SpendMoneyResponse resp)
         {
-            if (!ok)
+            if (resp.Id != "store")
+                return;
+
+            if (!resp.OK)
             {
                 gameError.Show(GetLocale("not_enough_money"));
                 return;
@@ -97,7 +100,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
         private void BuyItemClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest { Amount = _info.Price });
+            MsgBroker.Instance.Publish(new SpendMoneyRequest { Id = "store", Amount = _info.Price });
         }
 
         private void CloseCard()
@@ -110,7 +113,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
         {
             MsgBroker.Instance
                 .Receive<SpendMoneyResponse>()
-                .Subscribe(e => HandleItemPurchase(e.OK))
+                .Subscribe(HandleItemPurchase)
                 .AddTo(_disposable);
         }
 

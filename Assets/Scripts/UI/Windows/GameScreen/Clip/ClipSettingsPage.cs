@@ -72,11 +72,14 @@ namespace UI.Windows.GameScreen.Clip
         private void CreateClip()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest { Amount = _clipCost });
+            MsgBroker.Instance.Publish(new SpendMoneyRequest { Id = "clip", Amount = _clipCost });
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
         {
+            if (resp.Id != "clip")
+                return;
+
             if (!resp.OK)
             {
                 noMoneyErr.Show(GetLocale("not_enough_money"));
@@ -151,12 +154,14 @@ namespace UI.Windows.GameScreen.Clip
         protected override void AfterShow(object ctx = null)
         {
             FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
-            HintsManager.Instance.ShowHint("tutorial_clip_page");
 
-            MsgBroker.Instance
-                .Receive<SpendMoneyResponse>()
-                .Subscribe(HandleSpendMoneyResponse)
-                .AddTo(_disposable);
+            if (!HintsManager.Instance.ShowHint("tutorial_clip_page"))
+            {
+                MsgBroker.Instance
+                    .Receive<SpendMoneyResponse>()
+                    .Subscribe(HandleSpendMoneyResponse)
+                    .AddTo(_disposable);
+            }
         }
 
         protected override void AfterHide()
