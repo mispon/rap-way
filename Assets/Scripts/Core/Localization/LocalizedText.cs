@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using Game;
 using MessageBroker;
 using MessageBroker.Messages.Game;
+using Scenes.MessageBroker.Messages;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,38 +20,39 @@ namespace Core.Localization
     public class LocalizedText : MonoBehaviour
     {
         [SerializeField] private TextCase textCase = TextCase.Normal;
-        [SerializeField] private string   key;
+        [SerializeField] private string key;
 
-        private IDisposable _disposable;
-        private Text        _value;
+        private Text _value;
+        private readonly CompositeDisposable _disposable = new();
+
+        private void Awake()
+        {
+            _value = GetComponent<Text>();
+        }
 
         private IEnumerator Start()
         {
-            while (!LocalizationManager.Instance.IsReady)
-            {
-                yield return null;
-            }
-
-            _value = GetComponent<Text>();
-
-            _disposable = MsgBroker.Instance
+            MsgBroker.Instance
+                .Receive<GameReadyMessage>()
+                .Subscribe(e => OnLangChanged())
+                .AddTo(_disposable);
+            MsgBroker.Instance
+                .Receive<SceneLoadedMessage>()
+                .Subscribe(e => OnLangChanged())
+                .AddTo(_disposable);
+            MsgBroker.Instance
                 .Receive<LangChangedMessage>()
-                .Subscribe(e => OnLangChanged());
+                .Subscribe(e => OnLangChanged())
+                .AddTo(_disposable);
 
-            ApplyText();
-        }
+            while (!GameManager.Instance.Ready)
+                yield return null;
 
-        private void OnDestroy()
-        {
-            _disposable?.Dispose();
+            // apply actual localization 
+            OnLangChanged();
         }
 
         private void OnLangChanged()
-        {
-            ApplyText();
-        }
-
-        private void ApplyText()
         {
             var text = LocalizationManager.Instance.Get(key);
 
@@ -65,6 +67,11 @@ namespace Core.Localization
             }
 
             _value.text = text;
+        }
+
+        private void OnDestroy()
+        {
+            _disposable.Clear();
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using Game;
 using MessageBroker;
 using MessageBroker.Messages.Game;
+using Scenes.MessageBroker.Messages;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -13,36 +14,41 @@ namespace Core.Localization
     {
         [SerializeField] private TextCase textCase = TextCase.Normal;
         [SerializeField] private string key;
-        
-        private TextMeshProUGUI value;
-        private IDisposable _disposable;
+
+        private TextMeshProUGUI _value;
+        private readonly CompositeDisposable _disposable = new();
 
         private void Awake()
         {
-            value = GetComponent<TextMeshProUGUI>();
-
-            _disposable = MsgBroker.Instance
-                .Receive<LangChangedMessage>()
-                .Subscribe(e => OnLangChanged());
+            _value = GetComponent<TextMeshProUGUI>();
         }
 
         private IEnumerator Start()
         {
-            while (!LocalizationManager.Instance.IsReady)
+            MsgBroker.Instance
+                .Receive<GameReadyMessage>()
+                .Subscribe(e => OnLangChanged())
+                .AddTo(_disposable);
+            MsgBroker.Instance
+                .Receive<SceneLoadedMessage>()
+                .Subscribe(e => OnLangChanged())
+                .AddTo(_disposable);
+            MsgBroker.Instance
+                .Receive<LangChangedMessage>()
+                .Subscribe(e => OnLangChanged())
+                .AddTo(_disposable);
+
+            while (!GameManager.Instance.Ready)
                 yield return null;
-            
-            ApplyText();
+
+            // apply actual localization 
+            OnLangChanged();
         }
-        
+
         private void OnLangChanged()
         {
-            ApplyText();
-        }
-        
-        private void ApplyText()
-        {
             string text = LocalizationManager.Instance.Get(key);
-            
+
             switch (textCase)
             {
                 case TextCase.Lower:
@@ -53,12 +59,12 @@ namespace Core.Localization
                     break;
             }
 
-            value.text = text;
+            _value.text = text;
         }
 
         private void OnDestroy()
         {
-            _disposable?.Dispose();
+            _disposable.Clear();
         }
     }
 }

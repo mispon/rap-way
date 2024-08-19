@@ -63,6 +63,11 @@ namespace UI.Windows.GameScreen.Rappers
             list.RepositionElements(_listItems);
         }
 
+        protected override void AfterShow(object ctx = null)
+        {
+            HintsManager.Instance.ShowHint("tutorial_rappers", ChartsTabType.Rappers);
+        }
+
         /// <summary>
         /// Returns all rappers (internal and custom) sorted desc by fans count
         /// </summary>
@@ -82,11 +87,6 @@ namespace UI.Windows.GameScreen.Rappers
             });
 
             return allRappers.OrderByDescending(r => r.Fans).ToList();
-        }
-
-        protected override void AfterShow(object ctx = null)
-        {
-            HintsManager.Instance.ShowHint("tutorial_rappers", ChartsTabType.Rappers);
         }
 
         protected override void AfterHide()

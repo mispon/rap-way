@@ -27,16 +27,19 @@ namespace UI.Windows.GameScreen.Rappers
         [SerializeField] private Sprite playerFemaleImage;
         [SerializeField] private Image avatar;
         [SerializeField] private Text nickname;
+
         [Space]
         [SerializeField] private Text vocobulary;
         [SerializeField] private Text bitmaking;
         [SerializeField] private Text management;
+
         [Space]
         [SerializeField] private Image managerAvatar;
         [SerializeField] private Button battleButton;
         [SerializeField] private Button featButton;
         [SerializeField] private Button labelButton;
         [SerializeField] private Button deleteButton;
+
         [Space]
         [SerializeField] private Text fans;
         [SerializeField] private Text label;
@@ -73,6 +76,14 @@ namespace UI.Windows.GameScreen.Rappers
                     break;
             }
 
+            var manager = PlayerAPI.Data.Team.Manager;
+            bool isAvailable = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
+            if (!isAvailable)
+            {
+                Refresh();
+                return;
+            }
+
             int cooldown = GameManager.Instance.Settings.Team.ManagerCooldown;
             MsgBroker.Instance.Publish(new TeammateCooldownMessage
             {
@@ -89,6 +100,8 @@ namespace UI.Windows.GameScreen.Rappers
                     ["conv_type"] = convType
                 }
             });
+
+            Refresh();
         }
 
         private void DeleteRapper()
@@ -97,9 +110,6 @@ namespace UI.Windows.GameScreen.Rappers
             onDelete.Invoke(_rapper);
         }
 
-        /// <summary>
-        /// Открывает персональную карточку репера
-        /// </summary>
         public void Show(RapperInfo rapperInfo)
         {
             _rapper = rapperInfo;
@@ -107,13 +117,9 @@ namespace UI.Windows.GameScreen.Rappers
             deleteButton.gameObject.SetActive(_rapper.IsCustom);
 
             DisplayInfo(rapperInfo);
-            CheckPlayerManager();
-            CheckPlayersLabel();
+            Refresh();
         }
 
-        /// <summary>
-        /// Отобажает информацию в UI
-        /// </summary>
         private void DisplayInfo(RapperInfo info)
         {
             avatar.sprite = GetAvatar(info);
@@ -145,9 +151,12 @@ namespace UI.Windows.GameScreen.Rappers
             return info.IsCustom || info.Avatar == null ? customImage : info.Avatar;
         }
 
-        /// <summary>
-        /// Вызывается перед открытием страницы
-        /// </summary>
+        private void Refresh()
+        {
+            CheckPlayerManager();
+            CheckPlayersLabel();
+        }
+
         private void CheckPlayerManager()
         {
             var manager = PlayerAPI.Data.Team.Manager;

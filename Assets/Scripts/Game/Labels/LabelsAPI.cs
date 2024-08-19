@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Labels.Desc;
 using Models.Game;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
-using Core;
-using UnityEngine;
 
 namespace Game.Labels
 {

@@ -46,9 +46,9 @@ namespace UI.Windows.GameScreen.Rappers
 
         protected override void StartWork(object ctx)
         {
-            _rapper   = ctx.ValueByKey<RapperInfo>("rapper"); 
+            _rapper = ctx.ValueByKey<RapperInfo>("rapper");
             _convType = ctx.ValueByKey<ConversationType>("conv_type");
-            
+
             RefreshWorkAnims();
         }
 
@@ -66,10 +66,10 @@ namespace UI.Windows.GameScreen.Rappers
                 Type = WindowType.RapperConversationsResult,
                 Context = new Dictionary<string, object>
                 {
-                    ["rapper"]        = _rapper,
+                    ["rapper"] = _rapper,
                     ["player_points"] = _playerPoints,
                     ["rapper_points"] = _rapperPoints,
-                    ["conv_type"]     = _convType
+                    ["conv_type"] = _convType
                 }
             });
         }
@@ -97,7 +97,7 @@ namespace UI.Windows.GameScreen.Rappers
 
         private void GenerateRapperWorkPoints()
         {
-            int rapperPoints =  Random.Range(1, _rapper.Management + 1);
+            int rapperPoints = Random.Range(1, _rapper.Management + 1);
             rapperWorkPoints.Show(rapperPoints);
             _rapperPoints += rapperPoints;
             rapperPointsLabel.text = $"{_rapperPoints}";
@@ -106,10 +106,10 @@ namespace UI.Windows.GameScreen.Rappers
         protected override void BeforeShow(object ctx = null)
         {
             base.BeforeShow(ctx);
-            
+
             _hasManager = TeamManager.IsAvailable(TeammateType.Manager);
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
-            
+
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
             managementPointsLabel.text = "0";
             rapperPointsLabel.text = "0";

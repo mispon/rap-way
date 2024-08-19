@@ -16,10 +16,13 @@ namespace Core
 
         public bool TryGetByName(string spriteName, out Sprite sprite)
         {
-            if (_imagesMap.TryGetValue(spriteName, out var s))
+            if (spriteName != "" && spriteName != "null")
             {
-                sprite = s;
-                return true;
+                if (_imagesMap.TryGetValue(spriteName, out var s))
+                {
+                    sprite = s;
+                    return true;
+                }
             }
 
             sprite = null;

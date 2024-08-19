@@ -79,7 +79,7 @@ namespace UI.Windows.GameScreen.Store
 
         private void UpdateGameBalance(int money)
         {
-            gameBalance.text = money.GetDisplay();
+            gameBalance.text = money.GetShort();
         }
 
         private void UpdateDonateBalance(int donate)

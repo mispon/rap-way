@@ -19,7 +19,6 @@ using MessageBroker.Messages.Game;
 using Models.Game;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 #pragma warning disable CS0414 // Field is assigned but its value is never used
 
@@ -74,16 +73,18 @@ namespace Game
         [Header("News")] public List<News> News;
         [Header("Tutorials")] public HashSet<string> ShowedHints;
 
+        public bool Ready;
+
         private readonly CompositeDisposable _disposables = new();
 
-        private async void Start()
+        private void Start()
         {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
 
             RegisterHandlers();
 
-            await Task.Delay(500);
+            Ready = true;
             MsgBroker.Instance.Publish(new GameReadyMessage());
         }
 

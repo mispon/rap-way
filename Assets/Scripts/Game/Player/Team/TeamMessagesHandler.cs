@@ -1,3 +1,4 @@
+using Enums;
 using MessageBroker;
 using MessageBroker.Interfaces;
 using MessageBroker.Messages.Player;
@@ -16,6 +17,7 @@ namespace Game.Player.Team
         {
             HandleDayLeft(disposable);
             HandleMonthLeft(disposable);
+            HandleTeammateCooldown(disposable);
         }
 
         private static void HandleDayLeft(CompositeDisposable disposable)
@@ -35,6 +37,33 @@ namespace Game.Player.Team
             MsgBroker.Instance
                 .Receive<MonthLeftMessage>()
                 .Subscribe(e => OnMonthLeft(e.Month))
+                .AddTo(disposable);
+        }
+
+        private static void HandleTeammateCooldown(CompositeDisposable disposable)
+        {
+            MsgBroker.Instance
+                .Receive<TeammateCooldownMessage>()
+                .Subscribe(e =>
+                {
+                    var team = PlayerAPI.Data.Team;
+
+                    switch (e.Type)
+                    {
+                        case TeammateType.BitMaker:
+                            team.BitMaker.Cooldown = e.Cooldown;
+                            break;
+                        case TeammateType.TextWriter:
+                            team.TextWriter.Cooldown = e.Cooldown;
+                            break;
+                        case TeammateType.Manager:
+                            team.Manager.Cooldown = e.Cooldown;
+                            break;
+                        case TeammateType.PrMan:
+                            team.PrMan.Cooldown = e.Cooldown;
+                            break;
+                    }
+                })
                 .AddTo(disposable);
         }
 
@@ -75,10 +104,10 @@ namespace Game.Player.Team
             const int teamTab = 3;
             MsgBroker.Instance.Publish(new EmailMessage
             {
-                Title       = "email_team_salary_title",
-                Content     = "email_team_salary_content",
-                ContentArgs = new[] {PlayerAPI.Data.Info.NickName},
-                Sender      = "team.assistant@mail.com",
+                Title = "email_team_salary_title",
+                Content = "email_team_salary_content",
+                ContentArgs = new[] { PlayerAPI.Data.Info.NickName },
+                Sender = "team.assistant@mail.com",
                 mainAction = () =>
                 {
                     MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Training, teamTab));

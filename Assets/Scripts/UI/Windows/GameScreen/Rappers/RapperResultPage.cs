@@ -32,18 +32,18 @@ namespace UI.Windows.GameScreen.Rappers
             cancelButton.onClick.AddListener(OnClose);
             nextButton.onClick.AddListener(OnNext);
         }
-        
+
         public override void Show(object ctx = null)
         {
-            _rapper   = ctx.ValueByKey<RapperInfo>("rapper");
+            _rapper = ctx.ValueByKey<RapperInfo>("rapper");
             _convType = ctx.ValueByKey<ConversationType>("conv_type");
-            
+
             var playerPoints = ctx.ValueByKey<int>("player_points");
             var rapperPoints = ctx.ValueByKey<int>("rapper_points");
-            
+
             bool result = AnalyzeConversations(playerPoints, rapperPoints);
             DisplayResult(result, _rapper.Name);
-            
+
             base.Show(ctx);
         }
 
@@ -58,7 +58,7 @@ namespace UI.Windows.GameScreen.Rappers
             string key = result ? "conversations_success" : "conversations_fail";
             message.text = $"{GetLocale(key)} <color=#01C6B8>{rapperName}</color>!";
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
-            
+
             okButton.gameObject.SetActive(!result);
             cancelButton.gameObject.SetActive(result);
             nextButton.gameObject.SetActive(result);
@@ -77,7 +77,7 @@ namespace UI.Windows.GameScreen.Rappers
                         Context = _rapper
                     });
                     break;
-                
+
                 case ConversationType.Battle:
                     MsgBroker.Instance.Publish(new WindowControlMessage
                     {
@@ -87,14 +87,12 @@ namespace UI.Windows.GameScreen.Rappers
                     break;
 
                 case ConversationType.Label:
-                    _rapper.Label = PlayerAPI.Data.Label;
-                    LabelsAPI.Instance.RefreshScore(_rapper.Label);
-                    MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
+                    MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.RapperJoinLabel, _rapper));
                     break;
 
                 default:
                     MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
-                    Debug.LogError($"Unexpected conv type {_convType.ToString()}");
+                    Debug.LogError($"Unexpected conv type {_convType}");
                     break;
             }
         }
@@ -109,7 +107,7 @@ namespace UI.Windows.GameScreen.Rappers
             SoundManager.Instance.PlaySound(UIActionType.Click);
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
-                Type    = WindowType.Charts,
+                Type = WindowType.Charts,
                 Context = ChartsTabType.Rappers
             });
         }

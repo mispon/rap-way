@@ -29,8 +29,6 @@ namespace Core.Localization
         [SerializeField] private LocalizationData _data;
         private LocalizationData _enBackup;
 
-        public bool IsReady { get; private set; }
-
         protected override void Awake()
         {
             dontDestroy = true;
@@ -86,8 +84,6 @@ namespace Core.Localization
         /// </summary>
         private IEnumerator LoadLocalizationAsync(GameLang lang, bool sendEvent = false)
         {
-            IsReady = false;
-
             string path = Path.Combine(Application.streamingAssetsPath, GetFileName(lang));
 
             string jsonData = "";
@@ -105,7 +101,6 @@ namespace Core.Localization
                 MsgBroker.Instance.Publish(new LangChangedMessage { Lang = lang });
             }
 
-            IsReady = true;
             yield return null;
         }
 

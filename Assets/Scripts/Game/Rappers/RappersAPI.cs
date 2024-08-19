@@ -31,10 +31,10 @@ namespace Game.Rappers
         {
             foreach (var rapperInfo in _rappers)
             {
-                if (SpritesManager.Instance.TryGetByName(rapperInfo.AvatarName, out var avatar))
-                {
-                    rapperInfo.Avatar = avatar != null ? avatar : imagesBank.CustomRapperAvatar;
-                }
+                rapperInfo.Avatar = SpritesManager.Instance.TryGetByName(rapperInfo.AvatarName, out var avatar)
+                   ? avatar
+                   : imagesBank.CustomRapperAvatar;
+
                 yield return rapperInfo;
             }
 

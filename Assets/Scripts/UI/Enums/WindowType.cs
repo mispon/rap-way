@@ -73,6 +73,8 @@ namespace UI.Enums
         TeammateUnlocked = 51,
         AchievementUnlocked = 52,
 
+        RapperJoinLabel = 53,
+
         Previous = 998,
         None = 999
     }
