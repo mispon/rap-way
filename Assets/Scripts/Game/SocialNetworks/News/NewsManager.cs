@@ -5,6 +5,7 @@ using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
 using UniRx;
+using UnityEngine;
 
 namespace Game.SocialNetworks.News
 {

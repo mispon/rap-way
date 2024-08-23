@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -83,6 +84,12 @@ namespace Game
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
 
             RegisterHandlers();
+            StartCoroutine(SetReady());
+        }
+
+        private IEnumerator SetReady()
+        {
+            yield return new WaitForSeconds(1);
 
             Ready = true;
             MsgBroker.Instance.Publish(new GameReadyMessage());

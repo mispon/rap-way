@@ -16,13 +16,15 @@ namespace UI.Windows.GameScreen.Concert
         [Header("Персонаж")]
         [SerializeField] private Image maleCharacter;
         [SerializeField] private SkeletonGraphic femaleCharacter;
-        
-        [Header("Анимации флекса")] 
+
+        [Header("Анимации флекса")]
         [SerializeField] private SkeletonGraphic flexingGraphic;
-        [SerializeField, SpineAnimation(dataField = "flexingGraphic")] 
-        private string[] flexingStates; 
-        
-        [Header("Пропуск катсцены")] 
+        [SerializeField] private Animation flexingAnim;
+
+        [SerializeField, SpineAnimation(dataField = "flexingGraphic")]
+        private string[] flexingStates;
+
+        [Header("Пропуск катсцены")]
         [SerializeField] private Button skipButton;
 
         private ConcertInfo _concert;
@@ -40,12 +42,13 @@ namespace UI.Windows.GameScreen.Concert
 
         private void FillDanceFloor()
         {
-            var occupancyRatio = _concert.TicketsSold / (float) _concert.LocationCapacity;
+            var occupancyRatio = _concert.TicketsSold / (float)_concert.LocationCapacity;
             var locationOccupancyRatio = 1f / flexingStates.Length;
             var maxFlexingAnimationIndex = Mathf.FloorToInt(occupancyRatio / locationOccupancyRatio);
             maxFlexingAnimationIndex = Mathf.Clamp(maxFlexingAnimationIndex, 0, flexingStates.Length - 1);
-            
+
             flexingGraphic.SetUpStatesOrder(flexingStates.Take(maxFlexingAnimationIndex + 1).ToArray());
+            flexingAnim.Play();
         }
 
         protected override void AfterShow(object ctx = null)
@@ -53,7 +56,7 @@ namespace UI.Windows.GameScreen.Concert
             var gender = PlayerAPI.Data.Info.Gender;
             maleCharacter.gameObject.SetActive(gender == Gender.Male);
             femaleCharacter.gameObject.SetActive(gender == Gender.Female);
-            
+
             flexingGraphic.color = FlexingGraphicStartColor;
             FillDanceFloor();
         }

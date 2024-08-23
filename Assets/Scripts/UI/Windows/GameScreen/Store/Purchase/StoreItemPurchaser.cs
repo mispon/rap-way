@@ -24,6 +24,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
                     goodEvent.QualityImpact = item.QualityImpact;
                     break;
 
+                case GoodsType.Apartments:
                 case GoodsType.Car:
                 case GoodsType.Chain:
                 case GoodsType.Swatches:

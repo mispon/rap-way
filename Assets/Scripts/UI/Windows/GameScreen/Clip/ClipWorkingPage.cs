@@ -116,10 +116,9 @@ namespace UI.Windows.GameScreen.Clip
         {
             base.BeforeShow(ctx);
 
-            if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
-            {
-                _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
-            }
+            _label = !string.IsNullOrEmpty(PlayerAPI.Data.Label)
+                ? LabelsAPI.Instance.Get(PlayerAPI.Data.Label)
+                : null;
 
             if (_label != null)
             {

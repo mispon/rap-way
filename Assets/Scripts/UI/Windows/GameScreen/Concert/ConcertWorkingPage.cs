@@ -155,10 +155,9 @@ namespace UI.Windows.GameScreen.Concert
             managerAvatar.sprite = _hasManager ? imagesBank.ProducerActive : imagesBank.ProducerInactive;
             prManAvatar.sprite = _hasPrMan ? imagesBank.PrManActive : imagesBank.PrManInactive;
 
-            if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
-            {
-                _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
-            }
+            _label = !string.IsNullOrEmpty(PlayerAPI.Data.Label)
+                ? LabelsAPI.Instance.Get(PlayerAPI.Data.Label)
+                : null;
 
             if (_label != null)
             {

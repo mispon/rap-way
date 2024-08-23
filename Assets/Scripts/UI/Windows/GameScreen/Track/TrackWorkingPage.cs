@@ -149,10 +149,9 @@ namespace UI.Windows.GameScreen.Track
             _hasBitmaker = TeamManager.IsAvailable(TeammateType.BitMaker);
             _hasTextWriter = TeamManager.IsAvailable(TeammateType.TextWriter);
 
-            if (!string.IsNullOrEmpty(PlayerAPI.Data.Label))
-            {
-                _label = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
-            }
+            _label = !string.IsNullOrEmpty(PlayerAPI.Data.Label)
+                ? LabelsAPI.Instance.Get(PlayerAPI.Data.Label)
+                : null;
 
             if (_label != null)
             {

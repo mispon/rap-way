@@ -33,14 +33,6 @@ namespace Core.Localization
         private IEnumerator Start()
         {
             MsgBroker.Instance
-                .Receive<GameReadyMessage>()
-                .Subscribe(e => OnLangChanged())
-                .AddTo(_disposable);
-            MsgBroker.Instance
-                .Receive<SceneLoadedMessage>()
-                .Subscribe(e => OnLangChanged())
-                .AddTo(_disposable);
-            MsgBroker.Instance
                 .Receive<LangChangedMessage>()
                 .Subscribe(e => OnLangChanged())
                 .AddTo(_disposable);
