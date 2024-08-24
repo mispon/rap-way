@@ -73,6 +73,8 @@ namespace UI.Windows.GameScreen.Album
                 Type = WindowType.ProductionAlbumResult,
                 Context = _album
             });
+
+            _album = null;
         }
 
         protected override void FinishWork()
@@ -180,7 +182,6 @@ namespace UI.Windows.GameScreen.Album
             base.BeforeHide();
 
             bitPoints.text = textPoints.text = "0";
-            _album = null;
         }
     }
 }

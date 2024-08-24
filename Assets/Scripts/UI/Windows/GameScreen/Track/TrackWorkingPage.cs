@@ -72,6 +72,8 @@ namespace UI.Windows.GameScreen.Track
                 Type = WindowType.ProductionTrackResult,
                 Context = _track
             });
+
+            _track = null;
         }
 
         protected override void FinishWork()
@@ -173,7 +175,6 @@ namespace UI.Windows.GameScreen.Track
             base.BeforeHide();
 
             bitPoints.text = textPoints.text = "0";
-            _track = null;
         }
     }
 }

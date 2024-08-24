@@ -63,6 +63,8 @@ namespace UI.Windows.GameScreen.Clip
                 Type = WindowType.ProductionClipResult,
                 Context = _clip
             });
+
+            _clip = null;
         }
 
         protected override void FinishWork()
@@ -138,8 +140,6 @@ namespace UI.Windows.GameScreen.Clip
 
             directorPoints.text = "0";
             operatorPoints.text = "0";
-
-            _clip = null;
         }
     }
 }

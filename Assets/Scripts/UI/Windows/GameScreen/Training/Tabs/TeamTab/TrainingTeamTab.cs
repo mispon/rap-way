@@ -20,6 +20,7 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
         [Header("Настройки тренировок")]
         [Tooltip("Количество опыта на одно нажатие")]
         [SerializeField] private int trainingCost;
+
         [Tooltip("Требуемый опыт для увеличения уровня")]
         [SerializeField] private int[] expToLevelUp;
 
@@ -40,16 +41,16 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             {
                 var member = teammates[i];
                 bool expEnough = PlayerAPI.Data.Exp >= trainingCost;
-                
+
                 teammatesCards[i].Setup(member, expEnough, expToLevelUp[member.Skill.Value]);
             }
         }
-        
+
         private void AddExp(Teammate teammate)
         {
             bool isLevelUp = false;
             int expToUp = expToLevelUp[teammate.Skill.Value];
-            
+
             teammate.Skill.Exp += trainingCost;
 
             if (teammate.Skill.Exp >= expToUp)
@@ -62,12 +63,13 @@ namespace UI.Windows.GameScreen.Training.Tabs.TeamTab
             SoundManager.Instance.PlaySound(isLevelUp ? UIActionType.LevelUp : UIActionType.Train);
             onStartTraining.Invoke(() => trainingCost);
         }
-        
+
         private void GivePayment(Teammate teammate, int salary)
         {
-            MsgBroker.Instance.Publish(new ChangeMoneyMessage {Amount = -salary});
+            MsgBroker.Instance.Publish(new ChangeMoneyMessage { Amount = -salary });
             teammate.HasPayment = true;
-  
+
+            SoundManager.Instance.PlaySound(UIActionType.Pay);
             onStartTraining.Invoke(() => 0);
         }
 

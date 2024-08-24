@@ -2,26 +2,18 @@
 using Models.Production;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using PlayerAPI  = Game.Player.PlayerPackage;
+using PlayerAPI = Game.Player.PlayerPackage;
 using RappersAPI = Game.Rappers.RappersPackage;
-using LabelsAPI  = Game.Labels.LabelsPackage;
+using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
-    /// <summary>
-    /// Анализатор трека
-    /// </summary>
     public class TrackAnalyzer : Analyzer<TrackInfo>
     {
-        private IDisposable _disposable;
-        
-        /// <summary>
-        /// Анализирует успешность трека
-        /// </summary>
         public override void Analyze(TrackInfo track)
         {
             GameStatsManager.Analyze(track.TrendInfo);
-            
+
             float qualityPoints = CalculateTrackQuality(track);
             track.Quality = qualityPoints;
 
@@ -30,13 +22,13 @@ namespace Game.Production.Analyzers
                 // fake boost quality for tutorial
                 track.Quality = Math.Max(track.Quality, 0.1f);
             }
-            
+
             var hitDice = Random.Range(0f, 1f);
-            if (qualityPoints >= settings.Track.HitThreshold || hitDice <= settings.Track.HitChance) 
+            if (qualityPoints >= settings.Track.HitThreshold || hitDice <= settings.Track.HitChance)
             {
                 track.IsHit = true;
             }
-            
+
             int fansAmount = GetFans();
             if (track.Feat != null)
             {
@@ -45,7 +37,7 @@ namespace Game.Production.Analyzers
 
             track.ListenAmount = CalculateListensAmount(
                 fansAmount,
-                qualityPoints, 
+                qualityPoints,
                 track.TrendInfo.EqualityValue,
                 track.IsHit
             );
@@ -54,7 +46,7 @@ namespace Game.Production.Analyzers
             {
                 track.ChartPosition = CalculateChartPosition();
             }
-            
+
             track.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
             track.MoneyIncome = CalcMoneyIncome(track.ListenAmount, settings.Track.ListenCost);
 
@@ -72,13 +64,13 @@ namespace Game.Production.Analyzers
         private float CalculateTrackQuality(TrackInfo track)
         {
             float qualityPoints = 0;
-            
+
             float workPointsFactor = CalculateWorkPointsFactor(track.TextPoints, track.BitPoints);
             qualityPoints += workPointsFactor;
 
             float goodsPointsFactor = PlayerAPI.Goods.GetQualityImpact();
             qualityPoints += goodsPointsFactor;
-            
+
             return Mathf.Min(qualityPoints, 1f);
         }
 
@@ -93,7 +85,7 @@ namespace Game.Production.Analyzers
             var qualityPercent = 1f * workPointsTotal / settings.Track.WorkPointsMax;
 
             qualityPercent /= 2;
-            
+
             return Mathf.Min(qualityPercent, 0.5f);
         }
 
@@ -103,21 +95,22 @@ namespace Game.Production.Analyzers
         private int CalculateListensAmount(
             int fans,
             float quality,
-            float trandsMatchFactor, 
+            float trandsMatchFactor,
             bool isHit
-        ) {
+        )
+        {
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
             int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor()));
-            
+
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
             float activity = 1.0f + maxFansActivity * quality;
 
             int listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
-            
+
             // Попадание в тренды так же увеличивает прослушивания
-            listens = (int) (listens * (1f + trandsMatchFactor));
-            
+            listens = (int)(listens * (1f + trandsMatchFactor));
+
             if (isHit)
             {
                 try
@@ -132,7 +125,7 @@ namespace Game.Production.Analyzers
 
             return AddFuzzing(listens);
         }
-        
+
         private int CalculateChartPosition()
         {
             if (GetFans() <= settings.Player.MinFansForCharts)

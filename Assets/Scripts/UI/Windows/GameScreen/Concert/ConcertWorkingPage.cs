@@ -72,6 +72,8 @@ namespace UI.Windows.GameScreen.Concert
                 Type = WindowType.ProductionConcertResult,
                 Context = _concert
             });
+
+            _concert = null;
         }
 
         protected override void FinishWork()
@@ -177,7 +179,6 @@ namespace UI.Windows.GameScreen.Concert
 
             managementPointsLabel.text = "0";
             marketingPointsLabel.text = "0";
-            _concert = null;
         }
     }
 }

@@ -41,14 +41,16 @@ namespace Game.Player.Team
 
         public Teammate[] GetTeammates(Func<Teammate, bool> predicate)
         {
-            return PlayerAPI.Data.Team.TeammatesArray
+            return PlayerAPI.Data.Team
+                .TeammatesArray
                 .Where(predicate)
                 .ToArray();
         }
 
         public static bool IsAvailable(TeammateType type)
         {
-            var teammate = PlayerAPI.Data.Team.TeammatesArray
+            var teammate = PlayerAPI.Data.Team
+                .TeammatesArray
                 .First(e => e.Type == type);
 
             return teammate.IsEmpty == false && teammate.HasPayment;

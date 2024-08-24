@@ -1,3 +1,4 @@
+using System;
 using Core.Context;
 using Extensions;
 using Game;
@@ -11,35 +12,39 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.GameEvent
 {
-    public class EventDecisionPage: Page
+    public class EventDecisionPage : Page
     {
         [Header("Card")]
         [SerializeField] private Text nameText;
         [SerializeField] private Text descriptionText;
-        
+
         [Header("Incomes")]
         [SerializeField] private Text moneyText;
         [SerializeField] private Text fansText;
         [SerializeField] private Text hypeText;
         [SerializeField] private Text expText;
-        
-        [Header("Buttons"), SerializeField] private Button continueBtn;
+
+        [SerializeField] private Button continueBtn;
 
         private GameEventDecision _eventDecision;
+        private Action _closeCallback;
 
         private void Start()
         {
-            continueBtn.onClick.AddListener(() => base.Hide());
+            continueBtn.onClick.AddListener(() =>
+            {
+                _closeCallback.Invoke();
+            });
         }
 
         public override void Show(object ctx = null)
         {
             var eventName = ctx.ValueByKey<string>("event_name");
-            var eventDecision = ctx.ValueByKey<GameEventDecision>("event_decision");
-            
+            _eventDecision = ctx.ValueByKey<GameEventDecision>("event_decision");
+            _closeCallback = ctx.ValueByKey<Action>("close_callback");
+
             nameText.text = GetLocale(eventName);
-            _eventDecision = eventDecision;
-           
+
             base.Show(ctx);
         }
 
@@ -75,7 +80,7 @@ namespace UI.Windows.GameScreen.GameEvent
             descriptionText.text = GetLocale(_eventDecision.Description);
 
             var income = CalculateIncome(PlayerAPI.Data, _eventDecision);
-            
+
             moneyText.text = income.Money.GetMoney();
             fansText.text = income.Fans.GetDisplay();
             hypeText.text = income.Hype.ToString();
@@ -88,9 +93,9 @@ namespace UI.Windows.GameScreen.GameEvent
             fansText.text = string.Empty;
             hypeText.text = string.Empty;
             expText.text = string.Empty;
-            
+
             SaveResult();
-            
+
             nameText.text = string.Empty;
             descriptionText.text = string.Empty;
             _eventDecision = null;

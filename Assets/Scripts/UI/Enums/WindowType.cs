@@ -75,6 +75,8 @@ namespace UI.Enums
 
         RapperJoinLabel = 53,
 
+        GameEventResult = 54,
+
         Previous = 998,
         None = 999
     }

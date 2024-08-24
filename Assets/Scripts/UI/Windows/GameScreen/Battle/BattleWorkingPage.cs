@@ -27,7 +27,7 @@ namespace UI.Windows.GameScreen.Battle
         [SerializeField] private Text rapperPointsLabel;
         [SerializeField] private WorkPoints rapperWorkPoints;
         [SerializeField] private Sprite customRapperAvatar;
-        
+
         [Header("Controls")]
         [SerializeField] private int skillChance;
         [SerializeField] private WorkPoints doubleTimePoint;
@@ -35,7 +35,7 @@ namespace UI.Windows.GameScreen.Battle
         [SerializeField] private WorkPoints freestylePoint;
         [SerializeField] private WorkPoints punchPoint;
         [SerializeField] private WorkPoints flipPoint;
-        
+
         [Header("Date")]
         [SerializeField] private ImagesBank imagesBank;
 
@@ -54,7 +54,7 @@ namespace UI.Windows.GameScreen.Battle
             _rapper = ctx.Value<RapperInfo>();
             RefreshWorkAnims();
         }
-        
+
         protected override void DoDayWork()
         {
             SoundManager.Instance.PlaySound(UIActionType.WorkPoint);
@@ -69,7 +69,7 @@ namespace UI.Windows.GameScreen.Battle
                 Type = WindowType.BattleResult,
                 Context = new Dictionary<string, object>
                 {
-                    ["rapper"]       = _rapper,
+                    ["rapper"] = _rapper,
                     ["playerPoints"] = _playerPoints,
                     ["rapperPoints"] = _rapperPoints,
                 }
@@ -101,7 +101,7 @@ namespace UI.Windows.GameScreen.Battle
                     return 0;
 
                 var value = Random.Range(1, 6);
-                
+
                 workPoints.Show(value);
                 return value;
             }
@@ -123,7 +123,7 @@ namespace UI.Windows.GameScreen.Battle
 
         private void DisplayAvailableSkills()
         {
-            void DisplayIfAvailable(Skills skill, WorkPoints workPoint)
+            static void DisplayIfAvailable(Skills skill, WorkPoints workPoint)
             {
                 var icon = workPoint.transform.parent.GetComponent<Image>();
                 icon.enabled = PlayerAPI.Data.Skills.Contains(skill);
@@ -139,7 +139,7 @@ namespace UI.Windows.GameScreen.Battle
         protected override void BeforeShow(object ctx = null)
         {
             base.BeforeShow(ctx);
-            
+
             playerName.text = PlayerAPI.Data.Info.NickName.ToUpper();
             rapperName.text = _rapper.Name;
 
