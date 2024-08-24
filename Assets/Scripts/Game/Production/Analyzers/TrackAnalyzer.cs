@@ -17,17 +17,15 @@ namespace Game.Production.Analyzers
             float qualityPoints = CalculateTrackQuality(track);
             track.Quality = qualityPoints;
 
-            if (track.Id == 2)
+            if (track.Id != 1)
             {
-                // fake boost quality for tutorial
-                track.Quality = Math.Max(track.Quality, 0.1f);
+                var hitDice = Random.Range(0f, 1f);
+                if (qualityPoints >= settings.Track.HitThreshold || hitDice <= settings.Track.HitChance)
+                {
+                    track.IsHit = true;
+                }
             }
 
-            var hitDice = Random.Range(0f, 1f);
-            if (qualityPoints >= settings.Track.HitThreshold || hitDice <= settings.Track.HitChance)
-            {
-                track.IsHit = true;
-            }
 
             int fansAmount = GetFans();
             if (track.Feat != null)
@@ -54,6 +52,15 @@ namespace Game.Production.Analyzers
             {
                 int labelsFee = track.MoneyIncome / 100 * 20;
                 track.MoneyIncome -= labelsFee;
+            }
+
+            if (track.Id == 2)
+            {
+                // fake boost quality and other stuff for tutorial
+                track.Quality *= 2;
+                track.ListenAmount *= 2;
+                track.FansIncome *= 2;
+                track.MoneyIncome *= 2;
             }
         }
 

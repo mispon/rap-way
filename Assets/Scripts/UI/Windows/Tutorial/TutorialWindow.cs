@@ -12,17 +12,17 @@ namespace UI.Windows.Tutorial
     public class TutorialWindow : CanvasUIElement
     {
         [SerializeField] private ImagesBank imagesBank;
-        
+
         [Header("Player")]
         [SerializeField] private Text nickname;
         [SerializeField] private Image playerIcon;
-        
+
         [Header("Controls")]
         [SerializeField] private Text info;
         [SerializeField] private Button[] gameButtons;
 
         private readonly CompositeDisposable _disposable = new();
-        
+
         protected override void AfterShow(object ctx = null)
         {
             foreach (var gameBtn in gameButtons)
@@ -36,18 +36,18 @@ namespace UI.Windows.Tutorial
         public void ShowTutorial(TutorialStageSettings stageSettings)
         {
             var playerInfo = PlayerAPI.Data.Info;
-            
+
             nickname.text = playerInfo.NickName;
             playerIcon.sprite = playerInfo.Gender == Gender.Male
                 ? imagesBank.MaleAvatar
                 : imagesBank.FemaleAvatar;
-            
+
             info.text = LocalizationManager.Instance.Get(stageSettings.Text);
             for (int i = 0; i < gameButtons.Length; i++)
             {
                 gameButtons[i].interactable = stageSettings.ButtonsActivity[i];
             }
-            
+
             Show();
         }
 

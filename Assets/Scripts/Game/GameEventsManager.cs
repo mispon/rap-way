@@ -38,25 +38,28 @@ namespace Game
 
         public void CallEvent(GameEventType type, Action onEventShownAction)
         {
-            if (PlayerAPI.Data.History.TrackList.Count < minTracksCount)
-                return;
-
-            if (chance < Random.Range(0f, 1f))
-                return;
-
-            var eventInfo = data.GetRandomInfo(type, PlayerAPI.State.GetFans());
-            if (eventInfo != null)
+            if (PlayerAPI.Data.History.TrackList.Count >= minTracksCount)
             {
-                MsgBroker.Instance.Publish(new WindowControlMessage
+                if (chance >= Random.Range(0f, 1f))
                 {
-                    Type = WindowType.GameEvent,
-                    Context = new Dictionary<string, object>
+                    var eventInfo = data.GetRandomInfo(type, PlayerAPI.State.GetFans());
+                    if (eventInfo != null)
                     {
-                        ["event_info"] = eventInfo,
-                        ["close_callback"] = onEventShownAction,
+                        MsgBroker.Instance.Publish(new WindowControlMessage
+                        {
+                            Type = WindowType.GameEvent,
+                            Context = new Dictionary<string, object>
+                            {
+                                ["event_info"] = eventInfo,
+                                ["close_callback"] = onEventShownAction,
+                            }
+                        });
+                        return;
                     }
-                });
+                }
             }
+
+            onEventShownAction.Invoke();
         }
     }
 }
