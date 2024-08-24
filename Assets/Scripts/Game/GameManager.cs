@@ -251,11 +251,11 @@ namespace Game
         }
 
         /// <summary>
-        /// Checks if any save exist or not
+        /// Checks if lang already selected
         /// </summary>
-        public bool HasAnySaves()
+        public bool IsLangSelected()
         {
-            return PlayerPrefs.HasKey(gameDataKey);
+            return GameStats.LangSelected;
         }
 
         /// <summary>

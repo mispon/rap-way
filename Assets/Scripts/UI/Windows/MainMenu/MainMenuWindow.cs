@@ -20,7 +20,7 @@ namespace UI.Windows.MainMenu
         {
             _continueGameButton.interactable = GameManager.Instance.HasCharacter();
 
-            if (!GameManager.Instance.HasAnySaves())
+            if (!GameManager.Instance.IsLangSelected())
             {
                 FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.LangSelection));

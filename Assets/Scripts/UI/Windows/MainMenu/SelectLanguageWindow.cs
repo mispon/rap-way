@@ -1,5 +1,6 @@
 using Core;
 using Core.Localization;
+using Game;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -33,8 +34,10 @@ namespace UI.Windows.MainMenu
             base.BeforeShow(ctx);
         }
 
-        private void SelectLang(GameLang lang) {
+        private void SelectLang(GameLang lang)
+        {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
+            GameManager.Instance.GameStats.LangSelected = true;
             LocalizationManager.Instance.LoadLocalization(lang, true);
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.MainMenu));
         }

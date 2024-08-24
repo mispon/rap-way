@@ -26,7 +26,6 @@ namespace Game.Production.Analyzers
                 }
             }
 
-
             int fansAmount = GetFans();
             if (track.Feat != null)
             {

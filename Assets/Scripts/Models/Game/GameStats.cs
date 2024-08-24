@@ -20,12 +20,13 @@ namespace Models.Game
         public int SocialsCooldown;
         public int ConcertCooldown;
         public bool AskedReview;
-        
+        public bool LangSelected;
+
         /// <summary>
         /// Настройки игры
         /// </summary>
         public GameLang Lang;
-        
+
         public static GameStats New => new()
         {
             Now = DateTime.Now.DateToString(),

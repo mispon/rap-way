@@ -14,6 +14,14 @@ namespace Core
 
         private Dictionary<string, Sprite> _imagesMap = new();
 
+        private void Start()
+        {
+            _imagesMap = images
+                .Where(e => e != null)
+                .GroupBy(e => e.name)
+                .ToDictionary(k => k.Key, v => v.First());
+        }
+
         public bool TryGetByName(string spriteName, out Sprite sprite)
         {
             if (spriteName != "" && spriteName != "null")
@@ -39,10 +47,6 @@ namespace Core
         private void OnValidate()
         {
             images = LoadAllImages();
-            _imagesMap = images
-                .Where(e => e != null)
-                .GroupBy(e => e.name)
-                .ToDictionary(k => k.Key, v => v.First());
         }
 
         private static Sprite[] LoadAllImages()
