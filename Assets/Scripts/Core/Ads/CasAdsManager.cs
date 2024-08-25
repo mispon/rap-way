@@ -13,15 +13,15 @@ namespace Core.Ads
     public class CasAdsManager : Singleton<CasAdsManager>
     {
         private IMediationManager _manager;
-        
+
         public void Start()
         {
             MobileAds.ValidateIntegration();
             MobileAds.settings.allowInterstitialAdsWhenVideoCostAreLower = true;
-            
+
             _manager = GetAdManager();
             _manager.OnRewardedAdCompleted += OnRewardedAdCompleted;
-            
+
             StartCoroutine(ShowInterstitialLoop());
         }
 
@@ -29,9 +29,9 @@ namespace Core.Ads
         {
             int reward = Convert.ToInt32(PlayerAPI.Data.Money * 0.1f);
             reward = Math.Max(50, reward);
-            
+
             SoundManager.Instance.PlaySound(UIActionType.Pay);
-            MsgBroker.Instance.Publish(new ChangeMoneyMessage {Amount = reward});
+            MsgBroker.Instance.Publish(new ChangeMoneyMessage { Amount = reward });
         }
 
         private static IMediationManager GetAdManager()
@@ -47,18 +47,24 @@ namespace Core.Ads
         {
             if (GameManager.Instance.LoadNoAds())
                 return;
-            
-            bool adLoaded = _manager.IsReadyAd(AdType.Interstitial);
-            if (!adLoaded)
+
+            bool adsLoaded = _manager.IsReadyAd(AdType.Interstitial);
+            if (!adsLoaded)
             {
                 _manager.LoadAd(AdType.Interstitial);
             }
-            
+
             _manager.ShowAd(AdType.Interstitial);
         }
-        
+
         public void ShowRewarded()
         {
+            bool adsLoaded = _manager.IsReadyAd(AdType.Rewarded);
+            if (!adsLoaded)
+            {
+                _manager.LoadAd(AdType.Rewarded);
+            }
+
             _manager.ShowAd(AdType.Rewarded);
         }
 
@@ -70,7 +76,8 @@ namespace Core.Ads
                 {
                     yield return new WaitForSeconds(300);
                     ShowInterstitial();
-                } else
+                }
+                else
                 {
                     yield return new WaitForSeconds(10);
                 }
