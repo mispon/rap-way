@@ -20,8 +20,14 @@ namespace UI.Windows.Tutorial
         [Header("Controls")]
         [SerializeField] private Text info;
         [SerializeField] private Button[] gameButtons;
+        [SerializeField] private Button skipButton;
 
         private readonly CompositeDisposable _disposable = new();
+
+        private void Start()
+        {
+            skipButton.onClick.AddListener(() => base.Hide());
+        }
 
         protected override void AfterShow(object ctx = null)
         {

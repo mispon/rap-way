@@ -10,7 +10,7 @@ namespace UI.Windows.MainMenu
         [SerializeField] private string reviewPageURL;
         [SerializeField] private Button reviewButton;
 
-        protected override void AfterShow(object ctx = null)
+        private void Start()
         {
             reviewButton.onClick.AddListener(() => Application.OpenURL(reviewPageURL));
         }
@@ -18,6 +18,7 @@ namespace UI.Windows.MainMenu
         public override void Show(object ctx = null)
         {
             GameManager.Instance.GameStats.AskedReview = true;
+            base.Show(ctx);
         }
     }
 }
