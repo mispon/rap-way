@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.SocialNetworks.Email;
 using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
@@ -50,7 +50,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Email
 
         protected override void AfterOpen()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.EmailOpened);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.EmailOpened);
             HintsManager.Instance.ShowHint("tutorial_email", SocialNetworksTabType.Email);
 
             var hasEmails = _emailCards.Any();

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Core;
+using Core.Analytics;
 using Core.Localization;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
@@ -50,7 +50,7 @@ namespace UI.Windows.GameScreen.Album
 
         protected override void AfterShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewAlbumSelected);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewAlbumSelected);
             HintsManager.Instance.ShowHint("tutorial_album_page");
         }
 

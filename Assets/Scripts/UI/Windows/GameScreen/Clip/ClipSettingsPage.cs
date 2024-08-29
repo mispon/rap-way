@@ -3,7 +3,7 @@ using System.Linq;
 using Core;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
@@ -153,7 +153,7 @@ namespace UI.Windows.GameScreen.Clip
 
         protected override void AfterShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewClipSelected);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewClipSelected);
 
             if (!HintsManager.Instance.ShowHint("tutorial_clip_page"))
             {

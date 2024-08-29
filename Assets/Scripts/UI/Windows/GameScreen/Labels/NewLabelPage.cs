@@ -12,7 +12,7 @@ using UI.Enums;
 using UI.Windows.GameScreen.Charts;
 using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Analytics;
+using Core.Analytics;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace UI.Windows.GameScreen.Labels
@@ -51,7 +51,7 @@ namespace UI.Windows.GameScreen.Labels
 
         protected override void BeforeShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewLabelPageOpened);
             nameInput.text = "";
         }
 
@@ -153,7 +153,7 @@ namespace UI.Windows.GameScreen.Labels
                 IsCustom = true
             };
 
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewLabelCreated);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewLabelCreated);
             LabelsAPI.Instance.AddCustom(customLabel);
             BackButtonClick();
         }

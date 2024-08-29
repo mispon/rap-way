@@ -1,6 +1,6 @@
 using Core;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
@@ -89,7 +89,7 @@ namespace UI.Windows.MainMenu
 
             GameManager.Instance.SaveApplicationData();
 
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGameStart);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewGameStart);
             SceneMessageBroker.Instance.Publish(new SceneLoadMessage
             {
                 SceneType = SceneType.Game

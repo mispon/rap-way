@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Core;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.SocialNetworks.Eagler;
 using ScriptableObjects;
 using TMPro;
@@ -50,7 +50,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
 
         protected override void AfterOpen()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitterOpened);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.TwitterOpened);
             HintsManager.Instance.ShowHint("tutorial_eagler", SocialNetworksTabType.Eagler);
         }
 

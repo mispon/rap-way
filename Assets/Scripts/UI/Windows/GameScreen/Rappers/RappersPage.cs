@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -45,7 +45,7 @@ namespace UI.Windows.GameScreen.Rappers
 
         protected override void BeforeShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.RappersPageOpened);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RappersPageOpened);
 
             rapperCard.onDelete += HandleRapperDelete;
 

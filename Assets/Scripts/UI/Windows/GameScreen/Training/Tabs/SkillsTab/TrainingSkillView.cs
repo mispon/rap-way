@@ -2,7 +2,7 @@ using Core;
 using Core.Localization;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using ScriptableObjects;
 using System;
 using UnityEngine;
@@ -52,7 +52,7 @@ namespace UI.Windows.GameScreen.Training.Tabs.SkillsTab
 
         private void UnlockSkill()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrainingOpenSkill);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.TrainingOpenSkill);
 
             _onUnlock.Invoke(_skill);
             Hide();

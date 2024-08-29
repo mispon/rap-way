@@ -2,7 +2,7 @@
 using Core.Localization;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.Labels.Desc;
 using Models.Game;
 using ScriptableObjects;
@@ -76,7 +76,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
                 return;
             }
 
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreatedOwnLabel);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.CreatedOwnLabel);
 
             var label = new LabelInfo
             {

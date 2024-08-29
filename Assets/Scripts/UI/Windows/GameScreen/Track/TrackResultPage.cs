@@ -1,7 +1,7 @@
 ﻿using System;
 using Core.Context;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.SocialNetworks.Eagler;
@@ -122,7 +122,7 @@ namespace UI.Windows.GameScreen.Track
 
         protected override void AfterHide()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrackResultShown);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.TrackResultShown);
 
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
             MsgBroker.Instance.Publish(new NewsMessage

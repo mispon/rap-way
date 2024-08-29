@@ -1,5 +1,5 @@
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -22,7 +22,7 @@ namespace UI.Windows.MainMenu
 
             if (!GameManager.Instance.IsLangSelected())
             {
-                FirebaseAnalytics.LogEvent(FirebaseGameEvents.GameFirstOpen);
+                AnalyticsManager.LogEvent(FirebaseGameEvents.GameFirstOpen);
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.LangSelection));
                 return;
             }

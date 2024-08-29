@@ -1,6 +1,6 @@
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game;
 using Models.Production;
 using ScriptableObjects;
@@ -22,7 +22,7 @@ namespace UI.Windows.GameScreen.Social.ResultPages
 
         protected override void DisplayResult(SocialInfo socialInfo)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
 
             var trends = GameManager.Instance.GameStats.Trends;
 

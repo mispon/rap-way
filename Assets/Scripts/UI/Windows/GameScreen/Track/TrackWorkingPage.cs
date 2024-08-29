@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game;
 using Game.Labels.Desc;
 using Game.Player.State.Desc;
@@ -53,7 +53,7 @@ namespace UI.Windows.GameScreen.Track
 
         protected override void StartWork(object ctx)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateTrackClick);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.CreateTrackClick);
 
             _track = ctx.Value<TrackInfo>();
             RefreshWorkAnims();

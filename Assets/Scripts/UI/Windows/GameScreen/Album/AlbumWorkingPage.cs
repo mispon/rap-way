@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
+using Core.Analytics;
 using Enums;
-using Firebase.Analytics;
 using Game;
 using Game.Labels.Desc;
 using Game.Player.State.Desc;
@@ -54,7 +54,7 @@ namespace UI.Windows.GameScreen.Album
 
         protected override void StartWork(object ctx)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateAlbumClick);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.CreateAlbumClick);
 
             _album = ctx.Value<AlbumInfo>();
             RefreshWorkAnims();

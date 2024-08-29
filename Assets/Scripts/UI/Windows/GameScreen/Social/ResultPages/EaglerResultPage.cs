@@ -1,7 +1,7 @@
 using Enums;
 using Game.SocialNetworks.Eagler;
 using Game.Time;
-using Firebase.Analytics;
+using Core.Analytics;
 using Models.Production;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +21,7 @@ namespace UI.Windows.GameScreen.Social.ResultPages
 
         protected override void DisplayResult(SocialInfo info)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.TwitPublished);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.TwitPublished);
 
             var nickName = PlayerAPI.Data.Info.NickName;
 

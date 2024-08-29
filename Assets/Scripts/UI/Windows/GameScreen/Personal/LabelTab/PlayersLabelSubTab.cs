@@ -17,7 +17,7 @@ using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Analytics;
+using Core.Analytics;
 using PlayerAPI = Game.Player.PlayerPackage;
 using RappersAPI = Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
@@ -231,7 +231,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 
         private void DisbandLabel()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.DisbandedOwnLabel);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.DisbandedOwnLabel);
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             askingWindow.Show(

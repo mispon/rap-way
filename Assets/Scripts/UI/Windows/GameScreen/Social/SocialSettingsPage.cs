@@ -1,6 +1,6 @@
 ﻿using Core;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
@@ -55,7 +55,7 @@ namespace UI.Windows.GameScreen.Social
 
         protected override void AfterShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.SocialsPageOpened);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.SocialsPageOpened);
             HintsManager.Instance.ShowHint("tutorial_socials");
         }
 

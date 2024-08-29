@@ -13,10 +13,10 @@ using Models.Production;
 using UI.Windows.GameScreen.SocialNetworks.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Analytics;
 using MessageBroker.Messages.SocialNetworks;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
+using Core.Analytics;
 
 namespace UI.Windows.GameScreen.Album
 {
@@ -103,7 +103,7 @@ namespace UI.Windows.GameScreen.Album
 
         protected override void AfterHide()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.AlbumResultShown);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.AlbumResultShown);
 
             MsgBroker.Instance.Publish(new NewsMessage
             {

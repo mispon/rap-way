@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.SocialNetworks.News;
 using UI.Controls.ScrollViewController;
 using UI.Windows.Tutorial;
@@ -59,7 +59,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
 
         protected override void AfterOpen()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewsOpened);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewsOpened);
             HintsManager.Instance.ShowHint("tutorial_news", SocialNetworksTabType.News);
 
             newsEmpty.SetActive(_newsCards.Count() == 0);

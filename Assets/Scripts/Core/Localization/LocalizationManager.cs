@@ -91,6 +91,8 @@ namespace Core.Localization
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
             // TODO
+#elif UNITY_WEBGL
+            yield return LoadAndroidLocalization(path, data => jsonData = data);
 #else
             jsonData = File.ReadAllText(path);
 #endif
@@ -113,11 +115,13 @@ namespace Core.Localization
             yield return LoadAndroidLocalization(path, data => jsonData = data);
 #elif UNITY_IPHONE
             // TODO
+#elif UNITY_WEBGL
+            yield return LoadAndroidLocalization(path, data => jsonData = data);
 #else
             jsonData = File.ReadAllText(path);
 #endif
-            ParseBackupLocalizationData(jsonData);
 
+            ParseBackupLocalizationData(jsonData);
             yield return null;
         }
 

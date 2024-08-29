@@ -4,7 +4,7 @@ using Core;
 using Core.Localization;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.Player.State.Desc;
 using Game.Player.Team;
 using Game.Production;
@@ -50,7 +50,7 @@ namespace UI.Windows.GameScreen.Track
 
         protected override void AfterShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewTrackSelected);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewTrackSelected);
             HintsManager.Instance.ShowHint("tutorial_track_page");
         }
 

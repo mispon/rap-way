@@ -3,7 +3,7 @@ using System.Linq;
 using Core;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game;
 using Game.Player.Team;
 using Game.Production;
@@ -180,7 +180,7 @@ namespace UI.Windows.GameScreen.Concert
 
         protected override void AfterShow(object ctx = null)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewConcertSelected);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewConcertSelected);
 
             if (!HintsManager.Instance.ShowHint("tutorial_concert_page"))
             {

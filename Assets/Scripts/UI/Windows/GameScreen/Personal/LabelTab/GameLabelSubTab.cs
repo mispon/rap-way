@@ -3,7 +3,7 @@ using System.Linq;
 using Core;
 using Core.Localization;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.Labels.Desc;
 using Game.Rappers.Desc;
 using ScriptableObjects;
@@ -106,7 +106,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 
         private void LeaveLabel()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelLeaveAction);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.LabelLeaveAction);
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             askingWindow.Show(

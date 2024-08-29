@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Labels;
@@ -55,7 +55,7 @@ namespace UI.Windows.GameScreen.Contracts
 
         private void OnReject()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractDeclined);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.LabelContractDeclined);
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             MsgBroker.Instance.Publish(new NewsMessage
@@ -76,7 +76,7 @@ namespace UI.Windows.GameScreen.Contracts
 
         private void OnSign()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.LabelContractAccepted);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.LabelContractAccepted);
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             PlayerAPI.Data.Label = _labelName;

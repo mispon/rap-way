@@ -1,7 +1,7 @@
 ﻿using Core;
 using Core.Context;
 using Enums;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game;
 using Game.Labels.Desc;
 using Game.Player.State.Desc;
@@ -53,7 +53,7 @@ namespace UI.Windows.GameScreen.Concert
 
         protected override void StartWork(object ctx)
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.CreateConcertClick);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.CreateConcertClick);
 
             _concert = ctx.Value<ConcertInfo>();
             RefreshWorkAnims();

@@ -1,12 +1,12 @@
 using Core;
 using Enums;
-using Firebase.Analytics;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Models.Production;
+using Core.Analytics;
 
 namespace Game.Production
 {
@@ -28,10 +28,10 @@ namespace Game.Production
             switch (playerHistory.TrackList.Count)
             {
                 case 0:
-                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerCreateFirstTrack);
+                    AnalyticsManager.LogEvent(FirebaseGameEvents.PlayerCreateFirstTrack);
                     break;
                 case 1:
-                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.PlayerCreateSecondTrack);
+                    AnalyticsManager.LogEvent(FirebaseGameEvents.PlayerCreateSecondTrack);
                     break;
             }
 

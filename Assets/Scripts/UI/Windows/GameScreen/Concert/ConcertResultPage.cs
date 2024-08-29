@@ -1,7 +1,7 @@
 ﻿using Core.Context;
 using Enums;
 using Extensions;
-using Firebase.Analytics;
+using Core.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Time;
@@ -77,7 +77,7 @@ namespace UI.Windows.GameScreen.Concert
 
         protected override void AfterHide()
         {
-            FirebaseAnalytics.LogEvent(FirebaseGameEvents.ConcertResultShown);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.ConcertResultShown);
 
             MsgBroker.Instance.Publish(new NewsMessage
             {

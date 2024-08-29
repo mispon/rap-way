@@ -1,6 +1,6 @@
 using Core;
+using Core.Analytics;
 using Enums;
-using Firebase.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -24,7 +24,7 @@ namespace UI.Controls.Buttons
                 .Subscribe(_ =>
                 {
                     SoundManager.Instance.PlaySound(_soundType);
-                    FirebaseAnalytics.LogEvent(FirebaseGameEvents.NewGamePage);
+                    AnalyticsManager.LogEvent(FirebaseGameEvents.NewGamePage);
 
                     MsgBroker.Instance.Publish(new WindowControlMessage(_toWindow));
                 });
