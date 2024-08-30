@@ -276,6 +276,23 @@ namespace Game
             if (pauseStatus)
             {
                 SaveApplicationData();
+                SoundManager.Instance.PauseMusic();
+            }
+            else
+            {
+                SoundManager.Instance.UnpauseMusic();
+            }
+        }
+
+        private void OnApplicationFocus(bool focusStatus)
+        {
+            if (focusStatus)
+            {
+                SoundManager.Instance.UnpauseMusic();
+            }
+            else
+            {
+                SoundManager.Instance.PauseMusic();
             }
         }
 
