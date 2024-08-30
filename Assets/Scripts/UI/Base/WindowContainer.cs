@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Ads;
 using Core.PropertyAttributes;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -16,10 +17,10 @@ namespace UI.Base
         public WindowType Type;
         public CanvasUIElement Value;
     }
-    
+
     public class WindowContainer : UIElementContainer
     {
-        [ArrayElementTitle(new []{"Type"})]
+        [ArrayElementTitle(new[] { "Type" })]
         [SerializeField] private WindowTuple[] windows;
         [SerializeField] private WindowType startWindow;
 
@@ -29,54 +30,60 @@ namespace UI.Base
         public override void Initialize()
         {
             base.Initialize();
-            
+
             foreach (var window in windows)
                 window.Value.Initialize();
-            
+
             MsgBroker.Instance
                 .Receive<WindowControlMessage>()
                 .Subscribe(msg => ManageWindowControl(msg.Type, msg.Context))
                 .AddTo(disposables);
-            
+
             HideAnyWindow();
             ManageWindowControl(startWindow, new object());
         }
 
         private void ManageWindowControl(WindowType windowType, object ctx)
         {
+#if UNITY_ANDROID
+            CasAdsManager.Instance.ShowInterstitial();
+#elif UNITY_WEBGL
+            YandexAdsManager.Instance.ShowInterstitial();
+#endif
+
             switch (windowType)
             {
                 case WindowType.Previous:
                     if (_windowsHistory.TryPop(out var prevType))
                     {
-                        ChangeWindow(prevType, ctx);   
+                        ChangeWindow(prevType, ctx);
                     }
                     break;
-                
+
                 case WindowType.None:
                     _windowsHistory.Clear();
                     break;
-                
+
                 default:
                     ChangeWindow(windowType, ctx);
                     break;
             }
         }
-        
+
         private void ChangeWindow(WindowType windowType, object ctx)
         {
-            if (windowType == _activeWindow) 
+            if (windowType == _activeWindow)
                 return;
-            
+
             var window = GetWindow(windowType);
-            if (window == null) 
+            if (window == null)
                 return;
-            
+
             HideCurrentWindow();
-            
+
             _windowsHistory.Push(_activeWindow);
             _activeWindow = windowType;
-            
+
             window.Show(ctx);
         }
 

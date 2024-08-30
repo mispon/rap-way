@@ -1,3 +1,4 @@
+#if UNITY_ANDROID
 using System;
 using System.Collections;
 using CAS;
@@ -7,12 +8,16 @@ using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
 using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
+#endif
 
 namespace Core.Ads
 {
     public class CasAdsManager : Singleton<CasAdsManager>
     {
+#if UNITY_ANDROID
         private IMediationManager _manager;
+
+        private DateTime _lastShowTime = DateTime.Now;
 
         public void Start()
         {
@@ -21,8 +26,6 @@ namespace Core.Ads
 
             _manager = GetAdManager();
             _manager.OnRewardedAdCompleted += OnRewardedAdCompleted;
-
-            StartCoroutine(ShowInterstitialLoop());
         }
 
         private static void OnRewardedAdCompleted()
@@ -43,18 +46,22 @@ namespace Core.Ads
                 .Build();
         }
 
-        private void ShowInterstitial()
+        public void ShowInterstitial()
         {
             if (GameManager.Instance.LoadNoAds())
                 return;
 
-            bool adsLoaded = _manager.IsReadyAd(AdType.Interstitial);
-            if (!adsLoaded)
+            var elapsed = DateTime.Now - _lastShowTime;
+            if (elapsed.Minutes >= 5)
             {
-                _manager.LoadAd(AdType.Interstitial);
-            }
+                bool adsLoaded = _manager.IsReadyAd(AdType.Interstitial);
+                if (!adsLoaded)
+                {
+                    _manager.LoadAd(AdType.Interstitial);
+                }
 
-            _manager.ShowAd(AdType.Interstitial);
+                _manager.ShowAd(AdType.Interstitial);
+            }
         }
 
         public void ShowRewarded()
@@ -67,22 +74,6 @@ namespace Core.Ads
 
             _manager.ShowAd(AdType.Rewarded);
         }
-
-        private IEnumerator ShowInterstitialLoop()
-        {
-            while (true)
-            {
-                if (Application.isPlaying || Application.isFocused)
-                {
-                    yield return new WaitForSeconds(300);
-                    ShowInterstitial();
-                }
-                else
-                {
-                    yield return new WaitForSeconds(10);
-                }
-            }
-            // ReSharper disable once IteratorNeverReturns
-        }
+#endif
     }
 }

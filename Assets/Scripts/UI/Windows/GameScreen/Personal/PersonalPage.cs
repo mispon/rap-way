@@ -46,7 +46,11 @@ namespace UI.Windows.GameScreen.Personal
             cashButton.onClick.AddListener(() =>
             {
                 SoundManager.Instance.PlaySound(UIActionType.Click);
+#if UNITY_ANDROID
                 CasAdsManager.Instance.ShowRewarded();
+#elif UNITY_WEBGL
+                YandexAdsManager.Instance.ShowRewarded();
+#endif
             });
 
             personalButton.onClick.AddListener(OpenPersonalTab);
