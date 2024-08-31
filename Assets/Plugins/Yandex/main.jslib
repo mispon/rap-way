@@ -21,6 +21,7 @@ mergeInto(LibraryManager.library, {
                 },
                 onRewarded: () => {
                     console.log('Rewarded!');
+                    myGameInstance.SendMessage('GameManager', 'OnRewardedAdCompleted');
                 },
                 onClose: () => {
                     console.log('Video ad closed.');

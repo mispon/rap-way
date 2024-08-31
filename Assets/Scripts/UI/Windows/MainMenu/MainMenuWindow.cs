@@ -26,6 +26,11 @@ namespace UI.Windows.MainMenu
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.LangSelection));
                 return;
             }
+
+            if (GameManager.Instance.NeedAskReview())
+            {
+                MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.AskReview));
+            }
         }
 
         public override void Show(object ctx = null)

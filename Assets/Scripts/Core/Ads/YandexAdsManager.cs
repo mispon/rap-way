@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
+using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
 #endif
 
@@ -11,6 +12,8 @@ namespace Core.Ads
 {
     public class YandexAdsManager : Singleton<YandexAdsManager>
     {
+        [SerializeField] private int frequency = 5;
+
 #if UNITY_WEBGL
         [DllImport("__Internal")]
         private static extern void ShowInterstitialAdv();
@@ -24,7 +27,7 @@ namespace Core.Ads
         {
             var elapsed = DateTime.Now - _lastShowTime;
 
-            if (elapsed.Minutes >= 5)
+            if (elapsed.Minutes >= frequency)
             {
                 ShowInterstitialAdv();
                 _lastShowTime = DateTime.Now;
@@ -36,7 +39,7 @@ namespace Core.Ads
             ShowRewardedAdv();
         }
 
-        private static void OnRewardedAdCompleted()
+        public void OnRewardedAdCompleted()
         {
             int reward = Convert.ToInt32(PlayerAPI.Data.Money * 0.1f);
             reward = Math.Max(50, reward);

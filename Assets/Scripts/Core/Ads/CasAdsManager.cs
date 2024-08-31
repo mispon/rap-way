@@ -10,10 +10,14 @@ using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
 #endif
 
+using UnityEngine;
+
 namespace Core.Ads
 {
     public class CasAdsManager : Singleton<CasAdsManager>
     {
+        [SerializeField] private int frequency = 5;
+
 #if UNITY_ANDROID
         private IMediationManager _manager;
 
@@ -52,7 +56,7 @@ namespace Core.Ads
                 return;
 
             var elapsed = DateTime.Now - _lastShowTime;
-            if (elapsed.Minutes >= 5)
+            if (elapsed.Minutes >= frequency)
             {
                 bool adsLoaded = _manager.IsReadyAd(AdType.Interstitial);
                 if (!adsLoaded)
