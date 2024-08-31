@@ -10,15 +10,13 @@ using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
 #endif
 
-using UnityEngine;
-
 namespace Core.Ads
 {
     public class CasAdsManager : Singleton<CasAdsManager>
     {
+#if UNITY_ANDROID
         [SerializeField] private int frequency = 5;
 
-#if UNITY_ANDROID
         private IMediationManager _manager;
 
         private DateTime _lastShowTime = DateTime.Now;

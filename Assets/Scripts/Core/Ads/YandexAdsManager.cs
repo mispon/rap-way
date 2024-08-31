@@ -12,9 +12,9 @@ namespace Core.Ads
 {
     public class YandexAdsManager : Singleton<YandexAdsManager>
     {
+#if UNITY_WEBGL
         [SerializeField] private int frequency = 5;
 
-#if UNITY_WEBGL
         [DllImport("__Internal")]
         private static extern void ShowInterstitialAdv();
 

@@ -3,11 +3,15 @@ mergeInto(LibraryManager.library, {
     ShowInterstitialAdv: function () {
         ysdk.adv.showFullscreenAdv({
             callbacks: {
+                onOpen: () => {
+                    console.log('Show Interstitial!');
+                    myGameInstance.SendMessage('GameManager', 'PauseMusic');
+                },
                 onClose: function(wasShown) {
-                    // Действие после закрытия рекламы.
+                    myGameInstance.SendMessage('GameManager', 'UnpauseMusic');
                 },
                 onError: function(error) {
-                    // Действие в случае ошибки.
+                    console.log('Error while open video ad:', e);
                 }
             }
         });
@@ -17,14 +21,15 @@ mergeInto(LibraryManager.library, {
         ysdk.adv.showRewardedVideo({
             callbacks: {
                 onOpen: () => {
-                    console.log('Video ad open.');
+                    console.log('Show Rewarded!');
+                    myGameInstance.SendMessage('GameManager', 'PauseMusic');
+                },
+                onClose: () => {
+                    myGameInstance.SendMessage('GameManager', 'UnpauseMusic');
                 },
                 onRewarded: () => {
                     console.log('Rewarded!');
                     myGameInstance.SendMessage('GameManager', 'OnRewardedAdCompleted');
-                },
-                onClose: () => {
-                    console.log('Video ad closed.');
                 },
                 onError: (e) => {
                     console.log('Error while open video ad:', e);
