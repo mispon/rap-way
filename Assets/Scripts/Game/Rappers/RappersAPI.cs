@@ -20,6 +20,12 @@ namespace Game.Rappers
             _customRappers.Remove(info);
         }
 
+        public int MaxCustomRapperID()
+        {
+            const int minID = 0;
+            return _customRappers.Any() ? _customRappers.Max(e => e.Id) : minID;
+        }
+
         public RapperInfo GetRandom()
         {
             var rappers = GetAll().ToArray();
@@ -60,12 +66,6 @@ namespace Game.Rappers
             {
                 yield return rapperInfo;
             }
-        }
-
-        public int MaxCustomRapperID()
-        {
-            const int minID = 0;
-            return _customRappers.Any() ? _customRappers.Max(e => e.Id) : minID;
         }
 
         public static int GetFansCount(RapperInfo rapper)

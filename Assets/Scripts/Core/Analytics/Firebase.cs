@@ -1,5 +1,6 @@
 #if UNITY_ANDROID
 using Firebase.Analytics;
+using UnityEngine;
 #elif UNITY_IPHONE
 // TODO
 #else
