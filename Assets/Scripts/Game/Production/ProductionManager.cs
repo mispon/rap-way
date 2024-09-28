@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Models.Production;
+using PlayerAPI = Game.Rappers.RappersPackage;
 
 namespace Game.Production
 {
@@ -21,7 +22,7 @@ namespace Game.Production
         public event Action<RapperInfo> onBattle = rapper => { };
 
         private static PlayerData data => GameManager.Instance.PlayerData;
-        private static PlayerHistory playerHistory => data.History;
+        private static ProductionHistory playerHistory => data.History;
 
         public static void AddTrack(TrackInfo info)
         {
@@ -47,9 +48,15 @@ namespace Game.Production
         {
             var track = GetTrack(trackId);
 
-            var featInfo = track.Feat != null && !string.IsNullOrWhiteSpace(track.Feat.Name)
-                ? $" feat. {track.Feat.Name}"
-                : string.Empty;
+            string featInfo = "";
+            if (track.FeatId != 0)
+            {
+                var rapper = PlayerAPI.Instance.Get(track.FeatId);
+                if (rapper != null && rapper.Name != "")
+                {
+                    featInfo = $" feat. {rapper.Name}";
+                }
+            }
 
             return $"{track.Name}{featInfo}";
         }

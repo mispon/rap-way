@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.OrderedStarter;
+using Game.Rappers.AI;
 using Game.Rappers.Desc;
 using Game.Settings;
 using ScriptableObjects;
@@ -13,6 +14,7 @@ namespace Game.Rappers
     /// </summary>
     public partial class RappersPackage : GamePackage<RappersPackage>, IStarter
     {
+        [SerializeField] private RappersAI rapperAITemplate;
         [SerializeField] private RappersData data;
         [SerializeField] private ImagesBank imagesBank;
 
@@ -24,6 +26,8 @@ namespace Game.Rappers
         {
             UpdateInGameRappers();
             UpdateCustomRappersIDs();
+
+            LoadRappersAI();
         }
 
         private void UpdateInGameRappers()
@@ -34,7 +38,7 @@ namespace Game.Rappers
             {
                 if (rapperSet.TryGetValue(dr.Id, out var rapper))
                 {
-                    // update avatar for existing
+                    // setup avatar for existing
                     rapper.AvatarName = dr.AvatarName;
                 }
                 else
@@ -53,6 +57,14 @@ namespace Game.Rappers
             {
                 id++;
                 rapperInfo.Id = id;
+            }
+        }
+
+        private void LoadRappersAI()
+        {
+            foreach (var rapperInfo in GetAll())
+            {
+                Instantiate(rapperAITemplate, transform).Init(rapperInfo);
             }
         }
     }

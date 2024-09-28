@@ -29,19 +29,19 @@ namespace UI.Windows.GameScreen.Feat
             int playerBitSkill = data.Stats.Bitmaking.Value;
             int rapperBitSkill = _rapper.Bitmaking;
             bitSkill.text = $"{playerBitSkill + rapperBitSkill}";
-            
+
             int playerTextSkill = data.Stats.Vocobulary.Value;
             int rapperTextSkill = _rapper.Vocobulary;
             textSkill.text = $"{playerTextSkill + rapperTextSkill}";
         }
-        
+
         protected override void BeforeShow(object ctx = null)
         {
-            _track = new TrackInfo {Feat = _rapper};
+            _track = new TrackInfo { FeatId = _rapper.Id };
 
             rapperName.text = _rapper.Name;
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
-            
+
             SetupCarousel(PlayerAPI.Data);
             DisplaySkills(PlayerAPI.Data);
         }

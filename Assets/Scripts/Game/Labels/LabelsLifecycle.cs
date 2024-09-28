@@ -4,11 +4,11 @@ using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.UI;
+using Enums;
 using UI.Enums;
 using UnityEngine;
 using RappersAPI = Game.Rappers.RappersPackage;
 using PlayerAPI = Game.Player.PlayerPackage;
-using Enums;
 
 namespace Game.Labels
 {

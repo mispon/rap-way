@@ -18,6 +18,7 @@ using ScriptableObjects;
 using Enums;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
+using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace UI.Windows.GameScreen.Track
 {
@@ -61,9 +62,10 @@ namespace UI.Windows.GameScreen.Track
             var nickname = PlayerAPI.Data.Info.NickName;
 
             var trackName = track.Name;
-            if (track.Feat != null)
+            if (track.FeatId != 0)
             {
-                trackName += $" feat. {track.Feat.Name}";
+                var rapper = RappersAPI.Instance.Get(track.FeatId);
+                trackName += $" feat. {rapper.Name}";
             }
 
             var fansIncomePrefix = track.FansIncome > 0 ? "+" : string.Empty;
@@ -107,9 +109,10 @@ namespace UI.Windows.GameScreen.Track
             track.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddTrack(track);
 
-            if (track.Feat != null)
+            if (track.FeatId != 0)
             {
-                ProductionManager.AddFeat(track.Feat);
+                var rapper = RappersAPI.Instance.Get(track.FeatId);
+                ProductionManager.AddFeat(rapper);
             }
 
             MsgBroker.Instance.Publish(new ProductionRewardMessage
@@ -127,7 +130,7 @@ namespace UI.Windows.GameScreen.Track
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());
             MsgBroker.Instance.Publish(new NewsMessage
             {
-                Text = "news_player_create_track",
+                Text = "news_track_created",
                 TextArgs = new[] {
                     PlayerAPI.Data.Info.NickName,
                     _track.Name

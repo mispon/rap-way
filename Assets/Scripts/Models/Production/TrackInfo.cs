@@ -11,7 +11,7 @@ namespace Models.Production
     /// Информация о выпущенном треке
     /// </summary>
     [Serializable]
-    public class TrackInfo: ProductionBase
+    public class TrackInfo : ProductionBase
     {
         public TrendInfo TrendInfo;
         public int TextPoints;
@@ -19,8 +19,8 @@ namespace Models.Production
         public int ListenAmount;
         public int ChartPosition;
         public bool HasClip;
-        public RapperInfo Feat;
-        
+        public int FeatId;
+
         public override string[] HistoryInfo => new[]
         {
             ProductionManager.GetTrackName(Id),
@@ -30,8 +30,9 @@ namespace Models.Production
             ListenAmount.GetDisplay(),
             ChartPosition > 0 ? ChartPosition.ToString() : "—"
         };
-        
-        public override string GetLog() {
+
+        public override string GetLog()
+        {
             return $"{Timestamp}: {LocalizationManager.Instance.Get("log_track")} {Name}";
         }
     }

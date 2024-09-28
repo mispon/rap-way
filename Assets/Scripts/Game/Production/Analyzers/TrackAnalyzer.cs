@@ -27,9 +27,9 @@ namespace Game.Production.Analyzers
             }
 
             int fansAmount = GetFans();
-            if (track.Feat != null)
+            if (track.FeatId != 0)
             {
-                fansAmount += RappersAPI.GetFansCount(track.Feat);
+                fansAmount += RappersAPI.Instance.GetFansCount(track.FeatId);
             }
 
             track.ListenAmount = CalculateListensAmount(
@@ -47,7 +47,7 @@ namespace Game.Production.Analyzers
             track.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
             track.MoneyIncome = CalcMoneyIncome(track.ListenAmount, settings.Track.ListenCost);
 
-            if (LabelsAPI.Instance.IsPlayerInGameLabel() && track.Feat == null)
+            if (LabelsAPI.Instance.IsPlayerInGameLabel() && track.FeatId == 0)
             {
                 int labelsFee = track.MoneyIncome / 100 * 20;
                 track.MoneyIncome -= labelsFee;

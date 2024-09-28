@@ -227,7 +227,6 @@ MonoBehaviour:
   dontDestroy: 0
   chance: 0.15
   minTracksCount: 10
-  eventMainPage: {fileID: 0}
   data: {fileID: 11400000, guid: 974a9531e92eb33448c26e19d9138621, type: 2}
 --- !u!1 &3036844871196652973
 GameObject:
@@ -274,7 +273,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
-  newAchievementsPage: {fileID: 0}
   achievementsData: {fileID: 11400000, guid: ac93b9090d0b40548a2294d636cdedcc, type: 2}
 --- !u!1 &3187588212368941331
 GameObject:
@@ -416,20 +414,81 @@ MonoBehaviour:
   - Type: 0
     Avatar: {fileID: 21300000, guid: 794fd7e549aa3fb41bfbd5abf36497bf, type: 3}
     FansToUnlock: 1000
-    Salary: 64000000c80000002c01000090010000f401000058020000bc0200002003000084030000e8030000
+    Salary: 64000000f4010000d007000010270000b8880000f8240100a0860100f0490200400d030090d00300
   - Type: 1
     Avatar: {fileID: 21300000, guid: 9b163cec97a11814484166b334619a8f, type: 3}
     FansToUnlock: 5000
-    Salary: 64000000c80000002c01000090010000f401000058020000bc0200002003000084030000e8030000
+    Salary: 64000000f4010000d007000010270000b8880000f8240100a0860100f0490200400d030090d00300
   - Type: 2
     Avatar: {fileID: 21300000, guid: 3c9c20d3dab33fd46ac514fd859aaead, type: 3}
     FansToUnlock: 100000
-    Salary: 2c0100005802000084030000b0040000dc0500000807000034080000600900008c0a0000b80b0000
+    Salary: 64000000f4010000d007000010270000b8880000f8240100a0860100f0490200400d030090d00300
   - Type: 3
     Avatar: {fileID: 21300000, guid: a7037060194b9524bbc3baffad14c681, type: 3}
     FansToUnlock: 10000
-    Salary: c8000000900100005802000020030000e8030000b0040000780500004006000008070000d0070000
-  newTeammateEffect: {fileID: 0}
+    Salary: 64000000f4010000d007000010270000b8880000f8240100a0860100f0490200400d030090d00300
+--- !u!1 &6393902533989309799
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 882236368862741209}
+  - component: {fileID: 1757509380634691382}
+  m_Layer: 0
+  m_Name: RapperAITemplate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &882236368862741209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6393902533989309799}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5014948586328903758}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1757509380634691382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6393902533989309799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faae3c88d676d4eedb07a3654d1de7ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackCooldown: 30
+  clipCooldown: 30
+  albumCooldown: 50
+  concertCooldown: 100
+  eaglerCooldown: 20
+  actingFrequency: 30
+  info:
+    Id: 0
+    Name: 
+    Label: 
+    Fans: 0
+    Cooldown: 0
+    Vocobulary: 0
+    Bitmaking: 0
+    Management: 0
+    IsCustom: 0
+    IsPlayer: 0
+    AvatarName: 
 --- !u!1 &6485806368264999836
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,7 +518,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 882236368862741209}
   m_Father: {fileID: 1929117383248465391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4655962773293941368
@@ -475,6 +535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroy: 0
+  rapperAITemplate: {fileID: 1757509380634691382}
   data: {fileID: 11400000, guid: 4827d9250d9d42f499978cab5f09b8fd, type: 2}
   imagesBank: {fileID: 11400000, guid: f8f914cf7b3817041beb854fc3baf0ea, type: 2}
 --- !u!1 &7170994580708335421

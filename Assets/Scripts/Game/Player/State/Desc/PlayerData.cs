@@ -15,17 +15,17 @@ namespace Game.Player.State.Desc
     public class PlayerData
     {
         public const int MAX_SKILL = 10;
-        
+
         public int Money;
         public int Donate;
         public int Fans;
         public int Hype;
         public int Exp;
         public string Label;
-        
+
         public PlayerInfo Info;
         public PlayerStats Stats;
-        public PlayerHistory History;
+        public ProductionHistory History;
         public Team.Desc.Team Team;
 
         public List<Good> Goods;
@@ -38,14 +38,14 @@ namespace Game.Player.State.Desc
 
         public TrendsData LastKnownTrends;
         public bool FinishPageShowed;
-        
+
         public static PlayerData New => new()
         {
             Info = PlayerInfo.New,
             Stats = PlayerStats.New,
-            History = PlayerHistory.New,
+            History = ProductionHistory.New,
             Team = Player.Team.Desc.Team.New,
-            
+
             Goods = new List<Good>(),
             Achievements = new List<Achievement>(),
             Themes = new List<Themes> { Enums.Themes.Life },

@@ -107,7 +107,7 @@ namespace UI.Windows.GameScreen.Album
 
             MsgBroker.Instance.Publish(new NewsMessage
             {
-                Text = "news_player_create_album",
+                Text = "news_album_created",
                 TextArgs = new[] {
                     PlayerAPI.Data.Info.NickName,
                     _album.Name

@@ -1,4 +1,5 @@
 using System;
+using Game.Player.State.Desc;
 using UnityEngine;
 
 namespace Game.Rappers.Desc
@@ -10,13 +11,24 @@ namespace Game.Rappers.Desc
         public string Name;
         public string Label;
         public int Fans;
+
+        // Activity cooldown (for AI)
+        public int Cooldown;
+
+        // Skills 
         public int Vocobulary;
         public int Bitmaking;
         public int Management;
+
+        // Flags
         public bool IsCustom;
         public bool IsPlayer;
-        public string AvatarName;
 
+        // Avatar
+        public string AvatarName;
         [NonSerialized] public Sprite Avatar;
+
+        // History
+        public ProductionHistory History;
     }
 }

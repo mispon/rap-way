@@ -81,7 +81,7 @@ namespace UI.Windows.GameScreen.Concert
 
             MsgBroker.Instance.Publish(new NewsMessage
             {
-                Text = "news_player_finish_concert",
+                Text = "news_concert_finished",
                 TextArgs = new[] {
                     PlayerAPI.Data.Info.NickName,
                     _concert.LocationName

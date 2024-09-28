@@ -26,6 +26,27 @@ namespace Game.Rappers
             return _customRappers.Any() ? _customRappers.Max(e => e.Id) : minID;
         }
 
+        public RapperInfo Get(int rapperId)
+        {
+            foreach (var rapperInfo in _rappers)
+            {
+                if (rapperInfo.Id == rapperId)
+                {
+                    return rapperInfo;
+                }
+            }
+
+            foreach (var rapperInfo in _customRappers)
+            {
+                if (rapperInfo.Id == rapperId)
+                {
+                    return rapperInfo;
+                }
+            }
+
+            return null;
+        }
+
         public RapperInfo GetRandom()
         {
             var rappers = GetAll().ToArray();
@@ -66,6 +87,12 @@ namespace Game.Rappers
             {
                 yield return rapperInfo;
             }
+        }
+
+        public int GetFansCount(int rapperId)
+        {
+            var rapper = Get(rapperId);
+            return rapper != null ? GetFansCount(rapper) : 0;
         }
 
         public static int GetFansCount(RapperInfo rapper)

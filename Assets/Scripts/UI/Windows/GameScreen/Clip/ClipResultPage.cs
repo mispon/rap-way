@@ -101,7 +101,7 @@ namespace UI.Windows.GameScreen.Clip
 
             MsgBroker.Instance.Publish(new NewsMessage
             {
-                Text = "news_player_create_clip",
+                Text = "news_clip_created",
                 TextArgs = new[] {
                     PlayerAPI.Data.Info.NickName,
                     _clip.Name

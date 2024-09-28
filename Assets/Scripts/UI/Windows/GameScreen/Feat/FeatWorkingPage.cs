@@ -1,5 +1,6 @@
 using Core;
 using Core.Context;
+using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using Models.Production;
@@ -10,6 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
+using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace UI.Windows.GameScreen.Feat
 {
@@ -28,6 +30,7 @@ namespace UI.Windows.GameScreen.Feat
         [SerializeField] private Sprite customRapperAvatar;
 
         private TrackInfo _track;
+        private RapperInfo _feat;
 
         public override void Show(object ctx = null)
         {
@@ -38,6 +41,8 @@ namespace UI.Windows.GameScreen.Feat
         protected override void StartWork(object ctx)
         {
             _track = ctx.Value<TrackInfo>();
+            _feat = RappersAPI.Instance.Get(_track.FeatId);
+
             RefreshWorkAnims();
         }
 
@@ -51,16 +56,16 @@ namespace UI.Windows.GameScreen.Feat
         private void GenerateWorkPoints()
         {
             var stats = PlayerAPI.Data.Stats;
-            
+
             var bitWorkPoints = CreateWorkPoints(
                 stats.Bitmaking.Value, playerBitWorkPoints,
-                _track.Feat.Vocobulary, rapperBitWorkPoints
+                _feat.Vocobulary, rapperBitWorkPoints
             );
             var textWorkPoints = CreateWorkPoints(
                 stats.Vocobulary.Value, playerTextWorkPoints,
-                _track.Feat.Bitmaking, rapperTextWorkPoints
+                _feat.Bitmaking, rapperTextWorkPoints
             );
-            
+
             _track.BitPoints += bitWorkPoints;
             _track.TextPoints += textWorkPoints;
         }
@@ -68,7 +73,8 @@ namespace UI.Windows.GameScreen.Feat
         private static int CreateWorkPoints(
             int playerSkill, WorkPoints playerPoints,
             int rapperSkill, WorkPoints rapperPoints
-        ) {
+        )
+        {
             var playerValue = Random.Range(1, playerSkill + 2);
             playerPoints.Show(playerValue);
 
@@ -97,13 +103,13 @@ namespace UI.Windows.GameScreen.Feat
         {
             return settings.Track.FeatWorkDuration;
         }
-        
+
         protected override void BeforeShow(object ctx = null)
         {
             base.BeforeShow(ctx);
-            
+
             bitPoints.text = textPoints.text = "0";
-            rapperAvatar.sprite = _track.Feat.IsCustom ? customRapperAvatar : _track.Feat.Avatar;
+            rapperAvatar.sprite = _feat.IsCustom ? customRapperAvatar : _feat.Avatar;
         }
 
         protected override void BeforeHide()

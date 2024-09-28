@@ -77,7 +77,7 @@ namespace UI.Windows.GameScreen.Track
 
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
-                Type = _track.Feat == null
+                Type = _track.FeatId == 0
                     ? WindowType.ProductionTrackWork
                     : WindowType.ProductionFeatWork,
                 Context = _track
