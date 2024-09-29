@@ -49,7 +49,7 @@ namespace Game.Production
             var track = GetTrack(trackId);
 
             string featInfo = "";
-            if (track.FeatId != 0)
+            if (track.FeatId != -1)
             {
                 var rapper = PlayerAPI.Instance.Get(track.FeatId);
                 if (rapper != null && rapper.Name != "")

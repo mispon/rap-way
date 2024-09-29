@@ -152,7 +152,7 @@ namespace UI.Windows.GameScreen.Concert
 
         protected override void BeforeShow(object ctx = null)
         {
-            _concert = new ConcertInfo();
+            _concert = new ConcertInfo { CreatorId = -1 };
             CacheLastAlbums();
 
             var anyAlbums = _lastAlbums.Any();

@@ -77,7 +77,7 @@ namespace UI.Windows.GameScreen.Track
 
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
-                Type = _track.FeatId == 0
+                Type = _track.FeatId == -1
                     ? WindowType.ProductionTrackWork
                     : WindowType.ProductionFeatWork,
                 Context = _track
@@ -139,7 +139,11 @@ namespace UI.Windows.GameScreen.Track
 
         protected override void BeforeShow(object ctx = null)
         {
-            _track = new TrackInfo();
+            _track = new TrackInfo
+            {
+                CreatorId = -1,
+                FeatId = -1
+            };
 
             SetupCarousel(PlayerAPI.Data);
             SetupTeam();

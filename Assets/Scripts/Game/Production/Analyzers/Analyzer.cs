@@ -3,12 +3,11 @@ using Game.Settings;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
+using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace Game.Production.Analyzers
 {
-    /// <summary>
-    /// Базовый анализатор
-    /// </summary>
+    // TODO: remove MonoBehaviour inheritance
     public abstract class Analyzer<T> : MonoBehaviour
     {
         protected GameSettings settings;
@@ -18,14 +17,9 @@ namespace Game.Production.Analyzers
             settings = GameManager.Instance.Settings;
         }
 
-        /// <summary>
-        /// Анализирует успешность деятельности игрока 
-        /// </summary>
         public abstract void Analyze(T product);
 
-        /// <summary>
-        /// Рассчитывает прирост фанатов
-        /// </summary>
+
         protected int CalcNewFansCount(int fans, float quality)
         {
             var fansGrowVector = new[]
@@ -68,26 +62,20 @@ namespace Game.Production.Analyzers
 
             newFans = Math.Max(settings.Player.MinFansIncome, newFans);
             newFans = Math.Min(settings.Player.MaxFansIncome, newFans);
-            
+
             return AddFuzzing(newFans);
         }
 
-        /// <summary>
-        /// Рассчитывает прирос денег
-        /// </summary>
         protected int CalcMoneyIncome(int streams, float cost)
         {
             int money = Convert.ToInt32(streams * cost);
-            
+
             money = Math.Max(10, money);
             money = Math.Min(settings.Player.MaxMoneyIncome, money);
-            
+
             return AddFuzzing(money);
         }
-        
-        /// <summary>
-        /// Добавляет рандомное отклонение на N%
-        /// </summary>
+
         protected static int AddFuzzing(int value)
         {
             const float tenPercents = 0.1f;
@@ -98,24 +86,27 @@ namespace Game.Production.Analyzers
                 // to safe add back
                 value -= fuzz;
             }
-            
+
             return Random.Range(value - fuzz, value + fuzz);
         }
 
-        /// <summary>
-        /// Возвращает количество фанатов
-        /// </summary>
-        protected int GetFans()
+        protected int GetFans(int creatorId)
         {
-            return Mathf.Max(PlayerAPI.Data.Fans, settings.Player.BaseFans);
+            return IsPlayerCreator(creatorId)
+                ? Mathf.Max(PlayerAPI.Data.Fans, settings.Player.BaseFans)
+                : RappersAPI.Instance.GetFansCount(creatorId);
         }
-        
-        /// <summary>
-        /// Возвращает коэффициент хайпа
-        /// </summary>
-        protected float GetHypeFactor()
+
+        protected float GetHypeFactor(int creatorId)
         {
-            return Mathf.Max(0.1f, PlayerAPI.Data.Hype / 100f);
+            return IsPlayerCreator(creatorId)
+                ? Mathf.Max(0.1f, PlayerAPI.Data.Hype / 100f)
+                : Random.Range(0, 100);
+        }
+
+        protected bool IsPlayerCreator(int creatorId)
+        {
+            return creatorId == -1;
         }
     }
 }

@@ -6,43 +6,41 @@ using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
-    /// <summary>
-    /// Анализатор альбома
-    /// </summary>
     public class AlbumAnalyzer : Analyzer<AlbumInfo>
     {
-        /// <summary>
-        /// Анализирует успешность альбома
-        /// </summary>
+        // TODO: Rewrite and remove all hardcoded deps
+        // analyzer must analyze all tracks independently player or AI is creator
         public override void Analyze(AlbumInfo album)
         {
-            GameStatsManager.Analyze(album.TrendInfo);
-            
-            float qualityPoints = CalculateAlbumQuality(album);
+            float trendsMatch = GameStatsManager.Analyze(album.TrendInfo);
+
+            float qualityPoints = CalculateAlbumQuality(album.TextPoints, album.BitPoints, trendsMatch);
             album.Quality = qualityPoints;
-            
+
             var hitDice = Random.Range(0f, 1f);
-            if (qualityPoints >= settings.Album.HitThreshold || hitDice <= settings.Album.HitChance) 
+            if (qualityPoints >= settings.Album.HitThreshold || hitDice <= settings.Album.HitChance)
             {
                 album.IsHit = true;
             }
 
-            int fansAmount = GetFans();
+            int fansAmount = GetFans(album.CreatorId);
+
             album.ListenAmount = CalculateListensAmount(
+                album.CreatorId,
                 fansAmount,
-                qualityPoints, 
-                album.TrendInfo.EqualityValue,
+                qualityPoints,
+                trendsMatch,
                 album.IsHit
             );
 
             if (qualityPoints >= settings.Album.ChartsThreshold)
             {
-                album.ChartPosition = CalculateChartPosition();
+                album.ChartPosition = CalculateChartPosition(album.CreatorId);
             }
-            
+
             album.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
             album.MoneyIncome = CalcMoneyIncome(album.ListenAmount, settings.Album.ListenCost);
-            
+
             if (LabelsAPI.Instance.IsPlayerInGameLabel())
             {
                 int labelsFee = album.MoneyIncome / 100 * 20;
@@ -54,16 +52,15 @@ namespace Game.Production.Analyzers
         /// Определяет качество альбома в зависимости от очков работы и попадания в тренды
         /// </summary>
         /// <returns>Показатель качества альбома от [base] до 1.0</returns>
-        private float CalculateAlbumQuality(AlbumInfo album)
+        private float CalculateAlbumQuality(int textPoints, int bitPoints, float trendsMatch)
         {
             float qualityPoints = settings.Album.BaseQuality;
 
-            float workPointsFactor = CalculateWorkPointsFactor(album.TextPoints, album.BitPoints);
+            float workPointsFactor = CalculateWorkPointsFactor(textPoints, bitPoints);
             qualityPoints += workPointsFactor;
 
             // Определяем бонус в качество от попадания в тренды
-            
-            qualityPoints += album.TrendInfo.EqualityValue;
+            qualityPoints += trendsMatch;
 
             return Mathf.Min(qualityPoints, 1f);
         }
@@ -85,24 +82,25 @@ namespace Game.Production.Analyzers
         /// Вычисляет количество прослушиваний на основе качества альбома, кол-ва фанатов и уровня хайпа
         /// </summary>
         private int CalculateListensAmount(
+            int creatorId,
             int fans,
             float quality,
-            float trandsMatchFactor, 
-            bool isHit    
+            float trandsMatchFactor,
+            bool isHit
         )
         {
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor()));
-            
+            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
+
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
             float activity = 1.0f + (maxFansActivity * quality);
 
             int listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
-            
+
             // Попадание в тренды так же увеличивает прослушивания
-            listens = (int) (listens * (1f + trandsMatchFactor));
-            
+            listens = (int)(listens * (1f + trandsMatchFactor));
+
             if (isHit)
             {
                 try
@@ -114,13 +112,13 @@ namespace Game.Production.Analyzers
                     listens = int.MaxValue;
                 }
             }
-            
+
             return AddFuzzing(listens);
         }
 
-        private int CalculateChartPosition()
+        private int CalculateChartPosition(int creatorId)
         {
-            if (GetFans() < settings.Player.MinFansForCharts)
+            if (GetFans(creatorId) < settings.Player.MinFansForCharts)
             {
                 return 0;
             }

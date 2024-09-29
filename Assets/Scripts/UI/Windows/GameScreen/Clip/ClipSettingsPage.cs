@@ -128,7 +128,7 @@ namespace UI.Windows.GameScreen.Clip
 
         protected override void BeforeShow(object ctx = null)
         {
-            _clip = new ClipInfo();
+            _clip = new ClipInfo { CreatorId = -1 };
 
             CacheLastTracks();
 

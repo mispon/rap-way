@@ -7,9 +7,6 @@ using Models.Trends;
 
 namespace Models.Production
 {
-    /// <summary>
-    /// Информация о выпущенном треке
-    /// </summary>
     [Serializable]
     public class TrackInfo : ProductionBase
     {

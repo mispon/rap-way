@@ -62,7 +62,7 @@ namespace UI.Windows.GameScreen.Track
             var nickname = PlayerAPI.Data.Info.NickName;
 
             var trackName = track.Name;
-            if (track.FeatId != 0)
+            if (track.FeatId != -1)
             {
                 var rapper = RappersAPI.Instance.Get(track.FeatId);
                 trackName += $" feat. {rapper.Name}";
@@ -109,7 +109,7 @@ namespace UI.Windows.GameScreen.Track
             track.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddTrack(track);
 
-            if (track.FeatId != 0)
+            if (track.FeatId != -1)
             {
                 var rapper = RappersAPI.Instance.Get(track.FeatId);
                 ProductionManager.AddFeat(rapper);

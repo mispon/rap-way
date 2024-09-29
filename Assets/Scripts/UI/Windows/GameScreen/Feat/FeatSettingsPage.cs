@@ -37,7 +37,11 @@ namespace UI.Windows.GameScreen.Feat
 
         protected override void BeforeShow(object ctx = null)
         {
-            _track = new TrackInfo { FeatId = _rapper.Id };
+            _track = new TrackInfo
+            {
+                CreatorId = -1,
+                FeatId = _rapper.Id
+            };
 
             rapperName.text = _rapper.Name;
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;

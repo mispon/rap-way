@@ -5,29 +5,21 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Production.Analyzers
 {
-    /// <summary>
-    /// Анализатор соц. действий
-    /// </summary>
-    public class SocialAnalyzer: Analyzer<SocialInfo>
+    public class SocialAnalyzer : Analyzer<SocialInfo>
     {
-        /// <summary>
-        /// Анализирует успешность социального действия
-        /// </summary>
         public override void Analyze(SocialInfo social)
         {
             float quality = social.CharityAmount > 0
                 ? CalculateCharityQuality(social.WorkPoints, social.CharityAmount)
                 : GetAllOtherQuality(social.WorkPoints);
 
-            float activeFans = GetFans() * settings.Socials.ActiveFansGroup;
+            const int playerId = -1;
+            float activeFans = GetFans(playerId) * settings.Socials.ActiveFansGroup;
 
             social.HypeIncome = Convert.ToInt32(quality * 100);
             social.Likes = Convert.ToInt32(activeFans * quality);
         }
 
-        /// <summary>
-        /// Вычисляет качество для пожертвования
-        /// </summary>
         private float CalculateCharityQuality(int workPoints, int charityAmount)
         {
             float maxCharity = PlayerAPI.Data.Money / 10f;
@@ -40,9 +32,6 @@ namespace Game.Production.Analyzers
             return charityImpact + workImpact;
         }
 
-        /// <summary>
-        /// Вычисляет качество для всех остальных соц. действий
-        /// </summary>
         private float GetAllOtherQuality(int workPoints)
         {
             return 1f * Mathf.Min(workPoints, settings.Socials.WorkPointsMax) / settings.Socials.WorkPointsMax;

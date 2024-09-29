@@ -17,22 +17,23 @@ namespace Game.Production.Analyzers
         public override void Analyze(ClipInfo clip)
         {
             var track = ProductionManager.GetTrack(clip.TrackId);
-            
+
             float qualityPoints = CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints);
             clip.Quality = qualityPoints;
 
             var hitDice = Random.Range(0f, 1f);
-            if (qualityPoints >= settings.Clip.HitThreshold || hitDice <= settings.Clip.HitChance) 
+            if (qualityPoints >= settings.Clip.HitThreshold || hitDice <= settings.Clip.HitChance)
             {
                 clip.IsHit = true;
             }
 
-            int fansAmount = GetFans();
-            
+            int fansAmount = GetFans(clip.CreatorId);
+
             clip.Views = CalculateViewsAmount(
-                fansAmount, 
+                clip.CreatorId,
+                fansAmount,
                 qualityPoints,
-                track.ListenAmount, 
+                track.ListenAmount,
                 clip.IsHit
             );
 
@@ -43,7 +44,7 @@ namespace Game.Production.Analyzers
 
             clip.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
             clip.MoneyIncome = CalcMoneyIncome(clip.Views, settings.Clip.ViewCost);
-            
+
             if (LabelsAPI.Instance.IsPlayerInGameLabel())
             {
                 int labelsFee = clip.MoneyIncome / 100 * 20;
@@ -66,23 +67,25 @@ namespace Game.Production.Analyzers
         /// Вычисляет количество просмотров на основе качества клипа, кол-ва фанатов и уровня хайпа
         /// </summary>
         private int CalculateViewsAmount(
+            int creatorId,
             int fans,
-            float quality, 
+            float quality,
             int trackListenAmount,
             bool isHit
-        ) {
+        )
+        {
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor()));
-            
+            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
+
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
             float activity = 1.0f + maxFansActivity * quality;
 
             int views = Convert.ToInt32(Math.Ceiling(activeFans * activity));
-            
+
             // Успешность трека увеличивает просмотры
             views += Convert.ToInt32(trackListenAmount * 0.1f);
-            
+
             if (isHit)
             {
                 try
@@ -94,7 +97,7 @@ namespace Game.Production.Analyzers
                     views = int.MaxValue;
                 }
             }
-            
+
             return AddFuzzing(views);
         }
 
@@ -105,7 +108,7 @@ namespace Game.Production.Analyzers
         {
             int likes = Convert.ToInt32(clipQuality * activeViewers);
             int dislikes = Convert.ToInt32((1f - clipQuality) * activeViewers);
-            
+
             return (AddFuzzing(likes), AddFuzzing(dislikes));
         }
     }

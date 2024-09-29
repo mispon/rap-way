@@ -8,6 +8,7 @@ namespace Models.Production
     [Serializable]
     public abstract class ProductionBase
     {
+        public int CreatorId;
         public int Id;
         public string Name;
         public int MoneyIncome;

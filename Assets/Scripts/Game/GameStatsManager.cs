@@ -20,16 +20,16 @@ namespace Game
     /// <summary>
     /// Класс управления трендами
     /// </summary>
-    public class GameStatsManager: Singleton<GameStatsManager>, IStarter
+    public class GameStatsManager : Singleton<GameStatsManager>, IStarter
     {
         private static readonly int STYLES_COUNT = Enum.GetValues(typeof(Styles)).Length;
         private static readonly int THEMES_COUNT = Enum.GetValues(typeof(Themes)).Length;
-        
+
         [Header("Данные сравнения")]
         [SerializeField] private TrendsCompareData trendsCompareData;
 
         private readonly CompositeDisposable _disposable = new();
-        
+
         public void OnStart()
         {
             MsgBroker.Instance
@@ -41,12 +41,14 @@ namespace Game
                 .Subscribe(e => OnWeekLeft())
                 .AddTo(_disposable);
         }
-        
+
         /// <summary>
         /// Получение новой даты обновления трендов
         /// </summary>
         public static DateTime GetNextTimeUpdate(DateTime currentDate)
-            => currentDate.AddMonths(UnityEngine.Random.Range(2, 4));
+        {
+            return currentDate.AddMonths(UnityEngine.Random.Range(2, 4));
+        }
 
         /// <summary>
         /// Истечение игрового дня 
@@ -65,10 +67,10 @@ namespace Game
         private static void OnWeekLeft()
         {
             var now = TimeManager.Instance.Now;
-            
+
             if (now < GameManager.Instance.GameStats.Trends.NextTimeUpdate)
                 return;
-            
+
             ChangeTrends(now);
         }
 
@@ -76,28 +78,29 @@ namespace Game
         {
             GameManager.Instance.GameStats.Trends = new Trends
             {
-                Style = (Styles) UnityEngine.Random.Range(0, STYLES_COUNT),
-                Theme = (Themes) UnityEngine.Random.Range(0, THEMES_COUNT),
+                Style = (Styles)UnityEngine.Random.Range(0, STYLES_COUNT),
+                Theme = (Themes)UnityEngine.Random.Range(0, THEMES_COUNT),
                 NextTimeUpdate = GetNextTimeUpdate(now)
             };
         }
 
-        public static void Analyze(TrendInfo info)
+        public static float Analyze(TrendInfo info)
         {
             var currentTrend = GameManager.Instance.GameStats.Trends;
             var compareData = Instance.trendsCompareData;
-            
+
             var styleEquality = compareData.StylesCompareInfos.AnalyzeEquality(currentTrend.Style, info.Style);
             var themeEquality = compareData.ThemesCompareInfos.AnalyzeEquality(currentTrend.Theme, info.Theme);
 
-            info.EqualityValue = styleEquality + themeEquality;
+            return styleEquality + themeEquality;
         }
 
-        private void OnDestroy() {
+        private void OnDestroy()
+        {
             _disposable.Clear();
         }
     }
-    
+
     public static class Extension
     {
         public static float AnalyzeEquality<T>(this BaseCompareInfo<T>[] array, T currentValue, T selectedValue)

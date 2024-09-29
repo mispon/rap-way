@@ -10,10 +10,10 @@ namespace Game.Production.Analyzers
 {
     public class TrackAnalyzer : Analyzer<TrackInfo>
     {
+        // TODO: Rewrite and remove all hardcoded deps
+        // analyzer must analyze all tracks independently player or AI is creator
         public override void Analyze(TrackInfo track)
         {
-            GameStatsManager.Analyze(track.TrendInfo);
-
             float qualityPoints = CalculateTrackQuality(track);
             track.Quality = qualityPoints;
 
@@ -26,34 +26,37 @@ namespace Game.Production.Analyzers
                 }
             }
 
-            int fansAmount = GetFans();
-            if (track.FeatId != 0)
+            int fansAmount = GetFans(track.CreatorId);
+            if (track.FeatId != -1)
             {
-                fansAmount += RappersAPI.Instance.GetFansCount(track.FeatId);
+                fansAmount += RappersAPI.Instance.Get(track.FeatId)?.Fans ?? 0;
             }
 
+            float trendsMatch = GameStatsManager.Analyze(track.TrendInfo);
+
             track.ListenAmount = CalculateListensAmount(
+                track.CreatorId,
                 fansAmount,
                 qualityPoints,
-                track.TrendInfo.EqualityValue,
+                trendsMatch,
                 track.IsHit
             );
 
             if (qualityPoints >= settings.Track.ChartsThreshold)
             {
-                track.ChartPosition = CalculateChartPosition();
+                track.ChartPosition = CalculateChartPosition(track.CreatorId);
             }
 
             track.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
             track.MoneyIncome = CalcMoneyIncome(track.ListenAmount, settings.Track.ListenCost);
 
-            if (LabelsAPI.Instance.IsPlayerInGameLabel() && track.FeatId == 0)
+            if (LabelsAPI.Instance.IsPlayerInGameLabel() && track.FeatId == -1)
             {
                 int labelsFee = track.MoneyIncome / 100 * 20;
                 track.MoneyIncome -= labelsFee;
             }
 
-            if (track.Id == 2)
+            if (IsPlayerCreator(track.CreatorId) && track.Id == 2)
             {
                 // fake boost quality and other stuff for tutorial
                 track.Quality *= 2;
@@ -99,6 +102,7 @@ namespace Game.Production.Analyzers
         /// Вычисляет количество прослушиваний на основе кол-ва фанатов и уровня хайпа
         /// </summary>
         private int CalculateListensAmount(
+            int creatorId,
             int fans,
             float quality,
             float trandsMatchFactor,
@@ -106,7 +110,7 @@ namespace Game.Production.Analyzers
         )
         {
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor()));
+            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
 
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
@@ -132,9 +136,9 @@ namespace Game.Production.Analyzers
             return AddFuzzing(listens);
         }
 
-        private int CalculateChartPosition()
+        private int CalculateChartPosition(int creatorId)
         {
-            if (GetFans() <= settings.Player.MinFansForCharts)
+            if (GetFans(creatorId) <= settings.Player.MinFansForCharts)
             {
                 return 0;
             }

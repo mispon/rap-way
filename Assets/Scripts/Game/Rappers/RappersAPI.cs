@@ -89,25 +89,12 @@ namespace Game.Rappers
             }
         }
 
-        public int GetFansCount(int rapperId)
-        {
-            var rapper = Get(rapperId);
-            return rapper != null ? GetFansCount(rapper) : 0;
-        }
-
-        public static int GetFansCount(RapperInfo rapper)
-        {
-            const int factor = 1_000_000;
-            return rapper.Fans * factor;
-        }
-
         public static int GetRapperScore(RapperInfo rapper)
         {
             const int maxRapperScore = 100;
             const int maxValuableFans = 50_000_000;
 
-            int fans = rapper.IsPlayer ? rapper.Fans : GetFansCount(rapper);
-            var score = Convert.ToInt32(1f * fans / maxValuableFans * maxRapperScore);
+            var score = Convert.ToInt32(1f * rapper.Fans / maxValuableFans * maxRapperScore);
 
             return Mathf.Min(score, maxRapperScore);
         }

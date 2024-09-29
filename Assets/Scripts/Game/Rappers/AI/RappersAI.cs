@@ -1,5 +1,7 @@
 using System;
+using Game.Production.Analyzers;
 using Game.Rappers.Desc;
+using Game.Settings;
 using MessageBroker;
 using MessageBroker.Messages.Time;
 using ScriptableObjects;
@@ -11,6 +13,15 @@ namespace Game.Rappers.AI
 {
     public partial class RappersAI : MonoBehaviour
     {
+        [SerializeField] private GameSettings settings;
+        [SerializeField] private ConcertPlacesData concertData;
+
+        [Header("Analyzers")]
+        [SerializeField] private TrackAnalyzer trackAnalyzer;
+        [SerializeField] private ClipAnalyzer clipAnalyzer;
+        [SerializeField] private AlbumAnalyzer albumAnalyzer;
+        [SerializeField] private ConcertAnalyzer concertAnalyzer;
+
         [Header("Cooldowns")]
         [SerializeField] private int trackCooldown = 30;
         [SerializeField] private int clipCooldown = 30;
@@ -76,6 +87,18 @@ namespace Game.Rappers.AI
                     // do nothing
             }
 
+        }
+
+        private int GenWorkPoints(int skill, int days)
+        {
+            int wp = 0;
+
+            for (int i = 0; i < days / 2; i++)
+            {
+                wp += Random.Range(0, skill + 1);
+            }
+
+            return wp;
         }
 
         private int RollDice()

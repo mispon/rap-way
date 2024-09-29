@@ -140,7 +140,7 @@ namespace UI.Windows.GameScreen.Album
 
         protected override void BeforeShow(object ctx = null)
         {
-            _album = new AlbumInfo();
+            _album = new AlbumInfo { CreatorId = -1 };
 
             SetupCarousel(PlayerAPI.Data);
             SetupTeam();

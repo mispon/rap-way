@@ -26,6 +26,7 @@ namespace Game.Rappers
         {
             UpdateInGameRappers();
             UpdateCustomRappersIDs();
+            UpdateFansCount();
 
             LoadRappersAI();
         }
@@ -57,6 +58,17 @@ namespace Game.Rappers
             {
                 id++;
                 rapperInfo.Id = id;
+            }
+        }
+
+        private void UpdateFansCount()
+        {
+            foreach (var rapperInfo in GetAll())
+            {
+                if (rapperInfo.Fans < 100)
+                {
+                    rapperInfo.Fans *= 1_000_000;
+                }
             }
         }
 
