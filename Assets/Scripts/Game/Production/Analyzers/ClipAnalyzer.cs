@@ -2,6 +2,7 @@ using System;
 using Models.Production;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using RappersAPI = Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
@@ -16,7 +17,9 @@ namespace Game.Production.Analyzers
         /// </summary>
         public override void Analyze(ClipInfo clip)
         {
-            var track = ProductionManager.GetTrack(clip.TrackId);
+            var track = IsPlayerCreator(clip.CreatorId)
+                ? ProductionManager.GetTrack(clip.TrackId)
+                : RappersAPI.Instance.GetTrack(clip.CreatorId, clip.TrackId);
 
             float qualityPoints = CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints);
             clip.Quality = qualityPoints;

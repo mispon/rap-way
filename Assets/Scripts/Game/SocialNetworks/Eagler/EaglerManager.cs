@@ -26,9 +26,6 @@ namespace Game.SocialNetworks.Eagler
                 .ToList();
         }
 
-        /// <summary>
-        ///     Добавляет новый пост от игрока
-        /// </summary>
         public void CreateUserEagle(string nickname, string message, int likes)
         {
             var eagle = new Eagle
@@ -45,22 +42,21 @@ namespace Game.SocialNetworks.Eagler
             AddEagle(eagle);
         }
 
-        public List<Eagle> GenerateEagles(float quality)
+        public List<Eagle> GenerateEagles(int count, string rapperName, int fans, float quality)
         {
-            var twits = new List<Eagle>(3);
+            var eagles = new List<Eagle>(count);
 
-            var fans = PlayerAPI.Data.Fans;
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < count; i++)
             {
-                var twit = GenerateRandomEagle(quality, fans);
-                AddEagle(twit);
-                twits.Add(twit);
+                var eagle = GenerateRandomEagle(rapperName, fans, quality);
+                AddEagle(eagle);
+                eagles.Add(eagle);
             }
 
-            return twits;
+            return eagles;
         }
 
-        private Eagle GenerateRandomEagle(float quality, int fans)
+        private Eagle GenerateRandomEagle(string rapperName, int fans, float quality)
         {
             var likes = CalcLikes(fans);
 
@@ -70,7 +66,6 @@ namespace Game.SocialNetworks.Eagler
                 : $"{data.PositivePostKey}_{Random.Range(0, data.PositivePostsCount)}";
 
             var nickname = data.Nicknames[Random.Range(0, data.Nicknames.Length)];
-            var playerName = PlayerAPI.Data.Info.NickName;
             var randomTag = data.Hashtags[Random.Range(0, data.Hashtags.Length)];
 
             return new Eagle
@@ -81,7 +76,7 @@ namespace Game.SocialNetworks.Eagler
                 Likes = likes,
                 Views = CalcViews(likes),
                 Shares = CalcShares(likes),
-                Tags = $" <color=#109c22>#{playerName}</color> <color=#109c22>#{randomTag}</color>"
+                Tags = $" <color=#109c22>#{rapperName}</color> <color=#109c22>#{randomTag}</color>"
             };
         }
 

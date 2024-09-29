@@ -90,7 +90,10 @@ namespace UI.Windows.GameScreen.Track
 
         private void DisplayEagles(float quality)
         {
-            var eagles = EaglerManager.Instance.GenerateEagles(quality);
+            var nickname = PlayerAPI.Data.Info.NickName;
+            var fans = PlayerAPI.Data.Fans;
+
+            var eagles = EaglerManager.Instance.GenerateEagles(3, nickname, fans, quality);
             for (var i = 0; i < eagles.Count; i++)
             {
                 eagleCards[i].Initialize(i, eagles[i]);

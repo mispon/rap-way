@@ -101,7 +101,7 @@ namespace Game.Production.Analyzers
         {
             return IsPlayerCreator(creatorId)
                 ? Mathf.Max(0.1f, PlayerAPI.Data.Hype / 100f)
-                : Random.Range(0, 100);
+                : Random.Range(0.1f, 1.0f);
         }
 
         protected bool IsPlayerCreator(int creatorId)

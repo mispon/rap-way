@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Game.SocialNetworks.Eagler;
 using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
 using Models.Production;
@@ -41,6 +42,8 @@ namespace Game.Rappers.AI
                 Sprite = info.Avatar,
                 Popularity = info.Fans
             });
+
+            EaglerManager.Instance.GenerateEagles(1, info.Name, info.Fans, clip.Quality);
         }
 
         private TrackInfo SelectFreeTrack()

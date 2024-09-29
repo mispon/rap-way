@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Game.Rappers.Desc;
+using Models.Production;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -117,6 +118,20 @@ namespace Game.Rappers
                 >= 5 => 0.5f,
                 _ => 0
             };
+        }
+
+        public TrackInfo GetTrack(int rapperId, int trackId)
+        {
+            return Get(rapperId)
+                .History.TrackList
+                .First(e => e.Id == trackId);
+        }
+
+        public AlbumInfo GetAlbum(int rapperId, int albumId)
+        {
+            return Get(rapperId)
+                .History.AlbumList
+                .First(e => e.Id == albumId);
         }
 
         public bool IsNameAlreadyTaken(string nickname)

@@ -1,6 +1,7 @@
 using System;
 using Models.Production;
 using UnityEngine;
+using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace Game.Production.Analyzers
 {
@@ -14,7 +15,9 @@ namespace Game.Production.Analyzers
         /// </summary>
         public override void Analyze(ConcertInfo concert)
         {
-            var album = ProductionManager.GetAlbum(concert.AlbumId);
+            var album = IsPlayerCreator(concert.CreatorId)
+                ? ProductionManager.GetAlbum(concert.AlbumId)
+                : RappersAPI.Instance.GetAlbum(concert.CreatorId, concert.AlbumId);
 
             float concertQuality = CalculateWorkPointsFactor(concert.ManagementPoints, concert.MarketingPoints);
             concert.Quality = concertQuality;

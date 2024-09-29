@@ -8,6 +8,7 @@ namespace Game.Rappers.AI
         {
             info.Cooldown = eaglerCooldown;
             Debug.Log($"{info.Name} write eagle");
+            // TODO
         }
     }
 }
