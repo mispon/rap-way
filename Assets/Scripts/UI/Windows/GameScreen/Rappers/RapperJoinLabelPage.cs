@@ -55,7 +55,7 @@ namespace UI.Windows.GameScreen.Team
                     PlayerAPI.Data.Label
                 },
                 Sprite = _rapper.Avatar,
-                Popularity = RappersAPI.GetFansCount(_rapper)
+                Popularity = _rapper.Fans
             });
         }
     }

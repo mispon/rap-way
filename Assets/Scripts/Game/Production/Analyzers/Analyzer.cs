@@ -94,7 +94,7 @@ namespace Game.Production.Analyzers
         {
             return IsPlayerCreator(creatorId)
                 ? Mathf.Max(PlayerAPI.Data.Fans, settings.Player.BaseFans)
-                : RappersAPI.Instance.GetFansCount(creatorId);
+                : RappersAPI.Instance.Get(creatorId)?.Fans ?? 0;
         }
 
         protected float GetHypeFactor(int creatorId)
