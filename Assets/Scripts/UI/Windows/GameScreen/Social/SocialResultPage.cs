@@ -4,23 +4,22 @@ using Game.Production.Analyzers;
 using MessageBroker;
 using MessageBroker.Messages.Production;
 using Models.Production;
-using UnityEngine;
 
 namespace UI.Windows.GameScreen.Social
 {
     public abstract class SocialResultPage : Page
     {
-        [SerializeField] protected SocialAnalyzer analyzer;
-
         private SocialInfo _social;
-        
+
         public override void Show(object ctx = null)
         {
             _social = ctx.Value<SocialInfo>();
 
             if (_social.Type != SocialType.Trends)
-                analyzer.Analyze(_social);
-            
+            {
+                SocialAnalyzer.Analyze(_social, settings);
+            }
+
             DisplayResult(_social);
             base.Show(ctx);
         }
@@ -31,9 +30,9 @@ namespace UI.Windows.GameScreen.Social
         {
             MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
-                MoneyIncome = -social.CharityAmount,
-                HypeIncome = social.HypeIncome,
-                Exp = settings.Socials.RewardExp,
+                MoneyIncome        = -social.CharityAmount,
+                HypeIncome         = social.HypeIncome,
+                Exp                = settings.Socials.RewardExp,
                 WithSocialCooldown = true
             });
         }

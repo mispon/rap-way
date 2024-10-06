@@ -1,4 +1,5 @@
 using System;
+using Game.Settings;
 using Models.Production;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,21 +8,15 @@ using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
-    /// <summary>
-    /// Анализатор клипа
-    /// </summary>
-    public class ClipAnalyzer : Analyzer<ClipInfo>
+    public class ClipAnalyzer : Analyzer
     {
-        /// <summary>
-        /// Анализирует успешность клипа
-        /// </summary>
-        public override void Analyze(ClipInfo clip)
+        public static void Analyze(ClipInfo clip, GameSettings settings)
         {
             var track = IsPlayerCreator(clip.CreatorId)
                 ? ProductionManager.GetTrack(clip.TrackId)
                 : RappersAPI.Instance.GetTrack(clip.CreatorId, clip.TrackId);
 
-            float qualityPoints = CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints);
+            var qualityPoints = CalculateWorkPointsFactor(clip.DirectorPoints, clip.OperatorPoints, settings.Clip.WorkPointsMax);
             clip.Quality = qualityPoints;
 
             var hitDice = Random.Range(0f, 1f);
@@ -30,7 +25,7 @@ namespace Game.Production.Analyzers
                 clip.IsHit = true;
             }
 
-            int fansAmount = GetFans(clip.CreatorId);
+            var fansAmount = GetFans(clip.CreatorId, settings.Player.BaseFans);
 
             clip.Views = CalculateViewsAmount(
                 clip.CreatorId,
@@ -40,51 +35,56 @@ namespace Game.Production.Analyzers
                 clip.IsHit
             );
 
-            int activeViewers = Convert.ToInt32(clip.Views * settings.Clip.ActiveViewers);
+            var activeViewers = Convert.ToInt32(clip.Views * settings.Clip.ActiveViewers);
             var (likes, dislikes) = CalculateReaction(qualityPoints, activeViewers);
-            clip.Likes = likes;
+
+            clip.Likes    = likes;
             clip.Dislikes = dislikes;
 
-            clip.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
-            clip.MoneyIncome = CalcMoneyIncome(clip.Views, settings.Clip.ViewCost);
+            clip.FansIncome = CalcNewFansCount(
+                fansAmount,
+                qualityPoints,
+                settings.Player.MinFansIncome,
+                settings.Player.MaxFansIncome
+            );
+            clip.MoneyIncome = CalcMoneyIncome(
+                clip.Views,
+                settings.Clip.ViewCost,
+                settings.Player.MinMoneyIncome,
+                settings.Player.MaxMoneyIncome
+            );
 
             if (LabelsAPI.Instance.IsPlayerInGameLabel())
             {
-                int labelsFee = clip.MoneyIncome / 100 * 20;
+                var labelsFee = clip.MoneyIncome / 100 * settings.Labels.Fee;
                 clip.MoneyIncome -= labelsFee;
             }
         }
 
         /// <summary>
-        /// Вычисляет вклад рабочих очков в качество трека
+        ///     Вычисляет вклад рабочих очков в качество трека
         /// </summary>
-        private float CalculateWorkPointsFactor(int dirPoints, int opPoints)
+        private static float CalculateWorkPointsFactor(int dirPoints, int opPoints, int maxWorkPoints)
         {
             var workPointsTotal = dirPoints + opPoints;
-            var qualityPercent = 1f * workPointsTotal / settings.Clip.WorkPointsMax;
+            var qualityPercent  = 1f * workPointsTotal / maxWorkPoints;
 
             return Mathf.Min(qualityPercent, 1f);
         }
 
         /// <summary>
-        /// Вычисляет количество просмотров на основе качества клипа, кол-ва фанатов и уровня хайпа
+        ///     Вычисляет количество просмотров на основе качества клипа, кол-ва фанатов и уровня хайпа
         /// </summary>
-        private int CalculateViewsAmount(
-            int creatorId,
-            int fans,
-            float quality,
-            int trackListenAmount,
-            bool isHit
-        )
+        private static int CalculateViewsAmount(int creatorId, int fans, float quality, int trackListenAmount, bool isHit)
         {
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
+            var activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
 
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
-            float activity = 1.0f + maxFansActivity * quality;
+            var         activity        = 1.0f + maxFansActivity * quality;
 
-            int views = Convert.ToInt32(Math.Ceiling(activeFans * activity));
+            var views = Convert.ToInt32(Math.Ceiling(activeFans * activity));
 
             // Успешность трека увеличивает просмотры
             views += Convert.ToInt32(trackListenAmount * 0.1f);
@@ -94,8 +94,7 @@ namespace Game.Production.Analyzers
                 try
                 {
                     views = checked(views * 5);
-                }
-                catch (OverflowException)
+                } catch (OverflowException)
                 {
                     views = int.MaxValue;
                 }
@@ -105,12 +104,12 @@ namespace Game.Production.Analyzers
         }
 
         /// <summary>
-        /// Вычисляет количество лайков / дизлайков
+        ///     Вычисляет количество лайков / дизлайков
         /// </summary>
         private static (int likes, int dislikes) CalculateReaction(float clipQuality, int activeViewers)
         {
-            int likes = Convert.ToInt32(clipQuality * activeViewers);
-            int dislikes = Convert.ToInt32((1f - clipQuality) * activeViewers);
+            var likes    = Convert.ToInt32(clipQuality * activeViewers);
+            var dislikes = Convert.ToInt32((1f - clipQuality) * activeViewers);
 
             return (AddFuzzing(likes), AddFuzzing(dislikes));
         }

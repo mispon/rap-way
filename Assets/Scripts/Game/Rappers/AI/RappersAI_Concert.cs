@@ -1,5 +1,8 @@
 using System;
 using System.Linq;
+using Game.Production.Analyzers;
+using Game.Rappers.Desc;
+using Game.Settings;
 using Game.SocialNetworks.Eagler;
 using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
@@ -11,50 +14,50 @@ namespace Game.Rappers.AI
 {
     public partial class RappersAI
     {
-        private void DoConcert()
+        private static void DoConcert(RapperInfo rapperInfo, GameSettings settings, ConcertPlacesData concertData)
         {
-            var album = SelectFreeAlbum();
+            var album = SelectFreeAlbum(rapperInfo);
             if (album == null)
             {
                 return;
             }
+
             album.ConcertAmounts++;
+            rapperInfo.Cooldown = settings.Rappers.ConcertCooldown;
 
-            info.Cooldown = concertCooldown;
-
-            var locationId = GetRandomLocationId();
-            var location = concertData.Places[locationId];
+            var locationId = GetRandomLocationId(concertData);
+            var location   = concertData.Places[locationId];
 
             var concert = new ConcertInfo
             {
-                CreatorId = info.Id,
-                AlbumId = album.Id,
-                LocationId = locationId,
-                LocationName = location.NameKey,
+                CreatorId        = rapperInfo.Id,
+                AlbumId          = album.Id,
+                LocationId       = locationId,
+                LocationName     = location.NameKey,
                 LocationCapacity = location.Capacity,
-                ManagementPoints = GenWorkPoints(info.Management, settings.Concert.WorkDuration),
-                MarketingPoints = GenWorkPoints(info.Management, settings.Concert.WorkDuration),
+                ManagementPoints = GenWorkPoints(rapperInfo.Management, settings.Concert.WorkDuration),
+                MarketingPoints  = GenWorkPoints(rapperInfo.Management, settings.Concert.WorkDuration)
             };
 
-            concertAnalyzer.Analyze(concert);
+            ConcertAnalyzer.Analyze(concert, settings);
 
-            info.Fans = Math.Max(100, info.Fans + concert.FansIncome);
-            info.History.ConcertList.Add(concert);
+            rapperInfo.Fans = Math.Max(MIN_FANS_COUNT, rapperInfo.Fans + concert.FansIncome);
+            rapperInfo.History.ConcertList.Add(concert);
 
             MsgBroker.Instance.Publish(new NewsMessage
             {
-                Text = "news_concert_finished",
-                TextArgs = new[] { info.Name, concert.LocationName },
-                Sprite = info.Avatar,
-                Popularity = info.Fans
+                Text       = "news_concert_finished",
+                TextArgs   = new[] {rapperInfo.Name, concert.LocationName},
+                Sprite     = rapperInfo.Avatar,
+                Popularity = rapperInfo.Fans
             });
 
-            EaglerManager.Instance.GenerateEagles(1, info.Name, info.Fans, concert.Quality);
+            EaglerManager.Instance.GenerateEagles(1, rapperInfo.Name, rapperInfo.Fans, concert.Quality);
         }
 
-        private AlbumInfo SelectFreeAlbum()
+        private static AlbumInfo SelectFreeAlbum(RapperInfo rapperInfo)
         {
-            var albums = info.History.AlbumList
+            var albums = rapperInfo.History.AlbumList
                 .Where(e => e.ConcertAmounts < 3)
                 .ToArray();
 
@@ -63,7 +66,7 @@ namespace Game.Rappers.AI
                 : null;
         }
 
-        private int GetRandomLocationId()
+        private static int GetRandomLocationId(ConcertPlacesData concertData)
         {
             return Random.Range(0, concertData.Places.Length);
         }

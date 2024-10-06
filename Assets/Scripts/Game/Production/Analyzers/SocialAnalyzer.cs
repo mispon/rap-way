@@ -1,40 +1,46 @@
 using System;
+using Game.Settings;
 using Models.Production;
 using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Production.Analyzers
 {
-    public class SocialAnalyzer : Analyzer<SocialInfo>
+    public class SocialAnalyzer : Analyzer
     {
-        public override void Analyze(SocialInfo social)
+        public static void Analyze(SocialInfo social, GameSettings settings)
         {
-            float quality = social.CharityAmount > 0
-                ? CalculateCharityQuality(social.WorkPoints, social.CharityAmount)
-                : GetAllOtherQuality(social.WorkPoints);
+            var quality = social.CharityAmount > 0
+                ? CalculateCharityQuality(
+                    social.WorkPoints,
+                    social.CharityAmount,
+                    settings.Socials.CharitySizeImpact,
+                    settings.Socials.WorkPointsMax
+                )
+                : GetAllOtherQuality(social.WorkPoints, settings.Socials.WorkPointsMax);
 
-            const int playerId = -1;
-            float activeFans = GetFans(playerId) * settings.Socials.ActiveFansGroup;
+            const int playerId   = -1;
+            var       activeFans = GetFans(playerId, settings.Player.BaseFans) * settings.Socials.ActiveFansGroup;
 
             social.HypeIncome = Convert.ToInt32(quality * 100);
-            social.Likes = Convert.ToInt32(activeFans * quality);
+            social.Likes      = Convert.ToInt32(activeFans * quality);
         }
 
-        private float CalculateCharityQuality(int workPoints, int charityAmount)
+        private static float CalculateCharityQuality(int workPoints, int charityAmount, float charitySizeImpact, int maxWorkPoints)
         {
-            float maxCharity = PlayerAPI.Data.Money / 10f;
-            float charityImpact = settings.Socials.CharitySizeImpact * (charityAmount / maxCharity);
+            var maxCharity    = PlayerAPI.Data.Money / 10f;
+            var charityImpact = charitySizeImpact * (charityAmount / maxCharity);
 
-            float workPointsImpact = 1f - settings.Socials.CharitySizeImpact;
-            float workPointsRatio = 1f * workPoints / settings.Socials.WorkPointsMax;
-            float workImpact = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
+            var workPointsImpact = 1f - charitySizeImpact;
+            var workPointsRatio  = 1f * workPoints / maxWorkPoints;
+            var workImpact       = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
 
             return charityImpact + workImpact;
         }
 
-        private float GetAllOtherQuality(int workPoints)
+        private static float GetAllOtherQuality(int workPoints, int maxWorkPoints)
         {
-            return 1f * Mathf.Min(workPoints, settings.Socials.WorkPointsMax) / settings.Socials.WorkPointsMax;
+            return 1f * Mathf.Min(workPoints, maxWorkPoints) / maxWorkPoints;
         }
     }
 }

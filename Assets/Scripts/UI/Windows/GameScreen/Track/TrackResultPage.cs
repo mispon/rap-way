@@ -1,21 +1,21 @@
 ﻿using System;
-using Core.Context;
-using Extensions;
 using Core.Analytics;
+using Core.Context;
+using Enums;
+using Extensions;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.SocialNetworks.Eagler;
 using Game.Time;
 using MessageBroker;
 using MessageBroker.Messages.Production;
+using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.UI;
 using Models.Production;
+using ScriptableObjects;
 using UI.Windows.GameScreen.SocialNetworks.Eagler;
 using UnityEngine;
 using UnityEngine.UI;
-using MessageBroker.Messages.SocialNetworks;
-using ScriptableObjects;
-using Enums;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
 using RappersAPI = Game.Rappers.RappersPackage;
@@ -24,23 +24,19 @@ namespace UI.Windows.GameScreen.Track
 {
     public class TrackResultPage : Page
     {
-        [Header("Result")]
-        [SerializeField] private Text listenAmount;
-        [SerializeField] private Text duration;
-        [SerializeField] private Text trackNameLabel;
-        [SerializeField] private Text playerNameLabel;
-        [SerializeField] private Text qualityLabel;
-        [SerializeField] private Text chartInfo;
-        [SerializeField] private Text fansIncome;
-        [SerializeField] private Text moneyIncome;
-        [SerializeField] private Text expIncome;
+        [SerializeField] private Text       listenAmount;
+        [SerializeField] private Text       duration;
+        [SerializeField] private Text       trackNameLabel;
+        [SerializeField] private Text       playerNameLabel;
+        [SerializeField] private Text       qualityLabel;
+        [SerializeField] private Text       chartInfo;
+        [SerializeField] private Text       fansIncome;
+        [SerializeField] private Text       moneyIncome;
+        [SerializeField] private Text       expIncome;
         [SerializeField] private GameObject hitBadge;
 
         [Header("Eagles")]
         [SerializeField] private EaglerCard[] eagleCards;
-
-        [Header("Analyzer")]
-        [SerializeField] private TrackAnalyzer trackAnalyzer;
 
         [Header("Images")]
         [SerializeField] private ImagesBank imagesBank;
@@ -51,7 +47,7 @@ namespace UI.Windows.GameScreen.Track
         {
             _track = ctx.Value<TrackInfo>();
 
-            trackAnalyzer.Analyze(_track);
+            TrackAnalyzer.Analyze(_track, settings);
             DisplayResult(_track);
 
             base.Show(ctx);
@@ -69,15 +65,15 @@ namespace UI.Windows.GameScreen.Track
             }
 
             var fansIncomePrefix = track.FansIncome > 0 ? "+" : string.Empty;
-            fansIncome.text = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
+            fansIncome.text  = $"{fansIncomePrefix}{track.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{track.MoneyIncome.GetMoney()}";
-            expIncome.text = $"+{settings.Track.RewardExp}";
+            expIncome.text   = $"+{settings.Track.RewardExp}";
 
-            trackNameLabel.text = trackName;
+            trackNameLabel.text  = trackName;
             playerNameLabel.text = nickname;
-            qualityLabel.text = $"{Convert.ToInt32(track.Quality * 100)}%";
-            listenAmount.text = track.ListenAmount.GetDisplay();
-            duration.text = GetDuration();
+            qualityLabel.text    = $"{Convert.ToInt32(track.Quality * 100)}%";
+            listenAmount.text    = track.ListenAmount.GetDisplay();
+            duration.text        = GetDuration();
 
             hitBadge.SetActive(track.IsHit);
 
@@ -91,7 +87,7 @@ namespace UI.Windows.GameScreen.Track
         private void DisplayEagles(float quality)
         {
             var nickname = PlayerAPI.Data.Info.NickName;
-            var fans = PlayerAPI.Data.Fans;
+            var fans     = PlayerAPI.Data.Fans;
 
             var eagles = EaglerManager.Instance.GenerateEagles(3, nickname, fans, quality);
             for (var i = 0; i < eagles.Count; i++)
@@ -121,8 +117,8 @@ namespace UI.Windows.GameScreen.Track
             MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = track.MoneyIncome,
-                FansIncome = track.FansIncome,
-                Exp = settings.Track.RewardExp
+                FansIncome  = track.FansIncome,
+                Exp         = settings.Track.RewardExp
             });
         }
 
@@ -134,11 +130,12 @@ namespace UI.Windows.GameScreen.Track
             MsgBroker.Instance.Publish(new NewsMessage
             {
                 Text = "news_track_created",
-                TextArgs = new[] {
+                TextArgs = new[]
+                {
                     PlayerAPI.Data.Info.NickName,
                     _track.Name
                 },
-                Sprite = imagesBank.NewsTrack,
+                Sprite     = imagesBank.NewsTrack,
                 Popularity = PlayerAPI.Data.Fans
             });
 

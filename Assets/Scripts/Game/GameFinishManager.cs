@@ -13,9 +13,9 @@ namespace Game
     public class GameFinishManager : MonoBehaviour, IStarter
     {
         [SerializeField] private GameSettings settings;
-        
+
         private IDisposable _disposable;
-        
+
         public void OnStart()
         {
             _disposable = MsgBroker.Instance
@@ -26,9 +26,10 @@ namespace Game
         private void OnFansChanged(int value)
         {
             if (GameManager.Instance.PlayerData.FinishPageShowed)
+            {
                 return;
-            
-            
+            }
+
             if (value >= settings.Player.MaxFans)
             {
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameFinish));

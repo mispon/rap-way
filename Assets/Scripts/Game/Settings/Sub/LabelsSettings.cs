@@ -9,8 +9,10 @@ namespace Game.Settings.Sub
         public int MinLevel = 0;
         public int MaxLevel = 5;
 
+        public int Fee = 20;
+
         [Space]
-        public int[] ExpToLevelUp = { 100, 200, 300, 400, 500, 0 };
+        public int[] ExpToLevelUp = {100, 200, 300, 400, 500, 0};
         public int ExpChangeValue = 100;
 
         [Space]

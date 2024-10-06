@@ -1,7 +1,7 @@
-﻿using Core.Context;
+﻿using Core.Analytics;
+using Core.Context;
 using Enums;
 using Extensions;
-using Core.Analytics;
 using Game.Production;
 using Game.Production.Analyzers;
 using Game.Time;
@@ -18,20 +18,16 @@ namespace UI.Windows.GameScreen.Concert
 {
     public class ConcertResultPage : Page
     {
-        [Header("Result")]
-        [SerializeField] private Text placeName;
-        [SerializeField] private Text playerName;
-        [SerializeField] private Text ticketsSold;
-        [SerializeField] private Text ticketCost;
-        [SerializeField] private Text moneyIncome;
-        [SerializeField] private Text expIncome;
+        [SerializeField] private Text       placeName;
+        [SerializeField] private Text       playerName;
+        [SerializeField] private Text       ticketsSold;
+        [SerializeField] private Text       ticketCost;
+        [SerializeField] private Text       moneyIncome;
+        [SerializeField] private Text       expIncome;
         [SerializeField] private GameObject soldOutBadge;
 
         [Header("Cutscene")]
         [SerializeField] private ConcertCutscenePage cutscenePage;
-
-        [Header("Analyzer")]
-        [SerializeField] private ConcertAnalyzer concertAnalyzer;
 
         [Header("Images")]
         [SerializeField] private ImagesBank imagesBank;
@@ -42,7 +38,7 @@ namespace UI.Windows.GameScreen.Concert
         {
             _concert = ctx.Value<ConcertInfo>();
 
-            concertAnalyzer.Analyze(_concert);
+            ConcertAnalyzer.Analyze(_concert, settings);
             DisplayResult(_concert);
 
             base.Show(ctx);
@@ -50,14 +46,14 @@ namespace UI.Windows.GameScreen.Concert
 
         private void DisplayResult(ConcertInfo concert)
         {
-            placeName.text = concert.LocationName.ToUpper();
+            placeName.text  = concert.LocationName.ToUpper();
             playerName.text = PlayerAPI.Data.Info.NickName;
 
             moneyIncome.text = $"+{concert.Income.GetMoney()}";
-            expIncome.text = $"+{settings.Concert.RewardExp}";
+            expIncome.text   = $"+{settings.Concert.RewardExp}";
 
             ticketsSold.text = $"{concert.TicketsSold} / {concert.LocationCapacity}";
-            ticketCost.text = concert.TicketCost.GetMoney();
+            ticketCost.text  = concert.TicketCost.GetMoney();
 
             soldOutBadge.SetActive(concert.TicketsSold >= concert.LocationCapacity);
         }
@@ -67,7 +63,7 @@ namespace UI.Windows.GameScreen.Concert
             concert.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddConcert(concert);
 
-            MsgBroker.Instance.Publish(new ConcertRewardMessage { MoneyIncome = concert.Income });
+            MsgBroker.Instance.Publish(new ConcertRewardMessage {MoneyIncome = concert.Income});
         }
 
         protected override void BeforeShow(object ctx = null)
@@ -82,11 +78,12 @@ namespace UI.Windows.GameScreen.Concert
             MsgBroker.Instance.Publish(new NewsMessage
             {
                 Text = "news_concert_finished",
-                TextArgs = new[] {
+                TextArgs = new[]
+                {
                     PlayerAPI.Data.Info.NickName,
                     _concert.LocationName
                 },
-                Sprite = imagesBank.NewsClip,
+                Sprite     = imagesBank.NewsClip,
                 Popularity = PlayerAPI.Data.Fans
             });
 

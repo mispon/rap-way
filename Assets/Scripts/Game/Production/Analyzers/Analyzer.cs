@@ -1,5 +1,4 @@
 ﻿using System;
-using Game.Settings;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -7,20 +6,9 @@ using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace Game.Production.Analyzers
 {
-    // TODO: remove MonoBehaviour inheritance
-    public abstract class Analyzer<T> : MonoBehaviour
+    public class Analyzer
     {
-        protected GameSettings settings;
-
-        private void Start()
-        {
-            settings = GameManager.Instance.Settings;
-        }
-
-        public abstract void Analyze(T product);
-
-
-        protected int CalcNewFansCount(int fans, float quality)
+        protected static int CalcNewFansCount(int fans, float quality, int minIncome, int maxIncome)
         {
             var fansGrowVector = new[]
             {
@@ -42,11 +30,11 @@ namespace Game.Production.Analyzers
                 (30_000_000, 0.007f),
                 (50_000_000, 0.006f),
                 (100_000_000, 0.004f),
-                (250_000_000, 0.002f),
+                (250_000_000, 0.002f)
             };
 
             const float minPercent = 0.002f;
-            var percent = minPercent;
+            var         percent    = minPercent;
 
             foreach (var (fansCount, percentValue) in fansGrowVector)
             {
@@ -57,21 +45,17 @@ namespace Game.Production.Analyzers
                 }
             }
 
-            float factor = percent * Mathf.Max(1.0f, 0.7f + quality);
-            int newFans = Convert.ToInt32(fans * factor);
-
-            newFans = Math.Max(settings.Player.MinFansIncome, newFans);
-            newFans = Math.Min(settings.Player.MaxFansIncome, newFans);
+            var factor  = percent * Mathf.Max(1.0f, 0.7f + quality);
+            var newFans = Convert.ToInt32(fans * factor);
+            newFans = Mathf.Clamp(newFans, minIncome, maxIncome);
 
             return AddFuzzing(newFans);
         }
 
-        protected int CalcMoneyIncome(int streams, float cost)
+        protected static int CalcMoneyIncome(int streams, float cost, int minIncome, int maxIncome)
         {
-            int money = Convert.ToInt32(streams * cost);
-
-            money = Math.Max(10, money);
-            money = Math.Min(settings.Player.MaxMoneyIncome, money);
+            var money = Convert.ToInt32(streams * cost);
+            money = Mathf.Clamp(money, minIncome, maxIncome);
 
             return AddFuzzing(money);
         }
@@ -79,8 +63,8 @@ namespace Game.Production.Analyzers
         protected static int AddFuzzing(int value)
         {
             const float tenPercents = 0.1f;
-            int fuzz = Convert.ToInt32(value * tenPercents);
 
+            var fuzz = Convert.ToInt32(value * tenPercents);
             if (value == int.MaxValue)
             {
                 // to safe add back
@@ -90,21 +74,21 @@ namespace Game.Production.Analyzers
             return Random.Range(value - fuzz, value + fuzz);
         }
 
-        protected int GetFans(int creatorId)
+        protected static int GetFans(int creatorId, int baseFans)
         {
             return IsPlayerCreator(creatorId)
-                ? Mathf.Max(PlayerAPI.Data.Fans, settings.Player.BaseFans)
+                ? Mathf.Max(PlayerAPI.Data.Fans, baseFans)
                 : RappersAPI.Instance.Get(creatorId)?.Fans ?? 0;
         }
 
-        protected float GetHypeFactor(int creatorId)
+        protected static float GetHypeFactor(int creatorId)
         {
             return IsPlayerCreator(creatorId)
                 ? Mathf.Max(0.1f, PlayerAPI.Data.Hype / 100f)
                 : Random.Range(0.1f, 1.0f);
         }
 
-        protected bool IsPlayerCreator(int creatorId)
+        protected static bool IsPlayerCreator(int creatorId)
         {
             return creatorId == -1;
         }

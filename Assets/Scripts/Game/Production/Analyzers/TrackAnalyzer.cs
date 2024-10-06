@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Settings;
 using Models.Production;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,13 +9,13 @@ using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
-    public class TrackAnalyzer : Analyzer<TrackInfo>
+    public class TrackAnalyzer : Analyzer
     {
         // TODO: Rewrite and remove all hardcoded deps
         // analyzer must analyze all tracks independently player or AI is creator
-        public override void Analyze(TrackInfo track)
+        public static void Analyze(TrackInfo track, GameSettings settings)
         {
-            float qualityPoints = CalculateTrackQuality(track);
+            var qualityPoints = CalculateTrackQuality(track, settings.Track.WorkPointsMax);
             track.Quality = qualityPoints;
 
             if (track.Id != 1)
@@ -26,13 +27,13 @@ namespace Game.Production.Analyzers
                 }
             }
 
-            int fansAmount = GetFans(track.CreatorId);
+            var fansAmount = GetFans(track.CreatorId, settings.Player.BaseFans);
             if (track.FeatId != -1)
             {
                 fansAmount += RappersAPI.Instance.Get(track.FeatId)?.Fans ?? 0;
             }
 
-            float trendsMatch = GameStatsManager.Analyze(track.TrendInfo);
+            var trendsMatch = GameStatsManager.Analyze(track.TrendInfo);
 
             track.ListenAmount = CalculateListensAmount(
                 track.CreatorId,
@@ -44,54 +45,68 @@ namespace Game.Production.Analyzers
 
             if (qualityPoints >= settings.Track.ChartsThreshold)
             {
-                track.ChartPosition = CalculateChartPosition(track.CreatorId);
+                track.ChartPosition = CalculateChartPosition(
+                    track.CreatorId,
+                    settings.Player.BaseFans,
+                    settings.Player.MinFansForCharts
+                );
             }
 
-            track.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
-            track.MoneyIncome = CalcMoneyIncome(track.ListenAmount, settings.Track.ListenCost);
+            track.FansIncome = CalcNewFansCount(
+                fansAmount,
+                qualityPoints,
+                settings.Player.MinFansIncome,
+                settings.Player.MaxFansIncome
+            );
+            track.MoneyIncome = CalcMoneyIncome(
+                track.ListenAmount,
+                settings.Track.ListenCost,
+                settings.Player.MinMoneyIncome,
+                settings.Player.MaxMoneyIncome
+            );
 
             if (LabelsAPI.Instance.IsPlayerInGameLabel() && track.FeatId == -1)
             {
-                int labelsFee = track.MoneyIncome / 100 * 20;
+                var labelsFee = track.MoneyIncome / 100 * 20;
                 track.MoneyIncome -= labelsFee;
             }
 
             if (IsPlayerCreator(track.CreatorId) && track.Id == 2)
             {
                 // fake boost quality and other stuff for tutorial
-                track.Quality *= 2;
+                track.Quality      *= 2;
                 track.ListenAmount *= 2;
-                track.FansIncome *= 2;
-                track.MoneyIncome *= 2;
+                track.FansIncome   *= 2;
+                track.MoneyIncome  *= 2;
             }
         }
 
         /// <summary>
-        /// Определяет качество трека в зависимости от очков работы и попадания в тренды
+        ///     Определяет качество трека в зависимости от очков работы и попадания в тренды
         /// </summary>
         /// <returns>Показатель качества трека от 0.0 до 1.0</returns>
-        private float CalculateTrackQuality(TrackInfo track)
+        private static float CalculateTrackQuality(TrackInfo track, int maxWorkPoints)
         {
             float qualityPoints = 0;
 
-            float workPointsFactor = CalculateWorkPointsFactor(track.TextPoints, track.BitPoints);
+            var workPointsFactor = CalculateWorkPointsFactor(track.TextPoints, track.BitPoints, maxWorkPoints);
             qualityPoints += workPointsFactor;
 
-            float goodsPointsFactor = PlayerAPI.Goods.GetQualityImpact();
+            var goodsPointsFactor = PlayerAPI.Goods.GetQualityImpact();
             qualityPoints += goodsPointsFactor;
 
             return Mathf.Min(qualityPoints, 1f);
         }
 
         /// <summary>
-        /// Фактор рабочих очков - это доля набранных очков от максимального количества
-        /// Фактор максимум может составлять половину качества трека (другую половину составляет техника),
-        /// поэтому при подсчете значение делится еще на 2
+        ///     Фактор рабочих очков - это доля набранных очков от максимального количества
+        ///     Фактор максимум может составлять половину качества трека (другую половину составляет техника),
+        ///     поэтому при подсчете значение делится еще на 2
         /// </summary>
-        private float CalculateWorkPointsFactor(int textPoints, int bitPoints)
+        private static float CalculateWorkPointsFactor(int textPoints, int bitPoints, int maxWorkPoints)
         {
             var workPointsTotal = textPoints + bitPoints;
-            var qualityPercent = 1f * workPointsTotal / settings.Track.WorkPointsMax;
+            var qualityPercent  = 1f * workPointsTotal / maxWorkPoints;
 
             qualityPercent /= 2;
 
@@ -99,35 +114,28 @@ namespace Game.Production.Analyzers
         }
 
         /// <summary>
-        /// Вычисляет количество прослушиваний на основе кол-ва фанатов и уровня хайпа
+        ///     Вычисляет количество прослушиваний на основе кол-ва фанатов и уровня хайпа
         /// </summary>
-        private int CalculateListensAmount(
-            int creatorId,
-            int fans,
-            float quality,
-            float trandsMatchFactor,
-            bool isHit
-        )
+        private static int CalculateListensAmount(int creatorId, int fans, float quality, float trendsMatchFactor, bool isHit)
         {
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
+            var activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
 
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
-            float activity = 1.0f + maxFansActivity * quality;
+            var         activity        = 1.0f + maxFansActivity * quality;
 
-            int listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
+            var listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
 
             // Попадание в тренды так же увеличивает прослушивания
-            listens = (int)(listens * (1f + trandsMatchFactor));
+            listens = (int) (listens * (1f + trendsMatchFactor));
 
             if (isHit)
             {
                 try
                 {
                     listens = checked(listens * 5);
-                }
-                catch (OverflowException)
+                } catch (OverflowException)
                 {
                     listens = int.MaxValue;
                 }
@@ -136,9 +144,9 @@ namespace Game.Production.Analyzers
             return AddFuzzing(listens);
         }
 
-        private int CalculateChartPosition(int creatorId)
+        private static int CalculateChartPosition(int creatorId, int baseFans, int minFans)
         {
-            if (GetFans(creatorId) <= settings.Player.MinFansForCharts)
+            if (GetFans(creatorId, baseFans) <= minFans)
             {
                 return 0;
             }

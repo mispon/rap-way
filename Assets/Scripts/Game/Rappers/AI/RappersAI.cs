@@ -1,99 +1,67 @@
-using System;
-using Game.Production.Analyzers;
+using Enums;
 using Game.Rappers.Desc;
 using Game.Settings;
-using MessageBroker;
-using MessageBroker.Messages.Time;
 using ScriptableObjects;
-using UniRx;
-using UnityEngine;
 using Random = UnityEngine.Random;
+using RappersAPI = Game.Rappers.RappersPackage;
 
 namespace Game.Rappers.AI
 {
-    public partial class RappersAI : MonoBehaviour
+    public partial class RappersAI
     {
-        [SerializeField] private GameSettings settings;
-        [SerializeField] private ConcertPlacesData concertData;
+        private const int MIN_FANS_COUNT = 100;
 
-        [Header("Analyzers")]
-        [SerializeField] private TrackAnalyzer trackAnalyzer;
-        [SerializeField] private ClipAnalyzer clipAnalyzer;
-        [SerializeField] private AlbumAnalyzer albumAnalyzer;
-        [SerializeField] private ConcertAnalyzer concertAnalyzer;
-
-        [Header("Cooldowns")]
-        [SerializeField] private int trackCooldown = 30;
-        [SerializeField] private int clipCooldown = 30;
-        [SerializeField] private int albumCooldown = 50;
-        [SerializeField] private int concertCooldown = 100;
-        [SerializeField] private int eaglerCooldown = 20;
-
-        [Space]
-        [SerializeField] private int actingFrequency = 10;
-        [SerializeField] private RapperInfo info;
-
-        private IDisposable _disposable;
-
-        public void Init(RapperInfo rapperInfo)
+        public void DoAction(RapperInfo rapperInfo, GameSettings settings, ConcertPlacesData concertData)
         {
-            name = rapperInfo.Name;
-            gameObject.SetActive(true);
+            switch (ChooseAction())
+            {
+                case RappersAIActions.Track:
+                    DoTrack(rapperInfo, settings);
+                    break;
 
-            info = rapperInfo;
+                case RappersAIActions.Clip:
+                    DoClip(rapperInfo, settings);
+                    break;
 
-            _disposable = MsgBroker.Instance
-                .Receive<DayLeftMessage>()
-                .Subscribe(e => OnDayLeft());
+                case RappersAIActions.Album:
+                    DoAlbum(rapperInfo, settings);
+                    break;
+
+                case RappersAIActions.Concert:
+                    DoConcert(rapperInfo, settings, concertData);
+                    break;
+
+                case RappersAIActions.Eagle:
+                    DoEagler(rapperInfo, settings);
+                    break;
+            }
         }
 
-        private void OnDayLeft()
+        private static RappersAIActions ChooseAction()
         {
-            if (info.Cooldown > 0)
+            return RollDice() switch
             {
-                info.Cooldown -= 1;
-                return;
-            }
-
-            if (RollDice() > actingFrequency)
-            {
-                // dice failed, do nothing
-                return;
-            }
-
-            switch (RollDice())
-            {
-                case < 30:
-                    DoTrack();
-                    break;
-
-                case >= 30 and < 50:
-                    DoClip();
-                    break;
-
-                case >= 50 and < 65:
-                    DoAlbum();
-                    break;
-
-                case >= 65 and < 75:
-                    DoConcert();
-                    break;
-
-                case >= 75:
-                    DoEalger();
-                    break;
-
-                default:
-                    // do nothing
-            }
-
+                < 20  => RappersAIActions.Track,
+                < 35  => RappersAIActions.Clip,
+                < 50  => RappersAIActions.Album,
+                < 60  => RappersAIActions.Concert,
+                < 80  => RappersAIActions.Eagle,
+                < 90  => RappersAIActions.Feat,
+                < 95  => RappersAIActions.Battle,
+                < 100 => RappersAIActions.LeaveLabel,
+                // todo: implement actions
+                < 101 => RappersAIActions.Diss,
+                < 102 => RappersAIActions.Interview,
+                // default
+                _ => RappersAIActions.Track
+            };
         }
 
-        private int GenWorkPoints(int skill, int days)
+        private static int GenWorkPoints(int skill, int days)
         {
-            int wp = 0;
+            var wp = 0;
 
-            for (int i = 0; i < days / 2; i++)
+            for (var i = 0; i < days / 2; i++)
             {
                 wp += Random.Range(0, skill + 1);
             }
@@ -101,14 +69,28 @@ namespace Game.Rappers.AI
             return wp;
         }
 
-        private int RollDice()
+        private static int TryDoFeat(RapperInfo rapperInfo)
         {
-            return Random.Range(0, 100);
+            if (RollDice() > 10)
+            {
+                return -1;
+            }
+
+            while (true)
+            {
+                var feat = RappersAPI.Instance.GetRandom();
+                if (feat.Id == rapperInfo.Id)
+                {
+                    continue;
+                }
+
+                return feat.Id;
+            }
         }
 
-        private void OnDestroy()
+        private static int RollDice()
         {
-            _disposable?.Dispose();
+            return Random.Range(0, 100);
         }
     }
 }

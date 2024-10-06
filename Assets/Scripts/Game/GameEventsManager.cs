@@ -1,13 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Core;
 using Core.OrderedStarter;
 using Enums;
-using ScriptableObjects;
-using UnityEngine;
 using MessageBroker;
 using MessageBroker.Messages.UI;
+using ScriptableObjects;
 using UI.Enums;
-using System.Collections.Generic;
+using UnityEngine;
 using Random = UnityEngine.Random;
 using PlayerAPI = Game.Player.PlayerPackage;
 
@@ -19,13 +19,10 @@ namespace Game
     public class GameEventsManager : Singleton<GameEventsManager>, IStarter
     {
         [Header("Settings")]
-
-        [Tooltip("Game event chance")]
-        [SerializeField, Range(0.001f, 1f)]
+        [SerializeField] [Tooltip("Game event chance")] [Range(0.001f, 1f)]
         private float chance;
 
-        [SerializeField]
-        [Tooltip("Min tracks count to unlock")]
+        [SerializeField] [Tooltip("Min tracks count to unlock")]
         private int minTracksCount = 10;
 
         [Header("Data")]
@@ -50,8 +47,8 @@ namespace Game
                             Type = WindowType.GameEvent,
                             Context = new Dictionary<string, object>
                             {
-                                ["event_info"] = eventInfo,
-                                ["close_callback"] = onEventShownAction,
+                                ["event_info"]     = eventInfo,
+                                ["close_callback"] = onEventShownAction
                             }
                         });
                         return;

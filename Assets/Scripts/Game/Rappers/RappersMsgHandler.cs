@@ -5,26 +5,20 @@ using UniRx;
 namespace Game.Rappers
 {
     /// <summary>
-    /// Rappers specific events handler
+    ///     Rappers specific events handler
     /// </summary>
     public partial class RappersPackage
     {
         protected override void RegisterHandlers()
         {
-            HandleMonthLeft();
+            HandleDayLeft();
         }
-        
-        private void HandleMonthLeft()
+
+        private void HandleDayLeft()
         {
             MsgBroker.Instance
-                .Receive<MonthLeftMessage>()
-                .Subscribe(e =>
-                {
-                    if (e.Month % _settings.Rappers.FansUpdateFrequency == 0)
-                    {
-                        RandomlyChangeFans();
-                    }
-                })
+                .Receive<DayLeftMessage>()
+                .Subscribe(e => { TriggerAIActions(); })
                 .AddTo(disposable);
         }
     }

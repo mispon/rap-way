@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Core.Context;
 using Core.OrderedStarter;
 using Game.Labels.Desc;
 using Game.Settings;
@@ -14,14 +13,15 @@ namespace Game.Labels
         [SerializeField] private LabelsData data;
         [SerializeField] private ImagesBank imagesBank;
 
-        private List<LabelInfo> _labels => GameManager.Instance.Labels;
+        private List<LabelInfo> _labels       => GameManager.Instance.Labels;
         private List<LabelInfo> _customLabels => GameManager.Instance.CustomLabels;
-        private GameSettings _settings => GameManager.Instance.Settings;
+        private GameSettings    _settings     => GameManager.Instance.Settings;
 
         public void OnStart()
         {
             UpdateInGameLabels();
             UpdateLogoNames();
+
             RegisterHandlers();
         }
 
@@ -35,8 +35,7 @@ namespace Game.Labels
                 {
                     // update logo for existing
                     label.LogoName = dl.LogoName;
-                }
-                else
+                } else
                 {
                     // or add new label
                     _labels.Add(dl);

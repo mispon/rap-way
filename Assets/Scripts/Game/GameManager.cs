@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Core;
 using Core.Data;
 using Core.Localization;
@@ -28,51 +27,72 @@ namespace Game
     [Serializable]
     public class GameData
     {
-        public PlayerData PlayerData;
-        public GameStats GameStats;
+        public PlayerData   PlayerData;
+        public GameStats    GameStats;
         public RapperInfo[] Rappers;
         public RapperInfo[] CustomRappers;
-        public LabelInfo[] Labels;
-        public LabelInfo[] CustomLabels;
-        public LabelInfo PlayerLabel;
-        public Eagle[] Eagles;
-        public Email[] Emails;
-        public News[] News;
-        public string[] ShowedHints;
+        public LabelInfo[]  Labels;
+        public LabelInfo[]  CustomLabels;
+        public LabelInfo    PlayerLabel;
+        public Eagle[]      Eagles;
+        public Email[]      Emails;
+        public News[]       News;
+        public string[]     ShowedHints;
     }
 
     /// <summary>
-    /// Логика управления состоянием игры
+    ///     Логика управления состоянием игры
     /// </summary>
     public class GameManager : Singleton<GameManager>
     {
-        [Header("Stores URLs"), SerializeField] private string appStoreURL;
-        [Header("Stores URLs"), SerializeField] private string googlePlayURL;
+        [Header("Stores URLs")]
+        [SerializeField]
+        private string appStoreURL;
+
+        [Header("Stores URLs")]
+        [SerializeField]
+        private string googlePlayURL;
 
         [Space]
-        [Header("Save Key")][SerializeField] private string gameDataKey;
-        [Header("Save Key")][SerializeField] private string noAdsDataKey;
-        [Header("Save Key")][SerializeField] private string donateDataKey;
+        [Header("Save Key")]
+        [SerializeField] private string gameDataKey;
+
+        [Header("Save Key")]
+        [SerializeField] private string noAdsDataKey;
+        [Header("Save Key")]
+        [SerializeField] private string donateDataKey;
 
         [Space]
         [Header("Game Settings")] public GameSettings Settings;
-        [Header("Player")] public PlayerData PlayerData;
-        [Header("Game")] public GameStats GameStats;
+
+        [Header("Player")]
+        public PlayerData PlayerData;
+        [Header("Game")]
+        public GameStats GameStats;
 
         [Space]
         [Header("Rappers")] public List<RapperInfo> Rappers;
-        [Header("Custom Rappers")] public List<RapperInfo> CustomRappers;
+
+        [Header("Custom Rappers")]
+        public List<RapperInfo> CustomRappers;
 
         [Space]
         [Header("Labels")] public List<LabelInfo> Labels;
-        [Header("Custom Labels")] public List<LabelInfo> CustomLabels;
-        [Header("Player Label")] public LabelInfo PlayerLabel;
+
+        [Header("Custom Labels")]
+        public List<LabelInfo> CustomLabels;
+        [Header("Player Label")]
+        public LabelInfo PlayerLabel;
 
         [Space]
         [Header("Eagles")] public List<Eagle> Eagles;
-        [Header("Emails")] public List<Email> Emails;
-        [Header("News")] public List<News> News;
-        [Header("Tutorials")] public HashSet<string> ShowedHints;
+
+        [Header("Emails")]
+        public List<Email> Emails;
+        [Header("News")]
+        public List<News> News;
+        [Header("Tutorials")]
+        public HashSet<string> ShowedHints;
 
         public bool Ready;
 
@@ -119,19 +139,19 @@ namespace Game
         }
 
         /// <summary>
-        /// Creates new players save
+        ///     Creates new players save
         /// </summary>
         public PlayerData CreateNewPlayer()
         {
             PlayerData = PlayerData.New;
-            Eagles = new List<Eagle>(0);
-            Emails = new List<Email>(0);
-            News = new List<News>(0);
+            Eagles     = new List<Eagle>(0);
+            Emails     = new List<Email>(0);
+            News       = new List<News>(0);
 
-            Rappers = new List<RapperInfo>(0);
+            Rappers       = new List<RapperInfo>(0);
             CustomRappers = new List<RapperInfo>(0);
 
-            Labels = new List<LabelInfo>(0);
+            Labels       = new List<LabelInfo>(0);
             CustomLabels = new List<LabelInfo>(0);
 
             LoadDonateBalance();
@@ -140,7 +160,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Saves no ads setting
+        ///     Saves no ads setting
         /// </summary>
         public void SaveNoAds()
         {
@@ -148,7 +168,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Loads no ads setting 
+        ///     Loads no ads setting
         /// </summary>
         public bool LoadNoAds()
         {
@@ -156,15 +176,15 @@ namespace Game
         }
 
         /// <summary>
-        /// Saves donate balance
+        ///     Saves donate balance
         /// </summary>
-        public void SaveDonateBalance()
+        private void SaveDonateBalance()
         {
             PlayerPrefs.SetInt(donateDataKey, PlayerData.Donate);
         }
 
         /// <summary>
-        /// Loads donate balance
+        ///     Loads donate balance
         /// </summary>
         private void LoadDonateBalance()
         {
@@ -176,35 +196,35 @@ namespace Game
             var gameData = DataManager.Load<GameData>(gameDataKey) ?? new GameData
             {
                 PlayerData = PlayerData.New,
-                GameStats = GameStats.New,
+                GameStats  = GameStats.New,
 
-                Rappers = Array.Empty<RapperInfo>(),
+                Rappers       = Array.Empty<RapperInfo>(),
                 CustomRappers = Array.Empty<RapperInfo>(),
 
-                Labels = Array.Empty<LabelInfo>(),
+                Labels       = Array.Empty<LabelInfo>(),
                 CustomLabels = Array.Empty<LabelInfo>(),
-                PlayerLabel = null,
+                PlayerLabel  = null,
 
                 Eagles = Array.Empty<Eagle>(),
                 Emails = Array.Empty<Email>(),
-                News = Array.Empty<News>(),
+                News   = Array.Empty<News>(),
 
-                ShowedHints = Array.Empty<string>(),
+                ShowedHints = Array.Empty<string>()
             };
 
             PlayerData = gameData.PlayerData;
-            GameStats = gameData.GameStats;
+            GameStats  = gameData.GameStats;
 
-            Rappers = gameData.Rappers?.ToList() ?? new List<RapperInfo>(0);
+            Rappers       = gameData.Rappers?.ToList() ?? new List<RapperInfo>(0);
             CustomRappers = gameData.CustomRappers?.ToList() ?? new List<RapperInfo>(0);
 
-            Labels = gameData.Labels?.ToList() ?? new List<LabelInfo>(0);
+            Labels       = gameData.Labels?.ToList() ?? new List<LabelInfo>(0);
             CustomLabels = gameData.CustomLabels?.ToList() ?? new List<LabelInfo>(0);
-            PlayerLabel = gameData.PlayerLabel;
+            PlayerLabel  = gameData.PlayerLabel;
 
             Eagles = gameData.Eagles?.ToList() ?? new List<Eagle>(0);
             Emails = gameData.Emails?.ToList() ?? new List<Email>(0);
-            News = gameData.News?.ToList() ?? new List<News>(0);
+            News   = gameData.News?.ToList() ?? new List<News>(0);
 
             ShowedHints = gameData.ShowedHints?.ToHashSet() ?? new HashSet<string>(0);
 
@@ -223,18 +243,18 @@ namespace Game
             var gameData = new GameData
             {
                 PlayerData = PlayerData,
-                GameStats = GameStats,
+                GameStats  = GameStats,
 
-                Rappers = Rappers?.ToArray() ?? Array.Empty<RapperInfo>(),
+                Rappers       = Rappers?.ToArray() ?? Array.Empty<RapperInfo>(),
                 CustomRappers = CustomRappers.ToArray(),
 
-                Labels = Labels?.ToArray() ?? Array.Empty<LabelInfo>(),
+                Labels       = Labels?.ToArray() ?? Array.Empty<LabelInfo>(),
                 CustomLabels = CustomLabels?.ToArray(),
-                PlayerLabel = PlayerLabel,
+                PlayerLabel  = PlayerLabel,
 
                 Eagles = Eagles.Take(20).ToArray(),
                 Emails = Emails.Take(50).ToArray(),
-                News = News.Take(50).ToArray(),
+                News   = News.Take(50).ToArray(),
 
                 ShowedHints = ShowedHints.ToArray()
             };
@@ -243,7 +263,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Checks if character has been created or not
+        ///     Checks if character has been created or not
         /// </summary>
         public bool HasCharacter()
         {
@@ -251,7 +271,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Checks if lang already selected
+        ///     Checks if lang already selected
         /// </summary>
         public bool IsLangSelected()
         {
@@ -259,7 +279,7 @@ namespace Game
         }
 
         /// <summary>
-        /// Checks if game available to show review asking page
+        ///     Checks if game available to show review asking page
         /// </summary>
         public bool NeedAskReview()
         {
@@ -277,8 +297,7 @@ namespace Game
             {
                 SaveApplicationData();
                 SoundManager.Instance.PauseMusic();
-            }
-            else
+            } else
             {
                 SoundManager.Instance.UnpauseMusic();
             }
@@ -289,8 +308,7 @@ namespace Game
             if (focusStatus)
             {
                 SoundManager.Instance.UnpauseMusic();
-            }
-            else
+            } else
             {
                 SoundManager.Instance.PauseMusic();
             }

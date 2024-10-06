@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.OrderedStarter;
-using Game.Rappers.AI;
 using Game.Rappers.Desc;
 using Game.Settings;
 using ScriptableObjects;
@@ -10,25 +9,23 @@ using UnityEngine;
 namespace Game.Rappers
 {
     /// <summary>
-    /// MonoBehavior and Starter component of rappers package
+    ///     MonoBehavior and Starter component of rappers package
     /// </summary>
     public partial class RappersPackage : GamePackage<RappersPackage>, IStarter
     {
-        [SerializeField] private RappersAI rapperAITemplate;
-        [SerializeField] private RappersData data;
-        [SerializeField] private ImagesBank imagesBank;
+        [SerializeField] private RappersData       data;
+        [SerializeField] private ConcertPlacesData concertData;
+        [SerializeField] private ImagesBank        imagesBank;
 
-        private List<RapperInfo> _rappers => GameManager.Instance.Rappers;
-        private List<RapperInfo> _customRappers => GameManager.Instance.CustomRappers;
-        private GameSettings _settings => GameManager.Instance.Settings;
+        private static List<RapperInfo> _rappers       => GameManager.Instance.Rappers;
+        private static List<RapperInfo> _customRappers => GameManager.Instance.CustomRappers;
+        private static GameSettings     _settings      => GameManager.Instance.Settings;
 
         public void OnStart()
         {
             UpdateInGameRappers();
             UpdateCustomRappersIDs();
             UpdateFansCount();
-
-            LoadRappersAI();
         }
 
         private void UpdateInGameRappers()
@@ -41,8 +38,7 @@ namespace Game.Rappers
                 {
                     // setup avatar for existing
                     rapper.AvatarName = dr.AvatarName;
-                }
-                else
+                } else
                 {
                     // or append new in-game rapper
                     _rappers.Add(dr);
@@ -50,9 +46,9 @@ namespace Game.Rappers
             }
         }
 
-        private void UpdateCustomRappersIDs()
+        private static void UpdateCustomRappersIDs()
         {
-            int id = _rappers.Max(e => e.Id);
+            var id = _rappers.Max(e => e.Id);
 
             foreach (var rapperInfo in _customRappers)
             {
@@ -69,14 +65,6 @@ namespace Game.Rappers
                 {
                     rapperInfo.Fans *= 1_000_000;
                 }
-            }
-        }
-
-        private void LoadRappersAI()
-        {
-            foreach (var rapperInfo in GetAll())
-            {
-                Instantiate(rapperAITemplate, transform).Init(rapperInfo);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Settings;
 using Models.Production;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -6,15 +7,21 @@ using LabelsAPI = Game.Labels.LabelsPackage;
 
 namespace Game.Production.Analyzers
 {
-    public class AlbumAnalyzer : Analyzer<AlbumInfo>
+    public class AlbumAnalyzer : Analyzer
     {
         // TODO: Rewrite and remove all hardcoded deps
         // analyzer must analyze all tracks independently player or AI is creator
-        public override void Analyze(AlbumInfo album)
+        public static void Analyze(AlbumInfo album, GameSettings settings)
         {
-            float trendsMatch = GameStatsManager.Analyze(album.TrendInfo);
+            var trendsMatch = GameStatsManager.Analyze(album.TrendInfo);
 
-            float qualityPoints = CalculateAlbumQuality(album.TextPoints, album.BitPoints, trendsMatch);
+            var qualityPoints = CalculateAlbumQuality(
+                album.TextPoints,
+                album.BitPoints,
+                trendsMatch,
+                settings.Album.BaseQuality,
+                settings.Album.WorkPointsMax
+            );
             album.Quality = qualityPoints;
 
             var hitDice = Random.Range(0f, 1f);
@@ -23,7 +30,7 @@ namespace Game.Production.Analyzers
                 album.IsHit = true;
             }
 
-            int fansAmount = GetFans(album.CreatorId);
+            var fansAmount = GetFans(album.CreatorId, settings.Player.BaseFans);
 
             album.ListenAmount = CalculateListensAmount(
                 album.CreatorId,
@@ -35,28 +42,42 @@ namespace Game.Production.Analyzers
 
             if (qualityPoints >= settings.Album.ChartsThreshold)
             {
-                album.ChartPosition = CalculateChartPosition(album.CreatorId);
+                album.ChartPosition = CalculateChartPosition(
+                    album.CreatorId,
+                    settings.Player.BaseFans,
+                    settings.Player.MinFansForCharts
+                );
             }
 
-            album.FansIncome = CalcNewFansCount(fansAmount, qualityPoints);
-            album.MoneyIncome = CalcMoneyIncome(album.ListenAmount, settings.Album.ListenCost);
+            album.FansIncome = CalcNewFansCount(
+                fansAmount,
+                qualityPoints,
+                settings.Player.MinFansIncome,
+                settings.Player.MinFansIncome
+            );
+            album.MoneyIncome = CalcMoneyIncome(
+                album.ListenAmount,
+                settings.Album.ListenCost,
+                settings.Player.MinMoneyIncome,
+                settings.Player.MaxMoneyIncome
+            );
 
             if (LabelsAPI.Instance.IsPlayerInGameLabel())
             {
-                int labelsFee = album.MoneyIncome / 100 * 20;
+                var labelsFee = album.MoneyIncome / 100 * 20;
                 album.MoneyIncome -= labelsFee;
             }
         }
 
         /// <summary>
-        /// Определяет качество альбома в зависимости от очков работы и попадания в тренды
+        ///     Определяет качество альбома в зависимости от очков работы и попадания в тренды
         /// </summary>
         /// <returns>Показатель качества альбома от [base] до 1.0</returns>
-        private float CalculateAlbumQuality(int textPoints, int bitPoints, float trendsMatch)
+        private static float CalculateAlbumQuality(int textPoints, int bitPoints, float trendsMatch, float baseQuality, int maxWorkPoints)
         {
-            float qualityPoints = settings.Album.BaseQuality;
+            var qualityPoints = baseQuality;
 
-            float workPointsFactor = CalculateWorkPointsFactor(textPoints, bitPoints);
+            var workPointsFactor = CalculateWorkPointsFactor(textPoints, bitPoints, baseQuality, maxWorkPoints);
             qualityPoints += workPointsFactor;
 
             // Определяем бонус в качество от попадания в тренды
@@ -66,48 +87,41 @@ namespace Game.Production.Analyzers
         }
 
         /// <summary>
-        /// Фактор рабочих очков - это доля набранных рабочих очков в измерении качества альбома
+        ///     Фактор рабочих очков - это доля набранных рабочих очков в измерении качества альбома
         /// </summary>
-        private float CalculateWorkPointsFactor(int textPoints, int bitPoints)
+        private static float CalculateWorkPointsFactor(int textPoints, int bitPoints, float baseQuality, int maxWorkPoints)
         {
-            float workPointsImpact = 1f - settings.Album.BaseQuality;
-            float workPointsRatio = 1f * (textPoints + bitPoints) / settings.Album.WorkPointsMax;
+            var workPointsImpact = 1f - baseQuality;
+            var workPointsRatio  = 1f * (textPoints + bitPoints) / maxWorkPoints;
 
-            float workPointsFactor = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
+            var workPointsFactor = workPointsImpact * Mathf.Min(workPointsRatio, 1f);
 
             return workPointsFactor;
         }
 
         /// <summary>
-        /// Вычисляет количество прослушиваний на основе качества альбома, кол-ва фанатов и уровня хайпа
+        ///     Вычисляет количество прослушиваний на основе качества альбома, кол-ва фанатов и уровня хайпа
         /// </summary>
-        private int CalculateListensAmount(
-            int creatorId,
-            int fans,
-            float quality,
-            float trandsMatchFactor,
-            bool isHit
-        )
+        private static int CalculateListensAmount(int creatorId, int fans, float quality, float trendsMatchFactor, bool isHit)
         {
             // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            int activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
+            var activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
 
             // Активность прослушиваний трека фанатами зависит от его качества
             const float maxFansActivity = 5f;
-            float activity = 1.0f + (maxFansActivity * quality);
+            var         activity        = 1.0f + maxFansActivity * quality;
 
-            int listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
+            var listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
 
             // Попадание в тренды так же увеличивает прослушивания
-            listens = (int)(listens * (1f + trandsMatchFactor));
+            listens = (int) (listens * (1f + trendsMatchFactor));
 
             if (isHit)
             {
                 try
                 {
                     listens = checked(listens * 5);
-                }
-                catch (OverflowException)
+                } catch (OverflowException)
                 {
                     listens = int.MaxValue;
                 }
@@ -116,9 +130,9 @@ namespace Game.Production.Analyzers
             return AddFuzzing(listens);
         }
 
-        private int CalculateChartPosition(int creatorId)
+        private static int CalculateChartPosition(int creatorId, int baseFans, int minFansForChart)
         {
-            if (GetFans(creatorId) < settings.Player.MinFansForCharts)
+            if (GetFans(creatorId, baseFans) < minFansForChart)
             {
                 return 0;
             }

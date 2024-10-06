@@ -1,6 +1,6 @@
 ﻿using System;
-using Core.Context;
 using Core.Analytics;
+using Core.Context;
 using Enums;
 using Extensions;
 using Game.Production;
@@ -21,23 +21,19 @@ namespace UI.Windows.GameScreen.Clip
 {
     public class ClipResultPage : Page
     {
-        [Header("Result")]
-        [SerializeField] private Text views;
-        [SerializeField] private Text likes;
-        [SerializeField] private Text dislikes;
-        [SerializeField] private Text clipNameLabel;
-        [SerializeField] private Text playerNameLabel;
-        [SerializeField] private Text qualityLabel;
-        [SerializeField] private Text fansIncome;
-        [SerializeField] private Text moneyIncome;
-        [SerializeField] private Text expIncome;
+        [SerializeField] private Text       views;
+        [SerializeField] private Text       likes;
+        [SerializeField] private Text       dislikes;
+        [SerializeField] private Text       clipNameLabel;
+        [SerializeField] private Text       playerNameLabel;
+        [SerializeField] private Text       qualityLabel;
+        [SerializeField] private Text       fansIncome;
+        [SerializeField] private Text       moneyIncome;
+        [SerializeField] private Text       expIncome;
         [SerializeField] private GameObject hitBadge;
 
         [Header("Eagles")]
         [SerializeField] private EaglerCard[] eagleCards;
-
-        [Header("Analyzer")]
-        [SerializeField] private ClipAnalyzer clipAnalyzer;
 
         [Header("Images")]
         [SerializeField] private ImagesBank imagesBank;
@@ -48,7 +44,7 @@ namespace UI.Windows.GameScreen.Clip
         {
             _clip = ctx.Value<ClipInfo>();
 
-            clipAnalyzer.Analyze(_clip);
+            ClipAnalyzer.Analyze(_clip, settings);
             DisplayResult(_clip);
 
             base.Show(ctx);
@@ -57,16 +53,16 @@ namespace UI.Windows.GameScreen.Clip
         private void DisplayResult(ClipInfo clip)
         {
             var fansPrefix = clip.FansIncome > 0 ? "+" : string.Empty;
-            fansIncome.text = $"{fansPrefix}{clip.FansIncome.GetDisplay()}";
+            fansIncome.text  = $"{fansPrefix}{clip.FansIncome.GetDisplay()}";
             moneyIncome.text = $"+{clip.MoneyIncome.GetMoney()}";
-            expIncome.text = $"+{settings.Clip.RewardExp}";
+            expIncome.text   = $"+{settings.Clip.RewardExp}";
 
-            clipNameLabel.text = ProductionManager.GetTrackName(clip.TrackId);
+            clipNameLabel.text   = ProductionManager.GetTrackName(clip.TrackId);
             playerNameLabel.text = PlayerAPI.Data.Info.NickName;
-            qualityLabel.text = $"{Convert.ToInt32(clip.Quality * 100)}%";
+            qualityLabel.text    = $"{Convert.ToInt32(clip.Quality * 100)}%";
 
-            views.text = clip.Views.GetDisplay();
-            likes.text = clip.Likes.GetDisplay();
+            views.text    = clip.Views.GetDisplay();
+            likes.text    = clip.Likes.GetDisplay();
             dislikes.text = clip.Dislikes.GetDisplay();
 
             hitBadge.SetActive(clip.IsHit);
@@ -76,7 +72,7 @@ namespace UI.Windows.GameScreen.Clip
         private void DisplayEagles(float quality)
         {
             var nickname = PlayerAPI.Data.Info.NickName;
-            var fans = PlayerAPI.Data.Fans;
+            var fans     = PlayerAPI.Data.Fans;
 
             var eagles = EaglerManager.Instance.GenerateEagles(3, nickname, fans, quality);
             for (var i = 0; i < eagles.Count; i++)
@@ -93,8 +89,8 @@ namespace UI.Windows.GameScreen.Clip
             MsgBroker.Instance.Publish(new ProductionRewardMessage
             {
                 MoneyIncome = clip.MoneyIncome,
-                FansIncome = clip.FansIncome,
-                Exp = settings.Clip.RewardExp
+                FansIncome  = clip.FansIncome,
+                Exp         = settings.Clip.RewardExp
             });
         }
 
@@ -105,11 +101,12 @@ namespace UI.Windows.GameScreen.Clip
             MsgBroker.Instance.Publish(new NewsMessage
             {
                 Text = "news_clip_created",
-                TextArgs = new[] {
+                TextArgs = new[]
+                {
                     PlayerAPI.Data.Info.NickName,
                     _clip.Name
                 },
-                Sprite = imagesBank.NewsClip,
+                Sprite     = imagesBank.NewsClip,
                 Popularity = PlayerAPI.Data.Fans
             });
 
