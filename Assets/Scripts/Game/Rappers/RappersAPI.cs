@@ -51,7 +51,7 @@ namespace Game.Rappers
         public RapperInfo GetRandom()
         {
             var rappers = GetAll().ToArray();
-            int dice = Random.Range(0, rappers.Length);
+            var dice    = Random.Range(0, rappers.Length);
             return rappers[dice];
         }
 
@@ -60,15 +60,15 @@ namespace Game.Rappers
             foreach (var rapperInfo in _rappers)
             {
                 rapperInfo.Avatar = SpritesManager.Instance.TryGetByName(rapperInfo.AvatarName, out var avatar)
-                   ? avatar
-                   : imagesBank.CustomRapperAvatar;
+                    ? avatar
+                    : imagesBank.CustomRapperAvatar;
 
                 yield return rapperInfo;
             }
 
             foreach (var rapperInfo in _customRappers)
             {
-                rapperInfo.Avatar = imagesBank.CustomRapperAvatar;
+                rapperInfo.Avatar     = imagesBank.CustomRapperAvatar;
                 rapperInfo.AvatarName = imagesBank.CustomRapperAvatar.name;
 
                 yield return rapperInfo;
@@ -92,7 +92,7 @@ namespace Game.Rappers
 
         public static int GetRapperScore(RapperInfo rapper)
         {
-            const int maxRapperScore = 100;
+            const int maxRapperScore  = 100;
             const int maxValuableFans = 50_000_000;
 
             var score = Convert.ToInt32(1f * rapper.Fans / maxValuableFans * maxRapperScore);
@@ -102,7 +102,7 @@ namespace Game.Rappers
 
         public static float GetRapperPrestige(RapperInfo rapper)
         {
-            int score = GetRapperScore(rapper);
+            var score = GetRapperScore(rapper);
 
             return score switch
             {
@@ -115,8 +115,8 @@ namespace Game.Rappers
                 >= 30 => 2.0f,
                 >= 20 => 1.5f,
                 >= 10 => 1.0f,
-                >= 5 => 0.5f,
-                _ => 0
+                >= 5  => 0.5f,
+                _     => 0
             };
         }
 
@@ -143,6 +143,7 @@ namespace Game.Rappers
                     return true;
                 }
             }
+
             return false;
         }
     }

@@ -17,5 +17,6 @@ namespace Game.Settings.Sub
         public int AlbumCooldown   = 50;
         public int ConcertCooldown = 100;
         public int EaglerCooldown  = 20;
+        public int LabelCooldown   = 30;
     }
 }

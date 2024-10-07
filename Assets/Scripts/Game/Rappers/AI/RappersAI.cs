@@ -2,6 +2,7 @@ using Enums;
 using Game.Rappers.Desc;
 using Game.Settings;
 using ScriptableObjects;
+using UnityEngine;
 using Random = UnityEngine.Random;
 using RappersAPI = Game.Rappers.RappersPackage;
 
@@ -13,7 +14,9 @@ namespace Game.Rappers.AI
 
         public void DoAction(RapperInfo rapperInfo, GameSettings settings, ConcertPlacesData concertData)
         {
-            switch (ChooseAction())
+            var action = ChooseAction();
+
+            switch (action)
             {
                 case RappersAIActions.Track:
                     DoTrack(rapperInfo, settings);
@@ -34,6 +37,23 @@ namespace Game.Rappers.AI
                 case RappersAIActions.Eagle:
                     DoEagler(rapperInfo, settings);
                     break;
+
+                case RappersAIActions.LeaveLabel:
+                    TryLeaveLabel(rapperInfo, settings);
+                    break;
+
+                case RappersAIActions.Feat:
+                    break;
+                case RappersAIActions.Battle:
+                    break;
+                case RappersAIActions.Diss:
+                    break;
+                case RappersAIActions.Interview:
+                    break;
+
+                default:
+                    Debug.LogError($"Received unexpected action type: {action}");
+                    break;
             }
         }
 
@@ -46,12 +66,14 @@ namespace Game.Rappers.AI
                 < 50  => RappersAIActions.Album,
                 < 60  => RappersAIActions.Concert,
                 < 80  => RappersAIActions.Eagle,
-                < 90  => RappersAIActions.Feat,
-                < 95  => RappersAIActions.Battle,
                 < 100 => RappersAIActions.LeaveLabel,
+
                 // todo: implement actions
-                < 101 => RappersAIActions.Diss,
-                < 102 => RappersAIActions.Interview,
+                < 101 => RappersAIActions.Feat,
+                < 102 => RappersAIActions.Battle,
+                < 103 => RappersAIActions.Diss,
+                < 104 => RappersAIActions.Interview,
+
                 // default
                 _ => RappersAIActions.Track
             };
