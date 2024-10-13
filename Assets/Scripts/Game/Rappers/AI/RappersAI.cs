@@ -43,9 +43,13 @@ namespace Game.Rappers.AI
                     break;
 
                 case RappersAIActions.Feat:
+                    ProposeFeat(rapperInfo, settings);
                     break;
+
                 case RappersAIActions.Battle:
+                    ProposeBattle(rapperInfo, settings);
                     break;
+
                 case RappersAIActions.Diss:
                     break;
                 case RappersAIActions.Interview:
@@ -61,16 +65,16 @@ namespace Game.Rappers.AI
         {
             return RollDice() switch
             {
-                < 20  => RappersAIActions.Track,
-                < 35  => RappersAIActions.Clip,
-                < 50  => RappersAIActions.Album,
-                < 60  => RappersAIActions.Concert,
-                < 80  => RappersAIActions.Eagle,
-                < 100 => RappersAIActions.LeaveLabel,
+                < 15  => RappersAIActions.Track,
+                < 25  => RappersAIActions.Clip,
+                < 35  => RappersAIActions.Album,
+                < 45  => RappersAIActions.Concert,
+                < 60  => RappersAIActions.Eagle,
+                < 70  => RappersAIActions.LeaveLabel,
+                < 85  => RappersAIActions.Feat,
+                < 100 => RappersAIActions.Battle,
 
                 // todo: implement actions
-                < 101 => RappersAIActions.Feat,
-                < 102 => RappersAIActions.Battle,
                 < 103 => RappersAIActions.Diss,
                 < 104 => RappersAIActions.Interview,
 

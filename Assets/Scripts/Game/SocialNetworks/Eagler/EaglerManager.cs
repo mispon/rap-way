@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Game.Rappers.Desc;
 using Game.Time;
 using ScriptableObjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.SocialNetworks.Eagler
 {
@@ -30,13 +30,31 @@ namespace Game.SocialNetworks.Eagler
         {
             var eagle = new Eagle
             {
-                Date = TimeManager.Instance.DisplayNow,
+                Date     = TimeManager.Instance.DisplayNow,
                 Nickname = nickname,
-                Message = message,
-                Likes = likes,
-                Views = CalcViews(likes),
-                Shares = CalcShares(likes),
-                IsUser = true
+                Message  = message,
+                Likes    = likes,
+                Views    = CalcViews(likes),
+                Shares   = CalcShares(likes),
+                IsUser   = true
+            };
+
+            AddEagle(eagle);
+        }
+
+        public void CreateRapperEagle(RapperInfo rapper, string target)
+        {
+            var likes = CalcLikes(rapper.Fans);
+
+            var eagle = new Eagle
+            {
+                Date     = TimeManager.Instance.DisplayNow,
+                Nickname = rapper.Name,
+                Likes    = likes,
+                Views    = CalcViews(likes),
+                Shares   = CalcShares(likes),
+                Message  = "",
+                Tags     = $" <color=#109c22>#{target}</color>"
             };
 
             AddEagle(eagle);
@@ -65,18 +83,18 @@ namespace Game.SocialNetworks.Eagler
                 ? $"{data.NegativePostKey}_{Random.Range(0, data.NegativePostsCount)}"
                 : $"{data.PositivePostKey}_{Random.Range(0, data.PositivePostsCount)}";
 
-            var nickname = data.Nicknames[Random.Range(0, data.Nicknames.Length)];
+            var nickname  = data.Nicknames[Random.Range(0, data.Nicknames.Length)];
             var randomTag = data.Hashtags[Random.Range(0, data.Hashtags.Length)];
 
             return new Eagle
             {
-                Date = TimeManager.Instance.DisplayNow,
+                Date     = TimeManager.Instance.DisplayNow,
                 Nickname = nickname,
-                Message = messageKey,
-                Likes = likes,
-                Views = CalcViews(likes),
-                Shares = CalcShares(likes),
-                Tags = $" <color=#109c22>#{rapperName}</color> <color=#109c22>#{randomTag}</color>"
+                Message  = messageKey,
+                Likes    = likes,
+                Views    = CalcViews(likes),
+                Shares   = CalcShares(likes),
+                Tags     = $" <color=#109c22>#{rapperName}</color> <color=#109c22>#{randomTag}</color>"
             };
         }
 
