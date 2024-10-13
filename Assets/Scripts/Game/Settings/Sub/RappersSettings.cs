@@ -8,8 +8,9 @@ namespace Game.Settings.Sub
     {
         [Header("AI Base")]
         public int ConversationDuration = 30;
-        public int MinFans = 1;
-        public int MaxFans = 500_000_000;
+        public int MinFans    = 1;
+        public int MaxFans    = 500_000_000;
+        public int FeatChance = 10;
 
         [Header("AI Cooldowns")]
         public int TrackCooldown = 30;

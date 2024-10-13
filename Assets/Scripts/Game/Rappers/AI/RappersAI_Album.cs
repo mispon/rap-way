@@ -21,7 +21,6 @@ namespace Game.Rappers.AI
             var album = new AlbumInfo
             {
                 CreatorId  = rapperInfo.Id,
-                FeatId     = TryDoFeat(rapperInfo),
                 Name       = GenAlbumName(),
                 TextPoints = GenWorkPoints(rapperInfo.Vocobulary, settings.Album.WorkDuration),
                 BitPoints  = GenWorkPoints(rapperInfo.Bitmaking, settings.Album.WorkDuration),

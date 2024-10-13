@@ -21,7 +21,7 @@ namespace Game.Rappers.AI
             var track = new TrackInfo
             {
                 CreatorId  = rapperInfo.Id,
-                FeatId     = TryDoFeat(rapperInfo),
+                FeatId     = TryDoFeat(rapperInfo, settings.Rappers.FeatChance),
                 Name       = GenTrackName(),
                 TextPoints = GenWorkPoints(rapperInfo.Vocobulary, settings.Track.WorkDuration),
                 BitPoints  = GenWorkPoints(rapperInfo.Bitmaking, settings.Track.WorkDuration),

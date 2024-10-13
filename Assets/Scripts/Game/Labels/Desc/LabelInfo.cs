@@ -16,6 +16,9 @@ namespace Game.Labels.Desc
         public ExpValue Production;
         public int      Score;
 
+        // Activity cooldown (for AI)
+        public int Cooldown;
+
         // Flags
         public bool IsCustom;
         // is custom player's label or not

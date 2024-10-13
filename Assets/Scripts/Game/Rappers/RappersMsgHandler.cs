@@ -1,4 +1,5 @@
 using MessageBroker;
+using MessageBroker.Messages.Labels;
 using MessageBroker.Messages.Time;
 using UniRx;
 
@@ -12,6 +13,7 @@ namespace Game.Rappers
         protected override void RegisterHandlers()
         {
             HandleDayLeft();
+            HandleLabelInvite();
         }
 
         private void HandleDayLeft()
@@ -19,6 +21,14 @@ namespace Game.Rappers
             MsgBroker.Instance
                 .Receive<DayLeftMessage>()
                 .Subscribe(e => { TriggerAIActions(); })
+                .AddTo(disposable);
+        }
+
+        private void HandleLabelInvite()
+        {
+            MsgBroker.Instance
+                .Receive<LabelInviteRapperMessage>()
+                .Subscribe(e => { _rappersAI.TryJoinLabel(e.RapperId, e.LabelName, _settings); })
                 .AddTo(disposable);
         }
     }

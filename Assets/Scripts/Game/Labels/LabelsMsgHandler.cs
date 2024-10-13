@@ -11,15 +11,19 @@ namespace Game.Labels
     {
         protected override void RegisterHandlers()
         {
-            HandleWeekLeft();
+            HandleDayLeft();
             HandleMonthLeft();
         }
 
-        private void HandleWeekLeft()
+        private void HandleDayLeft()
         {
             MsgBroker.Instance
-                .Receive<WeekLeftMessage>()
-                .Subscribe(e => { UpdateLabelsStats(); })
+                .Receive<DayLeftMessage>()
+                .Subscribe(e =>
+                {
+                    TriggerAIAction();
+                    UpdateLabelsStats();
+                })
                 .AddTo(disposable);
         }
 
@@ -27,20 +31,7 @@ namespace Game.Labels
         {
             MsgBroker.Instance
                 .Receive<MonthLeftMessage>()
-                .Subscribe(e =>
-                {
-                    if (e.Month % _settings.Labels.RappersActionsFrequency == 0)
-                    {
-                        RandomRapperLabelAction();
-                    }
-
-                    if (e.Month % _settings.Labels.InvitePlayerFrequency == 0)
-                    {
-                        InvitePlayerToLabel();
-                    }
-
-                    SendPlayersLabelIncomeEmail();
-                })
+                .Subscribe(e => { SendPlayersLabelIncomeEmail(); })
                 .AddTo(disposable);
         }
     }

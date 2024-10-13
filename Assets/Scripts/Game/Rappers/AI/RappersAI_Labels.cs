@@ -1,4 +1,3 @@
-using Game.Labels.Desc;
 using Game.Rappers.Desc;
 using Game.Settings;
 using MessageBroker;
@@ -11,8 +10,11 @@ namespace Game.Rappers.AI
 {
     public partial class RappersAI
     {
-        public void TryJoinLabel(RapperInfo rapper, LabelInfo label, GameSettings settings)
+        public void TryJoinLabel(int rapperId, string labelName, GameSettings settings)
         {
+            var rapper = RappersAPI.Instance.Get(rapperId);
+            var label  = LabelsAPI.Instance.Get(labelName);
+
             if (rapper.Label != "")
             {
                 return;

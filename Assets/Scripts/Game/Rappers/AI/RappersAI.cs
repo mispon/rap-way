@@ -91,9 +91,9 @@ namespace Game.Rappers.AI
             return wp;
         }
 
-        private static int TryDoFeat(RapperInfo rapperInfo)
+        private static int TryDoFeat(RapperInfo rapperInfo, int chance)
         {
-            if (RollDice() > 10)
+            if (RollDice() > chance)
             {
                 return -1;
             }
