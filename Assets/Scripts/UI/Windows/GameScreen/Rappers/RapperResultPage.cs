@@ -9,21 +9,20 @@ using UI.Enums;
 using UI.Windows.GameScreen.Charts;
 using UnityEngine;
 using UnityEngine.UI;
-using LabelsAPI = Game.Labels.LabelsPackage;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Rappers
 {
     public class RapperResultPage : Page
     {
-        [SerializeField] private Text message;
-        [SerializeField] private Image rapperAvatar;
+        [SerializeField] private Text   message;
+        [SerializeField] private Image  rapperAvatar;
         [SerializeField] private Sprite customRapperAvatar;
         [SerializeField] private Button okButton;
         [SerializeField] private Button cancelButton;
         [SerializeField] private Button nextButton;
 
-        private RapperInfo _rapper;
+        private RapperInfo       _rapper;
         private ConversationType _convType;
 
         private void Start()
@@ -35,13 +34,13 @@ namespace UI.Windows.GameScreen.Rappers
 
         public override void Show(object ctx = null)
         {
-            _rapper = ctx.ValueByKey<RapperInfo>("rapper");
+            _rapper   = ctx.ValueByKey<RapperInfo>("rapper");
             _convType = ctx.ValueByKey<ConversationType>("conv_type");
 
             var playerPoints = ctx.ValueByKey<int>("player_points");
             var rapperPoints = ctx.ValueByKey<int>("rapper_points");
 
-            bool result = AnalyzeConversations(playerPoints, rapperPoints);
+            var result = AnalyzeConversations(playerPoints, rapperPoints);
             DisplayResult(result, _rapper.Name);
 
             base.Show(ctx);
@@ -55,8 +54,8 @@ namespace UI.Windows.GameScreen.Rappers
 
         private void DisplayResult(bool result, string rapperName)
         {
-            string key = result ? "conversations_success" : "conversations_fail";
-            message.text = $"{GetLocale(key)} <color=#01C6B8>{rapperName}</color>!";
+            var key = result ? "conversations_success" : "conversations_fail";
+            message.text        = $"{GetLocale(key)} <color=#01C6B8>{rapperName}</color>!";
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
 
             okButton.gameObject.SetActive(!result);
@@ -73,7 +72,7 @@ namespace UI.Windows.GameScreen.Rappers
                 case ConversationType.Feat:
                     MsgBroker.Instance.Publish(new WindowControlMessage
                     {
-                        Type = WindowType.ProductionFeatSettings,
+                        Type    = WindowType.ProductionFeatSettings,
                         Context = _rapper
                     });
                     break;
@@ -81,7 +80,7 @@ namespace UI.Windows.GameScreen.Rappers
                 case ConversationType.Battle:
                     MsgBroker.Instance.Publish(new WindowControlMessage
                     {
-                        Type = WindowType.BattleWork,
+                        Type    = WindowType.BattleWork,
                         Context = _rapper
                     });
                     break;
@@ -107,7 +106,7 @@ namespace UI.Windows.GameScreen.Rappers
             SoundManager.Instance.PlaySound(UIActionType.Click);
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
-                Type = WindowType.Charts,
+                Type    = WindowType.Charts,
                 Context = ChartsTabType.Rappers
             });
         }
