@@ -28,7 +28,7 @@ namespace Game.Rappers
         {
             MsgBroker.Instance
                 .Receive<LabelInviteRapperMessage>()
-                .Subscribe(e => { _rappersAI.TryJoinLabel(e.RapperId, e.LabelName, _settings); })
+                .Subscribe(e => { _rappersAI.TryJoinLabel(e.RapperId, e.LabelName); })
                 .AddTo(disposable);
         }
     }

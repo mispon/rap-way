@@ -26,6 +26,8 @@ namespace Game.Rappers
             UpdateInGameRappers();
             UpdateCustomRappersIDs();
             UpdateFansCount();
+
+            RegisterHandlers();
         }
 
         private void UpdateInGameRappers()

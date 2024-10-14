@@ -10,7 +10,7 @@ namespace Game.Rappers.AI
 {
     public partial class RappersAI
     {
-        public void TryJoinLabel(int rapperId, string labelName, GameSettings settings)
+        public void TryJoinLabel(int rapperId, string labelName)
         {
             var rapper = RappersAPI.Instance.Get(rapperId);
             var label  = LabelsAPI.Instance.Get(labelName);
@@ -20,8 +20,6 @@ namespace Game.Rappers.AI
                 return;
             }
 
-            rapper.Cooldown = settings.Rappers.LabelCooldown;
-
             var rapperPrestige = RappersAPI.GetRapperPrestige(rapper);
             var labelPrestige  = LabelsAPI.Instance.GetPrestige(label);
             var chance         = CalcChance(labelPrestige, rapperPrestige);
@@ -29,6 +27,7 @@ namespace Game.Rappers.AI
             if (RollDice() >= chance)
             {
                 // rapper decide don't join the label
+                Debug.Log($"[RAPPER AI] {rapper.Name} decline invite from label {label.Name}");
                 return;
             }
 
