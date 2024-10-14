@@ -12,7 +12,7 @@ namespace Game.Rappers.AI
     {
         private const int MIN_FANS_COUNT = 100;
 
-        public void DoAction(RapperInfo rapperInfo, GameSettings settings, ConcertPlacesData concertData)
+        public void DoAction(RapperInfo rapperInfo, GameSettings settings, ImagesBank imagesBank, ConcertPlacesData concertData)
         {
             var action = ChooseAction();
 
@@ -47,7 +47,7 @@ namespace Game.Rappers.AI
                     break;
 
                 case RappersAIActions.Battle:
-                    ProposeBattle(rapperInfo, settings);
+                    ProposeBattle(rapperInfo, settings, imagesBank);
                     break;
 
                 case RappersAIActions.Diss:

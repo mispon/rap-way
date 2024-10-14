@@ -23,7 +23,7 @@ namespace Game.Rappers
             foreach (var dice in dices)
             {
                 var rapper = rappers[dice];
-                _rappersAI.DoAction(rapper, _settings, concertData);
+                _rappersAI.DoAction(rapper, _settings, imagesBank, concertData);
             }
         }
 
