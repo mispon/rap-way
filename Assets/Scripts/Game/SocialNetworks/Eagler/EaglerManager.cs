@@ -46,6 +46,11 @@ namespace Game.SocialNetworks.Eagler
         {
             var likes = CalcLikes(rapper.Fans);
 
+            var dice = Random.Range(0f, 1f);
+            var messageKey = dice >= 0.5f
+                ? $"{data.RapperNegativePostKey}_{Random.Range(0, data.RapperNegativePostsCount)}"
+                : $"{data.RapperPositivePostKey}_{Random.Range(0, data.RapperPositivePostsCount)}";
+
             var eagle = new Eagle
             {
                 Date     = TimeManager.Instance.DisplayNow,
@@ -53,7 +58,7 @@ namespace Game.SocialNetworks.Eagler
                 Likes    = likes,
                 Views    = CalcViews(likes),
                 Shares   = CalcShares(likes),
-                Message  = "",
+                Message  = messageKey,
                 Tags     = $" <color=#109c22>#{target}</color>"
             };
 

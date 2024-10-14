@@ -95,6 +95,19 @@ namespace Game.Rappers.AI
             return wp;
         }
 
+        private static bool CanInteractPlayer(int rapperFans, int playerFans)
+        {
+            if (playerFans >= rapperFans)
+            {
+                return true;
+            }
+
+            const int maxDiff = 30;
+
+            var diff = playerFans / rapperFans * 100;
+            return diff < maxDiff;
+        }
+
         private static int TryDoFeat(RapperInfo rapperInfo, int chance)
         {
             if (RollDice() > chance)

@@ -1,6 +1,8 @@
 using Game.Rappers.Desc;
 using Game.Settings;
 using Game.SocialNetworks.Eagler;
+using MessageBroker;
+using MessageBroker.Messages.SocialNetworks;
 using RappersAPI = Game.Rappers.RappersPackage;
 using PlayerAPI = Game.Player.PlayerPackage;
 
@@ -10,34 +12,29 @@ namespace Game.Rappers.AI
     {
         private static void DoEagler(RapperInfo rapper, GameSettings settings)
         {
+            const int playerTargetChance = 25;
+
             rapper.Cooldown = settings.Rappers.EaglerCooldown;
 
-            const int playerTargetChance = 25;
-            var       isPlayerTarget     = CanInteractPlayer(rapper.Fans, PlayerAPI.Data.Fans) && RollDice() <= playerTargetChance;
-            
+            var isPlayerTarget = CanInteractPlayer(rapper.Fans, PlayerAPI.Data.Fans) && RollDice() <= playerTargetChance;
             var target = isPlayerTarget
                 ? PlayerAPI.Data.Info.NickName
                 : GetRandomRapperName(rapper.Name);
 
             if (isPlayerTarget)
             {
-                // send email
+                MsgBroker.Instance.Publish(new EmailMessage
+                {
+                    Title       = "rapper_eagle_player_title",
+                    TitleArgs   = new[] {rapper.Name},
+                    Content     = "rapper_eagle_player_text",
+                    ContentArgs = new[] {rapper.Name},
+                    Sender      = "personal.assistant@mail.com",
+                    Sprite      = rapper.Avatar
+                });
             }
 
             EaglerManager.Instance.CreateRapperEagle(rapper, target);
-        }
-
-        private static bool CanInteractPlayer(int rapperFans, int playerFans)
-        {
-            if (playerFans >= rapperFans)
-            {
-                return true;
-            }
-
-            const int maxDiff = 30;
-
-            var diff = playerFans / rapperFans * 100;
-            return diff < maxDiff;
         }
 
         private static string GetRandomRapperName(string self)

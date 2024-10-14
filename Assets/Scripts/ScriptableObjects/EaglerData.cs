@@ -7,9 +7,17 @@ namespace ScriptableObjects
     {
         public string[] Nicknames;
         public string[] Hashtags;
+
         public string PositivePostKey;
-        public int PositivePostsCount;
+        public int    PositivePostsCount;
+
         public string NegativePostKey;
-        public int NegativePostsCount;
+        public int    NegativePostsCount;
+
+        public string RapperPositivePostKey;
+        public int    RapperPositivePostsCount;
+
+        public string RapperNegativePostKey;
+        public int    RapperNegativePostsCount;
     }
 }
