@@ -7,6 +7,7 @@ using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
 using UI.Enums;
+using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Rappers.AI
@@ -19,6 +20,7 @@ namespace Game.Rappers.AI
 
             if (CanInteractPlayer(rapper.Fans, PlayerAPI.Data.Fans) && RollDice() > 50)
             {
+                Debug.Log($"[RAPPER AI] {rapper.Name} offer battle to player");
                 MsgBroker.Instance.Publish(new EmailMessage
                 {
                     Title       = "rapper_offers_battle_title",
@@ -45,6 +47,7 @@ namespace Game.Rappers.AI
             } else
             {
                 var opponent = GetRandomRapperName(rapper.Name);
+                Debug.Log($"[RAPPER AI] {rapper.Name} do battle with {opponent}");
 
                 MsgBroker.Instance.Publish(new NewsMessage
                 {

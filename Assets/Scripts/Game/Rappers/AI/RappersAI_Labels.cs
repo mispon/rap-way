@@ -32,7 +32,9 @@ namespace Game.Rappers.AI
                 return;
             }
 
+            Debug.Log($"[RAPPER AI] {rapper.Name} join label {label.Name}");
             rapper.Label = label.Name;
+
             MsgBroker.Instance.Publish(new NewsMessage
             {
                 Text       = "news_rapper_join_label",
@@ -62,7 +64,9 @@ namespace Game.Rappers.AI
                 return;
             }
 
+            Debug.Log($"[RAPPER AI] {rapper.Name} leave label {label.Name}");
             rapper.Label = "";
+
             MsgBroker.Instance.Publish(new NewsMessage
             {
                 Text       = "news_rapper_leave_label",

@@ -17,6 +17,8 @@ namespace Game.Labels.AI
             var rappers = RappersAPI.Instance.GetAll().ToArray();
 
             var randomIdx = Random.Range(0, rappers.Length);
+            Debug.Log($"[LABEL AI] {label.Name} send invite to rapper {rappers[randomIdx].Name}");
+
             MsgBroker.Instance.Publish(new LabelInviteRapperMessage
             {
                 LabelName = label.Name,

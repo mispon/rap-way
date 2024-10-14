@@ -8,22 +8,24 @@ using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
 using Models.Production;
 using Models.Trends;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Game.Rappers.AI
 {
     public partial class RappersAI
     {
-        private static void DoAlbum(RapperInfo rapperInfo, GameSettings settings)
+        private static void DoAlbum(RapperInfo rapper, GameSettings settings)
         {
-            rapperInfo.Cooldown = settings.Rappers.AlbumCooldown;
+            Debug.Log($"[RAPPER AI] {rapper.Name} do album");
+            rapper.Cooldown = settings.Rappers.AlbumCooldown;
 
             var album = new AlbumInfo
             {
-                CreatorId  = rapperInfo.Id,
+                CreatorId  = rapper.Id,
                 Name       = GenAlbumName(),
-                TextPoints = GenWorkPoints(rapperInfo.Vocobulary, settings.Album.WorkDuration),
-                BitPoints  = GenWorkPoints(rapperInfo.Bitmaking, settings.Album.WorkDuration),
+                TextPoints = GenWorkPoints(rapper.Vocobulary, settings.Album.WorkDuration),
+                BitPoints  = GenWorkPoints(rapper.Bitmaking, settings.Album.WorkDuration),
                 TrendInfo = new TrendInfo
                 {
                     Style = (Styles) Random.Range(0, Enum.GetValues(typeof(Styles)).Length),
@@ -33,18 +35,18 @@ namespace Game.Rappers.AI
 
             AlbumAnalyzer.Analyze(album, settings);
 
-            rapperInfo.Fans = Math.Max(MIN_FANS_COUNT, rapperInfo.Fans + album.FansIncome);
-            rapperInfo.History.AlbumList.Add(album);
+            rapper.Fans = Math.Max(MIN_FANS_COUNT, rapper.Fans + album.FansIncome);
+            rapper.History.AlbumList.Add(album);
 
             MsgBroker.Instance.Publish(new NewsMessage
             {
                 Text       = "news_album_created",
-                TextArgs   = new[] {rapperInfo.Name, album.Name},
-                Sprite     = rapperInfo.Avatar,
-                Popularity = rapperInfo.Fans
+                TextArgs   = new[] {rapper.Name, album.Name},
+                Sprite     = rapper.Avatar,
+                Popularity = rapper.Fans
             });
 
-            EaglerManager.Instance.GenerateEagles(1, rapperInfo.Name, rapperInfo.Fans, album.Quality);
+            EaglerManager.Instance.GenerateEagles(1, rapper.Name, rapper.Fans, album.Quality);
         }
 
         private static string GenAlbumName()

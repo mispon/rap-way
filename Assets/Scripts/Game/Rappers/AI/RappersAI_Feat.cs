@@ -6,6 +6,7 @@ using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.UI;
 using UI.Enums;
+using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Rappers.AI
@@ -19,6 +20,7 @@ namespace Game.Rappers.AI
                 return;
             }
 
+            Debug.Log($"[RAPPER AI] {rapper.Name} offers feat to player");
             rapper.Cooldown = settings.Rappers.FeatCooldown;
 
             MsgBroker.Instance.Publish(new EmailMessage

@@ -8,23 +8,25 @@ using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
 using Models.Production;
 using Models.Trends;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Game.Rappers.AI
 {
     public partial class RappersAI
     {
-        private static void DoTrack(RapperInfo rapperInfo, GameSettings settings)
+        private static void DoTrack(RapperInfo rapper, GameSettings settings)
         {
-            rapperInfo.Cooldown = settings.Rappers.TrackCooldown;
+            Debug.Log($"[RAPPER AI] {rapper.Name} do track");
+            rapper.Cooldown = settings.Rappers.TrackCooldown;
 
             var track = new TrackInfo
             {
-                CreatorId  = rapperInfo.Id,
-                FeatId     = TryDoFeat(rapperInfo, settings.Rappers.FeatChance),
+                CreatorId  = rapper.Id,
+                FeatId     = TryDoFeat(rapper, settings.Rappers.FeatChance),
                 Name       = GenTrackName(),
-                TextPoints = GenWorkPoints(rapperInfo.Vocobulary, settings.Track.WorkDuration),
-                BitPoints  = GenWorkPoints(rapperInfo.Bitmaking, settings.Track.WorkDuration),
+                TextPoints = GenWorkPoints(rapper.Vocobulary, settings.Track.WorkDuration),
+                BitPoints  = GenWorkPoints(rapper.Bitmaking, settings.Track.WorkDuration),
                 TrendInfo = new TrendInfo
                 {
                     Style = (Styles) Random.Range(0, Enum.GetValues(typeof(Styles)).Length),
@@ -34,18 +36,18 @@ namespace Game.Rappers.AI
 
             TrackAnalyzer.Analyze(track, settings);
 
-            rapperInfo.Fans = Math.Max(MIN_FANS_COUNT, rapperInfo.Fans + track.FansIncome);
-            rapperInfo.History.TrackList.Add(track);
+            rapper.Fans = Math.Max(MIN_FANS_COUNT, rapper.Fans + track.FansIncome);
+            rapper.History.TrackList.Add(track);
 
             MsgBroker.Instance.Publish(new NewsMessage
             {
                 Text       = "news_track_created",
-                TextArgs   = new[] {rapperInfo.Name, track.Name},
-                Sprite     = rapperInfo.Avatar,
-                Popularity = rapperInfo.Fans
+                TextArgs   = new[] {rapper.Name, track.Name},
+                Sprite     = rapper.Avatar,
+                Popularity = rapper.Fans
             });
 
-            EaglerManager.Instance.GenerateEagles(1, rapperInfo.Name, rapperInfo.Fans, track.Quality);
+            EaglerManager.Instance.GenerateEagles(1, rapper.Name, rapper.Fans, track.Quality);
         }
 
         private static string GenTrackName()

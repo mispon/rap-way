@@ -5,6 +5,7 @@ using MessageBroker;
 using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.UI;
 using UI.Enums;
+using UnityEngine;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Labels.AI
@@ -27,6 +28,7 @@ namespace Game.Labels.AI
                 return;
             }
 
+            Debug.Log($"[LABEL AI] {label.Name} send invite to player");
             label.Cooldown = settings.Labels.InvitePlayerCooldown;
 
             MsgBroker.Instance.Publish(new EmailMessage

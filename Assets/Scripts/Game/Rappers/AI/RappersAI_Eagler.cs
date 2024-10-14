@@ -6,6 +6,7 @@ using MessageBroker.Messages.SocialNetworks;
 using MessageBroker.Messages.UI;
 using UI.Enums;
 using UI.Windows.GameScreen.SocialNetworks;
+using UnityEngine;
 using RappersAPI = Game.Rappers.RappersPackage;
 using PlayerAPI = Game.Player.PlayerPackage;
 
@@ -23,6 +24,8 @@ namespace Game.Rappers.AI
             var target = isPlayerTarget
                 ? PlayerAPI.Data.Info.NickName
                 : GetRandomRapperName(rapper.Name);
+
+            Debug.Log($"[RAPPER AI] {rapper.Name} post eagle about {target}");
 
             if (isPlayerTarget)
             {
