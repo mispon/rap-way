@@ -18,7 +18,7 @@ namespace Game.Rappers.AI
         {
             rapper.Cooldown = settings.Rappers.BattleCooldown;
 
-            if (CanInteractPlayer(rapper.Fans, PlayerAPI.Data.Fans) && RollDice() > 50)
+            if (CanInteractPlayer(rapper.Fans, PlayerAPI.Data.Fans) && RollDice() <= settings.Rappers.PlayerBattleChance)
             {
                 Debug.Log($"[RAPPER AI] {rapper.Name} offer battle to player");
                 MsgBroker.Instance.Publish(new EmailMessage
@@ -29,6 +29,7 @@ namespace Game.Rappers.AI
                     ContentArgs = new[] {PlayerAPI.Data.Info.NickName, rapper.Name},
                     Sender      = "personal.assistant@mail.com",
                     Sprite      = rapper.Avatar,
+                    Type        = EmailsType.BattleOffer,
                     mainAction = () =>
                     {
                         MsgBroker.Instance.Publish(new WindowControlMessage

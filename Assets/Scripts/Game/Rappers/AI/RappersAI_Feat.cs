@@ -27,10 +27,11 @@ namespace Game.Rappers.AI
             {
                 Title       = "rapper_offers_feat_title",
                 TitleArgs   = new[] {rapper.Name},
-                Content     = "rapper_offers_feat_title",
+                Content     = "rapper_offers_feat_text",
                 ContentArgs = new[] {PlayerAPI.Data.Info.NickName, rapper.Name},
                 Sender      = "personal.assistant@mail.com",
                 Sprite      = rapper.Avatar,
+                Type        = EmailsType.FeatOffer,
                 mainAction = () =>
                 {
                     MsgBroker.Instance.Publish(new WindowControlMessage

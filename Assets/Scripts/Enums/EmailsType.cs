@@ -5,5 +5,7 @@ namespace Enums
         Undefined,
         LabelsContract,
         TeamSalary,
+        FeatOffer,
+        BattleOffer
     }
 }

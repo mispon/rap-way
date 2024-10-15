@@ -65,13 +65,13 @@ namespace Game.Rappers.AI
         {
             return RollDice() switch
             {
-                < 15  => RappersAIActions.Track,
-                < 25  => RappersAIActions.Clip,
-                < 35  => RappersAIActions.Album,
-                < 45  => RappersAIActions.Concert,
-                < 60  => RappersAIActions.Eagle,
-                < 70  => RappersAIActions.LeaveLabel,
-                < 85  => RappersAIActions.Feat,
+                < 20  => RappersAIActions.Track,
+                < 35  => RappersAIActions.Clip,
+                < 50  => RappersAIActions.Album,
+                < 60  => RappersAIActions.Concert,
+                < 80  => RappersAIActions.Eagle,
+                < 90  => RappersAIActions.LeaveLabel,
+                < 95  => RappersAIActions.Feat,
                 < 100 => RappersAIActions.Battle,
 
                 // todo: implement actions
