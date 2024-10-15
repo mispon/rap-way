@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Core;
-using Enums;
 using Core.Analytics;
+using Enums;
+using Extensions;
 using Game;
 using Game.Player.Team;
 using Game.Rappers.Desc;
@@ -25,8 +26,8 @@ namespace UI.Windows.GameScreen.Rappers
         [SerializeField] private Sprite customImage;
         [SerializeField] private Sprite playerMaleImage;
         [SerializeField] private Sprite playerFemaleImage;
-        [SerializeField] private Image avatar;
-        [SerializeField] private Text nickname;
+        [SerializeField] private Image  avatar;
+        [SerializeField] private Text   nickname;
 
         [Space]
         [SerializeField] private Text vocobulary;
@@ -76,18 +77,18 @@ namespace UI.Windows.GameScreen.Rappers
                     break;
             }
 
-            var manager = PlayerAPI.Data.Team.Manager;
-            bool isAvailable = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
+            var manager     = PlayerAPI.Data.Team.Manager;
+            var isAvailable = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
             if (!isAvailable)
             {
                 Refresh();
                 return;
             }
 
-            int cooldown = GameManager.Instance.Settings.Team.ManagerCooldown;
+            var cooldown = GameManager.Instance.Settings.Team.ManagerCooldown;
             MsgBroker.Instance.Publish(new TeammateCooldownMessage
             {
-                Type = TeammateType.Manager,
+                Type     = TeammateType.Manager,
                 Cooldown = cooldown
             });
 
@@ -96,7 +97,7 @@ namespace UI.Windows.GameScreen.Rappers
                 Type = WindowType.RapperConversationsWork,
                 Context = new Dictionary<string, object>
                 {
-                    ["rapper"] = _rapper,
+                    ["rapper"]    = _rapper,
                     ["conv_type"] = convType
                 }
             });
@@ -122,20 +123,24 @@ namespace UI.Windows.GameScreen.Rappers
 
         private void DisplayInfo(RapperInfo info)
         {
-            avatar.sprite = GetAvatar(info);
-            nickname.text = info.Name;
+            avatar.sprite   = GetAvatar(info);
+            nickname.text   = info.Name;
             vocobulary.text = info.Vocobulary.ToString();
-            bitmaking.text = info.Bitmaking.ToString();
+            bitmaking.text  = info.Bitmaking.ToString();
             management.text = info.Management.ToString();
-            fans.text = $"{info.Fans}M";
-            label.text = info.Label != "" ? info.Label : "-";
+            fans.text       = info.Fans.GetShort();
+            label.text      = info.Label != "" ? info.Label : "-";
 
             featButton.gameObject.SetActive(!info.IsPlayer);
             battleButton.gameObject.SetActive(!info.IsPlayer);
 
-            bool labelsButtonActive = !info.IsPlayer &&
-                                      !LabelsAPI.Instance.IsPlayerLabelEmpty &&
-                                      !string.Equals(_rapper.Label, LabelsAPI.Instance.PlayerLabel.Name, StringComparison.InvariantCultureIgnoreCase);
+            var labelsButtonActive = !info.IsPlayer &&
+                                     !LabelsAPI.Instance.IsPlayerLabelEmpty &&
+                                     !string.Equals(
+                                         _rapper.Label,
+                                         LabelsAPI.Instance.PlayerLabel.Name,
+                                         StringComparison.InvariantCultureIgnoreCase
+                                     );
             labelButton.gameObject.SetActive(labelsButtonActive);
         }
 
@@ -161,9 +166,9 @@ namespace UI.Windows.GameScreen.Rappers
         {
             var manager = PlayerAPI.Data.Team.Manager;
 
-            bool canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
+            var canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
             battleButton.interactable = canInteract;
-            featButton.interactable = canInteract;
+            featButton.interactable   = canInteract;
 
             managerAvatar.sprite = TeamManager.IsAvailable(TeammateType.Manager)
                 ? imagesBank.ProducerActive
@@ -174,15 +179,14 @@ namespace UI.Windows.GameScreen.Rappers
         {
             var manager = PlayerAPI.Data.Team.Manager;
 
-            bool canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
+            var canInteract = TeamManager.IsAvailable(TeammateType.Manager) && manager.Cooldown == 0;
 
             var labelInfo = LabelsAPI.Instance.Get(PlayerAPI.Data.Label);
-            if (labelInfo is { IsPlayer: true, IsFrozen: false })
+            if (labelInfo is {IsPlayer: true, IsFrozen: false})
             {
-                float prestige = RappersAPI.GetRapperPrestige(_rapper);
+                var prestige = RappersAPI.GetRapperPrestige(_rapper);
                 canInteract &= Mathf.Abs(prestige - labelInfo.Prestige.Value) <= 1.5f;
-            }
-            else
+            } else
             {
                 canInteract = false;
             }

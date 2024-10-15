@@ -1,4 +1,6 @@
 using System.Linq;
+using Core.Analytics;
+using Enums;
 using Game.Labels.Desc;
 using Game.Settings;
 using MessageBroker;
@@ -14,10 +16,11 @@ namespace Game.Labels.AI
         {
             label.Cooldown = settings.Labels.InviteRapperCooldown;
 
-            var rappers = RappersAPI.Instance.GetAll().ToArray();
-
+            var rappers   = RappersAPI.Instance.GetAll().ToArray();
             var randomIdx = Random.Range(0, rappers.Length);
+
             Debug.Log($"[LABEL AI] {label.Name} send invite to rapper {rappers[randomIdx].Name}");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.LabelAI_InviteRapper);
 
             MsgBroker.Instance.Publish(new LabelInviteRapperMessage
             {

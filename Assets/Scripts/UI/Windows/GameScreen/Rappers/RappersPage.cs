@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Enums;
 using Core.Analytics;
+using Enums;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -21,9 +21,9 @@ namespace UI.Windows.GameScreen.Rappers
 {
     public class RappersPage : Page
     {
-        [SerializeField] private AskingWindow askingWindow;
+        [SerializeField] private AskingWindow         askingWindow;
         [SerializeField] private ScrollViewController list;
-        [SerializeField] private GameObject template;
+        [SerializeField] private GameObject           template;
 
         [Space]
         [SerializeField] private RapperCard rapperCard;
@@ -69,7 +69,7 @@ namespace UI.Windows.GameScreen.Rappers
         }
 
         /// <summary>
-        /// Returns all rappers (internal and custom) sorted desc by fans count
+        ///     Returns all rappers (internal and custom) sorted desc by fans count
         /// </summary>
         private static List<RapperInfo> GetAllRappers()
         {
@@ -77,13 +77,13 @@ namespace UI.Windows.GameScreen.Rappers
 
             allRappers.Add(new RapperInfo
             {
-                Name = PlayerAPI.Data.Info.NickName,
-                Fans = PlayerAPI.Data.Fans / 1_000_000,
+                Name       = PlayerAPI.Data.Info.NickName,
+                Fans       = PlayerAPI.Data.Fans,
                 Vocobulary = PlayerAPI.Data.Stats.Vocobulary.Value,
-                Bitmaking = PlayerAPI.Data.Stats.Bitmaking.Value,
+                Bitmaking  = PlayerAPI.Data.Stats.Bitmaking.Value,
                 Management = PlayerAPI.Data.Stats.Management.Value,
-                Label = PlayerAPI.Data.Label,
-                IsPlayer = true
+                Label      = PlayerAPI.Data.Label,
+                IsPlayer   = true
             });
 
             return allRappers.OrderByDescending(r => r.Fans).ToList();
@@ -102,7 +102,7 @@ namespace UI.Windows.GameScreen.Rappers
         }
 
         /// <summary>
-        /// Process custom rapper remove
+        ///     Process custom rapper remove
         /// </summary>
         private void HandleRapperDelete(RapperInfo customRapper)
         {

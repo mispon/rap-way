@@ -1,4 +1,5 @@
 using System;
+using Core.Analytics;
 using Enums;
 using Game.Production.Analyzers;
 using Game.Rappers.Desc;
@@ -18,6 +19,8 @@ namespace Game.Rappers.AI
         private static void DoTrack(RapperInfo rapper, GameSettings settings)
         {
             Debug.Log($"[RAPPER AI] {rapper.Name} do track");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_CreateTrack);
+
             rapper.Cooldown = settings.Rappers.TrackCooldown;
 
             var track = new TrackInfo

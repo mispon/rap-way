@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Enums;
 using Core.Analytics;
+using Enums;
 using Game.Rappers.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -22,28 +22,28 @@ namespace UI.Windows.GameScreen.Rappers
     {
         [Header("Name Input")]
         [SerializeField] private InputField nameInput;
-        [SerializeField] private Carousel labelInput;
+        [SerializeField] private Carousel  labelInput;
         [SerializeField] private GameError gameError;
 
         [Header("Vocabulary")]
         [SerializeField] private Button vocabularyBtnLeft;
         [SerializeField] private Button vocabularyBtnRight;
-        [SerializeField] private Text vocabularyValue;
+        [SerializeField] private Text   vocabularyValue;
 
         [Header("Bitmaking")]
         [SerializeField] private Button bitmakingBtnLeft;
         [SerializeField] private Button bitmakingBtnRight;
-        [SerializeField] private Text bitmakingValue;
+        [SerializeField] private Text   bitmakingValue;
 
         [Header("Management")]
         [SerializeField] private Button managementBtnLeft;
         [SerializeField] private Button managementBtnRight;
-        [SerializeField] private Text managementValue;
+        [SerializeField] private Text   managementValue;
 
         [Header("Fans")]
         [SerializeField] private Button fansBtnLeft;
         [SerializeField] private Button fansBtnRight;
-        [SerializeField] private Text fansValue;
+        [SerializeField] private Text   fansValue;
 
         [Header("Buttons")]
         [SerializeField] private Button createButton;
@@ -86,7 +86,7 @@ namespace UI.Windows.GameScreen.Rappers
 
             foreach (var label in labels)
             {
-                props.Add(new CarouselProps { Text = label.Name });
+                props.Add(new CarouselProps {Text = label.Name});
             }
 
             labelInput.Init(props.ToArray());
@@ -103,8 +103,8 @@ namespace UI.Windows.GameScreen.Rappers
                 return;
             }
 
-            current -= 1;
-            value.text = current.ToString();
+            current    -= 1;
+            value.text =  current.ToString();
         }
 
         private static void OnBntRightClick(Text value, int maxValue)
@@ -117,8 +117,8 @@ namespace UI.Windows.GameScreen.Rappers
                 return;
             }
 
-            current += 1;
-            value.text = current.ToString();
+            current    += 1;
+            value.text =  current.ToString();
         }
 
         private void CreateButtonClick()
@@ -140,19 +140,19 @@ namespace UI.Windows.GameScreen.Rappers
                 return;
             }
 
-            int lastId = RappersAPI.Instance.MaxCustomRapperID();
-            string label = labelInput.GetLabel();
+            var lastId = RappersAPI.Instance.MaxCustomRapperID();
+            var label  = labelInput.GetLabel();
 
             var customRapper = new RapperInfo
             {
-                Id = lastId + 1,
-                Name = nickname,
-                Label = label != "None" ? label : "",
+                Id         = lastId + 1,
+                Name       = nickname,
+                Label      = label != "None" ? label : "",
                 Vocobulary = int.Parse(vocabularyValue.text),
-                Bitmaking = int.Parse(bitmakingValue.text),
+                Bitmaking  = int.Parse(bitmakingValue.text),
                 Management = int.Parse(managementValue.text),
-                Fans = int.Parse(fansValue.text),
-                IsCustom = true
+                Fans       = int.Parse(fansValue.text) * 1_000_000,
+                IsCustom   = true
             };
 
             AnalyticsManager.LogEvent(FirebaseGameEvents.NewRapperCreated);

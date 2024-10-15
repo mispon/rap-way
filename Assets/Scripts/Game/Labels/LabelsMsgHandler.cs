@@ -12,6 +12,7 @@ namespace Game.Labels
         protected override void RegisterHandlers()
         {
             HandleDayLeft();
+            HandleWeekLeft();
             HandleMonthLeft();
         }
 
@@ -19,11 +20,15 @@ namespace Game.Labels
         {
             MsgBroker.Instance
                 .Receive<DayLeftMessage>()
-                .Subscribe(e =>
-                {
-                    TriggerAIAction();
-                    UpdateLabelsStats();
-                })
+                .Subscribe(e => { UpdateLabelsStats(); })
+                .AddTo(disposable);
+        }
+
+        private void HandleWeekLeft()
+        {
+            MsgBroker.Instance
+                .Receive<WeekLeftMessage>()
+                .Subscribe(e => { TriggerAIAction(); })
                 .AddTo(disposable);
         }
 

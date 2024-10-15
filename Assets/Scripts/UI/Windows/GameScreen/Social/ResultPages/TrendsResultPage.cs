@@ -1,6 +1,6 @@
+using Core.Analytics;
 using Enums;
 using Extensions;
-using Core.Analytics;
 using Game;
 using Models.Production;
 using ScriptableObjects;
@@ -22,13 +22,13 @@ namespace UI.Windows.GameScreen.Social.ResultPages
 
         protected override void DisplayResult(SocialInfo socialInfo)
         {
-            AnalyticsManager.LogEvent(FirebaseGameEvents.TrandsAnalyzed);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.TrendsAnalyzed);
 
             var trends = GameManager.Instance.GameStats.Trends;
 
-            themeIcon.sprite = imagesBank.ThemesActive[(int)trends.Theme];
-            themeName.text = GetLocale(trends.Theme.GetDescription()).ToUpper();
-            styleName.text = GetLocale(trends.Style.GetDescription()).ToUpper();
+            themeIcon.sprite = imagesBank.ThemesActive[(int) trends.Theme];
+            themeName.text   = GetLocale(trends.Theme.GetDescription()).ToUpper();
+            styleName.text   = GetLocale(trends.Style.GetDescription()).ToUpper();
 
             PlayerAPI.UpdateKnownTrends(trends.Style, trends.Theme);
         }

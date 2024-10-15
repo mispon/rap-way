@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Analytics;
 using Enums;
 using Game.Rappers.Desc;
 using Game.Settings;
@@ -21,6 +22,8 @@ namespace Game.Rappers.AI
             if (CanInteractPlayer(rapper.Fans, PlayerAPI.Data.Fans) && RollDice() <= settings.Rappers.PlayerBattleChance)
             {
                 Debug.Log($"[RAPPER AI] {rapper.Name} offer battle to player");
+                AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_BattlePlayer);
+
                 MsgBroker.Instance.Publish(new EmailMessage
                 {
                     Title       = "rapper_offers_battle_title",
@@ -48,7 +51,9 @@ namespace Game.Rappers.AI
             } else
             {
                 var opponent = GetRandomRapperName(rapper.Name);
+
                 Debug.Log($"[RAPPER AI] {rapper.Name} do battle with {opponent}");
+                AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_BattleRapper);
 
                 MsgBroker.Instance.Publish(new NewsMessage
                 {

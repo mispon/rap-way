@@ -1,3 +1,5 @@
+using Core.Analytics;
+using Enums;
 using Game.Rappers.Desc;
 using Game.Settings;
 using Game.SocialNetworks.Eagler;
@@ -26,6 +28,7 @@ namespace Game.Rappers.AI
                 : GetRandomRapperName(rapper.Name);
 
             Debug.Log($"[RAPPER AI] {rapper.Name} post eagle about {target}");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_PostEagle);
 
             if (isPlayerTarget)
             {

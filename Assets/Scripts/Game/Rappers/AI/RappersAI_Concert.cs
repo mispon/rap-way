@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Core.Analytics;
+using Enums;
 using Game.Production.Analyzers;
 using Game.Rappers.Desc;
 using Game.Settings;
@@ -24,9 +26,10 @@ namespace Game.Rappers.AI
             }
 
             Debug.Log($"[RAPPER AI] {rapper.Name} do concert");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_CreateConcert);
 
-            album.ConcertAmounts++;
             rapper.Cooldown = settings.Rappers.ConcertCooldown;
+            album.ConcertAmounts++;
 
             var locationId = GetRandomLocationId(concertData);
             var location   = concertData.Places[locationId];

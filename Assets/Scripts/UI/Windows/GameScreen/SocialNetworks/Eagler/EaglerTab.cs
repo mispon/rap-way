@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Core;
+using Core.Analytics;
 using Enums;
 using Extensions;
-using Core.Analytics;
 using Game.SocialNetworks.Eagler;
 using ScriptableObjects;
 using TMPro;
@@ -22,7 +22,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
         [SerializeField] private TextMeshProUGUI realName;
         [SerializeField] private TextMeshProUGUI nickName;
         [SerializeField] private TextMeshProUGUI fans;
-        [SerializeField] private ImagesBank imagesBank;
+        [SerializeField] private ImagesBank      imagesBank;
 
         [Header("Feed")]
         [SerializeField] private TMP_InputField input;
@@ -50,7 +50,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
 
         protected override void AfterOpen()
         {
-            AnalyticsManager.LogEvent(FirebaseGameEvents.TwitterOpened);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.EaglerOpened);
             HintsManager.Instance.ShowHint("tutorial_eagler", SocialNetworksTabType.Eagler);
         }
 
@@ -66,7 +66,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
             avatar.sprite = info.Gender == Gender.Male ? imagesBank.MaleAvatar : imagesBank.FemaleAvatar;
             realName.text = $"{info.FirstName} {info.LastName}";
             nickName.text = $"@{info.NickName}";
-            fans.text = PlayerAPI.Data.Fans.GetShort();
+            fans.text     = PlayerAPI.Data.Fans.GetShort();
         }
 
         private void UpdateTrends()
@@ -115,7 +115,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
                 return;
             }
 
-            var nick = PlayerAPI.Data.Info.NickName;
+            var nick      = PlayerAPI.Data.Info.NickName;
             var fansCount = PlayerAPI.Data.Fans;
 
             EaglerManager.Instance.CreateUserEagle(nick, input.text, GetLikes(fansCount));
@@ -131,13 +131,13 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
             var percent = fans switch
             {
                 >= 10_000_000 => 1,
-                >= 1_000_000 => 5,
-                >= 100_000 => 10,
-                >= 10_000 => 20,
-                _ => 50
+                >= 1_000_000  => 5,
+                >= 100_000    => 10,
+                >= 10_000     => 20,
+                _             => 50
             };
 
-            var likes = fans.GetPercent(percent);
+            var likes  = fans.GetPercent(percent);
             var jitter = likes.GetPercent(20);
 
             likes = Random.Range(likes - jitter, likes + jitter);

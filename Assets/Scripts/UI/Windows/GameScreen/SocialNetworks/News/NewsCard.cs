@@ -12,9 +12,9 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
 
         private RectTransform _rectTransform;
 
-        private int _index { get; set; }
+        private int   _index  { get; set; }
         private float _height { get; set; }
-        private float _width { get; set; }
+        private float _width  { get; set; }
 
         public void SetPosition(float spacing)
         {
@@ -49,8 +49,8 @@ namespace UI.Windows.GameScreen.SocialNetworks.News
 
         public void Initialize(int i, NewsInfo news)
         {
-            _index = i;
-            content.text = LocalizationManager.Instance.GetFormat(news.Text, news.TextArgs);
+            _index       = i;
+            content.text = $"[{news.Date}] {LocalizationManager.Instance.GetFormat(news.Text, news.TextArgs)}";
         }
     }
 }

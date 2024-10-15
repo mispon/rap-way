@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Analytics;
 using Enums;
 using Game.Rappers.Desc;
 using Game.Settings;
@@ -21,6 +22,8 @@ namespace Game.Rappers.AI
             }
 
             Debug.Log($"[RAPPER AI] {rapper.Name} offers feat to player");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_FeatPlayer);
+
             rapper.Cooldown = settings.Rappers.FeatCooldown;
 
             MsgBroker.Instance.Publish(new EmailMessage

@@ -15,7 +15,7 @@ namespace Game.Labels
             var labels = GetAll().ToArray();
             DecrementCooldowns(labels);
 
-            // one random label do action per day
+            // one random label do action per week
             var randomIdx = Random.Range(0, labels.Length);
             _labelsAI.DoAction(labels[randomIdx], _settings);
         }

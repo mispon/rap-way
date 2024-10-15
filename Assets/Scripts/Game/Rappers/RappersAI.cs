@@ -18,13 +18,15 @@ namespace Game.Rappers
             var rappers = GetAll().ToArray();
             DecrementCooldowns(rappers);
 
-            // 3 random rappers do action per day
-            var dices = ThrowDices(3, rappers.Length);
-            foreach (var dice in dices)
+            if (Random.Range(0, 2) == 0)
             {
-                var rapper = rappers[dice];
-                _rappersAI.DoAction(rapper, _settings, imagesBank, concertData);
+                // 50% change some rapper do action
+                return;
             }
+
+            // one random rapper do action per day
+            var randomIdx = Random.Range(0, rappers.Length);
+            _rappersAI.DoAction(rappers[randomIdx], _settings, imagesBank, concertData);
         }
 
         private static void DecrementCooldowns(IEnumerable<RapperInfo> rappers)
@@ -36,19 +38,6 @@ namespace Game.Rappers
                     rapper.Cooldown--;
                 }
             }
-        }
-
-        private static int[] ThrowDices(int n, int elemsTotal)
-        {
-            var set = new HashSet<int>();
-
-            while (set.Count < n)
-            {
-                var dice = Random.Range(0, elemsTotal);
-                set.Add(dice);
-            }
-
-            return set.ToArray();
         }
     }
 }

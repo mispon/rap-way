@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Core.Analytics;
+using Enums;
 using Game.Production.Analyzers;
 using Game.Rappers.Desc;
 using Game.Settings;
@@ -23,9 +25,10 @@ namespace Game.Rappers.AI
             }
 
             Debug.Log($"[RAPPER AI] {rapper.Name} do clip");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_CreateClip);
 
-            track.HasClip   = true;
             rapper.Cooldown = settings.Rappers.ClipCooldown;
+            track.HasClip   = true;
 
             var clip = new ClipInfo
             {

@@ -1,3 +1,5 @@
+using Core.Analytics;
+using Enums;
 using Game.Rappers.Desc;
 using Game.Settings;
 using MessageBroker;
@@ -32,6 +34,8 @@ namespace Game.Rappers.AI
             }
 
             Debug.Log($"[RAPPER AI] {rapper.Name} join label {label.Name}");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_JoinLabel);
+
             rapper.Label = label.Name;
 
             MsgBroker.Instance.Publish(new NewsMessage
@@ -64,6 +68,8 @@ namespace Game.Rappers.AI
             }
 
             Debug.Log($"[RAPPER AI] {rapper.Name} leave label {label.Name}");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_LeaveLabel);
+
             rapper.Label = "";
 
             MsgBroker.Instance.Publish(new NewsMessage

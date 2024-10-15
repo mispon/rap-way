@@ -1,4 +1,5 @@
 using System;
+using Core.Analytics;
 using Enums;
 using Game.Production.Analyzers;
 using Game.Rappers.Desc;
@@ -18,6 +19,8 @@ namespace Game.Rappers.AI
         private static void DoAlbum(RapperInfo rapper, GameSettings settings)
         {
             Debug.Log($"[RAPPER AI] {rapper.Name} do album");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.RapperAI_CreateAlbum);
+
             rapper.Cooldown = settings.Rappers.AlbumCooldown;
 
             var album = new AlbumInfo

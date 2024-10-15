@@ -1,6 +1,8 @@
 using System;
 using Core;
+using Core.Analytics;
 using Core.Context;
+using Enums;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -19,8 +21,8 @@ namespace UI.Windows.GameScreen.Training
         [Header("Controls")]
         [SerializeField] private Carousel tabsCarousel;
         [SerializeField] private TrainingTab[] tabs;
-        [SerializeField] private Text expLabel;
-        [SerializeField] private Button closeButton;
+        [SerializeField] private Text          expLabel;
+        [SerializeField] private Button        closeButton;
 
         private int _tabIndex;
 
@@ -59,7 +61,7 @@ namespace UI.Windows.GameScreen.Training
 
         private void ApplyTraining(Func<int> training)
         {
-            int cost = training.Invoke();
+            var cost = training.Invoke();
             PlayerAPI.Data.Exp -= cost;
 
             DisplayExp();
@@ -83,7 +85,10 @@ namespace UI.Windows.GameScreen.Training
             OpenTab(_tabIndex);
         }
 
-        private void DisplayExp() => expLabel.text = PlayerAPI.Data.Exp.ToString();
+        private void DisplayExp()
+        {
+            expLabel.text = PlayerAPI.Data.Exp.ToString();
+        }
 
         protected override void BeforeShow(object ctx = null)
         {
@@ -92,8 +97,10 @@ namespace UI.Windows.GameScreen.Training
 
         protected override void AfterShow(object ctx = null)
         {
-            tabsCarousel.SetIndex(_tabIndex);
+            AnalyticsManager.LogEvent(FirebaseGameEvents.PlayerTrainingPage);
             HintsManager.Instance.ShowHint($"tutorial_training_{_tabIndex}");
+
+            tabsCarousel.SetIndex(_tabIndex);
         }
 
         protected override void AfterHide()

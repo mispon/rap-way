@@ -1,3 +1,4 @@
+using Core.Analytics;
 using Enums;
 using Game.Labels.Desc;
 using Game.Settings;
@@ -29,6 +30,8 @@ namespace Game.Labels.AI
             }
 
             Debug.Log($"[LABEL AI] {label.Name} send invite to player");
+            AnalyticsManager.LogEvent(FirebaseGameEvents.LabelAI_InvitePlayer);
+
             label.Cooldown = settings.Labels.InvitePlayerCooldown;
 
             MsgBroker.Instance.Publish(new EmailMessage
