@@ -18,11 +18,9 @@ namespace Game.Rappers.AI
     {
         private static void DoEagler(RapperInfo rapper, GameSettings settings)
         {
-            const int playerTargetChance = 25;
-
             rapper.Cooldown = settings.Rappers.EaglerCooldown;
 
-            var isPlayerTarget = CanInteractPlayer(rapper.Fans, PlayerAPI.Data.Fans) && RollDice() <= playerTargetChance;
+            var isPlayerTarget = CanInteractPlayer(rapper.Fans, PlayerAPI.Data.Fans) && RollDice() <= settings.Rappers.PlayerEagleChance;
             var target = isPlayerTarget
                 ? PlayerAPI.Data.Info.NickName
                 : GetRandomRapperName(rapper.Name);

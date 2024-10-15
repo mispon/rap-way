@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Extensions;
 using Game.Rappers.Desc;
 using Game.Time;
 using ScriptableObjects;
@@ -19,11 +20,12 @@ namespace Game.SocialNetworks.Eagler
             return GameManager.Instance.Eagles.Take(20).ToList();
         }
 
-        public List<string> GetTrends(int count = 5)
+        public string[] GetTrends(int count = 5)
         {
             return data.Hashtags
+                .Shuffle()
                 .Take(count)
-                .ToList();
+                .ToArray();
         }
 
         public void CreateUserEagle(string nickname, string message, int likes)

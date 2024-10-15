@@ -73,7 +73,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
         {
             var trendsList = EaglerManager.Instance.GetTrends();
 
-            for (var i = 0; i < trendsList.Count; i++)
+            for (var i = 0; i < trendsList.Length; i++)
             {
                 trends[i].text = $"#{trendsList[i]}";
             }

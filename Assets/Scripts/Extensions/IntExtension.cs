@@ -18,13 +18,34 @@
             const int m = 1_000_000;
             const int t = 1_000;
 
-            return value switch
+            string valueStr;
+            var    suffix = "";
+
+            switch (value)
             {
-                > b => $"{(double)value / b:F1}B",
-                > m => $"{(double)value / m:F1}M",
-                > t => $"{(double)value / t:F1}T",
-                _ => value.ToString()
-            };
+                case >= b:
+                    valueStr = $"{(double) value / b:F1}";
+                    suffix   = "B";
+                    break;
+                case >= m:
+                    valueStr = $"{(double) value / m:F1}";
+                    suffix   = "M";
+                    break;
+                case >= t:
+                    valueStr = $"{(double) value / t:F1}";
+                    suffix   = "T";
+                    break;
+                default:
+                    valueStr = value.ToString();
+                    break;
+            }
+
+            if (valueStr.EndsWith(".0"))
+            {
+                valueStr = valueStr[..^2];
+            }
+
+            return $"{valueStr}{suffix}";
         }
 
         public static int GetPercent(this int value, int percent)

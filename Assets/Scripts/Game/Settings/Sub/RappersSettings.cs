@@ -11,7 +11,8 @@ namespace Game.Settings.Sub
         public int MinFans            = 1;
         public int MaxFans            = 500_000_000;
         public int FeatChance         = 10;
-        public int PlayerBattleChance = 25;
+        public int PlayerBattleChance = 20;
+        public int PlayerEagleChance  = 25;
 
         [Header("AI Cooldowns")]
         public int TrackCooldown = 30;

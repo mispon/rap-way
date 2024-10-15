@@ -62,12 +62,22 @@ namespace Game.Rappers
 
         private void InitAll()
         {
+            const int M = 1_000_000;
+
             foreach (var rapperInfo in GetAll())
             {
                 // fix fans count
-                if (rapperInfo.Fans < 100)
+                switch (rapperInfo.Fans)
                 {
-                    rapperInfo.Fans *= 1_000_000;
+                    case 0:
+                        rapperInfo.Fans = Random.Range(M, 5 * M);
+                        break;
+                    case < 100:
+                        rapperInfo.Fans *= M;
+                        break;
+                    case < 500:
+                        rapperInfo.Fans *= M / 10;
+                        break;
                 }
 
                 // create history objects

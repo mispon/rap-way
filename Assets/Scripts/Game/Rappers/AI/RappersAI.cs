@@ -102,10 +102,10 @@ namespace Game.Rappers.AI
                 return true;
             }
 
-            const int maxDiff = 30;
+            const float maxDiff = 0.1f;
 
-            var diff = playerFans / rapperFans * 100;
-            return diff < maxDiff;
+            var diff = 1f * (playerFans - rapperFans) / rapperFans;
+            return Mathf.Abs(diff) <= maxDiff;
         }
 
         private static int TryDoFeat(RapperInfo rapperInfo, int chance)
