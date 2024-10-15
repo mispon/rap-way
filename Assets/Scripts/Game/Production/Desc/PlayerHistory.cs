@@ -4,27 +4,27 @@ using System.Linq;
 using Extensions;
 using Models.Production;
 
-namespace Game.Player.State.Desc
+namespace Game.Production.Desc
 {
     [Serializable]
     public class ProductionHistory
     {
-        public List<TrackInfo> TrackList;
-        public List<AlbumInfo> AlbumList;
-        public List<ClipInfo> ClipList;
+        public List<TrackInfo>   TrackList;
+        public List<AlbumInfo>   AlbumList;
+        public List<ClipInfo>    ClipList;
         public List<ConcertInfo> ConcertList;
 
-        public static ProductionHistory New => new ProductionHistory
+        public static ProductionHistory New => new()
         {
-            TrackList = new List<TrackInfo>(),
-            AlbumList = new List<AlbumInfo>(),
-            ClipList = new List<ClipInfo>(),
+            TrackList   = new List<TrackInfo>(),
+            AlbumList   = new List<AlbumInfo>(),
+            ClipList    = new List<ClipInfo>(),
             ConcertList = new List<ConcertInfo>()
         };
 
         public List<ProductionBase> GetLastActions(int amount)
         {
-            int size = TrackList.Count + AlbumList.Count + ClipList.Count + ConcertList.Count;
+            var size   = TrackList.Count + AlbumList.Count + ClipList.Count + ConcertList.Count;
             var result = new List<ProductionBase>(size);
 
             result.AddRange(TrackList);
@@ -36,6 +36,11 @@ namespace Game.Player.State.Desc
                 .OrderByDescending(e => e.Timestamp.StringToDate())
                 .Take(amount)
                 .ToList();
+        }
+
+        public bool Empty()
+        {
+            return TrackList == null || AlbumList == null || ClipList == null || ConcertList == null;
         }
     }
 }

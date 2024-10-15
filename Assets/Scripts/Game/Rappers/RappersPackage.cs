@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.OrderedStarter;
+using Game.Production.Desc;
 using Game.Rappers.Desc;
 using Game.Settings;
 using ScriptableObjects;
@@ -25,8 +26,8 @@ namespace Game.Rappers
         {
             UpdateInGameRappers();
             UpdateCustomRappersIDs();
-            UpdateFansCount();
 
+            InitAll();
             RegisterHandlers();
         }
 
@@ -59,13 +60,20 @@ namespace Game.Rappers
             }
         }
 
-        private void UpdateFansCount()
+        private void InitAll()
         {
             foreach (var rapperInfo in GetAll())
             {
+                // fix fans count
                 if (rapperInfo.Fans < 100)
                 {
                     rapperInfo.Fans *= 1_000_000;
+                }
+
+                // create history objects
+                if (rapperInfo.History == null || rapperInfo.History.Empty())
+                {
+                    rapperInfo.History = ProductionHistory.New;
                 }
             }
         }

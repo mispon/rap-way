@@ -1,5 +1,5 @@
 using System;
-using Game.Player.State.Desc;
+using Game.Production.Desc;
 using UnityEngine;
 
 namespace Game.Rappers.Desc
@@ -7,10 +7,10 @@ namespace Game.Rappers.Desc
     [Serializable]
     public class RapperInfo
     {
-        public int Id;
+        public int    Id;
         public string Name;
         public string Label;
-        public int Fans;
+        public int    Fans;
 
         // Activity cooldown (for AI)
         public int Cooldown;
@@ -25,7 +25,7 @@ namespace Game.Rappers.Desc
         public bool IsPlayer;
 
         // Avatar
-        public string AvatarName;
+        public                 string AvatarName;
         [NonSerialized] public Sprite Avatar;
 
         // History
