@@ -70,7 +70,15 @@ namespace Game.Production.Analyzers
 
             // Количество продаж билетов зависит от: качества концерта, прослушиваний альбома, цены билета и новизны альбома
             var salesFactor = quality * costFactor * repeatsDebuff;
-            activeFansAmount = Convert.ToInt32(activeFansAmount * salesFactor);
+
+            try
+            {
+                activeFansAmount = Convert.ToInt32(activeFansAmount * salesFactor);
+            } catch (OverflowException)
+            {
+                activeFansAmount = int.MaxValue;
+            }
+
 
             return Mathf.Clamp(activeFansAmount, minTicketsSold, capacity);
         }

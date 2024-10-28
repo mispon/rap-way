@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Core.Analytics;
 using Core.Localization;
-using Extensions;
 using Enums;
+using Extensions;
 using Game.Labels.Desc;
 using Game.Rappers.Desc;
 using MessageBroker;
@@ -17,7 +18,6 @@ using UI.Windows.Tutorial;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using Core.Analytics;
 using PlayerAPI = Game.Player.PlayerPackage;
 using RappersAPI = Game.Rappers.RappersPackage;
 using LabelsAPI = Game.Labels.LabelsPackage;
@@ -26,32 +26,32 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 {
     public class PlayersLabelSubTab : Tab
     {
-        [SerializeField] private LabelTab labelTab;
+        [SerializeField] private LabelTab     labelTab;
         [SerializeField] private AskingWindow askingWindow;
-        [SerializeField] private Sprite customLabelLogo;
+        [SerializeField] private Sprite       customLabelLogo;
 
         [Space]
         [SerializeField] private Image logo;
 
-        [SerializeField] private Text labelName;
-        [SerializeField] private Text exp;
-        [SerializeField] private Text income;
-        [SerializeField] private Text service;
+        [SerializeField] private Text   labelName;
+        [SerializeField] private Text   exp;
+        [SerializeField] private Text   income;
+        [SerializeField] private Text   service;
         [SerializeField] private Button payServiceButton;
 
         [Space]
         [SerializeField] private int[] expToProductionLevelUp;
 
-        [SerializeField] private Text production;
+        [SerializeField] private Text        production;
         [SerializeField] private ProgressBar productionBar;
-        [SerializeField] private Button upProductionButton;
+        [SerializeField] private Button      upProductionButton;
 
         [Space]
         [SerializeField] private int[] expToPrestigeLevelUp;
 
         [SerializeField] private PrestigeStars stars;
-        [SerializeField] private ProgressBar prestigeBar;
-        [SerializeField] private Button upPrestigeButton;
+        [SerializeField] private ProgressBar   prestigeBar;
+        [SerializeField] private Button        upPrestigeButton;
 
         [Space]
         [SerializeField] private ScrollViewController list;
@@ -61,24 +61,24 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         [Space]
         [SerializeField] private GameObject moneyReport;
 
-        [SerializeField] private Text moneyReportIncome;
-        [SerializeField] private Text moneyReportService;
-        [SerializeField] private Text moneyReportFrozenWarning;
+        [SerializeField] private Text   moneyReportIncome;
+        [SerializeField] private Text   moneyReportService;
+        [SerializeField] private Text   moneyReportFrozenWarning;
         [SerializeField] private Button moneyReportOkButton;
 
         [Space]
         [SerializeField] private Button disbandButton;
 
-        private readonly CompositeDisposable _disposable = new();
-        private readonly List<LabelMemberRow> _listItems = new();
+        private readonly CompositeDisposable  _disposable = new();
+        private readonly List<LabelMemberRow> _listItems  = new();
 
         private LabelInfo _label;
-        private int _income;
-        private int _cost;
+        private int       _income;
+        private int       _cost;
 
         private const int minLabelCost = 250_000;
         private const int maxStatValue = 5;
-        private const int expStep = 100;
+        private const int expStep      = 100;
 
         private void Start()
         {
@@ -103,7 +103,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         {
             _label = label;
 
-            logo.sprite = customLabelLogo;
+            logo.sprite    = customLabelLogo;
             labelName.text = label.Name;
 
             production.text = label.Production.Value.ToString();
@@ -121,10 +121,10 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 
             exp.text = PlayerAPI.Data.Exp.ToString();
 
-            _income = LabelsAPI.Instance.GetPlayersLabelIncome();
+            _income     = LabelsAPI.Instance.GetPlayersLabelIncome();
             income.text = _income.GetMoney();
 
-            _cost = GetServiceCost();
+            _cost        = GetServiceCost();
             service.text = _cost.GetMoney();
 
             payServiceButton.gameObject.SetActive(label.IsFrozen);
@@ -160,9 +160,9 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 
             members.Add(new RapperInfo
             {
-                Name = PlayerAPI.Data.Info.NickName,
-                Fans = PlayerAPI.Data.Fans / 1_000_000,
-                Label = PlayerAPI.Data.Label,
+                Name     = PlayerAPI.Data.Info.NickName,
+                Fans     = PlayerAPI.Data.Fans,
+                Label    = PlayerAPI.Data.Label,
                 IsPlayer = true
             });
 
@@ -172,14 +172,14 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         private int GetServiceCost()
         {
             var prestige = LabelsAPI.Instance.GetPrestige(_label, expToPrestigeLevelUp);
-            return Mathf.Max((int)(prestige * 1_000_000), minLabelCost);
+            return Mathf.Max((int) (prestige * 1_000_000), minLabelCost);
         }
 
         private void PayService()
         {
             SoundManager.Instance.PlaySound(UIActionType.Pay);
 
-            MsgBroker.Instance.Publish(new ChangeMoneyMessage { Amount = -_cost });
+            MsgBroker.Instance.Publish(new ChangeMoneyMessage {Amount = -_cost});
             _label.IsFrozen = false;
 
             DisplayInfo(_label);
@@ -189,7 +189,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         {
             SoundManager.Instance.PlaySound(UIActionType.Train);
 
-            var level = _label.Production.Value;
+            var level   = _label.Production.Value;
             var expToUp = expToProductionLevelUp[level];
 
             var newExp = _label.Production.Exp + expStep;
@@ -197,13 +197,13 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             {
                 SoundManager.Instance.PlaySound(UIActionType.LevelUp);
                 newExp -= expToUp;
-                level += 1;
+                level  += 1;
             }
 
             _label.Production.Value = level;
-            _label.Production.Exp = newExp;
+            _label.Production.Exp   = newExp;
 
-            MsgBroker.Instance.Publish(new ChangeExpMessage { Amount = -expStep });
+            MsgBroker.Instance.Publish(new ChangeExpMessage {Amount = -expStep});
             DisplayInfo(_label);
         }
 
@@ -211,7 +211,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         {
             SoundManager.Instance.PlaySound(UIActionType.Train);
 
-            var level = _label.Prestige.Value;
+            var level   = _label.Prestige.Value;
             var expToUp = expToPrestigeLevelUp[level];
 
             var newExp = _label.Prestige.Exp + expStep;
@@ -219,13 +219,13 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             {
                 SoundManager.Instance.PlaySound(UIActionType.LevelUp);
                 newExp -= expToUp;
-                level += 1;
+                level  += 1;
             }
 
             _label.Prestige.Value = level;
-            _label.Prestige.Exp = newExp;
+            _label.Prestige.Exp   = newExp;
 
-            MsgBroker.Instance.Publish(new ChangeExpMessage { Amount = -expStep });
+            MsgBroker.Instance.Publish(new ChangeExpMessage {Amount = -expStep});
             DisplayInfo(_label);
         }
 
@@ -271,7 +271,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 
             if (!_label.IsFrozen)
             {
-                MsgBroker.Instance.Publish(new ChangeMoneyMessage { Amount = _income });
+                MsgBroker.Instance.Publish(new ChangeMoneyMessage {Amount = _income});
             }
 
             _label.IsFrozen = true;

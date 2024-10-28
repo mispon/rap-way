@@ -40,6 +40,7 @@ namespace Game.Rappers.AI
                     Sprite      = rapper.Avatar,
                     mainAction = () =>
                     {
+                        MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
                         MsgBroker.Instance.Publish(new WindowControlMessage
                         {
                             Type    = WindowType.SocialNetworks,

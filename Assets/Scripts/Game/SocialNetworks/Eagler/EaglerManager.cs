@@ -50,8 +50,8 @@ namespace Game.SocialNetworks.Eagler
 
             var dice = Random.Range(0f, 1f);
             var messageKey = dice >= 0.5f
-                ? $"{data.RapperNegativePostKey}_{Random.Range(0, data.RapperNegativePostsCount)}"
-                : $"{data.RapperPositivePostKey}_{Random.Range(0, data.RapperPositivePostsCount)}";
+                ? $"{data.RapperNegativePostKey}_{Random.Range(0, data.RapperNegativePostsCount) + 1}"
+                : $"{data.RapperPositivePostKey}_{Random.Range(0, data.RapperPositivePostsCount) + 1}";
 
             var eagle = new Eagle
             {

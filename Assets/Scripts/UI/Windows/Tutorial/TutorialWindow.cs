@@ -20,14 +20,8 @@ namespace UI.Windows.Tutorial
         [Header("Controls")]
         [SerializeField] private Text info;
         [SerializeField] private Button[] gameButtons;
-        [SerializeField] private Button skipButton;
 
         private readonly CompositeDisposable _disposable = new();
-
-        private void Start()
-        {
-            skipButton.onClick.AddListener(() => base.Hide());
-        }
 
         protected override void AfterShow(object ctx = null)
         {
@@ -49,7 +43,7 @@ namespace UI.Windows.Tutorial
                 : imagesBank.FemaleAvatar;
 
             info.text = LocalizationManager.Instance.Get(stageSettings.Text);
-            for (int i = 0; i < gameButtons.Length; i++)
+            for (var i = 0; i < gameButtons.Length; i++)
             {
                 gameButtons[i].interactable = stageSettings.ButtonsActivity[i];
             }
