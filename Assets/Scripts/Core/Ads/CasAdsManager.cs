@@ -63,6 +63,7 @@ namespace Core.Ads
                 }
 
                 _manager.ShowAd(AdType.Interstitial);
+                _lastShowTime = DateTime.Now;
             }
         }
 

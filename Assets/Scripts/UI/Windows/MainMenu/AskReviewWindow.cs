@@ -1,4 +1,6 @@
+#if UNITY_WEBGL
 using System.Runtime.InteropServices;
+#endif
 using Game;
 using MessageBroker;
 using MessageBroker.Messages.UI;
@@ -14,8 +16,10 @@ namespace UI.Windows.MainMenu
         [SerializeField] private string reviewPageURL;
         [SerializeField] private Button reviewButton;
 
+#if UNITY_WEBGL
         [DllImport("__Internal")]
         private static extern void YandexRateGame();
+#endif
 
         private void Start()
         {
