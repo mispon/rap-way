@@ -10,7 +10,9 @@ namespace ScriptableObjects
 
         [Header("Персонаж")]
         public Sprite MaleAvatar;
+        public Sprite MaleAvatarInactive;
         public Sprite FemaleAvatar;
+        public Sprite FemaleAvatarInactive;
 
         [Header("Иконка стилистики")]
         public Sprite StyleActive;

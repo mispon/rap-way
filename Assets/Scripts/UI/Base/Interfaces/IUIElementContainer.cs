@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine;
 
 namespace UI.Base.Interfaces
 {
-    public interface IUIElementContainer: IDisposable {}
+    public interface IUIElementContainer : IDisposable { }
 }

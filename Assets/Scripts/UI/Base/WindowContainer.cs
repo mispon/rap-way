@@ -14,17 +14,17 @@ namespace UI.Base
     [Serializable]
     public class WindowTuple
     {
-        public WindowType Type;
+        public WindowType      Type;
         public CanvasUIElement Value;
     }
 
     public class WindowContainer : UIElementContainer
     {
-        [ArrayElementTitle(new[] { "Type" })]
+        [ArrayElementTitle(new[] {"Type"})]
         [SerializeField] private WindowTuple[] windows;
         [SerializeField] private WindowType startWindow;
 
-        private WindowType _activeWindow;
+        private          WindowType        _activeWindow;
         private readonly Stack<WindowType> _windowsHistory = new();
 
         public override void Initialize()
@@ -32,7 +32,9 @@ namespace UI.Base
             base.Initialize();
 
             foreach (var window in windows)
+            {
                 window.Value.Initialize();
+            }
 
             MsgBroker.Instance
                 .Receive<WindowControlMessage>()
@@ -58,6 +60,7 @@ namespace UI.Base
                     {
                         ChangeWindow(prevType, ctx);
                     }
+
                     break;
 
                 case WindowType.None:
@@ -73,11 +76,15 @@ namespace UI.Base
         private void ChangeWindow(WindowType windowType, object ctx)
         {
             if (windowType == _activeWindow)
+            {
                 return;
+            }
 
             var window = GetWindow(windowType);
             if (window == null)
+            {
                 return;
+            }
 
             HideCurrentWindow();
 
@@ -94,8 +101,7 @@ namespace UI.Base
 
         private void HideCurrentWindow()
         {
-            var currentWindow = GetWindow(_activeWindow);
-            currentWindow?.Hide();
+            GetWindow(_activeWindow)?.Hide();
         }
 
         private void HideAnyWindow()
