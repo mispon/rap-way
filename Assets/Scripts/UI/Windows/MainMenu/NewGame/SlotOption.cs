@@ -31,10 +31,24 @@ namespace UI.Windows.MainMenu.NewGame
             _part      = part;
 
             GetComponent<Button>().onClick.AddListener(HandleClick);
-            GetComponent<Image>().color                    = _index % 2 == 0 ? colorEven : colorOdd;
-            GetComponentInChildren<TextMeshProUGUI>().text = _index < 10 ? $"0{_index}" : $"{_index}";
+            GetComponent<Image>().color = _index % 2 == 0 ? colorEven : colorOdd;
+            GetComponentInChildren<TextMeshProUGUI>().text = _index == 0 && slot is SlotCategory.Hair or SlotCategory.FacialHair
+                ? "EMPTY"
+                : _index < 10
+                    ? $"0{_index}"
+                    : $"{_index}";
 
             gameObject.SetActive(true);
+        }
+
+        public void RandomizePart(Part randomPart)
+        {
+            _character.EquipPart(slot, randomPart);
+        }
+
+        public void ResetPart(Part emptyPart)
+        {
+            _character.EquipPart(slot, emptyPart);
         }
 
         private void HandleClick()
