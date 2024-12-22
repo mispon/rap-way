@@ -1,5 +1,6 @@
 using CharacterCreator2D;
 using Core;
+using Game.Player.Character;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using ScriptableObjects;
@@ -11,8 +12,7 @@ namespace UI.Windows.MainMenu.NewGame
 {
     public class CharacterCreatorWindow : CanvasUIElement
     {
-        [SerializeField] private CharacterViewer character;
-        [SerializeField] private ImagesBank      imagesBank;
+        [SerializeField] private ImagesBank imagesBank;
 
         [Header("Gender")]
         [SerializeField] private Button maleButton;
@@ -46,7 +46,6 @@ namespace UI.Windows.MainMenu.NewGame
 
         [Header("Control Buttons")]
         [SerializeField] private Button randomizeButton;
-        [SerializeField] private Button nextButton;
 
         [Header("Colors")]
         [SerializeField] private Color activeColor;
@@ -73,14 +72,18 @@ namespace UI.Windows.MainMenu.NewGame
                 SoundManager.Instance.PlaySound(UIActionType.Click);
                 MsgBroker.Instance.Publish(new RandomizeCharacter());
             });
-            nextButton.onClick.AddListener(() =>
-            {
-                SoundManager.Instance.PlaySound(UIActionType.Click);
-                // click
-            });
 
             SelectCategory(common, bodyColors);
             base.Initialize();
+        }
+
+        protected override void BeforeShow(object ctx = null)
+        {
+            maleButton.image.sprite   = imagesBank.MaleAvatar;
+            femaleButton.image.sprite = imagesBank.FemaleAvatarInactive;
+            facialHairButton.gameObject.SetActive(true);
+
+            base.BeforeShow(ctx);
         }
 
         private void SelectGender(BodyType type)
@@ -99,9 +102,7 @@ namespace UI.Windows.MainMenu.NewGame
                 facialHairButton.gameObject.SetActive(false);
             }
 
-            character.SetBodyType(type);
-            character.ResetEmote();
-
+            Character.Instance.Viewer.SetBodyType(type);
             MsgBroker.Instance.Publish(new ResetCharacter());
         }
 

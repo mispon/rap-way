@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using CharacterCreator2D;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using UI.Controls.ScrollViewController;
@@ -10,10 +9,10 @@ namespace UI.Windows.MainMenu.NewGame
 {
     public class SlotColorOptionsList : MonoBehaviour
     {
-        [SerializeField] private CharacterViewer      character;
         [SerializeField] private ScrollViewController scrollView;
         [SerializeField] private GameObject           optionTemplate;
         [SerializeField] private Color[]              colors;
+        [SerializeField] private int                  defaultColor;
 
         private readonly List<SlotColorOption> _options    = new();
         private readonly CompositeDisposable   _disposable = new();
@@ -30,13 +29,13 @@ namespace UI.Windows.MainMenu.NewGame
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<ResetCharacter>()
-                .Subscribe(m => { _options[0].SetPartColor(colors[0]); })
+                .Subscribe(m => { _options[0].SetPartColor(colors[defaultColor]); })
                 .AddTo(_disposable);
 
             for (var i = 0; i < colors.Length; i++)
             {
                 var option = scrollView.InstantiatedElement<SlotColorOption>(optionTemplate);
-                option.Initialize(i, character, colors[i]);
+                option.Initialize(i, colors[i]);
 
                 _options.Add(option);
             }

@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
+using CharacterCreator2D;
 using Core;
 using Core.Analytics;
 using Enums;
 using Game;
+using Game.Player.Character;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using ScriptableObjects;
@@ -24,30 +26,15 @@ namespace UI.Windows.MainMenu.NewGame
         [SerializeField] private Sprite _femaleAvatarInactive;
 
         [Header("Data fields")]
-        [SerializeField] private Button _maleButton;
-        [SerializeField] private Button       _femaleButton;
         [SerializeField] private InputField[] _inputFields;
-        [SerializeField] private Carousel     _ageCarousel;
+        [SerializeField] private Carousel _ageCarousel;
 
         [Header("Buttons")]
         [SerializeField] private Button _startButton;
 
-        private bool _maleSelected = true;
-
         public override void Initialize()
         {
-            _maleButton.onClick.AddListener(() => OnGenderChange(true));
-            _femaleButton.onClick.AddListener(() => OnGenderChange(false));
             _startButton.onClick.AddListener(OnStartClick);
-        }
-
-        private void OnGenderChange(bool isMale)
-        {
-            SoundManager.Instance.PlaySound(UIActionType.Click);
-
-            _maleSelected              = isMale;
-            _maleButton.image.sprite   = isMale ? _maleAvatar : _maleAvatarInactive;
-            _femaleButton.image.sprite = !isMale ? _femaleAvatar : _femaleAvatarInactive;
         }
 
         private void OnStartClick()
@@ -83,13 +70,17 @@ namespace UI.Windows.MainMenu.NewGame
         {
             var player = GameManager.Instance.CreateNewPlayer().Info;
 
-            player.Gender    = _maleSelected ? Gender.Male : Gender.Female;
             player.FirstName = _inputFields[0].text.Trim();
             player.LastName  = _inputFields[1].text.Trim();
             player.NickName  = _inputFields[2].text.Trim();
             player.Age       = Convert.ToInt32(_ageCarousel.GetLabel());
 
+            player.Gender = Character.Instance.Viewer.bodyType == BodyType.Male
+                ? Gender.Male
+                : Gender.Female;
+
             GameManager.Instance.SaveApplicationData();
+            Character.Instance.Save();
 
             AnalyticsManager.LogEvent(FirebaseGameEvents.NewGameStart);
             SceneMessageBroker.Instance.Publish(new SceneLoadMessage

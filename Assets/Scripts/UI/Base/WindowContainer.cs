@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Ads;
 using Core.PropertyAttributes;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Enums;
 using UniRx;
 using UnityEngine;
+
+#if UNITY_ANDROID
+using Core.Ads;
+
+#elif UNITY_WEBGL
+using Core.Ads;
+#endif
 
 namespace UI.Base
 {
@@ -33,7 +39,7 @@ namespace UI.Base
 
             foreach (var window in windows)
             {
-                window.Value.Initialize();
+                window.Value?.Initialize();
             }
 
             MsgBroker.Instance
@@ -80,18 +86,12 @@ namespace UI.Base
                 return;
             }
 
-            var window = GetWindow(windowType);
-            if (window == null)
-            {
-                return;
-            }
-
             HideCurrentWindow();
 
             _windowsHistory.Push(_activeWindow);
             _activeWindow = windowType;
 
-            window.Show(ctx);
+            GetWindow(windowType)?.Show(ctx);
         }
 
         private CanvasUIElement GetWindow(WindowType windowType)

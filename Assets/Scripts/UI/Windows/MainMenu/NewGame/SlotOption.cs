@@ -1,5 +1,6 @@
 using CharacterCreator2D;
 using Core;
+using Game.Player.Character;
 using ScriptableObjects;
 using TMPro;
 using UI.Controls.ScrollViewController;
@@ -16,19 +17,17 @@ namespace UI.Windows.MainMenu.NewGame
         [SerializeField] private Color colorEven;
         [SerializeField] private Color colorOdd;
 
-        private RectTransform   _rectTransform;
-        private CharacterViewer _character;
-        private Part            _part;
+        private RectTransform _rectTransform;
+        private Part          _part;
 
         private int   _index  { get; set; }
         private float _height { get; set; }
         private float _width  { get; set; }
 
-        public void Initialize(int pos, CharacterViewer character, Part part)
+        public void Initialize(int pos, Part part)
         {
-            _index     = pos;
-            _character = character;
-            _part      = part;
+            _index = pos;
+            _part  = part;
 
             GetComponent<Button>().onClick.AddListener(HandleClick);
             GetComponent<Image>().color = _index % 2 == 0 ? colorEven : colorOdd;
@@ -41,20 +40,15 @@ namespace UI.Windows.MainMenu.NewGame
             gameObject.SetActive(true);
         }
 
-        public void RandomizePart(Part randomPart)
+        public void SetPart(Part part)
         {
-            _character.EquipPart(slot, randomPart);
-        }
-
-        public void ResetPart(Part emptyPart)
-        {
-            _character.EquipPart(slot, emptyPart);
+            Character.Instance.Viewer.EquipPart(slot, part);
         }
 
         private void HandleClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            _character.EquipPart(slot, _part);
+            SetPart(_part);
         }
 
         public float GetHeight()

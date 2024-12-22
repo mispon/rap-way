@@ -1,5 +1,6 @@
 ﻿using CharacterCreator2D;
 using CharacterCreator2D.UI;
+using Game.Player.Character;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using UniRx;
@@ -10,7 +11,6 @@ namespace UI.Windows.MainMenu.NewGame
 {
     public class BodySegmentSlider : MonoBehaviour
     {
-        [SerializeField] private CharacterViewer  character;
         [SerializeField] private InputFieldSlider input;
         [SerializeField] private SegmentType      segmentType;
         [SerializeField] private BodySliderType   sliderType;
@@ -29,15 +29,14 @@ namespace UI.Windows.MainMenu.NewGame
                 .AddTo(_disposable);
 
             input.onValueChanged.AddListener(UpdateScale);
-        }
 
-        private void OnEnable()
-        {
             Refresh();
         }
 
         private void Refresh()
         {
+            var character = Character.Instance.Viewer;
+
             input.slider.value = sliderType switch
             {
                 BodySliderType.X           => character.GetBodySlider(segmentType).x,
@@ -49,6 +48,8 @@ namespace UI.Windows.MainMenu.NewGame
 
         private void UpdateScale(float value)
         {
+            var character = Character.Instance.Viewer;
+
             switch (sliderType)
             {
                 case BodySliderType.X:
@@ -65,6 +66,8 @@ namespace UI.Windows.MainMenu.NewGame
 
         private void ResetScale()
         {
+            var character = Character.Instance.Viewer;
+
             switch (sliderType)
             {
                 case BodySliderType.X:
@@ -81,9 +84,9 @@ namespace UI.Windows.MainMenu.NewGame
 
         private void RandomizeScale()
         {
-            var extremeDice = Random.Range(0f, 1f);
+            var character = Character.Instance.Viewer;
 
-            var value = extremeDice switch
+            var value = Random.Range(0f, 1f) switch
             {
                 > 0.85f => Random.Range(0.0f, 1.0f),
                 > 0.5f  => Random.Range(0.3f, 0.7f),

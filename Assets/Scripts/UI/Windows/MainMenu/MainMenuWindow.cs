@@ -1,6 +1,7 @@
-using Enums;
 using Core.Analytics;
+using Enums;
 using Game;
+using Game.Player.Character;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Base;
@@ -13,7 +14,7 @@ namespace UI.Windows.MainMenu
 {
     public class MainMenuWindow : CanvasUIElement
     {
-        [SerializeField] private Button _continueGameButton;
+        [SerializeField] private Button         _continueGameButton;
         [SerializeField] private ProductionAnim _productionAnim;
 
         protected override void BeforeShow(object ctx = null)
@@ -37,6 +38,8 @@ namespace UI.Windows.MainMenu
         {
             base.Show(ctx);
             _productionAnim.Refresh();
+
+            Character.Instance.Show();
         }
     }
 }

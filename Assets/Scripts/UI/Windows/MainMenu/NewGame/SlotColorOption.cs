@@ -1,5 +1,6 @@
 using CharacterCreator2D;
 using Core;
+using Game.Player.Character;
 using ScriptableObjects;
 using UI.Controls.ScrollViewController;
 using UnityEngine;
@@ -12,18 +13,16 @@ namespace UI.Windows.MainMenu.NewGame
     {
         [SerializeField] private SlotCategory slot;
 
-        private RectTransform   _rectTransform;
-        private CharacterViewer _character;
-        private Part            _part;
+        private RectTransform _rectTransform;
+        private Part          _part;
 
         private int   _index  { get; set; }
         private float _height { get; set; }
         private float _width  { get; set; }
 
-        public void Initialize(int pos, CharacterViewer character, Color color)
+        public void Initialize(int pos, Color color)
         {
-            _index     = pos;
-            _character = character;
+            _index = pos;
 
             GetComponent<Button>().onClick.AddListener(HandleClick);
             GetComponent<Image>().color = color;
@@ -35,10 +34,10 @@ namespace UI.Windows.MainMenu.NewGame
         {
             if (slot == SlotCategory.BodySkin)
             {
-                _character.SkinColor = color;
+                Character.Instance.Viewer.SkinColor = color;
             } else
             {
-                _character.SetPartColor(slot, color, color, color);
+                Character.Instance.Viewer.SetPartColor(slot, color, color, color);
             }
         }
 
