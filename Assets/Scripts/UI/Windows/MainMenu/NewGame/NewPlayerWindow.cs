@@ -19,11 +19,9 @@ namespace UI.Windows.MainMenu.NewGame
 {
     public class PlayerInfoWindow : CanvasUIElement
     {
-        [Header("Sprites")]
-        [SerializeField] private Sprite _maleAvatar;
-        [SerializeField] private Sprite _femaleAvatar;
-        [SerializeField] private Sprite _maleAvatarInactive;
-        [SerializeField] private Sprite _femaleAvatarInactive;
+        [Header("Preview")]
+        [SerializeField] private Camera previewCam;
+        [SerializeField] private RawImage preview;
 
         [Header("Data fields")]
         [SerializeField] private InputField[] _inputFields;
@@ -32,9 +30,30 @@ namespace UI.Windows.MainMenu.NewGame
         [Header("Buttons")]
         [SerializeField] private Button _startButton;
 
+        private RenderTexture _renderTexture;
+
         public override void Initialize()
         {
             _startButton.onClick.AddListener(OnStartClick);
+        }
+
+        protected override void BeforeShow(object ctx = null)
+        {
+            SetupPreview();
+        }
+
+        private void SetupPreview()
+        {
+            var width  = Convert.ToInt32(preview.rectTransform.rect.width);
+            var height = Convert.ToInt32(preview.rectTransform.rect.height);
+
+            _renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
+            {
+                filterMode = FilterMode.Bilinear
+            };
+
+            previewCam.targetTexture = _renderTexture;
+            preview.texture          = _renderTexture;
         }
 
         private void OnStartClick()
