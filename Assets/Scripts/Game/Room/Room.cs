@@ -19,15 +19,18 @@ namespace Game.Room
         {
             MsgBroker.Instance
                 .Receive<WindowControlMessage>()
-                .Subscribe(m =>
-                {
-                    background.sprite = m.Type switch
-                    {
-                        WindowType.CharacterCreator => darkImage,
-                        _                           => mainImage
-                    };
-                })
+                .Subscribe(HandleWindow)
                 .AddTo(_disposable);
+        }
+
+        private void HandleWindow(WindowControlMessage m)
+        {
+            background.sprite = m.Type switch
+            {
+                WindowType.CharacterCreator => darkImage,
+                WindowType.Personal         => darkImage,
+                _                           => mainImage
+            };
         }
 
         private void OnDestroy()

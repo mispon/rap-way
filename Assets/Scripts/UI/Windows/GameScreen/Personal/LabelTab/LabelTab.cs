@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Game.Player.Character;
+using UnityEngine;
 using LabelsAPI = Game.Labels.LabelsPackage;
 using PlayerAPI = Game.Player.PlayerPackage;
 
@@ -6,15 +7,16 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 {
     public class LabelTab : Tab
     {
-        [SerializeField] private NoLabelSubTab noLabelTab;
-        [SerializeField] private GameLabelSubTab gameLabelTab;
+        [SerializeField] private NoLabelSubTab      noLabelTab;
+        [SerializeField] private GameLabelSubTab    gameLabelTab;
         [SerializeField] private PlayersLabelSubTab playersLabelTab;
-        
+
         public override void Open()
         {
+            Character.Instance.Hide();
             base.Open();
-            
-            string labelName = PlayerAPI.Data.Label;
+
+            var labelName = PlayerAPI.Data.Label;
             if (string.IsNullOrEmpty(labelName))
             {
                 noLabelTab.Open();
@@ -28,11 +30,14 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
                 noLabelTab.Open();
                 return;
             }
-                
+
             if (label.IsPlayer)
+            {
                 playersLabelTab.Show(label);
-            else
+            } else
+            {
                 gameLabelTab.Show(label);
+            }
         }
 
         public override void Close()
@@ -40,7 +45,7 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             noLabelTab.Close();
             gameLabelTab.Close();
             playersLabelTab.Close();
-            
+
             base.Close();
         }
 

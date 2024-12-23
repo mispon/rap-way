@@ -34,32 +34,33 @@ namespace Game.Player.Character
         {
             MsgBroker.Instance
                 .Receive<WindowControlMessage>()
-                .Subscribe(m =>
-                {
-                    switch (m.Type)
-                    {
-                        case WindowType.GameScreen:
-                            Hide();
-                            break;
-                        case WindowType.CharacterCreator:
-                            SetDefault();
-                            break;
-                        case WindowType.MainMenu:
-                            Load();
-                            break;
-                        default:
-                            Show();
-                            break;
-                    }
-                })
+                .Subscribe(HandleWindow)
                 .AddTo(_disposable);
 
             Load();
         }
 
-        protected override void Dispose()
+        private void HandleWindow(WindowControlMessage m)
         {
-            _disposable?.Clear();
+            switch (m.Type)
+            {
+                case WindowType.GameScreen:
+                    Hide();
+                    break;
+
+                case WindowType.CharacterCreator:
+                    SetDefault();
+                    break;
+
+                case WindowType.MainMenu:
+                    Load();
+                    break;
+
+                default:
+                    SetPosition();
+                    Show();
+                    break;
+            }
         }
 
         public void Show()
@@ -67,7 +68,13 @@ namespace Game.Player.Character
             Viewer.gameObject.SetActive(true);
         }
 
-        private void Hide()
+        public void Show(float x, float y = -6.5f)
+        {
+            Show();
+            SetPosition(x, y);
+        }
+
+        public void Hide()
         {
             Viewer.gameObject.SetActive(false);
         }
@@ -75,6 +82,11 @@ namespace Game.Player.Character
         private void SetDefault()
         {
             Viewer.AssignCharacterData(_defaultData);
+        }
+
+        private void SetPosition(float x = 0.0f, float y = -6.5f)
+        {
+            Viewer.transform.position = new Vector3(x, y, 0);
         }
 
         public void Save()
@@ -93,6 +105,11 @@ namespace Game.Player.Character
         private static string GetFilePath()
         {
             return Path.Combine(Application.streamingAssetsPath, "character.json");
+        }
+
+        protected override void Dispose()
+        {
+            _disposable?.Clear();
         }
     }
 }
