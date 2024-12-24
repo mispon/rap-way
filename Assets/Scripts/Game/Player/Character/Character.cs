@@ -12,6 +12,7 @@ namespace Game.Player.Character
     public class Character : Singleton<Character>
     {
         private CharacterViewer _viewer;
+        private Animator        _animator;
         private CharacterData   _defaultData;
 
         private readonly CompositeDisposable _disposable = new();
@@ -23,6 +24,7 @@ namespace Game.Player.Character
                 if (_viewer == null)
                 {
                     _viewer      = GetComponentInChildren<CharacterViewer>();
+                    _animator    = _viewer.GetComponent<Animator>();
                     _defaultData = _viewer.GenerateCharacterData();
                 }
 
@@ -66,6 +68,7 @@ namespace Game.Player.Character
         public void Show()
         {
             Viewer.gameObject.SetActive(true);
+            _animator.speed = 1;
         }
 
         public void Show(float x, float y = -6.5f)
@@ -77,6 +80,11 @@ namespace Game.Player.Character
         public void Hide()
         {
             Viewer.gameObject.SetActive(false);
+        }
+
+        public void SetAnimationSpeed(float speed)
+        {
+            _animator.speed = speed;
         }
 
         private void SetDefault()

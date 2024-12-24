@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Linq;
 using CharacterCreator2D;
+using CharacterCreator2D.UI;
 using Core;
 using Core.Analytics;
 using Enums;
@@ -20,7 +22,7 @@ namespace UI.Windows.MainMenu.NewGame
     public class PlayerInfoWindow : CanvasUIElement
     {
         [Header("Preview")]
-        [SerializeField] private Camera previewCam;
+        [SerializeField] private Camera previewCamera;
         [SerializeField] private RawImage preview;
 
         [Header("Data fields")]
@@ -39,7 +41,16 @@ namespace UI.Windows.MainMenu.NewGame
 
         protected override void BeforeShow(object ctx = null)
         {
+            Character.Instance.SetAnimationSpeed(0);
+            previewCamera.gameObject.SetActive(true);
+
             SetupPreview();
+        }
+
+        protected override void AfterHide()
+        {
+            Character.Instance.SetAnimationSpeed(1);
+            previewCamera.gameObject.SetActive(false);
         }
 
         private void SetupPreview()
@@ -52,8 +63,8 @@ namespace UI.Windows.MainMenu.NewGame
                 filterMode = FilterMode.Bilinear
             };
 
-            previewCam.targetTexture = _renderTexture;
-            preview.texture          = _renderTexture;
+            previewCamera.targetTexture = _renderTexture;
+            preview.texture             = _renderTexture;
         }
 
         private void OnStartClick()
@@ -66,6 +77,13 @@ namespace UI.Windows.MainMenu.NewGame
             }
 
             CreatePlayer();
+            SavePortrait();
+
+            AnalyticsManager.LogEvent(FirebaseGameEvents.NewGameStart);
+            SceneMessageBroker.Instance.Publish(new SceneLoadMessage
+            {
+                SceneType = SceneType.Game
+            });
         }
 
         private static bool CheckNotNullOrEmpty(InputField field)
@@ -100,12 +118,31 @@ namespace UI.Windows.MainMenu.NewGame
 
             GameManager.Instance.SaveApplicationData();
             Character.Instance.Save();
+        }
 
-            AnalyticsManager.LogEvent(FirebaseGameEvents.NewGameStart);
-            SceneMessageBroker.Instance.Publish(new SceneLoadMessage
-            {
-                SceneType = SceneType.Game
-            });
+        private void SavePortrait()
+        {
+            var width  = Convert.ToInt32(preview.rectTransform.rect.width);
+            var height = Convert.ToInt32(preview.rectTransform.rect.height);
+            var tex2D  = new Texture2D(width, height, TextureFormat.RGBA32, false);
+
+            RenderTexture.active = _renderTexture;
+            previewCamera.Render();
+
+            tex2D.ReadPixels(new Rect(0, 0, width, height), 0, 0, false);
+            TextureScaler.Bilinear(tex2D, width, height);
+            tex2D.Apply();
+
+            var player   = GameManager.Instance.PlayerData.Info;
+            var filename = $"{player.NickName.ToLower()}.png";
+            var path     = Path.Combine(Application.streamingAssetsPath, $"Portraits/{filename}");
+
+            var bytes = tex2D.EncodeToPNG();
+            File.WriteAllBytes(path, bytes);
+
+            var sprite = Sprite.Create(tex2D, new Rect(0.0f, 0.0f, tex2D.width, tex2D.height), new Vector2(0.5f, 0.5f), 100.0f);
+            sprite.name = filename;
+            SpritesManager.Instance.AppendPortrait(sprite);
         }
     }
 }

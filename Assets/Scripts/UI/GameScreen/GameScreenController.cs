@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Core;
 using Core.OrderedStarter;
-using Enums;
 using Extensions;
 using Game.Time;
 using MessageBroker;
@@ -20,21 +19,22 @@ namespace UI.GameScreen
 {
     public class GameScreenController : Singleton<GameScreenController>, IStarter
     {
-        [SerializeField] private Image playerAvatar;
+        [SerializeField] private Image           playerAvatar;
         [SerializeField] private TextMeshProUGUI playerNickname;
+        [SerializeField] private TextMeshProUGUI playerRealname;
         [SerializeField] private TextMeshProUGUI playerLevel;
 
         [SerializeField] private TextMeshProUGUI playerMoney;
         [SerializeField] private TextMeshProUGUI playerFans;
         [SerializeField] private TextMeshProUGUI playerHype;
 
-        [SerializeField] private Text currentDate;
+        [SerializeField] private Text   currentDate;
         [SerializeField] private Button moneyButton;
         [SerializeField] private Button fansButton;
         [SerializeField] private Button hypeButton;
 
-        [SerializeField] private StatDescItem[] statDescItems;
-        [Space, SerializeField] private ImagesBank imagesBank;
+        [SerializeField]         private StatDescItem[] statDescItems;
+        [Space] [SerializeField] private ImagesBank     imagesBank;
 
         private readonly CompositeDisposable _disposable = new();
 
@@ -82,7 +82,7 @@ namespace UI.GameScreen
                 Type = WindowType.StatsDesc,
                 Context = new Dictionary<string, object>
                 {
-                    ["icon"] = item.Icon,
+                    ["icon"]    = item.Icon,
                     ["nameKey"] = item.NameKey,
                     ["descKey"] = item.DescKey
                 }
@@ -92,11 +92,12 @@ namespace UI.GameScreen
         private void UpdateHUD(FullStateResponse resp)
         {
             playerNickname.text = resp.NickName.ToUpper();
-            playerAvatar.sprite = resp.Gender == Gender.Male ? imagesBank.MaleAvatar : imagesBank.FemaleAvatar;
-            playerMoney.text = resp.Money.GetShort();
-            playerFans.text = resp.Fans.GetShort();
-            playerHype.text = resp.Hype.ToString();
-            currentDate.text = TimeManager.Instance.DisplayNow;
+            playerRealname.text = $"{resp.RealName}, {resp.Level} lvl";
+            playerAvatar.sprite = SpritesManager.Instance.GetPortrait(resp.NickName.ToLower());
+            playerMoney.text    = resp.Money.GetShort();
+            playerFans.text     = resp.Fans.GetShort();
+            playerHype.text     = resp.Hype.ToString();
+            currentDate.text    = TimeManager.Instance.DisplayNow;
         }
 
         public void SetVisibility(bool state)
