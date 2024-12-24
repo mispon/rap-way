@@ -12,6 +12,7 @@ namespace Game.Room
         [SerializeField] private Image  background;
         [SerializeField] private Sprite mainImage;
         [SerializeField] private Sprite darkImage;
+        [SerializeField] private Sprite shopImage;
 
         private readonly CompositeDisposable _disposable = new();
 

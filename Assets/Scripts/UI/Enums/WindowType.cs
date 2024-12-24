@@ -2,38 +2,72 @@ namespace UI.Enums
 {
     public enum WindowType
     {
-        MainMenu  = 0,
-        About     = 1,
-        AskReview = 2,
-        Settings  = 3,
-        _         = 4,
+        // Main menu
+        MainMenu         = 0,
+        About            = 1,
+        AskReview        = 2,
+        Settings         = 3,
+        LangSelection    = 4,
+        CharacterCreator = 5,
+        PlayerInfo       = 6,
+        _main_menu       = 19,
 
-        GameScreen = 5,
-        GameEvent  = 6,
-        GameFinish = 7,
+        // Game
+        GameScreen      = 20,
+        GameEvent       = 21,
+        GameFinish      = 22,
+        GameEventResult = 23,
+        _game           = 39,
 
-        ProductionSelect = 8,
+        // Production
+        ProductionSelect = 40,
 
-        ProductionTrackSettings = 9,
-        ProductionTrackWork     = 10,
-        ProductionTrackResult   = 11,
+        // Track
+        ProductionTrackSettings = 41,
+        ProductionTrackWork     = 42,
+        ProductionTrackResult   = 43,
+        _prod_track             = 49,
 
-        ProductionAlbumSettings = 12,
-        ProductionAlbumWork     = 13,
-        ProductionAlbumResult   = 14,
+        // Album
+        ProductionAlbumSettings = 50,
+        ProductionAlbumWork     = 51,
+        ProductionAlbumResult   = 52,
+        _prod_album             = 59,
 
-        ProductionClipSettings = 15,
-        ProductionClipWork     = 16,
-        ProductionClipResult   = 17,
+        // Clip
+        ProductionClipSettings = 60,
+        ProductionClipWork     = 61,
+        ProductionClipResult   = 62,
+        _prod_clip             = 69,
 
-        ProductionConcertSettings = 18,
-        ProductionConcertWork     = 19,
-        ProductionConcertResult   = 20,
+        // Concert
+        ProductionConcertSettings = 70,
+        ProductionConcertWork     = 71,
+        ProductionConcertResult   = 72,
+        _prod_concert             = 79,
 
-        ProductionFeatSettings = 21,
-        ProductionFeatWork     = 22,
-        ProductionFeatResult   = 23,
+        // Feat
+        ProductionFeatSettings = 80,
+        ProductionFeatWork     = 81,
+        ProductionFeatResult   = 82,
+        _prod_feat             = 89,
 
+        _other_production_reserve = 99,
+
+        // Shop
+        Shop               = 100,
+        Shop_ItemCard      = 101,
+        Shop_PurchasedItem = 102,
+        Shop_Clothes       = 103,
+        _shop              = 149,
+
+        // Battle
+        BattleWork   = 150,
+        BattleResult = 151,
+        _battle      = 159,
+
+        // Socials
+        SocialNetworks          = 161,
         SocialsActions          = 24,
         SocialsWork             = 25,
         SocialsResult_Charity   = 26,
@@ -43,43 +77,32 @@ namespace UI.Enums
         SocialsResult_TackTack  = 30,
         SocialsResult_Telescope = 31,
         SocialsResult_Trends    = 32,
+        _socials                = 199,
 
-        Personal  = 33,
-        Training  = 34,
-        StatsDesc = 35,
-        Hints     = 36,
-        Charts    = 37,
+        // Single Pages
+        Personal            = 200,
+        Training            = 201,
+        StatsDesc           = 202,
+        Hints               = 203,
+        Charts              = 204,
+        History             = 205,
+        TeammateUnlocked    = 206,
+        AchievementUnlocked = 207,
+        _single_pages       = 249,
 
-        BattleWork   = 38,
-        BattleResult = 39,
+        // Rappers
+        RapperConversationsWork   = 250,
+        RapperConversationsResult = 251,
+        RapperJoinLabel           = 252,
+        NewRapper                 = 253,
+        _rappers                  = 274,
 
-        NewLabel  = 40,
-        NewRapper = 41,
+        // Labels
+        NewLabel      = 275,
+        LabelContract = 276,
+        _labels       = 299,
 
-        RapperConversationsWork   = 42,
-        RapperConversationsResult = 43,
-
-        LabelContract = 44,
-
-        Shop               = 45,
-        Shop_ItemCard      = 46,
-        Shop_PurchasedItem = 47,
-
-        SocialNetworks = 48,
-        History        = 49,
-
-        LangSelection = 50,
-
-        TeammateUnlocked    = 51,
-        AchievementUnlocked = 52,
-
-        RapperJoinLabel = 53,
-
-        GameEventResult = 54,
-
-        CharacterCreator = 55,
-        PlayerInfo       = 56,
-
+        // System
         Previous = 998,
         None     = 999
     }
