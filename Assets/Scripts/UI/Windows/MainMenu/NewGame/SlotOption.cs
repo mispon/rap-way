@@ -1,5 +1,6 @@
 using CharacterCreator2D;
 using Core;
+using Core.Localization;
 using Game.Player.Character;
 using ScriptableObjects;
 using TMPro;
@@ -32,7 +33,7 @@ namespace UI.Windows.MainMenu.NewGame
             GetComponent<Button>().onClick.AddListener(HandleClick);
             GetComponent<Image>().color = _index % 2 == 0 ? colorEven : colorOdd;
             GetComponentInChildren<TextMeshProUGUI>().text = _index == 0 && slot is SlotCategory.Hair or SlotCategory.FacialHair
-                ? "EMPTY"
+                ? LocalizationManager.Instance.Get("empty")
                 : _index < 10
                     ? $"0{_index}"
                     : $"{_index}";

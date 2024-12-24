@@ -14,7 +14,7 @@ namespace UI.Controls.Buttons
     [RequireComponent(typeof(Button))]
     public class NewGameButton : MonoBehaviour
     {
-        [SerializeField] private WindowType _toWindow;
+        [SerializeField] private WindowType   _toWindow;
         [SerializeField] private UIActionType _soundType = UIActionType.Click;
 
         private void Awake()
@@ -26,7 +26,7 @@ namespace UI.Controls.Buttons
                     SoundManager.Instance.PlaySound(_soundType);
                     AnalyticsManager.LogEvent(FirebaseGameEvents.NewGamePage);
 
-                    MsgBroker.Instance.Publish(new WindowControlMessage(_toWindow));
+                    MsgBroker.Instance.Publish(new WindowControlMessage(_toWindow, true));
                 });
         }
     }

@@ -1,6 +1,7 @@
 using System.IO;
 using CharacterCreator2D;
 using Core;
+using Core.Context;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using UI.Enums;
@@ -51,7 +52,12 @@ namespace Game.Player.Character
                     break;
 
                 case WindowType.CharacterCreator:
-                    SetDefault();
+                    var reset = m.Context.Value<bool>();
+                    if (reset)
+                    {
+                        SetDefault();
+                    }
+
                     break;
 
                 case WindowType.MainMenu:
@@ -107,6 +113,9 @@ namespace Game.Player.Character
             if (Viewer.LoadFromJSON(GetFilePath()))
             {
                 Viewer.Initialize();
+            } else
+            {
+                Viewer.AssignCharacterData(_defaultData);
             }
         }
 
