@@ -18,27 +18,27 @@ namespace ScriptableObjects
     public class CategoryInfo
     {
         public GoodsType Type;
-        public Sprite Icon;
+        public Sprite    Icon;
     }
 
     [Serializable]
     public class GoodsGroup
     {
-        public GoodsType Type;
+        public GoodsType  Type;
         public GoodInfo[] Items;
     }
 
     [Serializable]
     public class GoodInfo
     {
-        public string Name;
-        public string Desc;
+        public string    Name;
+        public string    Desc;
         public GoodsType Type;
-        public short Level;
-        public int Price;
-        public Sprite SquareImage;
-        public Sprite RectImage;
-        public bool IsDonate;
+        public short     Level;
+        public int       Price;
+        public Sprite    SquareImage;
+        public Sprite    RectImage;
+        public bool      IsDonate;
 
         public Sprite PersonalPageImage => RectImage == null ? SquareImage : RectImage;
 

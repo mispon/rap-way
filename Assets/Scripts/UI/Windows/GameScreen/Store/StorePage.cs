@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core.Analytics;
 using Core.Context;
 using Enums;
 using Extensions;
-using Core.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
@@ -50,22 +50,22 @@ namespace UI.Windows.GameScreen.Store
 
         protected override void AfterShow(object ctx = null)
         {
-            int idx = ctx.Value<int>();
-            _categoryItems[idx].ShowItems(true);
+            var idx = ctx.Value<int>();
+            _categoryItems[idx].HandleClick(true);
         }
 
         private void ShowCategoriesList()
         {
-            int i = 1;
+            var i = 1;
             foreach (var category in data.Categories)
             {
                 var row = categories.InstantiatedElement<StoreCategoryItem>(categoryItemTemplate);
 
                 var group = data.Goods.First(e => e.Type == category.Type);
-                row.Initialize(i, category.Icon, GetLocale(category.Type.GetDescription()), group.Items);
-                i++;
+                row.Initialize(i, category.Type, category.Icon, GetLocale(category.Type.GetDescription()), group.Items);
 
                 _categoryItems.Add(row);
+                i++;
             }
 
             categories.RepositionElements(_categoryItems);

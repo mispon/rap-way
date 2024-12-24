@@ -31,6 +31,9 @@ namespace Enums
         [Description("GoodsType_Grillz")]
         Grillz,
 
+        [Description("GoodsType_Clothes")]
+        Clothes,
+
         [Description("GoodsType_DonateCoins")]
         DonateCoins,
 

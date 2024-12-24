@@ -64,6 +64,11 @@ namespace Game.Player.Character
                     Load();
                     break;
 
+                case WindowType.Shop_Clothes:
+                    SetPosition(0, -7.5f);
+                    Show();
+                    break;
+
                 default:
                     SetPosition();
                     Show();

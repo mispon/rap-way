@@ -3,21 +3,21 @@ namespace UI.Enums
     public enum WindowType
     {
         // Main menu
-        MainMenu         = 0,
-        About            = 1,
-        AskReview        = 2,
-        Settings         = 3,
-        LangSelection    = 4,
-        CharacterCreator = 5,
-        PlayerInfo       = 6,
-        _main_menu       = 19,
+        MainMenu            = 0,
+        About               = 1,
+        AskReview           = 2,
+        Settings            = 3,
+        LangSelection       = 4,
+        CharacterCreator    = 5,
+        PlayerInfo          = 6,
+        __reserve_main_menu = 19,
 
         // Game
         GameScreen      = 20,
         GameEvent       = 21,
         GameFinish      = 22,
         GameEventResult = 23,
-        _game           = 39,
+        __reserve_game  = 39,
 
         // Production
         ProductionSelect = 40,
@@ -26,45 +26,45 @@ namespace UI.Enums
         ProductionTrackSettings = 41,
         ProductionTrackWork     = 42,
         ProductionTrackResult   = 43,
-        _prod_track             = 49,
+        __reserve_prod_track    = 49,
 
         // Album
         ProductionAlbumSettings = 50,
         ProductionAlbumWork     = 51,
         ProductionAlbumResult   = 52,
-        _prod_album             = 59,
+        __reserve_prod_album    = 59,
 
         // Clip
         ProductionClipSettings = 60,
         ProductionClipWork     = 61,
         ProductionClipResult   = 62,
-        _prod_clip             = 69,
+        __reserve_prod_clip    = 69,
 
         // Concert
         ProductionConcertSettings = 70,
         ProductionConcertWork     = 71,
         ProductionConcertResult   = 72,
-        _prod_concert             = 79,
+        __reserve_prod_concert    = 79,
 
         // Feat
         ProductionFeatSettings = 80,
         ProductionFeatWork     = 81,
         ProductionFeatResult   = 82,
-        _prod_feat             = 89,
+        __reserve_prod_feat    = 89,
 
-        _other_production_reserve = 99,
+        __reserve_other_production_reserve = 99,
 
         // Shop
         Shop               = 100,
         Shop_ItemCard      = 101,
         Shop_PurchasedItem = 102,
         Shop_Clothes       = 103,
-        _shop              = 149,
+        __reserve_shop     = 149,
 
         // Battle
-        BattleWork   = 150,
-        BattleResult = 151,
-        _battle      = 159,
+        BattleWork       = 150,
+        BattleResult     = 151,
+        __reserve_battle = 159,
 
         // Socials
         SocialNetworks          = 161,
@@ -77,30 +77,30 @@ namespace UI.Enums
         SocialsResult_TackTack  = 30,
         SocialsResult_Telescope = 31,
         SocialsResult_Trends    = 32,
-        _socials                = 199,
+        __reserve_socials       = 199,
 
         // Single Pages
-        Personal            = 200,
-        Training            = 201,
-        StatsDesc           = 202,
-        Hints               = 203,
-        Charts              = 204,
-        History             = 205,
-        TeammateUnlocked    = 206,
-        AchievementUnlocked = 207,
-        _single_pages       = 249,
+        Personal               = 200,
+        Training               = 201,
+        StatsDesc              = 202,
+        Hints                  = 203,
+        Charts                 = 204,
+        History                = 205,
+        TeammateUnlocked       = 206,
+        AchievementUnlocked    = 207,
+        __reserve_single_pages = 249,
 
         // Rappers
         RapperConversationsWork   = 250,
         RapperConversationsResult = 251,
         RapperJoinLabel           = 252,
         NewRapper                 = 253,
-        _rappers                  = 274,
+        __reserve_rappers         = 274,
 
         // Labels
-        NewLabel      = 275,
-        LabelContract = 276,
-        _labels       = 299,
+        NewLabel         = 275,
+        LabelContract    = 276,
+        __reserve_labels = 299,
 
         // System
         Previous = 998,
