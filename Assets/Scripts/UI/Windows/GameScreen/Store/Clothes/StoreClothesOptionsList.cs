@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using CharacterCreator2D;
 using Enums;
 using Game;
-using Game.Player;
 using UI.Controls.ScrollViewController;
 using UniRx;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Store.Clothes
 {
@@ -28,7 +28,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
 
             var items = parts.Length > 0
                 ? parts
-                : PlayerPackage.Data.Info.Gender == Gender.Male
+                : PlayerAPI.Data.Info.Gender == Gender.Male
                     ? partsMale
                     : partsFemale;
 

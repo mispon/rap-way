@@ -1,4 +1,5 @@
 using Core;
+using Enums;
 using Extensions;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
@@ -6,6 +7,7 @@ using ScriptableObjects;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Store.Clothes
 {
@@ -22,6 +24,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
         [SerializeField] private Button hatsButton;
         [SerializeField] private Button outwearButton;
         [SerializeField] private Button pantsButton;
+        [SerializeField] private Button skirtsButton;
         [SerializeField] private Button glovesButton;
         [SerializeField] private Button bootsButton;
         [SerializeField] private Button otherButton;
@@ -30,6 +33,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
         [SerializeField] private GameObject hats;
         [SerializeField] private GameObject outwear;
         [SerializeField] private GameObject pants;
+        [SerializeField] private GameObject skirts;
         [SerializeField] private GameObject gloves;
         [SerializeField] private GameObject boots;
         [SerializeField] private GameObject other;
@@ -38,6 +42,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
         [SerializeField] private GameObject hatsColor;
         [SerializeField] private GameObject outwearColor;
         [SerializeField] private GameObject pantsColor;
+        [SerializeField] private GameObject skirtsColor;
         [SerializeField] private GameObject glovesColor;
         [SerializeField] private GameObject bootsColor;
         [SerializeField] private GameObject otherColor;
@@ -52,9 +57,13 @@ namespace UI.Windows.GameScreen.Store.Clothes
             hatsButton.onClick.AddListener(() => SelectCategory(hats, hatsColor));
             outwearButton.onClick.AddListener(() => SelectCategory(outwear, outwearColor));
             pantsButton.onClick.AddListener(() => SelectCategory(pants, pantsColor));
+            skirtsButton.onClick.AddListener(() => SelectCategory(skirts, skirtsColor));
             glovesButton.onClick.AddListener(() => SelectCategory(gloves, glovesColor));
             bootsButton.onClick.AddListener(() => SelectCategory(boots, bootsColor));
             otherButton.onClick.AddListener(() => SelectCategory(other, otherColor));
+            
+            // handle clothes slot change
+            // handle clothes slot color change
         }
 
         protected override void BeforeShow(object ctx = null)
@@ -70,6 +79,11 @@ namespace UI.Windows.GameScreen.Store.Clothes
 
             MsgBroker.Instance.Publish(new FullStateRequest());
             SelectCategory(hats, hatsColor);
+
+            if (PlayerAPI.Data.Info.Gender == Gender.Male)
+            {
+                skirtsButton.gameObject.SetActive(false);
+            }
         }
 
         private void SelectCategory(GameObject category, GameObject categoryColors)
@@ -90,7 +104,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
             category.SetActive(true);
             _prevCategory = category;
 
-            categoryColors.SetActive(true);
+            categoryColors.gameObject.SetActive(true);
             _prevCategoryColor = categoryColors;
         }
 

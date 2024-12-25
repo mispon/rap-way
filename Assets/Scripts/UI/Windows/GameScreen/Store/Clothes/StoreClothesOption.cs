@@ -24,8 +24,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
         private int   _index  { get; set; }
         private float _height { get; set; }
         private float _width  { get; set; }
-
-
+        
         public void Initialize(int pos, Part part)
         {
             _index = pos;

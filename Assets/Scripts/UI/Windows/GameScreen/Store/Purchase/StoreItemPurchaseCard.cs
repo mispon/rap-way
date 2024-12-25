@@ -16,26 +16,29 @@ namespace UI.Windows.GameScreen.Store.Purchase
 {
     public class StoreItemPurchaseCard : Page
     {
-        [Header("Purchaser"), SerializeField] private StoreItemPurchaser _purchaser;
-        [Header("Error"), SerializeField] private GameError gameError;
+        [Header("Purchaser")]
+        [SerializeField] private StoreItemPurchaser _purchaser;
 
-        [Space, Header("Money Icon")]
+        [Header("Error")]
+        [SerializeField] private GameError gameError;
+
+        [Space] [Header("Money Icon")]
         [SerializeField] private Sprite moneySprite;
         [SerializeField] private Sprite donateSprite;
         [SerializeField] private Sprite realMoneySprite;
 
-        [Space, Header("Card")]
+        [Space] [Header("Card")]
         [SerializeField] private Image icon;
-        [SerializeField] private Text itemName;
-        [SerializeField] private Text itemDesc;
-        [SerializeField] private Text impact;
-        [SerializeField] private Image moneyIcon;
-        [SerializeField] private Text price;
+        [SerializeField] private Text   itemName;
+        [SerializeField] private Text   itemDesc;
+        [SerializeField] private Text   impact;
+        [SerializeField] private Image  moneyIcon;
+        [SerializeField] private Text   price;
         [SerializeField] private Button buyButton;
         [SerializeField] private Button cancelButton;
 
-        private GoodInfo _info;
-        private int _category;
+        private          GoodInfo            _info;
+        private          int                 _category;
         private readonly CompositeDisposable _disposable = new();
 
         private void Start()
@@ -46,20 +49,20 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
         public override void Show(object ctx = null)
         {
-            _info = ctx.ValueByKey<GoodInfo>("item_info");
+            _info     = ctx.ValueByKey<GoodInfo>("item_info");
             _category = ctx.ValueByKey<int>("category");
 
-            icon.sprite = _info.SquareImage;
+            icon.sprite   = _info.SquareImage;
             itemName.text = _info.Name;
 
             var quality = _info.QualityImpact * 100;
             itemDesc.text = !string.IsNullOrEmpty(_info.Desc) ? GetLocale(_info.Desc, quality) : "";
 
-            var impactTemplate = "<color=\"#ed8105\">Q: {0}%</color> | <color=\"#9c05ed\">H: {1}</color>";
+            const string impactTemplate = "<color=\"#ed8105\">Q: {0}%</color> | <color=\"#9c05ed\">H: {1}</color>";
             impact.text = string.Format(impactTemplate, quality, _info.Hype);
 
             moneyIcon.sprite = moneySprite;
-            price.text = _info.Price.GetDisplay();
+            price.text       = _info.Price.GetDisplay();
 
             gameError.ForceHide();
             base.Show(ctx);
@@ -68,7 +71,9 @@ namespace UI.Windows.GameScreen.Store.Purchase
         private void HandleItemPurchase(SpendMoneyResponse resp)
         {
             if (resp.Id != "store")
+            {
                 return;
+            }
 
             if (!resp.OK)
             {
@@ -92,7 +97,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
                 Context = new Dictionary<string, object>
                 {
                     ["item_info"] = _info,
-                    ["category"] = _category
+                    ["category"]  = _category
                 }
             });
         }
@@ -100,7 +105,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
         private void BuyItemClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest { Id = "store", Amount = _info.Price });
+            MsgBroker.Instance.Publish(new SpendMoneyRequest {Id = "store", Amount = _info.Price});
         }
 
         private void CloseCard()

@@ -106,7 +106,11 @@ namespace Game.Player.Character
         private void SetDefault()
         {
             Viewer.AssignCharacterData(_defaultData);
+            PutOnSelectedClothes();
+        }
 
+        private void PutOnSelectedClothes()
+        {
             // default outwear
             Viewer.EquipPart(SlotCategory.Armor, Viewer.bodyType == BodyType.Male ? defaultMaleArmor : defaultFemaleArmor);
             Viewer.SetPartColor(SlotCategory.Armor, Color.white, Color.white, Color.white);
@@ -114,6 +118,8 @@ namespace Game.Player.Character
             // default pants 
             Viewer.EquipPart(SlotCategory.Pants, Viewer.bodyType == BodyType.Male ? defaultMalePants : defaultFemalePants);
             Viewer.SetPartColor(SlotCategory.Pants, Color.white, Color.white, Color.white);
+
+            // todo: check inventory and apply
         }
 
         private void SetPosition(float x = 0.0f, float y = -6.5f)
