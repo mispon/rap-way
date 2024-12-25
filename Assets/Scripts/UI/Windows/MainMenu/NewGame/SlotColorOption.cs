@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.Windows.MainMenu.NewGame
 {
-    [RequireComponent(typeof(Button), typeof(Image), typeof(RectTransform))]
+    [RequireComponent(typeof(Button), typeof(RectTransform))]
     public class SlotColorOption : MonoBehaviour, IScrollViewControllerItem
     {
         [SerializeField] private SlotCategory slot;
@@ -20,24 +20,28 @@ namespace UI.Windows.MainMenu.NewGame
         private float _height { get; set; }
         private float _width  { get; set; }
 
-        public void Initialize(int pos, Color color)
+        public void Initialize(int pos, SlotColor sc)
         {
             _index = pos;
 
             GetComponent<Button>().onClick.AddListener(HandleClick);
-            GetComponent<Image>().color = color;
+
+            var images = GetComponentsInChildren<Image>();
+            images[0].color = sc.Color1;
+            images[1].color = sc.Color2;
+            images[2].color = sc.Color3;
 
             gameObject.SetActive(true);
         }
 
-        public void SetPartColor(Color color)
+        public void SetPartColor(Color color1, Color color2, Color color3)
         {
             if (slot == SlotCategory.BodySkin)
             {
-                Character.Instance.Viewer.SkinColor = color;
+                Character.Instance.Viewer.SkinColor = color1;
             } else
             {
-                Character.Instance.Viewer.SetPartColor(slot, color, color, color);
+                Character.Instance.Viewer.SetPartColor(slot, color1, color2, color3);
             }
         }
 
@@ -45,8 +49,13 @@ namespace UI.Windows.MainMenu.NewGame
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
 
-            var color = GetComponent<Image>().color;
-            SetPartColor(color);
+            var images = GetComponentsInChildren<Image>();
+
+            var color1 = images[0].color;
+            var color2 = images[1].color;
+            var color3 = images[2].color;
+
+            SetPartColor(color1, color2, color3);
         }
 
         public float GetHeight()

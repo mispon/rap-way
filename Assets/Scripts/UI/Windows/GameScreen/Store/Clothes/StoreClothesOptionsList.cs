@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using CharacterCreator2D;
 using Enums;
+using Game;
 using Game.Player;
 using UI.Controls.ScrollViewController;
 using UniRx;
@@ -20,8 +22,10 @@ namespace UI.Windows.GameScreen.Store.Clothes
         private readonly List<StoreClothesOption> _options    = new();
         private readonly CompositeDisposable      _disposable = new();
 
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitUntil(() => GameManager.Instance.Ready);
+
             var items = parts.Length > 0
                 ? parts
                 : PlayerPackage.Data.Info.Gender == Gender.Male

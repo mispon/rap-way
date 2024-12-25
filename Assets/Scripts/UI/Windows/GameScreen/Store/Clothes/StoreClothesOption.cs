@@ -1,5 +1,6 @@
 using CharacterCreator2D;
 using Core;
+using Core.Localization;
 using Game.Player.Character;
 using ScriptableObjects;
 using TMPro;
@@ -32,9 +33,11 @@ namespace UI.Windows.GameScreen.Store.Clothes
 
             GetComponent<Button>().onClick.AddListener(HandleClick);
             GetComponent<Image>().color = _index % 2 == 0 ? colorEven : colorOdd;
-            GetComponentInChildren<TextMeshProUGUI>().text = _index < 10
-                ? $"0{_index}"
-                : $"{_index}";
+            GetComponentInChildren<TextMeshProUGUI>().text = _index == 0
+                ? LocalizationManager.Instance.Get("empty")
+                : _index < 10
+                    ? $"0{_index}"
+                    : $"{_index}";
         }
 
         private void HandleClick()

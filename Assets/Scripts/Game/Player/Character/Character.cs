@@ -12,6 +12,11 @@ namespace Game.Player.Character
 {
     public class Character : Singleton<Character>
     {
+        [SerializeField] private Part defaultMaleArmor;
+        [SerializeField] private Part defaultMalePants;
+        [SerializeField] private Part defaultFemaleArmor;
+        [SerializeField] private Part defaultFemalePants;
+
         private CharacterViewer _viewer;
         private Animator        _animator;
         private CharacterData   _defaultData;
@@ -101,6 +106,14 @@ namespace Game.Player.Character
         private void SetDefault()
         {
             Viewer.AssignCharacterData(_defaultData);
+
+            // default outwear
+            Viewer.EquipPart(SlotCategory.Armor, Viewer.bodyType == BodyType.Male ? defaultMaleArmor : defaultFemaleArmor);
+            Viewer.SetPartColor(SlotCategory.Armor, Color.white, Color.white, Color.white);
+
+            // default pants 
+            Viewer.EquipPart(SlotCategory.Pants, Viewer.bodyType == BodyType.Male ? defaultMalePants : defaultFemalePants);
+            Viewer.SetPartColor(SlotCategory.Pants, Color.white, Color.white, Color.white);
         }
 
         private void SetPosition(float x = 0.0f, float y = -6.5f)
@@ -120,7 +133,7 @@ namespace Game.Player.Character
                 Viewer.Initialize();
             } else
             {
-                Viewer.AssignCharacterData(_defaultData);
+                SetDefault();
             }
         }
 

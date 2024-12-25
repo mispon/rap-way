@@ -1,3 +1,4 @@
+using Core;
 using Extensions;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
@@ -17,7 +18,44 @@ namespace UI.Windows.GameScreen.Store.Clothes
         [SerializeField] private Text gameBalance;
         [SerializeField] private Text donateBalance;
 
+        [Header("Category Buttons")]
+        [SerializeField] private Button hatsButton;
+        [SerializeField] private Button outwearButton;
+        [SerializeField] private Button pantsButton;
+        [SerializeField] private Button glovesButton;
+        [SerializeField] private Button bootsButton;
+        [SerializeField] private Button otherButton;
+
+        [Header("Categories")]
+        [SerializeField] private GameObject hats;
+        [SerializeField] private GameObject outwear;
+        [SerializeField] private GameObject pants;
+        [SerializeField] private GameObject gloves;
+        [SerializeField] private GameObject boots;
+        [SerializeField] private GameObject other;
+
+        [Header("Categories Colors")]
+        [SerializeField] private GameObject hatsColor;
+        [SerializeField] private GameObject outwearColor;
+        [SerializeField] private GameObject pantsColor;
+        [SerializeField] private GameObject glovesColor;
+        [SerializeField] private GameObject bootsColor;
+        [SerializeField] private GameObject otherColor;
+
+        private GameObject _prevCategory;
+        private GameObject _prevCategoryColor;
+
         private readonly CompositeDisposable _disposable = new();
+
+        public override void Initialize()
+        {
+            hatsButton.onClick.AddListener(() => SelectCategory(hats, hatsColor));
+            outwearButton.onClick.AddListener(() => SelectCategory(outwear, outwearColor));
+            pantsButton.onClick.AddListener(() => SelectCategory(pants, pantsColor));
+            glovesButton.onClick.AddListener(() => SelectCategory(gloves, glovesColor));
+            bootsButton.onClick.AddListener(() => SelectCategory(boots, bootsColor));
+            otherButton.onClick.AddListener(() => SelectCategory(other, otherColor));
+        }
 
         protected override void BeforeShow(object ctx = null)
         {
@@ -29,7 +67,31 @@ namespace UI.Windows.GameScreen.Store.Clothes
                 .Receive<FullStateResponse>()
                 .Subscribe(UpdateHUD)
                 .AddTo(_disposable);
+
             MsgBroker.Instance.Publish(new FullStateRequest());
+            SelectCategory(hats, hatsColor);
+        }
+
+        private void SelectCategory(GameObject category, GameObject categoryColors)
+        {
+            SoundManager.Instance.PlaySound(UIActionType.Switcher);
+
+            if (_prevCategory != null)
+            {
+                _prevCategory.SetActive(false);
+            }
+
+            if (_prevCategoryColor != null)
+            {
+                _prevCategoryColor.SetActive(false);
+            }
+
+
+            category.SetActive(true);
+            _prevCategory = category;
+
+            categoryColors.SetActive(true);
+            _prevCategoryColor = categoryColors;
         }
 
         private void UpdateHUD(FullStateResponse resp)

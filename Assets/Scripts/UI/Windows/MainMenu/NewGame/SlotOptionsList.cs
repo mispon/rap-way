@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using CharacterCreator2D;
+using Game;
 using MessageBroker;
 using MessageBroker.Messages.Player;
 using UI.Controls.ScrollViewController;
@@ -18,8 +20,10 @@ namespace UI.Windows.MainMenu.NewGame
         private readonly List<SlotOption>    _options    = new();
         private readonly CompositeDisposable _disposable = new();
 
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitUntil(() => GameManager.Instance.Ready);
+
             MsgBroker.Instance
                 .Receive<RandomizeCharacter>()
                 .Subscribe(m =>
