@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Core.Analytics;
 using Enums;
 using Extensions;
-using Core.Analytics;
 using Game;
 using Game.Player.Team;
 using Game.Production;
@@ -30,13 +30,13 @@ namespace UI.Windows.GameScreen.Concert
         [Header("Controls")]
         [SerializeField] private Carousel placeCarousel;
         [SerializeField] private Carousel albumsCarousel;
-        [SerializeField] private Slider ticketCostSlider;
-        [SerializeField] private Button startButton;
+        [SerializeField] private Slider   ticketCostSlider;
+        [SerializeField] private Button   startButton;
 
         [Header("Labels")]
         [SerializeField] private Text placeCapacityLabel;
-        [SerializeField] private Text fansRequirementLabel;
-        [SerializeField] private Text ticketCost;
+        [SerializeField] private Text       fansRequirementLabel;
+        [SerializeField] private Text       ticketCost;
         [SerializeField] private GameObject cooldownIcon;
 
         [Header("Avatars")]
@@ -52,10 +52,10 @@ namespace UI.Windows.GameScreen.Concert
         [SerializeField] private ImagesBank imagesBank;
 
         private ConcertInfo _concert;
-        private int _placeCost;
+        private int         _placeCost;
 
-        private const int MAX_ALBUMS_COUNT = 5;
-        private readonly List<AlbumInfo> _lastAlbums = new(MAX_ALBUMS_COUNT);
+        private const    int             MAX_ALBUMS_COUNT = 5;
+        private readonly List<AlbumInfo> _lastAlbums      = new(MAX_ALBUMS_COUNT);
 
         private readonly CompositeDisposable _disposable = new();
 
@@ -70,13 +70,15 @@ namespace UI.Windows.GameScreen.Concert
         private void CreateConcert()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest { Id = "concert", Amount = _placeCost });
+            MsgBroker.Instance.Publish(new SpendMoneyRequest {Source = "concert", Amount = _placeCost});
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
         {
-            if (resp.Id != "concert")
+            if (resp.Source != "concert")
+            {
                 return;
+            }
 
             if (!resp.OK)
             {
@@ -88,13 +90,13 @@ namespace UI.Windows.GameScreen.Concert
             var album = albumsCarousel.GetValue<AlbumInfo>();
             album.ConcertAmounts += 1;
 
-            _concert.AlbumId = album.Id;
-            _concert.Id = ProductionManager.GetNextProductionId<ConcertInfo>();
+            _concert.AlbumId    = album.Id;
+            _concert.Id         = ProductionManager.GetNextProductionId<ConcertInfo>();
             _concert.TicketCost = Mathf.RoundToInt(ticketCostSlider.value);
 
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
-                Type = WindowType.ProductionConcertWork,
+                Type    = WindowType.ProductionConcertWork,
                 Context = _concert
             });
         }
@@ -102,7 +104,7 @@ namespace UI.Windows.GameScreen.Concert
         private void SetupPlaceCarousel()
         {
             var placeProps = placeData.Places
-                .Select(e => new CarouselProps { Text = e.NameKey, Value = e })
+                .Select(e => new CarouselProps {Text = e.NameKey, Value = e})
                 .ToArray();
 
             placeCarousel.Init(placeProps);
@@ -113,11 +115,11 @@ namespace UI.Windows.GameScreen.Concert
         {
             var place = placeData.Places[index];
 
-            _concert.LocationId = index;
-            _concert.LocationName = place.NameKey;
+            _concert.LocationId       = index;
+            _concert.LocationName     = place.NameKey;
             _concert.LocationCapacity = place.Capacity;
-            _concert.MaxTicketCost = place.TicketMaxCost;
-            placeCapacityLabel.text = GetLocale("concert_capacity", place.Capacity.GetDisplay()).ToUpper();
+            _concert.MaxTicketCost    = place.TicketMaxCost;
+            placeCapacityLabel.text   = GetLocale("concert_capacity", place.Capacity.GetDisplay()).ToUpper();
 
             _placeCost = place.Cost;
             concertPrice.SetValue(GetLocale("concert_rent", _placeCost.GetMoney()).ToUpper());
@@ -132,10 +134,10 @@ namespace UI.Windows.GameScreen.Concert
 
         private void CheckConcertConditions(int fansRequirement)
         {
-            bool canStart = PlayerAPI.Data.Fans >= fansRequirement;
+            var canStart = PlayerAPI.Data.Fans >= fansRequirement;
             canStart &= _lastAlbums.Any();
 
-            bool hasCooldown = GameManager.Instance.GameStats.ConcertCooldown > 0;
+            var hasCooldown = GameManager.Instance.GameStats.ConcertCooldown > 0;
             cooldownIcon.SetActive(hasCooldown);
 
             canStart &= !hasCooldown;
@@ -145,25 +147,26 @@ namespace UI.Windows.GameScreen.Concert
 
         private void OnTicketPriceChanged(float value)
         {
-            int cost = Mathf.RoundToInt(value);
+            var cost = Mathf.RoundToInt(value);
             _concert.TicketCost = cost;
-            ticketCost.text = $"{cost.GetMoney()}";
+            ticketCost.text     = $"{cost.GetMoney()}";
         }
 
         protected override void BeforeShow(object ctx = null)
         {
-            _concert = new ConcertInfo { CreatorId = -1 };
+            _concert = new ConcertInfo {CreatorId = -1};
             CacheLastAlbums();
 
             var anyAlbums = _lastAlbums.Any();
             var albumProps = anyAlbums
                 ? _lastAlbums
-                    .Select(e => new CarouselProps { Text = e.Name, Value = e })
+                    .Select(e => new CarouselProps {Text = e.Name, Value = e})
                     .ToArray()
-                : new[] {
+                : new[]
+                {
                     new CarouselProps
                     {
-                        Text = GetLocale("no_albums_yet"),
+                        Text  = GetLocale("no_albums_yet"),
                         Value = new AlbumInfo()
                     }
                 };
@@ -224,12 +227,12 @@ namespace UI.Windows.GameScreen.Concert
         private void ResetTeam()
         {
             managerAvatar.sprite = imagesBank.ProducerInactive;
-            prAvatar.sprite = imagesBank.PrManInactive;
+            prAvatar.sprite      = imagesBank.PrManInactive;
         }
 
         private void ResetTicketCost()
         {
-            int minValue = Mathf.RoundToInt(ticketCostSlider.minValue);
+            var minValue = Mathf.RoundToInt(ticketCostSlider.minValue);
             ticketCostSlider.SetValueWithoutNotify(minValue);
             ticketCost.text = $"{minValue.GetMoney()}";
         }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Core.Analytics;
 using Enums;
 using Extensions;
-using Core.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
@@ -27,7 +27,7 @@ namespace UI.Windows.GameScreen.Clip
         [SerializeField] private Carousel trackCarousel;
         [SerializeField] private Carousel directorCarousel;
         [SerializeField] private Carousel operatorCarousel;
-        [SerializeField] private Button startButton;
+        [SerializeField] private Button   startButton;
 
         [Header("Labels")]
         [SerializeField] private Text directorSkill;
@@ -39,14 +39,15 @@ namespace UI.Windows.GameScreen.Clip
         [SerializeField] private GameError noMoneyErr;
         [SerializeField] private Price price;
 
-        [Header("Data"), SerializeField] private ClipStaffData staffData;
+        [Header("Data")]
+        [SerializeField] private ClipStaffData staffData;
 
         private ClipInfo _clip;
-        private int _directorPrice;
-        private int _operatorPrice;
+        private int      _directorPrice;
+        private int      _operatorPrice;
 
-        private const int TRACKS_CACHE = 10;
-        private readonly List<TrackInfo> _lastTracks = new(TRACKS_CACHE);
+        private const    int             TRACKS_CACHE = 10;
+        private readonly List<TrackInfo> _lastTracks  = new(TRACKS_CACHE);
 
         private readonly CompositeDisposable _disposable = new();
 
@@ -72,13 +73,15 @@ namespace UI.Windows.GameScreen.Clip
         private void CreateClip()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest { Id = "clip", Amount = _clipCost });
+            MsgBroker.Instance.Publish(new SpendMoneyRequest {Source = "clip", Amount = _clipCost});
         }
 
         private void HandleSpendMoneyResponse(SpendMoneyResponse resp)
         {
-            if (resp.Id != "clip")
+            if (resp.Source != "clip")
+            {
                 return;
+            }
 
             if (!resp.OK)
             {
@@ -91,11 +94,11 @@ namespace UI.Windows.GameScreen.Clip
             track.HasClip = true;
 
             _clip.TrackId = track.Id;
-            _clip.Name = track.Name;
+            _clip.Name    = track.Name;
 
             MsgBroker.Instance.Publish(new WindowControlMessage
             {
-                Type = WindowType.ProductionClipWork,
+                Type    = WindowType.ProductionClipWork,
                 Context = _clip
             });
         }
@@ -103,44 +106,45 @@ namespace UI.Windows.GameScreen.Clip
         private void OnDirectorChange(int index)
         {
             var director = staffData.Directors[index];
-            directorSkill.text = GetLocale("skill_value", director.Skill).ToUpper();
-            directorPrice.text = GetLocale("cost_value", director.Salary.GetMoney()).ToUpper();
+            directorSkill.text  = GetLocale("skill_value", director.Skill).ToUpper();
+            directorPrice.text  = GetLocale("cost_value", director.Salary.GetMoney()).ToUpper();
             _clip.DirectorSkill = director.Skill;
-            _directorPrice = director.Salary;
+            _directorPrice      = director.Salary;
             DisplayFullPrice();
         }
 
         private void OnOperatorChange(int index)
         {
             var clipOperator = staffData.Operators[index];
-            operatorSkill.text = GetLocale("skill_value", clipOperator.Skill).ToUpper();
-            operatorPrice.text = GetLocale("cost_value", clipOperator.Salary.GetMoney()).ToUpper();
+            operatorSkill.text  = GetLocale("skill_value", clipOperator.Skill).ToUpper();
+            operatorPrice.text  = GetLocale("cost_value", clipOperator.Salary.GetMoney()).ToUpper();
             _clip.OperatorSkill = clipOperator.Skill;
-            _operatorPrice = clipOperator.Salary;
+            _operatorPrice      = clipOperator.Salary;
             DisplayFullPrice();
         }
 
         private void DisplayFullPrice()
         {
-            string fullPrice = GetLocale("cost_value", _clipCost.GetMoney());
+            var fullPrice = GetLocale("cost_value", _clipCost.GetMoney());
             price.SetValue(fullPrice.ToUpper());
         }
 
         protected override void BeforeShow(object ctx = null)
         {
-            _clip = new ClipInfo { CreatorId = -1 };
+            _clip = new ClipInfo {CreatorId = -1};
 
             CacheLastTracks();
 
-            bool anyTracks = _lastTracks.Any();
+            var anyTracks = _lastTracks.Any();
             var trackProps = anyTracks
                 ? _lastTracks
-                    .Select(e => new CarouselProps { Text = e.Name, Value = e })
+                    .Select(e => new CarouselProps {Text = e.Name, Value = e})
                     .ToArray()
-                : new[] {
+                : new[]
+                {
                     new CarouselProps
                     {
-                        Text = GetLocale("no_tracks_yet").ToUpper(),
+                        Text  = GetLocale("no_tracks_yet").ToUpper(),
                         Value = new TrackInfo()
                     }
                 };

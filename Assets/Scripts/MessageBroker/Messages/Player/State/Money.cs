@@ -2,14 +2,14 @@ namespace MessageBroker.Messages.Player.State
 {
     public struct SpendMoneyRequest
     {
-        public string Id;
-        public int Amount;
+        public string Source;
+        public int    Amount;
     }
 
     public struct SpendMoneyResponse
     {
-        public string Id;
-        public bool OK;
+        public string Source;
+        public bool   OK;
     }
 
     public struct ChangeMoneyMessage

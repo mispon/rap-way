@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Core;
 using Core.Context;
 using Extensions;
+using Game.Player.Inventory.Desc;
 using MessageBroker;
+using MessageBroker.Messages.Player;
 using MessageBroker.Messages.Player.State;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -11,14 +13,12 @@ using UI.Enums;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using StoreItemInfo = ScriptableObjects.StoreItem;
 
 namespace UI.Windows.GameScreen.Store.Purchase
 {
     public class StoreItemPurchaseCard : Page
     {
-        [Header("Purchaser")]
-        [SerializeField] private StoreItemPurchaser _purchaser;
-
         [Header("Error")]
         [SerializeField] private GameError gameError;
 
@@ -37,7 +37,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
         [SerializeField] private Button buyButton;
         [SerializeField] private Button cancelButton;
 
-        private          GoodInfo            _info;
+        private          StoreItemInfo       _info;
         private          int                 _category;
         private readonly CompositeDisposable _disposable = new();
 
@@ -49,17 +49,17 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
         public override void Show(object ctx = null)
         {
-            _info     = ctx.ValueByKey<GoodInfo>("item_info");
+            _info     = ctx.ValueByKey<StoreItemInfo>("item_info");
             _category = ctx.ValueByKey<int>("category");
 
             icon.sprite   = _info.SquareImage;
             itemName.text = _info.Name;
 
-            var quality = _info.QualityImpact * 100;
+            var quality = _info.Values.Quality * 100;
             itemDesc.text = !string.IsNullOrEmpty(_info.Desc) ? GetLocale(_info.Desc, quality) : "";
 
             const string impactTemplate = "<color=\"#ed8105\">Q: {0}%</color> | <color=\"#9c05ed\">H: {1}</color>";
-            impact.text = string.Format(impactTemplate, quality, _info.Hype);
+            impact.text = string.Format(impactTemplate, quality, _info.Values.Hype);
 
             moneyIcon.sprite = moneySprite;
             price.text       = _info.Price.GetDisplay();
@@ -70,7 +70,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
         private void HandleItemPurchase(SpendMoneyResponse resp)
         {
-            if (resp.Id != "store")
+            if (resp.Source != "store")
             {
                 return;
             }
@@ -82,9 +82,17 @@ namespace UI.Windows.GameScreen.Store.Purchase
             }
 
             SoundManager.Instance.PlaySound(UIActionType.Pay);
-
-            var newGoodEvent = StoreItemPurchaser.CreateNewGoodEvent(_info);
-            MsgBroker.Instance.Publish(newGoodEvent);
+            MsgBroker.Instance.Publish(new AddInventoryItemMessage
+            {
+                Name = _info.Name,
+                Type = _info.Type,
+                Raw = new ValuesItem
+                {
+                    Hype    = _info.Values.Hype,
+                    Quality = _info.Values.Quality,
+                    Level   = _info.Values.Level
+                }
+            });
 
             ShowPurchasedItem();
         }
@@ -105,7 +113,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
         private void BuyItemClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest {Id = "store", Amount = _info.Price});
+            MsgBroker.Instance.Publish(new SpendMoneyRequest {Source = "store", Amount = _info.Price});
         }
 
         private void CloseCard()

@@ -19,7 +19,7 @@ namespace UI.Windows.GameScreen.Store
         private readonly CompositeDisposable _disposable = new();
 
         [Header("Data")]
-        [SerializeField] private GoodsData data;
+        [SerializeField] private StoreData data;
 
         [Header("Header")]
         [SerializeField] private Text gameBalance;
@@ -61,7 +61,7 @@ namespace UI.Windows.GameScreen.Store
             {
                 var row = categories.InstantiatedElement<StoreCategoryItem>(categoryItemTemplate);
 
-                var group = data.Goods.First(e => e.Type == category.Type);
+                var group = data.Groups.First(e => e.Type == category.Type);
                 row.Initialize(i, category.Type, category.Icon, GetLocale(category.Type.GetDescription()), group.Items);
 
                 _categoryItems.Add(row);

@@ -1,5 +1,5 @@
 ﻿using Enums;
-using Game.Player.Goods;
+using Game.Player.Inventory;
 using Game.Player.State;
 using Game.Player.State.Desc;
 using Models.Trends;
@@ -10,9 +10,9 @@ namespace Game.Player
     {
         public static PlayerData Data => GameManager.Instance.PlayerData;
 
-        public static readonly StateAPI State = new();
-        public static readonly GoodsAPI Goods = new();
-        
+        public static readonly StateAPI     State     = new();
+        public static readonly InventoryAPI Inventory = new();
+
         public static void UpdateKnownTrends(Styles style, Themes theme)
         {
             Data.LastKnownTrends ??= Trends.New;

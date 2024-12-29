@@ -4,7 +4,7 @@ using Core.Localization;
 using Enums;
 using Extensions;
 using Game.Player.Character;
-using Game.Player.Goods.Desc;
+using Game.Player.Inventory.Desc;
 using Game.Player.State.Desc;
 using Models.Production;
 using ScriptableObjects;
@@ -47,14 +47,14 @@ namespace UI.Windows.GameScreen.Personal.PersonalTab
         [SerializeField] private Text[] lastActions;
 
         [Header("Data")]
-        [SerializeField] private GoodsData goodsBank;
+        [SerializeField] private StoreData storeBank;
         [SerializeField] private ImagesBank imageBank;
 
         public override void Open()
         {
             HintsManager.Instance.ShowHint("tutorial_personal_page", PersonalTabType.Personal);
 
-            SetupGoods(PlayerAPI.Data.Goods);
+            SetupGoods(PlayerAPI.Data.Inventory);
             SetupStats(PlayerAPI.Data.Stats);
             SetupSkills(PlayerAPI.Data.Skills);
             SetupBestTrack(PlayerAPI.Data.History.TrackList);
@@ -64,34 +64,36 @@ namespace UI.Windows.GameScreen.Personal.PersonalTab
             base.Open();
         }
 
-        private void SetupGoods(List<Good> playerGoods)
+        private void SetupGoods(List<InventoryItem> inventory)
         {
-            Sprite GetGoodsSprite(GoodsType type)
+            Sprite GetGoodsSprite(InventoryType type)
             {
-                var good = playerGoods
-                    .OrderByDescending(e => e.Level)
-                    .FirstOrDefault(e => e.Type == type);
+                var item = inventory
+                    .Where(e => e.Type == type)
+                    .OrderByDescending(e => e.Value<ValuesItem>().Quality)
+                    .ThenBy(e => e.Value<ValuesItem>().Hype)
+                    .FirstOrDefault();
 
-                if (good == null)
+                if (item == null)
                 {
                     return imageBank.Empty;
                 }
 
-                var goodsGroup = goodsBank.Goods.First(e => e.Type == good.Type);
+                var itemsGroup = storeBank.Groups.First(e => e.Type == item.Type);
 
-                return goodsGroup.Items
-                    .First(e => e.Level == good.Level)
+                return itemsGroup.Items
+                    .First(e => e.Name == item.Name)
                     .PersonalPageImage;
             }
 
-            microIcon.sprite     = GetGoodsSprite(GoodsType.Micro);
-            soundCardIcon.sprite = GetGoodsSprite(GoodsType.AudioCard);
-            mixerIcon.sprite     = GetGoodsSprite(GoodsType.FxMixer);
-            acousticIcon.sprite  = GetGoodsSprite(GoodsType.Acoustic);
-            carIcon.sprite       = GetGoodsSprite(GoodsType.Car);
-            swatchesIcon.sprite  = GetGoodsSprite(GoodsType.Swatches);
-            chainIcon.sprite     = GetGoodsSprite(GoodsType.Chain);
-            grillzIcon.sprite    = GetGoodsSprite(GoodsType.Grillz);
+            microIcon.sprite     = GetGoodsSprite(InventoryType.Micro);
+            soundCardIcon.sprite = GetGoodsSprite(InventoryType.AudioCard);
+            mixerIcon.sprite     = GetGoodsSprite(InventoryType.FxMixer);
+            acousticIcon.sprite  = GetGoodsSprite(InventoryType.Acoustic);
+            carIcon.sprite       = GetGoodsSprite(InventoryType.Car);
+            swatchesIcon.sprite  = GetGoodsSprite(InventoryType.Swatches);
+            chainIcon.sprite     = GetGoodsSprite(InventoryType.Chain);
+            grillzIcon.sprite    = GetGoodsSprite(InventoryType.Grillz);
         }
 
         private void SetupStats(PlayerStats playerStats)

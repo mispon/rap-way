@@ -1,5 +1,5 @@
 using Core;
-using Enums;
+using Game.Player.Inventory.Desc;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -7,6 +7,7 @@ using UI.Controls.ScrollViewController;
 using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
+using StoreItemInfo = ScriptableObjects.StoreItem;
 
 namespace UI.Windows.GameScreen.Store
 {
@@ -26,8 +27,8 @@ namespace UI.Windows.GameScreen.Store
         private float _height { get; set; }
         private float _width  { get; set; }
 
-        private GoodsType  _categoryType;
-        private GoodInfo[] _itemsInfo;
+        private InventoryType   _categoryType;
+        private StoreItemInfo[] _storeItems;
 
         private void Start()
         {
@@ -41,20 +42,20 @@ namespace UI.Windows.GameScreen.Store
                 SoundManager.Instance.PlaySound(UIActionType.Click);
             }
 
-            if (_categoryType == GoodsType.Clothes)
+            if (_categoryType == InventoryType.Clothes)
             {
                 MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.Shop_Clothes));
             } else
             {
                 var category = _index - 1;
-                itemsView.Show(category, _itemsInfo);
+                itemsView.Show(category, _storeItems);
             }
         }
 
-        public void Initialize(int i, GoodsType cType, Sprite cIcon, string cName, GoodInfo[] itemsInfo)
+        public void Initialize(int i, InventoryType cType, Sprite cIcon, string cName, StoreItemInfo[] storeItems)
         {
             _index        = i;
-            _itemsInfo    = itemsInfo;
+            _storeItems   = storeItems;
             _categoryType = cType;
 
             categoryIcon.sprite = cIcon;

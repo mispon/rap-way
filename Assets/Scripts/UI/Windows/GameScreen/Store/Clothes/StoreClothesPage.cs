@@ -1,4 +1,7 @@
+using System;
+using CharacterCreator2D;
 using Core;
+using Core.PropertyAttributes;
 using Enums;
 using Extensions;
 using MessageBroker;
@@ -11,41 +14,28 @@ using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Store.Clothes
 {
+    [Serializable]
+    public class CategoryRow
+    {
+        public SlotCategory Slot;
+        public Button       Button;
+        public GameObject   Category;
+        public GameObject   CategoryColors;
+    }
+
     public class StoreClothesPage : Page
     {
-        [Header("Data")]
-        [SerializeField] private GoodsData data;
-
         [Header("Header")]
         [SerializeField] private Text gameBalance;
         [SerializeField] private Text donateBalance;
 
-        [Header("Category Buttons")]
-        [SerializeField] private Button hatsButton;
-        [SerializeField] private Button outwearButton;
-        [SerializeField] private Button pantsButton;
-        [SerializeField] private Button skirtsButton;
-        [SerializeField] private Button glovesButton;
-        [SerializeField] private Button bootsButton;
-        [SerializeField] private Button otherButton;
-
         [Header("Categories")]
-        [SerializeField] private GameObject hats;
-        [SerializeField] private GameObject outwear;
-        [SerializeField] private GameObject pants;
-        [SerializeField] private GameObject skirts;
-        [SerializeField] private GameObject gloves;
-        [SerializeField] private GameObject boots;
-        [SerializeField] private GameObject other;
+        [ArrayElementTitle(new[] {"Slot"})]
+        [SerializeField] private CategoryRow[] rows;
 
-        [Header("Categories Colors")]
-        [SerializeField] private GameObject hatsColor;
-        [SerializeField] private GameObject outwearColor;
-        [SerializeField] private GameObject pantsColor;
-        [SerializeField] private GameObject skirtsColor;
-        [SerializeField] private GameObject glovesColor;
-        [SerializeField] private GameObject bootsColor;
-        [SerializeField] private GameObject otherColor;
+        [Header("Button Images")]
+        [SerializeField] private Sprite mainSprite;
+        [SerializeField] private Sprite selectedSprite;
 
         private GameObject _prevCategory;
         private GameObject _prevCategoryColor;
@@ -54,16 +44,10 @@ namespace UI.Windows.GameScreen.Store.Clothes
 
         public override void Initialize()
         {
-            hatsButton.onClick.AddListener(() => SelectCategory(hats, hatsColor));
-            outwearButton.onClick.AddListener(() => SelectCategory(outwear, outwearColor));
-            pantsButton.onClick.AddListener(() => SelectCategory(pants, pantsColor));
-            skirtsButton.onClick.AddListener(() => SelectCategory(skirts, skirtsColor));
-            glovesButton.onClick.AddListener(() => SelectCategory(gloves, glovesColor));
-            bootsButton.onClick.AddListener(() => SelectCategory(boots, bootsColor));
-            otherButton.onClick.AddListener(() => SelectCategory(other, otherColor));
-            
-            // handle clothes slot change
-            // handle clothes slot color change
+            foreach (var row in rows)
+            {
+                row.Button.onClick.AddListener(() => SelectCategory(row));
+            }
         }
 
         protected override void BeforeShow(object ctx = null)
@@ -78,15 +62,16 @@ namespace UI.Windows.GameScreen.Store.Clothes
                 .AddTo(_disposable);
 
             MsgBroker.Instance.Publish(new FullStateRequest());
-            SelectCategory(hats, hatsColor);
+            SelectCategory(rows[0]);
 
             if (PlayerAPI.Data.Info.Gender == Gender.Male)
             {
-                skirtsButton.gameObject.SetActive(false);
+                const int skirtsIdx = 3;
+                rows[skirtsIdx].Button.gameObject.SetActive(false);
             }
         }
 
-        private void SelectCategory(GameObject category, GameObject categoryColors)
+        private void SelectCategory(CategoryRow row)
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
 
@@ -101,11 +86,18 @@ namespace UI.Windows.GameScreen.Store.Clothes
             }
 
 
-            category.SetActive(true);
-            _prevCategory = category;
+            row.Category.SetActive(true);
+            _prevCategory = row.Category;
 
-            categoryColors.gameObject.SetActive(true);
-            _prevCategoryColor = categoryColors;
+            row.CategoryColors.gameObject.SetActive(true);
+            _prevCategoryColor = row.CategoryColors;
+
+            foreach (var r in rows)
+            {
+                r.Button.image.sprite = row.Button.name == r.Button.name
+                    ? selectedSprite
+                    : mainSprite;
+            }
         }
 
         private void UpdateHUD(FullStateResponse resp)

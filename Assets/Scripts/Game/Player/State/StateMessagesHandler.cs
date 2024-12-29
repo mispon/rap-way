@@ -70,7 +70,7 @@ namespace Game.Player.State
                         UpdateMoney(-e.Amount);
                     }
 
-                    MsgBroker.Instance.Publish(new SpendMoneyResponse {Id = e.Id, OK = isMoneyEnough});
+                    MsgBroker.Instance.Publish(new SpendMoneyResponse {Source = e.Source, OK = isMoneyEnough});
                 })
                 .AddTo(disposable);
         }

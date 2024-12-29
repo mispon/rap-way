@@ -92,7 +92,7 @@ namespace Game.Production.Analyzers
             var workPointsFactor = CalculateWorkPointsFactor(track.TextPoints, track.BitPoints, maxWorkPoints);
             qualityPoints += workPointsFactor;
 
-            var goodsPointsFactor = PlayerAPI.Goods.GetQualityImpact();
+            var goodsPointsFactor = PlayerAPI.Inventory.GetQualityImpact();
             qualityPoints += goodsPointsFactor;
 
             return Mathf.Min(qualityPoints, 1f);

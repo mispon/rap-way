@@ -1,7 +1,10 @@
+using System;
 using CharacterCreator2D;
 using Core;
 using Core.Localization;
 using Game.Player.Character;
+using MessageBroker;
+using MessageBroker.Messages.Store;
 using ScriptableObjects;
 using TMPro;
 using UI.Controls.ScrollViewController;
@@ -10,11 +13,13 @@ using UnityEngine.UI;
 
 namespace UI.Windows.GameScreen.Store.Clothes
 {
-    [RequireComponent(typeof(Button), typeof(Image), typeof(RectTransform))]
+    [RequireComponent(typeof(Button), typeof(RectTransform))]
     public class StoreClothesOption : MonoBehaviour, IScrollViewControllerItem
     {
         [SerializeField] private SlotCategory slot;
+        [SerializeField] private GameObject   outline;
         [Space]
+        [SerializeField] private Image image;
         [SerializeField] private Color colorEven;
         [SerializeField] private Color colorOdd;
 
@@ -24,25 +29,40 @@ namespace UI.Windows.GameScreen.Store.Clothes
         private int   _index  { get; set; }
         private float _height { get; set; }
         private float _width  { get; set; }
-        
-        public void Initialize(int pos, Part part)
+
+        public void Initialize(int pos, Part part, Action beforeClick)
         {
             _index = pos;
             _part  = part;
 
-            GetComponent<Button>().onClick.AddListener(HandleClick);
-            GetComponent<Image>().color = _index % 2 == 0 ? colorEven : colorOdd;
+            GetComponent<Button>().onClick.AddListener(() =>
+            {
+                beforeClick.Invoke();
+                HandleClick();
+            });
             GetComponentInChildren<TextMeshProUGUI>().text = _index == 0
                 ? LocalizationManager.Instance.Get("empty")
                 : _index < 10
                     ? $"0{_index}"
                     : $"{_index}";
+
+            image.color = _index % 2 == 0 ? colorEven : colorOdd;
+            outline.SetActive(false);
+        }
+
+        public void HideOutline()
+        {
+            outline.SetActive(false);
         }
 
         private void HandleClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
+
             Character.Instance.Viewer.EquipPart(slot, _part);
+            MsgBroker.Instance.Publish(new ClothesSlotChanged {Slot = slot});
+
+            outline.SetActive(true);
         }
 
         public float GetHeight()

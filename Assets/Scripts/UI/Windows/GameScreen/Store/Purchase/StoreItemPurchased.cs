@@ -8,6 +8,7 @@ using ScriptableObjects;
 using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
+using StoreItemInfo = ScriptableObjects.StoreItem;
 
 namespace UI.Windows.GameScreen.Store.Purchase
 {
@@ -26,7 +27,7 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
         public override void Show(object ctx = null)
         {
-            var info = ctx.ValueByKey<GoodInfo>("item_info");
+            var info = ctx.ValueByKey<StoreItemInfo>("item_info");
             _category = ctx.ValueByKey<int>("category");
 
             icon.sprite   = info.SquareImage;

@@ -27,11 +27,11 @@ namespace Game.Player.Hype
                     if (e.Day % 3 == 0)
                     {
                         MsgBroker.Instance.Publish(new ChangeHypeMessage {Amount = -1});
-                    } 
+                    }
                 })
                 .AddTo(disposable);
         }
-        
+
         private static void HandleChangeHype(CompositeDisposable disposable)
         {
             MsgBroker.Instance
@@ -39,7 +39,7 @@ namespace Game.Player.Hype
                 .Subscribe(e => UpdateHype(e.Amount))
                 .AddTo(disposable);
         }
-        
+
         private static void HandleProductionReward(CompositeDisposable disposable)
         {
             MsgBroker.Instance
@@ -47,20 +47,20 @@ namespace Game.Player.Hype
                 .Subscribe(e => UpdateHype(e.HypeIncome))
                 .AddTo(disposable);
         }
-        
+
         private static void UpdateHype(int value)
         {
             var playerData = GameManager.Instance.PlayerData;
-                    
-            int oldVal = playerData.Hype;
-            int newVal = playerData.Hype + value;
 
-            int minHype = playerData.Goods
+            var oldVal = playerData.Hype;
+            var newVal = playerData.Hype + value;
+
+            var minHype = playerData.Inventory
                 .GroupBy(g => g.Type)
-                .ToDictionary(k => k, v => v.Max(g => g.Hype))
+                .ToDictionary(k => k, v => v.Max(g => g.Value<int>()))
                 .Sum(g => g.Value);
             const int maxHype = 100;
-                    
+
             newVal = Mathf.Clamp(newVal, minHype, maxHype);
 
             playerData.Hype = newVal;

@@ -35,13 +35,21 @@ namespace UI.Windows.GameScreen.Store.Clothes
             for (var i = 0; i < items.Length; i++)
             {
                 var option = scrollView.InstantiatedElement<StoreClothesOption>(optionTemplate);
-                option.Initialize(i, items[i]);
+                option.Initialize(i, items[i], BeforeClickCallback);
 
                 _options.Add(option);
             }
 
             scrollView.RepositionElements(_options);
             gameObject.SetActive(false);
+        }
+
+        private void BeforeClickCallback()
+        {
+            foreach (var option in _options)
+            {
+                option.HideOutline();
+            }
         }
 
         private void OnDestroy()

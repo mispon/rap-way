@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using Enums;
 using Game.Player.Achievements.Desc;
-using Game.Player.Goods.Desc;
+using Game.Player.Inventory.Desc;
 using Game.Production.Desc;
 using TrendsData = Models.Trends.Trends;
 
 namespace Game.Player.State.Desc
 {
-    /// <summary>
-    ///     Все данные игрока
-    /// </summary>
     [Serializable]
     public class PlayerData
     {
@@ -28,13 +25,13 @@ namespace Game.Player.State.Desc
         public ProductionHistory History;
         public Team.Desc.Team    Team;
 
-        public List<Good>        Goods;
-        public List<Achievement> Achievements;
-        public List<Themes>      Themes;
-        public List<Styles>      Styles;
-        public List<Skills>      Skills;
-        public List<int>         Feats;
-        public List<int>         Battles;
+        public List<InventoryItem> Inventory;
+        public List<Achievement>   Achievements;
+        public List<Themes>        Themes;
+        public List<Styles>        Styles;
+        public List<Skills>        Skills;
+        public List<int>           Feats;
+        public List<int>           Battles;
 
         public TrendsData LastKnownTrends;
         public bool       FinishPageShowed;
@@ -46,7 +43,7 @@ namespace Game.Player.State.Desc
             History = ProductionHistory.New,
             Team    = Player.Team.Desc.Team.New,
 
-            Goods        = new List<Good>(),
+            Inventory    = new List<InventoryItem>(),
             Achievements = new List<Achievement>(),
             Themes       = new List<Themes> {Enums.Themes.Life},
             Styles       = new List<Styles> {Enums.Styles.Underground},

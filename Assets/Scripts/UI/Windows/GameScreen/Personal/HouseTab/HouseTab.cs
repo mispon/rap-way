@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Enums;
 using Game.Player.Character;
+using Game.Player.Inventory.Desc;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayerAPI = Game.Player.PlayerPackage;
@@ -18,21 +18,27 @@ namespace UI.Windows.GameScreen.Personal.HouseTab
     public class HouseTab : Tab
     {
         [SerializeField] private GameObject noHouseLabel;
+
         [Space] [Header("House")]
         [SerializeField] private HouseSettings[] settingsByLevel;
         [SerializeField] private GameObject houseGroup;
         [SerializeField] private Image      houseImage;
+
         [Space] [Header("Rooms")]
         [SerializeField] private GameObject[] houseRooms;
 
         public override void Open()
         {
-            var house = PlayerAPI.Data.Goods
+            var house = PlayerAPI.Data.Inventory
+                .Where(e => e.Type == InventoryType.House)
+                .Select(e => e.Value<ValuesItem>())
                 .OrderByDescending(e => e.Level)
-                .FirstOrDefault(e => e.Type == GoodsType.Apartments);
+                .FirstOrDefault();
 
-            SetState(house != null);
-            if (house != null)
+            var houseExists = house.Level > 0;
+            SetActiveGroup(houseExists);
+
+            if (houseExists)
             {
                 var settings = settingsByLevel[house.Level - 1];
                 houseImage.sprite = settings.Image;
@@ -48,10 +54,10 @@ namespace UI.Windows.GameScreen.Personal.HouseTab
             base.Open();
         }
 
-        private void SetState(bool isHouseExists)
+        private void SetActiveGroup(bool houseExists)
         {
-            noHouseLabel.SetActive(!isHouseExists);
-            houseGroup.SetActive(isHouseExists);
+            noHouseLabel.SetActive(!houseExists);
+            houseGroup.SetActive(houseExists);
         }
     }
 }
