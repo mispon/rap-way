@@ -7,6 +7,7 @@ using MessageBroker.Messages.UI;
 using UI.Enums;
 using UniRx;
 using UnityEngine;
+using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace Game.Player.Character
 {
@@ -103,14 +104,20 @@ namespace Game.Player.Character
             _animator.speed = speed;
         }
 
-        private void SetDefault()
+        public void ResetClothes()
         {
-            Viewer.AssignCharacterData(_defaultData);
-            PutOnSelectedClothes();
-        }
+            // reset all clothes
+            var slots = new[]
+            {
+                SlotCategory.Helmet, SlotCategory.Gloves,
+                SlotCategory.Boots, SlotCategory.Skirt,
+                SlotCategory.MainHand
+            };
+            foreach (var slot in slots)
+            {
+                Viewer.EquipPart(slot, "");
+            }
 
-        private void PutOnSelectedClothes()
-        {
             // default outwear
             Viewer.EquipPart(SlotCategory.Armor, Viewer.bodyType == BodyType.Male ? defaultMaleArmor : defaultFemaleArmor);
             Viewer.SetPartColor(SlotCategory.Armor, Color.white, Color.white, Color.white);
@@ -119,7 +126,19 @@ namespace Game.Player.Character
             Viewer.EquipPart(SlotCategory.Pants, Viewer.bodyType == BodyType.Male ? defaultMalePants : defaultFemalePants);
             Viewer.SetPartColor(SlotCategory.Pants, Color.white, Color.white, Color.white);
 
-            // todo: check inventory and apply
+            var clothes = PlayerAPI.Inventory.GetEquippedClothes();
+
+            foreach (var ci in clothes)
+            {
+                Viewer.EquipPart(ci.Slot, ci.Name);
+                Viewer.SetPartColor(ci.Slot, ci.Color1, ci.Color2, ci.Color3);
+            }
+        }
+
+        private void SetDefault()
+        {
+            Viewer.AssignCharacterData(_defaultData);
+            ResetClothes();
         }
 
         private void SetPosition(float x = 0.0f, float y = -6.5f)

@@ -52,4 +52,12 @@ namespace ScriptableObjects
         public float Quality;
         public int   Level;
     }
+
+    public class ClothingItem
+    {
+        public Sprite SquareImage;
+        public string Name;
+        public int    Price;
+        public object Value;
+    }
 }

@@ -62,5 +62,13 @@ namespace Game.Player.Inventory
                 item.Equipped = target.GetHashCode() == value.GetHashCode();
             }
         }
+
+        public List<ClothingItem> GetEquippedClothes()
+        {
+            return data.Inventory
+                .Where(e => e.Type == InventoryType.Clothes)
+                .Select(e => e.Value<ClothingItem>())
+                .ToList();
+        }
     }
 }

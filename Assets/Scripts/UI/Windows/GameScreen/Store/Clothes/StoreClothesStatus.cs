@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using CharacterCreator2D;
 using Core.PropertyAttributes;
@@ -6,10 +7,13 @@ using Game.Player.Character;
 using Game.Player.Inventory.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Store;
+using MessageBroker.Messages.UI;
 using TMPro;
+using UI.Enums;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using ClothingItemInfo = ScriptableObjects.ClothingItem;
 using PlayerAPI = Game.Player.PlayerPackage;
 
 namespace UI.Windows.GameScreen.Store.Clothes
@@ -25,6 +29,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
     {
         [SerializeField] private GameObject ownStatus;
         [SerializeField] private GameObject priceStatus;
+        [SerializeField] private Sprite     clothingImage;
         [Space]
         [SerializeField] private TextMeshProUGUI priceLabel;
         [Space]
@@ -41,17 +46,27 @@ namespace UI.Windows.GameScreen.Store.Clothes
         private void Start()
         {
             MsgBroker.Instance
-                .Receive<ClothesSlotChanged>()
-                .Subscribe(HandleClothesChanged)
+                .Receive<ClothesSlotChangedMessage>()
+                .Subscribe(m => HandleClothesChanged(m.Slot, m.Index))
+                .AddTo(_disposable);
+            MsgBroker.Instance
+                .Receive<ClothesSlotColorChangedMessage>()
+                .Subscribe(m => HandleClothesChanged(m.Slot))
                 .AddTo(_disposable);
 
             buyButton.onClick.AddListener(BuyClothingItem);
             equipButton.onClick.AddListener(EquipClothingItem);
         }
 
-        private void HandleClothesChanged(ClothesSlotChanged m)
+        private void HandleClothesChanged(SlotCategory slot, int index = 1)
         {
-            _slot = m.Slot;
+            if (index == 0)
+            {
+                HideAll();
+                return;
+            }
+
+            _slot = slot;
 
             var clothingItem = GetClothingItem();
             if (string.IsNullOrEmpty(clothingItem.Name))
@@ -63,25 +78,38 @@ namespace UI.Windows.GameScreen.Store.Clothes
 
             if (inventoryItem == null)
             {
-                ownStatus.SetActive(false);
-                priceStatus.SetActive(true);
+                ToggleStatus(false);
                 priceLabel.text = prices
                     .First(e => e.Slot == _slot)
                     .Price.ToString();
             } else
             {
-                ownStatus.SetActive(true);
-                priceStatus.SetActive(false);
-
-                equipButton.interactable = !inventoryItem.Equipped;
+                ToggleStatus(true);
             }
         }
 
         private void BuyClothingItem()
         {
+            const int clothesCategoryIndex = 4;
+
             var clothingItem = GetClothingItem();
             var price        = prices.First(e => e.Slot == _slot).Price;
-            // todo: show purchase window
+
+            MsgBroker.Instance.Publish(new WindowControlMessage
+            {
+                Type = WindowType.Shop_ItemCard,
+                Context = new Dictionary<string, object>
+                {
+                    ["clothing_item_info"] = new ClothingItemInfo
+                    {
+                        Name        = clothingItem.Name,
+                        Price       = price,
+                        SquareImage = clothingImage,
+                        Value       = clothingItem
+                    },
+                    ["category"] = clothesCategoryIndex
+                }
+            });
         }
 
         private void EquipClothingItem()
@@ -102,6 +130,23 @@ namespace UI.Windows.GameScreen.Store.Clothes
                 Color2 = character.GetPartColor(_slot, ColorCode.Color2),
                 Color3 = character.GetPartColor(_slot, ColorCode.Color3)
             };
+        }
+
+        private void HideAll()
+        {
+            ownStatus.SetActive(false);
+            priceStatus.SetActive(false);
+            buyButton.gameObject.SetActive(false);
+            equipButton.gameObject.SetActive(false);
+        }
+
+        private void ToggleStatus(bool own)
+        {
+            ownStatus.SetActive(own);
+            priceStatus.SetActive(!own);
+
+            equipButton.gameObject.SetActive(own);
+            buyButton.gameObject.SetActive(!own);
         }
 
         private void OnDestroy()

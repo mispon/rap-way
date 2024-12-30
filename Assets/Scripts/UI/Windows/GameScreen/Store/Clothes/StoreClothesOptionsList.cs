@@ -22,6 +22,20 @@ namespace UI.Windows.GameScreen.Store.Clothes
         private readonly List<StoreClothesOption> _options    = new();
         private readonly CompositeDisposable      _disposable = new();
 
+        public void Show()
+        {
+            BeforeClickCallback();
+            gameObject.SetActive(true);
+
+            _options[0].SelectOption();
+        }
+
+        public void Hide()
+        {
+            BeforeClickCallback();
+            gameObject.SetActive(false);
+        }
+
         private IEnumerator Start()
         {
             yield return new WaitUntil(() => GameManager.Instance.Ready);

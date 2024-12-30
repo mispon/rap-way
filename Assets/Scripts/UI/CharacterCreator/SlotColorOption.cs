@@ -43,16 +43,24 @@ namespace UI.CharacterCreator
             outline.SetActive(false);
         }
 
-        public void SetPartColor(Color color1, Color color2, Color color3)
+        public void SelectOption()
         {
+            var images = GetComponentsInChildren<Image>();
+
+            var color1 = images[0].color;
+            var color2 = images[1].color;
+            var color3 = images[2].color;
+
             if (slot == SlotCategory.BodySkin)
             {
                 Character.Instance.Viewer.SkinColor = color1;
             } else
             {
                 Character.Instance.Viewer.SetPartColor(slot, color1, color2, color3);
-                MsgBroker.Instance.Publish(new ClothesSlotChanged {Slot = slot});
+                MsgBroker.Instance.Publish(new ClothesSlotColorChangedMessage {Slot = slot});
             }
+
+            outline.SetActive(true);
         }
 
         public void HideOutline()
@@ -63,15 +71,7 @@ namespace UI.CharacterCreator
         private void HandleClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-
-            var images = GetComponentsInChildren<Image>();
-
-            var color1 = images[0].color;
-            var color2 = images[1].color;
-            var color3 = images[2].color;
-
-            SetPartColor(color1, color2, color3);
-            outline.SetActive(true);
+            SelectOption();
         }
 
         public float GetHeight()

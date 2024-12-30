@@ -50,6 +50,21 @@ namespace UI.Windows.GameScreen.Store.Clothes
             outline.SetActive(false);
         }
 
+        public void SelectOption()
+        {
+            if (_index == 0)
+            {
+                Character.Instance.ResetClothes();
+            } else
+            {
+                Character.Instance.Viewer.EquipPart(slot, _part);
+            }
+
+            MsgBroker.Instance.Publish(new ClothesSlotChangedMessage {Slot = slot, Index = _index});
+
+            outline.SetActive(true);
+        }
+
         public void HideOutline()
         {
             outline.SetActive(false);
@@ -58,11 +73,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
         private void HandleClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-
-            Character.Instance.Viewer.EquipPart(slot, _part);
-            MsgBroker.Instance.Publish(new ClothesSlotChanged {Slot = slot});
-
-            outline.SetActive(true);
+            SelectOption();
         }
 
         public float GetHeight()

@@ -29,6 +29,20 @@ namespace UI.CharacterCreator
         private readonly List<SlotColorOption> _options    = new();
         private readonly CompositeDisposable   _disposable = new();
 
+        public void Show()
+        {
+            BeforeClickCallback();
+            gameObject.SetActive(true);
+
+            _options[0].SelectOption();
+        }
+
+        public void Hide()
+        {
+            BeforeClickCallback();
+            gameObject.SetActive(false);
+        }
+
         private IEnumerator Start()
         {
             yield return new WaitUntil(() => GameManager.Instance.Ready);
@@ -37,17 +51,13 @@ namespace UI.CharacterCreator
                 .Receive<RandomizeCharacter>()
                 .Subscribe(m =>
                 {
-                    var sc = colors[Random.Range(0, colors.Length)];
-                    _options[0].SetPartColor(sc.Color1, sc.Color2, sc.Color3);
+                    var idx = Random.Range(0, _options.Count);
+                    _options[idx].SelectOption();
                 })
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<ResetCharacter>()
-                .Subscribe(m =>
-                {
-                    var sc = colors[defaultColor];
-                    _options[0].SetPartColor(sc.Color1, sc.Color2, sc.Color3);
-                })
+                .Subscribe(m => { _options[defaultColor].SelectOption(); })
                 .AddTo(_disposable);
 
             for (var i = 0; i < colors.Length; i++)

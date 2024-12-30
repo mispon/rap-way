@@ -14,6 +14,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using StoreItemInfo = ScriptableObjects.StoreItem;
+using ClothingItemInfo = ScriptableObjects.ClothingItem;
 
 namespace UI.Windows.GameScreen.Store.Purchase
 {
@@ -37,8 +38,10 @@ namespace UI.Windows.GameScreen.Store.Purchase
         [SerializeField] private Button buyButton;
         [SerializeField] private Button cancelButton;
 
-        private          StoreItemInfo       _info;
-        private          int                 _category;
+        private StoreItemInfo    _storeItem;
+        private ClothingItemInfo _clothingItem;
+        private int              _category;
+
         private readonly CompositeDisposable _disposable = new();
 
         private void Start()
@@ -49,20 +52,36 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
         public override void Show(object ctx = null)
         {
-            _info     = ctx.ValueByKey<StoreItemInfo>("item_info");
             _category = ctx.ValueByKey<int>("category");
 
-            icon.sprite   = _info.SquareImage;
-            itemName.text = _info.Name;
+            _storeItem = ctx.ValueByKey<StoreItemInfo>("item_info");
+            if (_storeItem != null)
+            {
+                icon.sprite   = _storeItem.SquareImage;
+                itemName.text = _storeItem.Name;
 
-            var quality = _info.Values.Quality * 100;
-            itemDesc.text = !string.IsNullOrEmpty(_info.Desc) ? GetLocale(_info.Desc, quality) : "";
+                var quality = _storeItem.Values.Quality * 100;
+                itemDesc.text = !string.IsNullOrEmpty(_storeItem.Desc) ? GetLocale(_storeItem.Desc, quality) : "";
 
-            const string impactTemplate = "<color=\"#ed8105\">Q: {0}%</color> | <color=\"#9c05ed\">H: {1}</color>";
-            impact.text = string.Format(impactTemplate, quality, _info.Values.Hype);
+                const string impactTemplate = "<color=\"#ed8105\">Q: {0}%</color> | <color=\"#9c05ed\">H: {1}</color>";
+                impact.text = string.Format(impactTemplate, quality, _storeItem.Values.Hype);
 
-            moneyIcon.sprite = moneySprite;
-            price.text       = _info.Price.GetDisplay();
+                moneyIcon.sprite = moneySprite;
+                price.text       = _storeItem.Price.GetDisplay();
+            }
+
+            _clothingItem = ctx.ValueByKey<ClothingItemInfo>("clothing_item_info");
+            if (_clothingItem != null)
+            {
+                icon.sprite   = _clothingItem.SquareImage;
+                itemName.text = _clothingItem.Name;
+                itemDesc.text = GetLocale("clothing_item_desc");
+
+                impact.text = "";
+
+                moneyIcon.sprite = moneySprite;
+                price.text       = _clothingItem.Price.GetDisplay();
+            }
 
             gameError.ForceHide();
             base.Show(ctx);
@@ -82,17 +101,31 @@ namespace UI.Windows.GameScreen.Store.Purchase
             }
 
             SoundManager.Instance.PlaySound(UIActionType.Pay);
-            MsgBroker.Instance.Publish(new AddInventoryItemMessage
+
+
+            if (_storeItem != null)
             {
-                Name = _info.Name,
-                Type = _info.Type,
-                Raw = new ValuesItem
+                MsgBroker.Instance.Publish(new AddInventoryItemMessage
                 {
-                    Hype    = _info.Values.Hype,
-                    Quality = _info.Values.Quality,
-                    Level   = _info.Values.Level
-                }
-            });
+                    Name = _storeItem.Name,
+                    Type = _storeItem.Type,
+                    Raw = new ValuesItem
+                    {
+                        Hype    = _storeItem.Values.Hype,
+                        Quality = _storeItem.Values.Quality,
+                        Level   = _storeItem.Values.Level
+                    }
+                });
+            } else if (_clothingItem != null)
+            {
+                MsgBroker.Instance.Publish(new AddInventoryItemMessage
+                {
+                    Name = _clothingItem.Name,
+                    Type = InventoryType.Clothes,
+                    Raw  = _clothingItem.Value
+                });
+            }
+
 
             ShowPurchasedItem();
         }
@@ -104,8 +137,9 @@ namespace UI.Windows.GameScreen.Store.Purchase
                 Type = WindowType.Shop_PurchasedItem,
                 Context = new Dictionary<string, object>
                 {
-                    ["item_info"] = _info,
-                    ["category"]  = _category
+                    ["item_info"]          = _storeItem,
+                    ["clothing_item_info"] = _clothingItem,
+                    ["category"]           = _category
                 }
             });
         }
@@ -113,7 +147,11 @@ namespace UI.Windows.GameScreen.Store.Purchase
         private void BuyItemClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Click);
-            MsgBroker.Instance.Publish(new SpendMoneyRequest {Source = "store", Amount = _info.Price});
+            MsgBroker.Instance.Publish(new SpendMoneyRequest
+            {
+                Source = "store",
+                Amount = _storeItem?.Price ?? _clothingItem.Price
+            });
         }
 
         private void CloseCard()

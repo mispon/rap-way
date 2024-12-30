@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using CharacterCreator2D;
 using Core;
 using Core.PropertyAttributes;
@@ -6,7 +7,9 @@ using Enums;
 using Extensions;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
+using MessageBroker.Messages.Store;
 using ScriptableObjects;
+using UI.CharacterCreator;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,10 +20,10 @@ namespace UI.Windows.GameScreen.Store.Clothes
     [Serializable]
     public class CategoryRow
     {
-        public SlotCategory Slot;
-        public Button       Button;
-        public GameObject   Category;
-        public GameObject   CategoryColors;
+        public SlotCategory            Slot;
+        public Button                  Button;
+        public StoreClothesOptionsList Category;
+        public SlotColorOptionsList    CategoryColors;
     }
 
     public class StoreClothesPage : Page
@@ -37,20 +40,12 @@ namespace UI.Windows.GameScreen.Store.Clothes
         [SerializeField] private Sprite mainSprite;
         [SerializeField] private Sprite selectedSprite;
 
-        private GameObject _prevCategory;
-        private GameObject _prevCategoryColor;
+        private StoreClothesOptionsList _prevCategory;
+        private SlotColorOptionsList    _prevCategoryColor;
 
         private readonly CompositeDisposable _disposable = new();
 
         public override void Initialize()
-        {
-            foreach (var row in rows)
-            {
-                row.Button.onClick.AddListener(() => SelectCategory(row));
-            }
-        }
-
-        protected override void BeforeShow(object ctx = null)
         {
             MsgBroker.Instance
                 .Receive<MoneyChangedMessage>()
@@ -60,7 +55,19 @@ namespace UI.Windows.GameScreen.Store.Clothes
                 .Receive<FullStateResponse>()
                 .Subscribe(UpdateHUD)
                 .AddTo(_disposable);
+            MsgBroker.Instance
+                .Receive<ClothesSlotChangedMessage>()
+                .Subscribe(HandleClothingItemSelection)
+                .AddTo(_disposable);
 
+            foreach (var row in rows)
+            {
+                row.Button.onClick.AddListener(() => SelectCategory(row));
+            }
+        }
+
+        protected override void BeforeShow(object ctx = null)
+        {
             MsgBroker.Instance.Publish(new FullStateRequest());
             SelectCategory(rows[0]);
 
@@ -77,19 +84,17 @@ namespace UI.Windows.GameScreen.Store.Clothes
 
             if (_prevCategory != null)
             {
-                _prevCategory.SetActive(false);
+                _prevCategory.Hide();
             }
 
             if (_prevCategoryColor != null)
             {
-                _prevCategoryColor.SetActive(false);
+                _prevCategoryColor.Hide();
             }
 
+            row.Category.Show();
 
-            row.Category.SetActive(true);
-            _prevCategory = row.Category;
-
-            row.CategoryColors.gameObject.SetActive(true);
+            _prevCategory      = row.Category;
             _prevCategoryColor = row.CategoryColors;
 
             foreach (var r in rows)
@@ -97,6 +102,19 @@ namespace UI.Windows.GameScreen.Store.Clothes
                 r.Button.image.sprite = row.Button.name == r.Button.name
                     ? selectedSprite
                     : mainSprite;
+            }
+        }
+
+        private void HandleClothingItemSelection(ClothesSlotChangedMessage m)
+        {
+            var category = rows.First(e => e.Slot == m.Slot);
+
+            if (m.Index == 0)
+            {
+                category.CategoryColors.Hide();
+            } else
+            {
+                category.CategoryColors.Show();
             }
         }
 
@@ -116,7 +134,7 @@ namespace UI.Windows.GameScreen.Store.Clothes
             donateBalance.text = donate.GetDisplay();
         }
 
-        protected override void AfterHide()
+        private void OnDestroy()
         {
             _disposable.Clear();
         }
