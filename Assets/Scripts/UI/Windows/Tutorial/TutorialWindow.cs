@@ -1,6 +1,5 @@
+using Core;
 using Core.Localization;
-using Enums;
-using ScriptableObjects;
 using UI.Base;
 using UniRx;
 using UnityEngine;
@@ -11,8 +10,6 @@ namespace UI.Windows.Tutorial
 {
     public class TutorialWindow : CanvasUIElement
     {
-        [SerializeField] private ImagesBank imagesBank;
-
         [Header("Player")]
         [SerializeField] private Text nickname;
         [SerializeField] private Image playerIcon;
@@ -37,10 +34,8 @@ namespace UI.Windows.Tutorial
         {
             var playerInfo = PlayerAPI.Data.Info;
 
-            nickname.text = playerInfo.NickName;
-            playerIcon.sprite = playerInfo.Gender == Gender.Male
-                ? imagesBank.MaleAvatar
-                : imagesBank.FemaleAvatar;
+            nickname.text     = playerInfo.NickName;
+            playerIcon.sprite = SpritesManager.Instance.GetPortrait(playerInfo.NickName);
 
             info.text = LocalizationManager.Instance.Get(stageSettings.Text);
             for (var i = 0; i < gameButtons.Length; i++)

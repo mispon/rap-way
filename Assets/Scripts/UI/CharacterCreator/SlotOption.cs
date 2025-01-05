@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace UI.CharacterCreator
 {
-    [RequireComponent(typeof(Button), typeof(Image), typeof(RectTransform))]
+    [RequireComponent(typeof(Button), typeof(RectTransform))]
     public class SlotOption : MonoBehaviour, IScrollViewControllerItem
     {
         [SerializeField] private SlotCategory slot;

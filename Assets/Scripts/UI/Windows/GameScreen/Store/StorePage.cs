@@ -4,6 +4,7 @@ using Core.Analytics;
 using Core.Context;
 using Enums;
 using Extensions;
+using Game.Player.Character;
 using MessageBroker;
 using MessageBroker.Messages.Player.State;
 using ScriptableObjects;
@@ -96,6 +97,8 @@ namespace UI.Windows.GameScreen.Store
 
             _categoryItems.Clear();
             _disposable.Clear();
+
+            Character.Instance.ResetClothes();
         }
     }
 }

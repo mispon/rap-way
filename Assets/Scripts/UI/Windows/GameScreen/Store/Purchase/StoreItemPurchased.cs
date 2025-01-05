@@ -9,6 +9,7 @@ using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 using StoreItemInfo = ScriptableObjects.StoreItem;
+using ClothingItemInfo = ScriptableObjects.ClothingItem;
 
 namespace UI.Windows.GameScreen.Store.Purchase
 {
@@ -27,11 +28,21 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
         public override void Show(object ctx = null)
         {
-            var info = ctx.ValueByKey<StoreItemInfo>("item_info");
             _category = ctx.ValueByKey<int>("category");
 
-            icon.sprite   = info.SquareImage;
-            itemName.text = info.Name;
+            var shopItem = ctx.ValueByKey<StoreItemInfo>("item_info");
+            if (shopItem != null)
+            {
+                icon.sprite   = shopItem.SquareImage;
+                itemName.text = shopItem.Name;
+            }
+
+            var clothingItem = ctx.ValueByKey<ClothingItemInfo>("clothing_item_info");
+            if (clothingItem != null)
+            {
+                icon.sprite   = clothingItem.SquareImage;
+                itemName.text = clothingItem.Name;
+            }
 
             base.Show(ctx);
         }

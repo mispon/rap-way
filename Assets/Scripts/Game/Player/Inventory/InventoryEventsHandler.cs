@@ -28,11 +28,11 @@ namespace Game.Player.Inventory
                     {
                         Name     = e.Name,
                         Type     = e.Type,
-                        Raw      = e.Raw,
                         Equipped = true
                     };
-                    playerData.Inventory.Add(item);
+                    item.SetValue(e.Raw);
 
+                    playerData.Inventory.Add(item);
                     MsgBroker.Instance.Publish(new ChangeHypeMessage());
                 })
                 .AddTo(disposable);

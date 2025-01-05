@@ -63,7 +63,7 @@ namespace UI.Windows.GameScreen.SocialNetworks.Eagler
         {
             var info = PlayerAPI.Data.Info;
 
-            avatar.sprite = info.Gender == Gender.Male ? imagesBank.MaleAvatar : imagesBank.FemaleAvatar;
+            avatar.sprite = SpritesManager.Instance.GetPortrait(info.NickName);
             realName.text = $"{info.FirstName} {info.LastName}";
             nickName.text = $"@{info.NickName}";
             fans.text     = PlayerAPI.Data.Fans.GetShort();

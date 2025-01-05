@@ -36,7 +36,6 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
         [Space]
         [SerializeField] private ScrollViewController list;
         [SerializeField] private GameObject template;
-        [SerializeField] private ImagesBank imagesBank;
 
         private readonly List<LabelMemberRow> _listItems = new();
 
@@ -109,21 +108,17 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
             AnalyticsManager.LogEvent(FirebaseGameEvents.LabelLeaveAction);
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
+            var nickname = PlayerAPI.Data.Info.NickName;
+
             askingWindow.Show(
                 LocalizationManager.Instance.Get("leave_label_question").ToUpper(),
                 () =>
                 {
                     MsgBroker.Instance.Publish(new NewsMessage
                     {
-                        Text = "news_player_leave_label",
-                        TextArgs = new[]
-                        {
-                            PlayerAPI.Data.Info.NickName,
-                            PlayerAPI.Data.Label
-                        },
-                        Sprite = PlayerAPI.Data.Info.Gender == Gender.Male
-                            ? imagesBank.MaleAvatar
-                            : imagesBank.FemaleAvatar,
+                        Text       = "news_player_leave_label",
+                        TextArgs   = new[] {nickname, PlayerAPI.Data.Label},
+                        Sprite     = SpritesManager.Instance.GetPortrait(nickname),
                         Popularity = PlayerAPI.Data.Fans
                     });
 

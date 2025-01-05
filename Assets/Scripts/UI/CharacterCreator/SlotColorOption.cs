@@ -17,6 +17,8 @@ namespace UI.CharacterCreator
         [SerializeField] private SlotCategory slot;
         [SerializeField] private GameObject   outline;
 
+        private Action        _beforeClick;
+        private bool          _selected;
         private RectTransform _rectTransform;
         private Part          _part;
 
@@ -26,13 +28,10 @@ namespace UI.CharacterCreator
 
         public void Initialize(int pos, SlotColor sc, Action beforeClick)
         {
-            _index = pos;
+            _index       = pos;
+            _beforeClick = beforeClick;
 
-            GetComponent<Button>().onClick.AddListener(() =>
-            {
-                beforeClick.Invoke();
-                HandleClick();
-            });
+            GetComponent<Button>().onClick.AddListener(HandleClick);
 
             var images = GetComponentsInChildren<Image>();
             images[0].color = sc.Color1;
@@ -45,6 +44,11 @@ namespace UI.CharacterCreator
 
         public void SelectOption()
         {
+            if (_selected)
+            {
+                return;
+            }
+
             var images = GetComponentsInChildren<Image>();
 
             var color1 = images[0].color;
@@ -60,12 +64,16 @@ namespace UI.CharacterCreator
                 MsgBroker.Instance.Publish(new ClothesSlotColorChangedMessage {Slot = slot});
             }
 
+            _beforeClick?.Invoke();
+
             outline.SetActive(true);
+            _selected = true;
         }
 
         public void HideOutline()
         {
             outline.SetActive(false);
+            _selected = false;
         }
 
         private void HandleClick()

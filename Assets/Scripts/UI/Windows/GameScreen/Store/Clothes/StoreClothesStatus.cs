@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CharacterCreator2D;
+using Core;
 using Core.PropertyAttributes;
 using Game.Player.Character;
-using Game.Player.Inventory.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Store;
 using MessageBroker.Messages.UI;
+using ScriptableObjects;
 using TMPro;
 using UI.Enums;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using ClothingItem = Game.Player.Inventory.Desc.ClothingItem;
 using ClothingItemInfo = ScriptableObjects.ClothingItem;
 using PlayerAPI = Game.Player.PlayerPackage;
 
@@ -78,18 +80,20 @@ namespace UI.Windows.GameScreen.Store.Clothes
 
             if (inventoryItem == null)
             {
-                ToggleStatus(false);
+                ToggleStatus(false, false);
                 priceLabel.text = prices
                     .First(e => e.Slot == _slot)
                     .Price.ToString();
             } else
             {
-                ToggleStatus(true);
+                ToggleStatus(true, inventoryItem.Equipped);
             }
         }
 
         private void BuyClothingItem()
         {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
+
             const int clothesCategoryIndex = 4;
 
             var clothingItem = GetClothingItem();
@@ -114,8 +118,12 @@ namespace UI.Windows.GameScreen.Store.Clothes
 
         private void EquipClothingItem()
         {
+            SoundManager.Instance.PlaySound(UIActionType.Click);
+
             var clothingItem = GetClothingItem();
             PlayerAPI.Inventory.EquipClothingItem(clothingItem);
+
+            ToggleStatus(true, true);
         }
 
         private ClothingItem GetClothingItem()
@@ -140,12 +148,12 @@ namespace UI.Windows.GameScreen.Store.Clothes
             equipButton.gameObject.SetActive(false);
         }
 
-        private void ToggleStatus(bool own)
+        private void ToggleStatus(bool own, bool equipped)
         {
             ownStatus.SetActive(own);
             priceStatus.SetActive(!own);
 
-            equipButton.gameObject.SetActive(own);
+            equipButton.gameObject.SetActive(own && !equipped);
             buyButton.gameObject.SetActive(!own);
         }
 

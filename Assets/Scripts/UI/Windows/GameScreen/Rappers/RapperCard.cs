@@ -148,9 +148,7 @@ namespace UI.Windows.GameScreen.Rappers
         {
             if (info.IsPlayer)
             {
-                return PlayerAPI.Data.Info.Gender == Gender.Male
-                    ? playerMaleImage
-                    : playerFemaleImage;
+                return SpritesManager.Instance.GetPortrait(info.Name);
             }
 
             return info.IsCustom || info.Avatar == null ? customImage : info.Avatar;

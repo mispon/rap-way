@@ -7,6 +7,7 @@ using Core.Data;
 using Core.Localization;
 using Extensions;
 using Game.Labels.Desc;
+using Game.Player.Character;
 using Game.Player.State.Desc;
 using Game.Rappers.Desc;
 using Game.Settings;
@@ -102,6 +103,9 @@ namespace Game
         {
             LoadApplicationData();
             LocalizationManager.Instance.LoadLocalization(GameStats.Lang, true);
+
+            // apply clothes from inventory
+            Character.Instance.ResetClothes();
 
             RegisterHandlers();
             StartCoroutine(SetReady());

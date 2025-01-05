@@ -22,7 +22,6 @@ namespace UI.GameScreen
         [SerializeField] private Image           playerAvatar;
         [SerializeField] private TextMeshProUGUI playerNickname;
         [SerializeField] private TextMeshProUGUI playerRealname;
-        [SerializeField] private TextMeshProUGUI playerLevel;
 
         [SerializeField] private TextMeshProUGUI playerMoney;
         [SerializeField] private TextMeshProUGUI playerFans;
@@ -33,8 +32,7 @@ namespace UI.GameScreen
         [SerializeField] private Button fansButton;
         [SerializeField] private Button hypeButton;
 
-        [SerializeField]         private StatDescItem[] statDescItems;
-        [Space] [SerializeField] private ImagesBank     imagesBank;
+        [SerializeField] private StatDescItem[] statDescItems;
 
         private readonly CompositeDisposable _disposable = new();
 
@@ -46,7 +44,6 @@ namespace UI.GameScreen
 
             HandleStateEvents();
 
-            MsgBroker.Instance.Publish(new FullStateRequest());
             MsgBroker.Instance.Publish(new WindowControlMessage(WindowType.GameScreen));
         }
 
@@ -93,7 +90,7 @@ namespace UI.GameScreen
         {
             playerNickname.text = resp.NickName.ToUpper();
             playerRealname.text = $"{resp.RealName}, {resp.Level} lvl";
-            playerAvatar.sprite = SpritesManager.Instance.GetPortrait(resp.NickName.ToLower());
+            playerAvatar.sprite = SpritesManager.Instance.GetPortrait(resp.NickName);
             playerMoney.text    = resp.Money.GetShort();
             playerFans.text     = resp.Fans.GetShort();
             playerHype.text     = resp.Hype.ToString();

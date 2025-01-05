@@ -19,14 +19,14 @@ namespace UI.Windows.GameScreen.Battle
     {
         [Header("Controls")]
         [SerializeField] private Text playerName;
-        [SerializeField] private Text rapperName;
-        [SerializeField] private Image playerAvatar;
-        [SerializeField] private Text playerPointsLabel;
+        [SerializeField] private Text       rapperName;
+        [SerializeField] private Image      playerAvatar;
+        [SerializeField] private Text       playerPointsLabel;
         [SerializeField] private WorkPoints playerWorkPoints;
-        [SerializeField] private Image rapperAvatar;
-        [SerializeField] private Text rapperPointsLabel;
+        [SerializeField] private Image      rapperAvatar;
+        [SerializeField] private Text       rapperPointsLabel;
         [SerializeField] private WorkPoints rapperWorkPoints;
-        [SerializeField] private Sprite customRapperAvatar;
+        [SerializeField] private Sprite     customRapperAvatar;
 
         [Header("Controls")]
         [SerializeField] private int skillChance;
@@ -36,12 +36,9 @@ namespace UI.Windows.GameScreen.Battle
         [SerializeField] private WorkPoints punchPoint;
         [SerializeField] private WorkPoints flipPoint;
 
-        [Header("Date")]
-        [SerializeField] private ImagesBank imagesBank;
-
         private RapperInfo _rapper;
-        private int _playerPoints;
-        private int _rapperPoints;
+        private int        _playerPoints;
+        private int        _rapperPoints;
 
         public override void Show(object ctx = null)
         {
@@ -69,9 +66,9 @@ namespace UI.Windows.GameScreen.Battle
                 Type = WindowType.BattleResult,
                 Context = new Dictionary<string, object>
                 {
-                    ["rapper"] = _rapper,
+                    ["rapper"]       = _rapper,
                     ["playerPoints"] = _playerPoints,
-                    ["rapperPoints"] = _rapperPoints,
+                    ["rapperPoints"] = _rapperPoints
                 }
             });
         }
@@ -83,12 +80,12 @@ namespace UI.Windows.GameScreen.Battle
 
         private void GenerateWorkPoints()
         {
-            int playerPoints = Random.Range(1, PlayerAPI.Data.Stats.Vocobulary.Value + 2);
+            var playerPoints = Random.Range(1, PlayerAPI.Data.Stats.Vocobulary.Value + 2);
             playerWorkPoints.Show(playerPoints);
-            playerPoints += GenerateSkillsPoints();
+            playerPoints  += GenerateSkillsPoints();
             _playerPoints += playerPoints;
 
-            int rapperPoints = Random.Range(1, _rapper.Vocobulary + 2);
+            var rapperPoints = Random.Range(1, _rapper.Vocobulary + 2);
             rapperWorkPoints.Show(rapperPoints);
             _rapperPoints += rapperPoints;
         }
@@ -98,7 +95,9 @@ namespace UI.Windows.GameScreen.Battle
             int GeneratePoint(Skills skill, WorkPoints workPoints)
             {
                 if (!PlayerAPI.Data.Skills.Contains(skill) || Random.Range(0, 100) > skillChance)
+                {
                     return 0;
+                }
 
                 var value = Random.Range(1, 6);
 
@@ -140,18 +139,18 @@ namespace UI.Windows.GameScreen.Battle
         {
             base.BeforeShow(ctx);
 
-            playerName.text = PlayerAPI.Data.Info.NickName.ToUpper();
+            var nickname = PlayerAPI.Data.Info.NickName;
+
+            playerName.text = nickname.ToUpper();
             rapperName.text = _rapper.Name;
 
-            _playerPoints = _rapperPoints = 0;
+            _playerPoints          = _rapperPoints = 0;
             playerPointsLabel.text = "0";
             rapperPointsLabel.text = "0";
 
             DisplayAvailableSkills();
 
-            playerAvatar.sprite = PlayerAPI.Data.Info.Gender == Gender.Male
-                ? imagesBank.MaleAvatar
-                : imagesBank.FemaleAvatar;
+            playerAvatar.sprite = SpritesManager.Instance.GetPortrait(nickname);
             rapperAvatar.sprite = _rapper.IsCustom ? customRapperAvatar : _rapper.Avatar;
         }
 

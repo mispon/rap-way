@@ -61,7 +61,7 @@ namespace Game.Player.Character
                     var reset = m.Context.Value<bool>();
                     if (reset)
                     {
-                        SetDefault();
+                        SetDefaultData();
                     }
 
                     break;
@@ -104,7 +104,13 @@ namespace Game.Player.Character
             _animator.speed = speed;
         }
 
-        public void ResetClothes()
+        private void SetDefaultData()
+        {
+            Viewer.AssignCharacterData(_defaultData);
+            DefaultClothes();
+        }
+
+        private void DefaultClothes()
         {
             // reset all clothes
             var slots = new[]
@@ -125,6 +131,11 @@ namespace Game.Player.Character
             // default pants 
             Viewer.EquipPart(SlotCategory.Pants, Viewer.bodyType == BodyType.Male ? defaultMalePants : defaultFemalePants);
             Viewer.SetPartColor(SlotCategory.Pants, Color.white, Color.white, Color.white);
+        }
+
+        public void ResetClothes()
+        {
+            DefaultClothes();
 
             var clothes = PlayerAPI.Inventory.GetEquippedClothes();
 
@@ -133,12 +144,6 @@ namespace Game.Player.Character
                 Viewer.EquipPart(ci.Slot, ci.Name);
                 Viewer.SetPartColor(ci.Slot, ci.Color1, ci.Color2, ci.Color3);
             }
-        }
-
-        private void SetDefault()
-        {
-            Viewer.AssignCharacterData(_defaultData);
-            ResetClothes();
         }
 
         private void SetPosition(float x = 0.0f, float y = -6.5f)
@@ -158,7 +163,7 @@ namespace Game.Player.Character
                 Viewer.Initialize();
             } else
             {
-                SetDefault();
+                SetDefaultData();
             }
         }
 

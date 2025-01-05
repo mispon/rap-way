@@ -1,7 +1,7 @@
 ﻿using Core;
+using Core.Analytics;
 using Core.Context;
 using Enums;
-using Core.Analytics;
 using Game.Labels.Desc;
 using MessageBroker;
 using MessageBroker.Messages.Labels;
@@ -18,8 +18,8 @@ namespace UI.Windows.GameScreen.Contracts
     public class LabelContractPage : Page
     {
         [SerializeField] private Image logo;
-        [SerializeField] private Text greeting;
-        [SerializeField] private Text contract;
+        [SerializeField] private Text  greeting;
+        [SerializeField] private Text  contract;
 
         [Space]
         [SerializeField] private Button rejectButton;
@@ -39,14 +39,16 @@ namespace UI.Windows.GameScreen.Contracts
         public override void Show(object ctx = null)
         {
             if (PlayerAPI.Data.Label != "")
+            {
                 return;
+            }
 
             var label = ctx.Value<LabelInfo>();
 
-            string playerNickname = PlayerAPI.Data.Info.NickName;
+            var playerNickname = PlayerAPI.Data.Info.NickName;
             _labelName = label.Name;
 
-            logo.sprite = label.Logo;
+            logo.sprite   = label.Logo;
             greeting.text = GetLocale("label_contract_greeting", _labelName);
             contract.text = GetLocale("label_contract_text", playerNickname, _labelName, _labelName);
 
@@ -58,16 +60,13 @@ namespace UI.Windows.GameScreen.Contracts
             AnalyticsManager.LogEvent(FirebaseGameEvents.LabelContractDeclined);
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
+            var nickname = PlayerAPI.Data.Info.NickName;
+
             MsgBroker.Instance.Publish(new NewsMessage
             {
-                Text = "news_player_reject_label",
-                TextArgs = new[] {
-                        PlayerAPI.Data.Info.NickName,
-                        _labelName
-                    },
-                Sprite = PlayerAPI.Data.Info.Gender == Gender.Male
-                    ? imagesBank.MaleAvatar
-                    : imagesBank.FemaleAvatar,
+                Text       = "news_player_reject_label",
+                TextArgs   = new[] {nickname, _labelName},
+                Sprite     = SpritesManager.Instance.GetPortrait(nickname),
                 Popularity = PlayerAPI.Data.Fans
             });
 
@@ -80,18 +79,14 @@ namespace UI.Windows.GameScreen.Contracts
             SoundManager.Instance.PlaySound(UIActionType.Click);
 
             PlayerAPI.Data.Label = _labelName;
+            var nickname = PlayerAPI.Data.Info.NickName;
 
-            MsgBroker.Instance.Publish(new PlayerSignLabelsContractMessage { });
+            MsgBroker.Instance.Publish(new PlayerSignLabelsContractMessage());
             MsgBroker.Instance.Publish(new NewsMessage
             {
-                Text = "news_player_join_label",
-                TextArgs = new[] {
-                        PlayerAPI.Data.Info.NickName,
-                        _labelName
-                    },
-                Sprite = PlayerAPI.Data.Info.Gender == Gender.Male
-                    ? imagesBank.MaleAvatar
-                    : imagesBank.FemaleAvatar,
+                Text       = "news_player_join_label",
+                TextArgs   = new[] {nickname, _labelName},
+                Sprite     = SpritesManager.Instance.GetPortrait(nickname),
                 Popularity = PlayerAPI.Data.Fans
             });
 

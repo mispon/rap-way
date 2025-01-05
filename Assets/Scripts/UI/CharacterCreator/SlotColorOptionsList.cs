@@ -57,7 +57,11 @@ namespace UI.CharacterCreator
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<ResetCharacter>()
-                .Subscribe(m => { _options[defaultColor].SelectOption(); })
+                .Subscribe(m =>
+                {
+                    var idx = defaultColor;
+                    _options[idx].SelectOption();
+                })
                 .AddTo(_disposable);
 
             for (var i = 0; i < colors.Length; i++)

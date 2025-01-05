@@ -51,7 +51,7 @@ namespace Core
 
         public Sprite GetPortrait(string nickname)
         {
-            var filename = $"{nickname}.png";
+            var filename = $"{nickname.ToLower()}.png";
             return portraits.FirstOrDefault(e => e.name == filename);
         }
 

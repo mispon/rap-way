@@ -10,6 +10,8 @@ namespace Game.Player.State
 {
     public class StateMessagesHandler : IMessagesHandler
     {
+        private static readonly StateAPI _api = new();
+
         private GameSettings _settings;
 
         public void RegisterHandlers(CompositeDisposable disposable)
@@ -43,7 +45,7 @@ namespace Game.Player.State
                         Fans     = playerData.Fans,
                         Hype     = playerData.Hype,
                         Exp      = playerData.Exp,
-                        Level    = 0 // todo
+                        Level    = _api.GetLevel()
                     });
                 })
                 .AddTo(disposable);
