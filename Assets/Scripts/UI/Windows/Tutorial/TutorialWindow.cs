@@ -1,5 +1,6 @@
 using Core;
 using Core.Localization;
+using TMPro;
 using UI.Base;
 using UniRx;
 using UnityEngine;
@@ -11,8 +12,9 @@ namespace UI.Windows.Tutorial
     public class TutorialWindow : CanvasUIElement
     {
         [Header("Player")]
-        [SerializeField] private Text nickname;
-        [SerializeField] private Image playerIcon;
+        [SerializeField] private TextMeshProUGUI nickname;
+        [SerializeField] private TextMeshProUGUI realname;
+        [SerializeField] private Image           playerIcon;
 
         [Header("Controls")]
         [SerializeField] private Text info;
@@ -35,6 +37,7 @@ namespace UI.Windows.Tutorial
             var playerInfo = PlayerAPI.Data.Info;
 
             nickname.text     = playerInfo.NickName;
+            realname.text     = $"{playerInfo.FirstName} {playerInfo.LastName}";
             playerIcon.sprite = SpritesManager.Instance.GetPortrait(playerInfo.NickName);
 
             info.text = LocalizationManager.Instance.Get(stageSettings.Text);
