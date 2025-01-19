@@ -45,8 +45,6 @@ namespace Game.Player.Character
                 .Receive<WindowControlMessage>()
                 .Subscribe(HandleWindow)
                 .AddTo(_disposable);
-
-            Load();
         }
 
         private void HandleWindow(WindowControlMessage m)
@@ -79,6 +77,17 @@ namespace Game.Player.Character
                     SetPosition();
                     Show();
                     break;
+            }
+        }
+
+        public void Load()
+        {
+            if (Viewer.LoadFromJSON(GetFilePath()))
+            {
+                Viewer.Initialize();
+            } else
+            {
+                SetDefaultData();
             }
         }
 
@@ -156,20 +165,9 @@ namespace Game.Player.Character
             Viewer.SaveToJSON(GetFilePath());
         }
 
-        private void Load()
-        {
-            if (Viewer.LoadFromJSON(GetFilePath()))
-            {
-                Viewer.Initialize();
-            } else
-            {
-                SetDefaultData();
-            }
-        }
-
         private static string GetFilePath()
         {
-            return Path.Combine(Application.streamingAssetsPath, "character.json");
+            return Path.Combine(Application.persistentDataPath, "character.json");
         }
 
         protected override void Dispose()

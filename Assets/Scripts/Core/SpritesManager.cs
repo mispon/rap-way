@@ -64,7 +64,12 @@ namespace Core
 
         private static Sprite[] LoadPortraits()
         {
-            var basePath = Path.Combine(Application.streamingAssetsPath, "Portraits/");
+            var basePath = Path.Combine(Application.persistentDataPath, "Portraits/");
+
+            if (!Directory.Exists(basePath))
+            {
+                Directory.CreateDirectory(basePath);
+            }
 
             var files = Directory.GetFiles(basePath, "*.png");
             var count = files.Length;

@@ -1,32 +1,45 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Core.Data
 {
-    /// <summary>
-    /// Управление сохранением и загрузкой игровых данных
-    /// </summary>
+    [Serializable]
+    public class ArrayValue<T>
+    {
+        public T[] Arr;
+    }
+
     public static class DataManager
     {
-        /// <summary>
-        /// Выполняет сохранение игровых данных 
-        /// </summary>
         public static void Save<T>(string saveKey, T data) where T : class
         {
             var jsonData = JsonUtility.ToJson(data);
-            
-            if (string.IsNullOrEmpty(jsonData)) 
-                throw new RapWayException($"Отсутствуют данные типа {typeof(T)} по ключу {saveKey}");
-            
+
+            if (string.IsNullOrEmpty(jsonData))
+            {
+                Debug.LogWarning($"Failed to marshal data by key: {saveKey}, data: {data}");
+                return;
+            }
+
             PlayerPrefs.SetString(saveKey, jsonData);
         }
 
-        /// <summary>
-        /// Выполняет загрузку игровых данных 
-        /// </summary>
+        public static void SaveArray<T>(string saveKey, IEnumerable<T> items) where T : class
+        {
+            var arrayValue = new ArrayValue<T>
+            {
+                Arr = items?.ToArray() ?? Array.Empty<T>()
+            };
+
+            Save(saveKey, arrayValue);
+        }
+
         public static T Load<T>(string saveKey) where T : class
         {
             T result = null;
-            
+
             if (PlayerPrefs.HasKey(saveKey))
             {
                 var jsonData = PlayerPrefs.GetString(saveKey);
@@ -36,15 +49,10 @@ namespace Core.Data
             return result;
         }
 
-        /// <summary>
-        /// Удаляет игровые данные
-        /// </summary>
-        public static void Clear(string saveKey)
+        public static T[] LoadArray<T>(string saveKey) where T : class
         {
-            if (PlayerPrefs.HasKey(saveKey))
-            {
-                PlayerPrefs.DeleteKey(saveKey);
-            }
+            var arrayValue = Load<ArrayValue<T>>(saveKey);
+            return arrayValue?.Arr ?? Array.Empty<T>();
         }
     }
 }

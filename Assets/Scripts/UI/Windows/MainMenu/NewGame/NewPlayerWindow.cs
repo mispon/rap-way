@@ -135,10 +135,10 @@ namespace UI.Windows.MainMenu.NewGame
 
             var player   = GameManager.Instance.PlayerData.Info;
             var filename = $"{player.NickName.ToLower()}.png";
-            var path     = Path.Combine(Application.streamingAssetsPath, $"Portraits/{filename}");
+            var path     = Path.Combine(Application.persistentDataPath, "Portraits");
 
             var bytes = tex2D.EncodeToPNG();
-            File.WriteAllBytes(path, bytes);
+            File.WriteAllBytes($"{path}/{filename}", bytes);
 
             var sprite = Sprite.Create(tex2D, new Rect(0.0f, 0.0f, tex2D.width, tex2D.height), new Vector2(0.5f, 0.5f), 100.0f);
             sprite.name = filename;
