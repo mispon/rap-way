@@ -24,15 +24,17 @@ namespace Game.Player.Inventory
                 {
                     var playerData = GameManager.Instance.PlayerData;
 
-                    var item = new InventoryItem
+                    var newItem = new InventoryItem
                     {
                         Name     = e.Name,
                         Type     = e.Type,
                         Equipped = true
                     };
-                    item.SetValue(e.Raw);
+                    newItem.SetValue(e.Raw);
 
-                    playerData.Inventory.Add(item);
+                    playerData.Inventory.Add(newItem);
+                    PlayerPackage.Inventory.EquipClothingItem(newItem.Value<ClothingItem>());
+
                     MsgBroker.Instance.Publish(new ChangeHypeMessage());
                 })
                 .AddTo(disposable);

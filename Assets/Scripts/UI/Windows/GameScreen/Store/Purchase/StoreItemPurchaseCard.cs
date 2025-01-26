@@ -102,7 +102,6 @@ namespace UI.Windows.GameScreen.Store.Purchase
 
             SoundManager.Instance.PlaySound(UIActionType.Pay);
 
-
             if (_storeItem != null)
             {
                 MsgBroker.Instance.Publish(new AddInventoryItemMessage

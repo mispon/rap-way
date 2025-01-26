@@ -26,47 +26,31 @@ namespace Game
 {
     public class GameManager : Singleton<GameManager>
     {
-        [Header("Stores URLs")]
-        [SerializeField]
-        private string appStoreURL;
-        [Header("Stores URLs")]
-        [SerializeField]
-        private string googlePlayURL;
+        [SerializeField] private string appStoreURL;
+        [SerializeField] private string googlePlayURL;
 
         [Space]
-        [Header("Game Settings")]
         public GameSettings Settings;
 
         [Space]
-        [Header("Game")]
         public GameStats GameStats;
-        [Header("Player")]
         public PlayerData PlayerData;
 
         [Space]
-        [Header("Rappers")]
         public List<RapperInfo> Rappers;
-        [Header("Custom Rappers")]
         public List<RapperInfo> CustomRappers;
 
         [Space]
-        [Header("Labels")]
         public List<LabelInfo> Labels;
-        [Header("Custom Labels")]
         public List<LabelInfo> CustomLabels;
-        [Header("Player Label")]
-        public LabelInfo PlayerLabel;
+        public LabelInfo       PlayerLabel;
 
         [Space]
-        [Header("Eagles")]
         public List<Eagle> Eagles;
-        [Header("Emails")]
         public List<Email> Emails;
-        [Header("News")]
-        public List<News> News;
+        public List<News>  News;
 
         [Space]
-        [Header("Tutorials")]
         public HashSet<string> ShowedHints;
 
         public bool Ready;

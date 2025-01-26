@@ -85,6 +85,7 @@ namespace Game.Player.Character
             if (Viewer.LoadFromJSON(GetFilePath()))
             {
                 Viewer.Initialize();
+                ResetClothes();
             } else
             {
                 SetDefaultData();
