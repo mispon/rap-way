@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CharacterCreator2D;
@@ -8,6 +9,8 @@ using Core.Analytics;
 using Enums;
 using Game;
 using Game.Player.Character;
+using MessageBroker;
+using MessageBroker.Messages.UI;
 using Scenes.MessageBroker;
 using Scenes.MessageBroker.Messages;
 using ScriptableObjects;
@@ -30,13 +33,25 @@ namespace UI.Windows.MainMenu.NewGame
         [SerializeField] private Carousel _ageCarousel;
 
         [Header("Buttons")]
-        [SerializeField] private Button _startButton;
+        [SerializeField] private Button startButton;
+        [SerializeField] private Button backButton;
 
         private RenderTexture _renderTexture;
 
         public override void Initialize()
         {
-            _startButton.onClick.AddListener(OnStartClick);
+            startButton.onClick.AddListener(OnStartClick);
+            backButton.onClick.AddListener(() =>
+            {
+                MsgBroker.Instance.Publish(new WindowControlMessage
+                {
+                    Type = WindowType.CharacterCreator,
+                    Context = new Dictionary<string, object>
+                    {
+                        ["dont_reset"] = true
+                    }
+                });
+            });
         }
 
         protected override void BeforeShow(object ctx = null)

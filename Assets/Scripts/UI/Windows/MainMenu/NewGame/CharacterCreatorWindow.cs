@@ -1,6 +1,7 @@
 using System;
 using CharacterCreator2D;
 using Core;
+using Core.Context;
 using Game.Player.Character;
 using MessageBroker;
 using MessageBroker.Messages.Player;
@@ -60,9 +61,14 @@ namespace UI.Windows.MainMenu.NewGame
 
         protected override void BeforeShow(object ctx = null)
         {
-            SelectGender(BodyType.Male, true);
-            SelectCategory(categories[0]);
+            var dontReset = ctx.ValueByKey<bool>("dont_reset");
 
+            if (!dontReset)
+            {
+                SelectGender(BodyType.Male, true);
+                SelectCategory(categories[0]);    
+            }
+            
             base.BeforeShow(ctx);
         }
 
@@ -104,13 +110,21 @@ namespace UI.Windows.MainMenu.NewGame
             if (_prevCategory != null)
             {
                 _prevCategory.Category.SetActive(false);
-                _prevCategory.CategoryColors.SetActive(false);
                 _prevCategory.Outline.SetActive(false);
+                
+                if (_prevCategory.CategoryColors != null)
+                {
+                    _prevCategory.CategoryColors.SetActive(false);
+                }
             }
 
             category.Category.SetActive(true);
             category.Outline.SetActive(true);
-            category.CategoryColors?.SetActive(true);
+
+            if (category.CategoryColors != null)
+            {
+                category.CategoryColors.SetActive(true);
+            }
 
             if (category.ZoomCharacter)
             {

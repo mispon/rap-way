@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using CharacterCreator2D;
 using Core;
@@ -39,7 +40,7 @@ namespace Game.Player.Character
             }
         }
 
-        protected override void Initialize()
+        private void Start()
         {
             MsgBroker.Instance
                 .Receive<WindowControlMessage>()
