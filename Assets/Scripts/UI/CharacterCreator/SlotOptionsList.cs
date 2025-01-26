@@ -28,13 +28,13 @@ namespace UI.CharacterCreator
                 .Receive<RandomizeCharacter>()
                 .Subscribe(m =>
                 {
-                    var part = parts[Random.Range(0, parts.Length)];
-                    _options[0].SetPart(part);
+                    var idx = Random.Range(0, _options.Count);
+                    _options[idx].SelectPart();
                 })
                 .AddTo(_disposable);
             MsgBroker.Instance
                 .Receive<ResetCharacter>()
-                .Subscribe(m => { _options[0].SetPart(parts[defaultPart]); })
+                .Subscribe(m => { _options[defaultPart].SelectPart(); })
                 .AddTo(_disposable);
 
             for (var i = 0; i < parts.Length; i++)

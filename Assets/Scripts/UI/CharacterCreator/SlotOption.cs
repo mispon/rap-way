@@ -21,6 +21,8 @@ namespace UI.CharacterCreator
         [SerializeField] private Color colorEven;
         [SerializeField] private Color colorOdd;
 
+        private Action        _beforeClick;
+        private bool          _selected;
         private RectTransform _rectTransform;
         private Part          _part;
 
@@ -32,6 +34,8 @@ namespace UI.CharacterCreator
         {
             _index = pos;
             _part  = part;
+
+            _beforeClick = beforeClick;
 
             GetComponent<Button>().onClick.AddListener(() =>
             {
@@ -50,21 +54,30 @@ namespace UI.CharacterCreator
             outline.SetActive(false);
         }
 
-        public void SetPart(Part part)
+        public void SelectPart()
         {
-            Character.Instance.Viewer.EquipPart(slot, part);
+            if (_selected)
+            {
+                return;
+            }
+
+            _selected = true;
+            _beforeClick?.Invoke();
+
+            Character.Instance.Viewer.EquipPart(slot, _part);
+            outline.SetActive(true);
         }
 
         public void HideOutline()
         {
             outline.SetActive(false);
+            _selected = false;
         }
 
         private void HandleClick()
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
-            SetPart(_part);
-            outline.SetActive(true);
+            SelectPart();
         }
 
         public float GetHeight()

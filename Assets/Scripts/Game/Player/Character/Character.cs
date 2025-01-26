@@ -155,7 +155,7 @@ namespace Game.Player.Character
             }
         }
 
-        private void SetPosition(float x = 0.0f, float y = -6.5f)
+        public void SetPosition(float x = 0.0f, float y = -6.5f)
         {
             Viewer.transform.position = new Vector3(x, y, 0);
         }

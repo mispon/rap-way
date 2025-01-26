@@ -1,3 +1,4 @@
+using System;
 using CharacterCreator2D;
 using Core;
 using Game.Player.Character;
@@ -10,62 +11,43 @@ using UnityEngine.UI;
 
 namespace UI.Windows.MainMenu.NewGame
 {
+    [Serializable]
+    public class CategoryRow
+    {
+        public Button     Button;
+        public GameObject Outline;
+        public GameObject Category;
+        public GameObject CategoryColors;
+        public bool       ZoomCharacter;
+    }
+
     public class CharacterCreatorWindow : CanvasUIElement
     {
+        [SerializeField] private Camera     mainCamera;
         [SerializeField] private ImagesBank imagesBank;
 
         [Header("Gender")]
         [SerializeField] private Button maleButton;
         [SerializeField] private Button femaleButton;
 
-        [Header("Categories Buttons")]
-        [SerializeField] private Button commonButton;
-        [SerializeField] private Button hairButton;
-        [SerializeField] private Button facialHairButton;
-        [SerializeField] private Button eyesButton;
-        [SerializeField] private Button eyebrowButton;
-        [SerializeField] private Button noseButton;
-        [SerializeField] private Button mouthButton;
-
         [Header("Categories")]
-        [SerializeField] private GameObject common;
-        [SerializeField] private GameObject hairs;
-        [SerializeField] private GameObject facialHairs;
-        [SerializeField] private GameObject eyes;
-        [SerializeField] private GameObject eyebrows;
-        [SerializeField] private GameObject noses;
-        [SerializeField] private GameObject mouths;
-
-        [Header("Category Colors")]
-        [SerializeField] private GameObject bodyColors;
-        [SerializeField] private GameObject hairColors;
-        [SerializeField] private GameObject facialHairColors;
-        [SerializeField] private GameObject eyesColors;
-        [SerializeField] private GameObject eyebrowsColors;
-        [SerializeField] private GameObject mouthsColors;
+        [SerializeField] private CategoryRow[] categories;
+        [SerializeField] private Button facialHairButton;
 
         [Header("Control Buttons")]
         [SerializeField] private Button randomizeButton;
 
-        [Header("Colors")]
-        [SerializeField] private Color activeColor;
-        [SerializeField] private Color inactiveColor;
-
-        private GameObject _prevCategory;
-        private GameObject _prevCategoryColors;
+        private CategoryRow _prevCategory;
 
         public override void Initialize()
         {
             maleButton.onClick.AddListener(() => SelectGender(BodyType.Male));
             femaleButton.onClick.AddListener(() => SelectGender(BodyType.Female));
 
-            commonButton.onClick.AddListener(() => SelectCategory(common, bodyColors));
-            hairButton.onClick.AddListener(() => SelectCategory(hairs, hairColors));
-            facialHairButton.onClick.AddListener(() => SelectCategory(facialHairs, facialHairColors));
-            eyesButton.onClick.AddListener(() => SelectCategory(eyes, eyesColors));
-            eyebrowButton.onClick.AddListener(() => SelectCategory(eyebrows, eyebrowsColors));
-            noseButton.onClick.AddListener(() => SelectCategory(noses));
-            mouthButton.onClick.AddListener(() => SelectCategory(mouths, mouthsColors));
+            foreach (var category in categories)
+            {
+                category.Button.onClick.AddListener(() => SelectCategory(category));
+            }
 
             randomizeButton.onClick.AddListener(() =>
             {
@@ -73,22 +55,31 @@ namespace UI.Windows.MainMenu.NewGame
                 MsgBroker.Instance.Publish(new RandomizeCharacter());
             });
 
-            SelectCategory(common, bodyColors);
             base.Initialize();
         }
 
         protected override void BeforeShow(object ctx = null)
         {
-            maleButton.image.sprite   = imagesBank.MaleAvatar;
-            femaleButton.image.sprite = imagesBank.FemaleAvatarInactive;
-            facialHairButton.gameObject.SetActive(true);
+            SelectGender(BodyType.Male, true);
+            SelectCategory(categories[0]);
 
             base.BeforeShow(ctx);
         }
 
-        private void SelectGender(BodyType type)
+        protected override void AfterHide()
         {
-            SoundManager.Instance.PlaySound(UIActionType.Click);
+            mainCamera.fieldOfView = 85;
+            Character.Instance.SetPosition();
+
+            base.AfterHide();
+        }
+
+        private void SelectGender(BodyType type, bool silent = false)
+        {
+            if (!silent)
+            {
+                SoundManager.Instance.PlaySound(UIActionType.Click);
+            }
 
             if (type == BodyType.Male)
             {
@@ -106,25 +97,32 @@ namespace UI.Windows.MainMenu.NewGame
             MsgBroker.Instance.Publish(new ResetCharacter());
         }
 
-        private void SelectCategory(GameObject category, GameObject categoryColors = null)
+        private void SelectCategory(CategoryRow category)
         {
             SoundManager.Instance.PlaySound(UIActionType.Switcher);
 
             if (_prevCategory != null)
             {
-                _prevCategory.SetActive(false);
+                _prevCategory.Category.SetActive(false);
+                _prevCategory.CategoryColors.SetActive(false);
+                _prevCategory.Outline.SetActive(false);
             }
 
-            if (_prevCategoryColors != null)
+            category.Category.SetActive(true);
+            category.Outline.SetActive(true);
+            category.CategoryColors?.SetActive(true);
+
+            if (category.ZoomCharacter)
             {
-                _prevCategoryColors.SetActive(false);
+                mainCamera.fieldOfView = 40;
+                Character.Instance.SetPosition(0.3f, -10f);
+            } else
+            {
+                mainCamera.fieldOfView = 75;
+                Character.Instance.SetPosition();
             }
 
-            category.SetActive(true);
             _prevCategory = category;
-
-            categoryColors?.SetActive(true);
-            _prevCategoryColors = categoryColors;
         }
     }
 }
