@@ -31,6 +31,7 @@ namespace Game.Room
                 WindowType.CharacterCreator => darkImage,
                 WindowType.Personal         => darkImage,
                 WindowType.Shop_Clothes     => shopImage,
+                WindowType.Hints            => background.sprite,
                 WindowType.Previous         => background.sprite,
                 _                           => mainImage
             };

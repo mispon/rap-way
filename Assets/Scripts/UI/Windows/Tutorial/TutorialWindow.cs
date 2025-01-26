@@ -37,7 +37,7 @@ namespace UI.Windows.Tutorial
             var playerInfo = PlayerAPI.Data.Info;
 
             nickname.text     = playerInfo.NickName;
-            realname.text     = $"{playerInfo.FirstName} {playerInfo.LastName}";
+            realname.text     = $"{playerInfo.FirstName} {playerInfo.LastName}, {PlayerAPI.State.GetLevel()} lvl";
             playerIcon.sprite = SpritesManager.Instance.GetPortrait(playerInfo.NickName);
 
             info.text = LocalizationManager.Instance.Get(stageSettings.Text);

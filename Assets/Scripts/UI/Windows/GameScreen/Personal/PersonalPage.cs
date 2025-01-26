@@ -1,8 +1,7 @@
 using Core;
-using Core.Ads;
+using Core.Analytics;
 using Core.Context;
 using Enums;
-using Core.Analytics;
 using MessageBroker;
 using MessageBroker.Messages.UI;
 using ScriptableObjects;
@@ -38,8 +37,8 @@ namespace UI.Windows.GameScreen.Personal
         [Header("Реклама")]
         [SerializeField] private Button cashButton;
 
-        private PersonalTabType _activeTab = PersonalTabType.None;
-        private bool _isFirstOpen = true;
+        private PersonalTabType _activeTab   = PersonalTabType.None;
+        private bool            _isFirstOpen = true;
 
         private void Start()
         {
@@ -93,14 +92,12 @@ namespace UI.Windows.GameScreen.Personal
             {
                 SoundManager.Instance.PlaySound(UIActionType.Switcher);
             }
+
             _isFirstOpen = false;
 
-            if (_activeTab != PersonalTabType.Personal)
-            {
-                _activeTab = PersonalTabType.Personal;
-                UpdateTabs(personalTab, houseTab, labelTab);
-                UpdateTabButtons(personalButton, houseButton, labelButton);
-            }
+            _activeTab = PersonalTabType.Personal;
+            UpdateTabs(personalTab, houseTab, labelTab);
+            UpdateTabButtons(personalButton, houseButton, labelButton);
         }
 
         private void OpenHouseTab()
@@ -156,7 +153,7 @@ namespace UI.Windows.GameScreen.Personal
 
         protected override void AfterHide()
         {
-            _activeTab = PersonalTabType.None;
+            _activeTab   = PersonalTabType.None;
             _isFirstOpen = true;
 
             MsgBroker.Instance.Publish(new TutorialWindowControlMessage());

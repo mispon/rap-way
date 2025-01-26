@@ -26,9 +26,11 @@ namespace UI.Windows.Tutorial
 
         public bool ShowHint(string key, object pageCtx = null)
         {
-            bool ok = GameManager.Instance.ShowedHints.Add(key);
+            var ok = GameManager.Instance.ShowedHints.Add(key);
             if (!ok)
+            {
                 return false;
+            }
 
             var info = LocalizationManager.Instance.Get(key);
 
@@ -37,9 +39,9 @@ namespace UI.Windows.Tutorial
                 Type = WindowType.Hints,
                 Context = new Dictionary<string, object>
                 {
-                    ["hint_key"] = key,
+                    ["hint_key"]  = key,
                     ["hint_text"] = info,
-                    ["page_ctx"] = pageCtx
+                    ["page_ctx"]  = pageCtx
                 }
             });
 
