@@ -63,9 +63,9 @@ namespace Game.Rappers.AI
 
         private static AlbumInfo SelectFreeAlbum(RapperInfo rapperInfo)
         {
-            var albums = rapperInfo.History.AlbumList
+            var albums = rapperInfo?.History?.AlbumList
                 .Where(e => e.ConcertAmounts < 3)
-                .ToArray();
+                .ToArray() ?? Array.Empty<AlbumInfo>();
 
             return albums.Length > 0
                 ? albums[Random.Range(0, albums.Length)]

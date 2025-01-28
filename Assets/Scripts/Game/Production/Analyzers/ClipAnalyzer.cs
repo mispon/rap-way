@@ -77,30 +77,31 @@ namespace Game.Production.Analyzers
         /// </summary>
         private static int CalculateViewsAmount(int creatorId, int fans, float quality, int trackListenAmount, bool isHit)
         {
-            // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            var activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
-
-            // Активность прослушиваний трека фанатами зависит от его качества
-            const float maxFansActivity = 5f;
-            var         activity        = 1.0f + maxFansActivity * quality;
-
-            var views = Convert.ToInt32(Math.Ceiling(activeFans * activity));
-
-            // Успешность трека увеличивает просмотры
-            views += Convert.ToInt32(trackListenAmount * 0.1f);
-
-            if (isHit)
+            try
             {
-                try
-                {
-                    views = checked(views * 5);
-                } catch (OverflowException)
-                {
-                    views = int.MaxValue;
-                }
-            }
+                // Количество фанатов, ждущих трек, зависит от уровня хайпа
+                var activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
 
-            return AddFuzzing(views);
+                // Активность прослушиваний трека фанатами зависит от его качества
+                const float maxFansActivity = 5f;
+                var         activity        = 1.0f + maxFansActivity * quality;
+
+                var views = Convert.ToInt32(Math.Ceiling(activeFans * activity));
+
+                // Успешность трека увеличивает просмотры
+                views += Convert.ToInt32(trackListenAmount * 0.1f);
+
+                if (isHit)
+                {
+                    views *= 5;
+                }
+
+                return AddFuzzing(views);
+
+            } catch (Exception)
+            {
+                return AddFuzzing(int.MaxValue);
+            }
         }
 
         /// <summary>

@@ -42,13 +42,18 @@ namespace Core.Localization
         {
             var item = _data.items.FirstOrDefault(e => e.key == key);
             if (item != null)
+            {
                 return item.value;
+            }
 
             item = _enBackup.items.FirstOrDefault(e => e.key == key);
             if (item != null)
+            {
                 return item.value;
-
-            throw new RapWayException($"Not found localization by key [{key}]!");
+            }
+            
+            Debug.LogError($"Not found localization by key [{key}]!");
+            return key;
         }
 
         /// <summary>

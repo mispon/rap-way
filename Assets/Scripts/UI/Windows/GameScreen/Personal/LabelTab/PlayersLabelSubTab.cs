@@ -251,6 +251,11 @@ namespace UI.Windows.GameScreen.Personal.LabelTab
 
         public void ShowMoneyReport()
         {
+            if (_label == null)
+            {
+                return;
+            }
+            
             var incomeValue = (_label.IsFrozen ? 0 : _income).GetMoney();
             moneyReportIncome.text = LocalizationManager.Instance
                 .GetFormat("label_monthly_income", incomeValue)

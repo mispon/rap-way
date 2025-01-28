@@ -23,9 +23,12 @@ namespace Game.Player.Inventory
             var equips = data.Inventory
                 .Where(g => qualityTypes.Contains(g.Type))
                 .GroupBy(g => g.Type)
-                .ToDictionary(k => k, v => v.Max(g => g));
-
-            return equips.Sum(p => p.Value<float>());
+                .ToDictionary(
+                    k => k.Key, 
+                    v => v.Max(g => g.Value<ValuesItem>().Quality)
+                );
+            
+            return equips.Sum(p => p.Value);
         }
 
         public InventoryItem FindClothingItem(ClothingItem target)

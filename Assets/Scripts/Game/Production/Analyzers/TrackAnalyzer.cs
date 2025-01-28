@@ -92,8 +92,11 @@ namespace Game.Production.Analyzers
             var workPointsFactor = CalculateWorkPointsFactor(track.TextPoints, track.BitPoints, maxWorkPoints);
             qualityPoints += workPointsFactor;
 
-            var goodsPointsFactor = PlayerAPI.Inventory.GetQualityImpact();
-            qualityPoints += goodsPointsFactor;
+            if (IsPlayerCreator(track.CreatorId))
+            {
+                var goodsPointsFactor = PlayerAPI.Inventory.GetQualityImpact();
+                qualityPoints += goodsPointsFactor;    
+            }
 
             return Mathf.Min(qualityPoints, 1f);
         }
@@ -118,30 +121,31 @@ namespace Game.Production.Analyzers
         /// </summary>
         private static int CalculateListensAmount(int creatorId, int fans, float quality, float trendsMatchFactor, bool isHit)
         {
-            // Количество фанатов, ждущих трек, зависит от уровня хайпа
-            var activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
-
-            // Активность прослушиваний трека фанатами зависит от его качества
-            const float maxFansActivity = 5f;
-            var         activity        = 1.0f + maxFansActivity * quality;
-
-            var listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
-
-            // Попадание в тренды так же увеличивает прослушивания
-            listens = (int) (listens * (1f + trendsMatchFactor));
-
-            if (isHit)
+            try
             {
-                try
-                {
-                    listens = checked(listens * 5);
-                } catch (OverflowException)
-                {
-                    listens = int.MaxValue;
-                }
-            }
+                // Количество фанатов, ждущих трек, зависит от уровня хайпа
+                var activeFans = Convert.ToInt32(fans * (0.5f + GetHypeFactor(creatorId)));
 
-            return AddFuzzing(listens);
+                // Активность прослушиваний трека фанатами зависит от его качества
+                const float maxFansActivity = 5f;
+                var         activity        = 1.0f + maxFansActivity * quality;
+
+                var listens = Convert.ToInt32(Math.Ceiling(activeFans * activity));
+
+                // Попадание в тренды так же увеличивает прослушивания
+                listens = (int) (listens * (1f + trendsMatchFactor));
+
+                if (isHit)
+                {
+                    listens *= 5;
+                }
+
+                return AddFuzzing(listens);
+                
+            } catch (Exception)
+            {
+                return AddFuzzing(int.MaxValue);
+            }
         }
 
         private static int CalculateChartPosition(int creatorId, int baseFans, int minFans)

@@ -55,7 +55,14 @@ namespace Extensions
         /// </summary>
         public static DateTime StringToDate(this string value)
         {
-            return DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            try
+            {
+                return DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                
+            } catch (Exception)
+            {
+                return DateTime.Now;
+            }
         }
 
         /// <summary>

@@ -68,7 +68,7 @@ namespace Game.Production.Analyzers
             if (value == int.MaxValue)
             {
                 // to safe add back
-                value -= fuzz;
+                value -= fuzz + 1;
             }
 
             return Random.Range(value - fuzz, value + fuzz);

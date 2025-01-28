@@ -33,8 +33,12 @@ namespace Game.Player.Inventory
                     newItem.SetValue(e.Raw);
 
                     playerData.Inventory.Add(newItem);
-                    PlayerPackage.Inventory.EquipClothingItem(newItem.Value<ClothingItem>());
 
+                    if (e.Type == InventoryType.Clothes)
+                    {
+                        PlayerPackage.Inventory.EquipClothingItem(newItem.Value<ClothingItem>());    
+                    }
+                    
                     MsgBroker.Instance.Publish(new ChangeHypeMessage());
                 })
                 .AddTo(disposable);

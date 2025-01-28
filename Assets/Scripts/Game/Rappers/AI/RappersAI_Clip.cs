@@ -57,9 +57,9 @@ namespace Game.Rappers.AI
 
         private static TrackInfo SelectFreeTrack(RapperInfo rapperInfo)
         {
-            var tracks = rapperInfo.History.TrackList
+            var tracks = rapperInfo?.History?.TrackList
                 .Where(e => !e.HasClip)
-                .ToArray();
+                .ToArray() ?? Array.Empty<TrackInfo>();
 
             return tracks.Length > 0
                 ? tracks[Random.Range(0, tracks.Length)]
