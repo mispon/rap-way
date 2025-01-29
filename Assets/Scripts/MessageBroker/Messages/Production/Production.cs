@@ -12,5 +12,6 @@ namespace MessageBroker.Messages.Production
     public struct ConcertRewardMessage
     {
         public int MoneyIncome;
+        public int Exp;
     }
 }

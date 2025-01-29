@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Core;
 using MessageBroker;
@@ -36,39 +37,53 @@ namespace Scenes
 
         private void LoadNewScene()
         {
-            _ack = 0;
-            _currentScene = SceneManager.GetActiveScene().name;
-            
-            loadingScreen.onFadeComplete -= LoadNewScene;
-            loadingScreen
-                .ShowProgressBar(settings.LoadingDelay)
-                .DoOnCompleted(UnloadCurrentScene)
-                .Subscribe(e => Debug.Log(e))
-                .AddTo(this);
-            
-            string sceneName = settings.GetSceneName(_loadingScene);
-            SceneManager
-                .LoadSceneAsync(sceneName, LoadSceneMode.Additive)
-                .AsObservable()
-                .Last()
-                .Subscribe(_ => UnloadCurrentScene());
+            try
+            {
+                _ack          = 0;
+                _currentScene = SceneManager.GetActiveScene().name;
+
+                loadingScreen.onFadeComplete -= LoadNewScene;
+                loadingScreen
+                    .ShowProgressBar(settings.LoadingDelay)
+                    .DoOnCompleted(UnloadCurrentScene)
+                    .Subscribe(e => Debug.Log(e))
+                    .AddTo(this);
+
+                string sceneName = settings.GetSceneName(_loadingScene);
+                SceneManager
+                    .LoadSceneAsync(sceneName, LoadSceneMode.Additive)
+                    .AsObservable()
+                    .Last()
+                    .Subscribe(_ => UnloadCurrentScene());
+
+            } catch (Exception ex)
+            {
+                Debug.LogError(ex);
+            }
         }
 
         private void UnloadCurrentScene()
         {
-            // we need 2 ACKs to unload last scene
-            Interlocked.Increment(ref _ack);
-            if (Interlocked.Read(ref _ack) != 2)
-                return;
-            
-            SceneManager
-                .UnloadSceneAsync(_currentScene)
-                .AsObservable()
-                .Last()
-                .Subscribe(_ => loadingScreen.EndLoading(settings.FadeTimeEnd))
-                .AddTo(this);
-            
-            MsgBroker.Instance.Publish(new SceneLoadedMessage());
+            try
+            {
+                // we need 2 ACKs to unload last scene
+                Interlocked.Increment(ref _ack);
+                if (Interlocked.Read(ref _ack) != 2)
+                    return;
+
+                SceneManager
+                    .UnloadSceneAsync(_currentScene)
+                    .AsObservable()
+                    .Last()
+                    .Subscribe(_ => loadingScreen.EndLoading(settings.FadeTimeEnd))
+                    .AddTo(this);
+
+                MsgBroker.Instance.Publish(new SceneLoadedMessage());
+                
+            } catch (Exception ex)
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 }

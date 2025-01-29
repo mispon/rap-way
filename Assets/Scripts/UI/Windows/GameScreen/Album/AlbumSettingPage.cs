@@ -56,6 +56,7 @@ namespace UI.Windows.GameScreen.Album
 
         private void OnAlbumNameInput(string value)
         {
+            _album ??= new AlbumInfo { CreatorId = -1 };
             _album.Name = value;
         }
 

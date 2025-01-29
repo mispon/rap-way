@@ -58,12 +58,16 @@ namespace UI.Windows.GameScreen.Concert
             soldOutBadge.SetActive(concert.TicketsSold >= concert.LocationCapacity);
         }
 
-        private static void SaveResult(ConcertInfo concert)
+        private void SaveResult(ConcertInfo concert)
         {
             concert.Timestamp = TimeManager.Instance.Now.DateToString();
             ProductionManager.AddConcert(concert);
 
-            MsgBroker.Instance.Publish(new ConcertRewardMessage {MoneyIncome = concert.Income});
+            MsgBroker.Instance.Publish(new ConcertRewardMessage
+            {
+                MoneyIncome = concert.Income,
+                Exp         = settings.Concert.RewardExp
+            });
         }
 
         protected override void BeforeShow(object ctx = null)

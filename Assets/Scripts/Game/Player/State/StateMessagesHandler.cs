@@ -120,6 +120,8 @@ namespace Game.Player.State
                 .Subscribe(e =>
                 {
                     UpdateMoney(e.MoneyIncome);
+                    UpdateExp(e.Exp);
+                    
                     GameManager.Instance.GameStats.ConcertCooldown = _settings.Concert.Cooldown;
                     GameManager.Instance.SaveApplicationData();
                 })

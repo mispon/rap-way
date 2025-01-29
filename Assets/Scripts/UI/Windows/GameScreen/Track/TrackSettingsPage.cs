@@ -56,6 +56,12 @@ namespace UI.Windows.GameScreen.Track
 
         private void OnTrackNameInput(string value)
         {
+            _track ??= new TrackInfo
+            {
+                CreatorId = -1,
+                FeatId    = -1
+            };
+
             _track.Name = value;
         }
 
