@@ -54,7 +54,7 @@ namespace Game.Production.Analyzers
                 fansAmount,
                 qualityPoints,
                 settings.Player.MinFansIncome,
-                settings.Player.MinFansIncome
+                settings.Player.MaxFansIncome
             );
             album.MoneyIncome = CalcMoneyIncome(
                 album.ListenAmount,

@@ -57,8 +57,16 @@ namespace Extensions
         {
             try
             {
-                return DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var now = DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 
+                if (now.Year == 1)
+                {
+                    // fix date time corruption
+                    now = DateTime.Now;
+                }
+
+                return now;
+
             } catch (Exception)
             {
                 return DateTime.Now;

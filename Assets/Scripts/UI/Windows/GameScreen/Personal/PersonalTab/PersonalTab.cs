@@ -71,7 +71,8 @@ namespace UI.Windows.GameScreen.Personal.PersonalTab
                 var item = inventory
                     .Where(e => e.Type == type)
                     .OrderByDescending(e => e.Value<ValuesItem>().Quality)
-                    .ThenBy(e => e.Value<ValuesItem>().Hype)
+                    .ThenByDescending(e => e.Value<ValuesItem>().Hype)
+                    .ThenByDescending(e => e.Value<ValuesItem>().Level)
                     .FirstOrDefault();
 
                 if (item == null)

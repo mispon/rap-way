@@ -24,7 +24,8 @@ namespace Scenes
         {
             SceneMessageBroker.Instance
                 .Receive<SceneLoadMessage>()
-                .Subscribe(OnSceneLoadMessage);
+                .Subscribe(OnSceneLoadMessage)
+                .AddTo(this);;
         }
         
         private void OnSceneLoadMessage(SceneLoadMessage msg)
@@ -53,8 +54,9 @@ namespace Scenes
                 SceneManager
                     .LoadSceneAsync(sceneName, LoadSceneMode.Additive)
                     .AsObservable()
-                    .Last()
-                    .Subscribe(_ => UnloadCurrentScene());
+                    .LastOrDefault()
+                    .Subscribe(_ => UnloadCurrentScene())
+                    .AddTo(this);
 
             } catch (Exception ex)
             {
@@ -74,7 +76,7 @@ namespace Scenes
                 SceneManager
                     .UnloadSceneAsync(_currentScene)
                     .AsObservable()
-                    .Last()
+                    .LastOrDefault()
                     .Subscribe(_ => loadingScreen.EndLoading(settings.FadeTimeEnd))
                     .AddTo(this);
 
