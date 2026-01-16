@@ -1,6 +1,6 @@
 namespace RapWay.Core.Audio
 {
-    public class AudioManager
+    public class AudioService
     {
         
     }
