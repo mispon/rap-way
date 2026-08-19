@@ -11,6 +11,7 @@
 
 - Use Unity `6000.5.9f1`; do not upgrade the Editor or packages incidentally.
 - Treat `GAME_DESIGN_DOCUMENT.md` as the product source of truth for agreed gameplay mechanics, scope, and design constraints.
+- Treat `TECHNICAL_DESIGN_DOCUMENT.md` as the source of truth for architecture, technology choices, dependency boundaries, and migration direction.
 - Read `Docs/AI/UnityProjectContext.md` when onboarding or when architecture context is needed.
 - First-party code and content live under `Assets/_Project/`. Treat other top-level `Assets/` folders as vendor/imported unless verified otherwise.
 - Preserve user changes. Check `git status` before and after work; never reset, clean, or overwrite unrelated files.
@@ -27,18 +28,20 @@
 
 ## Architecture
 
-- Keep `MonoBehaviour` views thin. Put game rules in plain C# domain/application services that can be tested without Unity scenes.
+- Keep `MonoBehaviour` views thin. `RapWay.Domain` and `RapWay.Application` must not reference Unity or Unity-specific packages and must be testable with `dotnet test`.
 - Use VContainer constructor injection. Register dependencies in scopes/installers; avoid new global singletons, service locators, and hidden `Find` calls.
-- Use UniTask for asynchronous Unity work. Pass cancellation tied to object/application lifetime where work can outlive a frame.
-- Use `.Forget()` only at deliberate entry-point boundaries and ensure failures are logged or handled.
-- Use ScriptableObjects for authoring/configuration, not mutable runtime state. Keep save DTOs explicit and versionable.
-- Organize new gameplay by feature while keeping shared infrastructure in `Core`, composition in `App`, and pure models/contracts in `Domain`.
-- Prefer events/messages for cross-feature notifications; prefer direct calls inside one cohesive feature.
+- Keep state-changing simulation synchronous. Use standard `Task`/`ValueTask` in engine-independent ports, Unity `Awaitable` for simple Unity-native operations, and UniTask only in Unity-facing integrations that justify it, including MessagePipe and selected DOTween workflows.
+- Pass cancellation tied to application, session, scene, or screen lifetime. Fire-and-forget is allowed only at deliberate entry-point boundaries where failures are observed and logged.
+- Store gameplay definitions in validated JSON with stable IDs. Limit ScriptableObjects to Unity asset references and presentation/import configuration; never use them for mutable runtime state.
+- Follow the directed assemblies in `TECHNICAL_DESIGN_DOCUMENT.md`: Domain, Application, Infrastructure, Presentation.Unity, and Composition.Unity. Group related code by feature inside those layers.
+- Use explicit commands for intent and ordered domain events for committed facts. PubSub is not a command or query mechanism; prefer direct calls inside one cohesive feature.
 
 ## C# Style
 
 - Follow `.editorconfig`: four spaces, braces, explicit accessibility, and sorted `using` directives.
 - Use namespace root `RapWay`. Code identifiers and technical comments are English; player-facing text must be localizable.
+- Store player-facing text in feature-scoped Unity Localization String Table Collections. Russian is the source locale and English is required for release; never place translated prose directly in gameplay JSON.
+- Use stable semantic English keys and named Smart String arguments with typed contracts. Do not use positional placeholders, derive keys from source text, or assemble sentences from localized fragments.
 - Use `PascalCase` for types/members, `camelCase` for locals/parameters, `_camelCase` for private fields, and `IName` for interfaces.
 - Prefer `[SerializeField] private` over public fields. Preserve serialized names or use `FormerlySerializedAs` when renaming.
 - Keep one primary type per file and match file/type names. Avoid regions, clever abstractions, and comments that repeat the code.
@@ -47,16 +50,17 @@
 ## UI And UX
 
 - New screen-heavy UI should use UI Toolkit (`UXML` structure, `USS` styling, C# behavior) unless an existing uGUI screen is being maintained or a required effect is unsupported.
-- Do not mix UI Toolkit and uGUI inside one screen without a documented reason. Migrate existing uGUI incrementally, never wholesale without approval.
+- Do not mix UI Toolkit and uGUI inside one screen without a documented reason. Replace the legacy uGUI prototype after the approved UI Toolkit shell and vertical slice are functional.
 - Build reusable primitives and shared design tokens before duplicating styling. Avoid inline styles when a reusable USS class is appropriate.
 - Design mobile-first: safe areas, adaptive layouts, readable type, touch targets of roughly 44-48 px minimum, and no hover-only interaction.
 - Verify narrow/tall and wide mobile layouts, then mouse/keyboard behavior for PC. Keep navigation usable with touch, mouse, keyboard, and Back/Escape.
+- Validate UI with pseudo-localization. Missing keys, stale required translations, placeholder mismatches, clipping, and missing Cyrillic/Latin glyphs are release-blocking defects.
 - Separate presentation from logic: views expose UI events/state; presenters/controllers coordinate services and domain models.
 - Use DOTween or UI Toolkit transitions intentionally; animations must be interruptible and must not block core interactions.
 
 ## Tests And Validation
 
-- Add EditMode tests for domain rules, calculations, state transitions, persistence migrations, and deterministic services.
+- Add fast NUnit tests through `dotnet test` for domain rules, calculations, state transitions, persistence migrations, and deterministic services. Use Unity EditMode tests only when Unity APIs or assembly integration are required.
 - Add PlayMode tests sparingly for scene wiring, navigation, prefab integration, and critical end-to-end flows.
 - Tests must be deterministic and independent of execution order, network access, real time, and production save data.
 - A bug fix should reproduce the failure first when feasible. Do not weaken assertions merely to make a test pass.
