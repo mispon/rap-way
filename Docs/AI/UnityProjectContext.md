@@ -6,7 +6,7 @@
 
 - Project root: `D:\Projects\Rap Way`
 - Project: Rap Way, a mobile-first rap artist career simulator
-- Last analyzed: 2026-08-19
+- Last analyzed: 2026-08-20
 - Last analyzed commit: `c73d2628` on branch `v3`
 
 ## Confirmed Environment
@@ -46,7 +46,12 @@
 
 | Assembly | Responsibility | Key references | Notes |
 | --- | --- | --- | --- |
-| `RapWay` | All first-party runtime code | VContainer, UniTask, uGUI, project plugins | One broad runtime assembly; no first-party test or editor assemblies detected |
+| `RapWay.Domain` | Engine-independent rules and facts | .NET Standard only | Compiled by both Unity and `DotNet/RapWay.Domain` |
+| `RapWay.Application` | Engine-independent use cases and transaction coordination | `RapWay.Domain` | Compiled by both Unity and `DotNet/RapWay.Application` |
+| `RapWay.Infrastructure` | Engine-independent external adapters | Domain, Application | Empty marker boundary introduced for incremental migration |
+| `RapWay.Presentation.Unity` | Unity views, presenters, and visual adapters | Domain, Application | Empty marker boundary introduced for incremental migration |
+| `RapWay.Composition.Unity` | Unity/VContainer composition | All target layers | Empty marker boundary introduced for incremental migration |
+| `RapWay` | Legacy prototype compatibility | Target assemblies plus VContainer, UniTask, uGUI, project plugins | Temporary assembly retained to preserve serialized prototype scripts |
 
 ## Scenes And Startup Flow
 
@@ -77,10 +82,12 @@
 
 ## Testing And Validation
 
-- EditMode tests: none detected
-- PlayMode tests: none detected
-- Unity Test Framework: not directly declared in `Packages/manifest.json`
-- CI/build validation: no workflow or documented command detected
+- Pure C# test entry point: `dotnet test RapWay.slnx --configuration Release`
+- SDK: .NET `10.0.400`, pinned by `global.json`
+- Test stack: NUnit `4.6.1`, NUnit3TestAdapter `6.2.0`, Microsoft.NET.Test.Sdk `18.8.1`
+- Current pure test count: 41 architecture/kernel tests; all passed on 2026-08-20
+- Domain and Application projects link the same source compiled by Unity; gameplay code is not duplicated
+- Unity EditMode and PlayMode tests: none currently detected
 - Files under `Features/Test` are UI prototypes, not automated tests
 
 ## Available Unity Tooling
@@ -105,7 +112,9 @@
 
 - iOS configuration and build health are unverified.
 - Windows/PC build configuration and input behavior are unverified.
-- Unity 6000.5.9f1 migration import and script compilation completed with no captured Console errors. Dynamic Batching now emits a deprecation warning; scene wiring, prefab references, player builds, and runtime behavior still require dedicated validation.
+- Unity 6000.5.9f1 imports and compiles the new target asmdefs. A 2026-08-20 smoke test reached `MainMenu` from `Boot` and completed the prototype save call.
+- CharacterCreator2D currently throws an initialization exception because `CharacterUtility.Init` receives a missing shader. Treat URP 2D/material compatibility as unverified and resolve it at the Stage 4 presentation gate.
+- Dynamic Batching emits a deprecation warning. Scene/prefab references beyond the smoke path, player builds, and device behavior still require dedicated validation.
 - The intended visual design system, supported device matrix, localization scope, analytics, and monetization requirements are not documented.
 - The best UI authoring path (continue uGUI versus incremental UI Toolkit adoption) requires one representative screen prototype and device validation.
 
@@ -119,6 +128,12 @@
 - `ProjectSettings/QualitySettings.asset`
 - `Packages/manifest.json`
 - `Assets/_Project/Code/RapWay.asmdef`
+- `Assets/_Project/Code/Domain/RapWay.Domain.asmdef`
+- `Assets/_Project/Code/Application/RapWay.Application.asmdef`
+- `Assets/_Project/Code/Infrastructure/RapWay.Infrastructure.asmdef`
+- `Assets/_Project/Code/Presentation.Unity/RapWay.Presentation.Unity.asmdef`
+- `Assets/_Project/Code/Composition.Unity/RapWay.Composition.Unity.asmdef`
+- `RapWay.slnx`, `global.json`, and projects/tests under `DotNet/`
 - Representative files under `Assets/_Project/Code/App`, `Core`, `Data`, and `UI`
 - First-party scene, prefab, and UI-asset inventories
 

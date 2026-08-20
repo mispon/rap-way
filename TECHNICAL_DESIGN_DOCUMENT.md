@@ -202,6 +202,7 @@ Copying the entire state for every command is not required. Atomicity may be imp
 Simulation time is action-driven and discrete.
 
 - The base unit is one in-game hour stored as an integer `TotalHours` value.
+- Calendar dates use Gregorian rules at whole-hour precision; the initial technical ceiling is `5,000,000` elapsed hours.
 - Days, weeks, months, years, dates, and ages derive from calendar rules.
 - Actions have integer-hour durations.
 - The world advances only when a command explicitly advances time.
@@ -225,12 +226,14 @@ All authoritative randomness is explicit.
 
 Changing random algorithms is a save-compatibility decision and requires a migration or stream-version strategy.
 
+Algorithm version 1 derives each stream from the master seed plus its stable name using FNV-1a and a SplitMix64-style finalizer, then generates values with xorshift64*. A committed golden-vector test protects this contract.
+
 ## 10. Numeric model and overflow safety
 
 Authoritative simulation state does not use `float` or `double`.
 
-- Money uses a `Money` value object backed by `long` minor units.
-- Percentages and multipliers use fixed-point integers such as basis points, where `10_000` represents 100%.
+- Money uses a `Money` value object backed by `long` minor units and is technically capped to `+/-9,000,000,000,000,000`; lower feature-specific caps may be introduced by gameplay rules.
+- Percentages and multipliers use fixed-point integers such as basis points, where `10_000` represents 100%. The shared value is technically capped to `+/-1,000,000`; calculations specify toward-zero, away-from-zero, or nearest-away-from-zero rounding.
 - Needs and bounded resources use explicit normalized integer ranges.
 - Skills store durable XP; displayed level and progress derive from a progression rule.
 - Probabilities use integer weights.
@@ -586,6 +589,8 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 ### 22.1 Installed and retained
 
 - Unity Editor `6000.5.9f1`: rendering and platform shell.
+- .NET SDK `10.0.400`: pinned by `global.json` for engine-independent builds and tests.
+- NUnit `4.6.1`, NUnit3TestAdapter `6.2.0`, and Microsoft.NET.Test.Sdk `18.8.1`: pinned pure .NET test toolchain.
 - VContainer `1.19.0` currently resolved: Unity composition and lifetime scopes.
 - UniTask `2.5.11` currently resolved: limited Unity-side async support and MessagePipe requirement.
 - Newtonsoft Json Unity package `3.2.2` / Json.NET `13.0.2`: save and content infrastructure.
@@ -600,7 +605,6 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 - MessagePipe `1.8.2` or a later specifically validated release: committed-fact PubSub with VContainer integration.
 - URP version verified for Unity `6000.5.9f1`: 2D Renderer and CharacterCreator2D shader support.
 - Unity Localization version verified for Unity `6000.5.9f1`: String Table Collections, Smart Strings, pseudo-localization, and editor APIs. Its resolved Addressables dependency is pinned in the package lock and initially contained to localization.
-- NUnit and the .NET test SDK: exact versions pinned when the test projects are scaffolded.
 
 ### 22.3 Planned removal or containment
 
@@ -638,20 +642,18 @@ The initial architecture does not include:
 
 ## 25. Migration sequence from the prototype
 
-The target should be reached incrementally while keeping the project runnable.
+The target should be reached incrementally while keeping the project runnable. `ROADMAP.md` owns the detailed current order; this section records the architectural dependency sequence it must preserve.
 
 1. Scaffold engine-independent assemblies and the `dotnet test` solution.
-2. Introduce core value objects, GameState, command result, deterministic time, random streams, and numeric helpers with tests.
-3. Introduce the Application transaction and committed-event port.
-4. Add pinned MessagePipe packages and replace UniRx broker usage.
-5. Replace continuous `GameTimeService` and distributed `ISaveable` patterns feature by feature.
-6. Build the UI Toolkit shell and one complete navigation vertical slice.
-7. Remove legacy uGUI runtime content and UniRx after dependency checks.
-8. Migrate to URP 2D and validate CharacterCreator2D materials and assembly on Android.
-9. Enable and profile CharacterCreator2D lazy resource loading.
-10. Implement explicit snapshot saves, migrations, atomic writes, and backup recovery.
-11. Add content catalogs and validation as real gameplay definitions are introduced.
-12. Install the pinned Unity Localization package, establish source/required locales, and add the catalog generator and release validators before large-scale text authoring.
+2. Introduce core value objects, authoritative `GameState`, command results, the Application transaction, deterministic time/random streams, numeric helpers, and the committed-event port with tests.
+3. Add pinned MessagePipe packages at the committed-event boundary without expanding prototype UniRx usage.
+4. Implement explicit snapshot saves, migrations, atomic writes, backup recovery, and mobile lifecycle adapters against the minimal real `GameState`.
+5. Complete the approved visual direction gate, migrate to URP 2D, and build the UI Toolkit application shell and navigation slice.
+6. Remove replaced legacy uGUI runtime content and UniRx after dependency checks.
+7. Install the pinned Unity Localization package, establish source/required locales, and add catalog generation and release validators before large-scale text authoring.
+8. Add gameplay content catalogs and validation before feature definition volume grows.
+9. Replace continuous `GameTimeService` and distributed `ISaveable` behavior as their new vertical systems take ownership.
+10. Validate CharacterCreator2D materials and assembly on Android, then enable and profile its lazy resource loading.
 
 Each migration step should have a narrow acceptance criterion and should not combine unrelated gameplay work.
 

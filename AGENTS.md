@@ -12,6 +12,7 @@
 - Use Unity `6000.5.9f1`; do not upgrade the Editor or packages incidentally.
 - Treat `GAME_DESIGN_DOCUMENT.md` as the product source of truth for agreed gameplay mechanics, scope, and design constraints.
 - Treat `TECHNICAL_DESIGN_DOCUMENT.md` as the source of truth for architecture, technology choices, dependency boundaries, and migration direction.
+- Treat `ROADMAP.md` as the source of truth for implementation order. Keep exactly one numbered stage `In Progress`; do not begin a later system unless its dependencies and the active stage gate are satisfied.
 - Read `Docs/AI/UnityProjectContext.md` when onboarding or when architecture context is needed.
 - First-party code and content live under `Assets/_Project/`. Treat other top-level `Assets/` folders as vendor/imported unless verified otherwise.
 - Preserve user changes. Check `git status` before and after work; never reset, clean, or overwrite unrelated files.
@@ -19,12 +20,13 @@
 ## Required Workflow
 
 1. Inspect the relevant code, assets, scene/prefab wiring, and existing conventions before editing.
-2. Prefer the smallest coherent change that completes the requested behavior.
-3. Use the connected Unity Pipeline/MCP for scenes, prefabs, GameObjects, serialized references, Console, tests, and validation.
-4. Do not hand-edit Unity YAML (`.unity`, `.prefab`, `.asset`, `.mat`, `.controller`) unless Editor-safe tooling cannot do the job and the IDs/format are understood.
-5. After C# changes, trigger compilation, wait for completion, and inspect Unity Console errors.
-6. Validate the affected flow at mobile aspect ratios. Run relevant tests; add a regression test for a fixed logic bug when practical.
-7. Report what changed, what was validated, and any remaining uncertainty.
+2. Check the active `ROADMAP.md` stage and keep the change within its goal, dependencies, and acceptance criteria unless the user explicitly reprioritizes it.
+3. Prefer the smallest coherent change that completes the requested behavior.
+4. Use the connected Unity Pipeline/MCP for scenes, prefabs, GameObjects, serialized references, Console, tests, and validation.
+5. Do not hand-edit Unity YAML (`.unity`, `.prefab`, `.asset`, `.mat`, `.controller`) unless Editor-safe tooling cannot do the job and the IDs/format are understood.
+6. After C# changes, trigger compilation, wait for completion, and inspect Unity Console errors.
+7. Validate the affected flow at mobile aspect ratios. Run relevant tests; add a regression test for a fixed logic bug when practical.
+8. Report what changed, what was validated, and any remaining uncertainty.
 
 ## Architecture
 

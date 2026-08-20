@@ -11,7 +11,7 @@ namespace RapWay.Core.SaveSystem.Services
 
         public FileStorageService()
         {
-            _basePath = Application.persistentDataPath;
+            _basePath = UnityEngine.Application.persistentDataPath;
         }
 
         public async UniTask SaveAsync(string fileName, object data)
