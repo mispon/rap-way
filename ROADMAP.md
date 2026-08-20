@@ -191,7 +191,7 @@ This is a rolling-wave roadmap. The entire route stays visible, the active stage
 
 ### Stage 2 — Persistence foundation
 
-**Status:** In Progress
+**Status:** Done
 
 **Goal:** Make the authoritative state durable before real careers accumulate valuable progress.
 
@@ -211,6 +211,15 @@ This is a rolling-wave roadmap. The entire route stays visible, the active stage
 - Debounced autosave scheduling after meaningful committed commands without coupling persistence to Domain or the game clock.
 - Removal of the replaced `Dictionary<string, object>`, `TypeNameHandling`, distributed `ISaveable`, and legacy save registrations after compatibility wiring is verified.
 
+**Implementation evidence:**
+
+- Added the engine-independent `IGameSaveStore` port, explicit schema-v1 DTOs, deterministic mapping for calendar/revision/materialized PRNG streams, invariant `ulong` encoding, SHA-256 envelope verification, strict current-schema decoding, and sequential `v0 -> v1` migration.
+- Added same-directory temporary writes, flush-before-replace, atomic primary replacement, two rotating backups, typed recovery reporting, and newest-valid-backup selection.
+- Added scoped Unity session loading, mobile pause/quit save requests, and committed-event autosave with a two-second debounce. A Play Mode smoke test created the lifecycle object without new integration errors.
+- `dotnet test RapWay.slnx --configuration Release --no-restore` passes 53/53 tests, including a committed schema-v0 fixture, corruption/interruption recovery, and signed/unsigned numeric boundaries.
+- Removed the legacy prefab component through Unity Editor tooling, then deleted `SaveLoadService`, `ISaveable`, `Dictionary<string, object>`, `TypeNameHandling.Auto`, the old installer/storage classes, and hidden time/scene save calls. Legacy platform files remain untouched as recoverable archives.
+- Android suspend/resume and platform file-replacement behavior remain release/device validation; no alternate persistence implementation is planned.
+
 **Vertical result:** A minimal game session can be saved, closed, loaded, verified, and recovered from a deliberately corrupted primary file.
 
 **Acceptance criteria:**
@@ -227,7 +236,7 @@ This is a rolling-wave roadmap. The entire route stays visible, the active stage
 
 ### Stage 3 — Visual direction gate
 
-**Status:** Gate — Open. This decision gate does not count as a second active implementation stage: it may be designed while Stage 0 remains active, but must be approved before Stage 4 production UI work.
+**Status:** Gate — Approved. `VISUAL_DESIGN_GUIDE.md`, the reference screen, and supporting art direction were explicitly accepted before Stage 4.
 
 **Goal:** Turn the intended tone of Rap Way into concrete constraints from which UI and world presentation can be built.
 
@@ -252,7 +261,7 @@ This is a rolling-wave roadmap. The entire route stays visible, the active stage
 
 ### Stage 4 — Unity presentation foundation
 
-**Status:** Planned
+**Status:** In Progress
 
 **Goal:** Create the persistent mobile-first shell used by every later vertical system.
 

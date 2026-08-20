@@ -22,5 +22,9 @@
   <ItemGroup>
     <ProjectReference Include="../../RapWay.Domain/RapWay.Domain.csproj" />
     <ProjectReference Include="../../RapWay.Application/RapWay.Application.csproj" />
+    <ProjectReference Include="../../RapWay.Infrastructure/RapWay.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Fixtures/**/*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

@@ -595,6 +595,7 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 - MessagePipe Core and VContainer `1.8.2`, pinned to official commit `58516c36d4465a7b6396b7850a4ad7e03326998c`: scoped publication of committed domain facts only.
 - UniTask `2.5.11` currently resolved: limited Unity-side async support and MessagePipe requirement.
 - Newtonsoft Json Unity package `3.2.2` / Json.NET `13.0.2`: save and content infrastructure.
+- Persistence schema `1`: explicit snapshot DTOs, SHA-256 payload verification, sequential migrations, same-directory atomic replacement, two rotating backups, and typed recovery reporting. See `Docs/Architecture/PERSISTENCE.md`.
 - Unity Input System `1.20.0`: touch, mouse, keyboard, and platform input.
 - DOTween `1.2.815` generation or newer imported asset: presentation animation. Exact imported version must be verified and recorded before the next upgrade.
 - CharacterCreator2D: character visual assembly. Imported asset version must be recorded from its source/license record.
@@ -611,7 +612,7 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 - UniRx: remove after replacing the prototype `IMessageBroker` use with the accepted event flow.
 - uGUI: remove after the UI Toolkit vertical slice is functional and package consumers are audited.
 - Continuous `GameTimeService.Tick`: replace with action-driven discrete simulation time.
-- Distributed `ISaveable` plus `Dictionary<string, object>` save state: replace with explicit snapshot DTOs and migrations.
+- Distributed `ISaveable` plus `Dictionary<string, object>` save state: removed in Stage 2 after replacement with explicit snapshot DTOs and migrations.
 
 ## 23. Dependency policy
 
@@ -652,7 +653,7 @@ The target should be reached incrementally while keeping the project runnable. `
 6. Remove replaced legacy uGUI runtime content and UniRx after dependency checks.
 7. Install the pinned Unity Localization package, establish source/required locales, and add catalog generation and release validators before large-scale text authoring.
 8. Add gameplay content catalogs and validation before feature definition volume grows.
-9. Replace continuous `GameTimeService` and distributed `ISaveable` behavior as their new vertical systems take ownership.
+9. Replace continuous `GameTimeService` when the action-driven character loop takes ownership; distributed `ISaveable` behavior was removed in Stage 2.
 10. Validate CharacterCreator2D materials and assembly on Android, then enable and profile its lazy resource loading.
 
 Each migration step should have a narrow acceptance criterion and should not combine unrelated gameplay work.

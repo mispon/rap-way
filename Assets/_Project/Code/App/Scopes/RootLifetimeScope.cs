@@ -18,7 +18,6 @@ namespace RapWay.App.Scopes
         {
             RegisterConfigs(builder);
             
-            builder.InstallSaveSystem();
             builder.InstallCoreSystems();
             builder.InstallGameSystems();
             builder.InstallUISystems(uiConfig);

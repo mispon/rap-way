@@ -31,17 +31,16 @@ This inventory assigns every known first-party prototype area to the roadmap sta
 ### Continuous prototype time
 
 - Current area: `Core/TimeSystem/GameTimeService.cs`, `Data/Settings/TimeConfig.cs`, and the now-unused legacy `Domain/Events/TimeEvents.cs` definitions.
-- Problems: frame-driven time, Unity delta time in simulation, distributed saving, and fire-and-forget autosaves remain mixed.
+- Problems: frame-driven time and Unity delta time remain in the presentation-side prototype.
 - Stage 1 status: first-party UniRx broker registration and unused prototype time-fact publications were removed. New committed facts leave Application only through `ICommittedEventSink` and the scoped MessagePipe adapter.
 - Replacement owner: Stage 1 for deterministic time/events and Stage 8 for player-facing action costs/calendar behavior.
 - Removal gate: action-driven command transaction publishes committed facts and all old subscribers are migrated.
 
 ### Distributed save system
 
-- Current area: `Core/SaveSystem/` and `Domain/Interfaces/ISaveable.cs`.
-- Problems: mutable registration, `Dictionary<string, object>`, vendor-shaped restore data, and incomplete durability semantics.
-- Replacement owner: Stage 2.
-- Removal gate: explicit versioned snapshot round-trip, migrations, checksum, atomic replacement, backups, recovery tests, and mobile lifecycle adapter.
+- Stage 2 status: removed. `Core/SaveSystem/`, `ISaveable`, the root save installer, the prefab-authored `AutoSaveManager`, and hidden time/scene save calls were deleted after the replacement vertical passed validation.
+- Replacement owner: `RapWay.Application.Persistence`, `RapWay.Infrastructure.Persistence`, and `RapWay.Composition.Unity.Persistence`.
+- Compatibility: old platform `savegame.json` data is not modified or implicitly imported. The schema-v1 career format uses distinct filenames.
 
 ### Scene loading and navigation
 

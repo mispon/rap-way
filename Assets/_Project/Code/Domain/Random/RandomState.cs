@@ -17,11 +17,41 @@ namespace RapWay.Domain.Random
         {
             MasterSeed = masterSeed;
             _streams = streams;
+            Validate();
         }
 
         public ulong MasterSeed { get; }
 
         public int StreamCount => _streams.Count;
+
+        public static RandomState Restore(ulong masterSeed, IReadOnlyList<RandomStreamState> streams)
+        {
+            if (streams == null)
+            {
+                throw new ArgumentNullException(nameof(streams));
+            }
+
+            List<RandomStreamState> copies = new(streams.Count);
+            for (int index = 0; index < streams.Count; index++)
+            {
+                RandomStreamState stream = streams[index] ??
+                                           throw new ArgumentException("Random streams cannot contain null.", nameof(streams));
+                copies.Add(stream.Copy());
+            }
+
+            return new RandomState(masterSeed, copies);
+        }
+
+        public IReadOnlyList<RandomStreamState> CaptureStreams()
+        {
+            RandomStreamState[] copies = new RandomStreamState[_streams.Count];
+            for (int index = 0; index < _streams.Count; index++)
+            {
+                copies[index] = _streams[index].Copy();
+            }
+
+            return Array.AsReadOnly(copies);
+        }
 
         internal RandomStreamState GetOrCreateStream(StableId name)
         {
