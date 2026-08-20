@@ -41,7 +41,7 @@
 | `Assets/_Project/Code/UI` | Window base classes, HUD, widgets, safe-area helpers | Confirmed | Folder contents |
 | `Assets/_Project/Data` | ScriptableObject configuration assets | Confirmed | UI and time configuration assets |
 | `Assets/_Project/Prefabs/UI` | Canvas, HUD, buttons, and window prefabs | Confirmed | Prefab inventory |
-| `Assets/_Project/Scenes` | Boot, MainMenu, Game, and Debug scenes | Confirmed | Scene inventory and Build Settings |
+| `Assets/_Project/Scenes` | Boot, Game, and Debug scenes | Confirmed | Scene inventory and Build Settings |
 
 ## Assembly Boundaries
 
@@ -56,11 +56,11 @@
 
 ## Scenes And Startup Flow
 
-- Enabled build scenes: `Boot`, `MainMenu`, `Game`
+- Enabled build scenes: `Boot`, `Game`
 - Development-only scene: `Debug` (not enabled in Build Settings)
-- Startup: `BootLifetimeScope` starts `BootController`; after a placeholder delay it loads `MainMenu`
-- Game startup: `GameLifetimeScope` starts `GameStartup`, which opens `HUDWindow`
-- MainMenu-to-Game transition: unknown from the representative code inspected
+- Startup: `BootLifetimeScope` starts `BootController`; after a placeholder delay it loads `Game` in menu mode
+- Game startup: `GameLifetimeScope` starts `GameStartup`, which shows either the shell main menu or the HUD depending on launch mode
+- Main menu and HUD now live inside `Game` scene shell flow rather than separate runtime scenes
 
 ## Architecture
 
@@ -86,7 +86,7 @@
 - Pure C# test entry point: `dotnet test RapWay.slnx --configuration Release`
 - SDK: .NET `10.0.400`, pinned by `global.json`
 - Test stack: NUnit `4.6.1`, NUnit3TestAdapter `6.2.0`, Microsoft.NET.Test.Sdk `18.8.1`
-- Current pure test count: 53 architecture, kernel, serialization, migration, and durability tests; all passed on 2026-08-20
+- Current pure test count: 55 architecture, kernel, serialization, migration, and durability tests; all passed on 2026-08-20
 - Domain and Application projects link the same source compiled by Unity; gameplay code is not duplicated
 - Unity EditMode and PlayMode tests: none currently detected
 - Files under `Features/Test` are UI prototypes, not automated tests
@@ -113,7 +113,7 @@
 
 - iOS configuration and build health are unverified.
 - Windows/PC build configuration and input behavior are unverified.
-- Unity 6000.5.9f1 imports and compiles the new target asmdefs. A 2026-08-20 smoke test reached `MainMenu` from `Boot` and completed the prototype save call.
+- Unity 6000.5.9f1 imports and compiles the new target asmdefs. A 2026-08-20 smoke test completed the updated Boot-to-Game shell flow and prototype save path.
 - CharacterCreator2D currently throws an initialization exception because `CharacterUtility.Init` receives a missing shader. Treat URP 2D/material compatibility as unverified and resolve it at the Stage 4 presentation gate.
 - Persistence schema v1, SHA-256 envelopes, sequential migration, atomic replacement, two backups, recovery reporting, and scoped Unity lifecycle/autosave adapters are implemented. The legacy distributed save path and prefab component were removed in Stage 2; old platform save files are left untouched.
 - Dynamic Batching emits a deprecation warning. Scene/prefab references beyond the smoke path, player builds, and device behavior still require dedicated validation.

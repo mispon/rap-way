@@ -1,6 +1,7 @@
 using _Project.Data.Settings;
 using RapWay.App.Installers;
-using RapWay.Data;
+using RapWay.Composition.Unity.Persistence;
+using RapWay.Composition.Unity.Presentation;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -11,8 +12,6 @@ namespace RapWay.App.Scopes
     {
         [Header("Settings")]
         [SerializeField] private TimeConfig timeConfig;
-        [Header("UI")]
-        [SerializeField] private UIConfig uiConfig;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -20,7 +19,8 @@ namespace RapWay.App.Scopes
             
             builder.InstallCoreSystems();
             builder.InstallGameSystems();
-            builder.InstallUISystems(uiConfig);
+            builder.InstallPersistentSaveStore(UnityEngine.Application.persistentDataPath);
+            builder.InstallStage4Presentation();
         }
 
         private void RegisterConfigs(IContainerBuilder builder)

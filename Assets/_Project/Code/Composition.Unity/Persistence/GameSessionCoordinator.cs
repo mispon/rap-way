@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using RapWay.Application.Events;
 using RapWay.Application.Persistence;
+using RapWay.Application.Session;
 using RapWay.Application.Simulation;
 using RapWay.Domain.State;
 using RapWay.Domain.Time;
@@ -16,16 +17,33 @@ namespace RapWay.Composition.Unity.Persistence
     {
         private readonly IGameSaveStore _saveStore;
         private readonly ICommittedEventSink _eventSink;
+        private readonly IGameSessionLaunchRequest _launchRequest;
         private SimulationSession _session;
 
-        public GameSessionCoordinator(IGameSaveStore saveStore, ICommittedEventSink eventSink)
+        public GameSessionCoordinator(
+            IGameSaveStore saveStore,
+            ICommittedEventSink eventSink,
+            IGameSessionLaunchRequest launchRequest)
         {
             _saveStore = saveStore ?? throw new ArgumentNullException(nameof(saveStore));
             _eventSink = eventSink ?? throw new ArgumentNullException(nameof(eventSink));
+            _launchRequest = launchRequest ?? throw new ArgumentNullException(nameof(launchRequest));
         }
 
         public async UniTask StartAsync(CancellationToken cancellationToken)
         {
+            GameSessionLaunchMode launchMode = _launchRequest.Consume();
+            if (launchMode == GameSessionLaunchMode.MainMenu)
+            {
+                return;
+            }
+
+            if (launchMode == GameSessionLaunchMode.NewCareer)
+            {
+                _session = new SimulationSession(CreateBootstrapState(), _eventSink);
+                return;
+            }
+
             GameLoadResult result = await _saveStore.LoadAsync(cancellationToken);
             if (result.IsSuccess)
             {

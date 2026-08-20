@@ -7,9 +7,13 @@ namespace RapWay.Composition.Unity.Persistence
 {
     public static class SimulationPersistenceInstaller
     {
-        public static void InstallSimulationPersistence(this IContainerBuilder builder, string saveDirectoryPath)
+        public static void InstallPersistentSaveStore(this IContainerBuilder builder, string saveDirectoryPath)
         {
             builder.RegisterInstance<IGameSaveStore>(new JsonGameSaveStore(saveDirectoryPath));
+        }
+
+        public static void InstallSimulationPersistence(this IContainerBuilder builder)
+        {
             builder.RegisterEntryPoint<GameSessionCoordinator>(Lifetime.Scoped)
                 .AsSelf()
                 .As<IGameStateSnapshotSource>();

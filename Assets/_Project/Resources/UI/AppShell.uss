@@ -1,0 +1,177 @@
+.app-shell {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(16, 18, 24);
+}
+
+.screen {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen--centered {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.screen--hud {
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.hero-card,
+.menu-card {
+    width: 100%;
+    max-width: 520px;
+    padding: 32px;
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+    background-color: rgba(24, 28, 38, 0.92);
+}
+
+.brand-title {
+    margin-bottom: 16px;
+    font-size: 72px;
+    -unity-font-style: bold;
+    color: rgb(244, 235, 214);
+    unity-text-align: middle-center;
+}
+
+.subtitle-label {
+    margin-bottom: 32px;
+    color: rgb(167, 176, 198);
+    unity-text-align: middle-center;
+    font-size: 22px;
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button {
+    width: 100%;
+    min-height: 60px;
+    margin-bottom: 14px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    font-size: 20px;
+    -unity-font-style: bold;
+    unity-text-align: middle-center;
+}
+
+.primary-button {
+    background-color: rgb(243, 110, 65);
+    color: rgb(255, 248, 244);
+}
+
+.secondary-button {
+    background-color: rgb(41, 48, 66);
+    color: rgb(244, 247, 255);
+}
+
+.ghost-button {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: rgb(220, 226, 240);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgb(74, 83, 105);
+    border-right-color: rgb(74, 83, 105);
+    border-bottom-color: rgb(74, 83, 105);
+    border-left-color: rgb(74, 83, 105);
+}
+
+.status-label {
+    margin-top: 12px;
+    color: rgb(186, 196, 220);
+    font-size: 18px;
+    unity-text-align: middle-center;
+}
+
+.status-label--hero {
+    margin-top: 0;
+    font-size: 26px;
+}
+
+.hud-card {
+    padding: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: rgb(24, 28, 38);
+}
+
+.hud-title {
+    margin-bottom: 8px;
+    color: rgb(244, 235, 214);
+    font-size: 24px;
+    -unity-font-style: bold;
+}
+
+.hud-body {
+    color: rgb(167, 176, 198);
+    font-size: 14px;
+}
+
+.hud-menu-button {
+    align-self: flex-end;
+    min-width: 132px;
+}
+
+.modal-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.45);
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.modal-card {
+    width: 100%;
+    max-width: 480px;
+    padding: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: rgb(24, 28, 38);
+}
+
+.modal-title {
+    margin-bottom: 8px;
+    color: rgb(244, 235, 214);
+    font-size: 22px;
+    -unity-font-style: bold;
+}
+
+.modal-body {
+    margin-bottom: 16px;
+    color: rgb(167, 176, 198);
+    font-size: 14px;
+}

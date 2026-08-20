@@ -1,6 +1,5 @@
 using RapWay.Core.Audio;
 using RapWay.Core.Services;
-using RapWay.Core.UI;
 using VContainer;
 
 namespace RapWay.App.Installers

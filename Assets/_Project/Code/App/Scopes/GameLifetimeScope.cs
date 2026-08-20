@@ -10,7 +10,7 @@ namespace RapWay.App.Scopes
         protected override void Configure(IContainerBuilder builder)
         {
             builder.InstallSimulationMessaging();
-            builder.InstallSimulationPersistence(UnityEngine.Application.persistentDataPath);
+            builder.InstallSimulationPersistence();
             builder.RegisterEntryPoint<GameStartup>();
         }
     }
