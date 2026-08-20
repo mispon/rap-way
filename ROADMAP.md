@@ -147,7 +147,7 @@ This is a rolling-wave roadmap. The entire route stays visible, the active stage
 
 ### Stage 1 — Deterministic simulation kernel
 
-**Status:** In Progress
+**Status:** Done
 
 **Goal:** Establish the small, synchronous core through which all state-changing gameplay actions run.
 
@@ -172,7 +172,8 @@ This is a rolling-wave roadmap. The entire route stays visible, the active stage
 - Implemented minimal `GameState`, `SimulationSession`, stable IDs, Gregorian integer-hour calendar, capped money/basis points, checked fixed math, versioned named PRNG streams, typed commands/results, atomic working-copy execution, ordered domain events, and the vendor-free `ICommittedEventSink` boundary.
 - `dotnet test RapWay.slnx --configuration Release --no-restore` passes 41/41 tests, including PRNG golden vectors, stream isolation, numeric overflow/caps/rounding, calendar boundaries, rejection and exception rollback, mutable-reference isolation, state revision, event order, post-commit publication, and architecture boundaries.
 - Unity `6000.5.9f1` imported and compiled the shared Domain/Application sources with Pipeline `ready` and an empty Console.
-- Remaining completion gate: install the approved pinned MessagePipe package after explicit dependency confirmation, implement only the Infrastructure/Composition committed-event adapter, and migrate the prototype UniRx fact publication without expanding its use.
+- MessagePipe Core/VContainer `1.8.2` is pinned to official commit `58516c36d4465a7b6396b7850a4ad7e03326998c`; the adapter is scoped to `GameLifetimeScope`, `GlobalMessagePipe` is unused, and Domain/Application remain vendor-free.
+- First-party prototype UniRx broker registration and unused time-fact publication were removed. A `Game` scene Play Mode smoke test built the VContainer/MessagePipe scope without integration errors; the only runtime exception was the separately tracked pre-existing CharacterCreator2D missing-shader issue.
 
 **Vertical result:** A test can create a minimal `GameState`, execute an explicit command, advance action-driven time, consume a named random stream, commit ordered domain events, and either apply all changes or none.
 
@@ -190,11 +191,25 @@ This is a rolling-wave roadmap. The entire route stays visible, the active stage
 
 ### Stage 2 — Persistence foundation
 
-**Status:** Planned
+**Status:** In Progress
 
 **Goal:** Make the authoritative state durable before real careers accumulate valuable progress.
 
 **Depends on:** Stage 1.
+
+**Why now:** Careers will quickly become valuable player data. Persistence must become durable and migratable before feature state expands beyond the minimal kernel.
+
+**Must deliver:**
+
+- Explicit snapshot DTOs for the current `GameState`, calendar, and materialized random streams without Unity/vendor types or implicit type metadata.
+- Sequential schema migrations, deterministic DTO mapping, checksum verification, temporary writes, atomic replacement, two rotating backups, and recovery reporting.
+- Pure tests for round trips, corrupt/interrupted writes, backup recovery, schema migration, unsupported versions, and numeric/random boundaries.
+- A narrow Unity lifecycle adapter for pause/quit save requests that snapshots synchronously and observes asynchronous write failures.
+
+**Should deliver:**
+
+- Debounced autosave scheduling after meaningful committed commands without coupling persistence to Domain or the game clock.
+- Removal of the replaced `Dictionary<string, object>`, `TypeNameHandling`, distributed `ISaveable`, and legacy save registrations after compatibility wiring is verified.
 
 **Vertical result:** A minimal game session can be saved, closed, loaded, verified, and recovered from a deliberately corrupted primary file.
 

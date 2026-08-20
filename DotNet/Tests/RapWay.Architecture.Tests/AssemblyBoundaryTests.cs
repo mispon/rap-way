@@ -15,6 +15,7 @@ namespace RapWay.Architecture.Tests
         {
             "Cysharp",
             "DG.Tweening",
+            "MessagePipe",
             "Newtonsoft",
             "UniRx",
             "Unity",

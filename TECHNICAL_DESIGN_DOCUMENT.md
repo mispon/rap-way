@@ -592,6 +592,7 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 - .NET SDK `10.0.400`: pinned by `global.json` for engine-independent builds and tests.
 - NUnit `4.6.1`, NUnit3TestAdapter `6.2.0`, and Microsoft.NET.Test.Sdk `18.8.1`: pinned pure .NET test toolchain.
 - VContainer `1.19.0` currently resolved: Unity composition and lifetime scopes.
+- MessagePipe Core and VContainer `1.8.2`, pinned to official commit `58516c36d4465a7b6396b7850a4ad7e03326998c`: scoped publication of committed domain facts only.
 - UniTask `2.5.11` currently resolved: limited Unity-side async support and MessagePipe requirement.
 - Newtonsoft Json Unity package `3.2.2` / Json.NET `13.0.2`: save and content infrastructure.
 - Unity Input System `1.20.0`: touch, mouse, keyboard, and platform input.
@@ -602,7 +603,6 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 
 ### 22.2 Planned
 
-- MessagePipe `1.8.2` or a later specifically validated release: committed-fact PubSub with VContainer integration.
 - URP version verified for Unity `6000.5.9f1`: 2D Renderer and CharacterCreator2D shader support.
 - Unity Localization version verified for Unity `6000.5.9f1`: String Table Collections, Smart Strings, pseudo-localization, and editor APIs. Its resolved Addressables dependency is pinned in the package lock and initially contained to localization.
 

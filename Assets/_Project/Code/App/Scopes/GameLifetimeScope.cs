@@ -1,3 +1,4 @@
+using RapWay.Composition.Unity;
 using VContainer;
 using VContainer.Unity;
 
@@ -7,6 +8,7 @@ namespace RapWay.App.Scopes
     {
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.InstallSimulationMessaging();
             builder.RegisterEntryPoint<GameStartup>();
         }
     }

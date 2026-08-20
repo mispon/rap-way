@@ -28,10 +28,11 @@ This inventory assigns every known first-party prototype area to the roadmap sta
 - Replacement owner: Stage 4 for application shell/lifetimes/navigation; Stage 2 for persistence wiring; Stage 1 for committed-event wiring.
 - Removal gate: equivalent `RapWay.Composition.Unity` registrations and startup flow validated in Unity.
 
-### Continuous time and UniRx events
+### Continuous prototype time
 
-- Current area: `Core/TimeSystem/GameTimeService.cs`, `Data/Settings/TimeConfig.cs`, `Domain/Events/TimeEvents.cs`, and UniRx broker registration in `CoreSystemInstaller.cs`.
-- Problems: frame-driven time, Unity delta time in simulation, distributed saving, fire-and-forget autosaves, and PubSub commands/facts are mixed.
+- Current area: `Core/TimeSystem/GameTimeService.cs`, `Data/Settings/TimeConfig.cs`, and the now-unused legacy `Domain/Events/TimeEvents.cs` definitions.
+- Problems: frame-driven time, Unity delta time in simulation, distributed saving, and fire-and-forget autosaves remain mixed.
+- Stage 1 status: first-party UniRx broker registration and unused prototype time-fact publications were removed. New committed facts leave Application only through `ICommittedEventSink` and the scoped MessagePipe adapter.
 - Replacement owner: Stage 1 for deterministic time/events and Stage 8 for player-facing action costs/calendar behavior.
 - Removal gate: action-driven command transaction publishes committed facts and all old subscribers are migrated.
 
@@ -72,7 +73,7 @@ This inventory assigns every known first-party prototype area to the roadmap sta
 
 ### Third-party containment
 
-- UniRx under `Assets/Plugins/UniRx/`: remove after Stage 1 migrates its only first-party broker/time usages and an asset/reference audit is clean.
+- UniRx under `Assets/Plugins/UniRx/`: no first-party runtime usages remain after Stage 1. Keep the vendor folder only until a complete serialized/vendor reference audit confirms safe removal.
 - uGUI package: remove after Stage 4 replaces all first-party UI and vendor/package consumers are audited.
 - UniTask: retain only at accepted Unity-facing integrations; no Domain/Application references.
 - VContainer: retain in `RapWay.Composition.Unity`; no Domain/Application references.

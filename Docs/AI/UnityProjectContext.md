@@ -24,6 +24,7 @@
 | --- | --- | --- | --- |
 | Dependency injection | VContainer from GitHub | Confirmed | `Packages/manifest.json`, `Assets/_Project/Code/App/Scopes/` |
 | Async | Cysharp UniTask from GitHub | Confirmed | `Packages/manifest.json`, first-party services |
+| PubSub | MessagePipe Core/VContainer 1.8.2, official commit `58516c3` | Confirmed | `Packages/manifest.json`, `Packages/packages-lock.json`, scoped adapter/composition |
 | UI | Unity uGUI 2.5.0 with prefab-based windows | Confirmed | `Packages/manifest.json`, `Assets/_Project/Prefabs/UI/` |
 | Input | Unity Input System 1.20.0 | Confirmed | `Packages/manifest.json`, `ProjectSettings/ProjectSettings.asset` |
 | Serialization | Newtonsoft Json 3.2.2 plus Unity serialization | Confirmed | `Packages/manifest.json`, save-system code |

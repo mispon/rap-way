@@ -50,7 +50,8 @@ IDs are technical contracts and must not be generated from localized or mutable 
 - Domain events are immutable past-tense facts.
 - `ICommittedEventSink` is the only Stage 1 output boundary for independent subscribers.
 - Domain and Application contain no MessagePipe, UniRx, Unity, or other vendor types.
-- The planned MessagePipe adapter belongs in Infrastructure/Composition and receives only already committed event batches.
+- `MessagePipeCommittedEventSink` is implemented in Infrastructure, registered as scoped in the game-session composition scope, and receives only already committed event batches.
+- MessagePipe Core and VContainer `1.8.2` are pinned to official commit `58516c36d4465a7b6396b7850a4ad7e03326998c`; `GlobalMessagePipe` is not configured.
 
 ## Required regression coverage
 
