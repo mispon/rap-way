@@ -4,6 +4,7 @@ namespace RapWay.Presentation.Unity.Shell
     {
         Splash = 0,
         MainMenu = 1,
-        Hud = 2
+        NewCareerTemplateSelection = 2,
+        Hud = 3
     }
 }

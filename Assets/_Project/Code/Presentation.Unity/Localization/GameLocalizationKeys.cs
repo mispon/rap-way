@@ -1,0 +1,71 @@
+namespace RapWay.Presentation.Unity.Localization
+{
+    public static class GameLocalizationTables
+    {
+        public const string UiShell = "UI.Shell";
+    }
+
+    public static class GameLocalizationKeys
+    {
+        public static class UiShell
+        {
+            public static readonly LocalizationKey BrandTitle = new(GameLocalizationTables.UiShell, "brand_title");
+            public static readonly LocalizationKey SplashPreparingStage = new(GameLocalizationTables.UiShell, "splash_preparing_stage");
+            public static readonly LocalizationKey MainMenuSubtitle = new(GameLocalizationTables.UiShell, "main_menu_subtitle");
+            public static readonly LocalizationKey MainMenuNewCareer = new(GameLocalizationTables.UiShell, "main_menu_new_career");
+            public static readonly LocalizationKey MainMenuContinue = new(GameLocalizationTables.UiShell, "main_menu_continue");
+            public static readonly LocalizationKey MainMenuQuit = new(GameLocalizationTables.UiShell, "main_menu_quit");
+            public static readonly LocalizationKey MainMenuStatusCanContinue = new(GameLocalizationTables.UiShell, "main_menu_status_can_continue");
+            public static readonly LocalizationKey MainMenuStatusStartFirstCareer = new(GameLocalizationTables.UiShell, "main_menu_status_start_first_career");
+            public static readonly LocalizationKey TemplateScreenTitle = new(GameLocalizationTables.UiShell, "template_screen_title");
+            public static readonly LocalizationKey TemplateScreenSubtitle = new(GameLocalizationTables.UiShell, "template_screen_subtitle");
+            public static readonly LocalizationKey TemplateBack = new(GameLocalizationTables.UiShell, "template_back");
+            public static readonly LocalizationKey TemplateConfirm = new(GameLocalizationTables.UiShell, "template_confirm");
+            public static readonly LocalizationKey TemplateStatusChooseCircumstances = new(GameLocalizationTables.UiShell, "template_status_choose_circumstances");
+            public static readonly LocalizationKey HudTitle = new(GameLocalizationTables.UiShell, "hud_title");
+            public static readonly LocalizationKey HudBody = new(GameLocalizationTables.UiShell, "hud_body");
+            public static readonly LocalizationKey HudMenu = new(GameLocalizationTables.UiShell, "hud_menu");
+            public static readonly LocalizationKey ModalExitTitle = new(GameLocalizationTables.UiShell, "modal_exit_title");
+            public static readonly LocalizationKey ModalExitBody = new(GameLocalizationTables.UiShell, "modal_exit_body");
+            public static readonly LocalizationKey ModalExitConfirm = new(GameLocalizationTables.UiShell, "modal_exit_confirm");
+            public static readonly LocalizationKey ModalSessionTitle = new(GameLocalizationTables.UiShell, "modal_session_title");
+            public static readonly LocalizationKey ModalSessionBody = new(GameLocalizationTables.UiShell, "modal_session_body");
+            public static readonly LocalizationKey ModalSessionConfirm = new(GameLocalizationTables.UiShell, "modal_session_confirm");
+            public static readonly LocalizationKey ModalClose = new(GameLocalizationTables.UiShell, "modal_close");
+            public static readonly LocalizationKey StatusReturningToMainMenu = new(GameLocalizationTables.UiShell, "status_returning_to_main_menu");
+            public static readonly LocalizationKey StatusStartingNewCareer = new(GameLocalizationTables.UiShell, "status_starting_new_career");
+            public static readonly LocalizationKey StatusLoadingLatestCareer = new(GameLocalizationTables.UiShell, "status_loading_latest_career");
+            public static readonly LocalizationKey StatusGenericError = new(GameLocalizationTables.UiShell, "status_generic_error");
+            public static readonly LocalizationKey HudStatusCareerSessionRunning = new(GameLocalizationTables.UiShell, "hud_status_career_session_running");
+
+            public static readonly LocalizationKey TemplateOnYourOwnTitle = new(GameLocalizationTables.UiShell, "template_on_your_own_title");
+            public static readonly LocalizationKey TemplateOnYourOwnTagline = new(GameLocalizationTables.UiShell, "template_on_your_own_tagline");
+            public static readonly LocalizationKey TemplateOnYourOwnSummary = new(GameLocalizationTables.UiShell, "template_on_your_own_summary");
+            public static readonly LocalizationKey TemplateOnYourOwnEmphasis = new(GameLocalizationTables.UiShell, "template_on_your_own_emphasis");
+            public static readonly LocalizationKey TemplateAtRockBottomTitle = new(GameLocalizationTables.UiShell, "template_at_rock_bottom_title");
+            public static readonly LocalizationKey TemplateAtRockBottomTagline = new(GameLocalizationTables.UiShell, "template_at_rock_bottom_tagline");
+            public static readonly LocalizationKey TemplateAtRockBottomSummary = new(GameLocalizationTables.UiShell, "template_at_rock_bottom_summary");
+            public static readonly LocalizationKey TemplateAtRockBottomEmphasis = new(GameLocalizationTables.UiShell, "template_at_rock_bottom_emphasis");
+            public static readonly LocalizationKey TemplatePrivilegedStartTitle = new(GameLocalizationTables.UiShell, "template_privileged_start_title");
+            public static readonly LocalizationKey TemplatePrivilegedStartTagline = new(GameLocalizationTables.UiShell, "template_privileged_start_tagline");
+            public static readonly LocalizationKey TemplatePrivilegedStartSummary = new(GameLocalizationTables.UiShell, "template_privileged_start_summary");
+            public static readonly LocalizationKey TemplatePrivilegedStartEmphasis = new(GameLocalizationTables.UiShell, "template_privileged_start_emphasis");
+            public static readonly LocalizationKey TemplateOneMemeWonderTitle = new(GameLocalizationTables.UiShell, "template_one_meme_wonder_title");
+            public static readonly LocalizationKey TemplateOneMemeWonderTagline = new(GameLocalizationTables.UiShell, "template_one_meme_wonder_tagline");
+            public static readonly LocalizationKey TemplateOneMemeWonderSummary = new(GameLocalizationTables.UiShell, "template_one_meme_wonder_summary");
+            public static readonly LocalizationKey TemplateOneMemeWonderEmphasis = new(GameLocalizationTables.UiShell, "template_one_meme_wonder_emphasis");
+            public static readonly LocalizationKey TemplateBasementGeniusTitle = new(GameLocalizationTables.UiShell, "template_basement_genius_title");
+            public static readonly LocalizationKey TemplateBasementGeniusTagline = new(GameLocalizationTables.UiShell, "template_basement_genius_tagline");
+            public static readonly LocalizationKey TemplateBasementGeniusSummary = new(GameLocalizationTables.UiShell, "template_basement_genius_summary");
+            public static readonly LocalizationKey TemplateBasementGeniusEmphasis = new(GameLocalizationTables.UiShell, "template_basement_genius_emphasis");
+            public static readonly LocalizationKey TemplateFormerGroupMemberTitle = new(GameLocalizationTables.UiShell, "template_former_group_member_title");
+            public static readonly LocalizationKey TemplateFormerGroupMemberTagline = new(GameLocalizationTables.UiShell, "template_former_group_member_tagline");
+            public static readonly LocalizationKey TemplateFormerGroupMemberSummary = new(GameLocalizationTables.UiShell, "template_former_group_member_summary");
+            public static readonly LocalizationKey TemplateFormerGroupMemberEmphasis = new(GameLocalizationTables.UiShell, "template_former_group_member_emphasis");
+            public static readonly LocalizationKey TemplateProtegeTitle = new(GameLocalizationTables.UiShell, "template_protege_title");
+            public static readonly LocalizationKey TemplateProtegeTagline = new(GameLocalizationTables.UiShell, "template_protege_tagline");
+            public static readonly LocalizationKey TemplateProtegeSummary = new(GameLocalizationTables.UiShell, "template_protege_summary");
+            public static readonly LocalizationKey TemplateProtegeEmphasis = new(GameLocalizationTables.UiShell, "template_protege_emphasis");
+        }
+    }
+}

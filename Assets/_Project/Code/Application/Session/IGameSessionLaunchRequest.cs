@@ -4,8 +4,10 @@ namespace RapWay.Application.Session
     {
         GameSessionLaunchMode LastRequestedMode { get; }
 
-        void Request(GameSessionLaunchMode mode);
+        CareerStartTemplateId? LastRequestedStartTemplateId { get; }
 
-        GameSessionLaunchMode Consume();
+        void Request(GameSessionLaunchMode mode, CareerStartTemplateId? startTemplateId = null);
+
+        GameSessionLaunchRequestData Consume();
     }
 }

@@ -3,6 +3,7 @@ using RapWay.Application.Persistence;
 using RapWay.Application.Session;
 using RapWay.Composition.Unity.Navigation;
 using RapWay.Infrastructure.Persistence;
+using RapWay.Presentation.Unity.Localization;
 using RapWay.Presentation.Unity.Shell;
 using VContainer;
 
@@ -15,6 +16,7 @@ namespace RapWay.Composition.Unity.Presentation
             builder.Register<ISceneNavigator, UnitySceneNavigator>(Lifetime.Singleton);
             builder.Register<IGameSessionLaunchRequest, GameSessionLaunchRequest>(Lifetime.Singleton);
             builder.Register<ICareerSaveAvailabilityProbe, CareerSaveAvailabilityProbe>(Lifetime.Singleton);
+            builder.Register<IGameLocalizationService, GameLocalizationService>(Lifetime.Singleton);
             builder.Register<IAppShellFlow, AppShellController>(Lifetime.Singleton);
         }
     }

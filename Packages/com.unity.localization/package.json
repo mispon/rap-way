@@ -1,0 +1,32 @@
+{
+  "name": "com.unity.localization",
+  "displayName": "Localization",
+  "version": "1.5.9",
+  "unity": "2019.4",
+  "description": "Use the Localization package to easily configure localization settings for your application.\n\nAdd support for multiple languages and regional variants, including:\n\n• String localization: Set different strings to display based on locale. Use the Smart Strings feature to add logic to automatically replace specific strings, such as placeholders and plurals.\n• Asset localization: Use a different asset (such as a texture, model, or audio file) based on a locale.\n• Pseudo-localization: Test how your project will adapt to different localizations at an early stage, before adding your translations.\n• Import and export localization data to XLIFF, CSV and Google Sheets.\n\nAdd localization to your projects using the Localization package to help make your applications more accessible to a wider audience.",
+  "keywords": [
+    "localization",
+    "locale",
+    "language"
+  ],
+  "dependencies": {
+    "com.unity.addressables": "1.25.0",
+    "com.unity.nuget.newtonsoft-json": "3.0.2"
+  },
+  "relatedPackages": {
+    "com.unity.localization.tests": "1.5.9"
+  },
+  "_upm": {
+    "changelog": "### Fixed\n\n- Fixed Addressables Analyzer not checking the table addresses correctly. ([LOC-1260](https://issuetracker.unity3d.com/product/unity/issues/guid/LOC-1260))\n- Fixed an issue where negative values could be treated differently, causing invalid plural formatting. ([LOC-1258](https://issuetracker.unity3d.com/product/unity/issues/guid/LOC-1258))\n- Fixed exception when pushing to a Google Sheet that had 1 less row than required. ([LOC-1261](https://issuetracker.unity3d.com/product/unity/issues/guid/LOC-1261))\n- Fixed iOS and Mac builds not including localization data due to an if UNITY_INCLUDE_TESTS exclusion. ([LOC-1270](https://issuetracker.unity3d.com/product/unity/issues/guid/LOC-1270))"
+  },
+  "upmCi": {
+    "footprint": "3ef8e6d0aa43c02e163738a6c6a8f009f3b19a22"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.localization@1.5/manual/index.html",
+  "repository": {
+    "url": "https://github.cds.internal.unity3d.com/unity/com.unity.localization.git",
+    "type": "git",
+    "revision": "e926702332a191e2f8810036ebce6050a762b422"
+  },
+  "_fingerprint": "62db12c43c5cc209aa22b80b5960d88f86711ea4"
+}

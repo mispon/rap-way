@@ -2,28 +2,57 @@
     <ui:VisualElement name="safe-area-frame" class="app-shell">
         <ui:VisualElement name="screen-splash" class="screen screen--centered">
             <ui:VisualElement class="hero-card">
-                <ui:Label text="Rap Way" class="brand-title" />
-                <ui:Label text="Preparing the stage..." class="status-label status-label--hero" />
+                <ui:Label text="" class="brand-title" />
+                <ui:Label text="" class="status-label status-label--hero" />
             </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="screen-main-menu" class="screen screen--centered" style="display: none;">
             <ui:VisualElement class="menu-card">
-                <ui:Label text="Rap Way" class="brand-title" />
-                <ui:Label text="Build your name from the ground up." class="subtitle-label" />
-                <ui:Button name="new-career-button" text="New Career" class="primary-button" />
-                <ui:Button name="continue-button" text="Continue" class="secondary-button" />
-                <ui:Button name="quit-button" text="Quit" class="ghost-button" />
-                <ui:Label name="status-label" text="" class="status-label" />
+                <ui:Label text="" class="brand-title" />
+                <ui:Label text="" class="subtitle-label" />
+                <ui:Button name="new-career-button" text="" class="primary-button" />
+                <ui:Button name="continue-button" text="" class="secondary-button" />
+                <ui:Button name="quit-button" text="" class="ghost-button" />
+                <ui:Label name="main-menu-status-label" text="" class="status-label" />
             </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="screen-new-career-template" class="screen screen--centered" style="display: none;">
+            <ui:ScrollView mode="Vertical" class="template-scroll-view">
+                <ui:VisualElement class="template-selection-card">
+                    <ui:Label text="" class="template-screen-title" />
+                    <ui:Label text="" class="template-screen-subtitle" />
+                    <ui:VisualElement class="template-option-list">
+                        <ui:Button name="template-on-your-own-button" class="template-option-button" />
+                        <ui:Button name="template-at-rock-bottom-button" class="template-option-button" />
+                        <ui:Button name="template-privileged-start-button" class="template-option-button" />
+                        <ui:Button name="template-one-meme-wonder-button" class="template-option-button" />
+                        <ui:Button name="template-basement-genius-button" class="template-option-button" />
+                        <ui:Button name="template-former-group-member-button" class="template-option-button" />
+                        <ui:Button name="template-protege-button" class="template-option-button" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="template-detail-card">
+                        <ui:Label name="template-detail-title" text="" class="template-detail-title" />
+                        <ui:Label name="template-detail-tagline" text="" class="template-detail-tagline" />
+                        <ui:Label name="template-detail-summary" text="" class="template-detail-summary" />
+                        <ui:Label name="template-detail-emphasis" text="" class="template-detail-emphasis" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="template-action-row">
+                        <ui:Button name="template-back-button" text="" class="ghost-button template-action-button" />
+                        <ui:Button name="template-confirm-button" text="" class="primary-button template-action-button" />
+                    </ui:VisualElement>
+                    <ui:Label name="new-career-status-label" text="" class="status-label" />
+                </ui:VisualElement>
+            </ui:ScrollView>
         </ui:VisualElement>
 
         <ui:VisualElement name="screen-hud" class="screen screen--hud" style="display: none;">
             <ui:VisualElement class="hud-card">
-                <ui:Label text="Session HUD Placeholder" class="hud-title" />
-                <ui:Label text="Stage 4 shell is active." class="hud-body" />
+                <ui:Label text="" class="hud-title" />
+                <ui:Label text="" class="hud-body" />
             </ui:VisualElement>
-            <ui:Button name="hud-menu-button" text="Menu" class="secondary-button hud-menu-button" />
+            <ui:Button name="hud-menu-button" text="" class="secondary-button hud-menu-button" />
         </ui:VisualElement>
 
         <ui:VisualElement name="modal-overlay" class="modal-overlay" style="display: none;">
@@ -31,7 +60,7 @@
                 <ui:Label name="modal-title" text="" class="modal-title" />
                 <ui:Label name="modal-body" text="" class="modal-body" />
                 <ui:Button name="modal-primary-button" text="" class="primary-button" />
-                <ui:Button name="modal-secondary-button" text="Close" class="ghost-button" />
+                <ui:Button name="modal-secondary-button" text="" class="ghost-button" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -32,13 +32,13 @@ namespace RapWay.Composition.Unity.Persistence
 
         public async UniTask StartAsync(CancellationToken cancellationToken)
         {
-            GameSessionLaunchMode launchMode = _launchRequest.Consume();
-            if (launchMode == GameSessionLaunchMode.MainMenu)
+            GameSessionLaunchRequestData launchRequest = _launchRequest.Consume();
+            if (launchRequest.Mode == GameSessionLaunchMode.MainMenu)
             {
                 return;
             }
 
-            if (launchMode == GameSessionLaunchMode.NewCareer)
+            if (launchRequest.Mode == GameSessionLaunchMode.NewCareer)
             {
                 _session = new SimulationSession(CreateBootstrapState(), _eventSink);
                 return;

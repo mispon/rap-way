@@ -5,8 +5,8 @@ namespace RapWay.Application.Session
     public sealed class GameSessionLaunchRequest : IGameSessionLaunchRequest
     {
         private readonly object _sync = new();
-        private GameSessionLaunchMode _requestedMode = GameSessionLaunchMode.MainMenu;
-        private GameSessionLaunchMode _lastRequestedMode = GameSessionLaunchMode.MainMenu;
+        private GameSessionLaunchRequestData _requested = new(GameSessionLaunchMode.MainMenu, null);
+        private GameSessionLaunchRequestData _lastRequested = new(GameSessionLaunchMode.MainMenu, null);
 
         public GameSessionLaunchMode LastRequestedMode
         {
@@ -14,27 +14,39 @@ namespace RapWay.Application.Session
             {
                 lock (_sync)
                 {
-                    return _lastRequestedMode;
+                    return _lastRequested.Mode;
                 }
             }
         }
 
-        public void Request(GameSessionLaunchMode mode)
+        public CareerStartTemplateId? LastRequestedStartTemplateId
         {
-            lock (_sync)
+            get
             {
-                _requestedMode = mode;
-                _lastRequestedMode = mode;
+                lock (_sync)
+                {
+                    return _lastRequested.StartTemplateId;
+                }
             }
         }
 
-        public GameSessionLaunchMode Consume()
+        public void Request(GameSessionLaunchMode mode, CareerStartTemplateId? startTemplateId = null)
         {
             lock (_sync)
             {
-                GameSessionLaunchMode consumedMode = _requestedMode;
-                _requestedMode = GameSessionLaunchMode.MainMenu;
-                return consumedMode;
+                GameSessionLaunchRequestData request = new(mode, startTemplateId);
+                _requested = request;
+                _lastRequested = request;
+            }
+        }
+
+        public GameSessionLaunchRequestData Consume()
+        {
+            lock (_sync)
+            {
+                GameSessionLaunchRequestData consumedRequest = _requested;
+                _requested = new GameSessionLaunchRequestData(GameSessionLaunchMode.MainMenu, null);
+                return consumedRequest;
             }
         }
     }
