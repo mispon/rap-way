@@ -6,13 +6,13 @@
 
 - Project root: `D:\Projects\Rap Way`
 - Project: Rap Way, a mobile-first rap artist career simulator
-- Last analyzed: 2026-08-20
+- Last analyzed: 2026-08-21
 - Last analyzed commit: `c73d2628` on branch `v3`
 
 ## Confirmed Environment
 
 - Unity version: 6000.5.9f1 (revision b57deb96f08d)
-- Render pipeline: Built-in Render Pipeline (no SRP package or assigned render-pipeline asset detected)
+- Render pipeline: Universal Render Pipeline 17.5.0 with the 2D Renderer. The mobile baseline disables HDR, MSAA, depth/stencil, opaque texture, post-processing, and renderer features.
 - Input system: Unity Input System (`activeInputHandler: 1`)
 - UI system: uGUI/Canvas prefabs; no UXML or USS assets detected
 - Confirmed target: Android (`com.Meepson.RapWay`, min SDK 25, target SDK 34, IL2CPP)
@@ -114,7 +114,7 @@
 - iOS configuration and build health are unverified.
 - Windows/PC build configuration and input behavior are unverified.
 - Unity 6000.5.9f1 imports and compiles the new target asmdefs. A 2026-08-20 smoke test completed the updated Boot-to-Game shell flow and prototype save path.
-- CharacterCreator2D currently throws an initialization exception because `CharacterUtility.Init` receives a missing shader. Treat URP 2D/material compatibility as unverified and resolve it at the Stage 4 presentation gate.
+- URP 2D and CharacterCreator2D material compatibility passed Unity batch validation on 2026-08-21. Both baked CharacterCreator2D shaders resolve successfully; scene and device visual validation remains pending.
 - Persistence schema v1, SHA-256 envelopes, sequential migration, atomic replacement, two backups, recovery reporting, and scoped Unity lifecycle/autosave adapters are implemented. The legacy distributed save path and prefab component were removed in Stage 2; old platform save files are left untouched.
 - Dynamic Batching emits a deprecation warning. Scene/prefab references beyond the smoke path, player builds, and device behavior still require dedicated validation.
 - The intended visual design system, supported device matrix, localization scope, analytics, and monetization requirements are not documented.

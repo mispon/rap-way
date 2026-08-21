@@ -4,7 +4,7 @@ Version: 0.1
 
 Status: Living document
 
-Last updated: 2026-08-20
+Last updated: 2026-08-21
 
 ## 1. Purpose and authority
 
@@ -597,6 +597,7 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 - Newtonsoft Json Unity package `3.2.2` / Json.NET `13.0.2`: save and content infrastructure.
 - Persistence schema `1`: explicit snapshot DTOs, SHA-256 payload verification, sequential migrations, same-directory atomic replacement, two rotating backups, and typed recovery reporting. See `Docs/Architecture/PERSISTENCE.md`.
 - Unity Input System `1.20.0`: touch, mouse, keyboard, and platform input.
+- Universal Render Pipeline `17.5.0`: mobile-first rendering with the 2D Renderer. Validated with Unity `6000.5.9f1` and CharacterCreator2D baked shader lookup.
 - DOTween `1.2.815` generation or newer imported asset: presentation animation. Exact imported version must be verified and recorded before the next upgrade.
 - CharacterCreator2D: character visual assembly. Imported asset version must be recorded from its source/license record.
 - Clever Ads Solutions `4.7.4` currently resolved: advertisement provider behind `IAdService`.
@@ -604,7 +605,6 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 
 ### 22.2 Planned
 
-- URP version verified for Unity `6000.5.9f1`: 2D Renderer and CharacterCreator2D shader support.
 - Unity Localization version verified for Unity `6000.5.9f1`: String Table Collections, Smart Strings, pseudo-localization, and editor APIs. Its resolved Addressables dependency is pinned in the package lock and initially contained to localization.
 
 ### 22.3 Planned removal or containment
@@ -661,7 +661,6 @@ Each migration step should have a narrow acceptance criterion and should not com
 ## 26. Open technical decisions
 
 - Exact Android device support and performance budgets.
-- Exact URP package/configuration validated against Unity 6000.5.9f1.
 - CharacterCreator2D asset version and final build-content curation.
 - Whether profiling ever justifies expanding Addressables beyond localization.
 - PC build, storefront, input, and save-path requirements.
