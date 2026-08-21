@@ -2,7 +2,10 @@ using System;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using RapWay.Domain.Activities;
+using RapWay.Domain.Character;
 using RapWay.Domain.Common;
+using RapWay.Domain.Numerics;
 using RapWay.Domain.Random;
 using RapWay.Domain.State;
 using RapWay.Domain.Time;
@@ -73,30 +76,99 @@ namespace RapWay.Architecture.Tests
         }
 
         [Test]
-        public void SchemaZeroFixtureMigratesSequentiallyToCurrent()
+        public void SerializationDoesNotEmitAFormatVersion()
         {
             GameSaveSerializer serializer = new();
-            string fixturePath = Path.Combine(
-                TestContext.CurrentContext.TestDirectory,
-                "Fixtures",
-                "game-save-v0.json");
+            JObject envelope = JObject.Parse(serializer.Serialize(CreateState(0), SavedAtUtc));
 
-            DecodedGameSave decoded = serializer.Deserialize(File.ReadAllText(fixturePath));
-
-            Assert.That(decoded.State.Revision, Is.Zero);
-            Assert.That(decoded.State.Calendar.TotalHours, Is.EqualTo(12));
+            Assert.That(envelope["payload"]!["schemaVersion"], Is.Null);
         }
 
         [Test]
-        public void FutureSchemaIsRejectedWithoutGuessing()
+        public void RoundTripPreservesTheCharacterModel()
+        {
+            CharacterState character = new(
+                new CharacterIdentity(StableId.Create("artist.1"), StableId.Create("start.bottom")),
+                new CharacterResources(
+                    new BoundedResource(450, 1_000),
+                    new BoundedResource(300, 800),
+                    new BoundedResource(700, 1_200)),
+                Money.FromMinorUnits(12_345),
+                new AudienceState(new[]
+                {
+                    new AudienceSegment(StableId.Create("fans.local"), 25),
+                    new AudienceSegment(StableId.Create("fans.underground"), 11)
+                }),
+                new HypeState(new BoundedResource(425, 1_000)),
+                new SkillBook(new[]
+                {
+                    new SkillProgress(StableId.Create("skill.lyrics"), 500, 48)
+                }),
+                new TalentSet(new[]
+                {
+                    StableId.Create("talent.wordsmith")
+                }),
+                new StatusEffectSet(new[]
+                {
+                    new StatusEffectState(
+                        StableId.Create("effect.1"),
+                        StableId.Create("status.lovestruck"),
+                        StableId.Create("event.romance"),
+                        24,
+                        72,
+                        2)
+                }));
+            GameState state = new(
+                new CalendarState(new GameDate(2026, 1, 1, 8)),
+                new RandomState(123),
+                character);
+            GameSaveSerializer serializer = new();
+
+            DecodedGameSave decoded = serializer.Deserialize(serializer.Serialize(state, SavedAtUtc));
+
+            Assert.That(decoded.State.Character.Identity.StartTemplateId, Is.EqualTo(StableId.Create("start.bottom")));
+            Assert.That(decoded.State.Character.Resources.Satiety.Maximum, Is.EqualTo(800));
+            Assert.That(decoded.State.Character.Wallet.MinorUnits, Is.EqualTo(12_345));
+            Assert.That(decoded.State.Character.Audience.TotalFans, Is.EqualTo(36));
+            Assert.That(decoded.State.Character.Skills.Entries[0].Experience, Is.EqualTo(500));
+            Assert.That(decoded.State.Character.Talents.Ids[0], Is.EqualTo(StableId.Create("talent.wordsmith")));
+            Assert.That(decoded.State.Character.StatusEffects.Effects[0].ExpiresAtTotalHours, Is.EqualTo(72));
+        }
+
+        [Test]
+        public void RoundTripPreservesAnActiveActivity()
+        {
+            ActivitySessionState activity = new(
+                StableId.Create("activity.1"),
+                StableId.Create("work.courier"),
+                12,
+                4,
+                2);
+            GameState state = new(
+                new CalendarState(new GameDate(2026, 1, 1, 8), 14),
+                new RandomState(123),
+                CharacterState.CreateDefault(),
+                activity);
+            GameSaveSerializer serializer = new();
+
+            DecodedGameSave decoded = serializer.Deserialize(serializer.Serialize(state, SavedAtUtc));
+
+            Assert.That(decoded.State.ActiveActivity, Is.Not.Null);
+            Assert.That(decoded.State.ActiveActivity!.DefinitionId, Is.EqualTo(StableId.Create("work.courier")));
+            Assert.That(decoded.State.ActiveActivity.ElapsedHours, Is.EqualTo(2));
+            Assert.That(decoded.State.ActiveActivity.RemainingHours, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void VersionedPayloadIsRejectedAsAnIncompatibleDevelopmentSave()
         {
             JObject payload = CreateCurrentPayload(0);
-            payload["schemaVersion"] = GameStateSnapshotMapper.CurrentSchemaVersion + 1;
+            payload["schemaVersion"] = 1;
             GameSaveSerializer serializer = new();
 
             Assert.That(
                 (Action)(() => serializer.Deserialize(serializer.CreateEnvelope(payload))),
-                Throws.TypeOf<UnsupportedSaveSchemaException>());
+                Throws.TypeOf<InvalidDataException>());
         }
 
         [Test]

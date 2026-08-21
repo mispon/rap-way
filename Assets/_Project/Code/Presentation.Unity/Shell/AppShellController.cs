@@ -4,6 +4,8 @@ using Cysharp.Threading.Tasks;
 using RapWay.Application.Navigation;
 using RapWay.Application.Persistence;
 using RapWay.Application.Session;
+using RapWay.Core.Localization;
+using RapWay.Domain.Localization;
 using RapWay.Presentation.Unity.Localization;
 using UnityEngine;
 

@@ -2,8 +2,8 @@ using RapWay.Application.Navigation;
 using RapWay.Application.Persistence;
 using RapWay.Application.Session;
 using RapWay.Composition.Unity.Navigation;
+using RapWay.Core.Localization;
 using RapWay.Infrastructure.Persistence;
-using RapWay.Presentation.Unity.Localization;
 using RapWay.Presentation.Unity.Shell;
 using VContainer;
 

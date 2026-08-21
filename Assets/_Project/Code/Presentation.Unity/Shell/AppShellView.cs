@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using RapWay.Application.Session;
+using RapWay.Core.Localization;
+using RapWay.Domain.Localization;
 using RapWay.Presentation.Unity.Localization;
 using UnityEngine;
 using UnityEngine.InputSystem;

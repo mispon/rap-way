@@ -43,7 +43,11 @@
 - Follow `.editorconfig`: four spaces, braces, explicit accessibility, and sorted `using` directives.
 - Use namespace root `RapWay`. Code identifiers and technical comments are English; player-facing text must be localizable.
 - Store player-facing text in feature-scoped Unity Localization String Table Collections. Russian is the source locale and English is required for release; never place translated prose directly in gameplay JSON.
+- Unity String Table assets under `Assets/_Project/Localization/` are the sole source of truth for localization keys and translations. Do not hand-edit their YAML; use Unity Localization tools or `Rap Way/Localization` editor commands.
+- Create one collection per feature (`UI.Common`, `Activities`, `News`, `Events`, etc.), not a project-wide text table. Use English collection names and lower-case semantic `snake_case` entry keys.
+- UI code may use the generated `GameLocalizationKeys.cs` API, but never edit it manually. Gameplay JSON carries ordinary `{ "table", "key" }` references. Do not add a hand-maintained C# key list, translation seed data, or hard-coded fallback prose.
 - Use stable semantic English keys and named Smart String arguments with typed contracts. Do not use positional placeholders, derive keys from source text, or assemble sentences from localized fragments.
+- For every new text: add the key in the appropriate collection, fill Russian and English text, run `Rap Way/Localization/Validate Catalog`, and regenerate the key API before handoff. Missing or empty required-locale entries are defects.
 - Use `PascalCase` for types/members, `camelCase` for locals/parameters, `_camelCase` for private fields, and `IName` for interfaces.
 - Prefer `[SerializeField] private` over public fields. Preserve serialized names or use `FormerlySerializedAs` when renaming.
 - Keep one primary type per file and match file/type names. Avoid regions, clever abstractions, and comments that repeat the code.

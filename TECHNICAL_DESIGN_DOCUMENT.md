@@ -118,7 +118,7 @@ Do not create an assembly, DI module, repository, or base-class hierarchy for ev
 There is one authoritative `GameState` per active game session. It is divided into explicit state modules such as:
 
 - `WorldState`
-- `PlayerState`
+- `CharacterState`
 - `IndustryState`
 - `EconomyState`
 - `CalendarState`
@@ -133,6 +133,8 @@ Exact modules may evolve, but ownership rules do not:
 - State changes occur only through an Application command transaction.
 - Read models and UI models are derived data, not alternate authorities.
 - Only one `GameState` is active at a time.
+
+The initial implemented `CharacterState` contains stable identity/template IDs, bounded energy/satiety/motivation, wallet, segmented audience, hype, durable skill XP with last-practice time, unlocked talents, and status effects. It is an engine-independent module. `ActivitySessionState` is a separate optional `GameState` module: it owns one activity's stable IDs, duration, elapsed time, and lifecycle. `ActivityDefinition` is immutable content: stable ID, category, permitted duration range, localization keys, hourly resource and skill-XP effects, payment per completed hour, an optional contextual event pool, and interruption/acceleration flags. `StartActivity`, `AdvanceActivityHour`, `CompleteActivity`, and `InterruptActivity` are the initial state-changing commands: they validate immutable content through an Application lookup port, apply each hour discretely, and settle the configured payment only on completion or for already completed hours upon permitted interruption. Requirements, completion bonuses, and event outcomes are introduced separately.
 
 Rap Way uses snapshot persistence, not event sourcing. Domain events are not the permanent source of truth.
 
@@ -290,12 +292,12 @@ CSV is not part of the gameplay-content stack. Gameplay JSON may reference local
 
 ### 12.1 Localization
 
-Unity Localization String Table Collections are the canonical store for player-facing text. Collections are split by feature, for example `UI.Common`, `UI.MainMenu`, `News`, and `Events`, rather than accumulated in one global table.
+Unity Localization String Table Collections are the canonical store for every player-facing text and translation. Collections are split by feature, for example `UI.Common`, `UI.MainMenu`, `News`, and `Events`, rather than accumulated in one global table. The Unity-facing lookup service belongs to `Assets/_Project/Code/Core/Localization`; pure Domain/Application code carries a Unity-free `{ table, key }` localization reference only.
 
 #### Ownership and boundaries
 
 - Russian is the source locale. English is a required locale for the first release.
-- Collection names, stable semantic keys, and placeholder names are English.
+- Collection names and placeholder names are English. Collections are feature-scoped (`UI.Common`, `Activities`, `News`, `Events`); entry keys are stable semantic lower-case `snake_case` names.
 - Domain and Application emit facts and typed data; they never format localized sentences.
 - Presentation resolves a localization key with a typed argument contract.
 - Gameplay definitions may own variant keys, conditions, and weights. Localization owns only wording.
@@ -327,32 +329,33 @@ A project-owned `LocalizationCatalogTool` uses Unity Localization editor APIs; t
 
 - Adding or updating a shared key once with source text, feature ownership, context, and translator comments.
 - Searching key usage and reporting unused or broken references.
-- Generating typed key references such as `LocKeys.g.cs`.
+- Generating typed key references such as `GameLocalizationKeys.cs` from the Unity table assets. Generated code is a convenience and compile-time safety net, never the source of truth; content JSON stores ordinary table/key strings.
 - Validating completeness, translation state, named placeholders, argument contracts, duplicate intent, and forbidden positional placeholders.
 - Producing a readable review report for source changes and release readiness.
 - Optional Google Sheets or XLIFF exchange later; neither is the canonical runtime source.
+
+For each new player-facing text, the author creates or selects the feature collection in Unity Localization, adds the semantic key, fills Russian and English, then runs `Rap Way/Localization/Validate Catalog`. The generated `GameLocalizationKeys.cs` API is refreshed from the table assets and committed as a derived convenience artifact. Gameplay JSON uses `{ "table", "key" }` references instead of generated C# members.
 
 Pseudo-localization is part of UI validation and deliberately expands/wraps strings to expose clipping and hard-coded text. The first release guarantees Cyrillic and Latin font coverage. RTL and CJK require a separate font, layout, input, and device-validation decision.
 
 ## 13. Persistence
 
-Rap Way stores explicit versioned JSON snapshots.
+Before release, Rap Way stores explicit development JSON snapshots without format versioning.
 
 ### 13.1 Format
 
 - `GameSaveDto` is explicit and does not contain arbitrary `object` dictionaries.
-- `SchemaVersion` is independent from the application version.
 - Save DTOs contain no Unity object references or vendor types.
 - Newtonsoft.Json is the current serializer implementation.
 - `TypeNameHandling` and implicit polymorphic type-name persistence are prohibited.
 - Production compression is introduced only after measuring a real size or load-time problem.
 
-### 13.2 Migrations
+### 13.2 Pre-release save policy
 
-- Migrations are sequential and explicit: `v1 -> v2 -> v3`.
-- An old DTO is migrated before conversion into current `GameState`.
-- Migration tests use committed fixture saves for every supported schema.
-- A schema change is incomplete until its migration and compatibility test exist.
+- Development saves are disposable: a changed DTO format intentionally makes an old save incompatible.
+- No schema number, migration pipeline, or backward-compatibility fixture is maintained before release.
+- An incompatible existing save starts a fresh bootstrap career and is immediately replaced by the current snapshot.
+- Save-format versioning and explicit migrations become a release gate before player careers are promised long-term durability.
 
 ### 13.3 Durability
 
@@ -595,7 +598,7 @@ PC build and storefront pipelines are deferred until a Windows vertical slice ex
 - MessagePipe Core and VContainer `1.8.2`, pinned to official commit `58516c36d4465a7b6396b7850a4ad7e03326998c`: scoped publication of committed domain facts only.
 - UniTask `2.5.11` currently resolved: limited Unity-side async support and MessagePipe requirement.
 - Newtonsoft Json Unity package `3.2.2` / Json.NET `13.0.2`: save and content infrastructure.
-- Persistence schema `1`: explicit snapshot DTOs, SHA-256 payload verification, sequential migrations, same-directory atomic replacement, two rotating backups, and typed recovery reporting. See `Docs/Architecture/PERSISTENCE.md`.
+- Development persistence: explicit unversioned snapshot DTOs, SHA-256 payload verification, same-directory atomic replacement, two rotating backups, and typed recovery reporting. Incompatible development saves are replaced; versioned migration becomes a release gate. See `Docs/Architecture/PERSISTENCE.md`.
 - Unity Input System `1.20.0`: touch, mouse, keyboard, and platform input.
 - Universal Render Pipeline `17.5.0`: mobile-first rendering with the 2D Renderer. Validated with Unity `6000.5.9f1` and CharacterCreator2D baked shader lookup.
 - DOTween `1.2.815` generation or newer imported asset: presentation animation. Exact imported version must be verified and recorded before the next upgrade.

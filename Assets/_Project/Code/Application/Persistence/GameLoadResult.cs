@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using RapWay.Domain.State;
 

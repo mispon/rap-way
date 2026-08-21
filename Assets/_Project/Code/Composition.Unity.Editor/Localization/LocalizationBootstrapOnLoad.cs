@@ -22,12 +22,6 @@ namespace RapWay.Composition.Unity.Editor.Localization
 
         private static void TryBootstrap()
         {
-            if (LocalizationEditorSettings.ActiveLocalizationSettings != null &&
-                LocalizationEditorSettings.GetStringTableCollection(Presentation.Unity.Localization.GameLocalizationTables.UiShell) != null)
-            {
-                return;
-            }
-
             LocalizationCatalogBootstrapper.BootstrapCatalog();
         }
     }

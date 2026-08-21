@@ -4,27 +4,26 @@
 
 - Rap Way persists explicit snapshots of `GameState`; domain events are not a permanent source of truth.
 - `RapWay.Application.Persistence.IGameSaveStore` is the engine-independent port.
-- DTOs, JSON, migrations, checksums, and physical file handling live in `RapWay.Infrastructure.Persistence`.
+- DTOs, JSON, checksums, and physical file handling live in `RapWay.Infrastructure.Persistence`.
 - Unity lifecycle and MessagePipe autosave adapters live in `RapWay.Composition.Unity.Persistence`.
 - Domain and Application contain no Newtonsoft.Json, Unity, MessagePipe, file-system, or platform-path types.
 
-## Current schema
+## Pre-release format
 
-- Current schema: `1`.
 - The save envelope contains `checksumAlgorithm`, `checksum`, and `payload` only.
 - The payload contains an ISO-8601 UTC timestamp and explicit DTOs for revision, calendar, random master seed, and materialized random streams.
 - Unsigned 64-bit random values are invariant decimal strings so JSON consumers cannot round them through floating-point numbers.
 - Materialized streams are serialized in stable-ID order for deterministic output.
-- Unknown fields in the current schema are rejected instead of silently discarded.
+- Unknown fields are rejected instead of silently discarded; this makes an old development save intentionally incompatible after a DTO change.
 - `TypeNameHandling` is always `None`; `$type` metadata and arbitrary object dictionaries are prohibited.
 
-## Integrity and migration
+## Integrity and development cutover
 
 - SHA-256 covers the compact JSON representation of the unmodified payload.
 - JSON date auto-parsing is disabled before checksum verification so ISO strings remain canonical.
-- The checksum is verified before any migration runs.
-- Migrations advance exactly one version at a time. The committed `v0` fixture proves the `0 -> 1` path.
-- Saves from future schemas are rejected without guessing or destructive fallback.
+- There is deliberately no schema version or migration pipeline before release.
+- An incompatible existing development save creates a new bootstrap career and is immediately replaced by a current snapshot.
+- Save-format versioning and migrations are a release gate, when player careers become durable.
 
 ## Durable file layout
 
@@ -38,7 +37,7 @@
 
 ## Unity lifecycle
 
-- `GameSessionCoordinator` loads a valid career before exposing snapshots. Missing saves create a temporary bootstrap state; unrecoverable existing saves block session creation so they cannot be silently overwritten.
+- `GameSessionCoordinator` loads a valid career before exposing snapshots. Missing saves create a temporary bootstrap state; an unrecoverable development save is replaced with one instead of blocking the game.
 - `GameSaveLifecycleAdapter` captures synchronously and requests observed asynchronous writes on mobile pause and best-effort application quit.
 - `CommittedEventAutosaveScheduler` listens only to committed facts and debounces autosave requests by two seconds. It does not use the domain clock.
 - The bootstrap date is temporary composition data until the career-creation stage owns start date and seed selection.
@@ -49,6 +48,6 @@ The old `SaveLoadService`, `Dictionary<string, object>`, distributed `ISaveable`
 
 ## Validation
 
-- Pure .NET tests cover round trips, `long`/`ulong` boundaries, deterministic stream order, checksum corruption, unknown fields, the committed migration fixture, future schemas, missing saves, interrupted temp files, both backup levels, and total corruption.
+- Pure .NET tests cover round trips, `long`/`ulong` boundaries, deterministic stream order, checksum corruption, incompatible legacy fields, missing saves, interrupted temp files, both backup levels, and total corruption.
 - Unity compilation and a Game-scene Play Mode smoke test validate VContainer construction and lifecycle-object creation.
 - Android suspend/resume and platform file-replacement behavior still require a device smoke test before release; this is release validation, not a second persistence implementation path.

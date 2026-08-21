@@ -155,7 +155,6 @@ namespace RapWay.Infrastructure.Persistence
                                                   exception is FormatException ||
                                                   exception is InvalidDataException ||
                                                   exception is JsonException ||
-                                                  exception is UnsupportedSaveSchemaException ||
                                                   exception is ArgumentException ||
                                                   exception is InvalidOperationException ||
                                                   exception is OverflowException)

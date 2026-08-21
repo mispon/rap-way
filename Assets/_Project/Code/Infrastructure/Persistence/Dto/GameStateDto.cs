@@ -1,3 +1,5 @@
+#nullable enable
+
 using Newtonsoft.Json;
 
 namespace RapWay.Infrastructure.Persistence.Dto
@@ -13,5 +15,11 @@ namespace RapWay.Infrastructure.Persistence.Dto
 
         [JsonProperty("random", Order = 3, Required = Required.Always)]
         public RandomStateDto Random { get; set; } = new();
+
+        [JsonProperty("character", Order = 4, Required = Required.Always)]
+        public CharacterStateDto Character { get; set; } = new();
+
+        [JsonProperty("activeActivity", Order = 5, Required = Required.AllowNull)]
+        public ActivitySessionDto? ActiveActivity { get; set; }
     }
 }

@@ -16,18 +16,16 @@ namespace RapWay.Infrastructure.Persistence
         public const string ChecksumAlgorithm = "sha256";
 
         private readonly GameStateSnapshotMapper _mapper;
-        private readonly SaveMigrationPipeline _migrations;
         private readonly JsonSerializer _serializer;
 
         public GameSaveSerializer()
-            : this(new GameStateSnapshotMapper(), new SaveMigrationPipeline())
+            : this(new GameStateSnapshotMapper())
         {
         }
 
-        public GameSaveSerializer(GameStateSnapshotMapper mapper, SaveMigrationPipeline migrations)
+        public GameSaveSerializer(GameStateSnapshotMapper mapper)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _migrations = migrations ?? throw new ArgumentNullException(nameof(migrations));
             _serializer = JsonSerializer.Create(new JsonSerializerSettings
             {
                 Culture = CultureInfo.InvariantCulture,
@@ -91,11 +89,10 @@ namespace RapWay.Infrastructure.Persistence
                 throw new InvalidDataException("Save checksum verification failed.");
             }
 
-            JObject currentPayload = _migrations.MigrateToCurrent(payload);
             GameSaveDto save;
             try
             {
-                save = currentPayload.ToObject<GameSaveDto>(_serializer) ??
+                save = payload.ToObject<GameSaveDto>(_serializer) ??
                        throw new InvalidDataException("Save payload could not be decoded.");
             }
             catch (JsonException exception)

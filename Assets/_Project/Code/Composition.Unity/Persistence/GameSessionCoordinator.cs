@@ -62,7 +62,10 @@ namespace RapWay.Composition.Unity.Persistence
                 return;
             }
 
-            Debug.LogError($"[Persistence] Career save could not be recovered: {result.Detail}");
+            GameState replacementState = CreateBootstrapState();
+            await _saveStore.SaveAsync(replacementState, DateTime.UtcNow, cancellationToken);
+            _session = new SimulationSession(replacementState, _eventSink);
+            Debug.LogWarning($"[Persistence] Replaced an incompatible development save: {result.Detail}");
         }
 
         public bool TryGetStateSnapshot(out GameState stateSnapshot)

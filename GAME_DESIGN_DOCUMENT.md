@@ -2,7 +2,7 @@
 
 Version: 0.1  
 Status: Living document  
-Last updated: 2026-08-20
+Last updated: 2026-08-21
 
 ## 1. Document Purpose
 
@@ -178,7 +178,7 @@ A rival may dislike but respect the player. A friend may care but not trust them
 
 ### 7.4 Skills
 
-Skills range from 1 to 100. Potential examples include vocals, lyric writing, improvisation, instruments, production, performance, charisma, negotiation, and management. The final catalog is not yet fixed.
+Skills use durable experience rather than a hard-coded cap. The progression rule derives the displayed level from experience and may support mastery beyond 100. Potential examples include vocals, lyric writing, improvisation, instruments, production, performance, charisma, negotiation, and management. The final catalog is not yet fixed.
 
 Skills grow by doing relevant work. Learning effectiveness follows a zone of proximal challenge:
 
@@ -195,7 +195,7 @@ Equipment improves output but does not directly grant expertise.
 
 Mastery does not decay, but current form can.
 
-- Each applicable skill stores the last meaningful practice and a temporary form state.
+- Each applicable skill stores durable experience and the last meaningful practice. Current form is derived by the applicable progression rule and character state rather than reducing durable mastery.
 - Form modifies effective skill within a limited range, initially hypothesized around 0.85 to 1.05.
 - Performance and motor skills lose form faster than craft or theoretical skills.
 - A few meaningful practice sessions restore form quickly.
@@ -300,6 +300,10 @@ Ordinary work is a background exchange of time and energy for reliable money.
 - Positive and negative events may create contacts, injuries, opportunities, or complications.
 - Work competes directly with music, rest, relationships, and deadlines.
 - Better jobs may require skills, reputation, equipment, or reliable attendance.
+
+Starting an activity opens a short process screen rather than resolving the shift as an instant exchange. It presents the character's progress and changing needs while the player may read news, social feeds, and charts. Simulation time still advances only through explicit discrete activity steps; the presentation is never the clock. Contextual activity events may pause progress for a decision, and routine sessions may be accelerated after the player has seen them.
+
+Resources and relevant skill experience apply for every completed activity hour. Ordinary-work payment is settled after a successful session; an interrupted shift pays only proportionally for already completed hours and never grants completion bonuses.
 
 The intended early tension is: work a shift and safely pay for food, or risk the day on music and a possible breakthrough.
 
@@ -668,4 +672,3 @@ The following subjects require dedicated design or prototypes:
 - No pay-to-win, rewarded progression, or gameplay resources sold for money.
 - No requirement to manage every specialist as a permanent employee.
 - No guarantee that every agreed long-term system appears in the first release.
-
