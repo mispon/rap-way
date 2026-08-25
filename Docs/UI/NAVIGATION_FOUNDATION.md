@@ -15,6 +15,8 @@ Rap Way uses one mobile-first, in-session navigation history. It supports Footba
 
 Routes never infer their behavior from names, UXML files, or callers. A screen view receives an already validated route entry and emits intents; it does not manipulate history directly.
 
+The initial vertical slice follows this contract end to end: `Home → ActivitySelection → ActivityConfirmation → ActivitySession → ActivityResult → Home`. The selection and confirmation use `Push`; session and result use `Replace`; Close from the result intentionally clears to Home. Its renderer may refresh progress from simulation state, but it never chooses the next route itself.
+
 ## History behavior
 
 - `Home` is the only in-game root.

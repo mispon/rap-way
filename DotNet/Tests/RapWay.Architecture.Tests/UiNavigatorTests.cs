@@ -54,11 +54,14 @@ namespace RapWay.Architecture.Tests
         {
             UiNavigator navigator = CreateNavigator(historyLimit: 50);
             navigator.InitializeHome();
-            navigator.Navigate(UiRouteId.ActivitySession, new ActivityUiRouteContext("job.courier"));
-            navigator.Navigate(UiRouteId.ActivityResult, new ActivityUiRouteContext("job.courier", "session.001"));
+            navigator.Navigate(UiRouteId.ActivitySelection);
+            navigator.Navigate(UiRouteId.ActivityConfirmation, new ActivityUiRouteContext("job.courier"));
+            navigator.Navigate(UiRouteId.ActivitySession, new ActivityUiRouteContext("job.courier", "session.001"));
+            navigator.Navigate(UiRouteId.ActivityResult, new ActivityUiRouteContext("job.courier", "session.001", durationHours: 4));
 
-            Assert.That(navigator.Snapshot.History, Has.Count.EqualTo(2));
+            Assert.That(navigator.Snapshot.History, Has.Count.EqualTo(3));
             Assert.That(navigator.Snapshot.History[0].Definition.Id, Is.EqualTo(UiRouteId.Home));
+            Assert.That(navigator.Snapshot.History[1].Definition.Id, Is.EqualTo(UiRouteId.ActivitySelection));
             Assert.That(navigator.Snapshot.CurrentRoute!.Definition.Id, Is.EqualTo(UiRouteId.ActivityResult));
         }
 

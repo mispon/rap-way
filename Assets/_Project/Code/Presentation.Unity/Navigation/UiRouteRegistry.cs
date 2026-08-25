@@ -60,13 +60,14 @@ namespace RapWay.Presentation.Unity.Navigation
                 new UiRouteDefinition(UiRouteId.Career, UiNavigationMode.Push, typeof(EmptyUiRouteContext), UiBackAffordance.Hidden),
                 new UiRouteDefinition(UiRouteId.Inbox, UiNavigationMode.Push, typeof(EmptyUiRouteContext), UiBackAffordance.Hidden),
                 new UiRouteDefinition(UiRouteId.ActivitySelection, UiNavigationMode.Push, typeof(EmptyUiRouteContext), UiBackAffordance.Visible),
+                new UiRouteDefinition(UiRouteId.ActivityConfirmation, UiNavigationMode.Push, typeof(ActivityUiRouteContext), UiBackAffordance.Visible),
+                new UiRouteDefinition(UiRouteId.ActivitySession, UiNavigationMode.Replace, typeof(ActivityUiRouteContext), UiBackAffordance.Hidden),
+                new UiRouteDefinition(UiRouteId.ActivityResult, UiNavigationMode.Replace, typeof(ActivityUiRouteContext), UiBackAffordance.Hidden),
                 new UiRouteDefinition(UiRouteId.CreativeHub, UiNavigationMode.Push, typeof(EmptyUiRouteContext), UiBackAffordance.Visible),
                 new UiRouteDefinition(UiRouteId.Track, UiNavigationMode.Push, typeof(EntityUiRouteContext), UiBackAffordance.Visible),
                 new UiRouteDefinition(UiRouteId.TrackLyrics, UiNavigationMode.Push, typeof(EntityUiRouteContext), UiBackAffordance.Visible),
                 new UiRouteDefinition(UiRouteId.ArtistProfile, UiNavigationMode.Push, typeof(EntityUiRouteContext), UiBackAffordance.Visible),
                 new UiRouteDefinition(UiRouteId.NewsItem, UiNavigationMode.Push, typeof(EntityUiRouteContext), UiBackAffordance.Visible),
-                new UiRouteDefinition(UiRouteId.ActivitySession, UiNavigationMode.Replace, typeof(ActivityUiRouteContext), UiBackAffordance.Hidden),
-                new UiRouteDefinition(UiRouteId.ActivityResult, UiNavigationMode.Replace, typeof(ActivityUiRouteContext), UiBackAffordance.Hidden),
                 new UiRouteDefinition(UiRouteId.Dialog, UiNavigationMode.Dialog, typeof(DialogUiRouteContext), UiBackAffordance.Hidden)
             });
         }

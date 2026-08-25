@@ -27,8 +27,6 @@ namespace RapWay.Presentation.Unity.Shell
         private AppShellState _state;
         private CancellationTokenSource _transitionCts;
 
-        public event Action ActivitySelectionRequested;
-
         public AppShellController(
             ISceneNavigator sceneNavigator,
             ICareerSaveAvailabilityProbe saveAvailabilityProbe,
@@ -130,7 +128,7 @@ namespace RapWay.Presentation.Unity.Shell
 
         public void RequestActivitySelection()
         {
-            ActivitySelectionRequested?.Invoke();
+            _uiNavigator.Navigate(UiRouteId.ActivitySelection);
         }
 
         public void HandleBackAction()

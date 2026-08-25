@@ -48,6 +48,8 @@ namespace RapWay.Presentation.Unity.Activities
 
         public event Action Closed;
 
+        public event Action BackRequested;
+
         public void Initialize(
             IActivityDefinitionCatalog definitions,
             IGameLocalizationService localizationService,
@@ -187,7 +189,7 @@ namespace RapWay.Presentation.Unity.Activities
             _root.Q<Button>("activity-result-close").text = GetText(GameLocalizationKeys.UiActivities.ActivityDemoResultClose);
 
             _root.Q<Button>("activity-selection-close").clicked += () => Closed?.Invoke();
-            _root.Q<Button>("activity-confirmation-cancel").clicked += () => ShowSelection(_latestState);
+            _root.Q<Button>("activity-confirmation-cancel").clicked += () => BackRequested?.Invoke();
             _confirmationStartButton.clicked += StartSelectedActivity;
             _root.Q<Button>("activity-result-close").clicked += () => Closed?.Invoke();
         }

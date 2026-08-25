@@ -7,13 +7,14 @@ namespace RapWay.Presentation.Unity.Navigation
         Career = 2,
         Inbox = 3,
         ActivitySelection = 4,
-        CreativeHub = 5,
-        Track = 6,
-        TrackLyrics = 7,
-        ArtistProfile = 8,
-        NewsItem = 9,
-        ActivitySession = 10,
-        ActivityResult = 11,
-        Dialog = 12
+        ActivityConfirmation = 5,
+        ActivitySession = 6,
+        ActivityResult = 7,
+        CreativeHub = 8,
+        Track = 9,
+        TrackLyrics = 10,
+        ArtistProfile = 11,
+        NewsItem = 12,
+        Dialog = 13
     }
 }
