@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using RapWay.Application.Session;
 using RapWay.Core.Localization;
 using RapWay.Domain.Localization;
+using RapWay.Domain.State;
 using RapWay.Presentation.Unity.Localization;
+using RapWay.Presentation.Unity.Navigation;
+using RapWay.Presentation.Unity.UiToolkit;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -14,16 +18,12 @@ namespace RapWay.Presentation.Unity.Shell
 {
     public sealed class AppShellView : MonoBehaviour
     {
-        private const string VisualTreeResourcePath = "UI/AppShell";
-        private const string StyleSheetResourcePath = "UI/AppShell";
-        private const float BaseLandscapeWidth = 1920f;
-        private const float BasePortraitWidth = 1080f;
-
+        private const string TemplateOptionSelectedClassName = "template-option-button--selected";
         private UIDocument _document;
         private AppShellController _controller;
         private IGameLocalizationService _localizationService;
         private VisualElement _safeAreaFrame;
-        private VisualElement _modalOverlay;
+        private VisualElement _dialogScreen;
         private VisualElement _splashScreen;
         private VisualElement _mainMenuScreen;
         private VisualElement _newCareerTemplateScreen;
@@ -34,14 +34,10 @@ namespace RapWay.Presentation.Unity.Shell
         private Button _menuButton;
         private Button _startTemplateBackButton;
         private Button _startTemplateConfirmButton;
-        private Label _modalTitle;
-        private Label _modalBody;
-        private Button _modalPrimaryButton;
-        private Button _modalSecondaryButton;
-        private VisualElement _heroCard;
-        private VisualElement _menuCard;
+        private Label _dialogTitle;
+        private Label _dialogBody;
+        private VisualElement _dialogActions;
         private Label _heroStatusLabel;
-        private Label _mainMenuTitleLabel;
         private Label _subtitleLabel;
         private Label _templateScreenTitleLabel;
         private Label _templateScreenSubtitleLabel;
@@ -51,8 +47,17 @@ namespace RapWay.Presentation.Unity.Shell
         private Label _startTemplateEmphasisLabel;
         private Label _hudTitleLabel;
         private Label _hudBodyLabel;
+        private Label _hudOpportunityBodyLabel;
+        private Label _hudDateLabel;
+        private Label _hudEnergyLabel;
+        private Label _hudSatietyLabel;
+        private Label _hudMotivationLabel;
+        private Label _hudMoneyLabel;
+        private Label _hudFansLabel;
+        private Label _hudHypeLabel;
         private Button _newCareerButton;
         private Button _quitButton;
+        private Button _hudActionButton;
         private Dictionary<CareerStartTemplateId, Button> _templateButtons;
         private Rect _lastSafeArea;
         private Vector2Int _lastResolution;
@@ -64,12 +69,21 @@ namespace RapWay.Presentation.Unity.Shell
             return shellObject.AddComponent<AppShellView>();
         }
 
-        public void Initialize(AppShellController controller, IGameLocalizationService localizationService)
+        public void Initialize(
+            AppShellController controller,
+            IGameLocalizationService localizationService,
+            UiToolkitPresentationSettings uiToolkitPresentationSettings)
         {
             _controller = controller ?? throw new ArgumentNullException(nameof(controller));
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+            if (uiToolkitPresentationSettings == null)
+            {
+                throw new ArgumentNullException(nameof(uiToolkitPresentationSettings));
+            }
+
+            uiToolkitPresentationSettings.EnsureValid();
             EnsureEventSystem();
-            EnsureDocument();
+            EnsureDocument(uiToolkitPresentationSettings);
             BindView();
         }
 
@@ -95,8 +109,24 @@ namespace RapWay.Presentation.Unity.Shell
             _newCareerStatusLabel.text = statusText;
             ConfigureTemplateSelection(state);
 
-            _modalOverlay.style.display = ToDisplayStyle(state.ActiveModal != AppShellModal.None);
-            ConfigureModal(state);
+            _dialogScreen.style.display = ToDisplayStyle(state.ActiveDialog != null);
+            ConfigureDialog(state);
+        }
+
+        public void RenderHud(GameState state)
+        {
+            if (state == null || _hudDateLabel == null)
+            {
+                return;
+            }
+
+            _hudDateLabel.text = FormatDate(state);
+            _hudEnergyLabel.text = FormatPercent(state.Character.Resources.Energy.Current, state.Character.Resources.Energy.Maximum);
+            _hudSatietyLabel.text = FormatPercent(state.Character.Resources.Satiety.Current, state.Character.Resources.Satiety.Maximum);
+            _hudMotivationLabel.text = FormatPercent(state.Character.Resources.Motivation.Current, state.Character.Resources.Motivation.Maximum);
+            _hudMoneyLabel.text = FormatMoney(state.Character.Wallet.MinorUnits);
+            _hudFansLabel.text = state.Character.Audience.TotalFans.ToString("N0", CultureInfo.InvariantCulture);
+            _hudHypeLabel.text = state.Character.Hype.Intensity.Current.ToString(CultureInfo.InvariantCulture);
         }
 
         private void Update()
@@ -114,7 +144,7 @@ namespace RapWay.Presentation.Unity.Shell
             RefreshSafeAreaIfNeeded();
         }
 
-        private void EnsureDocument()
+        private void EnsureDocument(UiToolkitPresentationSettings uiToolkitPresentationSettings)
         {
             if (_document != null)
             {
@@ -122,37 +152,15 @@ namespace RapWay.Presentation.Unity.Shell
             }
 
             _document = gameObject.AddComponent<UIDocument>();
-            _document.panelSettings = CreatePanelSettings();
+            _document.panelSettings = uiToolkitPresentationSettings.PanelSettings;
             _document.sortingOrder = 100;
-
-            VisualTreeAsset visualTree = Resources.Load<VisualTreeAsset>(VisualTreeResourcePath);
-            StyleSheet styleSheet = Resources.Load<StyleSheet>(StyleSheetResourcePath);
-            if (visualTree == null)
-            {
-                throw new InvalidOperationException($"Visual tree '{VisualTreeResourcePath}' was not found.");
-            }
 
             VisualElement root = _document.rootVisualElement;
             root.Clear();
             root.style.flexGrow = 1f;
             root.style.width = Length.Percent(100);
             root.style.height = Length.Percent(100);
-            if (styleSheet != null)
-            {
-                root.styleSheets.Add(styleSheet);
-            }
-
-            visualTree.CloneTree(root);
-        }
-
-        private static PanelSettings CreatePanelSettings()
-        {
-            PanelSettings panelSettings = ScriptableObject.CreateInstance<PanelSettings>();
-            panelSettings.scaleMode = PanelScaleMode.ConstantPixelSize;
-            panelSettings.scale = CalculatePanelScale();
-            panelSettings.sortingOrder = 100;
-
-            return panelSettings;
+            uiToolkitPresentationSettings.AppShellVisualTree.CloneTree(root);
         }
 
         private static void EnsureEventSystem()
@@ -174,7 +182,7 @@ namespace RapWay.Presentation.Unity.Shell
             VisualElement root = _document.rootVisualElement;
 
             _safeAreaFrame = root.Q<VisualElement>("safe-area-frame");
-            _modalOverlay = root.Q<VisualElement>("modal-overlay");
+            _dialogScreen = root.Q<VisualElement>("screen-dialog");
             _splashScreen = root.Q<VisualElement>("screen-splash");
             _mainMenuScreen = root.Q<VisualElement>("screen-main-menu");
             _newCareerTemplateScreen = root.Q<VisualElement>("screen-new-career-template");
@@ -185,12 +193,9 @@ namespace RapWay.Presentation.Unity.Shell
             _menuButton = root.Q<Button>("hud-menu-button");
             _startTemplateBackButton = root.Q<Button>("template-back-button");
             _startTemplateConfirmButton = root.Q<Button>("template-confirm-button");
-            _modalTitle = root.Q<Label>("modal-title");
-            _modalBody = root.Q<Label>("modal-body");
-            _modalPrimaryButton = root.Q<Button>("modal-primary-button");
-            _modalSecondaryButton = root.Q<Button>("modal-secondary-button");
-            _heroCard = root.Q<VisualElement>(className: "hero-card");
-            _menuCard = root.Q<VisualElement>(className: "menu-card");
+            _dialogTitle = root.Q<Label>("dialog-title");
+            _dialogBody = root.Q<Label>("dialog-body");
+            _dialogActions = root.Q<VisualElement>("dialog-actions");
             _heroStatusLabel = root.Q<Label>(className: "status-label--hero");
             _subtitleLabel = root.Q<Label>(className: "subtitle-label");
             _templateScreenTitleLabel = root.Q<Label>(className: "template-screen-title");
@@ -200,10 +205,19 @@ namespace RapWay.Presentation.Unity.Shell
             _startTemplateSummaryLabel = root.Q<Label>("template-detail-summary");
             _startTemplateEmphasisLabel = root.Q<Label>("template-detail-emphasis");
             _hudTitleLabel = root.Q<Label>(className: "hud-title");
-            _hudBodyLabel = root.Q<Label>(className: "hud-body");
+            _hudBodyLabel = root.Q<Label>("hud-location-body");
+            _hudOpportunityBodyLabel = root.Q<Label>("hud-opportunity-body");
+            _hudDateLabel = root.Q<Label>("hud-date-label");
+            _hudEnergyLabel = root.Q<Label>("hud-energy-value");
+            _hudSatietyLabel = root.Q<Label>("hud-satiety-value");
+            _hudMotivationLabel = root.Q<Label>("hud-motivation-value");
+            _hudMoneyLabel = root.Q<Label>("hud-money-value");
+            _hudFansLabel = root.Q<Label>("hud-fans-value");
+            _hudHypeLabel = root.Q<Label>("hud-hype-value");
 
             _newCareerButton = root.Q<Button>("new-career-button");
             _quitButton = root.Q<Button>("quit-button");
+            _hudActionButton = root.Q<Button>("hud-action-button");
             _templateButtons = new Dictionary<CareerStartTemplateId, Button>
             {
                 { CareerStartTemplateId.OnYourOwn, root.Q<Button>("template-on-your-own-button") },
@@ -214,54 +228,40 @@ namespace RapWay.Presentation.Unity.Shell
                 { CareerStartTemplateId.FormerGroupMember, root.Q<Button>("template-former-group-member-button") },
                 { CareerStartTemplateId.Protege, root.Q<Button>("template-protege-button") }
             };
-            Label[] brandTitles = root.Query<Label>(className: "brand-title").ToList().ToArray();
-            if (brandTitles.Length > 1)
-            {
-                _mainMenuTitleLabel = brandTitles[1];
-            }
-
             _newCareerButton.clicked += _controller.HandleNewCareerRequested;
             _continueButton.clicked += _controller.HandleContinueRequested;
             _quitButton.clicked += _controller.HandleBackAction;
             _menuButton.clicked += _controller.HandleBackAction;
             _startTemplateBackButton.clicked += _controller.HandleBackAction;
             _startTemplateConfirmButton.clicked += _controller.HandleStartTemplateConfirmed;
-            _modalSecondaryButton.clicked += _controller.HandleModalDismiss;
+            _hudActionButton.clicked += _controller.RequestActivitySelection;
 
             RegisterTemplateCallbacks();
-            ApplyFallbackStyling(root, _newCareerButton, _quitButton);
             RefreshSafeArea(force: true);
         }
 
-        private void ConfigureModal(AppShellState state)
+        private void ConfigureDialog(AppShellState state)
         {
-            if (state.ActiveModal == AppShellModal.None)
+            DialogUiRouteContext dialogContext = state.ActiveDialog;
+            if (dialogContext == null)
             {
                 return;
             }
 
-            switch (state.ActiveModal)
+            _dialogTitle.text = GetText(dialogContext.TitleKey);
+            _dialogBody.text = GetText(dialogContext.BodyKey);
+            _dialogActions.Clear();
+
+            foreach (UiDialogAction action in dialogContext.Actions)
             {
-                case AppShellModal.ExitConfirmation:
-                    _modalTitle.text = GetText(GameLocalizationKeys.UiShell.ModalExitTitle);
-                    _modalBody.text = GetText(GameLocalizationKeys.UiShell.ModalExitBody);
-                    _modalPrimaryButton.text = GetText(GameLocalizationKeys.UiShell.ModalExitConfirm);
-                    _modalPrimaryButton.clicked -= _controller.HandleReturnToMenuRequested;
-                    _modalPrimaryButton.clicked -= _controller.HandleQuitConfirmed;
-                    _modalPrimaryButton.clicked += _controller.HandleQuitConfirmed;
-                    break;
-
-                case AppShellModal.SessionMenu:
-                    _modalTitle.text = GetText(GameLocalizationKeys.UiShell.ModalSessionTitle);
-                    _modalBody.text = GetText(GameLocalizationKeys.UiShell.ModalSessionBody);
-                    _modalPrimaryButton.text = GetText(GameLocalizationKeys.UiShell.ModalSessionConfirm);
-                    _modalPrimaryButton.clicked -= _controller.HandleQuitConfirmed;
-                    _modalPrimaryButton.clicked -= _controller.HandleReturnToMenuRequested;
-                    _modalPrimaryButton.clicked += _controller.HandleReturnToMenuRequested;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
+                string actionId = action.Id;
+                Button actionButton = new()
+                {
+                    text = GetText(action.LabelKey)
+                };
+                actionButton.AddToClassList(action.IsPrimary ? "primary-button" : "ghost-button");
+                actionButton.clicked += () => _controller.HandleDialogAction(actionId);
+                _dialogActions.Add(actionButton);
             }
         }
 
@@ -279,6 +279,11 @@ namespace RapWay.Presentation.Unity.Shell
 
         private void RefreshSafeArea(bool force)
         {
+            if (_safeAreaFrame == null)
+            {
+                return;
+            }
+
             Rect safeArea = Screen.safeArea;
             Vector2Int resolution = new(Screen.width, Screen.height);
             if (!force && safeArea == _lastSafeArea && resolution == _lastResolution)
@@ -288,11 +293,6 @@ namespace RapWay.Presentation.Unity.Shell
 
             _lastSafeArea = safeArea;
             _lastResolution = resolution;
-
-            if (_document?.panelSettings != null)
-            {
-                _document.panelSettings.scale = CalculatePanelScale();
-            }
 
             float left = safeArea.xMin;
             float right = Mathf.Max(0f, Screen.width - safeArea.xMax);
@@ -328,55 +328,8 @@ namespace RapWay.Presentation.Unity.Shell
             foreach (KeyValuePair<CareerStartTemplateId, Button> pair in _templateButtons)
             {
                 bool isSelected = pair.Key == selectedTemplateId;
-                ApplyTemplateButtonStyle(pair.Value, isSelected);
+                pair.Value.EnableInClassList(TemplateOptionSelectedClassName, isSelected);
             }
-        }
-
-        private void ApplyFallbackStyling(VisualElement root, Button newCareerButton, Button quitButton)
-        {
-            root.style.backgroundColor = new StyleColor(new Color(0.0627451f, 0.07058824f, 0.09411765f, 1f));
-
-            _safeAreaFrame.style.flexDirection = FlexDirection.Column;
-            _safeAreaFrame.style.justifyContent = Justify.Center;
-            _safeAreaFrame.style.alignItems = Align.Center;
-
-            _splashScreen.style.justifyContent = Justify.Center;
-            _splashScreen.style.alignItems = Align.Center;
-            _mainMenuScreen.style.justifyContent = Justify.Center;
-            _mainMenuScreen.style.alignItems = Align.Center;
-            _newCareerTemplateScreen.style.justifyContent = Justify.Center;
-            _newCareerTemplateScreen.style.alignItems = Align.Center;
-
-            ApplyCardStyle(_heroCard);
-            ApplyCardStyle(_menuCard);
-            ApplyCardStyle(_newCareerTemplateScreen.Q<VisualElement>(className: "template-selection-card"));
-            ApplyCardStyle(_hudScreen.Q<VisualElement>(className: "hud-card"));
-            ApplyCardStyle(_modalOverlay.Q<VisualElement>(className: "modal-card"));
-
-            ApplyLabelStyle(_heroStatusLabel, 26f, new Color(0.7294118f, 0.76862746f, 0.8627451f, 1f), FontStyle.Normal);
-            ApplyLabelStyle(_mainMenuTitleLabel, 72f, new Color(0.95686275f, 0.92156863f, 0.8392157f, 1f), FontStyle.Bold);
-            ApplyLabelStyle(_subtitleLabel, 22f, new Color(0.654902f, 0.6901961f, 0.7764706f, 1f), FontStyle.Normal);
-            ApplyLabelStyle(_startTemplateTitleLabel, 34f, new Color(0.95686275f, 0.92156863f, 0.8392157f, 1f), FontStyle.Bold);
-            ApplyLabelStyle(_startTemplateTaglineLabel, 20f, new Color(0.9529412f, 0.43137255f, 0.25490198f, 1f), FontStyle.Bold);
-            ApplyLabelStyle(_startTemplateSummaryLabel, 16f, new Color(0.8627451f, 0.8862745f, 0.9411765f, 1f), FontStyle.Normal);
-            ApplyLabelStyle(_startTemplateEmphasisLabel, 15f, new Color(0.7294118f, 0.76862746f, 0.8627451f, 1f), FontStyle.Normal);
-            ApplyLabelStyle(_mainMenuStatusLabel, 18f, new Color(0.7294118f, 0.76862746f, 0.8627451f, 1f), FontStyle.Normal);
-            ApplyLabelStyle(_newCareerStatusLabel, 18f, new Color(0.7294118f, 0.76862746f, 0.8627451f, 1f), FontStyle.Normal);
-            ApplyLabelStyle(_modalTitle, 22f, new Color(0.95686275f, 0.92156863f, 0.8392157f, 1f), FontStyle.Bold);
-            ApplyLabelStyle(_modalBody, 16f, new Color(0.654902f, 0.6901961f, 0.7764706f, 1f), FontStyle.Normal);
-            ApplyLabelStyle(_hudTitleLabel, 24f, new Color(0.95686275f, 0.92156863f, 0.8392157f, 1f), FontStyle.Bold);
-            ApplyLabelStyle(_hudBodyLabel, 14f, new Color(0.654902f, 0.6901961f, 0.7764706f, 1f), FontStyle.Normal);
-            _startTemplateSummaryLabel.style.unityTextAlign = TextAnchor.UpperLeft;
-            _startTemplateEmphasisLabel.style.unityTextAlign = TextAnchor.UpperLeft;
-
-            ApplyButtonStyle(newCareerButton, new Color(0.9529412f, 0.43137255f, 0.25490198f, 1f), new Color(1f, 0.972549f, 0.95686275f, 1f));
-            ApplyButtonStyle(_continueButton, new Color(0.16078432f, 0.1882353f, 0.25882354f, 1f), new Color(0.95686275f, 0.96862745f, 1f, 1f));
-            ApplyButtonStyle(quitButton, new Color(1f, 1f, 1f, 0.04f), new Color(0.8627451f, 0.8862745f, 0.9411765f, 1f));
-            ApplyButtonStyle(_menuButton, new Color(0.16078432f, 0.1882353f, 0.25882354f, 1f), new Color(0.95686275f, 0.96862745f, 1f, 1f));
-            ApplyButtonStyle(_startTemplateBackButton, new Color(1f, 1f, 1f, 0.04f), new Color(0.8627451f, 0.8862745f, 0.9411765f, 1f));
-            ApplyButtonStyle(_startTemplateConfirmButton, new Color(0.9529412f, 0.43137255f, 0.25490198f, 1f), new Color(1f, 0.972549f, 0.95686275f, 1f));
-            ApplyButtonStyle(_modalPrimaryButton, new Color(0.9529412f, 0.43137255f, 0.25490198f, 1f), new Color(1f, 0.972549f, 0.95686275f, 1f));
-            ApplyButtonStyle(_modalSecondaryButton, new Color(1f, 1f, 1f, 0.04f), new Color(0.8627451f, 0.8862745f, 0.9411765f, 1f));
         }
 
         private void RegisterTemplateCallbacks()
@@ -413,13 +366,28 @@ namespace RapWay.Presentation.Unity.Shell
             _templateScreenSubtitleLabel.text = GetText(GameLocalizationKeys.UiShell.TemplateScreenSubtitle);
             _hudTitleLabel.text = GetText(GameLocalizationKeys.UiShell.HudTitle);
             _hudBodyLabel.text = GetText(GameLocalizationKeys.UiShell.HudBody);
+            _hudOpportunityBodyLabel.text = GetText(GameLocalizationKeys.UiShell.HudOpportunityBody);
+            VisualElement root = _document.rootVisualElement;
+            root.Q<Label>("hud-location-label").text = GetText(GameLocalizationKeys.UiShell.HudLocation);
+            root.Q<Label>("hud-energy-label").text = GetText(GameLocalizationKeys.UiShell.HudEnergy);
+            root.Q<Label>("hud-satiety-label").text = GetText(GameLocalizationKeys.UiShell.HudSatiety);
+            root.Q<Label>("hud-motivation-label").text = GetText(GameLocalizationKeys.UiShell.HudMotivation);
+            root.Q<Label>("hud-money-label").text = GetText(GameLocalizationKeys.UiShell.HudMoney);
+            root.Q<Label>("hud-fans-label").text = GetText(GameLocalizationKeys.UiShell.HudFans);
+            root.Q<Label>("hud-hype-label").text = GetText(GameLocalizationKeys.UiShell.HudHype);
+            root.Q<Label>("hud-opportunity-label").text = GetText(GameLocalizationKeys.UiShell.HudOpportunity);
+            root.Q<Label>("hud-nav-home").text = GetText(GameLocalizationKeys.UiShell.HudNavHome);
+            root.Q<Label>("hud-nav-map").text = GetText(GameLocalizationKeys.UiShell.HudNavMap);
+            root.Q<Label>("hud-nav-career").text = GetText(GameLocalizationKeys.UiShell.HudNavCareer);
+            root.Q<Label>("hud-nav-inbox").text = GetText(GameLocalizationKeys.UiHome.HudNavInbox);
+            root.Q<Label>("hud-conditions-status-label").text = GetText(GameLocalizationKeys.UiHome.HudConditionsStatus);
             _newCareerButton.text = GetText(GameLocalizationKeys.UiShell.MainMenuNewCareer);
             _continueButton.text = GetText(GameLocalizationKeys.UiShell.MainMenuContinue);
             _quitButton.text = GetText(GameLocalizationKeys.UiShell.MainMenuQuit);
             _menuButton.text = GetText(GameLocalizationKeys.UiShell.HudMenu);
+            _hudActionButton.text = GetText(GameLocalizationKeys.UiHome.HudActionPrimary);
             _startTemplateBackButton.text = GetText(GameLocalizationKeys.UiShell.TemplateBack);
             _startTemplateConfirmButton.text = GetText(GameLocalizationKeys.UiShell.TemplateConfirm);
-            _modalSecondaryButton.text = GetText(GameLocalizationKeys.UiShell.ModalClose);
 
             Label[] brandTitles = _document.rootVisualElement.Query<Label>(className: "brand-title").ToList().ToArray();
             for (int index = 0; index < brandTitles.Length; index++)
@@ -439,99 +407,32 @@ namespace RapWay.Presentation.Unity.Shell
             return _localizationService?.Get(key) ?? string.Empty;
         }
 
-        private static void ApplyCardStyle(VisualElement card)
+        private string GetText(LocalizationKey key, params LocalizationArgument[] arguments)
         {
-            if (card == null)
-            {
-                return;
-            }
-
-            card.style.width = Length.Percent(100);
-            card.style.maxWidth = 520f;
-            card.style.paddingLeft = 32f;
-            card.style.paddingRight = 32f;
-            card.style.paddingTop = 32f;
-            card.style.paddingBottom = 32f;
-            card.style.backgroundColor = new StyleColor(new Color(0.09411765f, 0.10980392f, 0.14901961f, 0.92f));
+            return _localizationService?.Get(key, arguments) ?? string.Empty;
         }
 
-        private static void ApplyLabelStyle(Label label, float fontSize, Color color, FontStyle fontStyle)
+        private static string FormatDate(GameState state)
         {
-            if (label == null)
-            {
-                return;
-            }
-
-            label.style.fontSize = fontSize;
-            label.style.color = new StyleColor(color);
-            label.style.unityFontStyleAndWeight = fontStyle;
-            label.style.unityTextAlign = TextAnchor.MiddleCenter;
+            var date = state.Calendar.CurrentDate;
+            return $"{date.Day:D2}.{date.Month:D2}\n{date.Hour:D2}:00";
         }
 
-        private static void ApplyButtonStyle(Button button, Color backgroundColor, Color textColor)
+        private static string FormatPercent(long current, long maximum)
         {
-            if (button == null)
+            if (maximum <= 0)
             {
-                return;
+                return "0%";
             }
 
-            button.style.width = Length.Percent(100);
-            button.style.minHeight = 60f;
-            button.style.backgroundColor = new StyleColor(backgroundColor);
-            button.style.color = new StyleColor(textColor);
-            button.style.unityFontStyleAndWeight = FontStyle.Bold;
-            button.style.fontSize = 20f;
-
-            Label buttonLabel = button.Q<Label>();
-            if (buttonLabel != null)
-            {
-                buttonLabel.style.color = new StyleColor(textColor);
-                buttonLabel.style.fontSize = 20f;
-                buttonLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-                buttonLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-            }
+            long percent = current * 100 / maximum;
+            return percent.ToString(CultureInfo.InvariantCulture) + "%";
         }
 
-        private static void ApplyTemplateButtonStyle(Button button, bool isSelected)
+        private static string FormatMoney(long minorUnits)
         {
-            if (button == null)
-            {
-                return;
-            }
-
-            Color backgroundColor = isSelected
-                ? new Color(0.9529412f, 0.43137255f, 0.25490198f, 0.2f)
-                : new Color(0.16078432f, 0.1882353f, 0.25882354f, 0.85f);
-            Color borderColor = isSelected
-                ? new Color(0.9529412f, 0.43137255f, 0.25490198f, 1f)
-                : new Color(0.31764707f, 0.3529412f, 0.44313726f, 1f);
-            Color textColor = isSelected
-                ? new Color(1f, 0.972549f, 0.95686275f, 1f)
-                : new Color(0.95686275f, 0.96862745f, 1f, 1f);
-
-            button.style.backgroundColor = new StyleColor(backgroundColor);
-            button.style.borderLeftColor = borderColor;
-            button.style.borderRightColor = borderColor;
-            button.style.borderTopColor = borderColor;
-            button.style.borderBottomColor = borderColor;
-            button.style.borderLeftWidth = 2f;
-            button.style.borderRightWidth = 2f;
-            button.style.borderTopWidth = 2f;
-            button.style.borderBottomWidth = 2f;
-            button.style.color = new StyleColor(textColor);
-
-            Label buttonLabel = button.Q<Label>();
-            if (buttonLabel != null)
-            {
-                buttonLabel.style.color = new StyleColor(textColor);
-            }
-        }
-
-        private static float CalculatePanelScale()
-        {
-            float referenceWidth = Screen.height > Screen.width ? BasePortraitWidth : BaseLandscapeWidth;
-            float safeScreenWidth = Mathf.Max(1f, Screen.width);
-            return Mathf.Max(1f, safeScreenWidth / referenceWidth);
+            decimal majorUnits = minorUnits / 100m;
+            return majorUnits.ToString("N0", CultureInfo.InvariantCulture) + " ₽";
         }
     }
 }

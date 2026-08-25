@@ -24,7 +24,7 @@ namespace RapWay.Composition.Unity.Persistence
 
         private void OnApplicationPause(bool isPaused)
         {
-            if (isPaused)
+            if (isPaused && _lifetimeCancellation != null)
             {
                 SaveObservedAsync("pause", _lifetimeCancellation.Token).Forget();
             }
@@ -43,7 +43,7 @@ namespace RapWay.Composition.Unity.Persistence
 
         private async UniTaskVoid SaveObservedAsync(string reason, CancellationToken cancellationToken)
         {
-            if (!_snapshotSource.TryGetStateSnapshot(out GameState stateSnapshot))
+            if (_snapshotSource == null || _saveStore == null || !_snapshotSource.TryGetStateSnapshot(out GameState stateSnapshot))
             {
                 return;
             }

@@ -1,3 +1,4 @@
+using RapWay.Application.Activities;
 using RapWay.Application.Persistence;
 using RapWay.Infrastructure.Persistence;
 using VContainer;
@@ -16,7 +17,8 @@ namespace RapWay.Composition.Unity.Persistence
         {
             builder.RegisterEntryPoint<GameSessionCoordinator>(Lifetime.Scoped)
                 .AsSelf()
-                .As<IGameStateSnapshotSource>();
+                .As<IGameStateSnapshotSource>()
+                .As<IActivityLoop>();
             builder.RegisterEntryPoint<CommittedEventAutosaveScheduler>(Lifetime.Scoped);
             builder.RegisterComponentOnNewGameObject<GameSaveLifecycleAdapter>(
                 Lifetime.Scoped,

@@ -20,6 +20,11 @@ namespace RapWay.Composition.Unity.Editor.Localization
         private const string SettingsAssetPath = "Assets/_Project/Localization/LocalizationSettings.asset";
         private const string GeneratedKeyApiPath = "Assets/_Project/Code/Presentation.Unity/Localization/GameLocalizationKeys.cs";
         private const string MissingTranslationMessage = "[MISSING:{table.TableCollectionName}.{key}]";
+        private const string CollectionArgumentName = "-rapwayLocalizationCollection";
+        private const string KeyArgumentName = "-rapwayLocalizationKey";
+        private const string RussianValueArgumentName = "-rapwayLocalizationRussian";
+        private const string EnglishValueArgumentName = "-rapwayLocalizationEnglish";
+        private const string EntriesBase64ArgumentName = "-rapwayLocalizationEntriesBase64";
 
         [MenuItem("Rap Way/Localization/Bootstrap Catalog")]
         public static void BootstrapCatalog()
@@ -64,6 +69,46 @@ namespace RapWay.Composition.Unity.Editor.Localization
             EditorApplication.Exit(0);
         }
 
+        public static void UpsertEntryBatchMode()
+        {
+            try
+            {
+                BootstrapCatalogInternal(logToConsole: false);
+
+                string collectionName = GetRequiredCommandLineArgument(CollectionArgumentName);
+                Locale russianLocale = LocalizationEditorSettings.GetLocale("ru") ??
+                                      throw new InvalidOperationException("Required locale 'ru' was not found.");
+                Locale englishLocale = LocalizationEditorSettings.GetLocale("en") ??
+                                      throw new InvalidOperationException("Required locale 'en' was not found.");
+                StringTableCollection collection = EnsureStringTableCollection(
+                    collectionName,
+                    new List<Locale> { russianLocale, englishLocale });
+
+                IReadOnlyList<LocalizationEntryInput> entries = GetEntryInputs();
+                for (int index = 0; index < entries.Count; index++)
+                {
+                    LocalizationEntryInput entry = entries[index];
+                    UpsertEntry(collection, russianLocale.Identifier, entry.Key, entry.RussianValue);
+                    UpsertEntry(collection, englishLocale.Identifier, entry.Key, entry.EnglishValue);
+                }
+
+                ValidateCatalogInternal();
+                GenerateKeyApi(FindProjectStringTableCollections());
+
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                Debug.Log($"Rap Way localization entries for '{collectionName}' were updated.");
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+                EditorApplication.Exit(1);
+                return;
+            }
+
+            EditorApplication.Exit(0);
+        }
+
         private static void BootstrapCatalogInternal(bool logToConsole)
         {
             EnsureFolder("Assets", "_Project");
@@ -84,7 +129,7 @@ namespace RapWay.Composition.Unity.Editor.Localization
                 new List<Locale> { russianLocale, englishLocale });
 
             ValidateCatalogInternal();
-            GenerateKeyApi(collection);
+            GenerateKeyApi(FindProjectStringTableCollections());
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -173,12 +218,24 @@ namespace RapWay.Composition.Unity.Editor.Localization
             settings.GetStringDatabase().NoTranslationFoundMessage = MissingTranslationMessage;
 
             List<IStartupLocaleSelector> selectors = settings.GetStartupLocaleSelectors();
+            SpecificLocaleSelector specificLocaleSelector = null;
             for (int index = 0; index < selectors.Count; index++)
             {
-                if (selectors[index] is SpecificLocaleSelector specificLocaleSelector)
+                if (selectors[index] is SpecificLocaleSelector selector)
                 {
+                    specificLocaleSelector = selector;
                     specificLocaleSelector.LocaleId = projectLocale.Identifier;
+                    break;
                 }
+            }
+
+            if (specificLocaleSelector != null)
+            {
+                selectors.Remove(specificLocaleSelector);
+
+                int commandLineSelectorIndex = selectors.FindIndex(
+                    selector => selector is CommandLineLocaleSelector);
+                selectors.Insert(commandLineSelectorIndex + 1, specificLocaleSelector);
             }
 
             EditorUtility.SetDirty(settings);
@@ -210,12 +267,6 @@ namespace RapWay.Composition.Unity.Editor.Localization
 
         private static void ValidateCatalogInternal()
         {
-            StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection(GameLocalizationTables.UiShell);
-            if (collection == null)
-            {
-                throw new InvalidOperationException($"String Table Collection '{GameLocalizationTables.UiShell}' was not found.");
-            }
-
             Locale russianLocale = LocalizationEditorSettings.GetLocale("ru");
             Locale englishLocale = LocalizationEditorSettings.GetLocale("en");
             if (russianLocale == null || englishLocale == null)
@@ -223,8 +274,18 @@ namespace RapWay.Composition.Unity.Editor.Localization
                 throw new InvalidOperationException("Required locales 'ru' and 'en' must both exist in the project.");
             }
 
-            ValidateTable(collection, russianLocale.Identifier);
-            ValidateTable(collection, englishLocale.Identifier);
+            IReadOnlyList<StringTableCollection> collections = FindProjectStringTableCollections();
+            if (collections.Count == 0)
+            {
+                throw new InvalidOperationException("No String Table Collections were found.");
+            }
+
+            for (int index = 0; index < collections.Count; index++)
+            {
+                StringTableCollection collection = collections[index];
+                ValidateTable(collection, russianLocale.Identifier);
+                ValidateTable(collection, englishLocale.Identifier);
+            }
         }
 
         private static void ValidateTable(StringTableCollection collection, LocaleIdentifier localeIdentifier)
@@ -245,7 +306,7 @@ namespace RapWay.Composition.Unity.Editor.Localization
             }
         }
 
-        private static void GenerateKeyApi(StringTableCollection collection)
+        private static void GenerateKeyApi(IReadOnlyList<StringTableCollection> collections)
         {
             StringBuilder source = new();
             source.AppendLine("// <auto-generated />");
@@ -255,41 +316,50 @@ namespace RapWay.Composition.Unity.Editor.Localization
             source.AppendLine("{");
             source.AppendLine("    public static class GameLocalizationTables");
             source.AppendLine("    {");
-            source.Append("        public const string ");
-            source.Append(ToPascalIdentifier(collection.TableCollectionName));
-            source.Append(" = \"");
-            source.Append(collection.TableCollectionName);
-            source.AppendLine("\";");
+            for (int index = 0; index < collections.Count; index++)
+            {
+                StringTableCollection collection = collections[index];
+                source.Append("        public const string ");
+                source.Append(ToPascalIdentifier(collection.TableCollectionName));
+                source.Append(" = \"");
+                source.Append(collection.TableCollectionName);
+                source.AppendLine("\";");
+            }
+
             source.AppendLine("    }");
             source.AppendLine();
             source.AppendLine("    public static class GameLocalizationKeys");
             source.AppendLine("    {");
-            source.Append("        public static class ");
-            source.AppendLine(ToPascalIdentifier(collection.TableCollectionName));
-            source.AppendLine("        {");
-
-            List<SharedTableData.SharedTableEntry> entries = new(collection.SharedData.Entries);
-            entries.Sort((left, right) => string.CompareOrdinal(left.Key, right.Key));
-            HashSet<string> memberNames = new(StringComparer.Ordinal);
-            for (int index = 0; index < entries.Count; index++)
+            for (int collectionIndex = 0; collectionIndex < collections.Count; collectionIndex++)
             {
-                SharedTableData.SharedTableEntry entry = entries[index];
-                string memberName = ToPascalIdentifier(entry.Key);
-                if (!memberNames.Add(memberName))
+                StringTableCollection collection = collections[collectionIndex];
+                source.Append("        public static class ");
+                source.AppendLine(ToPascalIdentifier(collection.TableCollectionName));
+                source.AppendLine("        {");
+
+                List<SharedTableData.SharedTableEntry> entries = new(collection.SharedData.Entries);
+                entries.Sort((left, right) => string.CompareOrdinal(left.Key, right.Key));
+                HashSet<string> memberNames = new(StringComparer.Ordinal);
+                for (int entryIndex = 0; entryIndex < entries.Count; entryIndex++)
                 {
-                    throw new InvalidOperationException($"Localization key '{entry.Key}' maps to a duplicate generated member '{memberName}'.");
+                    SharedTableData.SharedTableEntry entry = entries[entryIndex];
+                    string memberName = ToPascalIdentifier(entry.Key);
+                    if (!memberNames.Add(memberName))
+                    {
+                        throw new InvalidOperationException($"Localization key '{entry.Key}' maps to a duplicate generated member '{memberName}'.");
+                    }
+
+                    source.Append("            public static readonly LocalizationKey ");
+                    source.Append(memberName);
+                    source.Append(" = new(GameLocalizationTables.");
+                    source.Append(ToPascalIdentifier(collection.TableCollectionName));
+                    source.Append(", \"");
+                    source.Append(entry.Key);
+                    source.AppendLine("\");");
                 }
 
-                source.Append("            public static readonly LocalizationKey ");
-                source.Append(memberName);
-                source.Append(" = new(GameLocalizationTables.");
-                source.Append(ToPascalIdentifier(collection.TableCollectionName));
-                source.Append(", \"");
-                source.Append(entry.Key);
-                source.AppendLine("\");");
+                source.AppendLine("        }");
             }
-
-            source.AppendLine("        }");
             source.AppendLine("    }");
             source.AppendLine("}");
 
@@ -301,6 +371,135 @@ namespace RapWay.Composition.Unity.Editor.Localization
 
             File.WriteAllText(GeneratedKeyApiPath, generatedSource, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
             AssetDatabase.ImportAsset(GeneratedKeyApiPath);
+        }
+
+        private static IReadOnlyList<StringTableCollection> FindProjectStringTableCollections()
+        {
+            string[] guids = AssetDatabase.FindAssets("t:StringTableCollection", new[] { TablesFolder });
+            List<StringTableCollection> collections = new(guids.Length);
+            for (int index = 0; index < guids.Length; index++)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guids[index]);
+                StringTableCollection collection = AssetDatabase.LoadAssetAtPath<StringTableCollection>(assetPath);
+                if (collection != null)
+                {
+                    collections.Add(collection);
+                }
+            }
+
+            collections.Sort((left, right) => string.CompareOrdinal(left.TableCollectionName, right.TableCollectionName));
+            return collections;
+        }
+
+        private static void UpsertEntry(
+            StringTableCollection collection,
+            LocaleIdentifier localeIdentifier,
+            string key,
+            string value)
+        {
+            StringTable table = collection.GetTable(localeIdentifier) as StringTable ??
+                                throw new InvalidOperationException(
+                                    $"Collection '{collection.TableCollectionName}' is missing table '{localeIdentifier.Code}'.");
+            StringTableEntry entry = table.GetEntry(key) ?? table.AddEntry(key, value);
+            entry.Value = value;
+            entry.IsSmart = value.IndexOf('{') >= 0 && value.IndexOf('}') >= 0;
+            EditorUtility.SetDirty(table);
+            EditorUtility.SetDirty(collection.SharedData);
+        }
+
+        private static string GetRequiredCommandLineArgument(string argumentName)
+        {
+            string[] arguments = Environment.GetCommandLineArgs();
+            for (int index = 0; index < arguments.Length - 1; index++)
+            {
+                if (string.Equals(arguments[index], argumentName, StringComparison.Ordinal))
+                {
+                    string value = arguments[index + 1];
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        return value;
+                    }
+                }
+            }
+
+            throw new ArgumentException($"Command-line argument '{argumentName}' is required.", nameof(argumentName));
+        }
+
+        private static IReadOnlyList<LocalizationEntryInput> GetEntryInputs()
+        {
+            if (!TryGetCommandLineArgument(EntriesBase64ArgumentName, out string encodedEntries))
+            {
+                return new[]
+                {
+                    new LocalizationEntryInput(
+                        GetRequiredCommandLineArgument(KeyArgumentName),
+                        GetRequiredCommandLineArgument(RussianValueArgumentName),
+                        GetRequiredCommandLineArgument(EnglishValueArgumentName))
+                };
+            }
+
+            string decodedEntries;
+            try
+            {
+                decodedEntries = Encoding.UTF8.GetString(Convert.FromBase64String(encodedEntries));
+            }
+            catch (FormatException exception)
+            {
+                throw new ArgumentException("Localization entries must be valid Base64 UTF-8 text.", EntriesBase64ArgumentName, exception);
+            }
+
+            string[] lines = decodedEntries.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            List<LocalizationEntryInput> entries = new(lines.Length);
+            for (int index = 0; index < lines.Length; index++)
+            {
+                string[] fields = lines[index].Split(new[] { '\t' });
+                if (fields.Length != 3 || string.IsNullOrWhiteSpace(fields[0]) || string.IsNullOrWhiteSpace(fields[1]) || string.IsNullOrWhiteSpace(fields[2]))
+                {
+                    throw new ArgumentException("Each localization entry must contain a key, Russian value, and English value separated by tabs.", EntriesBase64ArgumentName);
+                }
+
+                entries.Add(new LocalizationEntryInput(fields[0], fields[1], fields[2]));
+            }
+
+            if (entries.Count == 0)
+            {
+                throw new ArgumentException("At least one localization entry is required.", EntriesBase64ArgumentName);
+            }
+
+            return entries;
+        }
+
+        private static bool TryGetCommandLineArgument(string argumentName, out string value)
+        {
+            string[] arguments = Environment.GetCommandLineArgs();
+            for (int index = 0; index < arguments.Length - 1; index++)
+            {
+                if (string.Equals(arguments[index], argumentName, StringComparison.Ordinal) &&
+                    !string.IsNullOrWhiteSpace(arguments[index + 1]))
+                {
+                    value = arguments[index + 1];
+                    return true;
+                }
+            }
+
+            value = string.Empty;
+            return false;
+        }
+
+        private readonly struct LocalizationEntryInput
+        {
+            public LocalizationEntryInput(string key, string russianValue, string englishValue)
+            {
+                Key = key;
+                RussianValue = russianValue;
+                EnglishValue = englishValue;
+            }
+
+            public string Key { get; }
+
+            public string RussianValue { get; }
+
+            public string EnglishValue { get; }
         }
 
         private static string ToPascalIdentifier(string value)

@@ -6,7 +6,10 @@ using RapWay.Application.Persistence;
 using RapWay.Application.Session;
 using RapWay.Core.Localization;
 using RapWay.Domain.Localization;
+using RapWay.Domain.State;
 using RapWay.Presentation.Unity.Localization;
+using RapWay.Presentation.Unity.Navigation;
+using RapWay.Presentation.Unity.UiToolkit;
 using UnityEngine;
 
 namespace RapWay.Presentation.Unity.Shell
@@ -17,25 +20,33 @@ namespace RapWay.Presentation.Unity.Shell
         private readonly ICareerSaveAvailabilityProbe _saveAvailabilityProbe;
         private readonly IGameSessionLaunchRequest _launchRequest;
         private readonly IGameLocalizationService _localizationService;
+        private readonly UiToolkitPresentationSettings _uiToolkitPresentationSettings;
+        private readonly IUiNavigator _uiNavigator;
         private readonly AppShellView _view;
 
         private AppShellState _state;
         private CancellationTokenSource _transitionCts;
 
+        public event Action ActivitySelectionRequested;
+
         public AppShellController(
             ISceneNavigator sceneNavigator,
             ICareerSaveAvailabilityProbe saveAvailabilityProbe,
             IGameSessionLaunchRequest launchRequest,
-            IGameLocalizationService localizationService)
+            IGameLocalizationService localizationService,
+            UiToolkitPresentationSettings uiToolkitPresentationSettings,
+            IUiNavigator uiNavigator)
         {
             _sceneNavigator = sceneNavigator ?? throw new ArgumentNullException(nameof(sceneNavigator));
             _saveAvailabilityProbe = saveAvailabilityProbe ?? throw new ArgumentNullException(nameof(saveAvailabilityProbe));
             _launchRequest = launchRequest ?? throw new ArgumentNullException(nameof(launchRequest));
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+            _uiToolkitPresentationSettings = uiToolkitPresentationSettings ?? throw new ArgumentNullException(nameof(uiToolkitPresentationSettings));
+            _uiNavigator = uiNavigator ?? throw new ArgumentNullException(nameof(uiNavigator));
             _transitionCts = new CancellationTokenSource();
 
             _view = AppShellView.Create();
-            _view.Initialize(this, _localizationService);
+            _view.Initialize(this, _localizationService, _uiToolkitPresentationSettings);
 
             ShowSplash();
         }
@@ -50,7 +61,7 @@ namespace RapWay.Presentation.Unity.Shell
         {
             Render(new AppShellState(
                 AppShellScreen.Splash,
-                AppShellModal.None,
+                activeDialog: null,
                 canContinue: false,
                 selectedStartTemplateId: null,
                 isBusy: false,
@@ -76,8 +87,8 @@ namespace RapWay.Presentation.Unity.Shell
 
             Render(new AppShellState(
                 AppShellScreen.MainMenu,
-                AppShellModal.None,
-                canContinue,
+                activeDialog: null,
+                canContinue: canContinue,
                 selectedStartTemplateId: null,
                 isBusy: false,
                 statusText: _localizationService.Get(
@@ -88,8 +99,8 @@ namespace RapWay.Presentation.Unity.Shell
         {
             Render(new AppShellState(
                 AppShellScreen.NewCareerTemplateSelection,
-                AppShellModal.None,
-                _state.CanContinue,
+                activeDialog: null,
+                canContinue: _state.CanContinue,
                 selectedStartTemplateId: CareerStartTemplateId.OnYourOwn,
                 isBusy: false,
                 statusText: _localizationService.Get(GameLocalizationKeys.UiShell.TemplateStatusChooseCircumstances)));
@@ -97,13 +108,29 @@ namespace RapWay.Presentation.Unity.Shell
 
         public void ShowHud()
         {
+            _uiNavigator.InitializeHome();
             Render(new AppShellState(
                 AppShellScreen.Hud,
-                AppShellModal.None,
-                _state.CanContinue,
-                _state.SelectedStartTemplateId,
+                activeDialog: null,
+                canContinue: _state.CanContinue,
+                selectedStartTemplateId: _state.SelectedStartTemplateId,
                 isBusy: false,
                 statusText: _localizationService.Get(GameLocalizationKeys.UiShell.HudStatusCareerSessionRunning)));
+        }
+
+        public void UpdateHud(GameState state)
+        {
+            if (state == null)
+            {
+                throw new ArgumentNullException(nameof(state));
+            }
+
+            _view.RenderHud(state);
+        }
+
+        public void RequestActivitySelection()
+        {
+            ActivitySelectionRequested?.Invoke();
         }
 
         public void HandleBackAction()
@@ -113,15 +140,18 @@ namespace RapWay.Presentation.Unity.Shell
                 return;
             }
 
-            AppShellModal nextModal = _state.ActiveModal switch
+            if (_state.ActiveDialog != null)
             {
-                AppShellModal.None when _state.ActiveScreen == AppShellScreen.MainMenu => AppShellModal.ExitConfirmation,
-                AppShellModal.None when _state.ActiveScreen == AppShellScreen.NewCareerTemplateSelection => AppShellModal.None,
-                AppShellModal.None when _state.ActiveScreen == AppShellScreen.Hud => AppShellModal.SessionMenu,
-                _ => AppShellModal.None
-            };
+                DismissDialog();
+                return;
+            }
 
-            if (nextModal == AppShellModal.None && _state.ActiveScreen == AppShellScreen.NewCareerTemplateSelection)
+            if (_state.ActiveScreen == AppShellScreen.Hud && _uiNavigator.TryGoBack())
+            {
+                return;
+            }
+
+            if (_state.ActiveScreen == AppShellScreen.NewCareerTemplateSelection)
             {
                 Render(_state.With(
                     activeScreen: AppShellScreen.MainMenu,
@@ -131,17 +161,37 @@ namespace RapWay.Presentation.Unity.Shell
                 return;
             }
 
-            Render(_state.With(activeModal: nextModal));
+            if (_state.ActiveScreen == AppShellScreen.MainMenu)
+            {
+                ShowDialog(CreateExitConfirmationDialog());
+            }
+            else if (_state.ActiveScreen == AppShellScreen.Hud)
+            {
+                ShowDialog(CreateSessionMenuDialog());
+            }
         }
 
-        public void HandleModalDismiss()
+        public void HandleDialogAction(string actionId)
         {
-            if (_state.ActiveModal == AppShellModal.None)
+            if (string.IsNullOrWhiteSpace(actionId) || _state.ActiveDialog == null)
             {
                 return;
             }
 
-            Render(_state.With(activeModal: AppShellModal.None));
+            switch (actionId)
+            {
+                case "dismiss":
+                    DismissDialog();
+                    return;
+                case "quit_application":
+                    HandleQuitConfirmed();
+                    return;
+                case "return_to_main_menu":
+                    HandleReturnToMenuRequested();
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(actionId), actionId, "Unknown dialog action.");
+            }
         }
 
         public void HandleQuitConfirmed()
@@ -192,7 +242,7 @@ namespace RapWay.Presentation.Unity.Shell
         {
             _launchRequest.Request(GameSessionLaunchMode.MainMenu);
             Render(_state.With(
-                activeModal: AppShellModal.None,
+                clearActiveDialog: true,
                 clearSelectedStartTemplateId: true,
                 isBusy: true,
                 statusText: _localizationService.Get(GameLocalizationKeys.UiShell.StatusReturningToMainMenu)));
@@ -205,7 +255,7 @@ namespace RapWay.Presentation.Unity.Shell
             AppShellStartTemplateDefinition definition = AppShellStartTemplateCatalog.Get(templateId);
             _launchRequest.Request(GameSessionLaunchMode.NewCareer, templateId);
             Render(_state.With(
-                activeModal: AppShellModal.None,
+                clearActiveDialog: true,
                 selectedStartTemplateId: templateId,
                 isBusy: true,
                 statusText: _localizationService.Get(
@@ -219,7 +269,7 @@ namespace RapWay.Presentation.Unity.Shell
         {
             _launchRequest.Request(GameSessionLaunchMode.Continue);
             Render(_state.With(
-                activeModal: AppShellModal.None,
+                clearActiveDialog: true,
                 isBusy: true,
                 statusText: _localizationService.Get(GameLocalizationKeys.UiShell.StatusLoadingLatestCareer)));
 
@@ -257,6 +307,50 @@ namespace RapWay.Presentation.Unity.Shell
         {
             _state = state;
             _view.Render(state);
+        }
+
+        private void ShowDialog(DialogUiRouteContext dialogContext)
+        {
+            if (_state.ActiveScreen == AppShellScreen.Hud)
+            {
+                _uiNavigator.Navigate(UiRouteId.Dialog, dialogContext);
+            }
+
+            Render(_state.With(activeDialog: dialogContext));
+        }
+
+        private void DismissDialog()
+        {
+            if (_state.ActiveScreen == AppShellScreen.Hud)
+            {
+                _uiNavigator.DismissDialog();
+            }
+
+            Render(_state.With(clearActiveDialog: true));
+        }
+
+        private static DialogUiRouteContext CreateExitConfirmationDialog()
+        {
+            return new DialogUiRouteContext(
+                GameLocalizationKeys.UiShell.ModalExitTitle,
+                GameLocalizationKeys.UiShell.ModalExitBody,
+                new[]
+                {
+                    new UiDialogAction("quit_application", GameLocalizationKeys.UiShell.ModalExitConfirm, isPrimary: true),
+                    new UiDialogAction("dismiss", GameLocalizationKeys.UiShell.ModalClose, isPrimary: false)
+                });
+        }
+
+        private static DialogUiRouteContext CreateSessionMenuDialog()
+        {
+            return new DialogUiRouteContext(
+                GameLocalizationKeys.UiShell.ModalSessionTitle,
+                GameLocalizationKeys.UiShell.ModalSessionBody,
+                new[]
+                {
+                    new UiDialogAction("return_to_main_menu", GameLocalizationKeys.UiShell.ModalSessionConfirm, isPrimary: true),
+                    new UiDialogAction("dismiss", GameLocalizationKeys.UiShell.ModalClose, isPrimary: false)
+                });
         }
     }
 

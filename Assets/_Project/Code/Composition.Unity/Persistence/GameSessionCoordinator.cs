@@ -2,10 +2,13 @@ using System;
 using System.Security.Cryptography;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using RapWay.Application.Activities;
+using RapWay.Application.Commands;
 using RapWay.Application.Events;
 using RapWay.Application.Persistence;
 using RapWay.Application.Session;
 using RapWay.Application.Simulation;
+using RapWay.Domain.Common;
 using RapWay.Domain.State;
 using RapWay.Domain.Time;
 using UnityEngine;
@@ -13,21 +16,24 @@ using VContainer.Unity;
 
 namespace RapWay.Composition.Unity.Persistence
 {
-    public sealed class GameSessionCoordinator : IAsyncStartable, IGameStateSnapshotSource
+    public sealed class GameSessionCoordinator : IAsyncStartable, IGameStateSnapshotSource, IActivityLoop
     {
         private readonly IGameSaveStore _saveStore;
         private readonly ICommittedEventSink _eventSink;
         private readonly IGameSessionLaunchRequest _launchRequest;
+        private readonly IActivityDefinitionLookup _activityDefinitions;
         private SimulationSession _session;
 
         public GameSessionCoordinator(
             IGameSaveStore saveStore,
             ICommittedEventSink eventSink,
-            IGameSessionLaunchRequest launchRequest)
+            IGameSessionLaunchRequest launchRequest,
+            IActivityDefinitionLookup activityDefinitions)
         {
             _saveStore = saveStore ?? throw new ArgumentNullException(nameof(saveStore));
             _eventSink = eventSink ?? throw new ArgumentNullException(nameof(eventSink));
             _launchRequest = launchRequest ?? throw new ArgumentNullException(nameof(launchRequest));
+            _activityDefinitions = activityDefinitions ?? throw new ArgumentNullException(nameof(activityDefinitions));
         }
 
         public async UniTask StartAsync(CancellationToken cancellationToken)
@@ -78,6 +84,39 @@ namespace RapWay.Composition.Unity.Persistence
 
             stateSnapshot = _session.GetStateSnapshot();
             return true;
+        }
+
+        public CommandResult Start(StableId definitionId, int durationHours)
+        {
+            return GetSession().Execute(
+                new StartActivityCommand(definitionId, durationHours),
+                new StartActivityCommandHandler(_activityDefinitions));
+        }
+
+        public CommandResult AdvanceHour()
+        {
+            return GetSession().Execute(
+                new AdvanceActivityHourCommand(),
+                new AdvanceActivityHourCommandHandler(_activityDefinitions));
+        }
+
+        public CommandResult Complete()
+        {
+            return GetSession().Execute(
+                new CompleteActivityCommand(),
+                new CompleteActivityCommandHandler(_activityDefinitions));
+        }
+
+        public CommandResult Interrupt()
+        {
+            return GetSession().Execute(
+                new InterruptActivityCommand(),
+                new InterruptActivityCommandHandler(_activityDefinitions));
+        }
+
+        private SimulationSession GetSession()
+        {
+            return _session ?? throw new InvalidOperationException("A game session has not been created.");
         }
 
         private static GameState CreateBootstrapState()

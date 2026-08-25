@@ -1,5 +1,6 @@
 using System;
 using RapWay.Application.Session;
+using RapWay.Presentation.Unity.Navigation;
 
 namespace RapWay.Presentation.Unity.Shell
 {
@@ -7,14 +8,14 @@ namespace RapWay.Presentation.Unity.Shell
     {
         public AppShellState(
             AppShellScreen activeScreen,
-            AppShellModal activeModal,
+            DialogUiRouteContext activeDialog,
             bool canContinue,
             CareerStartTemplateId? selectedStartTemplateId,
             bool isBusy,
             string statusText)
         {
             ActiveScreen = activeScreen;
-            ActiveModal = activeModal;
+            ActiveDialog = activeDialog;
             CanContinue = canContinue;
             SelectedStartTemplateId = selectedStartTemplateId;
             IsBusy = isBusy;
@@ -23,7 +24,7 @@ namespace RapWay.Presentation.Unity.Shell
 
         public AppShellScreen ActiveScreen { get; }
 
-        public AppShellModal ActiveModal { get; }
+        public DialogUiRouteContext ActiveDialog { get; }
 
         public bool CanContinue { get; }
 
@@ -35,7 +36,8 @@ namespace RapWay.Presentation.Unity.Shell
 
         public AppShellState With(
             AppShellScreen? activeScreen = null,
-            AppShellModal? activeModal = null,
+            DialogUiRouteContext activeDialog = null,
+            bool clearActiveDialog = false,
             bool? canContinue = null,
             CareerStartTemplateId? selectedStartTemplateId = null,
             bool clearSelectedStartTemplateId = false,
@@ -48,7 +50,7 @@ namespace RapWay.Presentation.Unity.Shell
 
             return new AppShellState(
                 activeScreen ?? ActiveScreen,
-                activeModal ?? ActiveModal,
+                clearActiveDialog ? null : (activeDialog ?? ActiveDialog),
                 canContinue ?? CanContinue,
                 resolvedTemplateId,
                 isBusy ?? IsBusy,
@@ -58,7 +60,7 @@ namespace RapWay.Presentation.Unity.Shell
         public bool Equals(AppShellState other)
         {
             return ActiveScreen == other.ActiveScreen &&
-                   ActiveModal == other.ActiveModal &&
+                   Equals(ActiveDialog, other.ActiveDialog) &&
                    CanContinue == other.CanContinue &&
                    SelectedStartTemplateId == other.SelectedStartTemplateId &&
                    IsBusy == other.IsBusy &&
@@ -75,7 +77,7 @@ namespace RapWay.Presentation.Unity.Shell
             unchecked
             {
                 int hashCode = (int)ActiveScreen;
-                hashCode = (hashCode * 397) ^ (int)ActiveModal;
+                hashCode = (hashCode * 397) ^ (ActiveDialog != null ? ActiveDialog.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ CanContinue.GetHashCode();
                 hashCode = (hashCode * 397) ^ (SelectedStartTemplateId.HasValue ? (int)SelectedStartTemplateId.Value : -1);
                 hashCode = (hashCode * 397) ^ IsBusy.GetHashCode();

@@ -1,0 +1,46 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="DesignTokens.uss" />
+    <Style src="ActivityDemo.uss" />
+    <ui:VisualElement class="activity-root">
+        <ui:VisualElement name="activity-selection-screen" class="activity-selection-screen">
+            <ui:VisualElement class="activity-paper-panel">
+                <ui:Label name="activity-selection-title" class="activity-display-title" />
+                <ui:Label name="activity-selection-subtitle" class="activity-subtitle" />
+                <ui:Label name="activity-selection-resources" class="activity-resource-line" />
+                <ui:Label name="activity-selection-jobs-title" class="activity-section-title" />
+                <ui:VisualElement name="activity-selection-jobs" class="activity-job-list" />
+                <ui:Button name="activity-selection-close" class="activity-secondary-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="activity-confirmation-screen" class="activity-centered-screen" style="display: none;">
+            <ui:VisualElement class="activity-paper-panel activity-confirmation-panel">
+                <ui:Label name="activity-confirmation-heading" class="activity-section-title" />
+                <ui:Label name="activity-confirmation-title" class="activity-display-title activity-display-title--small" />
+                <ui:Label name="activity-confirmation-description" class="activity-body" />
+                <ui:Label name="activity-confirmation-details" class="activity-highlight" />
+                <ui:Label name="activity-confirmation-resources" class="activity-resource-line" />
+                <ui:Button name="activity-confirmation-start" class="activity-primary-button" />
+                <ui:Button name="activity-confirmation-cancel" class="activity-secondary-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="activity-session-screen" class="activity-centered-screen" style="display: none;">
+            <ui:VisualElement class="activity-session-panel">
+                <ui:Label name="activity-session-heading" class="activity-session-eyebrow" />
+                <ui:Label name="activity-session-title" class="activity-session-title" />
+                <ui:Label name="activity-session-progress" class="activity-session-progress" />
+                <ui:Label name="activity-session-resources" class="activity-session-resources" />
+                <ui:VisualElement class="activity-progress-track"><ui:VisualElement class="activity-progress-fill" /></ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="activity-result-screen" class="activity-centered-screen" style="display: none;">
+            <ui:VisualElement class="activity-paper-panel activity-result-panel">
+                <ui:Label name="activity-result-title" class="activity-display-title" />
+                <ui:Label name="activity-result-body" class="activity-body" />
+                <ui:Button name="activity-result-close" class="activity-primary-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

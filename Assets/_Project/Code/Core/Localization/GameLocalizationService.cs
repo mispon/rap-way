@@ -2,12 +2,17 @@ using System;
 using System.Collections.Generic;
 using RapWay.Domain.Localization;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
 namespace RapWay.Core.Localization
 {
     public sealed class GameLocalizationService : IGameLocalizationService
     {
+        private const string DefaultLocaleCode = "ru";
+
+        private bool _defaultLocaleApplied;
+
         public string Get(LocalizationKey key)
         {
             return Get(key, Array.Empty<LocalizationArgument>());
@@ -19,6 +24,8 @@ namespace RapWay.Core.Localization
             {
                 return Missing(key);
             }
+
+            ApplyDefaultLocale();
 
             try
             {
@@ -36,6 +43,21 @@ namespace RapWay.Core.Localization
             {
                 Debug.LogWarning($"Localization lookup failed for {key.TableName}.{key.EntryKey}: {exception.Message}");
                 return Missing(key);
+            }
+        }
+
+        private void ApplyDefaultLocale()
+        {
+            if (_defaultLocaleApplied)
+            {
+                return;
+            }
+
+            _defaultLocaleApplied = true;
+            Locale defaultLocale = LocalizationSettings.AvailableLocales.GetLocale(DefaultLocaleCode);
+            if (defaultLocale != null)
+            {
+                LocalizationSettings.SelectedLocale = defaultLocale;
             }
         }
 

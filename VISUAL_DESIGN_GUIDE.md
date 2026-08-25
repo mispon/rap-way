@@ -170,6 +170,14 @@ Both candidates are distributed under the SIL Open Font License in the Google Fo
 - The main action is visually dominant; secondary actions remain easy to find but quieter.
 - Bottom navigation contains persistent destinations only.
 
+### 7.4 Mobile viewport rule
+
+- The canonical authoring viewport is `390 × 844` logical pixels in Portrait orientation.
+- Ordinary gameplay screens fit in one vertical mobile viewport; they do not use vertical scrolling as an escape hatch for weak hierarchy.
+- Persistent actions and navigation stay anchored outside the content area. Content changes through explicit buttons, tabs, focused screens, sheets, pagination, or drill-down views.
+- Lists that cannot remain readable within one viewport must be split into purpose-specific screens or paged; they are not compressed below the approved touch and text minimums.
+- Validate the shell at 360 × 800, 390 × 844, and 412 × 915 logical-pixel viewports before treating a layout as reusable.
+
 ## 8. Core UI composition
 
 ### 8.1 Application shell
@@ -189,7 +197,17 @@ Both candidates are distributed under the SIL Open Font License in the Google Fo
 - Tapping opens sources, drains, and recent changes.
 - Large gains/losses use a short color/sign pulse and a textual cause.
 
-### 8.3 Cards
+### 8.3 Home HUD direction
+
+The first production-ready HUD composition is specified in `Docs/UI/HOME_HUD_SCREEN_BRIEF.md`.
+
+- Home uses three stable zones: top status chrome, character tableau, and action/navigation chrome.
+- Money, Fans, date/time, compact renewable state, and active conditions remain visible; deeper breakdowns open on demand.
+- The tableau contains the current location, idle character, and no more than one contextual opportunity card.
+- `Act` is the dominant action entry. Home, Map, Career, and Inbox are the only persistent destinations.
+- Inbox groups messages, decisions, news, and charts. Routine events use badges rather than interrupting the player.
+
+### 8.4 Cards
 
 - News/event cards use Paper and Ink with one category accent.
 - Preserve a strict title → context → consequence/action hierarchy.
@@ -330,6 +348,15 @@ Stage 3 may be marked complete when:
 - The screen remains feasible in UI Toolkit and CharacterCreator2D.
 - Cyrillic/Latin support is confirmed for selected font candidates.
 - The production pipeline is accepted as sustainable for a solo developer.
+
+### 18.1 UI Toolkit token source
+
+`Assets/_Project/Resources/UI/DesignTokens.uss` is the executable source of truth for the approved palette, shared spacing, border, touch-target, and typography-size tokens.
+
+- UI styles use semantic `--rw-*` custom properties instead of duplicating literal colors or common sizes.
+- Screen-specific USS files may introduce layout rules, but must not redefine a core palette token.
+- Font asset slots are added to this same file only when the approved Oswald/Manrope assets are imported and their Cyrillic/Latin atlases are validated.
+- Changes to a core token require mobile-aspect validation because they intentionally affect every UI Toolkit screen.
 
 Exact component tokens remain provisional until Stage 4 rebuilds the reference screen in UI Toolkit and validates it on representative mobile aspect ratios.
 

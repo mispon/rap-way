@@ -267,12 +267,12 @@ This is a rolling-wave roadmap. The entire route stays visible, the active stage
 
 **Depends on:** Stages 0 and 3. Stage 2 must be available before real session navigation is finalized.
 
-**Vertical result:** The app can move through bootstrap, main menu, new/load career, game session, HUD, modal, and Back/Escape flows using UI Toolkit in one persistent presentation shell.
+**Vertical result:** The app can move through bootstrap, main menu, new/load career, game session, HUD, full-screen transient dialog, and Back/Escape flows using UI Toolkit in one persistent presentation shell.
 
 **Acceptance criteria:**
 
 - URP 2D is configured with an explicit mobile baseline and CharacterCreator2D shader compatibility is validated.
-- UI Toolkit navigation, screen lifetime, safe area, modal layering, input routing, focus, and cancellation are implemented.
+- UI Toolkit navigation, a single in-session route stack, full-screen transient dialog pages, screen lifetime, safe area, input routing, focus, and cancellation are implemented.
 - Approved tokens and only the primitives required by real shell screens exist.
 - Touch, mouse, keyboard, and Back/Escape paths work at representative mobile aspect ratios.
 - The shell uses presenters/read models and contains no gameplay rules.

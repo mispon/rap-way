@@ -5,18 +5,79 @@ namespace RapWay.Presentation.Unity.Localization
 {
     public static class GameLocalizationTables
     {
+        public const string Activities = "Activities";
+        public const string UiActivities = "UI.Activities";
+        public const string UiHome = "UI.Home";
         public const string UiShell = "UI.Shell";
     }
 
     public static class GameLocalizationKeys
     {
+        public static class Activities
+        {
+            public static readonly LocalizationKey WorkCourierDescription = new(GameLocalizationTables.Activities, "work_courier_description");
+            public static readonly LocalizationKey WorkCourierTitle = new(GameLocalizationTables.Activities, "work_courier_title");
+            public static readonly LocalizationKey WorkGhostwriterDescription = new(GameLocalizationTables.Activities, "work_ghostwriter_description");
+            public static readonly LocalizationKey WorkGhostwriterTitle = new(GameLocalizationTables.Activities, "work_ghostwriter_title");
+            public static readonly LocalizationKey WorkStudioRunnerDescription = new(GameLocalizationTables.Activities, "work_studio_runner_description");
+            public static readonly LocalizationKey WorkStudioRunnerTitle = new(GameLocalizationTables.Activities, "work_studio_runner_title");
+        }
+        public static class UiActivities
+        {
+            public static readonly LocalizationKey ActivityDemoAdvance = new(GameLocalizationTables.UiActivities, "activity_demo_advance");
+            public static readonly LocalizationKey ActivityDemoCancel = new(GameLocalizationTables.UiActivities, "activity_demo_cancel");
+            public static readonly LocalizationKey ActivityDemoChoose = new(GameLocalizationTables.UiActivities, "activity_demo_choose");
+            public static readonly LocalizationKey ActivityDemoClose = new(GameLocalizationTables.UiActivities, "activity_demo_close");
+            public static readonly LocalizationKey ActivityDemoCommandFailed = new(GameLocalizationTables.UiActivities, "activity_demo_command_failed");
+            public static readonly LocalizationKey ActivityDemoComplete = new(GameLocalizationTables.UiActivities, "activity_demo_complete");
+            public static readonly LocalizationKey ActivityDemoConfirmationDetails = new(GameLocalizationTables.UiActivities, "activity_demo_confirmation_details");
+            public static readonly LocalizationKey ActivityDemoConfirmationTitle = new(GameLocalizationTables.UiActivities, "activity_demo_confirmation_title");
+            public static readonly LocalizationKey ActivityDemoExperience = new(GameLocalizationTables.UiActivities, "activity_demo_experience");
+            public static readonly LocalizationKey ActivityDemoPayRate = new(GameLocalizationTables.UiActivities, "activity_demo_pay_rate");
+            public static readonly LocalizationKey ActivityDemoResources = new(GameLocalizationTables.UiActivities, "activity_demo_resources");
+            public static readonly LocalizationKey ActivityDemoResultBody = new(GameLocalizationTables.UiActivities, "activity_demo_result_body");
+            public static readonly LocalizationKey ActivityDemoResultClose = new(GameLocalizationTables.UiActivities, "activity_demo_result_close");
+            public static readonly LocalizationKey ActivityDemoResultTitle = new(GameLocalizationTables.UiActivities, "activity_demo_result_title");
+            public static readonly LocalizationKey ActivityDemoSectionJobs = new(GameLocalizationTables.UiActivities, "activity_demo_section_jobs");
+            public static readonly LocalizationKey ActivityDemoSelectionSubtitle = new(GameLocalizationTables.UiActivities, "activity_demo_selection_subtitle");
+            public static readonly LocalizationKey ActivityDemoSessionProgress = new(GameLocalizationTables.UiActivities, "activity_demo_session_progress");
+            public static readonly LocalizationKey ActivityDemoSessionTitle = new(GameLocalizationTables.UiActivities, "activity_demo_session_title");
+            public static readonly LocalizationKey ActivityDemoStart = new(GameLocalizationTables.UiActivities, "activity_demo_start");
+            public static readonly LocalizationKey ActivityDemoStatusActive = new(GameLocalizationTables.UiActivities, "activity_demo_status_active");
+            public static readonly LocalizationKey ActivityDemoStatusIdle = new(GameLocalizationTables.UiActivities, "activity_demo_status_idle");
+            public static readonly LocalizationKey ActivityDemoTitle = new(GameLocalizationTables.UiActivities, "activity_demo_title");
+            public static readonly LocalizationKey ActivityDemoUnavailable = new(GameLocalizationTables.UiActivities, "activity_demo_unavailable");
+        }
+        public static class UiHome
+        {
+            public static readonly LocalizationKey HudActionPrimary = new(GameLocalizationTables.UiHome, "hud_action_primary");
+            public static readonly LocalizationKey HudConditionsStatus = new(GameLocalizationTables.UiHome, "hud_conditions_status");
+            public static readonly LocalizationKey HudNavInbox = new(GameLocalizationTables.UiHome, "hud_nav_inbox");
+        }
         public static class UiShell
         {
             public static readonly LocalizationKey BrandTitle = new(GameLocalizationTables.UiShell, "brand_title");
             public static readonly LocalizationKey HudBody = new(GameLocalizationTables.UiShell, "hud_body");
+            public static readonly LocalizationKey HudEnergy = new(GameLocalizationTables.UiShell, "hud_energy");
+            public static readonly LocalizationKey HudFans = new(GameLocalizationTables.UiShell, "hud_fans");
+            public static readonly LocalizationKey HudHype = new(GameLocalizationTables.UiShell, "hud_hype");
+            public static readonly LocalizationKey HudLocation = new(GameLocalizationTables.UiShell, "hud_location");
             public static readonly LocalizationKey HudMenu = new(GameLocalizationTables.UiShell, "hud_menu");
+            public static readonly LocalizationKey HudMoney = new(GameLocalizationTables.UiShell, "hud_money");
+            public static readonly LocalizationKey HudMotivation = new(GameLocalizationTables.UiShell, "hud_motivation");
+            public static readonly LocalizationKey HudNavCareer = new(GameLocalizationTables.UiShell, "hud_nav_career");
+            public static readonly LocalizationKey HudNavHome = new(GameLocalizationTables.UiShell, "hud_nav_home");
+            public static readonly LocalizationKey HudNavMap = new(GameLocalizationTables.UiShell, "hud_nav_map");
+            public static readonly LocalizationKey HudNavNews = new(GameLocalizationTables.UiShell, "hud_nav_news");
+            public static readonly LocalizationKey HudOpportunity = new(GameLocalizationTables.UiShell, "hud_opportunity");
+            public static readonly LocalizationKey HudOpportunityBody = new(GameLocalizationTables.UiShell, "hud_opportunity_body");
+            public static readonly LocalizationKey HudResourceBounded = new(GameLocalizationTables.UiShell, "hud_resource_bounded");
+            public static readonly LocalizationKey HudRest = new(GameLocalizationTables.UiShell, "hud_rest");
+            public static readonly LocalizationKey HudSatiety = new(GameLocalizationTables.UiShell, "hud_satiety");
             public static readonly LocalizationKey HudStatusCareerSessionRunning = new(GameLocalizationTables.UiShell, "hud_status_career_session_running");
             public static readonly LocalizationKey HudTitle = new(GameLocalizationTables.UiShell, "hud_title");
+            public static readonly LocalizationKey HudWork = new(GameLocalizationTables.UiShell, "hud_work");
+            public static readonly LocalizationKey HudWrite = new(GameLocalizationTables.UiShell, "hud_write");
             public static readonly LocalizationKey MainMenuContinue = new(GameLocalizationTables.UiShell, "main_menu_continue");
             public static readonly LocalizationKey MainMenuNewCareer = new(GameLocalizationTables.UiShell, "main_menu_new_career");
             public static readonly LocalizationKey MainMenuQuit = new(GameLocalizationTables.UiShell, "main_menu_quit");

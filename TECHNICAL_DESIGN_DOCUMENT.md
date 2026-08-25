@@ -283,6 +283,7 @@ Content rules:
 - Every definition has a stable string ID independent of file name and Unity GUID.
 - JSON maps into explicit pure C# DTOs and then validated immutable definitions.
 - Startup builds one read-only `GameContentCatalog`.
+- The current local bootstrap loads the packaged `Resources/Content/activities.json` once in the game lifetime scope; it is a small development adapter, not a remote-content or general asset-loading system.
 - Automated validation rejects duplicate IDs, broken references, invalid ranges, impossible conditions, and cycles where forbidden.
 - Unknown fields and schema mismatches must be surfaced rather than silently ignored in development.
 - ScriptableObjects are restricted to Unity asset references, import/render configuration, and presentation settings.
@@ -428,6 +429,9 @@ UI Toolkit is the standard runtime UI system.
 - UXML defines structure.
 - USS defines styles and shared design tokens.
 - C# views bind elements, render screen models, and emit user intents.
+- `UiToolkitPresentationSettings` is the single Unity-authored presentation configuration for Panel Settings and screen UXML references. Each UXML declares its Design Tokens and screen USS dependencies so it is self-contained and directly previewable in UI Builder. The composition root loads and registers the settings once; views receive it through DI and never use `Resources.Load` directly.
+- Panel Settings and its default Runtime Theme are ordinary versioned Unity assets. They are authored once and referenced by configuration; runtime and editor repair scripts must not create, mutate, or replace them.
+- The mobile baseline is Portrait `390 × 844`: the Player orientation is locked to Portrait and Panel Settings use `Scale With Screen Size`, matching width from that reference resolution. Layout validation covers `360 × 800`, `390 × 844`, and `412 × 915`.
 - Presenters translate state into screen models and intents into Application commands.
 - Views do not query or mutate Domain directly.
 - Explicit binding is preferred over reflection-heavy automatic binding.
@@ -460,6 +464,13 @@ Do not maintain two permanent UI frameworks.
 - Starting or loading a game creates GameSessionScope.
 - An additive Game scene contains cameras, backgrounds, visible characters, and other world presentation.
 - UI screens are navigator-managed views, not scenes.
+- In an active game session, `Home` is the only navigation root. Map, Career, Inbox, and future sections are peer routes, not tab roots; every visit participates in one global in-session route stack.
+- The central `UiRouteRegistry` explicitly defines every route's navigation mode (`Push`, `Replace`, `Dialog`, or `Home`), accepted typed context, and whether it renders an in-UI Back affordance. Views never infer navigation semantics from screen names.
+- The navigator preserves each stacked route entry's transient local view state for the current session only. History, scroll positions, filters, and selected local tabs are never persisted to a career save.
+- `Push` appends a route, `Replace` changes the current non-root route, and `Home` clears history back to a fresh Home view. The configured stack limit defaults to 50 entries; Home is retained and the oldest non-Home entry is discarded when the limit is reached.
+- Dialogs are full-screen transient pages on mobile, not visual overlays and not history entries. They preserve the origin page, close back to it, and use typed `DialogContext` with localization references and actions rather than raw player-facing strings.
+- Android Back and Escape dismiss an active dialog first, then pop global history whenever possible. A screen may intentionally omit an in-UI Back button without disabling this system behavior.
+- Route contexts use a small set of explicit contracts (`Empty`, `Entity`, `Activity`, and `Dialog` initially); specialized contracts are introduced only for genuinely new data shapes. Arbitrary string maps and raw parameter dictionaries are prohibited.
 - A development-only Debug scene may remain independent.
 - Scene reload must not destroy authoritative GameState.
 

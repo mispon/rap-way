@@ -1,0 +1,64 @@
+{
+  "activities": [
+    {
+      "id": "work.courier",
+      "category": "work",
+      "minimumDurationHours": 4,
+      "maximumDurationHours": 4,
+      "titleLocalization": { "table": "Activities", "key": "work_courier_title" },
+      "descriptionLocalization": { "table": "Activities", "key": "work_courier_description" },
+      "hourlyEffects": {
+        "energyChange": -55,
+        "satietyChange": -25,
+        "motivationChange": -8,
+        "skillExperience": [
+          { "skillId": "skill.charisma", "experiencePerHour": 8 }
+        ]
+      },
+      "paymentPerCompletedHourMinorUnits": "6500",
+      "eventPoolId": "",
+      "canInterrupt": true,
+      "canAccelerateWhenFamiliar": false
+    },
+    {
+      "id": "work.studio_runner",
+      "category": "work",
+      "minimumDurationHours": 4,
+      "maximumDurationHours": 4,
+      "titleLocalization": { "table": "Activities", "key": "work_studio_runner_title" },
+      "descriptionLocalization": { "table": "Activities", "key": "work_studio_runner_description" },
+      "hourlyEffects": {
+        "energyChange": -48,
+        "satietyChange": -22,
+        "motivationChange": -4,
+        "skillExperience": [
+          { "skillId": "skill.charisma", "experiencePerHour": 12 }
+        ]
+      },
+      "paymentPerCompletedHourMinorUnits": "7200",
+      "eventPoolId": "",
+      "canInterrupt": true,
+      "canAccelerateWhenFamiliar": false
+    },
+    {
+      "id": "work.ghostwriter",
+      "category": "work",
+      "minimumDurationHours": 4,
+      "maximumDurationHours": 4,
+      "titleLocalization": { "table": "Activities", "key": "work_ghostwriter_title" },
+      "descriptionLocalization": { "table": "Activities", "key": "work_ghostwriter_description" },
+      "hourlyEffects": {
+        "energyChange": -36,
+        "satietyChange": -18,
+        "motivationChange": -12,
+        "skillExperience": [
+          { "skillId": "skill.lyric_writing", "experiencePerHour": 18 }
+        ]
+      },
+      "paymentPerCompletedHourMinorUnits": "9000",
+      "eventPoolId": "",
+      "canInterrupt": true,
+      "canAccelerateWhenFamiliar": false
+    }
+  ]
+}

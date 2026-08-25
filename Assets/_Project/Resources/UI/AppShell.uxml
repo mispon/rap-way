@@ -1,13 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="DesignTokens.uss" />
+    <Style src="AppShell.uss" />
     <ui:VisualElement name="safe-area-frame" class="app-shell">
-        <ui:VisualElement name="screen-splash" class="screen screen--centered">
-            <ui:VisualElement class="hero-card">
-                <ui:Label text="" class="brand-title" />
-                <ui:Label text="" class="status-label status-label--hero" />
-            </ui:VisualElement>
+        <ui:VisualElement name="screen-splash" class="screen screen--centered screen--splash">
+            <ui:VisualElement class="splash-mark"><ui:Label text="RW" class="splash-mark__text" /></ui:VisualElement>
+            <ui:Label text="" class="brand-title" />
+            <ui:Label text="" class="status-label status-label--hero" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="screen-main-menu" class="screen screen--centered" style="display: none;">
+        <ui:VisualElement name="screen-main-menu" class="screen screen--centered screen--menu" style="display: none;">
+            <ui:VisualElement class="menu-poster-strip"><ui:Label text="RAP WAY" class="menu-poster-strip__text" /></ui:VisualElement>
             <ui:VisualElement class="menu-card">
                 <ui:Label text="" class="brand-title" />
                 <ui:Label text="" class="subtitle-label" />
@@ -19,7 +21,7 @@
         </ui:VisualElement>
 
         <ui:VisualElement name="screen-new-career-template" class="screen screen--centered" style="display: none;">
-            <ui:ScrollView mode="Vertical" class="template-scroll-view">
+            <ui:VisualElement class="template-screen-content">
                 <ui:VisualElement class="template-selection-card">
                     <ui:Label text="" class="template-screen-title" />
                     <ui:Label text="" class="template-screen-subtitle" />
@@ -44,23 +46,63 @@
                     </ui:VisualElement>
                     <ui:Label name="new-career-status-label" text="" class="status-label" />
                 </ui:VisualElement>
-            </ui:ScrollView>
+            </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="screen-hud" class="screen screen--hud" style="display: none;">
-            <ui:VisualElement class="hud-card">
-                <ui:Label text="" class="hud-title" />
-                <ui:Label text="" class="hud-body" />
+            <ui:VisualElement class="hud-content">
+                <ui:VisualElement class="hud-status-deck">
+                    <ui:VisualElement class="hud-status-cell hud-status-cell--date">
+                        <ui:Label name="hud-date-label" class="hud-date" />
+                        <ui:Button name="hud-menu-button" text="" class="hud-menu-button" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="hud-status-cell">
+                        <ui:Label name="hud-money-label" class="hud-economy-label" />
+                        <ui:Label name="hud-money-value" class="hud-economy-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="hud-status-cell">
+                        <ui:Label name="hud-fans-label" class="hud-economy-label" />
+                        <ui:Label name="hud-fans-value" class="hud-economy-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="hud-status-cell"><ui:Label name="hud-energy-label" class="hud-resource-label" /><ui:Label name="hud-energy-value" class="hud-resource-value" /></ui:VisualElement>
+                    <ui:VisualElement class="hud-status-cell"><ui:Label name="hud-satiety-label" class="hud-resource-label" /><ui:Label name="hud-satiety-value" class="hud-resource-value" /></ui:VisualElement>
+                    <ui:VisualElement class="hud-status-cell"><ui:Label name="hud-motivation-label" class="hud-resource-label" /><ui:Label name="hud-motivation-value" class="hud-resource-value" /></ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="hud-condition-strip">
+                    <ui:VisualElement class="hud-condition-strip__icon" />
+                    <ui:Label name="hud-conditions-status-label" class="hud-condition-strip__label" />
+                    <ui:Label name="hud-hype-label" class="hud-condition-strip__meta-label" />
+                    <ui:Label name="hud-hype-value" class="hud-condition-strip__value" />
+                </ui:VisualElement>
+                <ui:VisualElement class="hud-home-tableau">
+                    <ui:VisualElement class="hud-tableau-copy">
+                        <ui:Label name="hud-location-label" class="hud-location-label" />
+                        <ui:Label text="" class="hud-title hud-title--hidden" />
+                        <ui:Label name="hud-location-body" text="" class="hud-body hud-location-body--hidden" />
+                        <ui:VisualElement class="hud-character-slot" />
+                        <ui:VisualElement class="hud-opportunity-card">
+                            <ui:Label name="hud-opportunity-label" class="hud-opportunity-label" />
+                            <ui:Label name="hud-opportunity-body" text="" class="hud-body" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:Button name="hud-menu-button" text="" class="secondary-button hud-menu-button" />
+            <ui:VisualElement class="hud-bottom-bar">
+                <ui:Button name="hud-action-button" class="hud-action-button hud-action-button--primary" />
+                <ui:VisualElement class="hud-nav">
+                    <ui:Label name="hud-nav-home" class="hud-nav-item hud-nav-item--active" />
+                    <ui:Label name="hud-nav-map" class="hud-nav-item" />
+                    <ui:Label name="hud-nav-career" class="hud-nav-item" />
+                    <ui:Label name="hud-nav-inbox" class="hud-nav-item" />
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
 
-        <ui:VisualElement name="modal-overlay" class="modal-overlay" style="display: none;">
-            <ui:VisualElement class="modal-card">
-                <ui:Label name="modal-title" text="" class="modal-title" />
-                <ui:Label name="modal-body" text="" class="modal-body" />
-                <ui:Button name="modal-primary-button" text="" class="primary-button" />
-                <ui:Button name="modal-secondary-button" text="" class="ghost-button" />
+        <ui:VisualElement name="screen-dialog" class="screen screen--centered screen--dialog" style="display: none;">
+            <ui:VisualElement class="dialog-page__content">
+                <ui:Label name="dialog-title" text="" class="dialog-title" />
+                <ui:Label name="dialog-body" text="" class="dialog-body" />
+                <ui:VisualElement name="dialog-actions" class="dialog-actions" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

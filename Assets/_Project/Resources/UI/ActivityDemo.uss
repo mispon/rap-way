@@ -1,0 +1,188 @@
+.activity-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 0;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--rw-color-graphite-950);
+}
+
+.activity-selection-screen,
+.activity-centered-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: var(--rw-space-lg);
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.activity-paper-panel,
+.activity-session-panel {
+    width: 100%;
+    max-width: 390px;
+    padding: var(--rw-space-md);
+    background-color: var(--rw-color-paper-100);
+    border-top-width: var(--rw-border-strong);
+    border-right-width: var(--rw-border-strong);
+    border-bottom-width: var(--rw-border-strong);
+    border-left-width: var(--rw-border-strong);
+    border-top-color: var(--rw-color-paper-shadow-250);
+    border-right-color: var(--rw-color-paper-shadow-250);
+    border-bottom-color: var(--rw-color-paper-shadow-250);
+    border-left-color: var(--rw-color-paper-shadow-250);
+}
+
+.activity-display-title {
+    margin-bottom: var(--rw-space-xs);
+    color: var(--rw-color-ink-900);
+    font-size: 28px;
+    -unity-font-style: bold;
+}
+
+.activity-display-title--small {
+    font-size: 25px;
+}
+
+.activity-subtitle,
+.activity-body,
+.activity-resource-line {
+    margin-bottom: var(--rw-space-sm);
+    color: var(--rw-color-ink-muted);
+    font-size: 15px;
+    white-space: normal;
+}
+
+.activity-resource-line,
+.activity-job-card__payment,
+.activity-highlight {
+    color: var(--rw-color-burgundy-650);
+    -unity-font-style: bold;
+}
+
+.activity-section-title {
+    margin-bottom: var(--rw-space-sm);
+    color: var(--rw-color-ink-900);
+    font-size: 18px;
+    -unity-font-style: bold;
+}
+
+.activity-job-list {
+    width: 100%;
+}
+
+.activity-job-card {
+    width: 100%;
+    margin-bottom: var(--rw-space-sm);
+    padding: var(--rw-space-sm) var(--rw-space-md);
+    background-color: var(--rw-color-paper-bright);
+    border-left-width: 4px;
+    border-left-color: var(--rw-color-coral-500);
+}
+
+.activity-job-card__title {
+    margin-bottom: var(--rw-space-xs);
+    color: var(--rw-color-ink-900);
+    font-size: 17px;
+    -unity-font-style: bold;
+}
+
+.activity-job-card__description {
+    margin-bottom: var(--rw-space-xs);
+    color: var(--rw-color-ink-muted);
+    font-size: 13px;
+    white-space: normal;
+}
+
+.activity-job-card__payment,
+.activity-highlight {
+    margin-bottom: var(--rw-space-xs);
+    font-size: 14px;
+}
+
+.activity-primary-button,
+.activity-secondary-button {
+    width: 100%;
+    min-height: var(--rw-touch-target);
+    margin-top: var(--rw-space-sm);
+    color: var(--rw-color-paper-100);
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.activity-primary-button {
+    color: var(--rw-color-paper-100);
+    background-color: var(--rw-color-coral-500);
+}
+
+.activity-primary-button .unity-button__text {
+    color: var(--rw-color-paper-100);
+}
+
+.activity-secondary-button {
+    color: var(--rw-color-paper-100);
+    background-color: var(--rw-color-charcoal-850);
+}
+
+.activity-secondary-button .unity-button__text {
+    color: var(--rw-color-paper-100);
+}
+
+.activity-session-panel {
+    padding: var(--rw-space-xl);
+    background-color: var(--rw-color-charcoal-850);
+    border-top-color: var(--rw-color-olive-500);
+    border-right-color: var(--rw-color-olive-500);
+    border-bottom-color: var(--rw-color-olive-500);
+    border-left-color: var(--rw-color-olive-500);
+}
+
+.activity-session-eyebrow,
+.activity-session-resources {
+    color: var(--rw-color-paper-shadow-250);
+    font-size: 15px;
+}
+
+.activity-session-title {
+    margin-top: var(--rw-space-sm);
+    margin-bottom: var(--rw-space-md);
+    color: var(--rw-color-paper-100);
+    font-size: 30px;
+    -unity-font-style: bold;
+}
+
+.activity-session-progress {
+    margin-bottom: var(--rw-space-sm);
+    color: var(--rw-color-amber-500);
+    font-size: 20px;
+    -unity-font-style: bold;
+}
+
+.activity-progress-track {
+    height: 14px;
+    margin-top: var(--rw-space-lg);
+    background-color: var(--rw-color-graphite-950);
+}
+
+.activity-progress-fill {
+    width: 45%;
+    height: 100%;
+    background-color: var(--rw-color-coral-500);
+}
+
+.activity-result-panel {
+    max-width: 360px;
+}

@@ -6,9 +6,10 @@ using RapWay.Domain.Common;
 
 namespace RapWay.Infrastructure.Activities
 {
-    public sealed class ActivityDefinitionCatalog : IActivityDefinitionLookup
+    public sealed class ActivityDefinitionCatalog : IActivityDefinitionCatalog
     {
         private readonly Dictionary<StableId, ActivityDefinition> _definitions;
+        private readonly IReadOnlyList<ActivityDefinition> _orderedDefinitions;
 
         public ActivityDefinitionCatalog(IReadOnlyList<ActivityDefinition> definitions)
         {
@@ -27,7 +28,13 @@ namespace RapWay.Infrastructure.Activities
                     throw new ArgumentException($"Activity ID '{definition.Id}' is duplicated.", nameof(definitions));
                 }
             }
+
+            List<ActivityDefinition> orderedDefinitions = new(_definitions.Values);
+            orderedDefinitions.Sort((left, right) => left.Id.CompareTo(right.Id));
+            _orderedDefinitions = orderedDefinitions.AsReadOnly();
         }
+
+        public IReadOnlyList<ActivityDefinition> Definitions => _orderedDefinitions;
 
         public bool TryGet(StableId id, out ActivityDefinition definition)
         {

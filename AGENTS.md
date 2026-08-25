@@ -22,11 +22,12 @@
 1. Inspect the relevant code, assets, scene/prefab wiring, and existing conventions before editing.
 2. Check the active `ROADMAP.md` stage and keep the change within its goal, dependencies, and acceptance criteria unless the user explicitly reprioritizes it.
 3. Prefer the smallest coherent change that completes the requested behavior.
-4. Use the connected Unity Pipeline/MCP for scenes, prefabs, GameObjects, serialized references, Console, tests, and validation.
-5. Do not hand-edit Unity YAML (`.unity`, `.prefab`, `.asset`, `.mat`, `.controller`) unless Editor-safe tooling cannot do the job and the IDs/format are understood.
-6. After C# changes, trigger compilation, wait for completion, and inspect Unity Console errors.
-7. Validate the affected flow at mobile aspect ratios. Run relevant tests; add a regression test for a fixed logic bug when practical.
-8. Report what changed, what was validated, and any remaining uncertainty.
+4. Prefer the intended, maintainable solution over a workaround. Do not leave repair tools, runtime patching, compatibility shims, or fallback styling in production code when the underlying asset, configuration, or architecture can be corrected directly. Use a temporary workaround only to diagnose or unblock work, label it clearly, and remove it before handoff unless the user explicitly accepts it as a temporary measure.
+5. Use the connected Unity Pipeline/MCP for scenes, prefabs, GameObjects, serialized references, Console, tests, and validation.
+6. Do not hand-edit Unity YAML (`.unity`, `.prefab`, `.asset`, `.mat`, `.controller`) unless Editor-safe tooling cannot do the job and the IDs/format are understood.
+7. After C# changes, trigger compilation, wait for completion, and inspect Unity Console errors.
+8. Validate the affected flow at mobile aspect ratios. Run relevant tests; add a regression test for a fixed logic bug when practical.
+9. Report what changed, what was validated, and any remaining uncertainty.
 
 ## Architecture
 
@@ -55,9 +56,11 @@
 
 ## UI And UX
 
+- For any substantial UI Toolkit layout or mobile-screen change, apply `.cursor/skills/unity-mobile-ui-toolkit/SKILL.md` in addition to these project rules.
 - New screen-heavy UI should use UI Toolkit (`UXML` structure, `USS` styling, C# behavior) unless an existing uGUI screen is being maintained or a required effect is unsupported.
 - Do not mix UI Toolkit and uGUI inside one screen without a documented reason. Replace the legacy uGUI prototype after the approved UI Toolkit shell and vertical slice are functional.
 - Build reusable primitives and shared design tokens before duplicating styling. Avoid inline styles when a reusable USS class is appropriate.
+- Runtime UXML documents must declare their own shared token and screen stylesheet dependencies so they remain visually inspectable in UI Builder without Play mode. Do not attach ordinary screen USS files from C#.
 - Design mobile-first: safe areas, adaptive layouts, readable type, touch targets of roughly 44-48 px minimum, and no hover-only interaction.
 - Verify narrow/tall and wide mobile layouts, then mouse/keyboard behavior for PC. Keep navigation usable with touch, mouse, keyboard, and Back/Escape.
 - Validate UI with pseudo-localization. Missing keys, stale required translations, placeholder mismatches, clipping, and missing Cyrillic/Latin glyphs are release-blocking defects.
